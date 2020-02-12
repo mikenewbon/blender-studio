@@ -1,0 +1,15 @@
+{
+  "name": "blender-training",
+  "version": "0.1.0",
+  "description": "The Blender Training website",
+  "repository": "https://developer.blender.org/",
+  "author": "Sem Mulder <sem@blender.studio>",
+  "devDependencies": {
+    "eslint": "^6.7.2",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "stylelint": "^12.0.0",
+    "stylelint-config-recommended": "^3.0.0"
+  }
+}

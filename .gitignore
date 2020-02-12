@@ -1,0 +1,17 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*~
+
+.cache
+.coverage
+.pytest_cache
+.mypy_cache/
+
+# Distribution / packaging
+node_modules/
+
+/training/settings.py
+/training/public/
+/training/yarn-error.log
