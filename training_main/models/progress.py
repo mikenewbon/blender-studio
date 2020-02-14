@@ -17,6 +17,9 @@ class UserVideoProgress(mixins.CreatedUpdatedMixin, models.Model):
 
     position = models.DurationField()
 
+    def __str__(self) -> str:
+        return f'Progress of {self.user.username} ({self.user.id}) on Video {self.video.file.path} ({self.video.id})'
+
 
 class UserSectionProgress(mixins.CreatedUpdatedMixin, models.Model):
     class Meta:
@@ -33,3 +36,6 @@ class UserSectionProgress(mixins.CreatedUpdatedMixin, models.Model):
     started = models.BooleanField()
     # TODO(sem): Figure out when to set `finished = True`.
     finished = models.BooleanField()
+
+    def __str__(self) -> str:
+        return f'Progress of {self.user.username} ({self.user.id}) on Section {self.section.name} ({self.section.id})'

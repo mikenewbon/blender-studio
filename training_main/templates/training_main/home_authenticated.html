@@ -1,0 +1,39 @@
+{% extends 'training_main/base.html' %}
+{% import 'common/trainings.html' as trainings %}
+{% block content %}
+    <h1>Home</h1>
+    <h2>Welcome {{ request.user.username }}</h2>
+    <hr/>
+    <div>
+        <div>
+            <h3>Continue training</h3>
+            <p>Recently watched training will appear here with your position saved</p>
+        </div>
+        <div>
+            {% for training in recently_watched_trainings %}
+                {{ trainings.poster(training) }}
+            {% endfor %}
+        </div>
+    </div>
+    <div>
+        <div>
+            <h3>Your saved training</h3>
+            <p>You can add and remove items from this list by clicking the plus or the tick</p>
+        </div>
+        <div>
+            {% for training in favorited_trainings %}
+                {{ trainings.poster(training) }}
+            {% endfor %}
+        </div>
+    </div>
+    <div>
+        <div>
+            <h3>All training</h3>
+        </div>
+        <div>
+            {% for training in all_trainings %}
+                {{ trainings.poster(training) }}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}

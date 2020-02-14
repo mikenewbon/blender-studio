@@ -1,0 +1,10 @@
+{% macro poster(training) %}
+    <div class="training-poster">
+        <div>URL: <a href="{{ training.url }}">{{ training.url }}</a></div>
+        <div>Type: {{ training.get_type_display() }}</div>
+        <div>Name: {{ training.name }}</div>
+        <div>Description: {{ training.description }}</div>
+        <div>Difficulty: {{ training.get_difficulty_display() }}</div>
+        <div>Tags: {{ training.tags.all() | map(attribute='name') | join(', ') }} </div>
+    </div>
+{% endmacro %}

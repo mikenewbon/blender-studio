@@ -1,19 +1,10 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Q, F
 
 from training_main.models import mixins, sections
 
 
 class Comment(mixins.CreatedUpdatedMixin, models.Model):
-    class Meta:
-        constraints = [
-            models.CheckConstraint(
-                check=Q(reply_to__isnull=True) | Q(section=F('reply_to__section')),
-                name='reply_belongs_to_same_section',
-            )
-        ]
-
     # Whenever a User is deleted their Comment lives on to ensure integrity of the conversation.
     # Instead, we remove the reference to the User to honor the deletion request as much as
     # possible.
@@ -40,6 +31,13 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
 
     likes = models.ManyToManyField(User, through='Like', related_name='liked_comments')
 
+    def __str__(self) -> str:
+        return f'Comment by {self.username or "<deleted>"} on {self.section.name}'
+
+    @property
+    def username(self) -> str:
+        return '<deleted>' if self.user is None else self.user.username
+
 
 class Like(mixins.CreatedUpdatedMixin, models.Model):
     class Meta:
@@ -54,3 +52,10 @@ class Like(mixins.CreatedUpdatedMixin, models.Model):
     # possible.
     user = models.ForeignKey(User, null=True, blank=False, on_delete=models.SET_NULL)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f'Like by {self.username} on Comment {self.comment.id}'
+
+    @property
+    def username(self) -> str:
+        return '<deleted>' if self.user is None else self.user.username

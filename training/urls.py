@@ -16,7 +16,36 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from training_main.views.home import home
+from training_main.views.trainings.chapters.chapter import chapter
+from training_main.views.trainings.chapters.sections.section import section
+from training_main.views.trainings.training import training
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('oauth/', include('blender_id_oauth_client.urls')),
+]
+
+urlpatterns += [
+    path('', home, name='home'),
+    path(
+        'trainings/<slug:training_slug>/',
+        include(
+            [
+                path('', training, name='training'),
+                path(
+                    'chapters/<int:chapter_index>-<slug:chapter_slug>/',
+                    include(
+                        [
+                            path('', chapter, name='chapter'),
+                            path(
+                                'sections/<int:section_index>-<slug:section_slug>/',
+                                include([path('', section, name='section')]),
+                            ),
+                        ]
+                    ),
+                ),
+            ]
+        ),
+    ),
 ]

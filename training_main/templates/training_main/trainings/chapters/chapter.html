@@ -1,0 +1,23 @@
+{% extends 'training_main/base.html' %}
+
+{% block content %}
+    <span>
+        <a href="{{ url('home') }}">Home</a>
+        >
+        <a href="{{ training.url }}">{{ training.name }}</a>
+        >
+        <span>{{ chapter.index }}. {{ chapter.name }}</span>
+    </span>
+    <hr/>
+    <div>
+        <div>Name: {{ chapter.name }}</div>
+    </div>
+    <hr/>
+    <div>
+        <h3>Sections</h3>
+        {% for section in sections|sort(attribute='index') %}
+            <div>URL: <a href="{{ section.url }}">{{ section.url }}</a></div>
+            <div>Name: {{ section.name }}</div>
+        {% endfor %}
+    </div>
+{% endblock content %}

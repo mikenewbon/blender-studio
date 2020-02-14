@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls.base import reverse
 
 from training_main.models import mixins, trainings
 
@@ -15,7 +16,18 @@ class Chapter(mixins.CreatedUpdatedMixin, models.Model):
     index = models.IntegerField()
 
     name = models.TextField(unique=True)
-    slug = models.TextField(unique=True)
+    slug = models.SlugField(unique=True)
 
     def __str__(self) -> str:
-        return f'{self.index} {self.name}'
+        return f'{self.training.name} > {self.index}. {self.name}'
+
+    @property
+    def url(self) -> str:
+        return reverse(
+            'chapter',
+            kwargs={
+                'training_slug': self.training.slug,
+                'chapter_index': self.index,
+                'chapter_slug': self.slug,
+            },
+        )

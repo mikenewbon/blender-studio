@@ -1,0 +1,18 @@
+{% extends 'training_main/base.html' %}
+
+{% block content %}
+    <span>
+        <a href="{{ url('home') }}">Home</a>
+        >
+        <a href="{{ training.url }}">{{ training.name }}</a>
+        >
+        <a href="{{ chapter.url }}">{{ chapter.index }}. {{ chapter.name }}</a>
+        >
+        <span>{{ section.index }}. {{ section.name }}</span>
+    </span>
+    <hr/>
+    <div>
+        <div>Name: {{ section.name }}</div>
+        <div>Text: {{ section.text }}</div>
+    </div>
+{% endblock content %}

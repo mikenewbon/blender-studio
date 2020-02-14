@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls.base import reverse
 
 from training_main.models import mixins, tags
 
@@ -29,7 +30,7 @@ class Training(mixins.CreatedUpdatedMixin, models.Model):
         ]
 
     name = models.TextField(unique=True)
-    slug = models.TextField(unique=True)
+    slug = models.SlugField(unique=True)
     description = models.TextField()
     description.description = 'Description consisting of a few sentences.'
     summary = models.TextField()
@@ -41,12 +42,12 @@ class Training(mixins.CreatedUpdatedMixin, models.Model):
     type = models.TextField(choices=TrainingType.choices)
     difficulty = models.TextField(choices=TrainingDifficulty.choices)
 
-    favorited_by = models.ManyToManyField(
-        User, through='TrainingFavorite', related_name='favorite_trainings'
-    )
-
     def __str__(self) -> str:
         return self.name
+
+    @property
+    def url(self) -> str:
+        return reverse('training', kwargs={'training_slug': self.slug})
 
 
 class TrainingTag(models.Model):
@@ -59,7 +60,7 @@ class TrainingTag(models.Model):
     tag = models.ForeignKey(tags.Tag, on_delete=models.CASCADE)
 
 
-class TrainingFavorite(mixins.CreatedUpdatedMixin, models.Model):
+class Favorite(mixins.CreatedUpdatedMixin, models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
@@ -67,5 +68,8 @@ class TrainingFavorite(mixins.CreatedUpdatedMixin, models.Model):
             )
         ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    training = models.ForeignKey(Training, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
+    training = models.ForeignKey(Training, on_delete=models.CASCADE, related_name='favorites')
+
+    def __str__(self) -> str:
+        return f'Favorite of {self.user.username} ({self.user.id}) on Training {self.training.name} ({self.training.id})'
