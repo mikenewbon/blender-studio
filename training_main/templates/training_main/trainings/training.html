@@ -1,25 +1,71 @@
 {% extends 'training_main/base.html' %}
+{% import 'common/components.html' as components %}
+
+{% block breadcrumbs %}
+    {% call components.breadcrumbs() %}
+        {{ components.breadcrumb(label='Home', url=url('home')) }}
+        {{ components.breadcrumb(label=training.name) }}
+    {% endcall %}
+{% endblock breadcrumbs %}
 
 {% block content %}
-    <div>
-        <a href="{{ url('home') }}">Home</a>
-        >
-        <span>{{ training.name }}</span>
-    </div>
-    <hr/>
-    <div>
-        <div>Type: {{ training.get_type_display() }}</div>
-        <div>Name: {{ training.name }}</div>
-        <div>Description: {{ training.description }}</div>
-        <div>Difficulty: {{ training.get_difficulty_display() }}</div>
-        <div>Tags: {{ training.tags.all() | map(attribute='name') | join(', ') }} </div>
-    </div>
-    <hr/>
-    <div>
-        <h3>Chapters</h3>
-        {% for chapter in chapters|sort(attribute='index') %}
-            <div>URL: <a href="{{ chapter.url }}">{{ chapter.url }}</a></div>
-            <div>Name: {{ chapter.name }}</div>
-        {% endfor %}
-    </div>
+    {% set difficulty_color = {'beginner': 'green', 'intermediate': 'blue', 'advanced': 'red'}.get(training.difficulty, 'blue') %}
+    {% set image_placeholder = static('training_main/images/placeholders/training_banner.jpeg') %}
+
+    <section>
+        <img src="{{ image_placeholder }}" class="img-fluid img-width-100 mb-3" alt="">
+        <div class="row">
+            <div class="col-md-8">
+                <p class="subtitle">{{ training.get_type_display() }}</p>
+                <h1 class="mb-0">{{ training.name }}</h1>
+                <p>{{ training.description }}</p>
+                {% call components.pills(class=['mb-3']) %}
+                    {% for tag in training.tags.all() %}
+                        {{ components.pill(label=tag.name) }}
+                    {% endfor %}
+                {% endcall %}
+                <p class="mb-3">{{ training.summary }}</p>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card card-dark">
+                    <div class="card-body">
+                        <h3>About this {{ training.get_type_display() }}</h3>
+                        <table class="table table-sm mb-0">
+                            <tbody>
+                            <tr>
+                                <td>Difficulty</td>
+                                <td class="text-right">
+                                    {{ components.badge_difficulty(label=training.get_difficulty_display(), color=difficulty_color) }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Last updated</td>
+                                <td class="text-right">{{ training.date_updated.strftime('%d %B %Y') }}</td>
+                            </tr>
+                            <tr>
+                                <td>Estimated duration</td>
+                                <td class="text-right">4h 32m</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="pb-0">
+                                    <div class="row mb-2">
+                                        <div style="background-image:url('https://blender.chat/avatar/MikeNewbon');"
+                                             class="profile"></div>
+                                        <div class="col-md-auto">
+                                            <p class="subtitle x-small">Author</p>
+                                            <h4 class="comment-name">Mike Newbon</h4>
+                                        </div>
+                                    </div>
+                                    <p class="mb-0">Blender Artist. Co-Founder of blendFX. Shading, Pipeline, Tracking,
+                                        Python Scripting. Also: Knitting.</p>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock content %}

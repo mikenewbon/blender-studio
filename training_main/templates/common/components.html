@@ -1,0 +1,120 @@
+{% macro breadcrumbs() %}
+    <ol class="breadcrumb">
+        {{ caller() }}
+    </ol>
+{% endmacro %}
+
+{% macro breadcrumb(label, url=None) %}
+    <li class="breadcrumb-item">
+        {% if url is not none %}
+            <a href="{{ url }}">{{ label }}</a>
+        {% else %}
+            {{ label }}
+        {% endif %}
+    </li>
+{% endmacro %}
+
+{% macro cards() %}
+    <div class="row">
+        {{ caller() }}
+    </div>
+{% endmacro %}
+
+{% macro pills(class=[]) %}
+    <div class="pills {{ class|join(' ') }}">
+        {{ caller() }}
+    </div>
+{% endmacro %}
+
+{% macro pill(label, url=None, color='blue') %}
+    {% if url is none %}
+        <p class="badge badge-pill badge-{{ color }}">{{ label }}</p>
+    {% else %}
+        <a class="badge badge-pill badge-{{ color }}" href="{{ url }}">{{ label }}</a>
+    {% endif %}
+{% endmacro %}
+
+{% macro checkbox_favorite(checked, class=[]) %}
+    {% if checked %}
+        <button class="btn btn-primary btn-ctrl-sm {{ class|join(' ') }}">
+            <i class="material-icons btn-material-icons">add</i>
+        </button>
+    {% else %}
+        <button class="btn btn-secondary btn-ctrl-sm {{ class|join(' ') }}">
+            <i class="material-icons btn-material-icons">check</i>
+        </button>
+    {% endif %}
+{% endmacro %}
+
+{% macro progressbar(fraction) %}
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width:{{ fraction*100 }}%;"></div>
+    </div>
+{% endmacro %}
+
+{% macro badge_difficulty(label, color='blue') %}
+    <div class="badge badge-difficulty badge-{{ color }}">
+        <i class="material-icons btn-material-icons">extension</i>
+        {{ label }}
+    </div>
+{% endmacro %}
+
+{% macro card_training(training) %}
+    {% set difficulty_color = {'beginner': 'green', 'intermediate': 'blue', 'advanced': 'red'}.get(training.difficulty, 'blue') %}
+    {% set image_placeholder = static('training_main/images/placeholders/card_training.png') %}
+    <div class="col-12 col-sm-6 col-lg-4">
+        <div class="card card-media">
+
+            <div class="card-header" style='background-image: url("{{ image_placeholder }}")'>
+                {{ badge_difficulty(label=training.get_difficulty_display(), color=difficulty_color) }}
+                {{ checkbox_favorite(checked=False, class=['btn-save-media']) }}
+                {{ progressbar(1/4) }}
+            </div>
+
+            <a class="card-body" href="{{ training.url }}">
+                <p class="card-subtitle">{{ training.get_type_display() }}</p>
+                <h2 class="card-title">{{ training.name }}</h2>
+                <p class="card-text">{{ training.description }}</p>
+            </a>
+
+            <div class="card-footer">
+                {% call pills() %}
+                    {% for tag in training.tags.all() %}
+                        {{ pill(label=tag.name) }}
+                    {% endfor %}
+                {% endcall %}
+            </div>
+
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro jumbotron() %}
+    {% set image_placeholder = static('training_main/images/placeholders/jumbotron.png') %}
+    <div style="background-image:url('{{ image_placeholder }}')"
+         class="jumbotron jumbotron-fluid jumbotron-overlay header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5 col-xl-4">
+                    <div class="jumbotron-body">
+                        {{ caller() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro searchbar(placeholder) %}
+    <div class="input-group">
+        <div class="input-group-prepend"><span class="input-group-text"><i class="material-icons">search</i></span>
+        </div>
+        <input type="text" placeholder="{{ placeholder }}" class="form-control">
+    </div>
+{% endmacro %}
+
+{% macro select() %}
+    <select class="custom-select">
+        {{ caller() }}
+    </select>
+{% endmacro %}
