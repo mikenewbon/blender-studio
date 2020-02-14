@@ -39,6 +39,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
         'DIRS': [str(BASE_DIR / 'training_main/templates')],
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -99,7 +100,6 @@ USE_L10N = True
 USE_TZ = True
 
 PIPELINE = {
-    # 'PIPELINE_ENABLED': False,
     'JS_COMPRESSOR': 'pipeline.compressors.jsmin.JSMinCompressor',
     'CSS_COMPRESSOR': 'pipeline.compressors.NoopCompressor',
     'JAVASCRIPT': {},
@@ -107,14 +107,14 @@ PIPELINE = {
         'cloud': {
             'source_filenames': ['training_main/styles/cloud/cloud.scss'],
             'output_filename': 'css/cloud.css',
-            'extra_context': {'media': 'screen,projection'},
+            'extra_context': {'media': 'screen,projection', 'charset': 'utf-8'},
         },
     },
     'COMPILERS': ('libsasscompiler.LibSassCompiler',),
     'DISABLE_WRAPPER': True,
 }
 
-STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
