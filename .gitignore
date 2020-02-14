@@ -13,5 +13,5 @@ __pycache__/
 node_modules/
 
 /training/settings.py
-/training/public/
-/training/yarn-error.log
+/public/
+/yarn-error.log

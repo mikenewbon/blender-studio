@@ -11,6 +11,8 @@ django-pipeline = "^1.7"
 psycopg2 = "^2.8"
 blender_id_oauth_client = {path = "../blender-id-oauth-client"}
 Jinja2 = "^2.11.1"
+libsasscompiler = "^0.1.5"
+jsmin = "^2.2.2"
 
 [tool.poetry.dev-dependencies]
 black = {version = "*", allow-prereleases = true}

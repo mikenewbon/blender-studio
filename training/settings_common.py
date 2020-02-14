@@ -48,6 +48,7 @@ TEMPLATES = [
             ],
             'undefined': jinja2.StrictUndefined,
             'environment': 'training_main.jinja2.environment',
+            'extensions': ['pipeline.jinja2.PipelineExtension'],
         },
     },
     {
@@ -102,7 +103,13 @@ PIPELINE = {
     'JS_COMPRESSOR': 'pipeline.compressors.jsmin.JSMinCompressor',
     'CSS_COMPRESSOR': 'pipeline.compressors.NoopCompressor',
     'JAVASCRIPT': {},
-    'STYLESHEETS': {},
+    'STYLESHEETS': {
+        'cloud': {
+            'source_filenames': ['training_main/styles/cloud/cloud.scss'],
+            'output_filename': 'css/cloud.css',
+            'extra_context': {'media': 'screen,projection'},
+        },
+    },
     'COMPILERS': ('libsasscompiler.LibSassCompiler',),
     'DISABLE_WRAPPER': True,
 }

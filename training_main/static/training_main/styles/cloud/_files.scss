@@ -1,0 +1,38 @@
+.file {
+	@extend .card;
+	@extend .card-media;
+	@extend .card-dark;
+
+	text-align: center;
+	&:hover{
+		background-color: tint($navigation-gray, 10%);
+		.subtitle{
+			text-decoration: none;
+		}
+		h4{
+			text-decoration: underline;
+		}
+	}
+
+	.subtitle {
+		font-size: $x-small-font-size;
+	}
+	h4 {
+		margin-bottom: 0;
+	}
+	&-body {
+		@extend .card-body;
+		padding: $spacer/2;
+	}
+	&-header{
+		@extend .card-header;
+		background-size: contain;
+		background-repeat: no-repeat;
+	}
+}
+
+a.file{
+	&:hover{
+		text-decoration: none;
+	}
+}

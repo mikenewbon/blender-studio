@@ -1,0 +1,15 @@
+footer {
+	@include media-breakpoint-down(sm){
+		text-align: center;
+	}
+	ul {
+		@include list-unstyled();
+	}
+}
+
+.footer-social-media img{
+
+	@include media-breakpoint-down(sm){
+		width: 48px;
+	}
+}
