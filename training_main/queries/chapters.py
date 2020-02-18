@@ -14,8 +14,9 @@ def from_slug_with_sections(
 ) -> Optional[Tuple[trainings.Training, chapters.Chapter, List[sections.Section]]]:
     try:
         chapter = _published().select_related('training').get(slug=slug)
-        training = chapter.training
-        sections = list(chapter.sections.all())
-        return training, chapter, sections
     except chapters.Chapter.DoesNotExist:
         return None
+
+    training = chapter.training
+    sections = list(chapter.sections.all())
+    return training, chapter, sections

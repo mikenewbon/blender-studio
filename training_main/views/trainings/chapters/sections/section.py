@@ -2,6 +2,14 @@ from django.http.request import HttpRequest
 from django.template.response import TemplateResponse
 
 from training_main import responses, queries
+from training_main.views.common import (
+    comments_to_comment_trees,
+    training_model_to_template_type,
+    chapter_model_to_template_type,
+    section_model_to_template_type,
+    video_model_to_template_type,
+    asset_model_to_template_type,
+)
 from training_main.views.decorators import login_required
 
 
@@ -20,7 +28,13 @@ def section(
     if result is None:
         return responses.errors.not_found(request)
     else:
-        training, chapter, section, video, assets = result
+        training, chapter, section, video, assets, comments = result
         return responses.trainings.chapters.sections.section.section(
-            request, training=training, chapter=chapter, section=section, video=video, assets=assets
+            request,
+            training=training_model_to_template_type(training),
+            chapter=chapter_model_to_template_type(chapter),
+            section=section_model_to_template_type(section),
+            video=None if video is None else video_model_to_template_type(video),
+            assets=[asset_model_to_template_type(asset) for asset in assets],
+            comments=comments_to_comment_trees(comments),
         )

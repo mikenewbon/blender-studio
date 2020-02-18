@@ -15,9 +15,10 @@ def from_slug_with_chapters(
 ) -> Optional[Tuple[trainings.Training, List[chapters.Chapter]]]:
     try:
         training = _published().prefetch_related('tags', 'chapters').get(slug=slug)
-        return training, list(training.chapters.all())
     except trainings.Training.DoesNotExist:
         return None
+
+    return training, list(training.chapters.all())
 
 
 def favorited(*, user: User) -> List[trainings.Training]:

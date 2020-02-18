@@ -2,6 +2,10 @@ from django.http.request import HttpRequest
 
 import training_main.types
 from training_main import responses, queries
+from training_main.views.common import (
+    training_model_to_template_type,
+    chapter_model_to_template_type,
+)
 from training_main.views.decorators import login_required
 
 
@@ -15,4 +19,8 @@ def training(
         return responses.errors.not_found(request)
     else:
         training, chapters = result
-        return responses.trainings.training.training(request, training=training, chapters=chapters)
+        return responses.trainings.training.training(
+            request,
+            training=training_model_to_template_type(training),
+            chapters=[chapter_model_to_template_type(chapter) for chapter in chapters],
+        )

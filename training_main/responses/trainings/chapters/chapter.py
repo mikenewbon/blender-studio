@@ -3,16 +3,16 @@ from typing import Sequence
 from django.http.request import HttpRequest
 from django.template.response import TemplateResponse
 
-from training_main.models import chapters, sections, trainings
+from training_main.responses import types
 from training_main.types import TypeSafeTemplateResponse
 
 
 def chapter(
     request: HttpRequest,
     *,
-    training: trainings.Training,
-    chapter: chapters.Chapter,
-    sections: Sequence[sections.Section],
+    training: types.Training,
+    chapter: types.Chapter,
+    sections: Sequence[types.Section],
 ) -> TypeSafeTemplateResponse:
     return TypeSafeTemplateResponse(
         TemplateResponse(

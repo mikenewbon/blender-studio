@@ -3,16 +3,16 @@ from typing import Sequence
 from django.http.request import HttpRequest
 from django.template.response import TemplateResponse
 
-from training_main.models import trainings
+from training_main.responses import types
 from training_main.types import TypeSafeTemplateResponse
 
 
 def home_authenticated(
     request: HttpRequest,
     *,
-    favorited_trainings: Sequence[trainings.Training],
-    recently_watched_trainings: Sequence[trainings.Training],
-    all_trainings: Sequence[trainings.Training],
+    favorited_trainings: Sequence[types.Training],
+    recently_watched_trainings: Sequence[types.Training],
+    all_trainings: Sequence[types.Training],
 ) -> TypeSafeTemplateResponse:
     return TypeSafeTemplateResponse(
         TemplateResponse(
@@ -28,7 +28,7 @@ def home_authenticated(
 
 
 def home_not_authenticated(
-    request: HttpRequest, *, all_trainings: Sequence[trainings.Training],
+    request: HttpRequest, *, all_trainings: Sequence[types.Training],
 ) -> TypeSafeTemplateResponse:
     return TypeSafeTemplateResponse(
         TemplateResponse(

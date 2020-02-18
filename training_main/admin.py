@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from training_main.models import trainings, chapters, sections, tags
+from training_main.models import trainings, chapters, sections, tags, comments
 
 
 class ChapterInline(admin.TabularInline):
@@ -27,6 +27,11 @@ class ChapterAdmin(admin.ModelAdmin):
     inlines = [SectionInline]
 
 
+class VideoInline(admin.TabularInline):
+    show_change_link = True
+    model = sections.Video
+
+
 class AssetInline(admin.TabularInline):
     show_change_link = True
     model = sections.Asset
@@ -34,9 +39,10 @@ class AssetInline(admin.TabularInline):
 
 @admin.register(sections.Section)
 class SectionAdmin(admin.ModelAdmin):
-    inlines = [AssetInline]
+    inlines = [VideoInline, AssetInline]
 
 
 admin.site.register(sections.Video)
 admin.site.register(sections.Asset)
 admin.site.register(tags.Tag)
+admin.site.register(comments.Comment)

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -32,7 +34,7 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
     likes = models.ManyToManyField(User, through='Like', related_name='liked_comments')
 
     def __str__(self) -> str:
-        return f'Comment by {self.username or "<deleted>"} on {self.section.name}'
+        return f'Comment by {self.username} on {self.section.name}'
 
     @property
     def username(self) -> str:

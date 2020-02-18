@@ -1,14 +1,15 @@
 {% extends 'training_main/base.html' %}
+{% import 'common/components.html' as components %}
+
+{% block breadcrumbs %}
+    {% call components.breadcrumbs() %}
+        {{ components.breadcrumb(label='Home', url=url('home')) }}
+        {{ components.breadcrumb(label=training.name, url=training.url) }}
+        {{ components.breadcrumb(label=chapter.name) }}
+    {% endcall %}
+{% endblock breadcrumbs %}
 
 {% block content %}
-    <span>
-        <a href="{{ url('home') }}">Home</a>
-        >
-        <a href="{{ training.url }}">{{ training.name }}</a>
-        >
-        <span>{{ chapter.index }}. {{ chapter.name }}</span>
-    </span>
-    <hr/>
     <div>
         <div>Name: {{ chapter.name }}</div>
     </div>

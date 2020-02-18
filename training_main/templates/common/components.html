@@ -46,6 +46,21 @@
     {% endif %}
 {% endmacro %}
 
+{% macro checkbox_toggle(checked) %}
+    <div class="col-md-auto text-right">
+        <div class="form-group">
+            <label class="form-group form-switch">
+                {% if checked %}
+                    <input type="checkbox" class="form-check-input" checked="checked">
+                {% else %}
+                    <input type="checkbox" class="form-check-input">
+                {% endif %}
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+{% endmacro %}
+
 {% macro progressbar(fraction) %}
     <div class="progress">
         <div class="progress-bar" role="progressbar" style="width:{{ fraction*100 }}%;"></div>
@@ -66,21 +81,21 @@
         <div class="card card-media">
 
             <div class="card-header" style='background-image: url("{{ image_placeholder }}")'>
-                {{ badge_difficulty(label=training.get_difficulty_display(), color=difficulty_color) }}
+                {{ badge_difficulty(label=training.difficulty.label, color=difficulty_color) }}
                 {{ checkbox_favorite(checked=False, class=['btn-save-media']) }}
                 {{ progressbar(1/4) }}
             </div>
 
             <a class="card-body" href="{{ training.url }}">
-                <p class="card-subtitle">{{ training.get_type_display() }}</p>
+                <p class="card-subtitle">{{ training.type.label }}</p>
                 <h2 class="card-title">{{ training.name }}</h2>
                 <p class="card-text">{{ training.description }}</p>
             </a>
 
             <div class="card-footer">
                 {% call pills() %}
-                    {% for tag in training.tags.all() %}
-                        {{ pill(label=tag.name) }}
+                    {% for tag in training.tags %}
+                        {{ pill(label=tag) }}
                     {% endfor %}
                 {% endcall %}
             </div>
@@ -117,4 +132,55 @@
     <select class="custom-select">
         {{ caller() }}
     </select>
+{% endmacro %}
+
+{% macro video_player(url) %}
+    <video id="player" playsinline controls>
+        <source src="{{ url }}">
+    </video>
+{% endmacro %}
+
+{% macro comments(comment_trees) %}
+    <h3 class="mb-2">12 Comments</h3>
+    <div class="row my-2">
+        <div style="background-image:url('https://blender.chat/avatar/MikeNewbon');" class="profile"></div>
+        <div class="col">
+            <div class="input-group input-group-sm">
+                <input type="text" placeholder="Comment publicly" class="form-control">
+                <div class="input-group-append">
+                    <button class="btn btn-input">Comment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ _comment_trees(comment_trees) }}
+{% endmacro %}
+
+{% macro _comment_trees(comment_trees) %}
+    {% for comment in comment_trees %}
+        <div class="row comment">
+            <div class="col-md-12">
+                <div class="row comment-header">
+                    <div style="background-image:url('https://blender.chat/avatar/MikeNewbon');" class="profile"></div>
+                    <div class="col-md-auto">
+                        <h4 class="comment-name">{{ comment.username }}</h4>
+                        <p class="comment-date">{{ comment.date_updated.strftime('%d %B %Y - %H:%M') }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p class="comment-text">{{ comment.message }}</p>
+                        <div class="comment-likes">
+                            <i class="material-icons comment-likes-btn">favorite_border</i>
+                            <p class="comment-likes-count">{{ comment.likes }}</p>
+                            <a href="#" class="comment-reply">Reply</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                {{ _comment_trees(comment.replies) }}
+            </div>
+        </div>
+    {% endfor %}
 {% endmacro %}

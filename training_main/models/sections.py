@@ -8,27 +8,6 @@ from django.urls.base import reverse
 from training_main.models import mixins, chapters
 
 
-def video_upload_path(video: Video, filename: str) -> str:
-    return str(
-        Path('trainings')
-        / str(video.section.chapter.training.id)
-        / 'chapters'
-        / str(video.section.chapter.index)
-        / 'sections'
-        / str(video.section.index)
-        / 'video'
-        / filename
-    )
-
-
-class Video(mixins.CreatedUpdatedMixin, models.Model):
-    file = models.FileField(upload_to=video_upload_path)
-    size = models.IntegerField()
-
-    def __str__(self) -> str:
-        return self.file.path  # type: ignore
-
-
 class Section(mixins.CreatedUpdatedMixin, models.Model):
     class Meta:
         constraints = [
@@ -41,10 +20,6 @@ class Section(mixins.CreatedUpdatedMixin, models.Model):
     name = models.TextField(unique=True)
     slug = models.SlugField(unique=True)
     text = models.TextField()
-
-    video = models.OneToOneField(
-        Video, null=True, blank=True, on_delete=models.SET_NULL, related_name='section'
-    )
 
     def __str__(self) -> str:
         return f'{self.chapter.training.name} > {self.chapter.index}. {self.chapter.name} > {self.index}. {self.name}'
@@ -61,6 +36,28 @@ class Section(mixins.CreatedUpdatedMixin, models.Model):
                 'section_slug': self.slug,
             },
         )
+
+
+def video_upload_path(video: Video, filename: str) -> str:
+    return str(
+        Path('trainings')
+        / str(video.section.chapter.training.id)
+        / 'chapters'
+        / str(video.section.chapter.index)
+        / 'sections'
+        / str(video.section.index)
+        / 'video'
+        / filename
+    )
+
+
+class Video(mixins.CreatedUpdatedMixin, models.Model):
+    section = models.OneToOneField(Section, on_delete=models.CASCADE, related_name='video')
+    file = models.FileField(upload_to=video_upload_path)
+    size = models.IntegerField()
+
+    def __str__(self) -> str:
+        return self.file.path  # type: ignore
 
 
 def asset_upload_path(asset: Asset, filename: str) -> str:

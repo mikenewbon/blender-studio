@@ -16,12 +16,12 @@
         <img src="{{ image_placeholder }}" class="img-fluid img-width-100 mb-3" alt="">
         <div class="row">
             <div class="col-md-8">
-                <p class="subtitle">{{ training.get_type_display() }}</p>
+                <p class="subtitle">{{ training.type.label }}</p>
                 <h1 class="mb-0">{{ training.name }}</h1>
                 <p>{{ training.description }}</p>
                 {% call components.pills(class=['mb-3']) %}
-                    {% for tag in training.tags.all() %}
-                        {{ components.pill(label=tag.name) }}
+                    {% for tag in training.tags %}
+                        {{ components.pill(label=tag) }}
                     {% endfor %}
                 {% endcall %}
                 <p class="mb-3">{{ training.summary }}</p>
@@ -30,13 +30,13 @@
             <div class="col-md-4">
                 <div class="card card-dark">
                     <div class="card-body">
-                        <h3>About this {{ training.get_type_display() }}</h3>
+                        <h3>About this {{ training.type.label }}</h3>
                         <table class="table table-sm mb-0">
                             <tbody>
                             <tr>
                                 <td>Difficulty</td>
                                 <td class="text-right">
-                                    {{ components.badge_difficulty(label=training.get_difficulty_display(), color=difficulty_color) }}
+                                    {{ components.badge_difficulty(label=training.difficulty.label, color=difficulty_color) }}
                                 </td>
                             </tr>
                             <tr>
@@ -66,6 +66,13 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="row">
+            <h3>Chapters</h3>
+            {% for chapter in chapters|sort(attribute='index') %}
+                <div>URL: <a href="{{ chapter.url }}">{{ chapter.url }}</a></div>
+                <div>Name: {{ chapter.name }}</div>
+            {% endfor %}
         </div>
     </section>
 {% endblock content %}

@@ -2,7 +2,7 @@ from typing import Optional, Tuple, List
 
 from django.db.models import QuerySet
 
-from training_main.models import chapters, trainings, sections
+from training_main.models import chapters, trainings, sections, comments
 
 
 def _published() -> 'QuerySet[sections.Section]':
@@ -20,19 +20,26 @@ def from_slug(
         sections.Section,
         Optional[sections.Video],
         List[sections.Asset],
+        List[comments.Comment],
     ]
 ]:
     try:
         section = (
             _published()
-            .select_related('chapter__training', 'chapter', 'video')
-            .prefetch_related('assets')
+            .select_related('chapter__training', 'chapter')
+            .prefetch_related('video', 'assets', 'comments', 'comments__user')
             .get(slug=slug)
         )
-        video = section.video
-        assets = list(section.assets.all())
-        chapter = section.chapter
-        training = chapter.training
-        return training, chapter, section, video, assets
     except sections.Section.DoesNotExist:
         return None
+
+    video: Optional[sections.Video]
+    try:
+        video = section.video
+    except sections.Video.DoesNotExist:
+        video = None
+    assets = list(section.assets.all())
+    chapter = section.chapter
+    training = chapter.training
+    comments = list(section.comments.all())
+    return training, chapter, section, video, assets, comments

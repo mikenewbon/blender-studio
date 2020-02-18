@@ -2,6 +2,11 @@ from django.http.request import HttpRequest
 from django.template.response import TemplateResponse
 
 from training_main import responses, queries
+from training_main.views.common import (
+    training_model_to_template_type,
+    chapter_model_to_template_type,
+    section_model_to_template_type,
+)
 from training_main.views.decorators import login_required
 
 
@@ -16,5 +21,8 @@ def chapter(
     else:
         training, chapter, sections = result
         return responses.trainings.chapters.chapter.chapter(
-            request, training=training, chapter=chapter, sections=sections
+            request,
+            training=training_model_to_template_type(training),
+            chapter=chapter_model_to_template_type(chapter),
+            sections=[section_model_to_template_type(section) for section in sections],
         )
