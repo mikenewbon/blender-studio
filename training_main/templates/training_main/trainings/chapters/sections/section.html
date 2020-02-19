@@ -5,8 +5,8 @@
     {% call components.breadcrumbs() %}
         {{ components.breadcrumb(label='Home', url=url('home')) }}
         {{ components.breadcrumb(label=training.name, url=training.url) }}
-        {{ components.breadcrumb(label=chapter.name, url=chapter.url) }}
-        {{ components.breadcrumb(label=section.name) }}
+        {{ components.breadcrumb(label=chapter.name_with_index, url=chapter.url) }}
+        {{ components.breadcrumb(label=section.name_with_index) }}
     {% endcall %}
 {% endblock breadcrumbs %}
 
@@ -22,8 +22,8 @@
         <div class="col-md-8">
             <div class="row mb-2 justify-content-between">
                 <div class="col-md-auto">
-                    <p class="subtitle small">{{ chapter.index }}. {{ chapter.name }}</p>
-                    <h2 class="mb-0">{{ section.index }}. {{ section.name }}</h2>
+                    <p class="subtitle small">{{ chapter.name_with_index }}</p>
+                    <h2 class="mb-0">{{ section.name_with_index }}</h2>
                 </div>
             </div>
             <div class="row mb-3 justify-content-between">
@@ -33,8 +33,8 @@
                     </div>
                 </div>
             </div>
-            <div class="mb-3">{{ section.text }}</div>
-            <div class="mb-3">{{ components.comments(comments) }}</div>
+            <section class="mb-3">{{ section.text }}</section>
+            <section class="mb-3">{{ components.comment_section(comments) }}</section>
         </div>
         <div class="col-md-4">
             <div class="card card-dark">

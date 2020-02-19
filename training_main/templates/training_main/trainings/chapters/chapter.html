@@ -5,7 +5,7 @@
     {% call components.breadcrumbs() %}
         {{ components.breadcrumb(label='Home', url=url('home')) }}
         {{ components.breadcrumb(label=training.name, url=training.url) }}
-        {{ components.breadcrumb(label=chapter.name) }}
+        {{ components.breadcrumb(label=chapter.name_with_index) }}
     {% endcall %}
 {% endblock breadcrumbs %}
 

@@ -25,6 +25,10 @@ class Chapter:
     name: str
     url: str
 
+    @property
+    def name_with_index(self) -> str:
+        return f'{self.index:02.0f}. {self.name}'
+
 
 @dc.dataclass
 class Section:
@@ -32,6 +36,10 @@ class Section:
     name: str
     text: str
     url: str
+
+    @property
+    def name_with_index(self) -> str:
+        return f'{self.index:02.0f}. {self.name}'
 
 
 @dc.dataclass
@@ -46,9 +54,15 @@ class Asset:
 
 
 @dc.dataclass
+class Comments:
+    number_of_comments: int
+    comment_trees: List[CommentTree]
+
+
+@dc.dataclass
 class CommentTree:
     username: str
-    date_updated: datetime.datetime
+    date_created: datetime.datetime
     message: str
     likes: int
     replies: List[CommentTree]

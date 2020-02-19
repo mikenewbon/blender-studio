@@ -36,9 +36,9 @@ def asset_model_to_template_type(asset: sections.Asset) -> responses.types.Asset
     return responses.types.Asset(name=asset.file.name, url=asset.file.url)
 
 
-def comments_to_comment_trees(comments: Sequence[Comment]) -> List[responses.types.CommentTree]:
+def comments_to_template_type(comments: Sequence[Comment]) -> responses.types.Comments:
     lookup: Dict[Optional[int], List[Comment]] = {}
-    for comment in comments:
+    for comment in sorted(comments, key=lambda c: c.date_created, reverse=True):
         reply_to_pk = None if comment.reply_to is None else comment.reply_to.pk
 
         lookup.setdefault(reply_to_pk, []).append(comment)
@@ -46,10 +46,13 @@ def comments_to_comment_trees(comments: Sequence[Comment]) -> List[responses.typ
     def build_tree(comment: Comment) -> responses.types.CommentTree:
         return responses.types.CommentTree(
             username=comment.username,
-            date_updated=comment.date_updated,
+            date_created=comment.date_created,
             message=comment.message,
             likes=comment.likes.count(),
             replies=[build_tree(reply) for reply in lookup.get(comment.pk, [])],
         )
 
-    return [build_tree(comment) for comment in lookup.get(None, [])]
+    return responses.types.Comments(
+        number_of_comments=len(comments),
+        comment_trees=[build_tree(comment) for comment in lookup.get(None, [])],
+    )

@@ -19,7 +19,7 @@ class Chapter(mixins.CreatedUpdatedMixin, models.Model):
     slug = models.SlugField(unique=True)
 
     def __str__(self) -> str:
-        return f'{self.training.name} > {self.index}. {self.name}'
+        return f'{self.training.name} > {self.index:02.0f}. {self.name}'
 
     @property
     def url(self) -> str:

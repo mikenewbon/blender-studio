@@ -22,7 +22,7 @@ class Section(mixins.CreatedUpdatedMixin, models.Model):
     text = models.TextField()
 
     def __str__(self) -> str:
-        return f'{self.chapter.training.name} > {self.chapter.index}. {self.chapter.name} > {self.index}. {self.name}'
+        return f'{self.chapter.training.name} > {self.chapter.index:02.0f}. {self.chapter.name} > {self.index:02.0f}. {self.name}'
 
     @property
     def url(self) -> str:

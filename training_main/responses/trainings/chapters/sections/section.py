@@ -15,7 +15,7 @@ def section(
     section: types.Section,
     video: Optional[types.Video],
     assets: List[types.Asset],
-    comments: List[types.CommentTree],
+    comments: types.Comments,
 ) -> TypeSafeTemplateResponse:
     return TypeSafeTemplateResponse(
         TemplateResponse(

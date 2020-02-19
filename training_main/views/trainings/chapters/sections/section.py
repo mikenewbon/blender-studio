@@ -3,12 +3,12 @@ from django.template.response import TemplateResponse
 
 from training_main import responses, queries
 from training_main.views.common import (
-    comments_to_comment_trees,
     training_model_to_template_type,
     chapter_model_to_template_type,
     section_model_to_template_type,
     video_model_to_template_type,
     asset_model_to_template_type,
+    comments_to_template_type,
 )
 from training_main.views.decorators import login_required
 
@@ -36,5 +36,5 @@ def section(
             section=section_model_to_template_type(section),
             video=None if video is None else video_model_to_template_type(video),
             assets=[asset_model_to_template_type(asset) for asset in assets],
-            comments=comments_to_comment_trees(comments),
+            comments=comments_to_template_type(comments),
         )
