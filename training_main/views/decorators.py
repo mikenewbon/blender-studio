@@ -1,9 +1,9 @@
 from typing import TypeVar, Callable, cast
 
 from django.contrib.auth.decorators import login_required as django_login_required
-from django.template.response import TemplateResponse
+from django.http.response import HttpResponseBase
 
-F = TypeVar('F', bound=Callable[..., TemplateResponse])
+F = TypeVar('F', bound=Callable[..., HttpResponseBase])
 
 
 def login_required(function: F) -> F:

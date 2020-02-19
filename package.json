@@ -1,7 +1,7 @@
 {
   "name": "blender-training",
   "version": "0.1.0",
-  "description": "The Blender Training website",
+  "description": "The Blender Studio Training website",
   "repository": "https://developer.blender.org/",
   "author": "Sem Mulder <sem@blender.studio>",
   "devDependencies": {

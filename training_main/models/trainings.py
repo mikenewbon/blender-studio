@@ -49,6 +49,10 @@ class Training(mixins.CreatedUpdatedMixin, models.Model):
     def url(self) -> str:
         return reverse('training', kwargs={'training_slug': self.slug})
 
+    @property
+    def favorite_url(self) -> str:
+        return reverse('training_favorite', kwargs={'training_pk': self.pk})
+
 
 class TrainingTag(models.Model):
     class Meta:

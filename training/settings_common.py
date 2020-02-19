@@ -103,7 +103,16 @@ USE_TZ = True
 PIPELINE = {
     'JS_COMPRESSOR': 'pipeline.compressors.jsmin.JSMinCompressor',
     'CSS_COMPRESSOR': 'pipeline.compressors.NoopCompressor',
-    'JAVASCRIPT': {},
+    'JAVASCRIPT': {
+        'cloud': {
+            'source_filenames': [
+                'training_main/scripts/*.js',
+                'training_main/scripts/components/*.js',
+            ],
+            'output_filename': 'js/cloud.js',
+            'extra_context': {'async': True, 'defer': False},
+        }
+    },
     'STYLESHEETS': {
         'cloud': {
             'source_filenames': ['training_main/styles/cloud/cloud.scss'],

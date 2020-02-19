@@ -34,18 +34,6 @@
     {% endif %}
 {% endmacro %}
 
-{% macro checkbox_favorite(checked, class=[]) %}
-    {% if checked %}
-        <button class="btn btn-primary btn-ctrl-sm {{ class|join(' ') }}">
-            <i class="material-icons btn-material-icons">add</i>
-        </button>
-    {% else %}
-        <button class="btn btn-secondary btn-ctrl-sm {{ class|join(' ') }}">
-            <i class="material-icons btn-material-icons">check</i>
-        </button>
-    {% endif %}
-{% endmacro %}
-
 {% macro checkbox_toggle(checked) %}
     <div class="col-md-auto text-right">
         <div class="form-group">
@@ -74,15 +62,23 @@
     </div>
 {% endmacro %}
 
+{% macro card_training_checkbox_favorite(checked, class=[]) %}
+    <button class="btn btn-ctrl-sm checkbox-favorite {{ class|join(' ') }}"
+            {% if checked %}data-checked="checked"{% endif %}>
+        <i class="material-icons btn-material-icons checkbox-favorite-icon-checked">check</i>
+        <i class="material-icons btn-material-icons checkbox-favorite-icon-unchecked">add</i>
+    </button>
+{% endmacro %}
+
 {% macro card_training(training) %}
     {% set difficulty_color = {'beginner': 'green', 'intermediate': 'blue', 'advanced': 'red'}.get(training.difficulty, 'blue') %}
     {% set image_placeholder = static('training_main/images/placeholders/card_training.png') %}
     <div class="col-12 col-sm-6 col-lg-4">
-        <div class="card card-media">
+        <div class="card card-media card-training" data-favorite-url="{{ training.favorite_url }}">
 
             <div class="card-header" style='background-image: url("{{ image_placeholder }}")'>
                 {{ badge_difficulty(label=training.difficulty.label, color=difficulty_color) }}
-                {{ checkbox_favorite(checked=False, class=['btn-save-media']) }}
+                {{ card_training_checkbox_favorite(checked=training.favorited, class=['btn-save-media', 'card-training-favorite']) }}
                 {{ progressbar(1/4) }}
             </div>
 

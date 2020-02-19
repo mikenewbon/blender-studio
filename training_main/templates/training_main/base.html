@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blender Training</title>
+    <title>Blender Studio Training</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
@@ -14,9 +14,10 @@
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
     <script src="https://cdn.plyr.io/3.5.10/plyr.polyfilled.js"></script>
-    <meta name="description" content="Blender Training">
+    <meta name="description" content="Blender Studio Training">
     <meta name="author" content="Blender Institute">
     {% stylesheet 'cloud' %}
+    {% javascript 'cloud' %}
 </head>
 
 <body>
@@ -50,9 +51,11 @@
 
 <div class="content-holder">
     {% block jumbotron %}{% endblock jumbotron %}
-    <div class="container">
-        {% block content %}{% endblock content %}
-    </div>
+    {% block container %}
+        <div class="container">
+            {% block content %}{% endblock content %}
+        </div>
+    {% endblock container %}
 </div>
 </body>
 </html>

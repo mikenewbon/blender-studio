@@ -1,7 +1,7 @@
 from django.http.request import HttpRequest
 from django.template.response import TemplateResponse
 
-from training_main.types import TypeSafeTemplateResponse
+from training_main.responses.types import TypeSafeTemplateResponse
 
 
 def not_found(request: HttpRequest) -> TypeSafeTemplateResponse:

@@ -3,12 +3,12 @@ from typing import Sequence
 from django.http.request import HttpRequest
 from django.template.response import TemplateResponse
 
-from training_main.responses import types
-from training_main.types import TypeSafeTemplateResponse
+from training_main.responses.common import Training, Chapter
+from training_main.responses.types import TypeSafeTemplateResponse
 
 
 def training(
-    request: HttpRequest, *, training: types.Training, chapters: Sequence[types.Chapter]
+    request: HttpRequest, *, training: Training, chapters: Sequence[Chapter],
 ) -> TypeSafeTemplateResponse:
     return TypeSafeTemplateResponse(
         TemplateResponse(

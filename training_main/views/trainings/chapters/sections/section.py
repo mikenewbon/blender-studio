@@ -1,7 +1,8 @@
 from django.http.request import HttpRequest
-from django.template.response import TemplateResponse
+from django.views.decorators.http import require_safe
 
 from training_main import responses, queries
+from training_main.responses.types import TypeSafeTemplateResponse
 from training_main.views.common import (
     training_model_to_template_type,
     chapter_model_to_template_type,
@@ -13,6 +14,7 @@ from training_main.views.common import (
 from training_main.views.decorators import login_required
 
 
+@require_safe
 @login_required
 def section(
     request: HttpRequest,
@@ -22,16 +24,16 @@ def section(
     chapter_slug: str,
     section_index: int,
     section_slug: str,
-) -> TemplateResponse:
-    result = queries.sections.from_slug(section_slug)
+) -> TypeSafeTemplateResponse:
+    result = queries.sections.from_slug(user_pk=request.user.pk, section_slug=section_slug)
 
     if result is None:
         return responses.errors.not_found(request)
     else:
-        training, chapter, section, video, assets, comments = result
+        training, training_favorited, chapter, section, video, assets, comments = result
         return responses.trainings.chapters.sections.section.section(
             request,
-            training=training_model_to_template_type(training),
+            training=training_model_to_template_type(training, training_favorited),
             chapter=chapter_model_to_template_type(chapter),
             section=section_model_to_template_type(section),
             video=None if video is None else video_model_to_template_type(video),

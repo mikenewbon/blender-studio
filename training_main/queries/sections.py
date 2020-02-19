@@ -1,6 +1,6 @@
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, cast
 
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Exists, Subquery, OuterRef
 
 from training_main.models import chapters, trainings, sections, comments
 
@@ -12,10 +12,11 @@ def _published() -> 'QuerySet[sections.Section]':
 
 
 def from_slug(
-    slug: str,
+    *, user_pk: int, section_slug: str,
 ) -> Optional[
     Tuple[
         trainings.Training,
+        bool,
         chapters.Chapter,
         sections.Section,
         Optional[sections.Video],
@@ -26,9 +27,16 @@ def from_slug(
     try:
         section = (
             _published()
+            .annotate(
+                training_favorited=Exists(
+                    trainings.Favorite.objects.filter(
+                        user_id=user_pk, training_id=OuterRef('chapter__training_id')
+                    )
+                )
+            )
             .select_related('chapter__training', 'chapter')
             .prefetch_related('video', 'assets', 'comments', 'comments__user')
-            .get(slug=slug)
+            .get(slug=section_slug)
         )
     except sections.Section.DoesNotExist:
         return None
@@ -41,5 +49,6 @@ def from_slug(
     assets = list(section.assets.all())
     chapter = section.chapter
     training = chapter.training
+    training_favorited = cast(bool, getattr(section, 'training_favorited'))
     comments = list(section.comments.all())
-    return training, chapter, section, video, assets, comments
+    return training, training_favorited, chapter, section, video, assets, comments
