@@ -38,5 +38,5 @@ def section(
             section=section_model_to_template_type(section),
             video=None if video is None else video_model_to_template_type(video),
             assets=[asset_model_to_template_type(asset) for asset in assets],
-            comments=comments_to_template_type(comments),
+            comments=comments_to_template_type(comments, section.comment_url),
         )

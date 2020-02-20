@@ -137,46 +137,84 @@
 {% endmacro %}
 
 {% macro comment_section(comments) %}
-    <h3 class="mb-2">{{ comments.number_of_comments }} Comments</h3>
-    <div class="row my-2">
-        <div style="background-image:url('https://blender.chat/avatar/MikeNewbon');" class="profile"></div>
+    <div class="comment-section" data-comment-url="{{ comments.comment_url }}"
+         data-profile-image-url="{{ comments.profile_image_url }}">
+        <h3 class="mb-2">{{ comments.number_of_comments }} Comments</h3>
+        {{ comment_input(comments.profile_image_url) }}
+        <div class="comments">
+            {{ _comment_trees(comments.comment_trees) }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro comment_input(profile_image_url) %}
+    <div class="row my-2 comment-input">
+        <div style="background-image:url({{ profile_image_url }});" class="profile"></div>
         <div class="col">
-            <div class="input-group input-group-sm">
+            <form class="input-group input-group-sm">
                 <input type="text" placeholder="Comment publicly" class="form-control">
                 <div class="input-group-append">
                     <button class="btn btn-input">Comment</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
-    {{ _comment_trees(comments.comment_trees) }}
+{% endmacro %}
+
+{% macro comment_input_template() %}
+    <template id="comment-input-template">
+        {{ comment_input(profile_image_url='') }}
+    </template>
+{% endmacro %}
+
+{% macro comment(id, username, profile_image_url, date_string, message, likes) %}
+    <div class="row comment" data-comment-id="{{ id }}">
+        <div class="col-md-12">
+            <div class="row comment-header">
+                <div style="background-image:url('{{ profile_image_url }}');" class="profile"></div>
+                <div class="col-md-auto">
+                    <h4 class="comment-name">{{ username }}</h4>
+                    <p class="comment-date">{{ date_string }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <p class="comment-text">{{ message }}</p>
+                    <div class="comment-likes">
+                        <i class="material-icons comment-likes-btn">favorite_border</i>
+                        <p class="comment-likes-count">{{ likes }}</p>
+                        <a href="" class="comment-reply">Reply</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 comment-inputs">
+        </div>
+        <div class="col-md-12 replies">
+            {% if caller is defined %}
+                {{ caller() }}
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro comment_template() %}
+    <template id="comment-template">
+        {{ comment(id='', username='', profile_image_url='', date_string='', message='', likes='') }}
+    </template>
 {% endmacro %}
 
 {% macro _comment_trees(comment_trees) %}
-    {% for comment in comment_trees %}
-        <div class="row comment">
-            <div class="col-md-12">
-                <div class="row comment-header">
-                    <div style="background-image:url('https://blender.chat/avatar/MikeNewbon');" class="profile"></div>
-                    <div class="col-md-auto">
-                        <h4 class="comment-name">{{ comment.username }}</h4>
-                        <p class="comment-date">{{ comment.date_created.strftime('%d %B %Y - %H:%M') }}</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <p class="comment-text">{{ comment.message }}</p>
-                        <div class="comment-likes">
-                            <i class="material-icons comment-likes-btn">favorite_border</i>
-                            <p class="comment-likes-count">{{ comment.likes }}</p>
-                            <a href="#" class="comment-reply">Reply</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                {{ _comment_trees(comment.replies) }}
-            </div>
-        </div>
+    {% for c in comment_trees %}
+        {% call comment(
+            id=c.id,
+            username=c.username,
+            profile_image_url=c.profile_image_url,
+            date_string=c.date.strftime('%d %B %Y - %H:%M'),
+            message=c.message,
+            likes=c.likes
+        ) %}
+            {{ _comment_trees(c.replies) }}
+        {% endcall %}
     {% endfor %}
 {% endmacro %}

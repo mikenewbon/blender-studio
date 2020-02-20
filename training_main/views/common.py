@@ -1,8 +1,15 @@
-from typing import Sequence, List, Optional, Dict
+from typing import Sequence, List, Optional, Dict, Type, TypeVar
 
 import training_main.responses.common
 from training_main.models import trainings, chapters, sections
 from training_main.models.comments import Comment
+
+T = TypeVar('T', bound=object)
+
+
+def assert_cast(typ: Type[T], val: object) -> T:
+    assert isinstance(val, typ)
+    return val
 
 
 def training_model_to_template_type(
@@ -47,7 +54,7 @@ def asset_model_to_template_type(asset: sections.Asset) -> training_main.respons
 
 
 def comments_to_template_type(
-    comments: Sequence[Comment],
+    comments: Sequence[Comment], comment_url: str,
 ) -> training_main.responses.common.Comments:
     lookup: Dict[Optional[int], List[Comment]] = {}
     for comment in sorted(comments, key=lambda c: c.date_created, reverse=True):
@@ -57,14 +64,18 @@ def comments_to_template_type(
 
     def build_tree(comment: Comment) -> training_main.responses.common.CommentTree:
         return training_main.responses.common.CommentTree(
+            id=comment.pk,
             username=comment.username,
-            date_created=comment.date_created,
+            date=comment.date_created,
             message=comment.message,
             likes=comment.likes.count(),
             replies=[build_tree(reply) for reply in lookup.get(comment.pk, [])],
+            profile_image_url='https://blender.chat/avatar/MikeNewbon',
         )
 
     return training_main.responses.common.Comments(
+        comment_url=comment_url,
         number_of_comments=len(comments),
         comment_trees=[build_tree(comment) for comment in lookup.get(None, [])],
+        profile_image_url='https://blender.chat/avatar/fsiddi',
     )

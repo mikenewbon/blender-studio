@@ -57,14 +57,18 @@ class Asset:
 
 @dc.dataclass
 class Comments:
+    comment_url: str
     number_of_comments: int
     comment_trees: List[CommentTree]
+    profile_image_url: str
 
 
 @dc.dataclass
 class CommentTree:
+    id: int
     username: str
-    date_created: datetime.datetime
+    date: datetime.datetime
     message: str
     likes: int
     replies: List[CommentTree]
+    profile_image_url: str

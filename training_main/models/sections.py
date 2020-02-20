@@ -37,6 +37,10 @@ class Section(mixins.CreatedUpdatedMixin, models.Model):
             },
         )
 
+    @property
+    def comment_url(self) -> str:
+        return reverse('section_comment', kwargs={'section_pk': self.pk,},)
+
 
 def video_upload_path(video: Video, filename: str) -> str:
     return str(

@@ -1,6 +1,6 @@
 from typing import Optional, Tuple, List, cast
 
-from django.db.models import QuerySet, Exists, Subquery, OuterRef
+from django.db.models import QuerySet, Exists, OuterRef
 
 from training_main.models import chapters, trainings, sections, comments
 
@@ -52,3 +52,11 @@ def from_slug(
     training_favorited = cast(bool, getattr(section, 'training_favorited'))
     comments = list(section.comments.all())
     return training, training_favorited, chapter, section, video, assets, comments
+
+
+def comment(
+    *, user_pk: int, section_pk: int, message: str, reply_to_pk: Optional[int]
+) -> comments.Comment:
+    return comments.Comment.objects.create(
+        user_id=user_pk, section_id=section_pk, message=message, reply_to_id=reply_to_pk
+    )

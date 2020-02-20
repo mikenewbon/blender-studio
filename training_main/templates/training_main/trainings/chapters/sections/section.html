@@ -1,6 +1,12 @@
 {% extends 'training_main/base.html' %}
 {% import 'common/components.html' as components %}
 
+{% block html_templates %}
+    {{ super() }}
+    {{ components.comment_template() }}
+    {{ components.comment_input_template() }}
+{% endblock html_templates %}
+
 {% block breadcrumbs %}
     {% call components.breadcrumbs() %}
         {{ components.breadcrumb(label='Home', url=url('home')) }}
@@ -67,6 +73,6 @@
     </div>
     {# TODO(sem): Move this to a proper script. #}
     <script>
-        const player = new Plyr('#player');
+      const player = new Plyr('#player');
     </script>
 {% endblock content %}

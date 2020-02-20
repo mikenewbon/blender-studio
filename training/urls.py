@@ -18,6 +18,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from training_main.views.api.sections.comment import comment
 from training_main.views.api.trainings.favorite import favorite
 from training_main.views.home import home
 from training_main.views.trainings.chapters.chapter import chapter
@@ -38,7 +39,11 @@ urlpatterns += [
                 path(
                     'trainings/<int:training_pk>/',
                     include([path('favorite/', favorite, name='training_favorite')]),
-                )
+                ),
+                path(
+                    'sections/<int:section_pk>/',
+                    include([path('comment/', comment, name='section_comment')]),
+                ),
             ]
         ),
     ),
