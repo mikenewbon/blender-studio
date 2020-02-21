@@ -420,9 +420,13 @@
 		display: inline;
 	}
 	&-likes {
-		&-btn {
+		//display: flex;
+		//flex-direction: row;
+		//align-items: center;
+
+		.checkbox-like {
+			display: inline;
 			vertical-align: middle;
-			line-height: 1.5;
 			margin-bottom: 0;
 			font-size: $large-font-size;
 		}

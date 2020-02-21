@@ -1,0 +1,42 @@
+.comment-section {
+  .comment-content {
+    margin-left: $spacer/2;
+  }
+
+  .comment-input {
+    display: flex;
+    flex-direction: row;
+    margin-top: $spacer/2;
+    margin-bottom: $spacer/2;
+  }
+
+  .comment-likes {
+    .checkbox-like {
+      .checkbox-like-icon-unchecked {
+        display: initial;
+      }
+
+      .checkbox-like-icon-checked {
+        display: none;
+      }
+
+      &[data-checked] {
+        .checkbox-like-icon-unchecked {
+          display: none;
+        }
+
+        .checkbox-like-icon-checked {
+          display: initial;
+        }
+
+        &:hover {
+          text-decoration: initial;
+        }
+      }
+
+      &:hover {
+        text-decoration: initial;
+      }
+    }
+  }
+}

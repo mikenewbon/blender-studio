@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls.base import reverse
 
 from training_main.models import mixins, sections
 
@@ -39,6 +40,10 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
     @property
     def username(self) -> str:
         return '<deleted>' if self.user is None else self.user.username
+
+    @property
+    def like_url(self) -> str:
+        return reverse('comment_like', kwargs={'comment_pk': self.pk})
 
 
 class Like(mixins.CreatedUpdatedMixin, models.Model):

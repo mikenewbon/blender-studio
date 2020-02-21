@@ -68,7 +68,9 @@ def comments_to_template_type(
             username=comment.username,
             date=comment.date_created,
             message=comment.message,
-            likes=comment.likes.count(),
+            like_url=comment.like_url,
+            liked=assert_cast(bool, getattr(comment, 'liked')),
+            likes=assert_cast(int, getattr(comment, 'number_of_likes')),
             replies=[build_tree(reply) for reply in lookup.get(comment.pk, [])],
             profile_image_url='https://blender.chat/avatar/MikeNewbon',
         )

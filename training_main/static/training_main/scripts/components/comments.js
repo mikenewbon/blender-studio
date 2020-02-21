@@ -4,12 +4,21 @@ window.comments = (function comments() {
   class Comment {
     constructor(element) {
       this.id = element.dataset.commentId;
+      this.likeUrl = element.dataset.likeUrl;
       this.element = element;
       this._setupEventListeners();
     }
 
     get replyLink() {
       return this.element.querySelector('.comment-reply');
+    }
+
+    get likeButton() {
+      return this.element.querySelector('.checkbox-like');
+    }
+
+    get commentLikesCountElement() {
+      return this.element.querySelector('.comment-likes-count');
     }
 
     get commentSection() {
@@ -52,6 +61,8 @@ window.comments = (function comments() {
         event.preventDefault();
         this._showReplyCommentInput();
       });
+
+      this.likeButton.addEventListener('click', this._postLike.bind(this));
     }
 
     _getOrCreateReplyCommentInput() {
@@ -80,20 +91,53 @@ window.comments = (function comments() {
       const repliesElement = this.element.querySelector('.replies');
       repliesElement.prepend(comment.element);
     }
+
+    _postLike() {
+      const { commentLikesCountElement, likeButton } = this;
+
+      ajax
+        .jsonRequest('POST', this.likeUrl, {
+          like: !likeButton.dataset.checked
+        })
+        .then(data => {
+          if (data.like) {
+            likeButton.dataset.checked = 'checked';
+          } else {
+            delete likeButton.dataset.checked;
+          }
+
+          commentLikesCountElement.innerText = data.number_of_likes;
+        });
+    }
   }
 
   Comment.className = 'comment';
   Comment.instances = new WeakMap();
 
-  Comment.create = function create(id, username, profileImageUrl, dateString, message, likes) {
+  Comment.create = function create(
+    id,
+    username,
+    profileImageUrl,
+    dateString,
+    message,
+    likeUrl,
+    liked,
+    likes
+  ) {
     const template = document.getElementById('comment-template');
     const element = template.content.cloneNode(true).querySelector(`.${Comment.className}`);
     element.dataset.commentId = id;
+    element.dataset.likeUrl = likeUrl;
     element.querySelector('.profile').style.backgroundImage = `url('${profileImageUrl}')`;
     element.querySelector('.comment-name').innerText = username;
     element.querySelector('.comment-date').innerText = dateString;
     element.querySelector('.comment-text').innerText = message;
     element.querySelector('.comment-likes-count').innerText = likes;
+    if (liked) {
+      element.querySelector('.checkbox-like').dataset.checked = 'checked';
+    } else {
+      delete element.querySelector('.checkbox-like').dataset.checked;
+    }
     return Comment.getOrWrap(element);
   };
 
@@ -171,7 +215,9 @@ window.comments = (function comments() {
             data.profile_image_url,
             data.date_string,
             data.message,
-            0
+            data.like_url,
+            data.liked,
+            data.likes
           );
           if (this.hideOnSubmit) {
             this.hide();

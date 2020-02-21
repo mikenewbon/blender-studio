@@ -69,6 +69,8 @@ class CommentTree:
     username: str
     date: datetime.datetime
     message: str
+    like_url: str
+    liked: bool
     likes: int
     replies: List[CommentTree]
     profile_image_url: str

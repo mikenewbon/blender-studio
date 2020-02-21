@@ -148,7 +148,7 @@
 {% endmacro %}
 
 {% macro comment_input(profile_image_url) %}
-    <div class="row my-2 comment-input">
+    <div class="comment-input">
         <div style="background-image:url({{ profile_image_url }});" class="profile"></div>
         <div class="col">
             <form class="input-group input-group-sm">
@@ -167,9 +167,9 @@
     </template>
 {% endmacro %}
 
-{% macro comment(id, username, profile_image_url, date_string, message, likes) %}
-    <div class="row comment" data-comment-id="{{ id }}">
-        <div class="col-md-12">
+{% macro comment(id, username, profile_image_url, date_string, message, like_url, liked, likes) %}
+    <div class="row comment" data-comment-id="{{ id }}" data-like-url="{{ like_url }}">
+        <div class="col-md-12 comment-content">
             <div class="row comment-header">
                 <div style="background-image:url('{{ profile_image_url }}');" class="profile"></div>
                 <div class="col-md-auto">
@@ -178,14 +178,18 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col">
-                    <p class="comment-text">{{ message }}</p>
-                    <div class="comment-likes">
-                        <i class="material-icons comment-likes-btn">favorite_border</i>
-                        <p class="comment-likes-count">{{ likes }}</p>
-                        <a href="" class="comment-reply">Reply</a>
-                    </div>
+                <p class="comment-text">{{ message }}</p>
+            </div>
+            <div class="row">
+                <div class="comment-likes">
+                    <button class="btn btn-ctrl-sm checkbox-like"
+                            {% if liked %}data-checked="checked"{% endif %}>
+                        <i class="material-icons btn-material-icons checkbox-like-icon-checked text-primary">favorite</i>
+                        <i class="material-icons btn-material-icons checkbox-like-icon-unchecked">favorite_border</i>
+                    </button>
+                    <span class="comment-likes-count">{{ likes }}</span>
                 </div>
+                <a href="" class="comment-reply">Reply</a>
             </div>
         </div>
         <div class="col-md-12 comment-inputs">
@@ -200,7 +204,7 @@
 
 {% macro comment_template() %}
     <template id="comment-template">
-        {{ comment(id='', username='', profile_image_url='', date_string='', message='', likes='') }}
+        {{ comment(id='', username='', profile_image_url='', date_string='', message='', like_url='', liked=False, likes='') }}
     </template>
 {% endmacro %}
 
@@ -212,6 +216,8 @@
             profile_image_url=c.profile_image_url,
             date_string=c.date.strftime('%d %B %Y - %H:%M'),
             message=c.message,
+            like_url=c.like_url,
+            liked=c.liked,
             likes=c.likes
         ) %}
             {{ _comment_trees(c.replies) }}
