@@ -33,15 +33,17 @@
             </div>
         </div>
     </section>
-    <section class="mb-3">
-        <h2>Continue training</h2>
-        <p>Recently watched sections will appear here with your position saved</p>
-        {% call components.cards() %}
-            {% for section in recently_watched_sections %}
-                {{ components.card_section(section) }}
-            {% endfor %}
-        {% endcall %}
-    </section>
+    {% if recently_watched_sections %}
+        <section class="mb-3">
+            <h2>Continue training</h2>
+            <p>Recently watched sections will appear here with your position saved</p>
+            {% call components.cards() %}
+                {% for section in recently_watched_sections %}
+                    {{ components.card_section(section) }}
+                {% endfor %}
+            {% endcall %}
+        </section>
+    {% endif %}
     <section class="mb-3">
         <h2>Your saved training</h2>
         <p>You can add and remove items from this list by clicking the plus or the tick</p>
