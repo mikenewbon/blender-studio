@@ -35,10 +35,10 @@
     </section>
     <section class="mb-3">
         <h2>Continue training</h2>
-        <p>Recently watched training will appear here with your position saved</p>
+        <p>Recently watched sections will appear here with your position saved</p>
         {% call components.cards() %}
-            {% for training in recently_watched_trainings %}
-                {{ components.card_training(training) }}
+            {% for section in recently_watched_sections %}
+                {{ components.card_section(section) }}
             {% endfor %}
         {% endcall %}
     </section>

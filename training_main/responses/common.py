@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import dataclasses as dc
 import datetime
-from typing import Set, List, Optional
+from typing import Set, List, Optional, TypedDict
 
 from training_main.models import trainings
 
@@ -76,3 +76,9 @@ class CommentTree:
     likes: int
     replies: List[CommentTree]
     profile_image_url: str
+
+
+class SectionProgressReportingData(TypedDict):
+    progress_url: str
+    started_timeout: Optional[float]
+    finished_timeout: Optional[float]

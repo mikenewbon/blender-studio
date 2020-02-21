@@ -39,7 +39,11 @@ class Section(mixins.CreatedUpdatedMixin, models.Model):
 
     @property
     def comment_url(self) -> str:
-        return reverse('section_comment', kwargs={'section_pk': self.pk,},)
+        return reverse('section_comment', kwargs={'section_pk': self.pk},)
+
+    @property
+    def progress_url(self) -> str:
+        return reverse('section_progress', kwargs={'section_pk': self.pk})
 
 
 def video_upload_path(video: Video, filename: str) -> str:
@@ -59,6 +63,7 @@ class Video(mixins.CreatedUpdatedMixin, models.Model):
     section = models.OneToOneField(Section, on_delete=models.CASCADE, related_name='video')
     file = models.FileField(upload_to=video_upload_path)
     size = models.IntegerField()
+    duration = models.DurationField()
 
     def __str__(self) -> str:
         return self.file.path  # type: ignore

@@ -7,6 +7,13 @@
     {{ components.comment_input_template() }}
 {% endblock html_templates %}
 
+{% block scripts %}
+    {{ super() }}
+    <script id="sectionProgressReportingData" type="application/json">
+        {{ section_progress_reporting_data | tojson }}
+    </script>
+{% endblock scripts %}
+
 {% block breadcrumbs %}
     {% call components.breadcrumbs() %}
         {{ components.breadcrumb(label='Home', url=url('home')) }}

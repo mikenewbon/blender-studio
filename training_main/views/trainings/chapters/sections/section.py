@@ -2,6 +2,8 @@ from django.http.request import HttpRequest
 from django.views.decorators.http import require_safe
 
 from training_main import responses, queries
+from training_main.models.progress import UserSectionProgress
+from training_main.responses.common import SectionProgressReportingData
 from training_main.responses.types import TypeSafeTemplateResponse
 from training_main.views.common import (
     training_model_to_template_type,
@@ -48,4 +50,13 @@ def section(
             video=video,
             assets=[asset_model_to_template_type(asset) for asset in assets],
             comments=comments_to_template_type(comments, section.comment_url),
+            section_progress_reporting_data=SectionProgressReportingData(
+                progress_url=section.progress_url,
+                started_timeout=UserSectionProgress.started_duration_pageview_duration.total_seconds(),
+                finished_timeout=(
+                    UserSectionProgress.finished_duration_pageview_duration.total_seconds()
+                    if video is None
+                    else None
+                ),
+            ),
         )

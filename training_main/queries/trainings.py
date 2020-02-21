@@ -1,6 +1,6 @@
 from typing import Optional, List, Tuple, cast
 
-from django.db.models import QuerySet, Exists, OuterRef, Max
+from django.db.models import QuerySet, Exists, OuterRef
 
 from training_main.models import trainings, chapters
 
@@ -42,16 +42,6 @@ def from_slug_with_chapters(
         return None
 
     return training, cast(bool, getattr(training, 'favorited')), list(training.chapters.all())
-
-
-def recently_watched(*, user_pk: int) -> List[trainings.Training]:
-    return list(
-        _published()
-        .annotate(date_last_watched=Max('chapters__sections__progress__date_updated'))
-        .prefetch_related('tags')
-        .exclude(date_last_watched__isnull=True)
-        .order_by('-date_last_watched')
-    )
 
 
 def favorited(*, user_pk: int) -> List[trainings.Training]:

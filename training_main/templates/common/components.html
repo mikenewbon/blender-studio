@@ -70,6 +70,24 @@
     </button>
 {% endmacro %}
 
+{% macro card_section(section) %}
+    {% set image_placeholder = static('training_main/images/placeholders/card_training.png') %}
+    <div class="col-12 col-sm-6 col-lg-4">
+        <div class="card card-media">
+
+            <div class="card-header" style='background-image: url("{{ image_placeholder }}")'>
+                {{ progressbar(section.progress_fraction) }}
+            </div>
+
+            <a class="card-body" href="{{ section.url }}">
+                <p class="card-subtitle">{{ section.training_name }}</p>
+                <p class="card-subtitle">{{ section.chapter_name_with_index }}</p>
+                <h2 class="card-title">{{ section.name_with_index }}</h2>
+            </a>
+        </div>
+    </div>
+{% endmacro %}
+
 {% macro card_training(training) %}
     {% set difficulty_color = {'beginner': 'green', 'intermediate': 'blue', 'advanced': 'red'}.get(training.difficulty, 'blue') %}
     {% set image_placeholder = static('training_main/images/placeholders/card_training.png') %}
@@ -79,7 +97,6 @@
             <div class="card-header" style='background-image: url("{{ image_placeholder }}")'>
                 {{ badge_difficulty(label=training.difficulty.label, color=difficulty_color) }}
                 {{ card_training_checkbox_favorite(checked=training.favorited, class=['btn-save-media', 'card-training-favorite']) }}
-                {{ progressbar(1/4) }}
             </div>
 
             <a class="card-body" href="{{ training.url }}">
@@ -131,7 +148,8 @@
 {% endmacro %}
 
 {% macro video_player(url, progress_url, start_position) %}
-    <div class="video-player" data-progress-url="{{ progress_url }}" {% if start_position is not none %}data-start-position="{{ start_position }}{% endif %}">
+    <div class="video-player" data-progress-url="{{ progress_url }}"
+         {% if start_position is not none %}data-start-position="{{ start_position }}{% endif %}">
         <video playsinline controls>
             <source src="{{ url }}">
         </video>

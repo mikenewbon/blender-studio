@@ -21,7 +21,7 @@ from django.urls import path, include
 from training_main.views.api.comments.like import comment_like
 from training_main.views.api.sections.comment import comment
 from training_main.views.api.trainings.favorite import favorite
-from training_main.views.api.videos.progress import video_progress
+from training_main.views.api.videos.progress import video_progress, section_progress
 from training_main.views.home import home
 from training_main.views.trainings.chapters.chapter import chapter
 from training_main.views.trainings.chapters.sections.section import section
@@ -44,7 +44,12 @@ urlpatterns += [
                 ),
                 path(
                     'sections/<int:section_pk>/',
-                    include([path('comment/', comment, name='section_comment')]),
+                    include(
+                        [
+                            path('comment/', comment, name='section_comment'),
+                            path('progress/', section_progress, name='section_progress'),
+                        ]
+                    ),
                 ),
                 path('comments/<int:comment_pk>/like/', comment_like, name='comment_like'),
                 path('videos/<int:video_pk>/progress/', video_progress, name='video_progress'),

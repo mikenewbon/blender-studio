@@ -15,6 +15,35 @@ def _published() -> 'QuerySet[sections.Section]':
     )
 
 
+def recently_watched(*, user_pk: int) -> List[sections.Section]:
+    return list(
+        sections.Section.objects.raw(
+            '''
+            SELECT *
+            FROM (SELECT s.*,
+                         c.index                                                                             AS chapter_index,
+                         c.name                                                                              AS chapter_name,
+                         t.name                                                                              AS training_name,
+                         uvp.position                                                                        AS video_position,
+                         v.duration                                                                          AS video_duration,
+                         row_number()
+                         OVER (PARTITION BY t.id ORDER BY coalesce(uvp.date_updated, usp.date_updated) DESC) AS row_number_per_training
+                  FROM training_main_usersectionprogress usp
+                           LEFT JOIN training_main_section s ON usp.section_id = s.id
+                           LEFT JOIN training_main_chapter c ON s.chapter_id = c.id
+                           LEFT JOIN training_main_training t ON c.training_id = t.id
+                           LEFT JOIN training_main_video v ON s.id = v.section_id
+                           LEFT JOIN training_main_uservideoprogress uvp ON v.id = uvp.video_id AND usp.user_id = uvp.user_id
+                  WHERE usp.user_id = 1
+                    AND usp.started
+                    AND NOT usp.finished
+                  ORDER BY coalesce(uvp.date_updated, usp.date_updated) DESC) progress
+            WHERE progress.row_number_per_training = 1;
+            '''
+        )
+    )
+
+
 def from_slug(
     *, user_pk: int, section_slug: str,
 ) -> Optional[
@@ -85,3 +114,7 @@ def set_comment_like(*, comment_pk: int, user_pk: int, like: bool) -> int:
         comments.Like.objects.filter(comment_id=comment_pk, user_id=user_pk).delete()
 
     return comments.Like.objects.filter(comment_id=comment_pk).count()
+
+
+def video_from_pk(*, video_pk: int) -> sections.Video:
+    return sections.Video.objects.get(pk=video_pk)
