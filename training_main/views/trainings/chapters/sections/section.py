@@ -30,13 +30,22 @@ def section(
     if result is None:
         return responses.errors.not_found(request)
     else:
-        training, training_favorited, chapter, section, video, assets, comments = result
+        training, training_favorited, chapter, section, maybe_video, assets, comments = result
+
+        if maybe_video is None:
+            video = None
+        else:
+            video_model, video_start_position = maybe_video
+            video = video_model_to_template_type(
+                video=video_model, start_position=video_start_position
+            )
+
         return responses.trainings.chapters.sections.section.section(
             request,
             training=training_model_to_template_type(training, training_favorited),
             chapter=chapter_model_to_template_type(chapter),
             section=section_model_to_template_type(section),
-            video=None if video is None else video_model_to_template_type(video),
+            video=video,
             assets=[asset_model_to_template_type(asset) for asset in assets],
             comments=comments_to_template_type(comments, section.comment_url),
         )

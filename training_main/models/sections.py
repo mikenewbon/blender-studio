@@ -63,6 +63,10 @@ class Video(mixins.CreatedUpdatedMixin, models.Model):
     def __str__(self) -> str:
         return self.file.path  # type: ignore
 
+    @property
+    def progress_url(self) -> str:
+        return reverse('video_progress', kwargs={'video_pk': self.pk})
+
 
 def asset_upload_path(asset: Asset, filename: str) -> str:
     return str(

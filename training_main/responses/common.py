@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import dataclasses as dc
 import datetime
-from typing import Set, List
+from typing import Set, List, Optional
 
 from training_main.models import trainings
 
@@ -47,6 +47,8 @@ class Section:
 @dc.dataclass
 class Video:
     url: str
+    progress_url: str
+    start_position: Optional[float]
 
 
 @dc.dataclass

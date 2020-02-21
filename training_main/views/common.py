@@ -1,3 +1,4 @@
+import datetime
 from typing import Sequence, List, Optional, Dict, Type, TypeVar
 
 import training_main.responses.common
@@ -45,8 +46,14 @@ def section_model_to_template_type(
     )
 
 
-def video_model_to_template_type(video: sections.Video) -> training_main.responses.common.Video:
-    return training_main.responses.common.Video(url=video.file.url)
+def video_model_to_template_type(
+    video: sections.Video, start_position: Optional[datetime.timedelta]
+) -> training_main.responses.common.Video:
+    return training_main.responses.common.Video(
+        url=video.file.url,
+        progress_url=video.progress_url,
+        start_position=None if start_position is None else start_position.total_seconds(),
+    )
 
 
 def asset_model_to_template_type(asset: sections.Asset) -> training_main.responses.common.Asset:

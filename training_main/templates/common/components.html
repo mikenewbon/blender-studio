@@ -130,10 +130,12 @@
     </select>
 {% endmacro %}
 
-{% macro video_player(url) %}
-    <video id="player" playsinline controls>
-        <source src="{{ url }}">
-    </video>
+{% macro video_player(url, progress_url, start_position) %}
+    <div class="video-player" data-progress-url="{{ progress_url }}" {% if start_position is not none %}data-start-position="{{ start_position }}{% endif %}">
+        <video playsinline controls>
+            <source src="{{ url }}">
+        </video>
+    </div>
 {% endmacro %}
 
 {% macro comment_section(comments) %}

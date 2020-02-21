@@ -6,9 +6,11 @@ window.cardTraining = (function cardTraining() {
       CardTraining.instances.set(element, this);
       this.element = element;
       this.favoriteUrl = element.dataset.favoriteUrl;
-      const [favoriteElement] = this.element.getElementsByClassName('card-training-favorite');
-      this.favoriteElement = favoriteElement;
       this._setupEventListeners();
+    }
+
+    get favoriteElement() {
+      return this.element.getElementsByClassName('card-training-favorite')[0];
     }
 
     _setupEventListeners() {
@@ -16,20 +18,22 @@ window.cardTraining = (function cardTraining() {
     }
 
     _postFavorite() {
+      const { favoriteElement } = this;
       ajax
         .jsonRequest('POST', this.favoriteUrl, {
-          favorite: !this.favoriteElement.dataset.checked
+          favorite: !favoriteElement.dataset.checked
         })
         .then(data => {
           if (data.favorite) {
-            this.favoriteElement.dataset.checked = 'checked';
+            favoriteElement.dataset.checked = 'checked';
           } else {
-            delete this.favoriteElement.dataset.checked;
+            delete favoriteElement.dataset.checked;
           }
         });
     }
   }
 
+  CardTraining.className = 'card-training';
   CardTraining.instances = new WeakMap();
   CardTraining.getOrWrap = function getOrWrap(element) {
     const card = CardTraining.instances.get(element);
@@ -41,7 +45,7 @@ window.cardTraining = (function cardTraining() {
   };
 
   document.addEventListener('DOMContentLoaded', () => {
-    document.getElementsByClassName('card-training').forEach(CardTraining.getOrWrap);
+    document.getElementsByClassName(CardTraining.className).forEach(CardTraining.getOrWrap);
   });
 
   return { CardTraining };

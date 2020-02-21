@@ -110,7 +110,7 @@ PIPELINE = {
                 'training_main/scripts/components/*.js',
             ],
             'output_filename': 'js/cloud.js',
-            'extra_context': {'async': True, 'defer': False},
+            'extra_context': {'async': False, 'defer': False},
         }
     },
     'STYLESHEETS': {

@@ -1,3 +1,4 @@
+import datetime
 from typing import Optional, Tuple, List, cast
 
 from django.db.models import QuerySet, Exists, OuterRef
@@ -5,6 +6,7 @@ from django.db.models.aggregates import Count
 
 from training_main.models import chapters, trainings, sections, comments
 from training_main.models.comments import Like
+from training_main.models.progress import UserVideoProgress
 
 
 def _published() -> 'QuerySet[sections.Section]':
@@ -21,7 +23,7 @@ def from_slug(
         bool,
         chapters.Chapter,
         sections.Section,
-        Optional[sections.Video],
+        Optional[Tuple[sections.Video, Optional[datetime.timedelta]]],
         List[sections.Asset],
         List[comments.Comment],
     ]
@@ -43,11 +45,16 @@ def from_slug(
     except sections.Section.DoesNotExist:
         return None
 
-    video: Optional[sections.Video]
+    video: Optional[Tuple[sections.Video, Optional[datetime.timedelta]]]
     try:
-        video = section.video
+        try:
+            progress = section.video.progress.get(user_id=user_pk)
+        except UserVideoProgress.DoesNotExist:
+            progress = None
+        video = (section.video, None if progress is None else progress.position)
     except sections.Video.DoesNotExist:
         video = None
+
     assets = list(section.assets.all())
     chapter = section.chapter
     training = chapter.training
