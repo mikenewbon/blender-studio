@@ -49,7 +49,11 @@ def section(
             section=section_model_to_template_type(section),
             video=video,
             assets=[asset_model_to_template_type(asset) for asset in assets],
-            comments=comments_to_template_type(comments, section.comment_url),
+            comments=comments_to_template_type(
+                comments,
+                section.comment_url,
+                user_is_moderator=request.user.has_perm('training_main.moderate_comment'),
+            ),
             section_progress_reporting_data=SectionProgressReportingData(
                 progress_url=section.progress_url,
                 started_timeout=UserSectionProgress.started_duration_pageview_duration.total_seconds(),

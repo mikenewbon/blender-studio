@@ -76,6 +76,8 @@ class CommentTree:
     likes: int
     replies: List[CommentTree]
     profile_image_url: str
+    edit_url: str
+    delete_url: str
 
 
 class SectionProgressReportingData(TypedDict):

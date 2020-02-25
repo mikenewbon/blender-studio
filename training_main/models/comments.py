@@ -8,6 +8,9 @@ from training_main.models import mixins, sections
 
 
 class Comment(mixins.CreatedUpdatedMixin, models.Model):
+    class Meta:
+        permissions = [('moderate_comment', 'Can moderate comments')]
+
     # Whenever a User is deleted their Comment lives on to ensure integrity of the conversation.
     # Instead, we remove the reference to the User to honor the deletion request as much as
     # possible.
@@ -44,6 +47,14 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
     @property
     def like_url(self) -> str:
         return reverse('comment_like', kwargs={'comment_pk': self.pk})
+
+    @property
+    def edit_url(self) -> str:
+        return reverse('comment_edit', kwargs={'comment_pk': self.pk})
+
+    @property
+    def delete_url(self) -> str:
+        return reverse('comment_delete', kwargs={'comment_pk': self.pk})
 
 
 class Like(mixins.CreatedUpdatedMixin, models.Model):

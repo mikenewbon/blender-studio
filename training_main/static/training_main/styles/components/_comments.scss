@@ -1,4 +1,18 @@
 .comment-section {
+  .comment {
+    &:not([data-edit-url]) > .comment-content {
+      .comment-edit {
+        display: none;
+      }
+    }
+
+    &:not([data-delete-url]) > .comment-content {
+      .comment-delete {
+        display: none;
+      }
+    }
+  }
+
   .comment-content {
     margin-left: $spacer/2;
   }
