@@ -244,3 +244,16 @@
         {% endcall %}
     {% endfor %}
 {% endmacro %}
+
+{% macro nav_drawer() %}
+	<div class="nav-drawer">
+		<div class="nav-drawer-header">
+			<btn class="btn btn-nav navdrawertoggle">
+				<i class="material-icons x-large">menu</i>
+			</btn>
+		</div>
+		<div class="nav-drawer-body">
+			{{ caller() }}
+		</div>
+	</div>
+{% endmacro %}

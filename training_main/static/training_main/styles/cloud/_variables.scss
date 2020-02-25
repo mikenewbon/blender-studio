@@ -751,8 +751,8 @@ $nav-divider-margin-y: $spacer / 2 !default;
 // Navbar
 
 $navbar-height: 64px !default;
-$navbar-padding-y: $spacer / 2 !default;
-$navbar-padding-x: $spacer !default;
+$navbar-padding-y: 0 !default;
+$navbar-padding-x: 0 !default;
 
 $navbar-nav-link-padding-x: 0.5rem !default;
 
@@ -789,12 +789,12 @@ $navbar-dark-brand-hover-color: $navbar-dark-active-color !default;
 
 //Navdrawer
 
-$nav-drawer-width-closed: 105px !default;
+$nav-drawer-width-closed: 0px !default;
 $nav-drawer-width-open: 220px !default;
 $nav-drawer-animation-duration: 0s;
 
 $nav-drawer-wide-width-closed: 0px !default;
-$nav-drawer-wide-width-open: 220px !default;
+$nav-drawer-wide-width-open: 380px !default;
 $nav-drawer-wide-animation-duration: 0s;
 
 // Dropdowns

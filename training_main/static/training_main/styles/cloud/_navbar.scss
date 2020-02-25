@@ -13,19 +13,39 @@
 //
 // Provide a static navbar from which we expand to create full-width, fixed, and
 // other navbar variations.
+body{
 
+}
 .navbar {
 	min-height: $navbar-height;
-	.profile{
+	transition: margin-left $nav-drawer-animation-duration;
+	position: relative;
+	display: flex;
+	padding: $navbar-padding-y $navbar-padding-x;
+	flex-wrap: no-wrap; // allow us to do the line break for collapsing content
+	align-items: stretch;
+	justify-content: space-between; // space out brand from logo
+	// padding: $navbar-padding-y $navbar-padding-x;
+	@include fixed-top;
+	z-index: 1030;
+	background: $navigation-gray;
+	// Because flex properties aren't inherited, we need to redeclare these first
+	// few properties so that content nested within behave properly.
+	.profile {
 		margin-left: 0;
 	}
-	.navdrawertoggle{
-		display: none;
-		i{
+	.navdrawertoggle {
+
+		i {
 			font-size: $x-large-font-size;
 		}
 	}
-	.searchbar{
+	.searchbar-wrapper{
+		flex-grow: 1;
+	}
+	.searchbar {
+		margin: 0 auto;
+		max-width: 380px;
 		padding-top: $spacer/2;
 		padding-bottom: $spacer/2;
 		position: relative;
@@ -38,25 +58,14 @@
 			padding-left: 0;
 			padding-right: 0;
 		}
-		.navdrawertoggle{
+		.navdrawertoggle {
 			display: flex;
 		}
-		.searchbar{
-			display:none
+		.searchbar {
+			display: none;
 		}
 	}
-	transition: margin-left $nav-drawer-animation-duration;
-	position: relative;
-	display: flex;
-	flex-wrap: wrap; // allow us to do the line break for collapsing content
-	align-items: stretch;
-	justify-content: space-between; // space out brand from logo
-	// padding: $navbar-padding-y $navbar-padding-x;
-	@include fixed-top;
-	z-index: 1030;
-	background: $navigation-gray;
-	// Because flex properties aren't inherited, we need to redeclare these first
-	// few properties so that content nested within behave properly.
+
 	%container-flex-properties {
 		display: flex;
 		flex-wrap: wrap;
@@ -78,11 +87,11 @@
 }
 
 .navbar-secondary {
-	@include fixed-top;
+	position: sticky;
 	background: $charcoal-gray;
 	top: 64px;
 	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-	z-index: 1020;
+
 	.container {
 		padding: 0;
 	}
@@ -117,6 +126,8 @@
 // Used for brand, project, or site names.
 
 .navbar-brand {
+
+	padding: 0 $spacer;
 	display: flex;
 	align-items: center;
 	// padding-top: $navbar-brand-padding-y;
@@ -128,6 +139,9 @@
 
 	@include hover-focus() {
 		text-decoration: none;
+	}
+	img{
+		@include img-fluid();
 	}
 }
 
