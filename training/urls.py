@@ -40,10 +40,7 @@ urlpatterns += [
         'api/',
         include(
             [
-                path(
-                    'trainings/<int:training_pk>/',
-                    include([path('favorite/', favorite, name='training_favorite')]),
-                ),
+                path('trainings/<int:training_pk>/favorite/', favorite, name='training_favorite'),
                 path(
                     'sections/<int:section_pk>/',
                     include(
