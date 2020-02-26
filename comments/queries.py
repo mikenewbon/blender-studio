@@ -19,7 +19,7 @@ def edit_comment(*, comment_pk: int, user_pk: int, message: str) -> models.Comme
     return comment
 
 
-def moderator_edit_comment(*, comment_pk: int, user_pk: int, message: str) -> models.Comment:
+def moderator_edit_comment(*, comment_pk: int, message: str) -> models.Comment:
     comment: models.Comment = models.Comment.objects.get(id=comment_pk)
     comment.message = message
     comment.save()

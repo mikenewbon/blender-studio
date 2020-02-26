@@ -17,9 +17,7 @@ def comment_edit(request: HttpRequest, *, comment_pk: int) -> JsonResponse:
     message = assert_cast(str, parsed_body['message'])
 
     if request.user.has_perm('training.moderate_comment'):
-        comment = moderator_edit_comment(
-            comment_pk=comment_pk, user_pk=request.user.id, message=message
-        )
+        comment = moderator_edit_comment(comment_pk=comment_pk, message=message)
     else:
         comment = edit_comment(comment_pk=comment_pk, user_pk=request.user.id, message=message)
 
