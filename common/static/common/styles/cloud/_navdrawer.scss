@@ -217,7 +217,7 @@ body {
 
 $circle-radius: 14;
 $circle-diameter: $circle-radius*2;
-$circle-circumfrance: $circle-diameter*3.14;
+$circle-circumference: $circle-diameter*3.14;
 
 .training-nav-section-icon {
 	width: 30px;
@@ -257,13 +257,13 @@ $circle-circumfrance: $circle-diameter*3.14;
 			stroke: $primary;
 			stroke-width: 2px;
 			fill: none;
-			stroke-dasharray: $circle-circumfrance;
-			stroke-dashoffset: $circle-circumfrance;
+			stroke-dasharray: $circle-circumference;
+			stroke-dashoffset: $circle-circumference;
 			stroke-linecap: square;
 		}
 		&.progress-half {
 			circle {
-				stroke-dashoffset: calc( #{$circle-circumfrance} / 2);
+				stroke-dashoffset: calc( #{$circle-circumference}px / 2);
 			}
 		}
 		&.progress-complete {

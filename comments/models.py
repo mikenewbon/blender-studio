@@ -34,7 +34,7 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
     likes = models.ManyToManyField(User, through='Like', related_name='liked_comments')
 
     def __str__(self) -> str:
-        return f'Comment by {self.username} on {self.section.name} @ {self.date_updated}'
+        return f'Comment by {self.username} @ {self.date_updated}'
 
     @property
     def username(self) -> str:
