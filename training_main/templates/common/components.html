@@ -156,74 +156,102 @@
 {% endmacro %}
 
 {% macro comment_section(comments) %}
-<div class="comment-section" data-comment-url="{{ comments.comment_url }}"
-	data-profile-image-url="{{ comments.profile_image_url }}">
-	<h3 class="mb-2">{{ comments.number_of_comments }} Comments</h3>
-	{{ comment_input(comments.profile_image_url) }}
-	<div class="comments">
-		{{ _comment_trees(comments.comment_trees) }}
-	</div>
-</div>
+    <div class="comment-section" data-comment-url="{{ comments.comment_url }}"
+         data-profile-image-url="{{ comments.profile_image_url }}">
+        <h3 class="mb-2">{{ comments.number_of_comments }} Comments</h3>
+        {{ comment_main_input(comments.profile_image_url) }}
+        <div class="comments">
+            {{ _comment_trees(comments.comment_trees) }}
+        </div>
+    </div>
 {% endmacro %}
 
-{% macro comment_input(profile_image_url) %}
-<div class="comment-input">
-	<div style="background-image:url({{ profile_image_url }});" class="profile"></div>
-	<div class="col">
-		<form class="input-group input-group-sm">
-			<input type="text" placeholder="Comment publicly" class="form-control">
-			<div class="input-group-append">
-				<button class="btn btn-input">Comment</button>
-			</div>
-		</form>
-	</div>
-</div>
+{% macro comment_input(profile_image_url, button_label, class) %}
+    <div class="comment-input {{ class }}">
+        <div style="background-image:url({{ profile_image_url }});" class="profile"></div>
+        <div class="col">
+            <form class="input-group input-group-sm">
+                <input type="text" placeholder="Comment publicly" class="form-control">
+                <div class="input-group-append">
+                    <button class="btn btn-input">{{ button_label }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endmacro %}
 
-{% macro comment_input_template() %}
-<template id="comment-input-template">
-	{{ comment_input(profile_image_url='') }}
-</template>
+{% macro comment_main_input(profile_image_url) %}
+    {{ comment_input(profile_image_url, button_label='Comment', class='comment-main-input') }}
 {% endmacro %}
 
-{% macro comment(id, username, profile_image_url, date_string, message, like_url, liked, likes) %}
-<div class="row comment" data-comment-id="{{ id }}" data-like-url="{{ like_url }}">
-	<div class="col-md-12 comment-content">
-		<div class="row comment-header">
-			<div style="background-image:url('{{ profile_image_url }}');" class="profile"></div>
-			<div class="col-md-auto">
-				<h4 class="comment-name">{{ username }}</h4>
-				<p class="comment-date">{{ date_string }}</p>
-			</div>
-		</div>
-		<div class="row">
-			<p class="comment-text">{{ message }}</p>
-		</div>
-		<div class="row">
-			<div class="comment-likes">
-				<button class="btn btn-ctrl-sm checkbox-like" {% if liked %}data-checked="checked" {% endif %}>
-					<i class="material-icons btn-material-icons checkbox-like-icon-checked text-primary">favorite</i>
-					<i class="material-icons btn-material-icons checkbox-like-icon-unchecked">favorite_border</i>
-				</button>
-				<span class="comment-likes-count">{{ likes }}</span>
-			</div>
-			<a href="" class="comment-reply">Reply</a>
-		</div>
-	</div>
-	<div class="col-md-12 comment-inputs">
-	</div>
-	<div class="col-md-12 replies">
-		{% if caller is defined %}
-		{{ caller() }}
-		{% endif %}
-	</div>
-</div>
+{% macro comment_reply_input(profile_image_url) %}
+    {{ comment_input(profile_image_url, button_label='Reply', class='comment-reply-input') }}
+{% endmacro %}
+
+{% macro comment_reply_input_template() %}
+    <template id="comment-reply-input-template">
+        {{ comment_reply_input(profile_image_url='') }}
+    </template>
+{% endmacro %}
+
+{% macro comment_edit_input(profile_image_url) %}
+    {{ comment_input(profile_image_url, button_label='Save', class='comment-edit-input') }}
+{% endmacro %}
+
+{% macro comment_edit_input_template() %}
+    <template id="comment-edit-input-template">
+        {{ comment_edit_input(profile_image_url='') }}
+    </template>
+{% endmacro %}
+
+{% macro comment(id, username, profile_image_url, date_string, message, like_url, liked, likes, edit_url, delete_url) %}
+    <div class="row comment"
+         data-comment-id="{{ id }}"
+         data-profile-image-url="{{ profile_image_url }}"
+         data-like-url="{{ like_url }}"
+         {% if edit_url is not none %}data-edit-url="{{ edit_url }}"{% endif %}
+         {% if delete_url is not none %}data-delete-url="{{ delete_url }}"{% endif %}>
+        <div class="col-md-12 comment-content">
+            <div class="row comment-header">
+                <div style="background-image:url('{{ profile_image_url }}');" class="profile"></div>
+                <div class="col-md-auto">
+                    <h4 class="comment-name">{{ username }}</h4>
+                    <p class="comment-date">{{ date_string }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <p class="comment-text">{{ message }}</p>
+            </div>
+            <div class="row">
+                <div class="comment-likes">
+                    <button class="btn btn-ctrl-sm checkbox-like"
+                            {% if liked %}data-checked="checked"{% endif %}>
+                        <i class="material-icons btn-material-icons checkbox-like-icon-checked text-primary">favorite</i>
+                        <i class="material-icons btn-material-icons checkbox-like-icon-unchecked">favorite_border</i>
+                    </button>
+                    <span class="comment-likes-count">{{ likes }}</span>
+                </div>
+                <a href="" class="comment-action comment-reply">Reply</a>
+                <a href="" class="comment-action comment-edit">Edit</a>
+                <a href="" class="comment-action comment-delete">Delete</a>
+            </div>
+        </div>
+        <div class="col-md-12 comment-edit-inputs">
+        </div>
+        <div class="col-md-12 comment-reply-inputs">
+        </div>
+        <div class="col-md-12 replies">
+            {% if caller is defined %}
+                {{ caller() }}
+            {% endif %}
+        </div>
+    </div>
 {% endmacro %}
 
 {% macro comment_template() %}
-<template id="comment-template">
-	{{ comment(id='', username='', profile_image_url='', date_string='', message='', like_url='', liked=False, likes='') }}
-</template>
+    <template id="comment-template">
+        {{ comment(id='', username='', profile_image_url='', date_string='', message='', like_url='', liked=False, likes='', edit_url='', delete_url='') }}
+    </template>
 {% endmacro %}
 
 {% macro _comment_trees(comment_trees) %}
@@ -236,7 +264,9 @@
             message=c.message,
             like_url=c.like_url,
             liked=c.liked,
-            likes=c.likes
+            likes=c.likes,
+            edit_url=c.edit_url,
+            delete_url=c.delete_url
         ) %}
 {{ _comment_trees(c.replies) }}
 {% endcall %}

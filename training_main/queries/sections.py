@@ -1,8 +1,9 @@
 import datetime
 from typing import Optional, Tuple, List, cast
 
-from django.db.models import QuerySet, Exists, OuterRef
+from django.db.models import QuerySet, Exists, OuterRef, Case, When, Value
 from django.db.models.aggregates import Count
+from django.db.models.fields import BooleanField
 
 from training_main.models import chapters, trainings, sections, comments
 from training_main.models.comments import Like
@@ -45,7 +46,7 @@ def recently_watched(*, user_pk: int) -> List[sections.Section]:
 
 
 def from_slug(
-    *, user_pk: int, section_slug: str,
+    *, user_pk: int, section_slug: str
 ) -> Optional[
     Tuple[
         trainings.Training,
@@ -92,6 +93,11 @@ def from_slug(
         section.comments.annotate(
             liked=Exists(Like.objects.filter(comment_id=OuterRef('pk'), user_id=user_pk)),
             number_of_likes=Count('likes'),
+            owned_by_current_user=Case(
+                When(user_id=user_pk, then=Value(True)),
+                default=Value(False),
+                output_field=BooleanField(),
+            ),
         ).all()
     )
     return training, training_favorited, chapter, section, video, assets, comments
@@ -114,6 +120,30 @@ def set_comment_like(*, comment_pk: int, user_pk: int, like: bool) -> int:
         comments.Like.objects.filter(comment_id=comment_pk, user_id=user_pk).delete()
 
     return comments.Like.objects.filter(comment_id=comment_pk).count()
+
+
+def edit_comment(*, comment_pk: int, user_pk: int, message: str) -> comments.Comment:
+    comment: comments.Comment = comments.Comment.objects.get(id=comment_pk, user_id=user_pk)
+    comment.message = message
+    comment.save()
+    return comment
+
+
+def moderator_edit_comment(*, comment_pk: int, user_pk: int, message: str) -> comments.Comment:
+    comment: comments.Comment = comments.Comment.objects.get(id=comment_pk)
+    comment.message = message
+    comment.save()
+    return comment
+
+
+def delete_comment(*, comment_pk: int, user_pk: int) -> None:
+    comment: comments.Comment = comments.Comment.objects.get(id=comment_pk, user_id=user_pk)
+    comment.delete()
+
+
+def moderator_delete_comment(*, comment_pk: int) -> None:
+    comment: comments.Comment = comments.Comment.objects.get(id=comment_pk)
+    comment.delete()
 
 
 def video_from_pk(*, video_pk: int) -> sections.Video:

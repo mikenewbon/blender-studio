@@ -31,5 +31,7 @@ def comment(request: HttpRequest, *, section_pk: int) -> JsonResponse:
             'like_url': comment.like_url,
             'liked': False,
             'likes': 0,
+            'edit_url': comment.edit_url,
+            'delete_url': comment.delete_url,
         }
     )

@@ -4,7 +4,8 @@
 {% block html_templates %}
     {{ super() }}
     {{ components.comment_template() }}
-    {{ components.comment_input_template() }}
+    {{ components.comment_reply_input_template() }}
+    {{ components.comment_edit_input_template() }}
 {% endblock html_templates %}
 
 {% block scripts %}

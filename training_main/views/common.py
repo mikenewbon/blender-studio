@@ -61,7 +61,7 @@ def asset_model_to_template_type(asset: sections.Asset) -> training_main.respons
 
 
 def comments_to_template_type(
-    comments: Sequence[Comment], comment_url: str,
+    comments: Sequence[Comment], comment_url: str, user_is_moderator: bool
 ) -> training_main.responses.common.Comments:
     lookup: Dict[Optional[int], List[Comment]] = {}
     for comment in sorted(comments, key=lambda c: c.date_created, reverse=True):
@@ -80,6 +80,16 @@ def comments_to_template_type(
             likes=assert_cast(int, getattr(comment, 'number_of_likes')),
             replies=[build_tree(reply) for reply in lookup.get(comment.pk, [])],
             profile_image_url='https://blender.chat/avatar/MikeNewbon',
+            edit_url=(
+                comment.edit_url
+                if assert_cast(bool, getattr(comment, 'owned_by_current_user')) or user_is_moderator
+                else None
+            ),
+            delete_url=(
+                comment.delete_url
+                if assert_cast(bool, getattr(comment, 'owned_by_current_user')) or user_is_moderator
+                else None
+            ),
         )
 
     return training_main.responses.common.Comments(

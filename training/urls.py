@@ -18,6 +18,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from training_main.views.api.comments.delete import comment_delete
+from training_main.views.api.comments.edit import comment_edit
 from training_main.views.api.comments.like import comment_like
 from training_main.views.api.sections.comment import comment
 from training_main.views.api.trainings.favorite import favorite
@@ -38,10 +40,7 @@ urlpatterns += [
         'api/',
         include(
             [
-                path(
-                    'trainings/<int:training_pk>/',
-                    include([path('favorite/', favorite, name='training_favorite')]),
-                ),
+                path('trainings/<int:training_pk>/favorite/', favorite, name='training_favorite'),
                 path(
                     'sections/<int:section_pk>/',
                     include(
@@ -51,7 +50,16 @@ urlpatterns += [
                         ]
                     ),
                 ),
-                path('comments/<int:comment_pk>/like/', comment_like, name='comment_like'),
+                path(
+                    'comments/<int:comment_pk>/',
+                    include(
+                        [
+                            path('like/', comment_like, name='comment_like'),
+                            path('edit/', comment_edit, name='comment_edit'),
+                            path('delete/', comment_delete, name='comment_delete'),
+                        ]
+                    ),
+                ),
                 path('videos/<int:video_pk>/progress/', video_progress, name='video_progress'),
             ]
         ),

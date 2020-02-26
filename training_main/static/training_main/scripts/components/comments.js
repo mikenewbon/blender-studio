@@ -5,12 +5,23 @@ window.comments = (function comments() {
     constructor(element) {
       this.id = element.dataset.commentId;
       this.likeUrl = element.dataset.likeUrl;
+      this.editUrl = element.dataset.editUrl;
+      this.deleteUrl = element.dataset.deleteUrl;
+      this.profileImageUrl = element.dataset.profileImageUrl;
       this.element = element;
       this._setupEventListeners();
     }
 
     get replyLink() {
       return this.element.querySelector('.comment-reply');
+    }
+
+    get editLink() {
+      return this.element.querySelector('.comment-edit');
+    }
+
+    get deleteLink() {
+      return this.element.querySelector('.comment-delete');
     }
 
     get likeButton() {
@@ -22,18 +33,47 @@ window.comments = (function comments() {
     }
 
     get commentSection() {
-      const commentSectionElement = this.element.closest(`.${CommentSection.className}`);
+      const commentSectionElement = this.element.closest(`.${Section.className}`);
       if (commentSectionElement == null) {
         return null;
       } else {
-        return CommentSection.getOrWrap(commentSectionElement);
+        return Section.getOrWrap(commentSectionElement);
       }
     }
 
-	get inputsElement() {
-      const inputsElement = [...this.element.children].filter(e =>
-        e.classList.contains('comment-inputs')
-      )[0];
+    get textElement() {
+      return this.element.querySelector('.comment-text');
+    }
+
+    get message() {
+      return this.textElement.innerText;
+    }
+
+    set message(value) {
+      this.textElement.innerText = value;
+    }
+
+    _setupEventListeners() {
+      this.replyLink.addEventListener('click', event => {
+        event.preventDefault();
+        this._showReplyInput();
+      });
+
+      this.editLink.addEventListener('click', event => {
+        event.preventDefault();
+        this._showEditInput();
+      });
+
+      this.deleteLink.addEventListener('click', event => {
+        event.preventDefault();
+        this._postDeleteComment();
+      });
+
+      this.likeButton.addEventListener('click', this._postLike.bind(this));
+    }
+
+    get replyInputsElement() {
+      const inputsElement = this.element.querySelector('.comment-reply-inputs');
 
       if (inputsElement == null) {
         return null;
@@ -42,54 +82,83 @@ window.comments = (function comments() {
       }
     }
 
-    get replyCommentInput() {
-      const { inputsElement } = this;
-      if (inputsElement == null) {
+    get replyInput() {
+      const { replyInputsElement } = this;
+      if (replyInputsElement == null) {
         return null;
       }
 
-      const replyCommentInputElement = inputsElement.querySelector('.comment-input');
-      if (replyCommentInputElement == null) {
+      const replyInputElement = replyInputsElement.querySelector(`.${ReplyInput.className}`);
+      if (replyInputElement == null) {
         return null;
       }
 
-      return CommentInput.getOrWrap(replyCommentInputElement);
+      return ReplyInput.getOrWrap(replyInputElement);
     }
 
-    _setupEventListeners() {
-      this.replyLink.addEventListener('click', event => {
-        event.preventDefault();
-        this._showReplyCommentInput();
-      });
-
-      this.likeButton.addEventListener('click', this._postLike.bind(this));
-    }
-
-    _getOrCreateReplyCommentInput() {
-      const { commentSection, replyCommentInput, inputsElement } = this;
-      if (replyCommentInput == null) {
-        const commentInput = CommentInput.create(commentSection.profileImageUrl);
-
-        commentInput.hideOnFocusOut = true;
-        commentInput.hideOnSubmit = true;
-
-        inputsElement.append(commentInput.element);
-
-        return commentInput;
+    _getOrCreateReplyInput() {
+      const { commentSection, replyInput, replyInputsElement } = this;
+      if (replyInput == null) {
+        const replyInput = ReplyInput.create(commentSection.profileImageUrl);
+        replyInputsElement.append(replyInput.element);
+        return replyInput;
       } else {
-        return replyCommentInput;
+        return replyInput;
       }
     }
 
-    _showReplyCommentInput() {
-      const replyCommentInput = this._getOrCreateReplyCommentInput();
-      replyCommentInput.show();
-      replyCommentInput.focus();
+    _showReplyInput() {
+      const replyInput = this._getOrCreateReplyInput();
+      replyInput.show();
+      replyInput.focus();
     }
 
     prependReply(comment) {
       const repliesElement = this.element.querySelector('.replies');
       repliesElement.prepend(comment.element);
+    }
+
+    get editInputsElement() {
+      const inputsElement = this.element.querySelector('.comment-edit-inputs');
+
+      if (inputsElement == null) {
+        return null;
+      } else {
+        return inputsElement;
+      }
+    }
+
+    get editInput() {
+      const { editInputsElement } = this;
+      if (editInputsElement == null) {
+        return null;
+      }
+
+      const editInputElement = editInputsElement.querySelector(`.${EditInput.className}`);
+      if (editInputElement == null) {
+        return null;
+      }
+
+      return EditInput.getOrWrap(editInputElement);
+    }
+
+    _getOrCreateEditInput() {
+      const { profileImageUrl, editInput, editInputsElement } = this;
+      if (editInput == null) {
+        const editInput = EditInput.create(profileImageUrl);
+        editInputsElement.append(editInput.element);
+        return editInput;
+      } else {
+        return editInput;
+      }
+    }
+
+    _showEditInput() {
+      const editInput = this._getOrCreateEditInput();
+      editInput.prepopulateMessage();
+      this.hideContent();
+      editInput.show();
+      editInput.focus();
     }
 
     _postLike() {
@@ -109,6 +178,26 @@ window.comments = (function comments() {
           commentLikesCountElement.innerText = data.number_of_likes;
         });
     }
+
+    _postDeleteComment() {
+      const { deleteUrl, element } = this;
+
+      ajax.jsonRequest('POST', deleteUrl).then(() => {
+        element.remove();
+      });
+    }
+
+    get contentElement() {
+      return this.element.querySelector('.comment-content');
+    }
+
+    showContent() {
+      this.contentElement.style.display = null;
+    }
+
+    hideContent() {
+      this.contentElement.style.display = 'none';
+    }
   }
 
   Comment.className = 'comment';
@@ -122,12 +211,17 @@ window.comments = (function comments() {
     message,
     likeUrl,
     liked,
-    likes
+    likes,
+    editUrl,
+    deleteUrl
   ) {
     const template = document.getElementById('comment-template');
     const element = template.content.cloneNode(true).querySelector(`.${Comment.className}`);
     element.dataset.commentId = id;
+    element.dataset.profileImageUrl = profileImageUrl;
     element.dataset.likeUrl = likeUrl;
+    element.dataset.editUrl = editUrl;
+    element.dataset.deleteUrl = deleteUrl;
     element.querySelector('.profile').style.backgroundImage = `url('${profileImageUrl}')`;
     element.querySelector('.comment-name').innerText = username;
     element.querySelector('.comment-date').innerText = dateString;
@@ -152,11 +246,7 @@ window.comments = (function comments() {
 
   class CommentInput {
     constructor(element) {
-      CommentInput.instances.set(element, this);
       this.element = element;
-      this.hideOnFocusOut = false;
-      this.hideOnSubmit = false;
-      this._setupEventListeners();
     }
 
     get formElement() {
@@ -168,67 +258,12 @@ window.comments = (function comments() {
     }
 
     get commentSection() {
-      const commentSectionElement = this.element.closest(`.${CommentSection.className}`);
+      const commentSectionElement = this.element.closest(`.${Section.className}`);
       if (commentSectionElement == null) {
         return null;
       } else {
-        return CommentSection.getOrWrap(commentSectionElement);
+        return Section.getOrWrap(commentSectionElement);
       }
-    }
-
-    get replyTo() {
-      const commentElement = this.element.closest(`.${Comment.className}`);
-      if (commentElement == null) {
-        return null;
-      } else {
-        return Comment.getOrWrap(commentElement);
-      }
-    }
-
-    _setupEventListeners() {
-      this.formElement.addEventListener('submit', event => {
-        event.preventDefault();
-        this._postComment();
-      });
-
-      this.element.addEventListener('focusout', event => {
-        if (this.hideOnFocusOut && !this.element.contains(event.relatedTarget)) {
-          this.hide();
-        }
-      });
-    }
-
-    _postComment() {
-      const { commentSection, inputElement, replyTo } = this;
-      const message = inputElement.value;
-      inputElement.value = '';
-
-      ajax
-        .jsonRequest('POST', commentSection.commentUrl, {
-          reply_to: replyTo == null ? null : replyTo.id,
-          message
-        })
-        .then(data => {
-          const comment = Comment.create(
-            data.id,
-            data.username,
-            data.profile_image_url,
-            data.date_string,
-            data.message,
-            data.like_url,
-            data.liked,
-            data.likes
-          );
-          if (this.hideOnSubmit) {
-            this.hide();
-          }
-
-          if (replyTo == null) {
-            commentSection.prependComment(comment);
-          } else {
-            replyTo.prependReply(comment);
-          }
-        });
     }
 
     show() {
@@ -244,28 +279,200 @@ window.comments = (function comments() {
     }
   }
 
-  CommentInput.className = 'comment-input';
-  CommentInput.instances = new WeakMap();
+  class MainInput extends CommentInput {
+    constructor(element) {
+      super(element);
+      MainInput.instances.set(element, this);
+      this._setupEventListeners();
+    }
 
-  CommentInput.getOrWrap = function getOrWrap(element) {
-    const c = CommentInput.instances.get(element);
+    _setupEventListeners() {
+      this.formElement.addEventListener('submit', event => {
+        event.preventDefault();
+        this._postComment();
+      });
+    }
+
+    _postComment() {
+      const { commentSection, inputElement } = this;
+      const message = inputElement.value;
+      inputElement.value = '';
+
+      ajax
+        .jsonRequest('POST', commentSection.commentUrl, {
+          reply_to: null,
+          message
+        })
+        .then(data => {
+          const comment = Comment.create(
+            data.id,
+            data.username,
+            data.profile_image_url,
+            data.date_string,
+            data.message,
+            data.like_url,
+            data.liked,
+            data.likes,
+            data.edit_url,
+            data.delete_url
+          );
+          commentSection.prependComment(comment);
+        });
+    }
+  }
+
+  MainInput.className = 'comment-main-input';
+  MainInput.instances = new WeakMap();
+
+  MainInput.getOrWrap = function getOrWrap(element) {
+    const c = MainInput.instances.get(element);
     if (c == null) {
-      return new CommentInput(element);
+      return new MainInput(element);
     } else {
       return c;
     }
   };
 
-  CommentInput.create = function create(profileImageUrl) {
-    const template = document.getElementById('comment-input-template');
-    const element = template.content.cloneNode(true).querySelector(`.${CommentInput.className}`);
-    element.querySelector('.profile').style.backgroundImage = `url('${profileImageUrl}')`;
-    return CommentInput.getOrWrap(element);
+  class ReplyInput extends CommentInput {
+    constructor(element) {
+      super(element);
+      ReplyInput.instances.set(element, this);
+      this._setupEventListeners();
+    }
+
+    get replyTo() {
+      return Comment.getOrWrap(this.element.closest(`.${Comment.className}`));
+    }
+
+    _setupEventListeners() {
+      this.formElement.addEventListener('submit', event => {
+        event.preventDefault();
+        this.hide();
+        this._postReply();
+      });
+
+      this.element.addEventListener('focusout', event => {
+        if (!this.element.contains(event.relatedTarget)) {
+          this.hide();
+        }
+      });
+    }
+
+    _postReply() {
+      const { commentSection, inputElement, replyTo } = this;
+      const message = inputElement.value;
+      inputElement.value = '';
+
+      ajax
+        .jsonRequest('POST', commentSection.commentUrl, {
+          reply_to: replyTo.id,
+          message
+        })
+        .then(data => {
+          const comment = Comment.create(
+            data.id,
+            data.username,
+            data.profile_image_url,
+            data.date_string,
+            data.message,
+            data.like_url,
+            data.liked,
+            data.likes,
+            data.edit_url,
+            data.delete_url
+          );
+          replyTo.prependReply(comment);
+        });
+    }
+  }
+
+  ReplyInput.className = 'comment-reply-input';
+  ReplyInput.instances = new WeakMap();
+
+  ReplyInput.getOrWrap = function getOrWrap(element) {
+    const c = ReplyInput.instances.get(element);
+    if (c == null) {
+      return new ReplyInput(element);
+    } else {
+      return c;
+    }
   };
 
-  class CommentSection {
+  ReplyInput.create = function create(profileImageUrl) {
+    const template = document.getElementById('comment-reply-input-template');
+    const element = template.content.cloneNode(true).querySelector(`.${ReplyInput.className}`);
+    element.querySelector('.profile').style.backgroundImage = `url('${profileImageUrl}')`;
+    return ReplyInput.getOrWrap(element);
+  };
+
+  class EditInput extends CommentInput {
     constructor(element) {
-      CommentSection.instances.set(element, this);
+      super(element);
+      EditInput.instances.set(element, this);
+      this._setupEventListeners();
+    }
+
+    get comment() {
+      return Comment.getOrWrap(this.element.closest(`.${Comment.className}`));
+    }
+
+    prepopulateMessage() {
+      this.inputElement.value = this.comment.message;
+    }
+
+    _setupEventListeners() {
+      this.formElement.addEventListener('submit', event => {
+        event.preventDefault();
+        this.comment.showContent();
+        this.hide();
+        this._postEdit();
+      });
+
+      this.element.addEventListener('focusout', event => {
+        if (!this.element.contains(event.relatedTarget)) {
+          this.comment.showContent();
+          this.hide();
+        }
+      });
+    }
+
+    _postEdit() {
+      const { comment, inputElement } = this;
+      const message = inputElement.value;
+      inputElement.value = '';
+
+      ajax
+        .jsonRequest('POST', comment.editUrl, {
+          message
+        })
+        .then(data => {
+          this.comment.message = data.message;
+        });
+    }
+  }
+
+  EditInput.className = 'comment-edit-input';
+  EditInput.instances = new WeakMap();
+
+  EditInput.getOrWrap = function getOrWrap(element) {
+    const c = EditInput.instances.get(element);
+    if (c == null) {
+      return new EditInput(element);
+    } else {
+      return c;
+    }
+  };
+
+  EditInput.create = function create(profileImageUrl) {
+    const template = document.getElementById('comment-edit-input-template');
+    const element = template.content.cloneNode(true).querySelector(`.${EditInput.className}`);
+    element.querySelector('.profile').style.backgroundImage = `url('${profileImageUrl}')`;
+    return EditInput.getOrWrap(element);
+  };
+
+  class Section {
+    constructor(element) {
+      Section.instances.set(element, this);
       this.element = element;
       this.commentUrl = element.dataset.commentUrl;
       this.profileImageUrl = element.dataset.profileImageUrl;
@@ -276,22 +483,24 @@ window.comments = (function comments() {
     }
   }
 
-  CommentSection.className = 'comment-section';
-  CommentSection.instances = new WeakMap();
-  CommentSection.getOrWrap = function getOrWrap(element) {
-    const c = CommentSection.instances.get(element);
+  Section.className = 'comment-section';
+  Section.instances = new WeakMap();
+  Section.getOrWrap = function getOrWrap(element) {
+    const c = Section.instances.get(element);
     if (c == null) {
-      return new CommentSection(element);
+      return new Section(element);
     } else {
       return c;
     }
   };
 
   document.addEventListener('DOMContentLoaded', () => {
-    document.getElementsByClassName(CommentSection.className).forEach(CommentSection.getOrWrap);
-    document.getElementsByClassName(CommentInput.className).forEach(CommentInput.getOrWrap);
+    document.getElementsByClassName(Section.className).forEach(Section.getOrWrap);
+    document.getElementsByClassName(MainInput.className).forEach(MainInput.getOrWrap);
+    document.getElementsByClassName(ReplyInput.className).forEach(ReplyInput.getOrWrap);
+    document.getElementsByClassName(EditInput.className).forEach(EditInput.getOrWrap);
     document.getElementsByClassName(Comment.className).forEach(Comment.getOrWrap);
   });
 
-  return { CommentSection };
+  return { CommentSection: Section };
 })();
