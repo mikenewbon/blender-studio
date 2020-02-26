@@ -22,5 +22,5 @@ def training(request: HttpRequest, *, training_slug: str) -> TypeSafeTemplateRes
         return typed_template_training(
             request,
             training=training_model_to_template_type(training, favorited),
-            navigation=navigation_to_template_type(*navigation),
+            navigation=navigation_to_template_type(*navigation, current='overview'),
         )

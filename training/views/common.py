@@ -1,5 +1,5 @@
 import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List, Literal, Optional, Union
 
 from common.types import assert_cast
 from training import typed_templates
@@ -54,18 +54,28 @@ def navigation_to_template_type(
     training: trainings.Training,
     chapters: List[chapters.Chapter],
     sections: List[sections_models.Section],
+    *,
+    current: Union[Literal['overview'], sections_models.Section],
 ) -> Navigation:
     sections_per_chapter: Dict[int, List[sections_models.Section]] = {}
     for section in sections:
         sections_per_chapter.setdefault(section.chapter_id, []).append(section)
 
     return Navigation(
-        training_url=training.url,
+        overview_url=training.url,
+        overview_active=current == 'overview',
         chapters=[
             ChapterNavigation(
                 index=chapter.index,
                 name=chapter.name,
                 slug=chapter.slug,
+                current=(
+                    isinstance(current, sections_models.Section)
+                    and any(
+                        current.id == section.id
+                        for section in sections_per_chapter.get(chapter.id, [])
+                    )
+                ),
                 sections=[
                     SectionNavigation(
                         index=section.index,
@@ -73,6 +83,10 @@ def navigation_to_template_type(
                         url=section.url,
                         started=assert_cast(bool, getattr(section, 'started')),
                         finished=assert_cast(bool, getattr(section, 'finished')),
+                        current=(
+                            isinstance(current, sections_models.Section)
+                            and current.id == section.id
+                        ),
                     )
                     for section in sorted(
                         sections_per_chapter.get(chapter.id, []), key=lambda s: s.index

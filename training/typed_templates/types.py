@@ -58,7 +58,8 @@ class Asset:
 
 @dc.dataclass
 class Navigation:
-    training_url: str
+    overview_url: str
+    overview_active: bool
 
     chapters: List[ChapterNavigation]
 
@@ -68,6 +69,7 @@ class ChapterNavigation:
     index: int
     name: str
     slug: str
+    current: bool
 
     sections: List[SectionNavigation]
 
@@ -83,6 +85,7 @@ class SectionNavigation:
     url: str
     started: bool
     finished: bool
+    current: bool
 
     @property
     def name_with_index(self) -> str:

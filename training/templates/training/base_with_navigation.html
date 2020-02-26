@@ -16,19 +16,22 @@
         {% call components.nav_drawer_group() %}
             {{ components.nav_drawer_section(
 				title='About this training',
-				href=navigation.training_url
+				href=navigation.overview_url,
+                active=navigation.overview_active
 			) }}
         {% endcall %}
 
         {% for chapter_navigation in navigation.chapters %}
             {% call components.nav_drawer_collapsable_group(
 				id='nav-' + chapter_navigation.slug,
-				title=chapter_navigation.name
+				title=chapter_navigation.name,
+                collapsed=not chapter_navigation.current
 			) %}
                 {% for section_navigation in chapter_navigation.sections %}
                     {{ components.nav_drawer_progress_section(
 						title=section_navigation.name,
 						href=section_navigation.url,
+						active=section_navigation.current,
 						started=section_navigation.started,
 						finished=section_navigation.finished
 					) }}
