@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import List, Optional
 
 from django.http.request import HttpRequest
 from django.template.response import TemplateResponse
@@ -6,12 +6,13 @@ from django.template.response import TemplateResponse
 from comments.typed_templates import Comments
 from common.typed_templates.types import TypeSafeTemplateResponse
 from training.typed_templates.types import (
-    Training,
-    Chapter,
-    Section,
-    Video,
     Asset,
+    Chapter,
+    Navigation,
+    Section,
     SectionProgressReportingData,
+    Training,
+    Video,
 )
 
 
@@ -25,6 +26,7 @@ def section(
     assets: List[Asset],
     comments: Comments,
     section_progress_reporting_data: SectionProgressReportingData,
+    navigation: Navigation,
 ) -> TypeSafeTemplateResponse:
     return TypeSafeTemplateResponse(
         TemplateResponse(
@@ -38,6 +40,7 @@ def section(
                 'assets': assets,
                 'comments': comments,
                 'section_progress_reporting_data': section_progress_reporting_data,
+                'navigation': navigation,
             },
         )
     )

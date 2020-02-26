@@ -1,4 +1,5 @@
-{% extends 'training/base.html' %}
+{% extends 'training/base_with_navigation.html' %}
+
 {% import 'common/components.html' as components %}
 {% import 'comments/components.html' as comment_components %}
 
@@ -20,7 +21,7 @@
     {% call components.breadcrumbs() %}
         {{ components.breadcrumb(label='Home', url=url('home')) }}
         {{ components.breadcrumb(label=training.name, url=training.url) }}
-        {{ components.breadcrumb(label=chapter.name_with_index, url=chapter.url) }}
+        {{ components.breadcrumb(label=chapter.name_with_index) }}
         {{ components.breadcrumb(label=section.name_with_index) }}
     {% endcall %}
 {% endblock breadcrumbs %}
@@ -70,10 +71,12 @@
                             </div>
                         </div>
                     {% endif %}
-                    <img src="{{ static('training/images/placeholders/video.jpg') }}" class="img-fluid mb-2">
+                    <img src="{{ static('training/images/placeholders/video.jpg') }}"
+                         class="img-fluid mb-2">
                     <p class="small mb-0">
                         Finally we are creating the high-res model for our scene! In this chapter we
-                        will go over a few basic modeling techniques as well as the first part of the production
+                        will go over a few basic modeling techniques as well as the first part of
+                        the production
                         timelapse.
                     </p>
                 </div>

@@ -11,6 +11,7 @@ from training.typed_templates.types import SectionProgressReportingData
 from training.views.common import (
     asset_model_to_template_type,
     chapter_model_to_template_type,
+    navigation_to_template_type,
     section_model_to_template_type,
     training_model_to_template_type,
     video_model_to_template_type,
@@ -43,6 +44,8 @@ def section(
                 video=video_model, start_position=video_start_position
             )
 
+        navigation = queries.trainings.navigation(user_pk=request.user.pk, training_pk=training.pk)
+
         return typed_templates.section.section(
             request,
             training=training_model_to_template_type(training, training_favorited),
@@ -64,4 +67,5 @@ def section(
                     else None
                 ),
             ),
+            navigation=navigation_to_template_type(*navigation),
         )

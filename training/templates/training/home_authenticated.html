@@ -1,14 +1,7 @@
 {% extends 'training/base.html' %}
+
 {% import 'common/components.html' as components %}
 {% import 'training/components.html' as training_components %}
-
-{% block bodyclasses %}has-nav-drawer{% endblock bodyclasses %}
-
-{% block nav_drawer %}
-{% call components.nav_drawer() %}
-	{{ components.nav_content_main() }}
-{% endcall %}
-{% endblock nav_drawer %}
 
 {% block jumbotron %}
     {% call components.jumbotron() %}

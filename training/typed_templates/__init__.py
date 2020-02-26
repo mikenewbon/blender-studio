@@ -1,4 +1,3 @@
-import training.typed_templates.chapter
 import training.typed_templates.home
 import training.typed_templates.section
 import training.typed_templates.training

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import dataclasses as dc
 import datetime
-from typing import Set, Optional, TypedDict
+from typing import List, Optional, Set, TypedDict
 
 from training.models import trainings
 
@@ -25,7 +25,6 @@ class Training:
 class Chapter:
     index: int
     name: str
-    url: str
 
     @property
     def name_with_index(self) -> str:
@@ -55,6 +54,39 @@ class Video:
 class Asset:
     name: str
     url: str
+
+
+@dc.dataclass
+class Navigation:
+    training_url: str
+
+    chapters: List[ChapterNavigation]
+
+
+@dc.dataclass
+class ChapterNavigation:
+    index: int
+    name: str
+    slug: str
+
+    sections: List[SectionNavigation]
+
+    @property
+    def name_with_index(self) -> str:
+        return f'{self.index:02.0f}. {self.name}'
+
+
+@dc.dataclass
+class SectionNavigation:
+    index: int
+    name: str
+    url: str
+    started: bool
+    finished: bool
+
+    @property
+    def name_with_index(self) -> str:
+        return f'{self.index:02.0f}. {self.name}'
 
 
 class SectionProgressReportingData(TypedDict):

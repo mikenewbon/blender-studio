@@ -73,19 +73,6 @@
 	</div>
 {% endmacro %}
 
-{% macro nav_drawer() %}
-	<div class="nav-drawer">
-		<div class="nav-drawer-header">
-			<btn class="btn btn-nav navdrawertoggle">
-				<i class="material-icons x-large">menu</i>
-			</btn>
-		</div>
-		<div class="nav-drawer-body">
-			{{ caller() }}
-		</div>
-	</div>
-{% endmacro %}
-
 {% macro checkbox_toggle(checked) %}
 	<div class="col-md-auto text-right">
 		<div class="form-group">
@@ -101,362 +88,78 @@
 	</div>
 {% endmacro %}
 
-
 {% macro nav_drawer() %}
-	<div class="nav-drawer">
+	<nav class="nav-drawer">
 		<div class="nav-drawer-spacer">
 		</div>
 		<div class="nav-drawer-body">
 			{{ caller() }}
 		</div>
 		<div class="drawer-overlay"></div>
-	</div>
-
+	</nav>
 {% endmacro %}
 
-{% macro nav_content_main() %}
-	<div class="px-3 py-2 d-block d-md-none">
-		<div class="input-group mb-0">
-			<div class="input-group-prepend"><span class="input-group-text"><i
-					class="material-icons">search</i></span>
-			</div>
-			<input type="text" placeholder="Search tags and keywords" class="form-control">
-		</div>
-	</div>
-	<ul class="nav-drawer-list">
-		<li><a href="" class="btn-nav active"><i class="material-icons">home</i>
-			<span>Home</span></a>
-		</li>
-		<li><a href="" class="btn-nav"><i class="material-icons">local_library</i>
-			<span>Training</span></a>
-		</li>
-		<li><a href="" class="btn-nav"><i class="material-icons">folder</i> <span>Assets</span></a>
-			<ul class="nav-drawer-sub-list small">
-				<li><a href="">
-					<p class="text-muted">HDR Images</p>
-				</a>
-				</li>
-				<li><a href="">
-					<p class="text-muted">Textures</p>
-				</a>
-				</li>
-				<li><a href="">
-					<p class="text-muted">Art Gallery</p>
-				</a>
-				</li>
-				<li><a href="">
-					<p class="text-muted">Characters</p>
-				</a>
-				</li>
-			</ul>
-		</li>
-		<li>
-			<a href="" class="btn-nav">
-				<i class="material-icons">movie</i>
-				<span>Films</span>
-			</a>
-		</li>
-		<li>
-			<a href="" class="btn-nav">
-				<i class="material-icons">chat_bubble</i>
-				<span>News</span>
-			</a>
-		</li>
-	</ul>
-{% endmacro %}
-
-{% macro nav_content_training() %}
-
-
+{% macro nav_drawer_header(title, subtitle=None) %}
 	<div class="training-nav-header">
-		<p class="subtitle">Course</p>
-		<h2>Blender Visual Effects Workflow - Part 1</h2>
+		{% if subtitle is not none %}<p class="subtitle">{{ subtitle }}</p>{% endif %}
+		<h2>{{ title }}</h2>
 	</div>
+{% endmacro %}
 
+{% macro nav_drawer_group() %}
 	<div class="training-nav-group">
-
-		<ul class="training-nav-list">
-
-			<li class="training-nav-section complete">
-				<a href="#" class="">
-					<div class="training-nav-section-icon">
-						<!-- progress class if it has started tracking progress-->
-						<i class="material-icons">done</i>
-						<svg width="30" height="30"
-							 class="training-nav-section-icon-progress progress-complete">
-							<circle cx="15" cy="15" r="14"/>
-						</svg>
-					</div>
-					<div>
-						<p class="subtitle x-small">Overview</p>
-						<h4>About this training</h4>
-					</div>
-				</a>
-			</li>
-
-			<li class="training-nav-section">
-				<a href="#" class="active">
-					<div class="training-nav-section-icon">
-						<!-- progress class if it has started tracking progress-->
-						<i class="material-icons">insert_drive_file</i>
-						<svg width="30" height="30"
-							 class="training-nav-section-icon-progress progress-half">
-							<circle cx="15" cy="15" r="14"/>
-						</svg>
-					</div>
-					<div>
-						<p class="subtitle x-small">Breadown</p>
-						<h4>Course Structure</h4>
-					</div>
-				</a>
-			</li>
-
-			<li class="training-nav-section">
-				<a href="#">
-					<div class="training-nav-section-icon">
-						<!-- progress class if it has started tracking progress-->
-						<i class="material-icons">play_arrow</i>
-						<svg width="30" height="30" class="training-nav-section-icon-progress ">
-							<circle cx="15" cy="15" r="14"/>
-						</svg>
-					</div>
-					<div>
-						<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span>
-						</p>
-						<h4>Setting up your scene</h4>
-					</div>
-				</a>
-			</li>
-
-		</ul>
-
+		<ol class="training-nav-list">
+			{{ caller() }}
+		</ol>
 	</div>
+{% endmacro %}
 
-
+{% macro nav_drawer_collapsable_group(id, title) %}
 	<div class="training-nav-group">
-		<h3 class="training-nav-dropdown" data-toggle="collapse" href="#nav-introduction"><i
-				class="material-icons">expand_less</i>Introduction</h3>
-		<ul id="nav-introduction" class="training-nav-list collapse show">
-
-			<li class="training-nav-section">
-				<a href="#">
-					<div class="training-nav-section-icon">
-						<!-- progress class if it has started tracking progress-->
-						<i class="material-icons">play_arrow</i>
-						<svg width="30" height="30" class="training-nav-section-icon-progress ">
-							<circle cx="15" cy="15" r="14"/>
-						</svg>
-					</div>
-					<div>
-						<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span>
-						</p>
-						<h4>01. Point Tracking - Part 1</h4>
-					</div>
-				</a>
-			</li>
-
-			<li class="training-nav-section">
-				<a href="#">
-					<div class="training-nav-section-icon">
-						<!-- progress class if it has started tracking progress-->
-						<i class="material-icons">play_arrow</i>
-						<svg width="30" height="30" class="training-nav-section-icon-progress ">
-							<circle cx="15" cy="15" r="14"/>
-						</svg>
-					</div>
-					<div>
-						<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span>
-						</p>
-						<h4>02. Point Tracking - Part 2</h4>
-					</div>
-				</a>
-			</li>
-
-			<li class="training-nav-section">
-				<a href="#">
-					<div class="training-nav-section-icon">
-						<!-- progress class if it has started tracking progress-->
-						<i class="material-icons">play_arrow</i>
-						<svg width="30" height="30" class="training-nav-section-icon-progress ">
-							<circle cx="15" cy="15" r="14"/>
-						</svg>
-					</div>
-					<div>
-						<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span>
-						</p>
-						<h4>03. Point Stabilization</h4>
-					</div>
-				</a>
-			</li>
-
-			<li class="training-nav-section">
-				<a href="#">
-					<div class="training-nav-section-icon">
-						<!-- progress class if it has started tracking progress-->
-						<i class="material-icons">play_arrow</i>
-						<svg width="30" height="30" class="training-nav-section-icon-progress ">
-							<circle cx="15" cy="15" r="14"/>
-						</svg>
-					</div>
-					<div>
-						<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span>
-						</p>
-						<h4>04. Point Tracking - Part 3</h4>
-					</div>
-				</a>
-			</li>
-		</ul>
+		<h3 class="training-nav-dropdown" data-toggle="collapse" data-target="#{{ id }}"><i
+				class="material-icons">expand_less</i>{{ title }}</h3>
+		<ol id="{{ id }}" class="training-nav-list collapse show">
+			{{ caller() }}
+		</ol>
 	</div>
+{% endmacro %}
 
-	<div class="training-nav-group">
-		<h3 class="training-nav-dropdown collapsed" data-toggle="collapse"
-			href="#nav-camera-tracking"><i
-				class="material-icons">expand_less</i>Camera Tracking</h3>
-		<ul id="nav-camera-tracking" class="training-nav-list collapse">
+{% macro nav_drawer_section(title, href) %}
+	<li class="training-nav-section">
+		<a href="{{ href }}">
+			<div class="training-nav-section-icon">
+				<i class="material-icons">insert_drive_file</i>
+				<svg width="30" height="30"
+					 class="training-nav-section-icon-progress">
+					<circle cx="15" cy="15" r="14"/>
+				</svg>
+			</div>
+			<div>
+				<h4>{{ title }}</h4>
+			</div>
+		</a>
+	</li>
+{% endmacro %}
 
-			<li class="training-nav-section">
-				<a href="#">
-					<div class="training-nav-section-icon">
-						<!-- progress class if it has started tracking progress-->
-						<i class="material-icons">play_arrow</i>
-						<svg width="30" height="30" class="training-nav-section-icon-progress ">
-							<circle cx="15" cy="15" r="14"/>
-						</svg>
-					</div>
-					<div>
-						<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span>
-						</p>
-						<h4>01. Point Tracking - Part 1</h4>
-					</div>
-				</a>
-			</li>
+{% macro nav_drawer_progress_section(title, href, started, finished) %}
+	<li class="training-nav-section {% if finished %}complete{% endif %}">
+		<a href="{{ href }}">
+			<div class="training-nav-section-icon">
 
-			<li class="training-nav-section">
-				<a href="#">
-					<div class="training-nav-section-icon">
-						<!-- progress class if it has started tracking progress-->
-						<i class="material-icons">play_arrow</i>
-						<svg width="30" height="30" class="training-nav-section-icon-progress ">
-							<circle cx="15" cy="15" r="14"/>
-						</svg>
-					</div>
-					<div>
-						<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span>
-						</p>
-						<h4>02. Point Tracking - Part 2</h4>
-					</div>
-				</a>
-			</li>
+				{% if finished %}
+					<i class="material-icons">done</i>
+				{% else %}
+					<i class="material-icons">play_arrow</i>
+				{% endif %}
 
-			<li class="training-nav-section">
-				<a href="#">
-					<div class="training-nav-section-icon">
-						<!-- progress class if it has started tracking progress-->
-						<i class="material-icons">play_arrow</i>
-						<svg width="30" height="30" class="training-nav-section-icon-progress ">
-							<circle cx="15" cy="15" r="14"/>
-						</svg>
-					</div>
-					<div>
-						<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span>
-						</p>
-						<h4>03. Point Stabilization</h4>
-					</div>
-				</a>
-			</li>
-
-			<li class="training-nav-section">
-				<a href="#">
-					<div class="training-nav-section-icon">
-						<!-- progress class if it has started tracking progress-->
-						<i class="material-icons">play_arrow</i>
-						<svg width="30" height="30" class="training-nav-section-icon-progress ">
-							<circle cx="15" cy="15" r="14"/>
-						</svg>
-					</div>
-					<div>
-						<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span>
-						</p>
-						<h4>04. Point Tracking - Part 3</h4>
-					</div>
-				</a>
-			</li>
-		</ul>
-	</div>
-
-	<div class="training-nav-group">
-		<h3 class="training-nav-dropdown collapsed" data-toggle="collapse"
-			href="#nav-object-tracking"><i
-				class="material-icons">expand_less</i>Object Tracking</h3>
-		<ul id="nav-object-tracking" class="training-nav-list collapse">
-
-			<li class="training-nav-section">
-				<a href="#">
-					<div class="training-nav-section-icon">
-						<!-- progress class if it has started tracking progress-->
-						<i class="material-icons">play_arrow</i>
-						<svg width="30" height="30" class="training-nav-section-icon-progress ">
-							<circle cx="15" cy="15" r="14"/>
-						</svg>
-					</div>
-					<div>
-						<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span>
-						</p>
-						<h4>01. Point Tracking - Part 1</h4>
-					</div>
-				</a>
-			</li>
-
-			<li class="training-nav-section">
-				<a href="#">
-					<div class="training-nav-section-icon">
-						<!-- progress class if it has started tracking progress-->
-						<i class="material-icons">play_arrow</i>
-						<svg width="30" height="30" class="training-nav-section-icon-progress ">
-							<circle cx="15" cy="15" r="14"/>
-						</svg>
-					</div>
-					<div>
-						<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span>
-						</p>
-						<h4>02. Point Tracking - Part 2</h4>
-					</div>
-				</a>
-			</li>
-
-			<li class="training-nav-section">
-				<a href="#">
-					<div class="training-nav-section-icon">
-						<!-- progress class if it has started tracking progress-->
-						<i class="material-icons">play_arrow</i>
-						<svg width="30" height="30" class="training-nav-section-icon-progress ">
-							<circle cx="15" cy="15" r="14"/>
-						</svg>
-					</div>
-					<div>
-						<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span>
-						</p>
-						<h4>03. Point Stabilization</h4>
-					</div>
-				</a>
-			</li>
-
-			<li class="training-nav-section">
-				<a href="#">
-					<div class="training-nav-section-icon">
-						<!-- progress class if it has started tracking progress-->
-						<i class="material-icons">play_arrow</i>
-						<svg width="30" height="30" class="training-nav-section-icon-progress ">
-							<circle cx="15" cy="15" r="14"/>
-						</svg>
-					</div>
-					<div>
-						<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span>
-						</p>
-						<h4>04. Point Tracking - Part 3</h4>
-					</div>
-				</a>
-			</li>
-		</ul>
-	</div>
+				<svg width="30" height="30"
+					 class="training-nav-section-icon-progress {% if finished %}progress-complete{% elif started %}progress-half{% endif %}">
+					<circle cx="15" cy="15" r="14"/>
+				</svg>
+			</div>
+			<div>
+				<h4>{{ title }}</h4>
+			</div>
+		</a>
+	</li>
 {% endmacro %}

@@ -1,8 +1,7 @@
 from django.db import models
-from django.urls.base import reverse
 
-from training.models import trainings
 from common import mixins
+from training.models import trainings
 
 
 class Chapter(mixins.CreatedUpdatedMixin, models.Model):
@@ -21,14 +20,3 @@ class Chapter(mixins.CreatedUpdatedMixin, models.Model):
 
     def __str__(self) -> str:
         return f'{self.training.name} > {self.index:02.0f}. {self.name}'
-
-    @property
-    def url(self) -> str:
-        return reverse(
-            'chapter',
-            kwargs={
-                'training_slug': self.training.slug,
-                'chapter_index': self.index,
-                'chapter_slug': self.slug,
-            },
-        )

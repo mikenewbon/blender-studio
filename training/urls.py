@@ -1,10 +1,9 @@
-from django.urls import path, include
+from django.urls import include, path
 
 from training.views.api.comment import comment
 from training.views.api.favorite import favorite
 from training.views.api.progress import section_progress, video_progress
 from training.views.home import home
-from training.views.training.chapter import chapter
 from training.views.training.section import section
 from training.views.training.training import training
 
@@ -34,16 +33,9 @@ urlpatterns = [
             [
                 path('', training, name='training'),
                 path(
-                    'chapters/<int:chapter_index>-<slug:chapter_slug>/',
-                    include(
-                        [
-                            path('', chapter, name='chapter'),
-                            path(
-                                'sections/<int:section_index>-<slug:section_slug>/',
-                                include([path('', section, name='section')]),
-                            ),
-                        ]
-                    ),
+                    'chapters/<int:chapter_index>-<slug:chapter_slug>/sections/<int:section_index>-<slug:section_slug>/',
+                    section,
+                    name='section',
                 ),
             ]
         ),

@@ -1,8 +1,8 @@
-from typing import Optional, List, Tuple, cast
+from typing import List, Optional, Tuple, cast
 
-from django.db.models import QuerySet, Exists, OuterRef
+from django.db.models import Exists, OuterRef, QuerySet
 
-from training.models import trainings, chapters
+from training.models import chapters, progress, sections, trainings
 
 
 def _published() -> 'QuerySet[trainings.Training]':
@@ -24,9 +24,7 @@ def set_favorite(*, training_pk: int, user_pk: int, favorite: bool) -> None:
         ).delete()
 
 
-def from_slug_with_chapters(
-    *, user_pk: int, training_slug: str,
-) -> Optional[Tuple[trainings.Training, bool, List[chapters.Chapter]]]:
+def from_slug(*, user_pk: int, training_slug: str,) -> Optional[Tuple[trainings.Training, bool]]:
     try:
         training = (
             _published()
@@ -35,13 +33,13 @@ def from_slug_with_chapters(
                     trainings.Favorite.objects.filter(user_id=user_pk, training_id=OuterRef('pk'))
                 )
             )
-            .prefetch_related('tags', 'chapters')
+            .prefetch_related('tags')
             .get(slug=training_slug)
         )
     except trainings.Training.DoesNotExist:
         return None
 
-    return training, cast(bool, getattr(training, 'favorited')), list(training.chapters.all())
+    return training, cast(bool, getattr(training, 'favorited'))
 
 
 def favorited(*, user_pk: int) -> List[trainings.Training]:
@@ -59,4 +57,29 @@ def all(user_pk: Optional[int]) -> List[trainings.Training]:
         .exclude(favorites__user_id=user_pk)
         .prefetch_related('tags')
         .order_by('-date_created')
+    )
+
+
+def navigation(
+    *, user_pk: int, training_pk: int
+) -> Tuple[trainings.Training, List[chapters.Chapter], List[sections.Section]]:
+    return (
+        _published().get(id=training_pk),
+        list(chapters.Chapter.objects.filter(training_id=training_pk).all()),
+        list(
+            sections.Section.objects.annotate(
+                started=Exists(
+                    progress.UserSectionProgress.objects.filter(
+                        user_id=user_pk, section_id=OuterRef('pk'), started=True
+                    )
+                ),
+                finished=Exists(
+                    progress.UserSectionProgress.objects.filter(
+                        user_id=user_pk, section_id=OuterRef('pk'), finished=True
+                    )
+                ),
+            )
+            .filter(chapter__training_id=training_pk)
+            .all()
+        ),
     )
