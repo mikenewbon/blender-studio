@@ -85,6 +85,7 @@ class SectionNavigation:
     url: str
     started: bool
     finished: bool
+    progress_fraction: float
     current: bool
 
     @property

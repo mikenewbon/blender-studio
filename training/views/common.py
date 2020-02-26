@@ -83,6 +83,13 @@ def navigation_to_template_type(
                         url=section.url,
                         started=assert_cast(bool, getattr(section, 'started')),
                         finished=assert_cast(bool, getattr(section, 'finished')),
+                        progress_fraction=(
+                            0.5
+                            if getattr(section, 'video_position') is None
+                            or getattr(section, 'video_duration') is None
+                            else getattr(section, 'video_position')
+                            / getattr(section, 'video_duration')
+                        ),
                         current=(
                             isinstance(current, sections_models.Section)
                             and current.id == section.id

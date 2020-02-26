@@ -1,6 +1,6 @@
 from typing import List, Optional, Tuple, cast
 
-from django.db.models import Exists, OuterRef, QuerySet
+from django.db.models import Exists, OuterRef, QuerySet, Subquery
 
 from training.models import chapters, progress, sections, trainings
 
@@ -77,6 +77,14 @@ def navigation(
                     progress.UserSectionProgress.objects.filter(
                         user_id=user_pk, section_id=OuterRef('pk'), finished=True
                     )
+                ),
+                video_position=Subquery(
+                    progress.UserVideoProgress.objects.filter(
+                        user_id=user_pk, video__section_id=OuterRef('pk')
+                    ).values('position')
+                ),
+                video_duration=Subquery(
+                    sections.Video.objects.filter(section_id=OuterRef('pk')).values('duration')
                 ),
             )
             .filter(chapter__training_id=training_pk)

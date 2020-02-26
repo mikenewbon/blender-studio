@@ -144,7 +144,7 @@
     </li>
 {% endmacro %}
 
-{% macro nav_drawer_progress_section(title, href, active, started, finished) %}
+{% macro nav_drawer_progress_section(title, href, active, started, finished, progress_fraction) %}
     <li class="training-nav-section {% if finished %}complete{% endif %}">
         <a href="{{ href }}" class="{% if active %}active{% endif %}">
             <div class="training-nav-section-icon">
@@ -156,7 +156,8 @@
                 {% endif %}
 
                 <svg width="30" height="30"
-                     class="training-nav-section-icon-progress {% if finished %}progress-complete{% elif started %}progress-half{% endif %}">
+                     class="training-nav-section-icon-progress"
+                     style="--progress-fraction: {{ 1.0 if finished else progress_fraction }}">
                     <circle cx="15" cy="15" r="14"/>
                 </svg>
             </div>
