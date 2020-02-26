@@ -1,12 +1,13 @@
 {% extends 'training_main/base.html' %}
 {% import 'common/components.html' as components %}
 
-{% block bodyclasses %}has-nav-drawer has-secondary-nav{% endblock bodyclasses %}
+{% block bodyclasses %}has-nav-drawer nav-drawer-wide{% endblock bodyclasses %}
 
-{% block navdrawer %}
-	{% call components.nav_drawer() %}
-	{% endcall %}
-{% endblock navdrawer %}
+{% block nav_drawer %}
+{% call components.nav_drawer() %}
+	{{ components.nav_content_training() }}
+{% endcall %}
+{% endblock nav_drawer %}
 
 {% block breadcrumbs %}
     {% call components.breadcrumbs() %}

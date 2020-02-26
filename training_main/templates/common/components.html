@@ -1,236 +1,234 @@
 {% macro breadcrumbs() %}
-    <ol class="breadcrumb">
-        {{ caller() }}
-    </ol>
+<ol class="breadcrumb">
+	{{ caller() }}
+</ol>
 {% endmacro %}
 
 {% macro breadcrumb(label, url=None) %}
-    <li class="breadcrumb-item">
-        {% if url is not none %}
-            <a href="{{ url }}">{{ label }}</a>
-        {% else %}
-            {{ label }}
-        {% endif %}
-    </li>
+<li class="breadcrumb-item">
+	{% if url is not none %}
+	<a href="{{ url }}">{{ label }}</a>
+	{% else %}
+	{{ label }}
+	{% endif %}
+</li>
 {% endmacro %}
 
 {% macro cards() %}
-    <div class="row">
-        {{ caller() }}
-    </div>
+<div class="row">
+	{{ caller() }}
+</div>
 {% endmacro %}
 
 {% macro pills(class=[]) %}
-    <div class="pills {{ class|join(' ') }}">
-        {{ caller() }}
-    </div>
+<div class="pills {{ class|join(' ') }}">
+	{{ caller() }}
+</div>
 {% endmacro %}
 
 {% macro pill(label, url=None, color='blue') %}
-    {% if url is none %}
-        <p class="badge badge-pill badge-{{ color }}">{{ label }}</p>
-    {% else %}
-        <a class="badge badge-pill badge-{{ color }}" href="{{ url }}">{{ label }}</a>
-    {% endif %}
+{% if url is none %}
+<p class="badge badge-pill badge-{{ color }}">{{ label }}</p>
+{% else %}
+<a class="badge badge-pill badge-{{ color }}" href="{{ url }}">{{ label }}</a>
+{% endif %}
 {% endmacro %}
 
 {% macro checkbox_toggle(checked) %}
-    <div class="col-md-auto text-right">
-        <div class="form-group">
-            <label class="form-group form-switch">
-                {% if checked %}
-                    <input type="checkbox" class="form-check-input" checked="checked">
-                {% else %}
-                    <input type="checkbox" class="form-check-input">
-                {% endif %}
-                <span class="slider"></span>
-            </label>
-        </div>
-    </div>
+<div class="col-md-auto text-right">
+	<div class="form-group">
+		<label class="form-group form-switch">
+			{% if checked %}
+			<input type="checkbox" class="form-check-input" checked="checked">
+			{% else %}
+			<input type="checkbox" class="form-check-input">
+			{% endif %}
+			<span class="slider"></span>
+		</label>
+	</div>
+</div>
 {% endmacro %}
 
 {% macro progressbar(fraction) %}
-    <div class="progress">
-        <div class="progress-bar" role="progressbar" style="width:{{ fraction*100 }}%;"></div>
-    </div>
+<div class="progress">
+	<div class="progress-bar" role="progressbar" style="width:{{ fraction*100 }}%;"></div>
+</div>
 {% endmacro %}
 
 {% macro badge_difficulty(label, color='blue') %}
-    <div class="badge badge-difficulty badge-{{ color }}">
-        <i class="material-icons btn-material-icons">extension</i>
-        {{ label }}
-    </div>
+<div class="badge badge-difficulty badge-{{ color }}">
+	<i class="material-icons btn-material-icons">extension</i>
+	{{ label }}
+</div>
 {% endmacro %}
 
 {% macro card_training_checkbox_favorite(checked, class=[]) %}
-    <button class="btn btn-ctrl-sm checkbox-favorite {{ class|join(' ') }}"
-            {% if checked %}data-checked="checked"{% endif %}>
-        <i class="material-icons btn-material-icons checkbox-favorite-icon-checked">check</i>
-        <i class="material-icons btn-material-icons checkbox-favorite-icon-unchecked">add</i>
-    </button>
+<button class="btn btn-ctrl-sm checkbox-favorite {{ class|join(' ') }}" {% if checked %}data-checked="checked"
+	{% endif %}>
+	<i class="material-icons btn-material-icons checkbox-favorite-icon-checked">check</i>
+	<i class="material-icons btn-material-icons checkbox-favorite-icon-unchecked">add</i>
+</button>
 {% endmacro %}
 
 {% macro card_section(section) %}
-    {% set image_placeholder = static('training_main/images/placeholders/card_training.png') %}
-    <div class="col-12 col-sm-6 col-lg-4">
-        <div class="card card-media">
+{% set image_placeholder = static('training_main/images/placeholders/card_training.png') %}
+<div class="col-12 col-sm-6 col-lg-4">
+	<div class="card card-media">
 
-            <div class="card-header" style='background-image: url("{{ image_placeholder }}")'>
-                {{ progressbar(section.progress_fraction) }}
-            </div>
+		<div class="card-header" style='background-image: url("{{ image_placeholder }}")'>
+			{{ progressbar(section.progress_fraction) }}
+		</div>
 
-            <a class="card-body" href="{{ section.url }}">
-                <p class="card-subtitle">{{ section.training_name }}</p>
-                <p class="card-subtitle">{{ section.chapter_name_with_index }}</p>
-                <h2 class="card-title">{{ section.name_with_index }}</h2>
-            </a>
-        </div>
-    </div>
+		<a class="card-body" href="{{ section.url }}">
+			<p class="card-subtitle">{{ section.training_name }}</p>
+			<p class="card-subtitle">{{ section.chapter_name_with_index }}</p>
+			<h2 class="card-title">{{ section.name_with_index }}</h2>
+		</a>
+	</div>
+</div>
 {% endmacro %}
 
 {% macro card_training(training) %}
-    {% set difficulty_color = {'beginner': 'green', 'intermediate': 'blue', 'advanced': 'red'}.get(training.difficulty, 'blue') %}
-    {% set image_placeholder = static('training_main/images/placeholders/card_training.png') %}
-    <div class="col-12 col-sm-6 col-lg-4">
-        <div class="card card-media card-training" data-favorite-url="{{ training.favorite_url }}">
+{% set difficulty_color = {'beginner': 'green', 'intermediate': 'blue', 'advanced': 'red'}.get(training.difficulty, 'blue') %}
+{% set image_placeholder = static('training_main/images/placeholders/card_training.png') %}
+<div class="col-12 col-sm-6 col-lg-4">
+	<div class="card card-media card-training" data-favorite-url="{{ training.favorite_url }}">
 
-            <div class="card-header" style='background-image: url("{{ image_placeholder }}")'>
-                {{ badge_difficulty(label=training.difficulty.label, color=difficulty_color) }}
-                {{ card_training_checkbox_favorite(checked=training.favorited, class=['btn-save-media', 'card-training-favorite']) }}
-            </div>
+		<div class="card-header" style='background-image: url("{{ image_placeholder }}")'>
+			{{ badge_difficulty(label=training.difficulty.label, color=difficulty_color) }}
+			{{ card_training_checkbox_favorite(checked=training.favorited, class=['btn-save-media', 'card-training-favorite']) }}
+		</div>
 
-            <a class="card-body" href="{{ training.url }}">
-                <p class="card-subtitle">{{ training.type.label }}</p>
-                <h2 class="card-title">{{ training.name }}</h2>
-                <p class="card-text">{{ training.description }}</p>
-            </a>
+		<a class="card-body" href="{{ training.url }}">
+			<p class="card-subtitle">{{ training.type.label }}</p>
+			<h2 class="card-title">{{ training.name }}</h2>
+			<p class="card-text">{{ training.description }}</p>
+		</a>
 
-            <div class="card-footer">
-                {% call pills() %}
-                    {% for tag in training.tags %}
-                        {{ pill(label=tag) }}
-                    {% endfor %}
-                {% endcall %}
-            </div>
+		<div class="card-footer">
+			{% call pills() %}
+			{% for tag in training.tags %}
+			{{ pill(label=tag) }}
+			{% endfor %}
+			{% endcall %}
+		</div>
 
-        </div>
-    </div>
+	</div>
+</div>
 {% endmacro %}
 
 {% macro jumbotron() %}
-    {% set image_placeholder = static('training_main/images/placeholders/jumbotron.png') %}
-    <div style="background-image:url('{{ image_placeholder }}')"
-         class="jumbotron jumbotron-fluid jumbotron-overlay header">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-5 col-xl-4">
-                    <div class="jumbotron-body">
-                        {{ caller() }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+{% set image_placeholder = static('training_main/images/placeholders/jumbotron.png') %}
+<div style="background-image:url('{{ image_placeholder }}')" class="jumbotron jumbotron-fluid jumbotron-overlay header">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-5 col-xl-4">
+				<div class="jumbotron-body">
+					{{ caller() }}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 {% endmacro %}
 
 {% macro searchbar(placeholder) %}
-    <div class="input-group">
-        <div class="input-group-prepend"><span class="input-group-text"><i class="material-icons">search</i></span>
-        </div>
-        <input type="text" placeholder="{{ placeholder }}" class="form-control">
-    </div>
+<div class="input-group">
+	<div class="input-group-prepend"><span class="input-group-text"><i class="material-icons">search</i></span>
+	</div>
+	<input type="text" placeholder="{{ placeholder }}" class="form-control">
+</div>
 {% endmacro %}
 
 {% macro select() %}
-    <select class="custom-select">
-        {{ caller() }}
-    </select>
+<select class="custom-select">
+	{{ caller() }}
+</select>
 {% endmacro %}
 
 {% macro video_player(url, progress_url, start_position) %}
-    <div class="video-player" data-progress-url="{{ progress_url }}"
-         {% if start_position is not none %}data-start-position="{{ start_position }}{% endif %}">
-        <video playsinline controls>
-            <source src="{{ url }}">
-        </video>
-    </div>
+<div class="video-player" data-progress-url="{{ progress_url }}"
+	{% if start_position is not none %}data-start-position="{{ start_position }}{% endif %}">
+	<video playsinline controls>
+		<source src="{{ url }}">
+	</video>
+</div>
 {% endmacro %}
 
 {% macro comment_section(comments) %}
-    <div class="comment-section" data-comment-url="{{ comments.comment_url }}"
-         data-profile-image-url="{{ comments.profile_image_url }}">
-        <h3 class="mb-2">{{ comments.number_of_comments }} Comments</h3>
-        {{ comment_input(comments.profile_image_url) }}
-        <div class="comments">
-            {{ _comment_trees(comments.comment_trees) }}
-        </div>
-    </div>
+<div class="comment-section" data-comment-url="{{ comments.comment_url }}"
+	data-profile-image-url="{{ comments.profile_image_url }}">
+	<h3 class="mb-2">{{ comments.number_of_comments }} Comments</h3>
+	{{ comment_input(comments.profile_image_url) }}
+	<div class="comments">
+		{{ _comment_trees(comments.comment_trees) }}
+	</div>
+</div>
 {% endmacro %}
 
 {% macro comment_input(profile_image_url) %}
-    <div class="comment-input">
-        <div style="background-image:url({{ profile_image_url }});" class="profile"></div>
-        <div class="col">
-            <form class="input-group input-group-sm">
-                <input type="text" placeholder="Comment publicly" class="form-control">
-                <div class="input-group-append">
-                    <button class="btn btn-input">Comment</button>
-                </div>
-            </form>
-        </div>
-    </div>
+<div class="comment-input">
+	<div style="background-image:url({{ profile_image_url }});" class="profile"></div>
+	<div class="col">
+		<form class="input-group input-group-sm">
+			<input type="text" placeholder="Comment publicly" class="form-control">
+			<div class="input-group-append">
+				<button class="btn btn-input">Comment</button>
+			</div>
+		</form>
+	</div>
+</div>
 {% endmacro %}
 
 {% macro comment_input_template() %}
-    <template id="comment-input-template">
-        {{ comment_input(profile_image_url='') }}
-    </template>
+<template id="comment-input-template">
+	{{ comment_input(profile_image_url='') }}
+</template>
 {% endmacro %}
 
 {% macro comment(id, username, profile_image_url, date_string, message, like_url, liked, likes) %}
-    <div class="row comment" data-comment-id="{{ id }}" data-like-url="{{ like_url }}">
-        <div class="col-md-12 comment-content">
-            <div class="row comment-header">
-                <div style="background-image:url('{{ profile_image_url }}');" class="profile"></div>
-                <div class="col-md-auto">
-                    <h4 class="comment-name">{{ username }}</h4>
-                    <p class="comment-date">{{ date_string }}</p>
-                </div>
-            </div>
-            <div class="row">
-                <p class="comment-text">{{ message }}</p>
-            </div>
-            <div class="row">
-                <div class="comment-likes">
-                    <button class="btn btn-ctrl-sm checkbox-like"
-                            {% if liked %}data-checked="checked"{% endif %}>
-                        <i class="material-icons btn-material-icons checkbox-like-icon-checked text-primary">favorite</i>
-                        <i class="material-icons btn-material-icons checkbox-like-icon-unchecked">favorite_border</i>
-                    </button>
-                    <span class="comment-likes-count">{{ likes }}</span>
-                </div>
-                <a href="" class="comment-reply">Reply</a>
-            </div>
-        </div>
-        <div class="col-md-12 comment-inputs">
-        </div>
-        <div class="col-md-12 replies">
-            {% if caller is defined %}
-                {{ caller() }}
-            {% endif %}
-        </div>
-    </div>
+<div class="row comment" data-comment-id="{{ id }}" data-like-url="{{ like_url }}">
+	<div class="col-md-12 comment-content">
+		<div class="row comment-header">
+			<div style="background-image:url('{{ profile_image_url }}');" class="profile"></div>
+			<div class="col-md-auto">
+				<h4 class="comment-name">{{ username }}</h4>
+				<p class="comment-date">{{ date_string }}</p>
+			</div>
+		</div>
+		<div class="row">
+			<p class="comment-text">{{ message }}</p>
+		</div>
+		<div class="row">
+			<div class="comment-likes">
+				<button class="btn btn-ctrl-sm checkbox-like" {% if liked %}data-checked="checked" {% endif %}>
+					<i class="material-icons btn-material-icons checkbox-like-icon-checked text-primary">favorite</i>
+					<i class="material-icons btn-material-icons checkbox-like-icon-unchecked">favorite_border</i>
+				</button>
+				<span class="comment-likes-count">{{ likes }}</span>
+			</div>
+			<a href="" class="comment-reply">Reply</a>
+		</div>
+	</div>
+	<div class="col-md-12 comment-inputs">
+	</div>
+	<div class="col-md-12 replies">
+		{% if caller is defined %}
+		{{ caller() }}
+		{% endif %}
+	</div>
+</div>
 {% endmacro %}
 
 {% macro comment_template() %}
-    <template id="comment-template">
-        {{ comment(id='', username='', profile_image_url='', date_string='', message='', like_url='', liked=False, likes='') }}
-    </template>
+<template id="comment-template">
+	{{ comment(id='', username='', profile_image_url='', date_string='', message='', like_url='', liked=False, likes='') }}
+</template>
 {% endmacro %}
 
 {% macro _comment_trees(comment_trees) %}
-    {% for c in comment_trees %}
-        {% call comment(
+{% for c in comment_trees %}
+{% call comment(
             id=c.id,
             username=c.username,
             profile_image_url=c.profile_image_url,
@@ -240,20 +238,346 @@
             liked=c.liked,
             likes=c.likes
         ) %}
-            {{ _comment_trees(c.replies) }}
-        {% endcall %}
-    {% endfor %}
+{{ _comment_trees(c.replies) }}
+{% endcall %}
+{% endfor %}
 {% endmacro %}
 
 {% macro nav_drawer() %}
-	<div class="nav-drawer">
-		<div class="nav-drawer-header">
-			<btn class="btn btn-nav navdrawertoggle">
-				<i class="material-icons x-large">menu</i>
-			</btn>
-		</div>
-		<div class="nav-drawer-body">
-			{{ caller() }}
-		</div>
+<div class="nav-drawer">
+	<div class="nav-drawer-spacer">
 	</div>
+	<div class="nav-drawer-body">
+		{{ caller() }}
+	</div>
+	<div class="drawer-overlay"></div>
+</div>
+
+{% endmacro %}
+
+{% macro nav_content_main() %}
+<div class="px-3 py-2 d-block d-md-none">
+	<div class="input-group mb-0">
+		<div class="input-group-prepend"><span class="input-group-text"><i class="material-icons">search</i></span>
+		</div>
+		<input type="text" placeholder="Search tags and keywords" class="form-control">
+	</div>
+</div>
+<ul class="nav-drawer-list">
+	<li><a href="" class="btn-nav active"><i class="material-icons">home</i> <span>Home</span></a>
+	</li>
+	<li><a href="" class="btn-nav"><i class="material-icons">local_library</i> <span>Training</span></a>
+	</li>
+	<li><a href="" class="btn-nav"><i class="material-icons">folder</i> <span>Assets</span></a>
+		<ul class="nav-drawer-sub-list small">
+			<li><a href="">
+					<p class="text-muted">HDR Images</p>
+				</a>
+			</li>
+			<li><a href="">
+					<p class="text-muted">Textures</p>
+				</a>
+			</li>
+			<li><a href="">
+					<p class="text-muted">Art Gallery</p>
+				</a>
+			</li>
+			<li><a href="">
+					<p class="text-muted">Characters</p>
+				</a>
+			</li>
+		</ul>
+	</li>
+	<li>
+		<a href="" class="btn-nav">
+			<i class="material-icons">movie</i>
+			<span>Films</span>
+		</a>
+	</li>
+	<li>
+		<a href="" class="btn-nav">
+			<i class="material-icons">chat_bubble</i>
+			<span>News</span>
+		</a>
+	</li>
+</ul>
+{% endmacro %}
+
+{% macro nav_content_training() %}
+
+
+<div class="training-nav-header">
+	<p class="subtitle">Course</p>
+	<h2>Blender Visual Effects Workflow - Part 1</h2>
+</div>
+
+<div class="training-nav-group">
+
+	<ul class="training-nav-list">
+
+		<li class="training-nav-section complete">
+			<a href="#" class="">
+				<div class="training-nav-section-icon">
+					<!-- progress class if it has started tracking progress-->
+					<i class="material-icons">done</i>
+					<svg width="30" height="30" class="training-nav-section-icon-progress progress-complete">
+						<circle cx="15" cy="15" r="14" />
+					</svg>
+				</div>
+				<div>
+					<p class="subtitle x-small">Overview</p>
+					<h4>About this training</h4>
+				</div>
+			</a>
+		</li>
+
+		<li class="training-nav-section">
+			<a href="#" class="active">
+				<div class="training-nav-section-icon">
+					<!-- progress class if it has started tracking progress-->
+					<i class="material-icons">insert_drive_file</i>
+					<svg width="30" height="30" class="training-nav-section-icon-progress progress-half">
+						<circle cx="15" cy="15" r="14" />
+					</svg>
+				</div>
+				<div>
+					<p class="subtitle x-small">Breadown</p>
+					<h4>Course Structure</h4>
+				</div>
+			</a>
+		</li>
+
+		<li class="training-nav-section">
+			<a href="#">
+				<div class="training-nav-section-icon">
+					<!-- progress class if it has started tracking progress-->
+					<i class="material-icons">play_arrow</i>
+					<svg width="30" height="30" class="training-nav-section-icon-progress ">
+						<circle cx="15" cy="15" r="14" />
+					</svg>
+				</div>
+				<div>
+					<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span></p>
+					<h4>Setting up your scene</h4>
+				</div>
+			</a>
+		</li>
+
+	</ul>
+
+</div>
+
+
+<div class="training-nav-group">
+	<h3 class="training-nav-dropdown" data-toggle="collapse" href="#nav-introduction"><i
+			class="material-icons">expand_less</i>Introduction</h3>
+	<ul id="nav-introduction" class="training-nav-list collapse show">
+
+		<li class="training-nav-section">
+			<a href="#">
+				<div class="training-nav-section-icon">
+					<!-- progress class if it has started tracking progress-->
+					<i class="material-icons">play_arrow</i>
+					<svg width="30" height="30" class="training-nav-section-icon-progress ">
+						<circle cx="15" cy="15" r="14" />
+					</svg>
+				</div>
+				<div>
+					<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span></p>
+					<h4>01. Point Tracking - Part 1</h4>
+				</div>
+			</a>
+		</li>
+
+		<li class="training-nav-section">
+			<a href="#">
+				<div class="training-nav-section-icon">
+					<!-- progress class if it has started tracking progress-->
+					<i class="material-icons">play_arrow</i>
+					<svg width="30" height="30" class="training-nav-section-icon-progress ">
+						<circle cx="15" cy="15" r="14" />
+					</svg>
+				</div>
+				<div>
+					<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span></p>
+					<h4>02. Point Tracking - Part 2</h4>
+				</div>
+			</a>
+		</li>
+
+		<li class="training-nav-section">
+			<a href="#">
+				<div class="training-nav-section-icon">
+					<!-- progress class if it has started tracking progress-->
+					<i class="material-icons">play_arrow</i>
+					<svg width="30" height="30" class="training-nav-section-icon-progress ">
+						<circle cx="15" cy="15" r="14" />
+					</svg>
+				</div>
+				<div>
+					<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span></p>
+					<h4>03. Point Stabilization</h4>
+				</div>
+			</a>
+		</li>
+
+		<li class="training-nav-section">
+			<a href="#">
+				<div class="training-nav-section-icon">
+					<!-- progress class if it has started tracking progress-->
+					<i class="material-icons">play_arrow</i>
+					<svg width="30" height="30" class="training-nav-section-icon-progress ">
+						<circle cx="15" cy="15" r="14" />
+					</svg>
+				</div>
+				<div>
+					<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span></p>
+					<h4>04. Point Tracking - Part 3</h4>
+				</div>
+			</a>
+		</li>
+	</ul>
+</div>
+
+<div class="training-nav-group">
+	<h3 class="training-nav-dropdown collapsed" data-toggle="collapse" href="#nav-camera-tracking"><i
+			class="material-icons">expand_less</i>Camera Tracking</h3>
+	<ul id="nav-camera-tracking" class="training-nav-list collapse">
+
+		<li class="training-nav-section">
+			<a href="#">
+				<div class="training-nav-section-icon">
+					<!-- progress class if it has started tracking progress-->
+					<i class="material-icons">play_arrow</i>
+					<svg width="30" height="30" class="training-nav-section-icon-progress ">
+						<circle cx="15" cy="15" r="14" />
+					</svg>
+				</div>
+				<div>
+					<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span></p>
+					<h4>01. Point Tracking - Part 1</h4>
+				</div>
+			</a>
+		</li>
+
+		<li class="training-nav-section">
+			<a href="#">
+				<div class="training-nav-section-icon">
+					<!-- progress class if it has started tracking progress-->
+					<i class="material-icons">play_arrow</i>
+					<svg width="30" height="30" class="training-nav-section-icon-progress ">
+						<circle cx="15" cy="15" r="14" />
+					</svg>
+				</div>
+				<div>
+					<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span></p>
+					<h4>02. Point Tracking - Part 2</h4>
+				</div>
+			</a>
+		</li>
+
+		<li class="training-nav-section">
+			<a href="#">
+				<div class="training-nav-section-icon">
+					<!-- progress class if it has started tracking progress-->
+					<i class="material-icons">play_arrow</i>
+					<svg width="30" height="30" class="training-nav-section-icon-progress ">
+						<circle cx="15" cy="15" r="14" />
+					</svg>
+				</div>
+				<div>
+					<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span></p>
+					<h4>03. Point Stabilization</h4>
+				</div>
+			</a>
+		</li>
+
+		<li class="training-nav-section">
+			<a href="#">
+				<div class="training-nav-section-icon">
+					<!-- progress class if it has started tracking progress-->
+					<i class="material-icons">play_arrow</i>
+					<svg width="30" height="30" class="training-nav-section-icon-progress ">
+						<circle cx="15" cy="15" r="14" />
+					</svg>
+				</div>
+				<div>
+					<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span></p>
+					<h4>04. Point Tracking - Part 3</h4>
+				</div>
+			</a>
+		</li>
+	</ul>
+</div>
+
+<div class="training-nav-group">
+	<h3 class="training-nav-dropdown collapsed" data-toggle="collapse" href="#nav-object-tracking"><i
+			class="material-icons">expand_less</i>Object Tracking</h3>
+	<ul id="nav-object-tracking" class="training-nav-list collapse">
+
+		<li class="training-nav-section">
+			<a href="#">
+				<div class="training-nav-section-icon">
+					<!-- progress class if it has started tracking progress-->
+					<i class="material-icons">play_arrow</i>
+					<svg width="30" height="30" class="training-nav-section-icon-progress ">
+						<circle cx="15" cy="15" r="14" />
+					</svg>
+				</div>
+				<div>
+					<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span></p>
+					<h4>01. Point Tracking - Part 1</h4>
+				</div>
+			</a>
+		</li>
+
+		<li class="training-nav-section">
+			<a href="#">
+				<div class="training-nav-section-icon">
+					<!-- progress class if it has started tracking progress-->
+					<i class="material-icons">play_arrow</i>
+					<svg width="30" height="30" class="training-nav-section-icon-progress ">
+						<circle cx="15" cy="15" r="14" />
+					</svg>
+				</div>
+				<div>
+					<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span></p>
+					<h4>02. Point Tracking - Part 2</h4>
+				</div>
+			</a>
+		</li>
+
+		<li class="training-nav-section">
+			<a href="#">
+				<div class="training-nav-section-icon">
+					<!-- progress class if it has started tracking progress-->
+					<i class="material-icons">play_arrow</i>
+					<svg width="30" height="30" class="training-nav-section-icon-progress ">
+						<circle cx="15" cy="15" r="14" />
+					</svg>
+				</div>
+				<div>
+					<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span></p>
+					<h4>03. Point Stabilization</h4>
+				</div>
+			</a>
+		</li>
+
+		<li class="training-nav-section">
+			<a href="#">
+				<div class="training-nav-section-icon">
+					<!-- progress class if it has started tracking progress-->
+					<i class="material-icons">play_arrow</i>
+					<svg width="30" height="30" class="training-nav-section-icon-progress ">
+						<circle cx="15" cy="15" r="14" />
+					</svg>
+				</div>
+				<div>
+					<p class="subtitle x-small">Video - <span class="video-time">1m 25s</span></p>
+					<h4>04. Point Tracking - Part 3</h4>
+				</div>
+			</a>
+		</li>
+	</ul>
+</div>
 {% endmacro %}

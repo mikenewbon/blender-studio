@@ -5,7 +5,6 @@ window.cardTraining = (function cardTraining() {
     constructor(element) {
       CardTraining.instances.set(element, this);
       this.element = element;
-      this.favoriteUrl = element.dataset.favoriteUrl;
       this._setupEventListeners();
     }
 
@@ -20,7 +19,7 @@ window.cardTraining = (function cardTraining() {
     _postFavorite() {
       const { favoriteElement } = this;
       ajax
-        .jsonRequest('POST', this.favoriteUrl, {
+        .jsonRequest('POST', favoriteElement.dataset.favoriteUrl, {
           favorite: !favoriteElement.dataset.checked
         })
         .then(data => {

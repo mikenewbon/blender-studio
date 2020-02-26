@@ -30,7 +30,7 @@ window.comments = (function comments() {
       }
     }
 
-    get inputsElement() {
+	get inputsElement() {
       const inputsElement = [...this.element.children].filter(e =>
         e.classList.contains('comment-inputs')
       )[0];
