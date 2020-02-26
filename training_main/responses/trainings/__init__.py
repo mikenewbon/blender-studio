@@ -1,2 +1,0 @@
-import training_main.responses.trainings.chapters
-import training_main.responses.trainings.training
