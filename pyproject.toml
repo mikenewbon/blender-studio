@@ -13,6 +13,7 @@ blender_id_oauth_client = {path = "../blender-id-oauth-client"}
 Jinja2 = "^2.11.1"
 libsasscompiler = "^0.1.5"
 jsmin = "^2.2.2"
+sorl-thumbnail = "^12.6.3"
 
 [tool.poetry.dev-dependencies]
 black = {version = "*", allow-prereleases = true}
