@@ -1,7 +1,7 @@
 {% macro comment_section(comments) %}
 	<div class="comment-section" data-comment-url="{{ comments.comment_url }}"
 		 data-profile-image-url="{{ comments.profile_image_url }}">
-		<h3 class="mb-2">{{ comments.number_of_comments }} Comments</h3>
+		<h3>{{ comments.number_of_comments }} Comments</h3>
 		{{ comment_main_input(comments.profile_image_url) }}
 		<div class="comments">
 			{{ _comment_trees(comments.comment_trees) }}
@@ -10,8 +10,10 @@
 {% endmacro %}
 
 {% macro comment_input(profile_image_url, button_label, class) %}
-	<div class="comment-input {{ class }}">
-		<div style="background-image:url({{ profile_image_url }});" class="profile"></div>
+	<div class="comment-input row {{ class }}">
+		<div class="col-auto pr-0 d-flex">
+			<div style="background-image:url({{ profile_image_url }});" class="profile"></div>
+		</div>
 		<div class="col">
 			<form class="input-group input-group-sm">
 				<input type="text" placeholder="Comment publicly" class="form-control">
@@ -54,29 +56,36 @@
 		 data-like-url="{{ like_url }}"
 		 {% if edit_url is not none %}data-edit-url="{{ edit_url }}"{% endif %}
 		 {% if delete_url is not none %}data-delete-url="{{ delete_url }}"{% endif %}>
-		<div class="col-md-12 comment-content">
+		<div class="col comment-content">
 			<div class="row comment-header">
-				<div style="background-image:url('{{ profile_image_url }}');" class="profile"></div>
-				<div class="col-md-auto">
+				<div class="col-auto pr-0 d-flex">
+					<div style="background-image:url('{{ profile_image_url }}');" class="profile col-profile"></div>
+				</div>
+				<div class="col-auto">
 					<h4 class="comment-name">{{ username }}</h4>
 					<p class="comment-date">{{ date_string }}</p>
 				</div>
 			</div>
 			<div class="row">
-				<p class="comment-text">{{ message }}</p>
+				<div class="col">
+					<p class="comment-text">{{ message }}</p>
+				</div>
 			</div>
 			<div class="row">
-				<div class="comment-likes">
-					<button class="btn btn-ctrl-sm checkbox-like"
-							{% if liked %}data-checked="checked"{% endif %}>
-						<i class="material-icons btn-material-icons checkbox-like-icon-checked text-primary">favorite</i>
-						<i class="material-icons btn-material-icons checkbox-like-icon-unchecked">favorite_border</i>
-					</button>
-					<span class="comment-likes-count">{{ likes }}</span>
+				<div class="col d-flex align-items-center">
+					<div class="comment-likes">
+						<button class="btn btn-ctrl-sm checkbox-like"
+								{% if liked %}data-checked="checked"{% endif %}>
+							<i class="material-icons btn-material-icons checkbox-like-icon-checked text-primary">favorite</i>
+							<i class="material-icons btn-material-icons checkbox-like-icon-unchecked">favorite_border</i>
+						</button>
+						<span class="comment-likes-count">{{ likes }}</span>
+					</div>
+					<a href="" class="comment-action comment-reply">Reply</a>
+					<a href="" class="comment-action comment-edit">Edit</a>
+					<a href="" class="comment-action comment-delete">Delete</a>
 				</div>
-				<a href="" class="comment-action comment-reply">Reply</a>
-				<a href="" class="comment-action comment-edit">Edit</a>
-				<a href="" class="comment-action comment-delete">Delete</a>
+
 			</div>
 		</div>
 		<div class="col-md-12 comment-edit-inputs">
