@@ -17,7 +17,8 @@
             {{ components.nav_drawer_section(
 				title='About this training',
 				href=navigation.overview_url,
-                active=navigation.overview_active
+                active=navigation.overview_active,
+                admin_change_href=navigation.training_admin_url
 			) }}
         {% endcall %}
 
@@ -34,7 +35,8 @@
 						active=section_navigation.current,
 						started=section_navigation.started,
 						finished=section_navigation.finished,
-						progress_fraction=section_navigation.progress_fraction
+						progress_fraction=section_navigation.progress_fraction,
+                        admin_change_href=section_navigation.admin_url
 					) }}
                 {% endfor %}
             {% endcall %}

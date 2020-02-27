@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls.base import reverse
 from django.utils.text import slugify
 
 from common import mixins
@@ -25,3 +26,7 @@ class Chapter(mixins.CreatedUpdatedMixin, models.Model):
 
     def __str__(self) -> str:
         return f'{self.training.name} > {self.index:02.0f}. {self.name}'
+
+    @property
+    def admin_url(self) -> str:
+        return reverse('admin:training_chapter_change', args=[self.pk])

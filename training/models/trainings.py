@@ -51,6 +51,9 @@ class Training(mixins.CreatedUpdatedMixin, models.Model):
     def __str__(self) -> str:
         return self.name
 
+    def get_absolute_url(self) -> str:
+        return self.url
+
     @property
     def url(self) -> str:
         return reverse('training', kwargs={'training_slug': self.slug})
@@ -58,6 +61,10 @@ class Training(mixins.CreatedUpdatedMixin, models.Model):
     @property
     def favorite_url(self) -> str:
         return reverse('training_favorite', kwargs={'training_pk': self.pk})
+
+    @property
+    def admin_url(self) -> str:
+        return reverse('admin:training_training_change', args=[self.pk])
 
 
 class TrainingTag(models.Model):

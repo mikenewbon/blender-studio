@@ -33,6 +33,9 @@ class Section(mixins.CreatedUpdatedMixin, models.Model):
     def __str__(self) -> str:
         return f'{self.chapter.training.name} > {self.chapter.index:02.0f}. {self.chapter.name} > {self.index:02.0f}. {self.name}'
 
+    def get_absolute_url(self) -> str:
+        return self.url
+
     @property
     def url(self) -> str:
         return reverse(
@@ -53,6 +56,10 @@ class Section(mixins.CreatedUpdatedMixin, models.Model):
     @property
     def progress_url(self) -> str:
         return reverse('section_progress', kwargs={'section_pk': self.pk})
+
+    @property
+    def admin_url(self) -> str:
+        return reverse('admin:training_section_change', args=[self.pk])
 
 
 class SectionComment(models.Model):

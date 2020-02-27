@@ -67,5 +67,5 @@ def section(
                     else None
                 ),
             ),
-            navigation=navigation_to_template_type(*navigation, current=section),
+            navigation=navigation_to_template_type(*navigation, user=request.user, current=section),
         )

@@ -193,6 +193,14 @@ body {
   padding: 0;
 
   .training-nav-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    &-link {
+      flex-grow: 1;
+    }
+
     &.complete {
       .training-nav-section-icon:before {
         background-color: $primary;

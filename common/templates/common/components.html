@@ -127,9 +127,9 @@
     </div>
 {% endmacro %}
 
-{% macro nav_drawer_section(title, href, active) %}
+{% macro nav_drawer_section(title, href, active, admin_change_href=None) %}
     <li class="training-nav-section">
-        <a href="{{ href }}" class="{% if active %}active{% endif %}">
+        <a href="{{ href }}" class="training-nav-section-link {% if active %}active{% endif %}">
             <div class="training-nav-section-icon">
                 <i class="material-icons">insert_drive_file</i>
                 <svg width="30" height="30"
@@ -141,12 +141,15 @@
                 <h4>{{ title }}</h4>
             </div>
         </a>
+        {% if admin_change_href is not none %}
+            <a href="{{ admin_change_href }}">edit</a>
+        {% endif %}
     </li>
 {% endmacro %}
 
-{% macro nav_drawer_progress_section(title, href, active, started, finished, progress_fraction) %}
+{% macro nav_drawer_progress_section(title, href, active, started, finished, progress_fraction, admin_change_href=None) %}
     <li class="training-nav-section {% if finished %}complete{% endif %}">
-        <a href="{{ href }}" class="{% if active %}active{% endif %}">
+        <a href="{{ href }}" class="training-nav-section-link {% if active %}active{% endif %}">
             <div class="training-nav-section-icon">
 
                 {% if finished %}
@@ -165,5 +168,8 @@
                 <h4>{{ title }}</h4>
             </div>
         </a>
+        {% if admin_change_href is not none %}
+            <a href="{{ admin_change_href }}">edit</a>
+        {% endif %}
     </li>
 {% endmacro %}

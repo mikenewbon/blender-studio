@@ -1,6 +1,16 @@
+from typing import Callable, TypeVar
+
 from django.contrib import admin
+from django.utils.html import format_html
 
 from training.models import chapters, sections, tags, trainings
+
+T = TypeVar('T', bound=Callable[..., object])
+
+
+def with_name(name: str, func: T) -> T:
+    func.__name__ = name
+    return func
 
 
 class ChapterInline(admin.TabularInline):
@@ -15,6 +25,10 @@ class TagInline(admin.TabularInline):
 
 @admin.register(trainings.Training)
 class TrainingAdmin(admin.ModelAdmin):
+    list_display = [
+        '__str__',
+        with_name('url', lambda obj: format_html("<a href='{url}'>{url}</a>", url=obj.url)),
+    ]
     inlines = [ChapterInline, TagInline]
 
 
@@ -41,6 +55,10 @@ class AssetInline(admin.TabularInline):
 
 @admin.register(sections.Section)
 class SectionAdmin(admin.ModelAdmin):
+    list_display = [
+        '__str__',
+        with_name('url', lambda obj: format_html("<a href='{url}'>{url}</a>", url=obj.url)),
+    ]
     inlines = [VideoInline, AssetInline]
 
 

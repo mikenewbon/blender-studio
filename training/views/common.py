@@ -1,6 +1,8 @@
 import datetime
 from typing import Dict, List, Literal, Optional, Union
 
+from django.contrib.auth.models import User
+
 from common.types import assert_cast
 from training import typed_templates
 from training.models import chapters, sections as sections_models, trainings
@@ -55,6 +57,7 @@ def navigation_to_template_type(
     chapters: List[chapters.Chapter],
     sections: List[sections_models.Section],
     *,
+    user: User,
     current: Union[Literal['overview'], sections_models.Section],
 ) -> Navigation:
     sections_per_chapter: Dict[int, List[sections_models.Section]] = {}
@@ -64,6 +67,11 @@ def navigation_to_template_type(
     return Navigation(
         overview_url=training.url,
         overview_active=current == 'overview',
+        training_admin_url=(
+            training.admin_url
+            if user.is_staff and user.has_perm('training.change_training')
+            else None
+        ),
         chapters=[
             ChapterNavigation(
                 index=chapter.index,
@@ -75,6 +83,11 @@ def navigation_to_template_type(
                         current.id == section.id
                         for section in sections_per_chapter.get(chapter.id, [])
                     )
+                ),
+                admin_url=(
+                    chapter.admin_url
+                    if user.is_staff and user.has_perm('training.change_chapter')
+                    else None
                 ),
                 sections=[
                     SectionNavigation(
@@ -93,6 +106,11 @@ def navigation_to_template_type(
                         current=(
                             isinstance(current, sections_models.Section)
                             and current.id == section.id
+                        ),
+                        admin_url=(
+                            section.admin_url
+                            if user.is_staff and user.has_perm('training.change_section')
+                            else None
                         ),
                     )
                     for section in sorted(
