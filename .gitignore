@@ -12,6 +12,6 @@ __pycache__/
 # Distribution / packaging
 node_modules/
 
-/training/settings.py
+/studio/settings.py
 /public/
 /yarn-error.log

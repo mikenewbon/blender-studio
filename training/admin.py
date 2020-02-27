@@ -1,11 +1,12 @@
 from django.contrib import admin
 
-from training.models import trainings, chapters, sections, tags
+from training.models import chapters, sections, tags, trainings
 
 
 class ChapterInline(admin.TabularInline):
     show_change_link = True
     model = chapters.Chapter
+    ordering = ('index',)
 
 
 class TagInline(admin.TabularInline):
@@ -20,6 +21,7 @@ class TrainingAdmin(admin.ModelAdmin):
 class SectionInline(admin.TabularInline):
     show_change_link = True
     model = sections.Section
+    ordering = ('index',)
 
 
 @admin.register(chapters.Chapter)

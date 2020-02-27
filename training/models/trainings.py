@@ -1,9 +1,10 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls.base import reverse
+from django.utils.text import slugify
 
-from training.models import tags
 from common import mixins
+from training.models import tags
 
 
 class TrainingStatus(models.TextChoices):
@@ -31,7 +32,7 @@ class Training(mixins.CreatedUpdatedMixin, models.Model):
         ]
 
     name = models.TextField(unique=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, blank=True)
     description = models.TextField()
     description.description = 'Description consisting of a few sentences.'
     summary = models.TextField()
@@ -42,6 +43,10 @@ class Training(mixins.CreatedUpdatedMixin, models.Model):
     tags = models.ManyToManyField(tags.Tag, through='TrainingTag', related_name='trainings')
     type = models.TextField(choices=TrainingType.choices)
     difficulty = models.TextField(choices=TrainingDifficulty.choices)
+
+    def clean(self) -> None:
+        if not self.slug:
+            self.slug = slugify(self.name)
 
     def __str__(self) -> str:
         return self.name
