@@ -28,7 +28,6 @@ def home_authenticated(request: HttpRequest) -> TypeSafeTemplateResponse:
             RecentlyWatchedSection(
                 index=section.index,
                 name=section.name,
-                text=section.text,
                 url=section.url,
                 training_name=getattr(section, 'training_name'),
                 chapter_index=getattr(section, 'chapter_index'),

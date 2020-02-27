@@ -9,11 +9,18 @@ from training.typed_templates.types import Section, Training
 
 
 @dc.dataclass
-class RecentlyWatchedSection(Section):
+class RecentlyWatchedSection:
+    index: int
+    name: str
+    url: str
     training_name: str
     chapter_index: int
     chapter_name: str
     progress_fraction: float
+
+    @property
+    def name_with_index(self) -> str:
+        return f'{self.index:02.0f}. {self.name}'
 
     @property
     def chapter_name_with_index(self) -> str:

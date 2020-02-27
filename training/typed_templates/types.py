@@ -4,6 +4,8 @@ import dataclasses as dc
 import datetime
 from typing import List, Optional, Set, TypedDict
 
+from markupsafe import Markup
+
 from training.models import trainings
 
 
@@ -11,7 +13,7 @@ from training.models import trainings
 class Training:
     name: str
     description: str
-    summary: str
+    summary: Markup
     type: trainings.TrainingType
     difficulty: trainings.TrainingDifficulty
     tags: Set[str]
@@ -35,7 +37,7 @@ class Chapter:
 class Section:
     index: int
     name: str
-    text: str
+    text: Markup
     url: str
 
     @property

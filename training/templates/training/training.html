@@ -4,74 +4,74 @@
 {% import 'training/components.html' as training_components %}
 
 {% block breadcrumbs %}
-{% call components.breadcrumbs() %}
-{{ components.breadcrumb(label='Home', url=url('home')) }}
-{{ components.breadcrumb(label=training.name) }}
-{% endcall %}
+    {% call components.breadcrumbs() %}
+        {{ components.breadcrumb(label='Home', url=url('home')) }}
+        {{ components.breadcrumb(label=training.name) }}
+    {% endcall %}
 {% endblock breadcrumbs %}
 
 {% block content %}
-{% set difficulty_color = {'beginner': 'green', 'intermediate': 'blue', 'advanced': 'red'}.get(training.difficulty, 'blue') %}
-{% set image_placeholder = static('training/images/placeholders/training_banner.jpeg') %}
+    {% set difficulty_color = {'beginner': 'green', 'intermediate': 'blue', 'advanced': 'red'}.get(training.difficulty, 'blue') %}
+    {% set image_placeholder = static('training/images/placeholders/training_banner.jpeg') %}
 
-<section>
-	<img src="{{ image_placeholder }}" class="img-fluid img-width-100 mb-3" alt="">
-	<div class="row">
-		<div class="col-md-8">
-			<p class="subtitle">{{ training.type.label }}</p>
-			<h1 class="mb-0">{{ training.name }}</h1>
-			<p>{{ training.description }}</p>
-			{% call components.pills(class=['mb-3']) %}
-			{% for tag in training.tags %}
-			{{ components.pill(label=tag) }}
-			{% endfor %}
-			{% endcall %}
-			<p class="mb-3">{{ training.summary }}</p>
-		</div>
+    <section>
+        <img src="{{ image_placeholder }}" class="img-fluid img-width-100 mb-3" alt="">
+        <div class="row">
+            <div class="col-md-8">
+                <p class="subtitle">{{ training.type.label }}</p>
+                <h1 class="mb-0">{{ training.name }}</h1>
+                <p>{{ training.description }}</p>
+                {% call components.pills(class=['mb-3']) %}
+                    {% for tag in training.tags %}
+                        {{ components.pill(label=tag) }}
+                    {% endfor %}
+                {% endcall %}
+                <section class="mb-3">{{ training.summary }}</section>
+            </div>
 
-		<div class="col-md-4">
-			<div class="card card-dark">
-				<div class="card-body">
-					<h3>About this {{ training.type.label }}</h3>
-					<table class="table table-sm mb-0">
-						<tbody>
-							<tr>
-								<td>Difficulty</td>
-								<td class="text-right">
-									{{ training_components.badge_difficulty(label=training.difficulty.label, color=difficulty_color) }}
-								</td>
-							</tr>
-							<tr>
-								<td>Last updated</td>
-								<td class="text-right">{{ training.date_updated.strftime('%d %B %Y') }}</td>
-							</tr>
-							<tr>
-								<td>Estimated duration</td>
-								<td class="text-right">4h 32m</td>
-							</tr>
-							<tr>
-								<td colspan="2" class="pb-0">
-									<div class="container-fluid">
-										<div class="row mb-2">
-											<div style="background-image:url('https://blender.chat/avatar/MikeNewbon');"
-												class="profile"></div>
-											<div class="col-md-auto">
-												<p class="subtitle x-small">Author</p>
-												<h4 class="comment-name">Mike Newbon</h4>
-											</div>
-										</div>
-									</div>
+            <div class="col-md-4">
+                <div class="card card-dark">
+                    <div class="card-body">
+                        <h3>About this {{ training.type.label }}</h3>
+                        <table class="table table-sm mb-0">
+                            <tbody>
+                            <tr>
+                                <td>Difficulty</td>
+                                <td class="text-right">
+                                    {{ training_components.badge_difficulty(label=training.difficulty.label, color=difficulty_color) }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Last updated</td>
+                                <td class="text-right">{{ training.date_updated.strftime('%d %B %Y') }}</td>
+                            </tr>
+                            <tr>
+                                <td>Estimated duration</td>
+                                <td class="text-right">4h 32m</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="pb-0">
+                                    <div class="container-fluid">
+                                        <div class="row mb-2">
+                                            <div style="background-image:url('https://blender.chat/avatar/MikeNewbon');"
+                                                 class="profile"></div>
+                                            <div class="col-md-auto">
+                                                <p class="subtitle x-small">Author</p>
+                                                <h4 class="comment-name">Mike Newbon</h4>
+                                            </div>
+                                        </div>
+                                    </div>
 
-									<p class="mb-0">Blender Artist. Co-Founder of blendFX. Shading,
-										Pipeline, Tracking,
-										Python Scripting. Also: Knitting.</p>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
+                                    <p class="mb-0">Blender Artist. Co-Founder of blendFX. Shading,
+                                        Pipeline, Tracking,
+                                        Python Scripting. Also: Knitting.</p>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock content %}

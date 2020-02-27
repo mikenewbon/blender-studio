@@ -3,6 +3,7 @@ from typing import Dict, List, Literal, Optional, Union
 
 from django.contrib.auth.models import User
 
+from common import markdown
 from common.types import assert_cast
 from training import typed_templates
 from training.models import chapters, sections as sections_models, trainings
@@ -15,7 +16,7 @@ def training_model_to_template_type(
     return typed_templates.types.Training(
         name=training.name,
         description=training.description,
-        summary=training.summary,
+        summary=markdown.render(training.summary),
         type=trainings.TrainingType(training.type),
         difficulty=trainings.TrainingDifficulty(training.difficulty),
         tags=set(str(tag) for tag in training.tags.all()),
@@ -34,7 +35,7 @@ def section_model_to_template_type(
     section: sections_models.Section,
 ) -> typed_templates.types.Section:
     return typed_templates.types.Section(
-        index=section.index, name=section.name, text=section.text, url=section.url
+        index=section.index, name=section.name, text=markdown.render(section.text), url=section.url
     )
 
 
