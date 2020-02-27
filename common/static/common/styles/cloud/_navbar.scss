@@ -107,6 +107,7 @@
 		scrollbar-width: none;
 	}
 	.breadcrumb-item {
+		white-space: nowrap;
 		display: flex;
 		padding: $spacer/2 0;
 		&:last-child {
