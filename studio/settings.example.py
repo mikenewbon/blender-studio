@@ -10,7 +10,7 @@ os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
 SECRET_KEY = '7ijgr7*_l=x^f0!((j!*sdfsdfsdf*xfbf3vcz0=#!5aai85$h3ck6l9m3c'
 DEBUG = True
-ALLOWED_HOSTS: List[str] = ['training.local']
+ALLOWED_HOSTS: List[str] = ['studio.local']
 
 BLENDER_ID = {
     # MUST end in a slash:
