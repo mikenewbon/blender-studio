@@ -77,7 +77,7 @@ class Video(mixins.CreatedUpdatedMixin, models.Model):
     section = models.OneToOneField(Section, on_delete=models.CASCADE, related_name='video')
     file = models.FileField(upload_to=video_upload_path)
     size = models.IntegerField()
-    duration = models.DurationField()
+    duration = models.DurationField(help_text='[DD] [[HH:]MM:]ss[.uuuuuu]')
 
     def __str__(self) -> str:
         return self.file.path  # type: ignore
