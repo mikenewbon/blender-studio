@@ -4,6 +4,7 @@ from pathlib import Path
 
 from django.db import models
 from django.urls.base import reverse
+from django.utils.text import slugify
 
 from comments.models import Comment
 from common import mixins
@@ -20,10 +21,14 @@ class Section(mixins.CreatedUpdatedMixin, models.Model):
     index = models.IntegerField()
 
     name = models.TextField(unique=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, blank=True)
     text = models.TextField()
 
     comments = models.ManyToManyField(Comment, through='SectionComment', related_name='section')
+
+    def clean(self) -> None:
+        if not self.slug:
+            self.slug = slugify(self.name)
 
     def __str__(self) -> str:
         return f'{self.chapter.training.name} > {self.chapter.index:02.0f}. {self.chapter.name} > {self.index:02.0f}. {self.name}'

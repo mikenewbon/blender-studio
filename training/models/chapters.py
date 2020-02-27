@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.text import slugify
 
 from common import mixins
 from training.models import trainings
@@ -16,7 +17,11 @@ class Chapter(mixins.CreatedUpdatedMixin, models.Model):
     index = models.IntegerField()
 
     name = models.TextField(unique=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, blank=True)
+
+    def clean(self) -> None:
+        if not self.slug:
+            self.slug = slugify(self.name)
 
     def __str__(self) -> str:
         return f'{self.training.name} > {self.index:02.0f}. {self.name}'
