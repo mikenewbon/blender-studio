@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.urls.base import reverse
 from django.utils.text import slugify
+from pathlib import Path
 
 from common import mixins
 from training.models import tags
@@ -24,6 +25,15 @@ class TrainingDifficulty(models.TextChoices):
     advanced = 'advanced', 'Advanced'
 
 
+def training_overview_upload_path(training: 'Training', filename: str) -> str:
+    return str(
+        Path('trainings')
+        / str(training.id)
+        / 'overview'
+        / filename
+    )
+
+
 class Training(mixins.CreatedUpdatedMixin, models.Model):
     class Meta:
         indexes = [
@@ -43,6 +53,9 @@ class Training(mixins.CreatedUpdatedMixin, models.Model):
     tags = models.ManyToManyField(tags.Tag, through='TrainingTag', related_name='trainings')
     type = models.TextField(choices=TrainingType.choices)
     difficulty = models.TextField(choices=TrainingDifficulty.choices)
+    picture_header = models.FileField(upload_to=training_overview_upload_path, blank=True,
+                                      null=True)
+    picture_16_9 = models.FileField(upload_to=training_overview_upload_path, blank=True, null=True)
 
     def clean(self) -> None:
         if not self.slug:

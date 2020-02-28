@@ -12,10 +12,9 @@
 
 {% block content %}
     {% set difficulty_color = {'beginner': 'green', 'intermediate': 'blue', 'advanced': 'red'}.get(training.difficulty, 'blue') %}
-    {% set image_placeholder = static('training/images/placeholders/training_banner.jpeg') %}
 
     <section>
-        <img src="{{ image_placeholder }}" class="img-fluid img-width-100 mb-3" alt="">
+        <img src="{{ training.picture_header }}" class="img-fluid img-width-100 mb-3" alt="">
         <div class="row">
             <div class="col-md-8">
                 <p class="subtitle">{{ training.type.label }}</p>

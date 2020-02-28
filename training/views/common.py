@@ -24,6 +24,8 @@ def training_model_to_template_type(
         favorite_url=training.favorite_url,
         date_updated=training.date_updated,
         favorited=favorited,
+        picture_16_9=training.picture_16_9.url if training.picture_16_9 else None,
+        picture_header=training.picture_header.url if training.picture_header else None,
     )
 
 
