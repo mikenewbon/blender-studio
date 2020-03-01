@@ -13,6 +13,13 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('training_dir', type=str)
+        parser.add_argument('-s', '--slug', dest='training_names', action='append',
+                            help="provides trianing slugs")
+        parser.add_argument(
+            '--all',
+            action='store_true',
+            help='Import all trainings in the directory',
+        )
 
     def load_doc(self, path: pathlib.Path):
         with open(str(path), "r") as read_file:
@@ -24,19 +31,19 @@ class Command(BaseCommand):
             setattr(model, field_name, django_file)
             model.save()
 
-    def handle(self, *args, **options):
+    def import_training(self, training_abspath):
         from training import models as models_training
 
-        dirname_abspath = pathlib.Path(options['training_dir'])
-
-        training_doc_path = dirname_abspath / 'track-match-blend' / 'index.json'
+        training_doc_path = training_abspath / 'index.json'
         training_doc = self.load_doc(training_doc_path)
 
         def get_or_create_training():
             # Fetch or create Training object
+            self.stdout.write(self.style.NOTICE('Creating training %s' % training_doc['url']))
             if models_training.trainings.Training.objects.filter(slug=training_doc['url']).exists():
                 training = models_training.trainings.Training.objects.get(slug=training_doc['url'])
-                self.stdout.write(self.style.WARNING('Project %s already exists' % training_doc['url']))
+                self.stdout.write(
+                    self.style.WARNING('Project %s already exists' % training_doc['url']))
             else:
                 training = models_training.trainings.Training.objects.create(
                     name=training_doc['name'],
@@ -50,10 +57,14 @@ class Command(BaseCommand):
             # Add images for the project
             training_pictures = {'picture_16_9', 'picture_header'}
             for picture in training_pictures:
-                file_doc_path = training_doc_path.parent / 'files' / str(training_doc[picture]) / 'file.json'
+                self.stdout.write(self.style.NOTICE('Adding pictures for training %s' % training))
+                file_doc_path = training_doc_path.parent / 'files' / str(
+                    training_doc[picture]) / 'file.json'
                 file_doc = self.load_doc(file_doc_path)
                 file_path_src = file_doc_path.parent / pathlib.Path(file_doc['file_path']).name
-                file_path_rel = models_training.training_overview_upload_path(training, pathlib.Path(file_doc['file_path']).name)
+                file_path_rel = models_training.training_overview_upload_path(training,
+                                                                              pathlib.Path(file_doc[
+                                                                                               'file_path']).name)
                 file_path_dst = pathlib.Path(settings.MEDIA_ROOT, file_path_rel)
                 # Ensure destination directory
                 file_path_dst.parent.mkdir(parents=True, exist_ok=True)
@@ -66,30 +77,38 @@ class Command(BaseCommand):
 
         def get_or_create_chapters(training):
             # Create Chapters
-            training_chapters_path = dirname_abspath / 'track-match-blend' / 'chapters'
+            training_chapters_path = training_abspath / 'chapters'
 
             chapter_index = 1
             for chapter_dir in os.listdir(training_chapters_path):
                 chapter_doc = self.load_doc(training_chapters_path / chapter_dir / 'index.json')
                 chapter_slug = str(chapter_doc['_id'])
 
+                self.stdout.write(self.style.NOTICE('Creating chapter %s' % chapter_slug))
                 chapter = models_training.chapters.Chapter.objects.get_or_create(
                     index=chapter_index,
                     training=training,
                     name=chapter_doc['name'],
                     slug=chapter_slug,
                 )[0]
+
+                date_created = chapter_doc['_created']
+                date_updated = chapter_doc['_created'] if '_updated' not in chapter_doc \
+                    else chapter_doc['_updated']
+                models_training.chapters.Chapter.objects.filter(pk=chapter.pk).update(
+                    date_created=date_created, date_updated=date_updated)
                 chapter_index += 1
                 get_or_create_sections(chapter)
 
         def get_or_create_sections(chapter):
-            chapter_abspath = dirname_abspath / chapter.training.slug / 'chapters' / chapter.slug
+            chapter_abspath = training_abspath / 'chapters' / chapter.slug
 
             section_index = 1
             for section_dir in os.scandir(chapter_abspath):
                 if section_dir.is_file():
                     continue
                 section_doc = self.load_doc(chapter_abspath / section_dir / 'index.json')
+                self.stdout.write(self.style.NOTICE('Creating section %s' % section_doc['name']))
                 section = models_training.sections.Section.objects.get_or_create(
                     index=section_index,
                     chapter=chapter,
@@ -97,6 +116,11 @@ class Command(BaseCommand):
                     slug=str(section_doc['_id']),
                     text=section_doc['description'],
                 )[0]
+                date_created = section_doc['_created']
+                date_updated = section_doc['_created'] if '_updated' not in section_doc \
+                    else section_doc['_updated']
+                models_training.sections.Section.objects.filter(pk=section.pk).update(
+                    date_created=date_created, date_updated=date_updated)
                 section_index += 1
 
                 # Create video, if available
@@ -120,16 +144,21 @@ class Command(BaseCommand):
                         duration='10:00',
                         file='stand/in/path.mp4'
                     )
+                models_training.sections.Video.objects.filter(pk=video.pk).update(
+                    date_created=date_created, date_updated=date_updated)
 
                 variation = file_doc['variations'][0]
 
-                file_path_src = file_doc_path.parent / 'variations' / pathlib.Path(variation['file_path']).name
+                file_path_src = file_doc_path.parent / 'variations' / pathlib.Path(
+                    variation['file_path']).name
                 file_path_rel = models_training.sections.video_upload_path(
                     video, pathlib.Path(variation['file_path']).name)
                 file_path_dst = pathlib.Path(settings.MEDIA_ROOT, file_path_rel)
                 # Ensure destination directory
                 file_path_dst.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy(str(file_path_src), str(file_path_dst))
+                # Copy only if files don't exist
+                if not file_path_dst.exists():
+                    shutil.copy(str(file_path_src), str(file_path_dst))
                 # self.add_local_file(training, 'picture_16_9', file_path_rel)
                 setattr(video, 'file', file_path_rel)
                 video.save()
@@ -139,3 +168,17 @@ class Command(BaseCommand):
         # Create Sections
 
         self.stdout.write(self.style.SUCCESS('All is great'))
+
+    def handle(self, *args, **options):
+        dirname_abspath = pathlib.Path(options['training_dir'])
+
+        if options['all']:
+            for entry in os.scandir(dirname_abspath):
+                if entry.is_dir():
+                    self.import_training(dirname_abspath / entry)
+            return
+
+        for training_name in options['training_names']:
+            self.import_training(dirname_abspath / training_name)
+
+
