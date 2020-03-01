@@ -15,13 +15,14 @@ class Section(mixins.CreatedUpdatedMixin, models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['chapter', 'index'], name='unique_index_per_section'),
+            models.UniqueConstraint(fields=['chapter', 'slug'], name='unique_slug_per_section'),
         ]
 
     chapter = models.ForeignKey(chapters.Chapter, on_delete=models.CASCADE, related_name='sections')
     index = models.IntegerField()
 
-    name = models.TextField(unique=True)
-    slug = models.SlugField(unique=True, blank=True)
+    name = models.CharField(max_length=512)
+    slug = models.SlugField(blank=True)
     text = models.TextField()
 
     comments = models.ManyToManyField(Comment, through='SectionComment', related_name='section')

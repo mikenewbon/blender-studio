@@ -10,6 +10,7 @@ class Chapter(mixins.CreatedUpdatedMixin, models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['training', 'index'], name='unique_index_per_chapter'),
+            models.UniqueConstraint(fields=['training', 'slug'], name='unique_slug_per_chapter'),
         ]
 
     training = models.ForeignKey(
@@ -17,8 +18,8 @@ class Chapter(mixins.CreatedUpdatedMixin, models.Model):
     )
     index = models.IntegerField()
 
-    name = models.TextField(unique=True)
-    slug = models.SlugField(unique=True, blank=True)
+    name = models.CharField(max_length=512)
+    slug = models.SlugField(blank=True)
 
     def clean(self) -> None:
         if not self.slug:
