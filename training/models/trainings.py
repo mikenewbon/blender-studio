@@ -54,6 +54,7 @@ class Training(mixins.CreatedUpdatedMixin, models.Model):
     picture_16_9 = models.FileField(upload_to=training_overview_upload_path, blank=True, null=True)
 
     def clean(self) -> None:
+        super().clean()
         if not self.slug:
             self.slug = slugify(self.name)
 

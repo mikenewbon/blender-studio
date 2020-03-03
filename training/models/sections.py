@@ -28,6 +28,7 @@ class Section(mixins.CreatedUpdatedMixin, models.Model):
     comments = models.ManyToManyField(Comment, through='SectionComment', related_name='section')
 
     def clean(self) -> None:
+        super().clean()
         if not self.slug:
             self.slug = slugify(self.name)
 

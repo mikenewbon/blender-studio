@@ -22,6 +22,7 @@ class Chapter(mixins.CreatedUpdatedMixin, models.Model):
     slug = models.SlugField(blank=True)
 
     def clean(self) -> None:
+        super().clean()
         if not self.slug:
             self.slug = slugify(self.name)
 
