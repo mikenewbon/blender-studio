@@ -14,11 +14,19 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='training',
             name='picture_16_9',
-            field=models.FileField(blank=True, null=True, upload_to=training.models.trainings.training_overview_upload_path),
+            field=models.FileField(
+                blank=True,
+                null=True,
+                upload_to=training.models.trainings.training_overview_upload_path,
+            ),
         ),
         migrations.AddField(
             model_name='training',
             name='picture_header',
-            field=models.FileField(blank=True, null=True, upload_to=training.models.trainings.training_overview_upload_path),
+            field=models.FileField(
+                blank=True,
+                null=True,
+                upload_to=training.models.trainings.training_overview_upload_path,
+            ),
         ),
     ]

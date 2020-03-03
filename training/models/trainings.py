@@ -26,12 +26,7 @@ class TrainingDifficulty(models.TextChoices):
 
 
 def training_overview_upload_path(training: 'Training', filename: str) -> str:
-    return str(
-        Path('trainings')
-        / str(training.id)
-        / 'overview'
-        / filename
-    )
+    return str(Path('trainings') / str(training.id) / 'overview' / filename)
 
 
 class Training(mixins.CreatedUpdatedMixin, models.Model):
@@ -53,8 +48,9 @@ class Training(mixins.CreatedUpdatedMixin, models.Model):
     tags = models.ManyToManyField(tags.Tag, through='TrainingTag', related_name='trainings')
     type = models.TextField(choices=TrainingType.choices)
     difficulty = models.TextField(choices=TrainingDifficulty.choices)
-    picture_header = models.FileField(upload_to=training_overview_upload_path, blank=True,
-                                      null=True)
+    picture_header = models.FileField(
+        upload_to=training_overview_upload_path, blank=True, null=True
+    )
     picture_16_9 = models.FileField(upload_to=training_overview_upload_path, blank=True, null=True)
 
     def clean(self) -> None:

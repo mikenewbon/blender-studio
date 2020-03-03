@@ -11,31 +11,27 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='chapter',
-            name='name',
-            field=models.CharField(max_length=512),
+            model_name='chapter', name='name', field=models.CharField(max_length=512),
         ),
         migrations.AlterField(
-            model_name='chapter',
-            name='slug',
-            field=models.SlugField(blank=True),
+            model_name='chapter', name='slug', field=models.SlugField(blank=True),
         ),
         migrations.AlterField(
-            model_name='section',
-            name='name',
-            field=models.CharField(max_length=512),
+            model_name='section', name='name', field=models.CharField(max_length=512),
         ),
         migrations.AlterField(
-            model_name='section',
-            name='slug',
-            field=models.SlugField(blank=True),
+            model_name='section', name='slug', field=models.SlugField(blank=True),
         ),
         migrations.AddConstraint(
             model_name='chapter',
-            constraint=models.UniqueConstraint(fields=('training', 'slug'), name='unique_slug_per_chapter'),
+            constraint=models.UniqueConstraint(
+                fields=('training', 'slug'), name='unique_slug_per_chapter'
+            ),
         ),
         migrations.AddConstraint(
             model_name='section',
-            constraint=models.UniqueConstraint(fields=('chapter', 'slug'), name='unique_slug_per_section'),
+            constraint=models.UniqueConstraint(
+                fields=('chapter', 'slug'), name='unique_slug_per_section'
+            ),
         ),
     ]
