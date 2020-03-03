@@ -47,7 +47,7 @@ def recently_watched(*, user_pk: int) -> List[sections.Section]:
 
 
 def from_slug(
-    *, user_pk: int, section_slug: str
+    *, user_pk: int, training_slug: str, chapter_slug: str, section_slug: str
 ) -> Optional[
     Tuple[
         trainings.Training,
@@ -71,7 +71,9 @@ def from_slug(
             )
             .select_related('chapter__training', 'chapter')
             .prefetch_related('video', 'assets', 'comments', 'comments__user')
-            .get(slug=section_slug)
+            .get(
+                chapter__training__slug=training_slug, chapter__slug=chapter_slug, slug=section_slug
+            )
         )
     except sections.Section.DoesNotExist:
         return None

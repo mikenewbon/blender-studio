@@ -29,7 +29,12 @@ def section(
     section_index: int,
     section_slug: str,
 ) -> TypeSafeTemplateResponse:
-    result = queries.sections.from_slug(user_pk=request.user.pk, section_slug=section_slug)
+    result = queries.sections.from_slug(
+        user_pk=request.user.pk,
+        training_slug=training_slug,
+        chapter_slug=chapter_slug,
+        section_slug=section_slug,
+    )
 
     if result is None:
         return not_found(request)
