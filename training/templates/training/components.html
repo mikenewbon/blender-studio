@@ -14,8 +14,8 @@
 {% endmacro %}
 
 {% macro card_training_checkbox_favorite(checked, class=[]) %}
-    <button class="btn btn-ctrl-sm checkbox-favorite {{ class|join(' ') }}"
-            {% if checked %}data-checked="checked"{% endif %}>
+    <button class="btn btn-ctrl-xs checkbox-favorite {{ class|join(' ') }}"
+            {% if checked %}data-checked="checked"{% endif %} data-toggle="tooltip" data-placement="left" title="Save for later">
         <i class="material-icons btn-material-icons checkbox-favorite-icon-checked">check</i>
         <i class="material-icons btn-material-icons checkbox-favorite-icon-unchecked">add</i>
     </button>
@@ -23,11 +23,12 @@
 
 {% macro card_section(section) %}
     {% set image_placeholder = static('training/images/placeholders/card_training.png') %}
-    <div class="col-12 col-sm-6 col-lg-4">
+    <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
         <div class="card card-media">
 
             <div class="card-header" style='background-image: url("{{ image_placeholder }}")'>
-                {{ progressbar(section.progress_fraction) }}
+				{{ progressbar(section.progress_fraction) }}
+
             </div>
 
             <a class="card-body" href="{{ section.url }}">
@@ -41,12 +42,13 @@
 
 {% macro card_training(training) %}
     {% set difficulty_color = {'beginner': 'green', 'intermediate': 'blue', 'advanced': 'red'}.get(training.difficulty, 'blue') %}
-    <div class="col-12 col-sm-6 col-lg-4">
+    <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
         <div class="card card-media card-training" data-favorite-url="{{ training.favorite_url }}">
 
-            <div class="card-header" style='background-image: url("{{ training.picture_16_9 }}")'>
+			<div class="card-header" style='background-image: url("{{ training.picture_16_9 }}")'>
+				<a href="{{ training.url }}" class="card-header-link"></a>
                 {{ badge_difficulty(label=training.difficulty.label, color=difficulty_color) }}
-                {{ card_training_checkbox_favorite(checked=training.favorited, class=['btn-save-media', 'card-training-favorite']) }}
+				{{ card_training_checkbox_favorite(checked=training.favorited, class=['btn-save-media', 'card-training-favorite']) }}
             </div>
 
             <a class="card-body" href="{{ training.url }}">

@@ -202,10 +202,18 @@ body {
     }
 
     &.complete {
+		+ .training-nav-section .training-nav-section-icon:after{
+			background-color: $primary;
+		}
       .training-nav-section-icon:before {
         background-color: $primary;
       }
-    }
+	}
+	&:first-of-type {
+		.training-nav-section-icon:after {
+		  content: none;
+		}
+	  }
 
     &:last-of-type {
       .training-nav-section-icon:before {
@@ -215,13 +223,15 @@ body {
   }
 }
 
+
+
 .training-nav-header {
   padding: $spacer;
 
 }
 
 .training-nav-section {
-
+	overflow: hidden;
 
   a {
     padding: $spacer/2 $spacer;
@@ -255,15 +265,27 @@ $circle-circumference: $circle-diameter*3.14;
   background-color: $input-gray;
   margin-right: $spacer;
   position: relative;
+  flex-shrink: 0;
+  align-self: flex-start;
 
   &:before {
     content: close-quote;
     width: 2px;
     background: $input-gray;
-    height: 100%;
+    height: 500%;
     position: absolute;
     left: 50%;
-    transform: translate(-50%, 100%);
+    transform: translate(-50%, 50%);
+    z-index: -1;
+  }
+  &:after {
+    content: close-quote;
+    width: 2px;
+    background: $input-gray;
+    height: 500%;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: -1;
   }
 

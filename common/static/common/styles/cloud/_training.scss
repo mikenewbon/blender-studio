@@ -1,0 +1,15 @@
+.training-toolbar-container{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-bottom: $spacer;
+
+}
+
+.training-toolbar{
+	flex-grow: 1;
+	justify-content: flex-end;
+	display: flex;
+	align-self: flex-start;
+	flex-shrink: 0;
+}

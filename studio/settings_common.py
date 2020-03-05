@@ -120,6 +120,16 @@ PIPELINE = {
             ],
             'output_filename': 'js/studio.js',
             'extra_context': {'async': False, 'defer': False},
+        },
+		'vendor': {
+            'source_filenames': [
+				'common/scripts/vendor/popper.min.js',
+				'common/scripts/vendor/jquery-3.4.1.min.js',
+				'common/scripts/vendor/bootstrap.min.js',
+                'common/scripts/vendor/plyr.polyfilled.min.js',
+            ],
+            'output_filename': 'js/vendor.js',
+            'extra_context': {'async': False, 'defer': False},
         }
     },
     'STYLESHEETS': {

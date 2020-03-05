@@ -166,12 +166,22 @@ fieldset:disabled a.btn {
 	}
 }
 
-.btn-ctrl-sm {
+.btn-ctrl-sm{
 	@include button-size(
 		$btn-padding-y-ctrl-sm,
 		$btn-padding-x-ctrl-sm,
 		$btn-font-size-ctrl-sm,
 		$btn-line-height-ctrl-sm,
+		$border-radius
+	);
+}
+
+.btn-ctrl-xs {
+	@include button-size(
+		$btn-padding-y-ctrl-xs,
+		$btn-padding-x-ctrl-xs,
+		$btn-font-size-ctrl-xs,
+		$btn-line-height-ctrl-xs,
 		$border-radius
 	);
 }

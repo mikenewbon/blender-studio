@@ -10,24 +10,19 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap"
           rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-            crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.plyr.io/3.5.10/plyr.polyfilled.js"></script>
     {% block html_templates %}{% endblock %}
-    {% block scripts %}{% endblock scripts %}
+	{% block scripts %}{% endblock scripts %}
+	{% javascript 'vendor' %}
     {% stylesheet 'training' %}
-    {% javascript 'studio' %}
+	{% javascript 'studio' %}
+
 </head>
 
 <body class="{% block bodyclasses %}{% endblock bodyclasses %}">
 <!-- When the body has a nav-drawer, it should have the class 'has-nav-drawer' and when it's wide, 'has-nav-drawer nav-drawer-wide' -->
 <nav class="navbar">
     <button class="btn btn-nav navdrawertoggle">
-        <i class="material-icons x-large">menu</i>
+        <i class="material-icons">menu</i>
     </button>
     <a href="#" class="navbar-brand">
         <img src="{{ static('common/images/blender_cloud_logo.svg') }}" alt="Blender Cloud">

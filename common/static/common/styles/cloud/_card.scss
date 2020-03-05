@@ -121,9 +121,18 @@
 	}
 }
 
-.card
+.card-header-link{
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+}
 
-.card-text:last-child {
+.card-grid-item{
+	display: flex;
+}
+
+.card .card-text:last-child {
 	margin-bottom: 0;
 }
 
@@ -140,9 +149,7 @@
 // Optional textual caps
 //
 
-.card
-
-.card-footer {
+.card .card-footer {
 	padding: 0 $card-spacer-x 20px $card-spacer-x;
 	background-color: $card-cap-bg;
 	border-top: $card-border-width solid $card-border-color;
@@ -370,7 +377,6 @@
 	}
 }
 
-
 .card-comment {
 	.card-body {
 		display: block;
@@ -379,8 +385,6 @@
 
 .comment {
 	.profile {
-
-
 		position: relative;
 		flex: 0 0 auto;
 		max-width: 100%;
@@ -400,7 +404,7 @@
 			content: close-quote;
 		}
 	}
-	&-header{
+	&-header {
 		// margin-bottom: $spacer/2 ;
 	}
 	&-name {

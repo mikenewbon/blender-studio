@@ -36,19 +36,32 @@
     {% endif %}
     <div class="row">
         <div class="col-md-8">
-            <div class="row mb-2 justify-content-between">
-                <div class="col-md-auto">
-                    <p class="subtitle small">{{ chapter.name_with_index }}</p>
-                    <h2 class="mb-0">{{ section.name_with_index }}</h2>
-                </div>
-            </div>
-            <div class="row mb-3 justify-content-between">
-                <div class="col-md-auto">
-                    <div class="text-muted x-small">
-                        <p class="d-inline mr-3">{{ training.date_updated.strftime('%d %B %Y') }}</p>
-                    </div>
-                </div>
-            </div>
+			<p class="subtitle small">{{ chapter.name_with_index }}</p>
+			<h2 class="">{{ section.name_with_index }}</h2>
+			<div class="training-toolbar-container">
+				<div class="">
+					<div class="text-muted x-small">
+						<p class="d-inline mr-3">{{ training.date_updated.strftime('%d %B %Y') }}</p>
+					</div>
+				</div>
+
+				<div class="training-toolbar">
+					<a class="btn btn-sm btn-dark"><i class="material-icons btn-material-icons btn-material-icons-lg">favorite_border</i> Like</a>
+					<a class="btn btn-sm btn-dark">Download</a>
+					<button data-toggle="dropdown" class="btn btn-sm btn-ctrl-sm btn-dark">
+
+						<i class="material-icons btn-material-icons">more_horiz</i>
+
+						<div class="dropdown-menu dropdown-menu-right">
+							<a href="#" class="dropdown-item">
+								<i class="material-icons">flag</i>
+								<span>Report Problem</span>
+							</a>
+						</div>
+					</button>
+				</div>
+			</div>
+
             <section class="mb-3">{{ section.text }}</section>
             <section class="mb-3">{{ comment_components.comment_section(comments) }}</section>
         </div>

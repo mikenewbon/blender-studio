@@ -26,11 +26,11 @@
     </div>
 {% endmacro %}
 
-{% macro pill(label, url=None, color='blue') %}
+{% macro pill(label, url=None) %}
     {% if url is none %}
-        <p class="badge badge-pill badge-{{ color }}">{{ label }}</p>
+	<p class="badge badge-pill">{{ label }}</p>
     {% else %}
-        <a class="badge badge-pill badge-{{ color }}" href="{{ url }}">{{ label }}</a>
+    <a class="badge badge-pill" href="{{ url }}">{{ label }}</a>
     {% endif %}
 {% endmacro %}
 
