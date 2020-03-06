@@ -6,15 +6,16 @@ authors = ["Sem Mulder <sem@blender.studio>"]
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
-Django = "^3.0"
+django = "3.0 || 3.0.*"
 django-pipeline = "^1.7"
 psycopg2 = "^2.8"
-blender_id_oauth_client = {path = "../blender-id-oauth-client"}
+blender_id_oauth_client = {git = "git@gitlab.com:blender-institute/blender-id-oauth-client.git", branch = "master"}
 Jinja2 = "^2.11.1"
 libsasscompiler = "^0.1.5"
 jsmin = "^2.2.2"
 sorl-thumbnail = "^12.6.3"
 mistune = "^0.8.4"
+looper = {git = "git@github.com:fsiddi/looper.git", branch = "master"}
 
 [tool.poetry.dev-dependencies]
 black = {version = "*", allow-prereleases = true}
