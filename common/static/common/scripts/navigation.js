@@ -1,17 +1,20 @@
-function navDrawerToggle(){
-	document.querySelector("body").classList.toggle("nav-drawer-open");
-}
+/* global $:false */
 
-document.addEventListener("DOMContentLoaded", function () {
+(function navigation() {
+  function navDrawerToggle() {
+    document.querySelector('body').classList.toggle('nav-drawer-open');
+  }
 
-	document.querySelectorAll(".navdrawertoggle").forEach((i) => {
-		i.addEventListener("click", () =>{
-			navDrawerToggle();
-		})
-	})
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.navdrawertoggle').forEach(i => {
+      i.addEventListener('click', () => {
+        navDrawerToggle();
+      });
+    });
+  });
 
-});
-
-$(function () {
-	$('[data-toggle="tooltip"]').tooltip()
-  })
+  // TODO(sem): Why do we wrap this function in `$`? What does that do?
+  $(() => {
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+})();
