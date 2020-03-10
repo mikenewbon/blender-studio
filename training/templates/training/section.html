@@ -29,7 +29,7 @@
 {% block content %}
     {% if video is not none %}
         <div class="row mb-3">
-            <div class="col">
+            <div class="col training-video">
                 {{ components.video_player(url=video.url, progress_url=video.progress_url, start_position=video.start_position) }}
             </div>
         </div>
@@ -39,7 +39,7 @@
 			<p class="subtitle small">{{ chapter.name_with_index }}</p>
 			<h2 class="">{{ section.name_with_index }}</h2>
 			<div class="training-toolbar-container">
-				<div class="">
+				<div class="training-toolbar-details">
 					<div class="text-muted x-small">
 						<p class="d-inline mr-3">{{ training.date_updated.strftime('%d %B %Y') }}</p>
 					</div>
@@ -62,11 +62,41 @@
 				</div>
 			</div>
 
-            <section class="mb-3">{{ section.text }}</section>
+			<section class="mb-3">{{ section.text }}</section>
+
+			<div class="card card-dark d-md-none">
+                <div class="card-body">
+                    {% if video is not none %}
+                        <div class="row mb-2 justify-content-between">
+                            <div class="col-auto">
+                                <p class="subtitle small">Autoplay Next Section</p>
+                                <h3 class="mb-0">02. Point Tracking - Part 2</h3>
+                            </div>
+                            {{ components.checkbox_toggle(checked=False) }}
+                        </div>
+                    {% else %}
+                        <div class="row mb-2 justify-content-between">
+                            <div class="col-md-auto">
+                                <p class="subtitle small">Next Section</p>
+                                <h3 class="mb-0">02. Point Tracking - Part 2</h3>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <img src="{{ static('training/images/placeholders/video.jpg') }}"
+                         class="img-fluid">
+                    <!-- <p class="small mb-0">
+                        Finally we are creating the high-res model for our scene! In this chapter we
+                        will go over a few basic modeling techniques as well as the first part of
+                        the production
+                        timelapse.
+                    </p> -->
+                </div>
+            </div>
+
             <section class="mb-3">{{ comment_components.comment_section(comments) }}</section>
         </div>
         <div class="col-md-4">
-            <div class="card card-dark">
+            <div class="card card-dark d-none d-md-block">
                 <div class="card-body">
                     {% if video is not none %}
                         <div class="row mb-2 justify-content-between">
@@ -85,13 +115,13 @@
                         </div>
                     {% endif %}
                     <img src="{{ static('training/images/placeholders/video.jpg') }}"
-                         class="img-fluid mb-2">
-                    <p class="small mb-0">
+                         class="img-fluid">
+                    <!-- <p class="small mb-0">
                         Finally we are creating the high-res model for our scene! In this chapter we
                         will go over a few basic modeling techniques as well as the first part of
                         the production
                         timelapse.
-                    </p>
+                    </p> -->
                 </div>
             </div>
         </div>

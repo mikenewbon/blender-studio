@@ -74,9 +74,9 @@
 {% endmacro %}
 
 {% macro checkbox_toggle(checked) %}
-    <div class="col-md-auto text-right">
-        <div class="form-group">
-            <label class="form-group form-switch">
+    <div class="col-auto text-right">
+        <div class="form-group mb-0">
+            <label class="form-group mb-0 form-switch">
                 {% if checked %}
                     <input type="checkbox" class="form-check-input" checked="checked">
                 {% else %}
@@ -118,7 +118,7 @@
     <div class="training-nav-group">
         <h3 class="training-nav-dropdown {% if collapsed %}collapsed{% endif %}"
             data-toggle="collapse" data-target="#{{ id }}">
-            <i class="material-icons">expand_less</i>
+            <i class="material-icons">keyboard_arrow_down</i>
             {{ title }}
         </h3>
         <ol id="{{ id }}" class="training-nav-list collapse {% if not collapsed %}show{% endif %}">

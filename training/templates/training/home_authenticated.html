@@ -14,19 +14,19 @@
 {% endblock jumbotron %}
 
 {% block content %}
-    <section class="mb-3">
+    <section class="">
         <div class="row">
-            <div class="col-6">
+            <div class="col-md-6 mb-3">
                 {{ components.searchbar(placeholder="Search tags and keywords") }}
             </div>
-            <div class="col-3">
+            <div class="col-md-3 col-6 mb-3">
                 {% call components.select() %}
                     {% for type in TrainingType %}
                         <option value="{{ type.value }}">{{ type.label }}</option>
                     {% endfor %}
                 {% endcall %}
             </div>
-            <div class="col-3">
+            <div class="col-md-3 col-6 mb-3">
                 {% call components.select() %}
                     {% for type in TrainingDifficulty %}
                         <option value="{{ type.value }}">{{ type.label }}</option>

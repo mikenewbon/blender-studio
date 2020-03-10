@@ -323,7 +323,7 @@ $circle-circumference: $circle-diameter*3.14;
 
   &.collapsed {
     i {
-      transform: rotate(180deg);
+      transform: rotate(-90deg);
     }
   }
 
