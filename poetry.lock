@@ -252,7 +252,7 @@ python-dateutil = "^2.7"
 requests = "^2.22"
 
 [package.source]
-reference = "1804ba1aebf32d9093237f5b1c667cecf120bf2d"
+reference = "f91e95c7ac334eeea5d35e73dc95c66d19f63385"
 type = "git"
 url = "git@github.com:fsiddi/looper.git"
 [[package]]
