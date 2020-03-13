@@ -72,6 +72,8 @@ LOOPER_CONVERTION_RATES_FROM_EURO = {
 
 LOOPER_MONEY_LOCALE = 'en_US.UTF-8'
 
+LOOPER_CAN_CHANGE_CUSTOMER_FUNCTION = 'subscriptions.permissions.can_change_customer'
+
 SUPPORTED_CURRENCIES = {'EUR', 'USD'}
 
 # Get the latest from https://dev.maxmind.com/geoip/geoip2/geolite2/. Note that you should check
