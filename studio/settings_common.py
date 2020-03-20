@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sites',
     'django.contrib.staticfiles',
 ]
 
@@ -171,3 +172,5 @@ LOGGING = {
     },
     'root': {'level': 'WARNING', 'handlers': ['console']},
 }
+
+SITE_ID = 1

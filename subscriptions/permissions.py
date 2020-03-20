@@ -1,5 +1,7 @@
+from django.contrib.auth.models import User
+from django.db.models.query_utils import Q
 from django.http import HttpRequest
-from looper.models import Customer
+from looper.models import Customer, Subscription
 
 from subscriptions.models import Organization, Subscriber
 
@@ -21,3 +23,16 @@ def can_change_customer(request: HttpRequest, customer: Customer) -> bool:
         pass
 
     return False
+
+
+def has_subscription(user: User) -> bool:
+    if not user.is_authenticated:
+        return False
+
+    return (
+        Subscription.objects.active()
+        .filter(
+            Q(customer__subscriber__user_id=user.id) | Q(customer__organization__users__id=user.id)
+        )
+        .exists()
+    )

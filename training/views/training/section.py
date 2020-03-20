@@ -5,6 +5,7 @@ from comments.views.common import comments_to_template_type
 from common.decorators import login_required
 from common.typed_templates.errors import not_found
 from common.typed_templates.types import TypeSafeTemplateResponse
+from subscriptions.decorators import subscription_required
 from training import queries, typed_templates
 from training.models.progress import UserSectionProgress
 from training.typed_templates.types import SectionProgressReportingData
@@ -20,6 +21,7 @@ from training.views.common import (
 
 @require_safe
 @login_required
+@subscription_required
 def section(
     request: HttpRequest,
     *,
