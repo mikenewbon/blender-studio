@@ -1,0 +1,25 @@
+{% macro wide_jumbotron() %}
+    {% set image_placeholder = static('training/images/placeholders/jumbotron.png') %}
+    <div style="background-image:url('{{ static('films/images/coffee-run-header.jpg') }}')"
+         class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-xl-5">
+                    <div class="jumbotron-body">
+                        {{ caller() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro sub_navigation() %}
+<div class="navbar-secondary">
+    <div class="container">
+        <div class="list-group list-group-flush list-group-horizontal small">
+            {{ caller() }}
+        </div>
+    </div>
+</div>
+{% endmacro %}

@@ -95,11 +95,11 @@
 	}
 	.list-group,
 	.breadcrumb {
-		padding: 0 $spacer/2;
+		padding: 0;
 		overflow-x: scroll;
-		flex-wrap: nowrap;
+		flex-wrap: wrap;
 		@include media-breakpoint-down(sm) {
-			padding: 0 $spacer;
+			flex-wrap: nowrap;
 		}
 		&::-webkit-scrollbar {
 			display: none;
@@ -112,6 +112,14 @@
 		padding: $spacer/2 0;
 		&:last-child {
 			padding-right: $spacer;
+		}
+	}
+	.list-group-item{
+		white-space: nowrap;
+		@include hover-focus{
+			background: $highlight-white;
+			text-decoration: none;
+			color:$white;
 		}
 	}
 }

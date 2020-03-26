@@ -1,1 +1,50 @@
-p hi
+{% extends 'films/base.html' %}
+{% import 'common/components.html' as components %}
+{% import 'films/components.html' as film_components %}
+
+{% block jumbotron %}
+    {% call film_components.wide_jumbotron() %}
+        <img src="{{ static('films/images/coffee-run-logo.png') }}">
+        <p>
+            Coffee Run (currently in development) is directed by Hjalti Hjalmarsson and produced by the team at Blender Animation Studio.</p>
+        <p>
+            This 2d-scroller-inspired short film will take you on the journey of a lifetime, as we sip on a cup of coffee. Read the project announcement on the blog.
+        </p>
+        <a class="btn btn-primary mb-0">Explore Content</a>
+        
+    {% endcall %}
+    {% call film_components.sub_navigation() %}
+        <a class="list-group-item" href="#">Coffee Run</a>
+        <a class="list-group-item" href="#">About</a>
+        <a class="list-group-item" href="#">Gallery</a>
+        <a class="list-group-item" href="#">Weeklies</a>
+    {% endcall %}
+{% endblock jumbotron %}
+
+
+{% block content %}
+<div class="update-feed">
+    <div class="update-feed-week">
+        <div class="update-feed-week-column column-left">
+            <div class="update-feed-week-icon">
+                <i class="material-icons">calendar_today</i>
+            </div>
+        </div>
+        <div class="update-feed-week-column column-right">
+            <div class="update-feed-week-header">
+                <p class="subtitle small">1st - 7th March</p>
+                <h3>Production Week 7</h3>
+            </div>
+            <div class="update-feed-individual">
+                <div class="update-feed-individual-summary">
+
+                </div>
+                <div class="update-feed-individual-files">
+
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock content %}

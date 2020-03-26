@@ -1,0 +1,41 @@
+.update-feed{
+    &-week{
+        display: flex;
+        flex-direction: row;
+        overflow: hidden;
+        &-column{
+            &.column-left{
+                flex-shrink: 1;
+            }
+            &.column-right{
+                flex-grow: 1;
+                margin-left: $spacer/2;
+            }
+        }
+        &-icon{
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: $input-gray;
+            border-radius: 50%;
+            position: relative;
+            i{
+                font-size: $font-size-md;
+            }
+            &:before{
+                content: close-quote;
+                display: block;
+                width: 2px;
+                height: 1000px;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translateX(-50%);
+                background: $input-gray;
+                z-index: -1;
+            }
+        }
+    }
+}
