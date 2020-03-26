@@ -8,6 +8,7 @@ import comments.urls
 import films.urls
 import subscriptions.urls
 import training.urls
+import films.urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -15,6 +16,7 @@ urlpatterns = [
     path('comments/', include(comments.urls)),
     path('films/', include(films.urls)),
     path('training/', include(training.urls)),
+    path('films/', include(films.urls)),
     path('subscriptions/', include(subscriptions.urls)),
 ]
 
