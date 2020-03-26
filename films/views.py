@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from common import mixins
 
 def index(request):
 
