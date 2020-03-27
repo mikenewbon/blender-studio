@@ -1,8 +1,15 @@
+.files{
+	.col{
+		margin-bottom: $spacer;
+	}
+}
+
 .file {
 	@extend .card;
 	@extend .card-media;
 	@extend .card-dark;
-
+	margin-bottom: 0;
+	height:100%;
 	text-align: center;
 	&:hover{
 		background-color: tint($navigation-gray, 10%);

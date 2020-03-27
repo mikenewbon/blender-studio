@@ -38,4 +38,14 @@
             }
         }
     }
+    &-individual{
+        margin-bottom: $spacer;
+        border-bottom: 2px solid $input-gray;
+        
+        &-summary{
+            > p{
+                margin-bottom: $spacer;
+            }
+        }
+    }
 }
