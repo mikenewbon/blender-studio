@@ -1,6 +1,7 @@
 import datetime
 import json
 
+from django.contrib.auth.decorators import login_required
 from django.http.request import HttpRequest
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_POST
@@ -12,7 +13,6 @@ from training.queries.progress import (
     set_section_progress_finished,
 )
 from training.queries.sections import video_from_pk
-from common.decorators import login_required
 
 
 @require_POST

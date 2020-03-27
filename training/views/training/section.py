@@ -1,8 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.http.request import HttpRequest
 from django.views.decorators.http import require_safe
 
 from comments.views.common import comments_to_template_type
-from common.decorators import login_required
 from common.typed_templates.errors import not_found
 from common.typed_templates.types import TypeSafeTemplateResponse
 from subscriptions.decorators import subscription_required

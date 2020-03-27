@@ -1,13 +1,12 @@
 import json
 
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.http.request import HttpRequest
 from django.views.decorators.http import require_POST
 
-from subscriptions.decorators import subscription_required
-from training.queries.trainings import set_favorite
 from common.types import assert_cast
-from common.decorators import login_required
+from training.queries.trainings import set_favorite
 
 
 @require_POST

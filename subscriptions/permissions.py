@@ -1,23 +1,25 @@
 from django.contrib.auth.models import User
+from django.db.models import QuerySet
 from django.db.models.query_utils import Q
-from django.http import HttpRequest
 from looper.models import Customer, Subscription
 
 from subscriptions.models import Organization, Subscriber
 
 
-def can_change_customer(request: HttpRequest, customer: Customer) -> bool:
-    if not request.user.is_authenticated:
+def can_change_customer(user: User, customer: Customer) -> bool:
+    if not user.is_authenticated:
         return False
 
     try:
-        return customer.subscriber.user_id == request.user.id
+        subscriber: Subscriber = customer.subscriber
+        return subscriber.user_id == user.id
     except Subscriber.DoesNotExist:
         pass
 
     try:
-        return customer.organization.organization_users.filter(
-            can_change_organization=True, user_id=request.user.id
+        organization: Organization = customer.organization
+        return organization.organization_users.filter(
+            can_change_organization=True, user_id=user.id
         ).exists()
     except Organization.DoesNotExist:
         pass
@@ -29,10 +31,8 @@ def has_subscription(user: User) -> bool:
     if not user.is_authenticated:
         return False
 
-    return (
-        Subscription.objects.active()
-        .filter(
-            Q(customer__subscriber__user_id=user.id) | Q(customer__organization__users__id=user.id)
-        )
-        .exists()
-    )
+    active_subscriptions: 'QuerySet[Subscription]' = Subscription.objects.active()
+
+    return active_subscriptions.filter(
+        Q(customer__subscriber__user_id=user.id) | Q(customer__organization__users__id=user.id)
+    ).exists()

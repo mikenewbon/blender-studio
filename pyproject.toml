@@ -15,7 +15,7 @@ libsasscompiler = "^0.1.5"
 jsmin = "^2.2.2"
 sorl-thumbnail = "^12.6.3"
 mistune = "^0.8.4"
-looper = {git = "git@gitlab.com:blender-institute/looper.git", branch = "master"}
+looper = {git = "git://git.blender.org/looper.git", branch = "master"}
 
 [tool.poetry.dev-dependencies]
 black = {version = "*", allow-prereleases = true}

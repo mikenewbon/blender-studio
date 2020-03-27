@@ -78,6 +78,7 @@ requests-oauthlib = "^1.0"
 reference = "f8c00db0cd2597a80bc5c0cf3ddbc46c400e9684"
 type = "git"
 url = "git@gitlab.com:blender-institute/blender-id-oauth-client.git"
+
 [[package]]
 category = "main"
 description = "Braintree Python Library"
@@ -251,9 +252,9 @@ python-dateutil = "^2.7"
 requests = "^2.22"
 
 [package.source]
-reference = "433bcda518623f15cab628e55be017c0d4fab9ad"
+reference = "7148b048f54aca4d64cae50761a345435f32874b"
 type = "git"
-url = "git@gitlab.com:blender-institute/looper.git"
+url = "git://git.blender.org/looper.git"
 [[package]]
 category = "main"
 description = "Safely add untrusted strings to HTML/XML markup."
@@ -453,7 +454,7 @@ secure = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "cer
 socks = ["PySocks (>=1.5.6,<1.5.7 || >1.5.7,<2.0)"]
 
 [metadata]
-content-hash = "f1075008268f290b55e1becd15215bdad335d9db2fe17486cb75c89bf0648ac9"
+content-hash = "1485032b9bd2c7eecd5f0b1adefc2127e21a4d188f05970e29a1c2d9a82ec8bc"
 python-versions = "^3.8.1"
 
 [metadata.files]

@@ -1,12 +1,12 @@
 import json
 
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.http.request import HttpRequest
 from django.views.decorators.http import require_POST
 
 from training import queries
 from common.types import assert_cast
-from common.decorators import login_required
 
 
 @require_POST

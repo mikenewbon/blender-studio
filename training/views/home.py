@@ -1,7 +1,7 @@
+from django.contrib.auth.decorators import login_required
 from django.http.request import HttpRequest
 from django.views.decorators.http import require_safe
 
-from common.decorators import login_required
 from common.typed_templates.types import TypeSafeTemplateResponse
 from training import queries, typed_templates
 from training.typed_templates.home import RecentlyWatchedSection

@@ -1,9 +1,9 @@
+from django.contrib.auth.decorators import login_required
 from django.http.request import HttpRequest
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_POST
 
 from comments.queries import delete_comment, moderator_delete_comment
-from common.decorators import login_required
 
 
 @require_POST
