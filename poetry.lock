@@ -12,7 +12,7 @@ description = "ASGI specs, helper code, and adapters"
 name = "asgiref"
 optional = false
 python-versions = ">=3.5"
-version = "3.2.4"
+version = "3.2.7"
 
 [package.extras]
 tests = ["pytest (>=4.3.0,<4.4.0)", "pytest-asyncio (>=0.10.0,<0.11.0)"]
@@ -78,7 +78,6 @@ requests-oauthlib = "^1.0"
 reference = "f8c00db0cd2597a80bc5c0cf3ddbc46c400e9684"
 type = "git"
 url = "git@gitlab.com:blender-institute/blender-id-oauth-client.git"
-
 [[package]]
 category = "main"
 description = "Braintree Python Library"
@@ -137,12 +136,12 @@ description = "Provides a country field for Django models."
 name = "django-countries"
 optional = false
 python-versions = "*"
-version = "6.0"
+version = "6.1.2"
 
 [package.extras]
-dev = ["tox", "django", "pytest", "pytest-django", "djangorestframework"]
+dev = ["tox", "black", "django", "pytest", "pytest-django", "djangorestframework", "graphene-django"]
 maintainer = ["transifex-client", "zest.releaser", "django"]
-test = ["pytest", "pytest-django", "pytest-cov"]
+test = ["pytest", "pytest-django", "pytest-cov", "graphene-django"]
 
 [[package]]
 category = "main"
@@ -158,11 +157,11 @@ description = "Mypy stubs for Django"
 name = "django-stubs"
 optional = false
 python-versions = ">=3.6"
-version = "1.4.0"
+version = "1.5.0"
 
 [package.dependencies]
 django = "*"
-mypy = ">=0.760,<0.770"
+mypy = ">=0.770,<0.780"
 typing-extensions = "*"
 
 [[package]]
@@ -252,7 +251,7 @@ python-dateutil = "^2.7"
 requests = "^2.22"
 
 [package.source]
-reference = "afcbad70f91e219f863c43fc78f6364635904d12"
+reference = "433bcda518623f15cab628e55be017c0d4fab9ad"
 type = "git"
 url = "git@gitlab.com:blender-institute/looper.git"
 [[package]]
@@ -285,7 +284,7 @@ description = "Optional static typing for Python"
 name = "mypy"
 optional = false
 python-versions = ">=3.5"
-version = "0.761"
+version = "0.770"
 
 [package.dependencies]
 mypy-extensions = ">=0.4.3,<0.5.0"
@@ -463,8 +462,8 @@ appdirs = [
     {file = "appdirs-1.4.3.tar.gz", hash = "sha256:9e5896d1372858f8dd3344faf4e5014d21849c756c8d5701f78f8a103b372d92"},
 ]
 asgiref = [
-    {file = "asgiref-3.2.4-py2.py3-none-any.whl", hash = "sha256:5e60ea919b37e5b9d8896d802c0dbbe41b16ea6719e5695a43496ef43e5b19ac"},
-    {file = "asgiref-3.2.4.tar.gz", hash = "sha256:f07043512078c76bb28a62fd1e327876599062b5f0aea60ed1d9cabc42e95fe2"},
+    {file = "asgiref-3.2.7-py2.py3-none-any.whl", hash = "sha256:9ca8b952a0a9afa61d30aa6d3d9b570bb3fd6bafcf7ec9e6bed43b936133db1c"},
+    {file = "asgiref-3.2.7.tar.gz", hash = "sha256:8036f90603c54e93521e5777b2b9a39ba1bad05773fcf2d208f0299d1df58ce5"},
 ]
 attrs = [
     {file = "attrs-19.3.0-py2.py3-none-any.whl", hash = "sha256:08a96c641c3a74e44eb59afb61a24f2cb9f4d7188748e76ba4bb5edfa3cb7d1c"},
@@ -500,15 +499,16 @@ django = [
     {file = "Django-3.0.4.tar.gz", hash = "sha256:50b781f6cbeb98f673aa76ed8e572a019a45e52bdd4ad09001072dfd91ab07c8"},
 ]
 django-countries = [
-    {file = "django-countries-6.0.tar.gz", hash = "sha256:cca351f304d18187b6200e1aae381c2902045c33aea5f4da58fd74685b7cd4fc"},
+    {file = "django-countries-6.1.2.tar.gz", hash = "sha256:e2ae9b76f9a0b5f3f365b5b81fe4972df0a5878c930139586f43f7d6d50a9594"},
+    {file = "django_countries-6.1.2-py3-none-any.whl", hash = "sha256:2e852c9693818d64d28758a720a0cb8277673ac495af8b855c4dc64940703bd2"},
 ]
 django-pipeline = [
     {file = "django-pipeline-1.7.0.tar.gz", hash = "sha256:0ded22b974e3d627c27fc490ef5b23fcdcf0cdb00b704d628b5ca6d0b010d6fe"},
     {file = "django_pipeline-1.7.0-py2.py3-none-any.whl", hash = "sha256:f7da70f00aa4baea3e0811f88927a116425deee05871fa2bfd2f8247f42d8847"},
 ]
 django-stubs = [
-    {file = "django-stubs-1.4.0.tar.gz", hash = "sha256:a84860e02d5ada1a96e4c6f6800be4729ea3df354ff1156f0616db647dc2fe9e"},
-    {file = "django_stubs-1.4.0-py3-none-any.whl", hash = "sha256:9a1bd302c42b1132e1537ba2315b94de01e673a1926ac2b3e1523ed7b81411c8"},
+    {file = "django-stubs-1.5.0.tar.gz", hash = "sha256:b4c9042f2c2fcb89dc0fb37df070cce0f9bf93b39ae193847b6e5a392b13c430"},
+    {file = "django_stubs-1.5.0-py3-none-any.whl", hash = "sha256:4a03df70e062f4133085efc461148d0934f36ccfd60a2b6d7bc35821f62008b6"},
 ]
 geoip2 = [
     {file = "geoip2-3.0.0-py2.py3-none-any.whl", hash = "sha256:99ec12d2f1271a73a0a4a2b663fe6ce25fd02289c0a6bef05c0a1c3b30ee95a4"},
@@ -585,20 +585,20 @@ mistune = [
     {file = "mistune-0.8.4.tar.gz", hash = "sha256:59a3429db53c50b5c6bcc8a07f8848cb00d7dc8bdb431a4ab41920d201d4756e"},
 ]
 mypy = [
-    {file = "mypy-0.761-cp35-cp35m-macosx_10_6_x86_64.whl", hash = "sha256:7f672d02fffcbace4db2b05369142e0506cdcde20cea0e07c7c2171c4fd11dd6"},
-    {file = "mypy-0.761-cp35-cp35m-manylinux1_x86_64.whl", hash = "sha256:87c556fb85d709dacd4b4cb6167eecc5bbb4f0a9864b69136a0d4640fdc76a36"},
-    {file = "mypy-0.761-cp35-cp35m-win_amd64.whl", hash = "sha256:c6d27bd20c3ba60d5b02f20bd28e20091d6286a699174dfad515636cb09b5a72"},
-    {file = "mypy-0.761-cp36-cp36m-macosx_10_6_x86_64.whl", hash = "sha256:4b9365ade157794cef9685791032521233729cb00ce76b0ddc78749abea463d2"},
-    {file = "mypy-0.761-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:634aef60b4ff0f650d3e59d4374626ca6153fcaff96ec075b215b568e6ee3cb0"},
-    {file = "mypy-0.761-cp36-cp36m-win_amd64.whl", hash = "sha256:53ea810ae3f83f9c9b452582261ea859828a9ed666f2e1ca840300b69322c474"},
-    {file = "mypy-0.761-cp37-cp37m-macosx_10_6_x86_64.whl", hash = "sha256:0a9a45157e532da06fe56adcfef8a74629566b607fa2c1ac0122d1ff995c748a"},
-    {file = "mypy-0.761-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:7eadc91af8270455e0d73565b8964da1642fe226665dd5c9560067cd64d56749"},
-    {file = "mypy-0.761-cp37-cp37m-win_amd64.whl", hash = "sha256:e2bb577d10d09a2d8822a042a23b8d62bc3b269667c9eb8e60a6edfa000211b1"},
-    {file = "mypy-0.761-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:2c35cae79ceb20d47facfad51f952df16c2ae9f45db6cb38405a3da1cf8fc0a7"},
-    {file = "mypy-0.761-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:f97a605d7c8bc2c6d1172c2f0d5a65b24142e11a58de689046e62c2d632ca8c1"},
-    {file = "mypy-0.761-cp38-cp38-win_amd64.whl", hash = "sha256:a6bd44efee4dc8c3324c13785a9dc3519b3ee3a92cada42d2b57762b7053b49b"},
-    {file = "mypy-0.761-py3-none-any.whl", hash = "sha256:7e396ce53cacd5596ff6d191b47ab0ea18f8e0ec04e15d69728d530e86d4c217"},
-    {file = "mypy-0.761.tar.gz", hash = "sha256:85baab8d74ec601e86134afe2bcccd87820f79d2f8d5798c889507d1088287bf"},
+    {file = "mypy-0.770-cp35-cp35m-macosx_10_6_x86_64.whl", hash = "sha256:a34b577cdf6313bf24755f7a0e3f3c326d5c1f4fe7422d1d06498eb25ad0c600"},
+    {file = "mypy-0.770-cp35-cp35m-manylinux1_x86_64.whl", hash = "sha256:86c857510a9b7c3104cf4cde1568f4921762c8f9842e987bc03ed4f160925754"},
+    {file = "mypy-0.770-cp35-cp35m-win_amd64.whl", hash = "sha256:a8ffcd53cb5dfc131850851cc09f1c44689c2812d0beb954d8138d4f5fc17f65"},
+    {file = "mypy-0.770-cp36-cp36m-macosx_10_6_x86_64.whl", hash = "sha256:7687f6455ec3ed7649d1ae574136835a4272b65b3ddcf01ab8704ac65616c5ce"},
+    {file = "mypy-0.770-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:3beff56b453b6ef94ecb2996bea101a08f1f8a9771d3cbf4988a61e4d9973761"},
+    {file = "mypy-0.770-cp36-cp36m-win_amd64.whl", hash = "sha256:15b948e1302682e3682f11f50208b726a246ab4e6c1b39f9264a8796bb416aa2"},
+    {file = "mypy-0.770-cp37-cp37m-macosx_10_6_x86_64.whl", hash = "sha256:b90928f2d9eb2f33162405f32dde9f6dcead63a0971ca8a1b50eb4ca3e35ceb8"},
+    {file = "mypy-0.770-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:c56ffe22faa2e51054c5f7a3bc70a370939c2ed4de308c690e7949230c995913"},
+    {file = "mypy-0.770-cp37-cp37m-win_amd64.whl", hash = "sha256:8dfb69fbf9f3aeed18afffb15e319ca7f8da9642336348ddd6cab2713ddcf8f9"},
+    {file = "mypy-0.770-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:219a3116ecd015f8dca7b5d2c366c973509dfb9a8fc97ef044a36e3da66144a1"},
+    {file = "mypy-0.770-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:7ec45a70d40ede1ec7ad7f95b3c94c9cf4c186a32f6bacb1795b60abd2f9ef27"},
+    {file = "mypy-0.770-cp38-cp38-win_amd64.whl", hash = "sha256:f91c7ae919bbc3f96cd5e5b2e786b2b108343d1d7972ea130f7de27fdd547cf3"},
+    {file = "mypy-0.770-py3-none-any.whl", hash = "sha256:3b1fc683fb204c6b4403a1ef23f0b1fac8e4477091585e0c8c54cbdf7d7bb164"},
+    {file = "mypy-0.770.tar.gz", hash = "sha256:8a627507ef9b307b46a1fea9513d5c98680ba09591253082b4c48697ba05a4ae"},
 ]
 mypy-extensions = [
     {file = "mypy_extensions-0.4.3-py2.py3-none-any.whl", hash = "sha256:090fedd75945a69ae91ce1303b5824f428daf5a028d2f6ab8a299250a846f15d"},
