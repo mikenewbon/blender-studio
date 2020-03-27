@@ -1,18 +1,34 @@
-.update-feed{
-    &-week{
+.update-feed {
+    margin-bottom: $spacer;
+    &-week {
         display: flex;
         flex-direction: row;
         overflow: hidden;
-        &-column{
-            &.column-left{
+        &-column {
+            &.column-left {
                 flex-shrink: 1;
-            }
-            &.column-right{
+                position: relative;
+                &:before {
+                    content: close-quote;
+                    display: block;
+                    width: 2px;
+                    height: 100%;
+                    position: absolute;
+                    left: 50%;
+                    top: 0;
+                    transform: translateX(-50%);
+                    background: $input-gray;
+                    z-index: -1;
+                }
+            } 
+
+            &.column-right {
                 flex-grow: 1;
                 margin-left: $spacer/2;
             }
         }
-        &-icon{
+
+        &-icon {
             width: 30px;
             height: 30px;
             display: flex;
@@ -21,31 +37,26 @@
             background: $input-gray;
             border-radius: 50%;
             position: relative;
-            i{
+
+            i {
                 font-size: $font-size-md;
             }
-            &:before{
-                content: close-quote;
-                display: block;
-                width: 2px;
-                height: 1000px;
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translateX(-50%);
-                background: $input-gray;
-                z-index: -1;
-            }
+
+           
         }
     }
-    &-individual{
+    .update-feed-week:last-of-type .update-feed-individual:last-of-type{
+        margin-bottom: 0;
+    }
+    &-individual {
         margin-bottom: $spacer;
         border-bottom: 2px solid $input-gray;
-        
-        &-summary{
-            > p{
+
+        &-summary {
+            >p {
                 margin-bottom: $spacer;
             }
         }
     }
+    
 }
