@@ -273,5 +273,46 @@
         <p clas="mb-0">Want to see more updates from Coffee Run? <a href="#">See all weeklies</a></p>
     </div>
 </div>
+
+<div class="mb-5"></div>
+
+<div class="row justify-content-center my-3">
+    <div class="col-md-6 text-center">
+        <h2 text>Featured Gallery</h2>
+        <p clas="mb-0">Want to see more? <a href="#">Explore all artwork</a></p>
+    </div>
+</div>
+
+<div class="grid">
+    <div class="grid-sizer"></div>
+    <div class="grid-item">
+        <img src="{{ static('films/images/masonry/1.png') }}">
+    </div>
+    <div class="grid-item">
+        <img src="{{ static('films/images/masonry/3.jpg') }}">
+    </div>
+    <div class="grid-item">
+        <img src="{{ static('films/images/masonry/2.png') }}">
+    </div>
+    <div class="grid-item">
+        <img src="{{ static('films/images/masonry/4.jpg') }}">
+    </div>
+    <div class="grid-item">
+        <img src="{{ static('films/images/masonry/5.jpg') }}">
+    </div>
+</div>
+
 <br><br><br><br><br><br><br><br><br><br><br>
+
+<script>
+    $('.grid').masonry({
+        // set itemSelector so .grid-sizer is not used in layout
+        itemSelector: '.grid-item',
+        // use element for option
+        columnWidth: '.grid-sizer',
+        percentPosition: true,
+        
+    })
+</script>
+
 {% endblock content %}

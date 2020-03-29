@@ -125,6 +125,7 @@ PIPELINE = {
                 'common/scripts/vendor/bootstrap.min.js',
                 'common/scripts/vendor/plyr.polyfilled.min.js',
                 'common/scripts/vendor/js.cookie-2.2.1.min.js',
+                'common/scripts/vendor/masonry.pkgd.min.js',
             ],
             'output_filename': 'js/vendor.js',
             'extra_context': {'async': False, 'defer': False},

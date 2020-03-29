@@ -1,0 +1,13 @@
+.grid{
+    margin: -$spacer/2;
+}
+.grid-item, .grid-sizer{
+    width: 50%;
+    @include media-breakpoint-down(md) {
+        width: 100%;
+    }
+    padding:$spacer/2;
+    img{
+        width: 100%;
+    }
+}
