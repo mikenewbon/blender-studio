@@ -283,7 +283,7 @@
     top: $spacer;
     right: $spacer;
     position: fixed;
-    
+
     @include media-breakpoint-down(md){
       top: 0;
       right: 0;
