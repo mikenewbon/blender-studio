@@ -319,16 +319,22 @@
 
 <div class="modal modal-asset" id="modal5" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
+    <button class="modal-navigation modal-close btn btn-ctrl" href="#" data-dismiss="modal">
+        <i class="material-icons btn-material-icons">close</i>
+    </button>
     <div class="modal-dialog" role="document">
         <div class="modal-content bg-dark">
+            
             <div class="modal-header p-0 bg-secondary">
-                <button class="modal-navigation previous btn btn-ctrl btn-dark" href="#">
-                    <i class="material-icons">navigate_before</i>
+                <button class="modal-navigation previous btn btn-ctrl" href="#">
+                    <i class="material-icons btn-material-icons">navigate_before</i>
                 </button>
-                <a class="modal-navigation next" href="#">
-                    <i class="material-icons">navigate_next</i>
+                <a data-toggle="modal" data-target="#modal5-zoom" class="modal-asset-image-wrapper" href="#">
+                    <img class="" src="{{ static('films/images/masonry/5.jpg') }}">
                 </a>
-                <img class="" src="{{ static('films/images/masonry/5.jpg') }}">
+                <button class="modal-navigation next btn btn-ctrl" href="#">
+                    <i class="material-icons btn-material-icons">navigate_next</i>
+                </button>
             </div>
             <div class="modal-body">
                 <p class="subtitle small">Image</p>
@@ -368,7 +374,7 @@
                 </div>
                 <p>Finally we are creating the high-res model for our scene! In this chapter we will go over a few basic
                     modeling techniques as well as the first part of the production timelapse.</p>
-            
+
                 <div class="comment-section mt-3" data-comment-url="/training/api/sections/1/comment/"
                     data-profile-image-url="https://blender.chat/avatar/fsiddi">
                     <h3>2 Comments</h3>
@@ -389,13 +395,50 @@
                         </div>
                     </div>
 
-                    
+
                     <div class="row mb-2">
                         <div class="col text-center">
                             <a href="#" class="btn btn-sm btn-secondary">Show Comments</a>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-asset-zoom" id="modal5-zoom" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <button class="modal-navigation modal-close btn btn-ctrl" href="#" data-dismiss="modal">
+        <i class="material-icons btn-material-icons">close</i>
+    </button>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content bg-dark">
+            
+            <div class="modal-header p-0">
+                <div class="training-toolbar">
+                    <a class="btn btn-sm btn-dark"><i
+                            class="material-icons btn-material-icons btn-material-icons-lg">favorite_border</i>
+                        Like</a>
+                    <a class="btn btn-sm btn-dark">Download</a>
+                    <button data-toggle="dropdown" class="btn btn-sm btn-ctrl-sm btn-dark">
+
+                        <i class="material-icons btn-material-icons">more_horiz</i>
+
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a href="#" class="dropdown-item">
+                                <i class="material-icons">flag</i>
+                                <span>Report Problem</span>
+                            </a>
+                        </div>
+                    </button>
+                    <button data-dismiss="modal" class="btn btn-sm btn-ctrl-sm btn-dark">
+                        <i class="material-icons btn-material-icons">close</i>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <img class="" src="{{ static('films/images/masonry/5.jpg') }}">
             </div>
         </div>
     </div>
