@@ -1,0 +1,18 @@
+{% extends 'films/base.html' %}
+{% import 'common/components.html' as components %}
+{% import 'films/components.html' as film_components %}
+
+{% block jumbotron %}
+
+{% call film_components.sub_navigation() %}
+<a class="list-group-item" href="/films/coffee-run">Coffee Run</a>
+<a class="list-group-item" href="/films/coffee-run/about">About</a>
+<a class="list-group-item active" href="/films/coffee-run/gallery">Gallery</a>
+<a class="list-group-item" href="/films/coffee-run/weeklies">Weeklies</a>
+{% endcall %}
+{% endblock jumbotron %}
+
+
+{% block content %}
+
+{% endblock content %}

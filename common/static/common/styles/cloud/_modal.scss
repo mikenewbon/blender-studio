@@ -283,18 +283,34 @@
     top: $spacer;
     right: $spacer;
     position: fixed;
+    
+    @include media-breakpoint-down(md){
+      top: 0;
+      right: 0;
+      background: $highlight-black;
+    }
   }
 
   &.next {
     top: 50%;
     right: -40px;
     transform: translate(50%, -50%);
+    @include media-breakpoint-down(md){
+      right: 0;
+      transform:translate(0%, -50%);
+      background: $highlight-black;
+    }
   }
 
   &.previous {
     top: 50%;
     left: -40px;
     transform: translate(-50%, -50%);
+    @include media-breakpoint-down(md){
+      left: 0;
+      transform:translate(0%, -50%);
+      background: $highlight-black;
+    }
   }
 }
 
@@ -316,6 +332,7 @@
     align-items: center;
     height: 100%;
     width: 100%;
+    padding: 0;
   }
 
   img {
