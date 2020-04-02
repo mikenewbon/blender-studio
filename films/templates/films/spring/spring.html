@@ -3,12 +3,12 @@
 {% import 'films/components.html' as film_components %}
 
 {% block jumbotron %}
-{% call film_components.wide_jumbotron() %}
-<img src="{{ static('films/images/coffee-run-logo.png') }}">
+{% call film_components.wide_jumbotron(bg_path="films/images/spring-header.png") %}
+<img class="mb-3" src="{{ static('films/images/spring_logo.png') }}">
 <p>
     Coffee Run (currently in development) is directed by Hjalti Hjalmarsson and produced by the team at Blender
     Animation Studio.</p>
-<p>
+<p class="mb-3">
     This 2d-scroller-inspired short film will take you on the journey of a lifetime, as we sip on a cup of coffee. Read
     the project announcement on the blog.
 </p>
@@ -16,7 +16,7 @@
 
 {% endcall %}
 {% call film_components.sub_navigation() %}
-<a class="list-group-item" href="#">Coffee Run</a>
+<a class="list-group-item active" href="/films/spring">Spring</a>
 <a class="list-group-item" href="#">About</a>
 <a class="list-group-item" href="#">Gallery</a>
 <a class="list-group-item" href="#">Weeklies</a>
@@ -25,264 +25,8 @@
 
 
 {% block content %}
+
 <section class="mb-5">
-    <!-- Latest Updates -->
-    <div class="row justify-content-center my-3">
-        <div class="col-md-6 text-center">
-            <h2 text>Latest Updates</h2>
-            <p clas="mb-0">Want to see more updates from Coffee Run? <a href="#">See all weeklies</a></p>
-        </div>
-    </div>
-
-    <div class="update-feed">
-
-        <div class="update-feed-week">
-            <div class="update-feed-week-column column-left">
-                <div class="update-feed-week-icon">
-                    <i class="material-icons">calendar_today</i>
-                </div>
-            </div>
-            <div class="update-feed-week-column column-right">
-                <div class="update-feed-week-header">
-                    <p class="subtitle small">1st - 7th March</p>
-                    <h3>Production Week 7</h3>
-                </div>
-
-                <div class="update-feed-individual row">
-                    <div class="update-feed-individual-summary col-md-4">
-                        <div class="row mb-2">
-                            <div style="background-image:url('https://blender.chat/avatar/MikeNewbon');"
-                                class="profile ml-2">
-                            </div>
-                            <div class="col-auto">
-                                <p class="subtitle text-white-50 x-small">Author</p>
-                                <h4 class="comment-name">Mike Newbon</h4>
-                            </div>
-                        </div>
-                        <p class="small">This week i’m working on the paint-overs for the Restaurant and Coffee shop.
-                            Getting the atmosphere for these settings right is important to the story delivery.</p>
-                    </div>
-                    <div class="update-feed-individual-files col-md-8">
-                        <div class="files">
-                            <div class="row row-cols-1 row-cols-md-4  row-cols-2">
-                                <div class="col">
-                                    <a class="file" href="#">
-                                        <div class="file-header"
-                                            style="background-image:url({{ static('films/images/files-example.jpg') }})">
-                                        </div>
-                                        <div class="file-body">
-                                            <p class="subtitle">Folder</p>
-                                            <h4>About this Training</h4>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <a class="file" href="#">
-                                        <div class="file-header"
-                                            style="background-image:url({{ static('films/images/files-example.jpg') }})">
-                                        </div>
-                                        <div class="file-body">
-                                            <p class="subtitle">Image</p>
-                                            <h4>Poster.jpeg</h4>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <a class="file" href="#">
-                                        <div class="file-header"
-                                            style="background-image:url({{ static('films/images/files-example.jpg') }})">
-                                        </div>
-                                        <div class="file-body">
-                                            <p class="subtitle">Video</p>
-                                            <h4>Spring.mp4</h4>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <a class="file" href="#">
-                                        <div class="file-header"
-                                            style="background-image:url({{ static('films/images/files-example.jpg') }})">
-                                        </div>
-                                        <div class="file-body">
-                                            <p class="subtitle">Blend File</p>
-                                            <h4>Scene.blend</h4>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-n2 mb-3">
-                            <div class="col text-center">
-                                <a href="#" class="btn btn-sm btn-secondary">Show more</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="update-feed-individual row">
-                    <div class="update-feed-individual-summary col-md-4">
-                        <div class="row mb-2">
-                            <div style="background-image:url('https://blender.chat/avatar/MikeNewbon');"
-                                class="profile ml-2">
-                            </div>
-                            <div class="col-auto">
-                                <p class="subtitle text-white-50 x-small">Author</p>
-                                <h4 class="comment-name">Mike Newbon</h4>
-                            </div>
-                        </div>
-                        <p class="small">This week i’m working on the paint-overs for the Restaurant and Coffee shop.
-                            Getting the atmosphere for these settings right is important to the story delivery.</p>
-                    </div>
-                    <div class="update-feed-individual-files col-md-8">
-                        <div class="files">
-                            <div class="row row-cols-1 row-cols-md-4  row-cols-2">
-                                <div class="col">
-                                    <a class="file" href="#">
-                                        <div class="file-header"
-                                            style="background-image:url({{ static('films/images/files-example.jpg') }})">
-                                        </div>
-                                        <div class="file-body">
-                                            <p class="subtitle">Folder</p>
-                                            <h4>About this Training</h4>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <a class="file" href="#">
-                                        <div class="file-header"
-                                            style="background-image:url({{ static('films/images/files-example.jpg') }})">
-                                        </div>
-                                        <div class="file-body">
-                                            <p class="subtitle">Image</p>
-                                            <h4>Poster.jpeg</h4>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <a class="file" href="#">
-                                        <div class="file-header"
-                                            style="background-image:url({{ static('films/images/files-example.jpg') }})">
-                                        </div>
-                                        <div class="file-body">
-                                            <p class="subtitle">Video</p>
-                                            <h4>Spring.mp4</h4>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <a class="file" href="#">
-                                        <div class="file-header"
-                                            style="background-image:url({{ static('films/images/files-example.jpg') }})">
-                                        </div>
-                                        <div class="file-body">
-                                            <p class="subtitle">Blend File</p>
-                                            <h4>Scene.blend</h4>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-n2 mb-3">
-                            <div class="col text-center">
-                                <a href="#" class="btn btn-sm btn-secondary">Show more</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="update-feed-week">
-            <div class="update-feed-week-column column-left">
-                <div class="update-feed-week-icon">
-                    <i class="material-icons">calendar_today</i>
-                </div>
-            </div>
-            <div class="update-feed-week-column column-right">
-                <div class="update-feed-week-header">
-                    <p class="subtitle small">1st - 7th March</p>
-                    <h3>Production Week 7</h3>
-                </div>
-                <div class="update-feed-individual row">
-                    <div class="update-feed-individual-summary col-md-4">
-                        <div class="row mb-2">
-                            <div style="background-image:url('https://blender.chat/avatar/MikeNewbon');"
-                                class="profile ml-2">
-                            </div>
-                            <div class="col-auto">
-                                <p class="subtitle text-white-50 x-small">Author</p>
-                                <h4 class="comment-name">Mike Newbon</h4>
-                            </div>
-                        </div>
-                        <p class="small">This week i’m working on the paint-overs for the Restaurant and Coffee shop.
-                            Getting the atmosphere for these settings right is important to the story delivery.</p>
-                    </div>
-                    <div class="update-feed-individual-files col-md-8">
-                        <div class="files">
-                            <div class="row row-cols-1 row-cols-md-4  row-cols-2">
-                                <div class="col">
-                                    <a class="file" href="#">
-                                        <div class="file-header"
-                                            style="background-image:url({{ static('films/images/files-example.jpg') }})">
-                                        </div>
-                                        <div class="file-body">
-                                            <p class="subtitle">Folder</p>
-                                            <h4>About this Training</h4>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <a class="file" href="#">
-                                        <div class="file-header"
-                                            style="background-image:url({{ static('films/images/files-example.jpg') }})">
-                                        </div>
-                                        <div class="file-body">
-                                            <p class="subtitle">Image</p>
-                                            <h4>Poster.jpeg</h4>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <a class="file" href="#">
-                                        <div class="file-header"
-                                            style="background-image:url({{ static('films/images/files-example.jpg') }})">
-                                        </div>
-                                        <div class="file-body">
-                                            <p class="subtitle">Video</p>
-                                            <h4>Spring.mp4</h4>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <a class="file" href="#">
-                                        <div class="file-header"
-                                            style="background-image:url({{ static('films/images/files-example.jpg') }})">
-                                        </div>
-                                        <div class="file-body">
-                                            <p class="subtitle">Blend File</p>
-                                            <h4>Scene.blend</h4>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="row">
-        <div class="col text-center">
-            <p clas="mb-0">Want to see more updates from Coffee Run? <a href="#">See all weeklies</a></p>
-        </div>
-    </div>
-</section>
-
-
-<section>
     <!-- Featured Gallery -->
 
     <div class="row justify-content-center my-3">
@@ -322,6 +66,40 @@
 
 </section>
 
+<section >
+    <div class="row justify-content-center my-3">
+        <div class="col-md-6 text-center">
+            <h2 text>Latest Blog Posts</h2>
+            <p clas="mb-0">Want to see more updates from Spring? <a href="#">See all the latest blog posts</a></p>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card-deck">
+                <div class="card card-dark mb-3"><a class="card-body" href="#">
+                        <p class="text-primary card-subtitle">News</p>
+                        <h2 class="card-title">Blender 2.81 released</h2>
+                        <p class="card-text">The much anticipated update of the Blender 2.80 milestone is
+                            here!</p>
+                    </a></div>
+                <div class="card card-dark mb-3"><a class="card-body" href="#">
+                        <p class="text-primary card-subtitle">News</p>
+                        <h2 class="card-title ">AMD signs up as a Patron member of Development Fund</h2>
+                        <p class="card-text">This will add more support for core Blender development, Vulkan
+                            migration and to keep AMD GPU technology well supported for our users.</p>
+                    </a></div>
+                <div class="card card-dark mb-3"><a class="card-body" href="#">
+                        <p class="text-primary card-subtitle">News</p>
+                        <h2 class="card-title">Blender Benchmark 2020 update</h2>
+                        <p class="card-text">The Blender Benchmark software and the Open Data platform
+                            received a significant update!</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 
 <br><br><br><br><br><br><br><br><br><br><br>

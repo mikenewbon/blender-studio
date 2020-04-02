@@ -3,8 +3,8 @@
 {% import 'films/components.html' as film_components %}
 
 {% block jumbotron %}
-{% call film_components.wide_jumbotron() %}
-<img src="{{ static('films/images/coffee-run-logo.png') }}">
+{% call film_components.wide_jumbotron(bg_path="films/images/coffee-run-header.jpg") %}
+<img class="mb-3" src="{{ static('films/images/coffee-run-logo.png') }}">
 <p>
     Coffee Run (currently in development) is directed by Hjalti Hjalmarsson and produced by the team at Blender
     Animation Studio.</p>

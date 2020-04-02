@@ -1,6 +1,5 @@
-{% macro wide_jumbotron() %}
-    {% set image_placeholder = static('training/images/placeholders/jumbotron.png') %}
-    <div style="background-image:url('{{ static('films/images/coffee-run-header.jpg') }}')"
+{% macro wide_jumbotron(bg_path='films/images/spring-header.png') %}
+    <div style="background-image:url('/static/{{ bg_path }}')"
          class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content header">
         <div class="container">
             <div class="row">

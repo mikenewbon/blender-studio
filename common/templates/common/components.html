@@ -34,9 +34,8 @@
     {% endif %}
 {% endmacro %}
 
-{% macro jumbotron() %}
-    {% set image_placeholder = static('training/images/placeholders/jumbotron.png') %}
-    <div style="background-image:url('{{ image_placeholder }}')"
+{% macro jumbotron(value='text') %}
+    <div style="background-image:url('value/{{ value }}')"
          class="jumbotron jumbotron-fluid jumbotron-overlay header">
         <div class="container">
             <div class="row">

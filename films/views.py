@@ -7,6 +7,11 @@ def index(request):
     context = {'films': 'filmslist '}
     return render(request, 'films/films_list.html', context)
 
+def spring(request):
+
+    context = {'films': 'spring '}
+    return render(request, 'films/spring/spring.html', context)
+
 def coffee_run(request):
 
     context = {'films': 'about '}
