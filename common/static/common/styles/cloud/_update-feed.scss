@@ -51,12 +51,25 @@
     &-individual {
         margin-bottom: $spacer;
         border-bottom: 2px solid $input-gray;
-
-        &-summary {
-            >p {
+        
+        &-files {
+            >*:last-of-type {
                 margin-bottom: $spacer;
+            }
+            > a{
+                display: inline-block;
+            }
+        }
+        &-summary {
+            >*:last-of-type {
+                margin-bottom: $spacer;
+            }
+            > a{
+                display: inline-block;
             }
         }
     }
     
 }
+
+
