@@ -22,3 +22,22 @@
     </div>
 </div>
 {% endmacro %}
+
+{% macro update_feed() %}
+<div class="update-feed"></div>
+    {{ caller() }}
+</div>
+{% endmacro %}
+
+{% macro update_feed_week() %}
+<div class="update-feed-week"></div>
+    <div class="update-feed-week-column column-left">
+        <div class="update-feed-week-icon">
+            <i class="material-icons">calendar_today</i>
+        </div>
+    </div>
+    <div class="update-feed-week-column column-right">
+        {{ caller() }}
+    </div>
+</div>
+{% endmacro %}

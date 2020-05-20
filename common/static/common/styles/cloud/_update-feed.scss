@@ -53,11 +53,20 @@
         border-bottom: 2px solid $input-gray;
         
         &-files {
-            >*:last-of-type {
+            > :last-child {
                 margin-bottom: $spacer;
+            }
+            &-show-more{
+                margin-top: $spacer/2;
             }
             > a{
                 display: inline-block;
+            }
+            .files{
+                .row{
+                    margin-bottom: -$spacer;
+                }
+                
             }
         }
         &-summary {
