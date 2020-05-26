@@ -5,6 +5,9 @@ from typing import List
 import braintree
 from dateutil.relativedelta import relativedelta
 
+from studio.settings_common import *
+
+
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
 SECRET_KEY = '7ijgr7*_l=x^f0!((j!*sdfsdfsdf*xfbf3vcz0=#!5aai85$h3ck6l9m3c'
