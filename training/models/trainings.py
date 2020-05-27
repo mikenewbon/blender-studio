@@ -99,4 +99,7 @@ class Favorite(mixins.CreatedUpdatedMixin, models.Model):
     training = models.ForeignKey(Training, on_delete=models.CASCADE, related_name='favorites')
 
     def __str__(self) -> str:
-        return f'Favorite of {self.user.username} ({self.user.id}) on Training {self.training.name} ({self.training.id})'
+        return (
+            f'Favorite of {self.user.username} ({self.user.id}) on Training '
+            f'{self.training.name} ({self.training.id})'
+        )
