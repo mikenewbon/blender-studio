@@ -21,7 +21,7 @@ from training.views.common import (
 
 @require_safe
 @login_required
-@subscription_required
+# @subscription_required
 def section(
     request: HttpRequest,
     *,
