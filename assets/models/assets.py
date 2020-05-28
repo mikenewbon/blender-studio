@@ -1,15 +1,42 @@
+import hashlib
 import uuid
-from pathlib import Path
+from pathlib import PosixPath, Path
 
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.text import slugify
 
 from common import mixins
-from common.utils import get_upload_to_hashed_path
-from films.models.collection import Collection
-from films.models.film import Film
-from films.models.license import License
+from films.models.collections import Collection
+from films.models.films import Film
+from assets.models.licenses import License
+
+
+# TODO: write tests
+def generate_hash_from_filename(instance_uuid: uuid.UUID, filename: str) -> str:
+    """Combine filename and uuid4 and get a unique string."""
+    unique_filename = f'{instance_uuid}_{filename}'
+    return hashlib.md5(unique_filename.encode('utf-8')).hexdigest()
+
+
+def get_upload_to_hashed_path(asset: 'Asset', filename: str) -> Path:
+    """ Generate a unique, hashed upload path for an asset file.
+
+    Every asset file gets a hashed filename. Image files are uploaded directly to MEDIA_ROOT, e.g.
+    MEDIA_ROOT/bd2b5b1cd81333ed2d8db03971f91200.png.
+    For each Video and File model instance, a separate folder with a unique name is created, where
+    all the instance-related files (both the asset file and the preview picture) are stored;
+    the folder name is the asset uuid. E.g.:
+    MEDIA_ROOT/b60123d8-a0b5-44fb-ac88-1cd992e30343/886743af0e9bc9ef7636caf489d5352c.mp4
+    """
+    extension = Path(filename).suffix
+    hashed_path = Path(generate_hash_from_filename(asset.uuid, filename))
+
+    if isinstance(asset, (Video, File)):
+        path = hashed_path.joinpath(str(asset.uuid)).with_suffix(extension)
+    else:
+        path = hashed_path.with_suffix(extension)
+    return path
 
 
 class AssetCategory(models.TextChoices):
@@ -26,7 +53,7 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
 
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
-    film = models.ForeignKey(Film, on_delete=models.CASCADE)
+    film = models.ForeignKey(Film, on_delete=models.CASCADE, related_name='assets')
     collection = models.ForeignKey(
         Collection, blank=True, null=True, on_delete=models.CASCADE, related_name='assets'
     )
@@ -59,17 +86,6 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
 
     def __str__(self) -> str:
         return self.name
-
-
-def asset_upload_path(asset: 'Asset', filename: str) -> str:
-    return str(
-        Path('film')
-        / str(asset.collection.film_id)
-        / 'collection'
-        / str(asset.collection_id)
-        / 'assets'
-        / filename
-    )
 
 
 class Video(Asset):

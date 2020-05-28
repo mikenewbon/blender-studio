@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.text import slugify
 
 from common import mixins
-from films.models import film
+from films.models import films
 
 
 def collection_overview_upload_path(collection: 'Collection', filename: str) -> str:
@@ -29,7 +29,7 @@ class Collection(mixins.CreatedUpdatedMixin, models.Model):
             ),
         ]
 
-    film = models.ForeignKey(film.Film, on_delete=models.CASCADE, related_name='collections')
+    film = models.ForeignKey(films.Film, on_delete=models.CASCADE, related_name='collections')
     parent = models.ForeignKey(
         'self', on_delete=models.CASCADE, null=True, related_name='child_collections'
     )
@@ -49,4 +49,4 @@ class Collection(mixins.CreatedUpdatedMixin, models.Model):
             self.slug = slugify(self.name)
 
     def __str__(self):
-        return self.name  # for the time being
+        return self.name
