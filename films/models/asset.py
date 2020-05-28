@@ -1,3 +1,4 @@
+import uuid
 from pathlib import Path
 
 from django.contrib.auth.models import User
@@ -5,6 +6,7 @@ from django.db import models
 from django.utils.text import slugify
 
 from common import mixins
+from common.utils import get_upload_to_hashed_path
 from films.models.collection import Collection
 from films.models.film import Film
 from films.models.license import License
@@ -21,6 +23,8 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
 
     class Meta:
         constraints = []  # TODO: only one related file (img, video, file)
+
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     film = models.ForeignKey(Film, on_delete=models.CASCADE)
     collection = models.ForeignKey(
@@ -69,12 +73,12 @@ def asset_upload_path(asset: 'Asset', filename: str) -> str:
 
 
 class Video(Asset):
-    file = models.FileField(upload_to=asset_upload_path)
+    file = models.FileField(upload_to=get_upload_to_hashed_path)
     size_bytes = models.IntegerField()
     resolution = models.CharField(max_length=32, blank=True)
     resolution_text = models.CharField(max_length=32, blank=True)
     duration_seconds = models.DurationField(help_text='[DD] [[HH:]MM:]ss[.uuuuuu]')
-    preview = models.ImageField(upload_to=asset_upload_path)
+    preview = models.ImageField(upload_to=get_upload_to_hashed_path)
 
     play_count = models.PositiveIntegerField()
 
@@ -83,7 +87,7 @@ class Video(Asset):
 
 
 class Image(Asset):
-    file = models.ImageField(upload_to=asset_upload_path)
+    file = models.ImageField(upload_to=get_upload_to_hashed_path)
     size_bytes = models.IntegerField()
     resolution = models.CharField(max_length=32, blank=True)
     resolution_text = models.CharField(max_length=32, blank=True)
@@ -93,9 +97,13 @@ class Image(Asset):
 
 
 class File(Asset):
-    file = models.FileField(upload_to=asset_upload_path)
+    file = models.FileField(upload_to=get_upload_to_hashed_path)
     size_bytes = models.IntegerField()
-    preview = models.ImageField(upload_to=asset_upload_path)
+    preview = models.ImageField(upload_to=get_upload_to_hashed_path)
 
     def __str__(self) -> str:
         return f"{self._meta.model_name} {self.file.path} in {self.name}"
+
+
+# TODO: Handle deleting all these files when a model instance is deleted from the db?
+# TODO: size could be retrieved: file.size (cached property of django.core.files.base.File)
