@@ -33,7 +33,10 @@ class Section(mixins.CreatedUpdatedMixin, models.Model):
             self.slug = slugify(self.name)
 
     def __str__(self) -> str:
-        return f'{self.chapter.training.name} > {self.chapter.index:02.0f}. {self.chapter.name} > {self.index:02.0f}. {self.name}'
+        return (
+            f'{self.chapter.training.name} > {self.chapter.index:02.0f}. {self.chapter.name} > '
+            f'{self.index:02.0f}. {self.name}'
+        )
 
     def get_absolute_url(self) -> str:
         return self.url

@@ -8,9 +8,9 @@ from common import mixins
 
 
 class FilmStatus(models.TextChoices):
-    pre_production = 'pre_production', 'Pre Production'
+    in_development = 'pre_production', 'In Development'
     in_production = 'in_production', 'In Production'
-    finished = 'finished', 'Finished'
+    released = 'released', 'Released'
 
 
 def film_overview_upload_path(film: 'Film', filename: str) -> str:
@@ -26,11 +26,12 @@ class Film(mixins.CreatedUpdatedMixin, models.Model):
     summary.description = 'Summary consisting of multiple paragraphs.'
 
     status = models.TextField(choices=FilmStatus.choices)
+    visibility = models.BooleanField(default=False)
 
+    logo = models.FileField(upload_to=film_overview_upload_path)
     poster = models.FileField(upload_to=film_overview_upload_path)
-    picture_header = models.FileField(
-        upload_to=film_overview_upload_path, blank=True, null=True
-    )
+    picture_header = models.FileField(upload_to=film_overview_upload_path, blank=True, null=True)
+    picture_16_9 = models.FileField(upload_to=film_overview_upload_path, blank=True, null=True)
 
     def clean(self) -> None:
         super().clean()
