@@ -7,10 +7,12 @@ BASE_DIR = pathlib.Path(__file__).absolute().parent.parent
 # Application definition
 
 INSTALLED_APPS = [
-    'training',
     'comments',
-    'subscriptions',
     'common',
+    'films',
+    'subscriptions',
+    'training',
+
     'looper',
     'blender_id_oauth_client',
     'pipeline',

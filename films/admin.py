@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from films.models import collections, films
+
+admin.site.register(collections.Collection)
+admin.site.register(films.Film)

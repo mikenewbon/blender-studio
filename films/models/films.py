@@ -44,9 +44,9 @@ class Film(mixins.CreatedUpdatedMixin, models.Model):
     def get_absolute_url(self) -> str:
         return self.url
 
-    @property
-    def url(self) -> str:
-        return reverse('film', kwargs={'film_slug': self.slug})
+    # @property
+    # def url(self) -> str:
+    #     return reverse('film', kwargs={'film_slug': self.slug})
 
 
 # TODO: Favorites?

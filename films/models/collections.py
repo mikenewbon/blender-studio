@@ -22,16 +22,16 @@ class Collection(mixins.CreatedUpdatedMixin, models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['parent_collection', 'index'], name='unique_index_per_collection'
+                fields=['parent', 'order'], name='unique_ordering_per_collection'
             ),
             models.UniqueConstraint(
-                fields=['parent_collection', 'slug'], name='unique_slug_per_collection'
+                fields=['parent', 'slug'], name='unique_slug_per_collection'
             ),
         ]
 
     film = models.ForeignKey(films.Film, on_delete=models.CASCADE, related_name='collections')
     parent = models.ForeignKey(
-        'self', on_delete=models.CASCADE, null=True, related_name='child_collections'
+        'self', on_delete=models.CASCADE, blank=True, null=True, related_name='child_collections'
     )
     order = models.IntegerField()
 
