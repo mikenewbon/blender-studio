@@ -1,15 +1,15 @@
 import hashlib
 import uuid
-from pathlib import PosixPath, Path
+from pathlib import Path
 
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.text import slugify
 
+from assets.models.licenses import License
 from common import mixins
 from films.models.collections import Collection
 from films.models.films import Film
-from assets.models.licenses import License
 
 
 # TODO: write tests
@@ -30,10 +30,11 @@ def get_upload_to_hashed_path(asset: 'Asset', filename: str) -> Path:
     MEDIA_ROOT/b60123d8-a0b5-44fb-ac88-1cd992e30343/886743af0e9bc9ef7636caf489d5352c.mp4
     """
     extension = Path(filename).suffix
-    hashed_path = Path(generate_hash_from_filename(asset.uuid, filename))
+    hashed_path = Path(generate_hash_from_filename(asset.asset.uuid, filename))
 
     if isinstance(asset, (Video, File)):
-        path = hashed_path.joinpath(str(asset.uuid)).with_suffix(extension)
+        dir_path = Path(str(asset.asset.uuid))
+        path = dir_path.joinpath(hashed_path).with_suffix(extension)
     else:
         path = hashed_path.with_suffix(extension)
     return path
@@ -55,22 +56,24 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
 
     film = models.ForeignKey(Film, on_delete=models.CASCADE, related_name='assets')
     collection = models.ForeignKey(
-        Collection, blank=True, null=True, on_delete=models.CASCADE, related_name='assets'
+        Collection, blank=True, null=True, on_delete=models.SET_NULL, related_name='assets'
     )
     order = models.IntegerField()
 
     name = models.CharField(max_length=512)
     slug = models.SlugField(blank=True)
     text = models.TextField()
-    license = models.ForeignKey(License, on_delete=models.PROTECT)
+    license = models.ForeignKey(
+        License, null=True, on_delete=models.SET_NULL, related_name='assets'
+    )
 
-    category = models.CharField(choices=AssetCategory.choices, max_length=17)
+    category = models.CharField(choices=AssetCategory.choices, max_length=17, db_index=True)
 
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='uploaded_assets')
     user.description = "The user who uploaded the asset."
-    author = models.ForeignKey(User, on_delete=models.PROTECT)
+    author = models.ForeignKey(User, on_delete=models.PROTECT, related_name='authored_assets')
     author.description = "The actual author of the asset."
-    view_count = models.PositiveIntegerField()
+    view_count = models.PositiveIntegerField(default=0)
 
     visibility = models.BooleanField(default=False)
 
