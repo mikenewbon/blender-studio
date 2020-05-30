@@ -91,7 +91,8 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
         return self.name
 
 
-class Video(Asset):
+class Video(mixins.CreatedUpdatedMixin, models.Model):
+    asset = models.OneToOneField(Asset, on_delete=models.CASCADE)
     file = models.FileField(upload_to=get_upload_to_hashed_path)
     size_bytes = models.IntegerField()
     resolution = models.CharField(max_length=32, blank=True)
@@ -99,29 +100,31 @@ class Video(Asset):
     duration_seconds = models.DurationField(help_text='[DD] [[HH:]MM:]ss[.uuuuuu]')
     preview = models.ImageField(upload_to=get_upload_to_hashed_path)
 
-    play_count = models.PositiveIntegerField()
+    play_count = models.PositiveIntegerField(default=0)
 
     def __str__(self) -> str:
-        return f"{self._meta.model_name} {self.file.path} in {self.name}"
+        return f"{self._meta.model_name} {self.file.path} in {self.asset.name}"
 
 
-class Image(Asset):
+class Image(mixins.CreatedUpdatedMixin, models.Model):
+    asset = models.OneToOneField(Asset, on_delete=models.CASCADE)
     file = models.ImageField(upload_to=get_upload_to_hashed_path)
     size_bytes = models.IntegerField()
     resolution = models.CharField(max_length=32, blank=True)
     resolution_text = models.CharField(max_length=32, blank=True)
 
     def __str__(self) -> str:
-        return f"{self._meta.model_name} {self.file.path} in {self.name}"
+        return f"{self._meta.model_name} {self.file.path} in {self.asset.name}"
 
 
-class File(Asset):
+class File(mixins.CreatedUpdatedMixin, models.Model):
+    asset = models.OneToOneField(Asset, on_delete=models.CASCADE)
     file = models.FileField(upload_to=get_upload_to_hashed_path)
     size_bytes = models.IntegerField()
     preview = models.ImageField(upload_to=get_upload_to_hashed_path)
 
     def __str__(self) -> str:
-        return f"{self._meta.model_name} {self.file.path} in {self.name}"
+        return f"{self._meta.model_name} {self.file.path} in {self.asset.name}"
 
 
 # TODO: Handle deleting all these files when a model instance is deleted from the db?
