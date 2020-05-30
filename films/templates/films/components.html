@@ -24,19 +24,23 @@
 {% endmacro %}
 
 {% macro update_feed() %}
-<div class="update-feed"></div>
+<div class="update-feed">
     {{ caller() }}
 </div>
 {% endmacro %}
 
-{% macro update_feed_week() %}
-<div class="update-feed-week"></div>
+{% macro update_feed_week(dates, prod_week) %}
+<div class="update-feed-week">
     <div class="update-feed-week-column column-left">
         <div class="update-feed-week-icon">
             <i class="material-icons">calendar_today</i>
         </div>
     </div>
     <div class="update-feed-week-column column-right">
+		<div class="update-feed-week-header">
+			<p>{{ dates }}</p>
+			<h3>Production Week {{ prod_week }}</h3>
+		</div>
         {{ caller() }}
     </div>
 </div>

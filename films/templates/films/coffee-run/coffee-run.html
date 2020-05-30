@@ -3,7 +3,7 @@
 {% import 'films/components.html' as film_components %}
 
 {% block jumbotron %}
-{% call film_components.wide_jumbotron(bg_path="films/images/coffee-run-header.jpg") %}
+{% call film_components.wide_jumbotron(bg_path="films/images/coffee-run-header.png") %}
 <img class="mb-3" src="{{ static('films/images/coffee-run-logo.png') }}">
 <p>
     Coffee Run (currently in development) is directed by Hjalti Hjalmarsson and produced by the team at Blender
@@ -32,7 +32,13 @@
             <h2 text>Latest Updates</h2>
             <p clas="mb-0">Want to see more updates from Coffee Run? <a href="#">See all weeklies</a></p>
         </div>
-    </div>
+	</div>
+
+	{% call film_components.update_feed() %}
+			{% call film_components.update_feed_week("1st - 7th March","7") %}
+				<p>hello</p>
+			{% endcall %}
+	{% endcall %}
 
     <div class="update-feed">
 
@@ -44,17 +50,17 @@
             </div>
             <div class="update-feed-week-column column-right">
                 <div class="update-feed-week-header">
-                    <p class="subtitle small">1st - 7th March</p>
+                    <p>1st - 7th March</p>
                     <h3>Production Week 7</h3>
                 </div>
 
-                <div class="update-feed-individual row">
-                    <div class="update-feed-individual-summary col-md-4">
-                        <a href="#" class="d-block">
-                            <img class="img-fluid" src="{{ static('films/images/coffee-run-16-9.png') }}">
+                <div class="update-feed-individual">
+                    <div class="update-feed-individual-summary">
+                        <a href="#">
+                            <img src="{{ static('films/images/coffee-run-16-9.png') }}">
                         </a>
                     </div>
-                    <div class="update-feed-individual-files col-md-8">
+                    <div class="update-feed-individual-files">
                         <h3>This week on Coffee Run</h3>
                         <p>This week i’m working on the paint-overs for the Restaurant and Coffee shop. Getting the
                             atmosphere for these settings right is important to the story delivery.</p>
@@ -64,11 +70,10 @@
                     </div>
                 </div>
 
-                <div class="update-feed-individual row">
-                    <div class="update-feed-individual-summary col-md-4">
-                        <div class="row mb-2">
-                            <div style="background-image:url('https://blender.chat/avatar/MikeNewbon');"
-                                class="profile ml-2">
+                <div class="update-feed-individual">
+                    <div class="update-feed-individual-summary">
+                        <div class="update-feed-individual-summary-profile">
+                            <div style="background-image:url('https://blender.chat/avatar/MikeNewbon');" class="profile-image profile ml-2">
                             </div>
                             <div class="col-auto">
                                 <p class="subtitle text-white-50 x-small">Author</p>
@@ -78,7 +83,7 @@
                         <p class="small">This week i’m working on the paint-overs for the Restaurant and Coffee shop.
                             Getting the atmosphere for these settings right is important to the story delivery.</p>
                     </div>
-                    <div class="update-feed-individual-files col-md-8">
+                    <div class="update-feed-individual-files">
                         <div class="files">
                             <div class="row row-cols-1 row-cols-md-4  row-cols-2">
                                 <div class="col">
@@ -135,9 +140,9 @@
                     </div>
                 </div>
 
-                <div class="update-feed-individual row">
-                    <div class="update-feed-individual-summary col-md-4">
-                        <div class="row mb-2">
+                <div class="update-feed-individual">
+                    <div class="update-feed-individual-summary">
+                        <div class="update-feed-individual-summary-profile">
                             <div style="background-image:url('https://blender.chat/avatar/MikeNewbon');"
                                 class="profile ml-2">
                             </div>
@@ -149,7 +154,7 @@
                         <p class="small">This week i’m working on the paint-overs for the Restaurant and Coffee shop.
                             Getting the atmosphere for these settings right is important to the story delivery.</p>
                     </div>
-                    <div class="update-feed-individual-files col-md-8">
+                    <div class="update-feed-individual-files">
                         <div class="files">
                             <div class="row row-cols-1 row-cols-md-4  row-cols-2">
                                 <div class="col">
@@ -220,9 +225,9 @@
                     <p class="subtitle small">1st - 7th March</p>
                     <h3>Production Week 7</h3>
                 </div>
-                <div class="update-feed-individual row">
-                    <div class="update-feed-individual-summary col-md-4">
-                        <div class="row mb-2">
+                <div class="update-feed-individual">
+                    <div class="update-feed-individual-summary">
+                        <div class="update-feed-individual-summary-profile">
                             <div style="background-image:url('https://blender.chat/avatar/MikeNewbon');"
                                 class="profile ml-2">
                             </div>
@@ -234,7 +239,7 @@
                         <p class="small">This week i’m working on the paint-overs for the Restaurant and Coffee shop.
                             Getting the atmosphere for these settings right is important to the story delivery.</p>
                     </div>
-                    <div class="update-feed-individual-files col-md-8">
+                    <div class="update-feed-individual-files">
                         <div class="files">
                             <div class="row row-cols-1 row-cols-md-4  row-cols-2">
                                 <div class="col">

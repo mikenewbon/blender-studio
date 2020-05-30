@@ -95,7 +95,7 @@
 	}
 	.list-group,
 	.breadcrumb {
-		padding: 0;
+		padding: 0 $spacer;
 		overflow-x: scroll;
 		flex-wrap: wrap;
 		@include media-breakpoint-down(sm) {
