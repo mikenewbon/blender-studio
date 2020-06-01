@@ -49,4 +49,4 @@ class Film(mixins.CreatedUpdatedMixin, models.Model):
     #     return reverse('film', kwargs={'film_slug': self.slug})
 
 
-# TODO: Favorites?
+# TODO: tags
