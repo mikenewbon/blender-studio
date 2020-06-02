@@ -5,8 +5,7 @@ from pathlib import Path
 from django.contrib.auth.models import User
 from django.db import models
 
-from assets.models import StorageBackend
-from assets.models.licenses import License
+from assets.models import License, StorageBackend
 from common import mixins
 
 
@@ -21,18 +20,18 @@ def get_upload_to_hashed_path(asset: 'StaticAsset', filename: str) -> Path:
     """ Generate a unique, hashed upload path for an asset source file.
 
     Videos and files will be uploaded to nested directories:
-    MEDIA_ROOT/films/<bd>/<bd2b5b1cd81333ed2d8db03971f91200>/.
-    Images - to MEDIA_ROOT/films/<bd>/
+    MEDIA_ROOT/<bd>/<bd2b5b1cd81333ed2d8db03971f91200>/.
+    Images - to MEDIA_ROOT/<bd>/
     """
     # TODO: think of a better parameter name? it's not an Asset instance anymore
     extension = Path(filename).suffix
     hashed = generate_hash_from_filename(filename)
-    path = Path('films', hashed[:2])
+    path = Path(hashed[:2], hashed)
 
-    if asset.source_type == 'image':
-        path = path.joinpath(hashed).with_suffix(extension)
+    if asset.source_type == AssetFileTypeChoices.image:
+        path = path.with_suffix(extension)
     else:
-        path = path.joinpath(hashed, hashed).with_suffix(extension)
+        path = path.joinpath(hashed).with_suffix(extension)
     return path
 
 
@@ -75,8 +74,10 @@ class Video(mixins.CreatedUpdatedMixin, models.Model):
     play_count = models.PositiveIntegerField(default=0)
 
     def __str__(self) -> str:
-        return f"{self._meta.model_name} {self.static_asset.original_filename} in " \
-               f"{self.static_asset.storage_backend.project}"
+        return (
+            f"{self._meta.model_name} {self.static_asset.original_filename} in "
+            f"{self.static_asset.storage_backend.project}"
+        )
 
 
 class Image(mixins.CreatedUpdatedMixin, models.Model):
@@ -85,8 +86,11 @@ class Image(mixins.CreatedUpdatedMixin, models.Model):
     resolution_text = models.CharField(max_length=32, blank=True)
 
     def __str__(self) -> str:
-        return f"{self._meta.model_name} {self.static_asset.original_filename} in " \
-               f"{self.static_asset.storage_backend.project}"
+        return (
+            f"{self._meta.model_name} {self.static_asset.original_filename} in "
+            f"{self.static_asset.storage_backend.project}"
+        )
+
 
 # TODO: Handle deleting all these files when a model instance is deleted from the db?
 # TODO: size could be retrieved: source.size (cached property of django.core.files.base.File)
