@@ -12,3 +12,6 @@ class License(models.Model):
         super().clean()
         if not self.slug:
             self.slug = slugify(self.name)
+
+    def __str__(self):
+        return f'License {self.name}'

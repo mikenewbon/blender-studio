@@ -67,6 +67,9 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
     # def preview(self):
     #     return self.source_preview or ...
 
+    def __str__(self):
+        return f'{self.source_type} {self.original_filename}'
+
 
 class Video(mixins.CreatedUpdatedMixin, models.Model):
     static_asset = models.OneToOneField(StaticAsset, on_delete=models.CASCADE)
@@ -76,10 +79,7 @@ class Video(mixins.CreatedUpdatedMixin, models.Model):
     play_count = models.PositiveIntegerField(default=0)
 
     def __str__(self) -> str:
-        return (
-            f"{self._meta.model_name} {self.static_asset.original_filename} in "
-            f"{self.static_asset.storage_backend.project}"
-        )
+        return f'{self._meta.model_name} {self.static_asset.original_filename}'
 
 
 class Image(mixins.CreatedUpdatedMixin, models.Model):
@@ -88,10 +88,7 @@ class Image(mixins.CreatedUpdatedMixin, models.Model):
     resolution_text = models.CharField(max_length=32, blank=True)
 
     def __str__(self) -> str:
-        return (
-            f"{self._meta.model_name} {self.static_asset.original_filename} in "
-            f"{self.static_asset.storage_backend.project}"
-        )
+        return f'{self._meta.model_name} {self.static_asset.original_filename}'
 
 
 # TODO: Handle deleting all these files when a model instance is deleted from the db?
