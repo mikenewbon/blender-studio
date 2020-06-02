@@ -41,7 +41,7 @@ class AssetFileTypeChoices(models.TextChoices):
     video = 'video', 'Video'
 
 
-class StaticAsset(models.Model):
+class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
     source = models.FileField(upload_to=get_upload_to_hashed_path)
     source_type = models.CharField(choices=AssetFileTypeChoices.choices, max_length=5)
     # TODO: source type validation
@@ -55,7 +55,9 @@ class StaticAsset(models.Model):
     license = models.ForeignKey(
         License, null=True, on_delete=models.SET_NULL, related_name='assets'
     )
-    storage_backend = models.ForeignKey(StorageBackend, on_delete=models.CASCADE)
+    storage_backend = models.ForeignKey(
+        StorageBackend, on_delete=models.CASCADE, related_name='assets'
+    )
 
     source_preview = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True)
     source_preview.description = "Optional asset preview. If not provided, it will be generated."
