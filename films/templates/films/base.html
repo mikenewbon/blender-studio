@@ -1,3 +1,5 @@
+{% load pipeline %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,13 +11,11 @@
     <meta name="author" content="Blender Institute">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap"
           rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	| {% stylesheet 'studio' %}
+
     {% block html_templates %}{% endblock %}
 	{% block scripts %}{% endblock scripts %}
-	{% javascript 'vendor' %}
-    {% stylesheet 'training' %}
-	{% javascript 'studio' %}
-
 </head>
 
 <body class="{% block bodyclasses %}{% endblock bodyclasses %}">
@@ -25,7 +25,7 @@
         <i class="material-icons">menu</i>
     </button>
     <a href="#" class="navbar-brand">
-        <img src="{{ static('common/images/blender_cloud_logo.svg') }}" alt="Blender Cloud">
+        <img src="{% static 'common/images/blender_cloud_logo.svg' %}" alt="Blender Cloud">
     </a>
     <div class="searchbar-wrapper">
         <div class="searchbar">

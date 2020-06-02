@@ -48,7 +48,6 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
         'DIRS': [
             str(BASE_DIR / 'training/templates'),
-            str(BASE_DIR / 'films/templates'),
             str(BASE_DIR / 'comments/templates'),
             str(BASE_DIR / 'common/templates'),
         ],
@@ -70,7 +69,18 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             str(BASE_DIR / 'films/templates'),
-],
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ]
+        },
+    },
+]
 
 WSGI_APPLICATION = 'studio.wsgi.application'
 
@@ -134,10 +144,10 @@ PIPELINE = {
         },
     },
     'STYLESHEETS': {
-        'training': {
-            'source_filenames': ['training/styles/main.scss'],
-            'output_filename': 'css/training.css',
-            'extra_context': {'media': 'screen,projection', 'charset': 'utf-8'},
+		'studio': {
+            'source_filenames': ('common/styles/cloud/cloud.scss',),
+            'output_filename': 'css/studio.css',
+            'extra_context': {'media': 'screen,projection'},
         },
     },
     'COMPILERS': ('libsasscompiler.LibSassCompiler',),

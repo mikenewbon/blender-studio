@@ -2,6 +2,15 @@
 
 
 {% block content %}
+
+	<div class="row justify-content-center my-3">
+		<div class="col-md-6 text-center">
+			<h1>Films</h1>
+			<p clas="mb-0">The iconic Blender Open Movies. Featuring all the production files, assets, artwork, and
+				never-seen-before content.</p>
+		</div>
+	</div>
+
     {% for film in object_list %}
         <div>
             <h2>title: {{ film.title }}</h2>
