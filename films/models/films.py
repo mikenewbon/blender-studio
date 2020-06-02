@@ -4,6 +4,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 
+from assets.models import StorageBackend
 from common import mixins
 
 
@@ -18,6 +19,9 @@ def film_overview_upload_path(film: 'Film', filename: str) -> str:
 
 
 class Film(mixins.CreatedUpdatedMixin, models.Model):
+    storage = models.OneToOneField(StorageBackend, on_delete=models.PROTECT)
+    # TODO: validation - either film or a training has to be null, but not both
+
     title = models.TextField(unique=True)
     slug = models.SlugField(unique=True, blank=True)
     description = models.TextField()
@@ -49,4 +53,4 @@ class Film(mixins.CreatedUpdatedMixin, models.Model):
     #     return reverse('film', kwargs={'film_slug': self.slug})
 
 
-# TODO: tags
+# TODO: tags, comments

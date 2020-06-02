@@ -1,9 +1,11 @@
+from pathlib import Path
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls.base import reverse
 from django.utils.text import slugify
-from pathlib import Path
 
+from assets.models import StorageBackend
 from common import mixins
 from training.models import tags
 
@@ -35,6 +37,9 @@ class Training(mixins.CreatedUpdatedMixin, models.Model):
             models.Index(fields=['status', 'type', 'difficulty']),
             models.Index(fields=['status', 'difficulty', 'type']),
         ]
+
+    storage = models.OneToOneField(StorageBackend, on_delete=models.PROTECT)
+    # TODO: validation - either film or a training has to be null, but not both
 
     name = models.TextField(unique=True)
     slug = models.SlugField(unique=True, blank=True)
