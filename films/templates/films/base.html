@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap"
           rel="stylesheet">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	| {% stylesheet 'studio' %}
+	{% stylesheet 'studio' %}
 
     {% block html_templates %}{% endblock %}
 	{% block scripts %}{% endblock scripts %}
@@ -62,9 +62,8 @@
         </div>
     </nav>
     {% block jumbotron %}{% endblock jumbotron %}
-    <div class="container-xl pt-3">
-        {% block content %}{% endblock content %}
-    </div>
+
+	{% block content %}{% endblock content %}
 </div>
 </body>
 
