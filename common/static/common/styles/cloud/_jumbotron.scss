@@ -13,6 +13,10 @@
 	.card-pills {
 		margin-top: $spacer;
 	}
+	.film-logo{
+		max-height: 200px;
+		max-width: 400px;
+	}
 	&.jumbotron-overlay {
 		&:before {
 			display: block;

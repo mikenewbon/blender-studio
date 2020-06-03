@@ -9,7 +9,7 @@
 			</div>
 			{% endif %}
 		</div>
-		<a class="card-body" href="/films/coffee-run">
+		<a class="card-body" href="{% url 'film-detail' film.slug %}">
 			<h2 class="card-title">{{ film.title }}</h2>
 			<p class="card-text">{{ film.description }}</p>
 		</a>

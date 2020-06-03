@@ -1,0 +1,22 @@
+<div style="background-image:url({{ film.picture_header.url }})"
+class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content header">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6 col-xl-5">
+				<div class="jumbotron-body">
+					<img class="mb-3 film-logo" src="{{ film.logo.url }}">
+					<p class="mb-3">
+						{{ film.summary }}
+					</p>
+					<!-- TODO(Mike): When movie link is added to backend, check for it and then show it-->
+					{% if film.status == "released" %}
+					<a class="btn btn-primary mb-0" href="#">Watch {{ film.title }}</a>
+					<a class="btn btn-transparent mb-0" href="#">Explore Content</a>
+					{% else %}
+					<a class="btn btn-primary mb-0" href="#">Explore Content</a>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

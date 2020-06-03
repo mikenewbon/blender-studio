@@ -2,10 +2,6 @@
 
 {% block content %}
 
-    <div>
-        <h2>title: {{ film.title }}</h2>
-        <p>{{ film.description }}</p>
-        <img src="{{ film.poster.url }}" height="300">
-    </div>
+	{% include "films/components/jumbotron_film.html" with film=film %}
 
 {% endblock %}

@@ -1,17 +1,15 @@
 {% extends 'films/base.html' %}
 
-
 {% block content %}
-<div class="container-xl pt-5">
-	{% include "components/generic/simple_header.html" with title="Films" subtitle="The iconic Blender Open Movies. Featuring all the production files, assets, artwork, and never-seen-before content." %}
 
-	<section>
-		<div class="row">
+<div class="container-xl pt-5">
+	{% include "components/simple_header.html" with title="Films" subtitle="The iconic Blender Open Movies. Featuring all the production files, assets, artwork, and never-seen-before content." %}
+
+	<div class="row">
 		{% for film in object_list %}
-			{% include "components/films/card_film.html" with film=film %}
+			{% include "films/components/card_film.html" with film=film %}
 		{% endfor %}
-		</div>
-	</section>
+	</div>
 
 </div>
 
