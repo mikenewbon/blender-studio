@@ -4,7 +4,7 @@ from common import mixins
 def index(request):
 
     context = {'films': 'filmslist '}
-    return render(request, 'films/films_list.html', context)
+    return render(request, 'films/films.html', context)
 
 def spring(request):
 

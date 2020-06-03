@@ -8,6 +8,8 @@ from films.models.films import Film
 @method_decorator(require_safe, name='dispatch')
 class FilmListView(ListView):
     model = Film
+    queryset = Film.objects.filter(visibility=True)
+    template_name = 'films/films.html'
 
 
 @method_decorator(require_safe, name='dispatch')

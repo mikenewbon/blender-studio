@@ -13,10 +13,13 @@
 
     {% for film in object_list %}
         <div>
-            <h2>title: {{ film.title }}</h2>
+			<h2>title: {{ film.title }}</h2>
+			<p>{{ film.status }}</p>
+			<p>{{ film.description }}</p>
             <a href="{% url 'film-detail' film.slug %}">
                 <img src="{{ film.poster.url }}" height="300">
             </a>
         </div>
-    {% endfor %}
+	{% endfor %}
+
 {% endblock %}
