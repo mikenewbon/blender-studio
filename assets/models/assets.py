@@ -1,38 +1,9 @@
-import hashlib
-import uuid
-from pathlib import Path
-
 from django.contrib.auth.models import User
 from django.db import models
 
 from assets.models import License, StorageBackend
 from common import mixins
-
-
-# TODO: write tests
-def generate_hash_from_filename(filename: str) -> str:
-    """Combine filename and uuid4 and get a unique string."""
-    unique_filename = f'{uuid.uuid4()}_{filename}'
-    return hashlib.md5(unique_filename.encode('utf-8')).hexdigest()
-
-
-def get_upload_to_hashed_path(asset: 'StaticAsset', filename: str) -> Path:
-    """ Generate a unique, hashed upload path for an asset source file.
-
-    Videos and files will be uploaded to nested directories:
-    MEDIA_ROOT/<bd>/<bd2b5b1cd81333ed2d8db03971f91200>/.
-    Images - to MEDIA_ROOT/<bd>/
-    """
-    # TODO: think of a better parameter name? it's not an Asset instance anymore
-    extension = Path(filename).suffix
-    hashed = generate_hash_from_filename(filename)
-    path = Path(hashed[:2], hashed)
-
-    if asset.source_type == AssetFileTypeChoices.image:
-        path = path.with_suffix(extension)
-    else:
-        path = path.joinpath(hashed).with_suffix(extension)
-    return path
+from common.upload_paths import get_upload_to_hashed_path
 
 
 class AssetFileTypeChoices(models.TextChoices):

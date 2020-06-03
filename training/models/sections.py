@@ -1,13 +1,10 @@
-from __future__ import annotations
-
-from pathlib import Path
-
 from django.db import models
 from django.urls.base import reverse
 from django.utils.text import slugify
 
 from comments.models import Comment
 from common import mixins
+from common.upload_paths import get_upload_to_hashed_path
 from training.models import chapters
 
 
@@ -77,22 +74,9 @@ class SectionComment(models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
 
 
-def video_upload_path(video: Video, filename: str) -> str:
-    return str(
-        Path('trainings')
-        / str(video.section.chapter.training.id)
-        / 'chapters'
-        / str(video.section.chapter.index)
-        / 'sections'
-        / str(video.section.index)
-        / 'video'
-        / filename
-    )
-
-
 class Video(mixins.CreatedUpdatedMixin, models.Model):
     section = models.OneToOneField(Section, on_delete=models.CASCADE, related_name='video')
-    file = models.FileField(upload_to=video_upload_path)
+    file = models.FileField(upload_to=get_upload_to_hashed_path)
     size = models.IntegerField()
     duration = models.DurationField(help_text='[DD] [[HH:]MM:]ss[.uuuuuu]')
 
@@ -104,22 +88,9 @@ class Video(mixins.CreatedUpdatedMixin, models.Model):
         return reverse('video_progress', kwargs={'video_pk': self.pk})
 
 
-def asset_upload_path(asset: Asset, filename: str) -> str:
-    return str(
-        Path('trainings')
-        / str(asset.section.chapter.training.id)
-        / 'chapters'
-        / str(asset.section.chapter.index)
-        / 'sections'
-        / str(asset.section.index)
-        / 'assets'
-        / filename
-    )
-
-
 class Asset(mixins.CreatedUpdatedMixin, models.Model):
     section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='assets')
-    file = models.FileField(upload_to=asset_upload_path)
+    file = models.FileField(upload_to=get_upload_to_hashed_path)
     size = models.IntegerField()
 
     def __str__(self) -> str:

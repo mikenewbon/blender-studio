@@ -1,21 +1,15 @@
-from pathlib import Path
-
 from django.db import models
-from django.urls import reverse
 from django.utils.text import slugify
 
 from assets.models import StorageBackend
 from common import mixins
+from common.upload_paths import get_upload_to_hashed_path
 
 
 class FilmStatus(models.TextChoices):
     in_development = 'pre_production', 'In Development'
     in_production = 'in_production', 'In Production'
     released = 'released', 'Released'
-
-
-def film_overview_upload_path(film: 'Film', filename: str) -> str:
-    return str(Path('films') / str(film.id) / 'overview' / filename)
 
 
 class Film(mixins.CreatedUpdatedMixin, models.Model):
@@ -32,10 +26,10 @@ class Film(mixins.CreatedUpdatedMixin, models.Model):
     status = models.TextField(choices=FilmStatus.choices)
     visibility = models.BooleanField(default=False)
 
-    logo = models.FileField(upload_to=film_overview_upload_path)
-    poster = models.FileField(upload_to=film_overview_upload_path)
-    picture_header = models.FileField(upload_to=film_overview_upload_path, blank=True, null=True)
-    picture_16_9 = models.FileField(upload_to=film_overview_upload_path, blank=True, null=True)
+    logo = models.ImageField(upload_to=get_upload_to_hashed_path)
+    poster = models.ImageField(upload_to=get_upload_to_hashed_path)
+    picture_header = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
+    picture_16_9 = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
 
     def clean(self) -> None:
         super().clean()
@@ -53,4 +47,4 @@ class Film(mixins.CreatedUpdatedMixin, models.Model):
     #     return reverse('film', kwargs={'film_slug': self.slug})
 
 
-# TODO: tags, comments
+# TODO: tags
