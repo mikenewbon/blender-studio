@@ -24,9 +24,7 @@ class Collection(mixins.CreatedUpdatedMixin, models.Model):
             models.UniqueConstraint(
                 fields=['parent', 'order'], name='unique_ordering_per_collection'
             ),
-            models.UniqueConstraint(
-                fields=['parent', 'slug'], name='unique_slug_per_collection'
-            ),
+            models.UniqueConstraint(fields=['parent', 'slug'], name='unique_slug_per_collection'),
         ]
 
     film = models.ForeignKey(films.Film, on_delete=models.CASCADE, related_name='collections')

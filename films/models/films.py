@@ -45,8 +45,8 @@ class Film(mixins.CreatedUpdatedMixin, models.Model):
     def __str__(self) -> str:
         return self.title
 
-    def get_absolute_url(self) -> str:
-        return self.url
+    # def get_absolute_url(self) -> str:
+    #     return self.url
 
     # @property
     # def url(self) -> str:

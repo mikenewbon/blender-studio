@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 
+from comments.models import Comment
 from common import mixins
 from films.models import Collection
 
@@ -17,8 +18,8 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
     An asset can be of one of the three types: image, video, or file.
     """
 
-    class Meta:
-        constraints = []  # TODO: only one related file (img, video, file)
+    # class Meta:
+    #     constraints = []  # TODO: only one related file (img, video, file)
 
     static_asset = models.ForeignKey(
         'assets.StaticAsset', on_delete=models.CASCADE, related_name='assets'
@@ -36,6 +37,8 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
 
     visibility = models.BooleanField(default=False)
 
+    comments = models.ManyToManyField(Comment, through='AssetComment', related_name='asset')
+
     def clean(self) -> None:
         super().clean()
         if not self.slug:
@@ -43,3 +46,14 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+
+class AssetComment(models.Model):
+    """ This is a `through` table between Asset and Comment.
+
+    An AssetComment should in fact only relate to one Comment, hence the
+    OneToOne comment field.
+    """
+
+    asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
+    comment = models.OneToOneField(Comment, on_delete=models.CASCADE)
