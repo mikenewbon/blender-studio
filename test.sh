@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-set -eux
+set -ux
 
 env PYTHONPATH=. poetry run mypy .
 poetry run black --check .
