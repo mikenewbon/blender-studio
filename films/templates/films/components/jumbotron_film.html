@@ -6,7 +6,7 @@ class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content header">
 				<div class="jumbotron-body">
 					<img class="mb-3 film-logo" src="{{ film.logo.url }}">
 					<p class="mb-3">
-						{{ film.summary }}
+						{{ film.summary|linebreaksbr }}
 					</p>
 					<!-- TODO(Mike): When movie link is added to backend, check for it and then show it-->
 					{% if film.status == "released" %}
