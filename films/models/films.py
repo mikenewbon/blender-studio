@@ -24,12 +24,15 @@ class Film(mixins.CreatedUpdatedMixin, models.Model):
     summary.description = 'Summary consisting of multiple paragraphs.'
 
     status = models.TextField(choices=FilmStatus.choices)
+    release_date = models.DateField(blank=True, null=True)
+    release_date.description = "Past or planned release date of the film."
     visibility = models.BooleanField(default=False)
 
     logo = models.ImageField(upload_to=get_upload_to_hashed_path)
     poster = models.ImageField(upload_to=get_upload_to_hashed_path)
     picture_header = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
     picture_16_9 = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
+    watch_link = models.URLField(blank=True, null=True)
 
     def clean(self) -> None:
         super().clean()
