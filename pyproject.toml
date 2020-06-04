@@ -23,6 +23,7 @@ black = {version = "*", allow-prereleases = true}
 mypy = "*"
 django-stubs = "*"
 pre-commit = "^2.4.0"
+ipython = "^7.15.0"
 
 [tool.black]
 line-length = 100
