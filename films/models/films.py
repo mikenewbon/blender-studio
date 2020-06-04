@@ -7,9 +7,9 @@ from common.upload_paths import get_upload_to_hashed_path
 
 
 class FilmStatus(models.TextChoices):
-    in_development = 'pre_production', 'In Development'
-    in_production = 'in_production', 'In Production'
-    released = 'released', 'Released'
+    in_development = '0_dev', 'In Development'
+    in_production = '1_prod', 'In Production'
+    released = '2_released', 'Released'
 
 
 class Film(mixins.CreatedUpdatedMixin, models.Model):
