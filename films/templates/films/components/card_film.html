@@ -2,7 +2,7 @@
 	<div class="card card-dark card-media card-poster">
 		<div class="card-header" style='background-image: url({{ film.poster.url }})'>
 			<a href="{% url 'film-detail' film.slug %}" class="card-header-link"></a>
-			{% if film.status != "released" %}
+			{% if film.status != "2_released" %}
 			<div class="badge badge-difficulty badge-primary">
 				<i class="material-icons btn-material-icons">theaters</i>
 				{{ film.get_status_display }}
