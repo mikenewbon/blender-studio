@@ -1,10 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Hello world!</title>
-</head>
-<body>
+{% extends 'films/base.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block content %}
+<div class="container-xl mt-5">
+	<section class="mb-4">
+		<!-- Latest Updates -->
+		<div class="row justify-content-center my-3">
+			<div class="col-md-6 text-center">
+				<p class="subtitle">Blender Studio</p>
+				<h1>Home</h1>
+				<p clas="mb-0">Welcome to the Blender Studio - currently still under construction.</p>
+			</div>
+		</div>
+	</section>
+	<section>
+		<div class="row">
+
+			<div class="col-12 col-sm-6 col-lg-6 card-grid-item">
+				<div class="card card-dark card-media text-center">
+					<div class="card-header" style="background-image:url({% static 'films/images/spring-header.png' %})">
+						<a href="/films" class="card-header-link"></a>
+					</div>
+					<a class="card-body" href="/films">
+						<h2 class="card-title">Films</h2>
+						<p class="card-text">Check out all of the Blender Studio's Open Movies.</p>
+					</a>
+				</div>
+			</div>
+
+			<div class="col-12 col-sm-6 col-lg-6 card-grid-item">
+				<div class="card card-dark card-media text-center">
+					<div class="card-header" style="background-image:url({% static 'films/images/files-example.jpg' %})">
+						<a href="/training" class="card-header-link"></a>
+					</div>
+					<a class="card-body" href="/training">
+						<h2 class="card-title">Training</h2>
+						<p class="card-text">Discover all the training Blender Studio has to offer.</p>
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+{% endblock content %}
