@@ -144,7 +144,7 @@ PIPELINE = {
         },
     },
     'STYLESHEETS': {
-		'studio': {
+        'studio': {
             'source_filenames': ('common/styles/cloud/cloud.scss',),
             'output_filename': 'css/studio.css',
             'extra_context': {'media': 'screen,projection'},

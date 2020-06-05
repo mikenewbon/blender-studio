@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.utils.text import slugify
 
 from assets.models import StorageBackend
@@ -45,9 +46,9 @@ class Film(mixins.CreatedUpdatedMixin, models.Model):
     # def get_absolute_url(self) -> str:
     #     return self.url
 
-    # @property
-    # def url(self) -> str:
-    #     return reverse('film', kwargs={'film_slug': self.slug})
+    @property
+    def url(self) -> str:
+        return reverse('film-detail', kwargs={'slug': self.slug})
 
 
 # TODO: tags

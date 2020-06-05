@@ -1,32 +1,21 @@
-from django.shortcuts import render
-from common import mixins
+from django.shortcuts import render, get_object_or_404
 
-def index(request):
+from films.models import Film
 
-    context = {'films': 'filmslist '}
-    return render(request, 'films/films.html', context)
 
-def spring(request):
+def about(request, slug):
+    film = get_object_or_404(Film, slug=slug)
+    context = {'film': film}
+    return render(request, 'films/about.html', context)
 
-    context = {'films': 'spring '}
-    return render(request, 'films/spring/spring.html', context)
 
-def coffee_run(request):
+def gallery(request, slug):
+    film = get_object_or_404(Film, slug=slug)
+    context = {'film': film}
+    return render(request, 'films/gallery.html', context)
 
-    context = {'films': 'about '}
-    return render(request, 'films/coffee-run/coffee-run.html', context)
 
-def about(request):
-
-    context = {'films': 'about '}
-    return render(request, 'films/coffee-run/about.html', context)
-
-def weeklies(request):
-
-    context = {'films': 'weeklies '}
-    return render(request, 'films/coffee-run/weeklies.html', context)
-
-def gallery(request):
-
-    context = {'films': 'about '}
-    return render(request, 'films/coffee-run/gallery.html', context)
+def weeklies(request, slug):
+    film = get_object_or_404(Film, slug=slug)
+    context = {'film': film}
+    return render(request, 'films/weeklies.html', context)

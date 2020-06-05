@@ -8,7 +8,7 @@ from films.models.films import Film
 @method_decorator(require_safe, name='dispatch')
 class FilmListView(ListView):
     model = Film
-    queryset = Film.objects.filter(visibility=True)
+    queryset = Film.objects.filter(visibility=True).order_by('status', '-release_date')
     template_name = 'films/films.html'
 
 
