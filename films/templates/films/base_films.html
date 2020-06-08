@@ -1,0 +1,24 @@
+{% extends 'common/base.html' %}
+
+{% block secondary_nav %}
+<!-- TODO(Mike): Move this into a script somewhere - make it less specific so it works on all nav's by removing the .navbar-secondary selector -->
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		document.querySelectorAll('.navbar-secondary a[href="' + location.pathname + '"]').forEach((link) =>{
+			link.classList.add('active');
+		})
+	});
+</script>
+<a class="list-group-item" href="{% url 'film-detail' slug=film.slug %}">
+	{{ film.title }}
+</a>
+<a class="list-group-item" href="{% url 'film-about' slug=film.slug %}">
+	About
+</a>
+<a class="list-group-item" href="{% url 'film-gallery' slug=film.slug %}">
+	Gallery
+</a>
+<a class="list-group-item" href="{% url 'film-weeklies' slug=film.slug %}">
+	Weeklies
+</a>
+{% endblock secondary_nav %}

@@ -1,20 +1,4 @@
-{% extends 'films/base.html' %}
-
-{% block secondary_nav %}
-	<a class="list-group-item" href="{% url 'film-detail' slug=film.slug %}">
-		{{ film.title }}
-	</a>
-	<a class="list-group-item active" href="{% url 'film-about' slug=film.slug %}">
-		About
-		{#                TODO (Natalia): any way to make the right item active?#}
-	</a>
-	<a class="list-group-item" href="{% url 'film-gallery' slug=film.slug %}">
-		Gallery
-	</a>
-	<a class="list-group-item" href="{% url 'film-weeklies' slug=film.slug %}">
-		Weeklies
-	</a>
-{% endblock secondary_nav %}
+{% extends 'films/base_films.html' %}
 
 {% block content %}
 

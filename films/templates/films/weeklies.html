@@ -1,39 +1,17 @@
-{% extends 'films/base.html' %}
+{% extends 'films/base_films.html' %}
 {% load static %}
 
-
-
-
-
-{% block secondary_nav %}
-<a class="list-group-item" href="{% url 'film-detail' slug=film.slug %}">
-	{{ film.title }}
-</a>
-<a class="list-group-item" href="{% url 'film-about' slug=film.slug %}">
-	About
-	{#                TODO (Natalia): any way to make the right item active?#}
-</a>
-<a class="list-group-item" href="{% url 'film-gallery' slug=film.slug %}">
-	Gallery
-</a>
-<a class="list-group-item active" href="{% url 'film-weeklies' slug=film.slug %}">
-	Weeklies
-</a>
-{% endblock secondary_nav %}
-
 {% block content %}
-<div class="container-xl">
+<div class="container-xl pt-4">
 	<section class="mb-5">
 		<!-- Latest Updates -->
-		<div class="row justify-content-center my-3">
+		<div class="row justify-content-center">
 			<div class="col-md-6 text-center">
-				<p class="subtitle">{{ film.title }}</p>
-				<h1>Weeklies</h1>
-				<p clas="mb-0">Keep up to date with the latest upload and progress on Coffee Run, see what the team are
-					up
-					to and check out their progress.</p>
+				<h2 text>Latest Updates</h2>
+				<p clas="mb-0">Want to see more updates from Coffee Run? <a href="#">See all weeklies</a></p>
 			</div>
 		</div>
+
 
 		<div class="update-feed">
 
@@ -45,15 +23,31 @@
 				</div>
 				<div class="update-feed-week-column column-right">
 					<div class="update-feed-week-header">
-						<p class="subtitle small">1st - 7th March</p>
+						<p>1st - 7th March</p>
 						<h3>Production Week 7</h3>
 					</div>
 
-					<div class="update-feed-individual row">
-						<div class="update-feed-individual-summary col-md-4">
-							<div class="row mb-2">
+					<div class="update-feed-individual">
+						<div class="update-feed-individual-summary">
+							<a href="#">
+								<img src="{% static 'films/images/coffee-run-16-9.png' %}">
+							</a>
+						</div>
+						<div class="update-feed-individual-files">
+							<h3>This week on Coffee Run</h3>
+							<p>This week i’m working on the paint-overs for the Restaurant and Coffee shop. Getting the
+								atmosphere for these settings right is important to the story delivery.</p>
+							<p>This week i’m working on the paint-overs for the Restaurant and Coffee shop. Getting the
+								atmosphere for these settings right is important to the story delivery.</p>
+							<a href="#">Read the full blog</a>
+						</div>
+					</div>
+
+					<div class="update-feed-individual">
+						<div class="update-feed-individual-summary">
+							<div class="update-feed-individual-summary-profile">
 								<div style="background-image:url('https://blender.chat/avatar/MikeNewbon');"
-									class="profile ml-2">
+									class="profile-image profile ml-2">
 								</div>
 								<div class="col-auto">
 									<p class="subtitle text-white-50 x-small">Author</p>
@@ -64,7 +58,7 @@
 								shop.
 								Getting the atmosphere for these settings right is important to the story delivery.</p>
 						</div>
-						<div class="update-feed-individual-files col-md-8">
+						<div class="update-feed-individual-files">
 							<div class="files">
 								<div class="row row-cols-1 row-cols-md-4  row-cols-2">
 									<div class="col">
@@ -113,7 +107,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="row mt-n2 mb-3">
+							<div class="row update-feed-individual-files-show-more">
 								<div class="col text-center">
 									<a href="#" class="btn btn-sm btn-secondary">Show more</a>
 								</div>
@@ -121,9 +115,9 @@
 						</div>
 					</div>
 
-					<div class="update-feed-individual row">
-						<div class="update-feed-individual-summary col-md-4">
-							<div class="row mb-2">
+					<div class="update-feed-individual">
+						<div class="update-feed-individual-summary">
+							<div class="update-feed-individual-summary-profile">
 								<div style="background-image:url('https://blender.chat/avatar/MikeNewbon');"
 									class="profile ml-2">
 								</div>
@@ -136,7 +130,7 @@
 								shop.
 								Getting the atmosphere for these settings right is important to the story delivery.</p>
 						</div>
-						<div class="update-feed-individual-files col-md-8">
+						<div class="update-feed-individual-files">
 							<div class="files">
 								<div class="row row-cols-1 row-cols-md-4  row-cols-2">
 									<div class="col">
@@ -185,7 +179,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="row mt-n2 mb-3">
+							<div class="row update-feed-individual-files-show-more">
 								<div class="col text-center">
 									<a href="#" class="btn btn-sm btn-secondary">Show more</a>
 								</div>
@@ -207,9 +201,9 @@
 						<p class="subtitle small">1st - 7th March</p>
 						<h3>Production Week 7</h3>
 					</div>
-					<div class="update-feed-individual row">
-						<div class="update-feed-individual-summary col-md-4">
-							<div class="row mb-2">
+					<div class="update-feed-individual">
+						<div class="update-feed-individual-summary">
+							<div class="update-feed-individual-summary-profile">
 								<div style="background-image:url('https://blender.chat/avatar/MikeNewbon');"
 									class="profile ml-2">
 								</div>
@@ -222,7 +216,7 @@
 								shop.
 								Getting the atmosphere for these settings right is important to the story delivery.</p>
 						</div>
-						<div class="update-feed-individual-files col-md-8">
+						<div class="update-feed-individual-files">
 							<div class="files">
 								<div class="row row-cols-1 row-cols-md-4  row-cols-2">
 									<div class="col">
@@ -280,10 +274,9 @@
 
 		<div class="row">
 			<div class="col text-center">
-				<a href="#" class="btn btn-sm btn-secondary">Show more</a>
+				<p clas="mb-0">Want to see more updates from Coffee Run? <a href="#">See all weeklies</a></p>
 			</div>
 		</div>
 	</section>
 </div>
-
 {% endblock content %}

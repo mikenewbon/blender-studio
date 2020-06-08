@@ -1,5 +1,6 @@
+{% load static %}
 <div style="background-image:url({{ film.picture_header.url }})"
-class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content header">
+	class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content header">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-6 col-xl-5">
@@ -8,15 +9,53 @@ class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content header">
 					<p class="mb-3">
 						{{ film.summary|linebreaksbr }}
 					</p>
-					<!-- TODO(Mike): When movie link is added to backend, check for it and then show it-->
-					{% if film.status == "released" %}
-					<a class="btn btn-primary mb-0" href="#">Watch {{ film.title }}</a>
-					<a class="btn btn-transparent mb-0" href="#">Explore Content</a>
+					{% if film.watch_link != null %}
+					<button class="btn btn-primary mb-0" data-toggle="modal" data-target="#watchVideoModal"
+						target="_blank">Watch
+						{{ film.title }}</button>
+					<a class="btn btn-transparent mb-0" href="{% url 'film-gallery' slug=film.slug %}">Explore
+						Content</a>
 					{% else %}
-					<a class="btn btn-primary mb-0" href="#">Explore Content</a>
+					<a class="btn btn-primary mb-0" href="{% url 'film-gallery' slug=film.slug %}">Explore Content</a>
 					{% endif %}
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+<div class="modal modal-asset" id="watchVideoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	aria-hidden="true">
+	<button class="modal-navigation modal-close btn btn-ctrl" href="#" data-dismiss="modal">
+		<i class="material-icons btn-material-icons">close</i>
+	</button>
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content bg-dark">
+			<div class="modal-body p-0">
+				<div class="embed-responsive embed-responsive-16by9 js-youtube-embed">
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	function getYouTubeID(url) {
+		let video_url = url;
+		var video_id = video_url.split('v=')[1];
+		var ampersandPosition = video_id.indexOf('&');
+		if (ampersandPosition != -1) {
+			video_id = video_id.substring(0, ampersandPosition);
+		}
+		return video_id;
+	}
+
+	document.addEventListener("DOMContentLoaded", function () {
+		let url = '{{ film.watch_link }}';
+		let id = getYouTubeID(url);
+		let iframeMarkup = '<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/' + id + '" allowfullscreen></iframe>';
+
+		document.querySelector('.js-youtube-embed').innerHTML = iframeMarkup;
+	});
+</script>
