@@ -17,7 +17,7 @@ class Film(mixins.CreatedUpdatedMixin, models.Model):
     storage = models.OneToOneField(StorageBackend, on_delete=models.PROTECT)
     # TODO: validation - either film or a training has to be null, but not both
 
-    title = models.TextField(unique=True)
+    title = models.CharField(unique=True, max_length=512)
     slug = models.SlugField(unique=True, blank=True)
     description = models.TextField()
     description.description = 'Description consisting of a few sentences.'
@@ -27,13 +27,13 @@ class Film(mixins.CreatedUpdatedMixin, models.Model):
     status = models.TextField(choices=FilmStatus.choices)
     release_date = models.DateField(blank=True, null=True)
     release_date.description = "Past or planned release date of the film."
-    visibility = models.BooleanField(default=False)
+    is_published = models.BooleanField(default=False)
 
     logo = models.ImageField(upload_to=get_upload_to_hashed_path)
     poster = models.ImageField(upload_to=get_upload_to_hashed_path)
-    picture_header = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
+    picture_header = models.ImageField(upload_to=get_upload_to_hashed_path)
     picture_16_9 = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
-    watch_link = models.URLField(blank=True, null=True)
+    youtube_link = models.URLField(blank=True, null=True)
 
     def clean(self) -> None:
         super().clean()

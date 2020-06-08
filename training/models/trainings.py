@@ -36,7 +36,7 @@ class Training(mixins.CreatedUpdatedMixin, models.Model):
     storage = models.OneToOneField(StorageBackend, on_delete=models.PROTECT)
     # TODO: validation - either film or a training has to be null, but not both
 
-    name = models.TextField(unique=True)
+    name = models.CharField(unique=True, max_length=512)
     slug = models.SlugField(unique=True, blank=True)
     description = models.TextField()
     description.description = 'Description consisting of a few sentences.'

@@ -23,8 +23,10 @@ class Collection(mixins.CreatedUpdatedMixin, models.Model):
 
     name = models.CharField(max_length=512)
     slug = models.SlugField(blank=True)
-    text = models.TextField()
+    text = models.TextField(blank=True)
 
+    preview = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
+    # TODO: generate preview if not uploaded
     picture_16_9 = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
 
     def clean(self) -> None:

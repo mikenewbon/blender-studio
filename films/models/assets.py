@@ -33,9 +33,8 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
     slug = models.SlugField(blank=True)
     description = models.TextField()
     category = models.CharField(choices=AssetCategory.choices, max_length=17, db_index=True)
-    view_count = models.PositiveIntegerField(default=0)
-
-    visibility = models.BooleanField(default=False)
+    view_count = models.PositiveIntegerField(default=0, editable=False)
+    is_published = models.BooleanField(default=False)
 
     comments = models.ManyToManyField(Comment, through='AssetComment', related_name='asset')
 
