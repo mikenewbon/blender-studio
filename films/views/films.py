@@ -25,12 +25,6 @@ def about(request, slug):
     return render(request, 'films/about.html', context)
 
 
-def gallery(request, slug):
-    film = get_object_or_404(Film, slug=slug)
-    context = {'film': film}
-    return render(request, 'films/gallery.html', context)
-
-
 def weeklies(request, slug):
     film = get_object_or_404(Film, slug=slug)
     context = {'film': film}

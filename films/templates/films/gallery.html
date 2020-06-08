@@ -19,4 +19,11 @@
 
 {% block content %}
 
+    {% for collection in collections %}
+        <div>
+            <h2><a href="#">{{ collection.name }}</a></h2>
+        </div>
+
+    {% endfor %}
+
 {% endblock content %}
