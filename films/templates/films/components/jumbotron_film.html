@@ -40,22 +40,28 @@
 	</div>
 </div>
 
+<!-- TODO(Mike): Move this into a external script? Speak with Francesco about local vs global -->
 <script>
 	function getYouTubeID(url) {
 		let video_url = url;
-		var video_id = video_url.split('v=')[1];
-		var ampersandPosition = video_id.indexOf('&');
+		let video_id = video_url.split('v=')[1];
+		let ampersandPosition = video_id.indexOf('&');
 		if (ampersandPosition != -1) {
 			video_id = video_id.substring(0, ampersandPosition);
 		}
 		return video_id;
 	}
 
-	document.addEventListener("DOMContentLoaded", function () {
-		let url = '{{ film.watch_link }}';
+	function insertYouTubeEmbed(url, element){
 		let id = getYouTubeID(url);
 		let iframeMarkup = '<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/' + id + '" allowfullscreen></iframe>';
 
-		document.querySelector('.js-youtube-embed').innerHTML = iframeMarkup;
+		document.querySelectorAll(element).forEach((item) =>{
+			item.innerHTML = iframeMarkup;
+		})
+	}
+
+	document.addEventListener("DOMContentLoaded", function () {
+		insertYouTubeEmbed('{{ film.watch_link }}', '.js-youtube-embed')
 	});
 </script>
