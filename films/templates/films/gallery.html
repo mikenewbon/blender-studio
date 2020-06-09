@@ -1,6 +1,29 @@
 {% extends 'films/base_films.html' %}
 
+{% block bodyclasses %}
+has-nav-drawer
+nav-drawer-wide
+{% endblock bodyclasses %}
+
 {% block nav_drawer %}
+<nav class="nav-drawer">
+	<div class="nav-drawer-spacer">
+	</div>
+	<div class="nav-drawer-body">
+
+		<div class="training-nav-header">
+			<p class="subtitle">Subtitle</p>
+			<h2>title</h2>
+		</div>
+
+		<div class="training-nav-group">
+			<ol class="training-nav-list">
+				{{ caller() }}
+			</ol>
+		</div>
+	</div>
+	<div class="drawer-overlay"></div>
+</nav>
 {% endblock nav_drawer %}
 
 {% block content %}
@@ -21,6 +44,44 @@
             </div>
         </div>
 
-    {% endfor %}
+{% endfor %}
 
 {% endblock content %}
+
+
+<!--     /////////////////////////////        -->
+
+{% block nav_drawer %}
+	{% call components.nav_drawer() %}
+		{{ components.nav_drawer_header(title=training.name, subtitle=training.type.label) }}
+			{% call components.nav_drawer_group() %}
+				{{ components.nav_drawer_section(
+								title='About this training',
+								href=navigation.overview_url,
+								active=navigation.overview_active,
+								admin_change_href=navigation.training_admin_url
+							) }}
+			{% endcall %}
+
+			{% for chapter_navigation in navigation.chapters %}
+				{% call components.nav_drawer_collapsable_group(
+						id='nav-' + chapter_navigation.slug,
+						title=chapter_navigation.name,
+						collapsed=not chapter_navigation.current
+					) %}
+				{% for section_navigation in chapter_navigation.sections %}
+					{{ components.nav_drawer_progress_section(
+								title=section_navigation.name,
+								href=section_navigation.url,
+								active=section_navigation.current,
+								started=section_navigation.started,
+								finished=section_navigation.finished,
+								progress_fraction=section_navigation.progress_fraction,
+								admin_change_href=section_navigation.admin_url
+							) }}
+		{% endfor %}
+		{% endcall %}
+		{% endfor %}
+
+	{% endcall %}
+{% endblock nav_drawer %}
