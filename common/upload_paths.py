@@ -3,6 +3,11 @@ import typing
 import uuid
 from pathlib import Path
 
+if typing.TYPE_CHECKING:
+    import assets.models.StaticAsset
+    import films
+    import training
+
 
 def generate_hash_from_filename(filename: str) -> str:
     """Combine filename and uuid4 and get a unique string."""
