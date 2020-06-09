@@ -19,9 +19,14 @@
 
 {% block content %}
 
-    {% for collection in collections %}
+    {% for collection, child_collections in collections.items %}
         <div>
             <h2><a href="#">{{ collection.name }}</a></h2>
+            <div>
+                {% for child_collection in child_collections %}
+                    <p><a href="#">{{ child_collection.name }}</a></p>
+                {% endfor %}
+            </div>
         </div>
 
     {% endfor %}
