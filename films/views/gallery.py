@@ -15,6 +15,15 @@ def film_collection_list(request, slug):
     for c in top_collections:
         nested_collections[c] = c.child_collections.all()
 
-    context = {'film': film, 'collections': nested_collections}
+    static_assets = film.storage.assets.prefetch_related('assets')
+    featured_artwork = []
+    for asset in static_assets:
+        featured_artwork.extend(asset.assets.filter(is_featured=True))
+
+    context = {
+        'film': film,
+        'collections': nested_collections,
+        'featured_artwork': featured_artwork,
+    }
 
     return render(request, 'films/gallery.html', context)
