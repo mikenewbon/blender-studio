@@ -99,14 +99,14 @@
 {% endmacro %}
 
 {% macro nav_drawer_header(title, subtitle=None) %}
-    <div class="training-nav-header">
+    <div class="drawer-nav-header">
         {% if subtitle is not none %}<p class="subtitle">{{ subtitle }}</p>{% endif %}
         <h2>{{ title }}</h2>
     </div>
 {% endmacro %}
 
 {% macro nav_drawer_group() %}
-    <div class="training-nav-group">
+    <div class="drawer-nav-group">
         <ol class="training-nav-list">
             {{ caller() }}
         </ol>
@@ -114,8 +114,8 @@
 {% endmacro %}
 
 {% macro nav_drawer_collapsable_group(id, title, collapsed) %}
-    <div class="training-nav-group">
-        <h3 class="training-nav-dropdown {% if collapsed %}collapsed{% endif %}"
+    <div class="drawer-nav-group">
+        <h3 class="drawer-nav-dropdown {% if collapsed %}collapsed{% endif %}"
             data-toggle="collapse" data-target="#{{ id }}">
             <i class="material-icons">keyboard_arrow_down</i>
             {{ title }}
@@ -127,12 +127,12 @@
 {% endmacro %}
 
 {% macro nav_drawer_section(title, href, active, admin_change_href=None) %}
-    <li class="training-nav-section">
-        <a href="{{ href }}" class="training-nav-section-link {% if active %}active{% endif %}">
-            <div class="training-nav-section-icon">
+    <li class="drawer-nav-section">
+        <a href="{{ href }}" class="drawer-nav-section-link {% if active %}active{% endif %}">
+            <div class="drawer-nav-section-icon">
                 <i class="material-icons">insert_drive_file</i>
                 <svg width="30" height="30"
-                     class="training-nav-section-icon-progress">
+                     class="drawer-nav-section-icon-progress">
                     <circle cx="15" cy="15" r="14"/>
                 </svg>
             </div>
@@ -147,9 +147,9 @@
 {% endmacro %}
 
 {% macro nav_drawer_progress_section(title, href, active, started, finished, progress_fraction, admin_change_href=None) %}
-    <li class="training-nav-section {% if finished %}complete{% endif %}">
-        <a href="{{ href }}" class="training-nav-section-link {% if active %}active{% endif %}">
-            <div class="training-nav-section-icon">
+    <li class="drawer-nav-section {% if finished %}complete{% endif %}">
+        <a href="{{ href }}" class="drawer-nav-section-link {% if active %}active{% endif %}">
+            <div class="drawer-nav-section-icon">
 
                 {% if finished %}
                     <i class="material-icons">done</i>
@@ -158,7 +158,7 @@
                 {% endif %}
 
                 <svg width="30" height="30"
-                     class="training-nav-section-icon-progress"
+                     class="drawer-nav-section-icon-progress"
                      style="--progress-fraction: {{ 1.0 if finished else progress_fraction }}">
                     <circle cx="15" cy="15" r="14"/>
                 </svg>

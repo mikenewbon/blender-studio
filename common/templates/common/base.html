@@ -25,9 +25,27 @@
 		<button class="btn btn-nav navdrawertoggle">
 			<i class="material-icons">menu</i>
 		</button>
-		<a href="#" class="navbar-brand">
+		<a href="/" class="navbar-brand">
 			<img src="{% static 'common/images/blender_cloud_logo.svg' %}" alt="Blender Cloud">
 		</a>
+
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				document.querySelectorAll('a.list-group-item[href="' + location.pathname + '"]').forEach((link) => {
+					link.classList.add('active');
+				})
+			});
+		</script>
+
+		<div class="navbar-main-nav list-group list-group-flush list-group-horizontal">
+			<a href="/films/" class="list-group-item">
+				<span>Films</span>
+			</a>
+			<a href="/training/" class="list-group-item">
+				<span>Training</span>
+			</a>
+		</div>
+
 		<div class="searchbar-wrapper">
 			<div class="searchbar">
 				<div class="input-group-prepend"><span class="input-group-text"><i

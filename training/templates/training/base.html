@@ -2,68 +2,84 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blender Studio Training</title>
-    <meta name="description" content="Blender Studio Training">
-    <meta name="author" content="Blender Institute">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap"
-          rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    {% block html_templates %}{% endblock %}
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Blender Studio Training</title>
+	<meta name="description" content="Blender Studio Training">
+	<meta name="author" content="Blender Institute">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	{% block html_templates %}{% endblock %}
 	{% block scripts %}{% endblock scripts %}
 	{% javascript 'vendor' %}
-    {% stylesheet 'training' %}
+	{% stylesheet 'training' %}
 	{% javascript 'studio' %}
 	<link href="{{ static('common/styles/cloud/cloud.css') }}" rel="stylesheet">
 
 </head>
 
 <body class="{% block bodyclasses %}{% endblock bodyclasses %}">
-<!-- When the body has a nav-drawer, it should have the class 'has-nav-drawer' and when it's wide, 'has-nav-drawer nav-drawer-wide' -->
-<nav class="navbar">
-    <button class="btn btn-nav navdrawertoggle">
-        <i class="material-icons">menu</i>
-    </button>
-    <a href="#" class="navbar-brand">
-        <img src="{{ static('common/images/blender_cloud_logo.svg') }}" alt="Blender Cloud">
-    </a>
-    <div class="searchbar-wrapper">
-        <div class="searchbar">
-            <div class="input-group-prepend"><span class="input-group-text"><i
-                    class="material-icons">search</i></span>
-            </div>
-            <input type="text" placeholder="Search tags and keywords" class="form-control">
-        </div>
-    </div>
-    <div data-toggle="dropdown" class="btn btn-nav nav-profile">
-        <div style="background-image:url('https://blender.chat/avatar/MikeNewbon');"
-             class="profile"></div>
-        <div class="dropdown-menu profile-dropdown"><a href="" class="dropdown-item"><i
-                class="material-icons">home</i>
-            <span>My Cloud</span></a><a href="" class="dropdown-item"><i class="material-icons">settings</i>
-            <span>Settings</span></a><a href="" class="dropdown-item"><i class="material-icons">credit_card</i>
-            <span>Subscription</span></a>
-            <div class="dropdown-divider"></div>
-            <a href="" class="dropdown-item"><i class="material-icons">exit_to_app</i> <span>Sign Out</span></a>
-        </div>
-    </div>
-</nav>
+	<!-- When the body has a nav-drawer, it should have the class 'has-nav-drawer' and when it's wide, 'has-nav-drawer nav-drawer-wide' -->
+	<nav class="navbar">
+		<button class="btn btn-nav navdrawertoggle">
+			<i class="material-icons">menu</i>
+		</button>
+		<a href="#" class="navbar-brand">
+			<img src="{{ static('common/images/blender_cloud_logo.svg') }}" alt="Blender Cloud">
+		</a>
 
-{% block nav_drawer %}
-{% endblock nav_drawer %}
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				document.querySelectorAll('a.list-group-item[href="' + location.pathname + '"]').forEach((link) => {
+					link.classList.add('active');
+				})
+			});
+		</script>
 
-<div class="content-holder">
-    <nav class="navbar-secondary" aria-label="breadcrumbs">
-        <div class="container">
-            {% block breadcrumbs %}{% endblock breadcrumbs %}
-        </div>
-    </nav>
-    {% block jumbotron %}{% endblock jumbotron %}
-    <div class="container-xl pt-3">
-        {% block content %}{% endblock content %}
-    </div>
-</div>
+		<div class="navbar-main-nav list-group list-group-flush list-group-horizontal">
+			<a href="/films/" class="list-group-item">
+				<span>Films</span>
+			</a>
+			<a href="/training/" class="list-group-item">
+				<span>Training</span>
+			</a>
+		</div>
+
+		<div class="searchbar-wrapper">
+			<div class="searchbar">
+				<div class="input-group-prepend"><span class="input-group-text"><i
+							class="material-icons">search</i></span>
+				</div>
+				<input type="text" placeholder="Search tags and keywords" class="form-control">
+			</div>
+		</div>
+		<div data-toggle="dropdown" class="btn btn-nav nav-profile">
+			<div style="background-image:url('https://blender.chat/avatar/MikeNewbon');" class="profile"></div>
+			<div class="dropdown-menu profile-dropdown"><a href="" class="dropdown-item"><i
+						class="material-icons">home</i>
+					<span>My Cloud</span></a><a href="" class="dropdown-item"><i class="material-icons">settings</i>
+					<span>Settings</span></a><a href="" class="dropdown-item"><i class="material-icons">credit_card</i>
+					<span>Subscription</span></a>
+				<div class="dropdown-divider"></div>
+				<a href="" class="dropdown-item"><i class="material-icons">exit_to_app</i> <span>Sign Out</span></a>
+			</div>
+		</div>
+	</nav>
+
+	{% block nav_drawer %}
+	{% endblock nav_drawer %}
+
+	<div class="content-holder">
+		<nav class="navbar-secondary" aria-label="breadcrumbs">
+			<div class="container">
+				{% block breadcrumbs %}{% endblock breadcrumbs %}
+			</div>
+		</nav>
+		{% block jumbotron %}{% endblock jumbotron %}
+		<div class="container-xl pt-3">
+			{% block content %}{% endblock content %}
+		</div>
+	</div>
 </body>
 
 </html>
