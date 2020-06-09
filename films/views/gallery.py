@@ -23,7 +23,7 @@ def film_collection_list(request, slug):
     context = {
         'film': film,
         'collections': nested_collections,
-        'featured_artwork': featured_artwork,
+        'featured_artwork': film.assets.filter(is_featured=True),
     }
 
     return render(request, 'films/gallery.html', context)
