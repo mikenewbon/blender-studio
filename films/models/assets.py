@@ -21,6 +21,7 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
     # class Meta:
     #     constraints = []  # TODO: only one related file (img, video, file)
 
+    film = models.ForeignKey('Film', on_delete=models.CASCADE, related_name='assets')
     static_asset = models.ForeignKey(
         'assets.StaticAsset', on_delete=models.CASCADE, related_name='assets'
     )
