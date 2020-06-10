@@ -17,15 +17,16 @@ class FilmListView(ListView):
 @method_decorator(require_safe, name='dispatch')
 class FilmDetailView(DetailView):
     queryset = Film.objects.filter(is_published=True)
+    slug_url_kwarg = 'film_slug'
 
 
-def about(request, slug):
-    film = get_object_or_404(Film, slug=slug)
+def about(request, film_slug):
+    film = get_object_or_404(Film, slug=film_slug)
     context = {'film': film}
     return render(request, 'films/about.html', context)
 
 
-def weeklies(request, slug):
-    film = get_object_or_404(Film, slug=slug)
+def weeklies(request, film_slug):
+    film = get_object_or_404(Film, slug=film_slug)
     context = {'film': film}
     return render(request, 'films/weeklies.html', context)

@@ -7,8 +7,8 @@ from django.shortcuts import get_object_or_404, render
 from films.models import Film, Collection
 
 
-def film_collection_list(request, slug):
-    film = get_object_or_404(Film, slug=slug)
+def collection_list(request, film_slug):
+    film = get_object_or_404(Film, slug=film_slug)
     top_level_collections = (
         film.collections.filter(parent__isnull=True)
         .order_by('order')

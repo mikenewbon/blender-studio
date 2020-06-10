@@ -6,13 +6,14 @@
 <a class="list-group-item" href="{% url 'film-detail' slug=film.slug %}">
 	{{ film.title }}
 </a>
-<a class="list-group-item" href="{% url 'film-about' slug=film.slug %}">
+<a class="list-group-item" href="{% url 'film-about' film_slug=film.slug %}">
 	About
 </a>
-<a class="list-group-item" href="{% url 'film-gallery' slug=film.slug %}">
+<a class="list-group-item" href="{% url 'film-gallery' film_slug=film.slug %}">
 	Gallery
 </a>
-<a class="list-group-item" href="{% url 'film-weeklies' slug=film.slug %}">
+<a class="list-group-item" href="{% url 'film-weeklies' film_slug=film.slug %}">
 	Weeklies
 </a>
 {% endblock secondary_nav %}
+

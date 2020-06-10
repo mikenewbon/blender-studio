@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls.base import reverse
 from django.utils.text import slugify
 
 from common import mixins
@@ -28,6 +29,12 @@ class Collection(mixins.CreatedUpdatedMixin, models.Model):
     preview = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
     # TODO: generate preview if not uploaded
     picture_16_9 = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
+
+    @property
+    def url(self) -> str:
+        return reverse(
+            'collection-detail', kwargs={'film_slug': self.film.slug, 'collection_slug': self.slug}
+        )
 
     def clean(self) -> None:
         super().clean()

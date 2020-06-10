@@ -48,7 +48,7 @@ class Film(mixins.CreatedUpdatedMixin, models.Model):
 
     @property
     def url(self) -> str:
-        return reverse('film-detail', kwargs={'slug': self.slug})
+        return reverse('film-detail', kwargs={'film_slug': self.slug})
 
 
 # TODO: tags
