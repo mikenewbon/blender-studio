@@ -13,10 +13,10 @@
 					<button class="btn btn-primary mb-0" data-toggle="modal" data-target="#watchVideoModal"
 						target="_blank">Watch
 						{{ film.title }}</button>
-					<a class="btn btn-transparent mb-0" href="{% url 'film-gallery' film_slug=film.slug %}">Explore
+					<a class="btn btn-transparent mb-0" href="{% url 'film-gallery' film.slug %}">Explore
 						Content</a>
 					{% else %}
-					<a class="btn btn-primary mb-0" href="{% url 'film-gallery' film_slug=film.slug %}">Explore Content</a>
+					<a class="btn btn-primary mb-0" href="{% url 'film-gallery' film.slug %}">Explore Content</a>
 					{% endif %}
 				</div>
 			</div>

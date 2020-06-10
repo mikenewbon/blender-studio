@@ -3,17 +3,16 @@
 {% block secondary_nav %}
 <!-- TODO(Mike): Move this into a script somewhere - make it less specific so it works on all nav's by removing the .navbar-secondary selector -->
 
-<a class="list-group-item" href="{% url 'film-detail' slug=film.slug %}">
+<a class="list-group-item" href="{{ film.url }}">
 	{{ film.title }}
 </a>
-<a class="list-group-item" href="{% url 'film-about' film_slug=film.slug %}">
+<a class="list-group-item" href="{% url 'film-about' film.slug %}">
 	About
 </a>
-<a class="list-group-item" href="{% url 'film-gallery' film_slug=film.slug %}">
+<a class="list-group-item" href="{% url 'film-gallery' film.slug %}">
 	Gallery
 </a>
-<a class="list-group-item" href="{% url 'film-weeklies' film_slug=film.slug %}">
+<a class="list-group-item" href="{% url 'film-weeklies' film.slug %}">
 	Weeklies
 </a>
 {% endblock secondary_nav %}
-

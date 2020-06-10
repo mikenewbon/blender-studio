@@ -8,10 +8,12 @@ from films.models import Film, Collection, Asset
 
 
 def get_gallery_drawer_context(film: Film) -> Dict[str, Any]:
-    """ Retrieves all collections for drawer menu in film gallery, ordered and nested.
+    """ A helper function that retrieves collections for drawer menu gallery.
 
-    Sends TWO database queries (1: fetch film top-level collections, 2: fetch their child
-    collections, ordered).
+    The collections are ordered and nested, ready to be looped over in templates.
+    Also the fake 'Featured Artwork' collection is created.
+    This function sends TWO database queries (1: fetch film top-level collections,
+    2: fetch their child collections, ordered).
     Returns a dictionary:
     'collections': <a dict of all the collections with their nested collections>,
     'featured_artwork': <a queryset of film assets marked as featured>.
@@ -51,7 +53,7 @@ def collection_list(request, film_slug):
 
 
 def collection_detail(request, film_slug, collection_slug):
-    # TODO: what about unpublished films and collections?
+    # TODO: what about unpublished films and assets?
     film = get_object_or_404(Film, slug=film_slug)
     collection = get_object_or_404(Collection, slug=collection_slug)
     child_collections = collection.child_collections.order_by('order').prefetch_related(

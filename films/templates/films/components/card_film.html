@@ -1,7 +1,7 @@
 <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
 	<div class="card card-dark card-media card-poster">
 		<div class="card-header" style='background-image: url({{ film.poster.url }})'>
-			<a href="{% url 'film-detail' film.slug %}" class="card-header-link"></a>
+			<a href="{{ film.url }}" class="card-header-link"></a>
 			{% if film.status != "2_released" %}
 			<div class="badge badge-difficulty badge-primary">
 				<i class="material-icons btn-material-icons">theaters</i>
@@ -9,7 +9,7 @@
 			</div>
 			{% endif %}
 		</div>
-		<a class="card-body" href="{% url 'film-detail' film.slug %}">
+		<a class="card-body" href="{% film.url %}">
 			<h2 class="card-title">{{ film.title }}</h2>
 			<p class="card-text">{{ film.description }}</p>
 		</a>

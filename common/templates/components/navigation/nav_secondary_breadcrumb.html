@@ -3,7 +3,7 @@
         <div class="list-group list-group-flush list-group-horizontal small">
 			<!-- TODO(Mike): The nav needs data from django about which items to include -->
 			{% for item in object_list %}
-				<a class="list-group-item" href="{% url 'film-detail' film.slug %}">{{ item.name }}</a>
+				<a class="list-group-item" href="{{ item.url }}">{{ item.name }}</a>
 			{% endfor %}
         </div>
     </div>
