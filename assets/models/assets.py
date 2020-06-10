@@ -36,10 +36,11 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
     source_preview.description = (
         "Asset preview is auto-generated for images and videos. Required for other files."
     )
+
     # TODO: generate preview if not uploaded
-    # @property # or a field?
-    # def preview(self):
-    #     return self.source_preview or ...
+    @property  # or a field?
+    def preview(self):
+        return self.source_preview or self.source
 
     @property
     def author_name(self) -> str:

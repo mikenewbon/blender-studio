@@ -92,7 +92,7 @@ nav-drawer-wide
 	 {% if featured_artwork %}
         <h2>Featured Artwork</h2>
         {% for asset in featured_artwork %}
-            <img src="{{ asset.static_asset.source_preview.url }}" height="100">
+            <img src="{{ asset.static_asset.preview.url }}" height="100">
         {% endfor %}
     {% endif %}
 

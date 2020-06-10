@@ -11,7 +11,7 @@
         <h2>Assets in this collection:</h2>
         {% for asset in current_assets %}
             <h4>{{ asset.name }}</h4>
-            <img src="{{ asset.static_asset.source.url }}" height="100">
+            <img src="{{ asset.static_asset.preview.url }}" height="100">
         {% endfor %}
     {% endif %}
 
@@ -21,7 +21,7 @@
             <h4>{{ child_collection.name }}</h4>
             {% for asset in coll_assets %}
                 <p>{{ asset.name }}</p>
-                <img src="{{ asset.static_asset.source.url }}" height="100">
+                <img src="{{ asset.static_asset.preview.url }}" height="100">
             {% endfor %}
         {% endfor %}
     {% endif %}
