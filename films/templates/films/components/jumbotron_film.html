@@ -9,7 +9,7 @@
 					<p class="mb-3">
 						{{ film.summary|linebreaksbr }}
 					</p>
-					{% if film.watch_link != null %}
+					{% if film.youtube_link != null %}
 					<button class="btn btn-primary mb-0" data-toggle="modal" data-target="#watchVideoModal"
 						target="_blank">Watch
 						{{ film.title }}</button>
@@ -62,6 +62,6 @@
 	}
 
 	document.addEventListener("DOMContentLoaded", function () {
-		insertYouTubeEmbed('{{ film.watch_link }}', '.js-youtube-embed')
+		insertYouTubeEmbed('{{ film.youtube_link }}', '.js-youtube-embed')
 	});
 </script>
