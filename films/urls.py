@@ -13,4 +13,5 @@ urlpatterns = [
         gallery.collection_detail,
         name='collection-detail',
     ),
+    path('<slug:film_slug>/assets/<slug:asset_slug>', gallery.asset_detail, name='asset-detail'),
 ]

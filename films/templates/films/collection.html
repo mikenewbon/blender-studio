@@ -10,7 +10,7 @@
     {% if current_assets %}
         <h2>Assets in this collection:</h2>
         {% for asset in current_assets %}
-            <h4>{{ asset.name }}</h4>
+            <h4><a href="{{ asset.url }}">{{ asset.name }}</a></h4>
             <img src="{{ asset.static_asset.preview.url }}" height="100">
         {% endfor %}
     {% endif %}
@@ -20,7 +20,7 @@
         {% for child_collection, coll_assets in nested_collections.items %}
             <h4>{{ child_collection.name }}</h4>
             {% for asset in coll_assets %}
-                <p>{{ asset.name }}</p>
+                <p><a href="{{ asset.url }}">{{ asset.name }}</a></p>
                 <img src="{{ asset.static_asset.preview.url }}" height="100">
             {% endfor %}
         {% endfor %}

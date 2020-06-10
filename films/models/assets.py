@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls.base import reverse
 from django.utils.text import slugify
 
 from comments.models import Comment
@@ -47,6 +48,12 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+    @property
+    def url(self) -> str:
+        return reverse(
+            'asset-detail', kwargs={'film_slug': self.film.slug, 'asset_slug': self.slug}
+        )
 
 
 class AssetComment(models.Model):

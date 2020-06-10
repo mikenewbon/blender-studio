@@ -53,7 +53,7 @@ def collection_list(request, film_slug):
 
 
 def collection_detail(request, film_slug, collection_slug):
-    # TODO: what about unpublished films and assets?
+    # TODO(Natalia): what about unpublished films and assets?
     film = get_object_or_404(Film, slug=film_slug)
     collection = get_object_or_404(Collection, slug=collection_slug)
     child_collections = collection.child_collections.order_by('order').prefetch_related(
@@ -75,3 +75,10 @@ def collection_detail(request, film_slug, collection_slug):
     }
 
     return render(request, 'films/collection.html', context)
+
+
+def asset_detail(request, film_slug, asset_slug):
+    film = get_object_or_404(Film, slug=film_slug)
+    asset = get_object_or_404(Asset, slug=asset_slug)
+
+    return render(request, 'films/asset_detail.html', {'film': film, 'asset': asset})
