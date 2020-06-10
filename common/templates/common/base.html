@@ -22,20 +22,14 @@
 <body class="{% block bodyclasses %}{% endblock bodyclasses %}">
 	<!-- When the body has a nav-drawer, it should have the class 'has-nav-drawer' and when it's wide, 'has-nav-drawer nav-drawer-wide' -->
 	<nav class="navbar">
+
 		<button class="btn btn-nav navdrawertoggle">
 			<i class="material-icons">menu</i>
 		</button>
+
 		<a href="/" class="navbar-brand">
 			<img src="{% static 'common/images/blender_cloud_logo.svg' %}" alt="Blender Cloud">
 		</a>
-
-		<script>
-			document.addEventListener("DOMContentLoaded", function () {
-				document.querySelectorAll('a.list-group-item[href="' + location.pathname + '"]').forEach((link) => {
-					link.classList.add('active');
-				})
-			});
-		</script>
 
 		<div class="navbar-main-nav list-group list-group-flush list-group-horizontal">
 			<a href="/films/" class="list-group-item">
@@ -43,6 +37,12 @@
 			</a>
 			<a href="/training/" class="list-group-item">
 				<span>Training</span>
+			</a>
+			<a href="/services/" class="list-group-item">
+				<span>Services</span>
+			</a>
+			<a href="/news/" class="list-group-item">
+				<span>News</span>
 			</a>
 		</div>
 
@@ -67,25 +67,67 @@
 		</div>
 	</nav>
 
-	{% block nav_drawer %}
-	{% endblock nav_drawer %}
 
-	<div class="content-holder">
-		<nav class="navbar-secondary" aria-label="breadcrumbs">
-			<div class="container">
-				{% block breadcrumbs %}{% endblock breadcrumbs %}
+	{% block breadcrumbs %}{% endblock breadcrumbs %}
+	{% comment %} <nav class="navbar-secondary" aria-label="breadcrumbs">
+		<div class="content-holder">
+			<div class="container-md">
+
 			</div>
-		</nav>
+		</div>
+	</nav> {% endcomment %}
 
-		{% block jumbotron %}{% endblock jumbotron %}
+	{% block jumbotron %}{% endblock jumbotron %}
 
-		<div class="navbar-secondary">
-			<div class="container">
+
+	{% block secondary_nav %}{% endblock secondary_nav %}
+	{% comment %} <div class="navbar-secondary">
+		<div class="content-holder">
+			<div class="container-md">
 				<div class="list-group list-group-flush list-group-horizontal small">
-					{% block secondary_nav %}{% endblock secondary_nav %}
+
 				</div>
 			</div>
 		</div>
+	</div> {% endcomment %}
+
+	{% block nav_drawer %}
+
+	<nav class="nav-drawer">
+		<div class="nav-drawer-spacer">
+		</div>
+		<div class="nav-drawer-body">
+
+			<div class="px-2 py-2 d-block d-md-none">
+				<div class="input-group mb-0">
+					<div class="input-group-prepend">
+						<span class="input-group-text">
+							<i class="material-icons">search</i></span>
+					</div><input class="form-control" type="text" placeholder="Search tags and keywords" />
+				</div>
+			</div>
+			<ul class="nav-drawer-list mb-0 global-navigation">
+				{% comment %} <li><a class="btn-nav active" href="/"><i class="material-icons">home</i>
+						<span>Home</span></a></li> {% endcomment %}
+				<li><a class="btn-nav" href="/training/"><i
+							class="material-icons">local_library</i><span>Training</span></a></li>
+				<li><a class="btn-nav" href="/films/"><i class="material-icons">movie</i> <span>Films</span></a>
+				</li>
+				<li><a class="btn-nav" href="#"><i class="material-icons">cloud</i> <span>Services</span></a></li>
+				<li><a class="btn-nav" href="/news/"><i class="material-icons">chat_bubble</i> <span>News</span></a>
+				</li>
+			</ul>
+			{% block nav_drawer_inner %}
+			{% endblock nav_drawer_inner %}
+		</div>
+		<div class="drawer-overlay"></div>
+	</nav>
+
+	{% endblock nav_drawer %}
+
+	<div class="content-holder">
+
+
 
 		{% block content %}{% endblock content %}
 	</div>

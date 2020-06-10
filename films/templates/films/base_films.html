@@ -1,18 +1,29 @@
 {% extends 'common/base.html' %}
 
-{% block secondary_nav %}
-<!-- TODO(Mike): Move this into a script somewhere - make it less specific so it works on all nav's by removing the .navbar-secondary selector -->
+{% block bodyclasses %}
+has-secondary-nav
+{% endblock bodyclasses %}
 
-<a class="list-group-item" href="{{ film.url }}">
-	{{ film.title }}
-</a>
-<a class="list-group-item" href="{% url 'film-about' film.slug %}">
-	About
-</a>
-<a class="list-group-item" href="{% url 'film-gallery' film.slug %}">
-	Gallery
-</a>
-<a class="list-group-item" href="{% url 'film-weeklies' film.slug %}">
-	Weeklies
-</a>
+{% block secondary_nav %}
+<div class="navbar-secondary">
+	<div class="content-holder">
+		<div class="container-md">
+			<div class="list-group list-group-flush list-group-horizontal small">
+				<a class="list-group-item" href="{% url 'film-detail' slug=film.slug %}">
+					{{ film.title }}
+				</a>
+				<a class="list-group-item" href="{% url 'film-about' slug=film.slug %}">
+					About
+				</a>
+				<a class="list-group-item" href="{% url 'film-gallery' slug=film.slug %}">
+					Gallery
+				</a>
+				<a class="list-group-item" href="{% url 'film-weeklies' slug=film.slug %}">
+					Weeklies
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+
 {% endblock secondary_nav %}

@@ -13,19 +13,22 @@
 //
 // Provide a static navbar from which we expand to create full-width, fixed, and
 // other navbar variations.
-
+body{
+	margin-top: $navbar-height;
+}
 .navbar {
 	min-height: $navbar-height;
 	transition: margin-left $nav-drawer-animation-duration;
 	position: relative;
 	display: flex;
 	padding: $navbar-padding-y $navbar-padding-x;
+	border-bottom: 1px solid $highlight-white;
 	flex-wrap: no-wrap; // allow us to do the line break for collapsing content
 	align-items: stretch;
 	justify-content: space-between; // space out brand from logo
 	// padding: $navbar-padding-y $navbar-padding-x;
 	@include fixed-top;
-	z-index: 1030;
+	z-index: 1040;
 	background: $navigation-gray;
 	// Because flex properties aren't inherited, we need to redeclare these first
 	// few properties so that content nested within behave properly.
@@ -33,7 +36,10 @@
 		margin-left: 0;
 	}
 	.navdrawertoggle {
-
+		display: none;
+		@include media-breakpoint-down(sm) {
+			display: flex;
+		}
 		i {
 			font-size: $x-large-font-size;
 		}
@@ -43,8 +49,11 @@
 	}
 	.navbar-main-nav{
 		flex-grow: 1;
-		justify-content: center;
 		align-items: center;
+		color: rgba($white, .5);
+		@include media-breakpoint-down(sm) {
+			display: none;
+		}
 		.list-group-item{
 			height: 100%;
 			display: flex;
@@ -106,11 +115,19 @@
 
 .navbar-secondary {
 	position: sticky;
-	background: $charcoal-gray;
-	top: 64px;
-	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-	z-index: 1000;
-	.container {
+	background: $navigation-gray;
+	border-top: 1px solid $highlight-white;
+	border-bottom: 1px solid $highlight-white;
+	top: $navbar-height;
+	z-index: 1030;
+	@include media-breakpoint-down(sm) {
+		z-index: 1020;
+	}
+	.content-holder{
+		margin-top: 0;
+		border-top: none;
+	}
+	.container, .container-fluid {
 		padding: 0;
 	}
 	.list-group,
