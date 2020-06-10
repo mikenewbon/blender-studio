@@ -1,0 +1,20 @@
+{%  extends 'films/gallery.html' %}
+
+{% block content %}
+
+{{ block.super }}
+<div>
+    <h2>Hello world!</h2>
+    <h3>This is the "{{ current_collection.name }}" collection.</h3>
+
+    {% for child_collection, assets in assets.items %}
+        <h4>{{ child_collection.name }}</h4>
+        {% for asset in assets %}
+            <p>{{ asset.name }}</p>
+            <img src="{{ asset.static_asset.source.url }}" height="100">
+        {% endfor %}
+    {% endfor %}
+
+</div>
+
+{% endblock content %}
