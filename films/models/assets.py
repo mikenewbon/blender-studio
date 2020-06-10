@@ -20,7 +20,7 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
     """
 
     # class Meta:
-    #     constraints = []  # TODO: only one related file (img, video, file)
+    #     constraints = []  # TODO(Natalia): only one related file (img, video, file)
 
     film = models.ForeignKey('Film', on_delete=models.CASCADE, related_name='assets')
     static_asset = models.ForeignKey(
@@ -48,6 +48,9 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+    def get_absolute_url(self) -> str:
+        return self.url
 
     @property
     def url(self) -> str:

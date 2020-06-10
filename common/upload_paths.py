@@ -25,7 +25,7 @@ ModelWithFile = typing.Union[
 ]
 
 
-# TODO: write tests
+# TODO(Natalia): write tests
 def get_upload_to_hashed_path(asset: ModelWithFile, filename: str) -> Path:
     """ Generate a unique, hashed upload path for a source file.
 

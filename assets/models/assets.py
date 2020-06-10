@@ -15,7 +15,7 @@ class AssetFileTypeChoices(models.TextChoices):
 class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
     source = models.FileField(upload_to=get_upload_to_hashed_path)
     source_type = models.CharField(choices=AssetFileTypeChoices.choices, max_length=5)
-    # TODO: source type validation
+    # TODO(Natalia): source type validation
     original_filename = models.CharField(max_length=128, editable=False)
     size_bytes = models.IntegerField(editable=False)
 
@@ -37,7 +37,7 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
         "Asset preview is auto-generated for images and videos. Required for other files."
     )
 
-    # TODO: generate preview if not uploaded
+    # TODO(Natalia): generate preview if not uploaded
     @property  # or a field?
     def preview(self):
         return self.source_preview or self.source
@@ -85,5 +85,4 @@ class Image(mixins.CreatedUpdatedMixin, models.Model):
         return f'{self._meta.model_name} {self.static_asset.original_filename}'
 
 
-# TODO: Handle deleting all these files when a model instance is deleted from the db?
-# TODO: size could be retrieved: source.size (cached property of django.core.files.base.File)
+# TODO(Natalia): Handle deleting all these files when a model instance is deleted from the db?

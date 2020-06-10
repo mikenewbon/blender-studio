@@ -15,7 +15,7 @@ class FilmStatus(models.TextChoices):
 
 class Film(mixins.CreatedUpdatedMixin, models.Model):
     storage = models.OneToOneField(StorageBackend, on_delete=models.PROTECT)
-    # TODO: validation - either film or a training has to be null, but not both
+    # TODO(Natalia): validation - either film or a training has to be null, but not both
 
     title = models.CharField(unique=True, max_length=512)
     slug = models.SlugField(unique=True, blank=True)
@@ -43,12 +43,9 @@ class Film(mixins.CreatedUpdatedMixin, models.Model):
     def __str__(self) -> str:
         return self.title
 
-    # def get_absolute_url(self) -> str:
-    #     return self.url
+    def get_absolute_url(self) -> str:
+        return self.url
 
     @property
     def url(self) -> str:
         return reverse('film-detail', kwargs={'film_slug': self.slug})
-
-
-# TODO: tags
