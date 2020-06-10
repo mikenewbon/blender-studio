@@ -69,7 +69,8 @@ def collection_detail(request, film_slug, collection_slug):
     context = {
         'film': film,
         'current_collection': collection,
-        'assets': collection_contents,
+        'current_assets': collection.assets.all(),
+        'nested_collections': collection_contents,
         **drawer_menu_context,
     }
 

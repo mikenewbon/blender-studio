@@ -7,13 +7,24 @@
     <h2>Hello world!</h2>
     <h3>This is the "{{ current_collection.name }}" collection.</h3>
 
-    {% for child_collection, coll_assets in assets.items %}
-        <h4>{{ child_collection.name }}</h4>
-        {% for asset in coll_assets %}
-            <p>{{ asset.name }}</p>
+    {% if current_assets %}
+        <h2>Assets in this collection:</h2>
+        {% for asset in current_assets %}
+            <h4>{{ asset.name }}</h4>
             <img src="{{ asset.static_asset.source.url }}" height="100">
         {% endfor %}
-    {% endfor %}
+    {% endif %}
+
+    {% if nested_collections %}
+        <h2>Nested collections and their assets:</h2>
+        {% for child_collection, coll_assets in nested_collections.items %}
+            <h4>{{ child_collection.name }}</h4>
+            {% for asset in coll_assets %}
+                <p>{{ asset.name }}</p>
+                <img src="{{ asset.static_asset.source.url }}" height="100">
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
 
 </div>
 
