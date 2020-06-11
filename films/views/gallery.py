@@ -2,6 +2,7 @@ from typing import Dict, Any
 
 from django.db.models import QuerySet
 from django.db.models.query import Prefetch
+from django.http import HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404, render
 
 from films.models import Film, Collection, Asset
@@ -40,7 +41,7 @@ def get_gallery_drawer_context(film: Film) -> Dict[str, Any]:
     }
 
 
-def collection_list(request, film_slug):
+def collection_list(request: HttpRequest, film_slug: str) -> HttpResponse:
     film = get_object_or_404(Film, slug=film_slug)
     drawer_menu_context = get_gallery_drawer_context(film)
 
@@ -52,7 +53,7 @@ def collection_list(request, film_slug):
     return render(request, 'films/gallery.html', context)
 
 
-def collection_detail(request, film_slug, collection_slug):
+def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str) -> HttpResponse:
     # TODO(Natalia): what about unpublished films and assets?
     film = get_object_or_404(Film, slug=film_slug)
     collection = get_object_or_404(Collection, slug=collection_slug)
@@ -77,7 +78,7 @@ def collection_detail(request, film_slug, collection_slug):
     return render(request, 'films/collection.html', context)
 
 
-def asset_detail(request, film_slug, asset_slug):
+def asset_detail(request: HttpRequest, film_slug: str, asset_slug: str) -> HttpResponse:
     film = get_object_or_404(Film, slug=film_slug)
     asset = get_object_or_404(Asset, slug=asset_slug)
 

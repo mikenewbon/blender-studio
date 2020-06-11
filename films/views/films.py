@@ -1,3 +1,5 @@
+from django.http import HttpResponse
+from django.http.request import HttpRequest
 from django.shortcuts import render, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_safe
@@ -20,13 +22,13 @@ class FilmDetailView(DetailView):
     slug_url_kwarg = 'film_slug'
 
 
-def about(request, film_slug):
+def about(request: HttpRequest, film_slug: str) -> HttpResponse:
     film = get_object_or_404(Film, slug=film_slug)
     context = {'film': film}
     return render(request, 'films/about.html', context)
 
 
-def weeklies(request, film_slug):
+def weeklies(request: HttpRequest, film_slug: str) -> HttpResponse:
     film = get_object_or_404(Film, slug=film_slug)
     context = {'film': film}
     return render(request, 'films/weeklies.html', context)
