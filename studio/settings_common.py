@@ -126,6 +126,7 @@ PIPELINE = {
                 'comments/scripts/*.js',
                 'comments/scripts/components/*.js',
                 'common/scripts/*.js',
+                'films/scripts/*.js',
             ],
             'output_filename': 'js/studio.js',
             'extra_context': {'async': False, 'defer': False},
