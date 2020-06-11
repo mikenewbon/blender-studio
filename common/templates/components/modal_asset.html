@@ -9,7 +9,7 @@
 				{% comment %} <button class="modal-navigation previous btn btn-ctrl" href="#">
 					<i class="material-icons btn-material-icons">navigate_before</i>
 				</button> {% endcomment %}
-				<a data-toggle="modal" data-target="#modal5-zoom" class="modal-asset-image-wrapper" href="#">
+				<a data-toggle="modal" data-target="#asset-{{ asset.id }}-zoom" class="modal-asset-image-wrapper" href="#">
 					<img class="" src="{{ asset.static_asset.preview.url }}">
 				</a>
 				{% comment %} <button class="modal-navigation next btn btn-ctrl" href="#">

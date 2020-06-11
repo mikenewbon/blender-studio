@@ -38,14 +38,23 @@
 })();
 
 document.addEventListener("DOMContentLoaded", function () {
+
 	// adds active class to any nav item with a href that matches the current url
 	document.querySelectorAll('a.list-group-item[href="' + location.pathname + '"]').forEach((link) => {
 		link.classList.add('active');
 	})
+
 	// adds active class to main-nav item if it matches the start of the current url
 	document.querySelectorAll('.navbar-main-nav a.list-group-item').forEach((link) => {
 		if(location.pathname.startsWith(link.pathname)) {
 			link.classList.add('active');
 		}
 	});
+
+	// adds active class to any nav item with a href that matches the current url (Training/gallery) TODO(Mike): Clean this repetion up
+	document.querySelectorAll('a.drawer-nav-section-link[href="' + location.pathname + '"]').forEach((link) => {
+		link.classList.add('active');
+	})
 });
+
+

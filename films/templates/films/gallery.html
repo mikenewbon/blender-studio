@@ -17,7 +17,7 @@ has-secondary-nav
 	<ol class="drawer-nav-list">
 		<li class="drawer-nav-section">
 			<!-- TODO(Mike): active state JS -->
-			<a href="{{ href }}" class="drawer-nav-section-link {% if active %}active{% endif %}">
+			<a href="{% url 'film-gallery' film_slug=film.slug %}" class="drawer-nav-section-link {% if active %}active{% endif %}">
 				<div class="drawer-nav-section-icon">
 					<i class="material-icons">view_carousel</i>
 					<svg width="30" height="30" class="drawer-nav-section-icon-progress">
@@ -77,9 +77,36 @@ has-secondary-nav
 
 <div class="container-xl pt-3">
 
-	{% block gallery_files %}{% endblock gallery_files %}
+	{% block gallery_files %}
+	<div>
+
+		<p class="subtitle">Spring</p>
+		<h2>Featured Artowrk</h2>
+
+		<div class="files">
+			<div class="row row-cols-2 row-cols-sm-3 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+
+
+				{% if featured_artwork %}
+				{% for asset in featured_artwork %}
+				{% include "components/file.html" with asset=asset %}
+				{% endfor %}
+				{% endif %}
+
+			</div>
+		</div>
+
+	</div>
+	{% endblock gallery_files %}
 
 </div>
 {% endblock content %}
 
-
+{% block content_extra %}
+{% if featured_artwork %}
+{% for asset in featured_artwork %}
+{% include "components/modal_asset.html" with asset=asset %}
+{% include "components/modal_asset_zoom.html" with asset=asset %}
+{% endfor %}
+{% endif %}
+{% endblock content_extra %}
