@@ -22,7 +22,7 @@
 				<div class="training-toolbar-container">
 					<div class="training-toolbar-details">
 						<div class="text-muted x-small">
-							<p class="d-inline mr-3">{{ asset.date_created }}</p>
+							<p class="d-inline mr-3">{{ asset.date_created|date:"jS F Y" }}</p>
 						</div>
 					</div>
 
@@ -52,8 +52,7 @@
 						<h4 class="comment-name">{{ asset.static_asset.author_name }}</h4>
 					</div>
 				</div>
-				<p>Finally we are creating the high-res model for our scene! In this chapter we will go over a few basic
-					modeling techniques as well as the first part of the production timelapse.</p>
+				<p>{{ asset.description }}</p>
 
 
 			</div>
