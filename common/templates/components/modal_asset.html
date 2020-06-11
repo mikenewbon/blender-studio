@@ -1,0 +1,65 @@
+<div class="modal modal-asset" id="asset-{{ asset.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+	<button class="modal-navigation modal-close btn btn-ctrl" href="#" data-dismiss="modal">
+		<i class="material-icons btn-material-icons">close</i>
+	</button>
+	<div class="modal-dialog" role="document">
+		<div class="modal-content bg-dark">
+
+			<div class="modal-header p-0 bg-secondary">
+				{% comment %} <button class="modal-navigation previous btn btn-ctrl" href="#">
+					<i class="material-icons btn-material-icons">navigate_before</i>
+				</button> {% endcomment %}
+				<a data-toggle="modal" data-target="#modal5-zoom" class="modal-asset-image-wrapper" href="#">
+					<img class="" src="{{ asset.static_asset.preview.url }}">
+				</a>
+				{% comment %} <button class="modal-navigation next btn btn-ctrl" href="#">
+					<i class="material-icons btn-material-icons">navigate_next</i>
+				</button> {% endcomment %}
+			</div>
+			<div class="modal-body">
+				<p class="subtitle small">{{ asset.static_asset.get_source_type_display }}</p>
+				<h2 class="mb-0">{{ asset.name }}</h2>
+				<div class="training-toolbar-container">
+					<div class="training-toolbar-details">
+						<div class="text-muted x-small">
+							<p class="d-inline mr-3">{{ asset.date_created }}</p>
+						</div>
+					</div>
+
+					<div class="training-toolbar">
+						<a class="btn btn-sm btn-dark"><i
+								class="material-icons btn-material-icons btn-material-icons-lg">favorite_border</i>
+							Like</a>
+						<a href="{{ asset.static_asset.source.url }}" download  class="btn btn-sm btn-dark">Download</a>
+						<button data-toggle="dropdown" class="btn btn-sm btn-ctrl-sm btn-dark">
+
+							<i class="material-icons btn-material-icons">more_horiz</i>
+
+							<div class="dropdown-menu dropdown-menu-right">
+								<a href="#" class="dropdown-item">
+									<i class="material-icons">flag</i>
+									<span>Report Problem</span>
+								</a>
+							</div>
+						</button>
+					</div>
+				</div>
+				<div class="row mb-2">
+					<div style="background-image:url('https://blender.chat/avatar/MikeNewbon');" class="profile ml-2">
+					</div>
+					<div class="col-auto">
+						<p class="subtitle text-white-50 x-small">Author</p>
+						<h4 class="comment-name">{{ asset.static_asset.author_name }}</h4>
+					</div>
+				</div>
+				<p>Finally we are creating the high-res model for our scene! In this chapter we will go over a few basic
+					modeling techniques as well as the first part of the production timelapse.</p>
+
+
+			</div>
+		</div>
+	</div>
+	<button class="modal-navigation modal-close btn btn-ctrl" href="#" data-dismiss="modal">
+		<i class="material-icons btn-material-icons">close</i>
+	</button>
+</div>

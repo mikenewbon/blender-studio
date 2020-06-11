@@ -1,31 +1,43 @@
 {%  extends 'films/gallery.html' %}
 
-{% block content %}
+{% block gallery_files %}
 
-{{ block.super }}
 <div>
-    <h2>Hello world!</h2>
-    <h3>This is the "{{ current_collection.name }}" collection.</h3>
 
-    {% if current_assets %}
-        <h2>Assets in this collection:</h2>
-        {% for asset in current_assets %}
-            <h4><a href="{{ asset.url }}">{{ asset.name }}</a></h4>
-            <img src="{{ asset.static_asset.preview.url }}" height="100">
-        {% endfor %}
-    {% endif %}
+	{% if current_collection.parent.parent %}
+	<a href="{{ current_collection.parent.url }}" class="btn btn-sm btn-secondary  mb-3">Back to
+		{{ current_collection.parent.name }}</a>
+	{% endif %}
 
-    {% if nested_collections %}
-        <h2>Nested collections and their assets:</h2>
-        {% for child_collection, coll_assets in nested_collections.items %}
-            <h4>{{ child_collection.name }}</h4>
-            {% for asset in coll_assets %}
-                <p><a href="{{ asset.url }}">{{ asset.name }}</a></p>
-                <img src="{{ asset.static_asset.preview.url }}" height="100">
-            {% endfor %}
-        {% endfor %}
-    {% endif %}
+	<p class="subtitle">{{ current_collection.parent.name }}</p>
+	<h2>{{ current_collection.name }}</h2>
+
+	<div class="files">
+		<div class="row row-cols-2 row-cols-sm-3 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+
+			{% if nested_collections %}
+			{% for child_collection in nested_collections %}
+			{% include "components/file.html" with asset=asset %}
+			{% endfor %}
+			{% endif %}
+
+			{% if current_assets %}
+			{% for asset in current_assets %}
+			{% include "components/file.html" with asset=asset %}
+			{% endfor %}
+			{% endif %}
+
+		</div>
+	</div>
 
 </div>
 
-{% endblock content %}
+{% endblock gallery_files %}
+
+{% block content_extra %}
+{% if current_assets %}
+{% for asset in current_assets %}
+{% include "components/modal_asset.html" with asset=asset %}
+{% endfor %}
+{% endif %}
+{% endblock content_extra %}

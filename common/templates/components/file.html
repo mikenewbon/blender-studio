@@ -1,0 +1,42 @@
+{% load static %}
+<div class="col">
+	<div class="file">
+		{% if child_collection %}
+		{% if child_collection.preview %}
+		<div class="file-header" style="background-image:url({{ child_collection.preview.url }})">
+			{% else %}
+			<div class="file-header" style="background-image:url({% static "common/images/icons/folder-24px.svg" %})">
+				{% endif %}
+				{% else %}
+				<div class="file-header" style="background-image:url({{ asset.static_asset.preview.url }})">
+					{% endif %}
+					{% if not child_collection %}
+					<a href="{{ asset.url }}" data-toggle="modal" data-target="#asset-{{ asset.id }}"
+						class="file-body"></a>
+					<btn class="btn btn-secondary btn-ctrl-xs btn-save-media" data-toggle="dropdown" href="#">
+						<i class="material-icons btn-material-icons">more_horiz</i>
+					</btn>
+					<div class="dropdown-menu dropdown-menu-right">
+						<a href="{{ asset.static_asset.source.url }}" download class="dropdown-item">
+							<i class="material-icons">get_app</i>
+							<span>Download</span>
+						</a>
+					</div>
+					{% else %}
+					<a href="{{ child_collection.url }}"
+						class="file-body"></a>
+					{% endif %}
+				</div>
+				{% if not child_collection %}
+				<a href="{{ asset.url }}" data-toggle="modal" data-target="#asset-{{ asset.id }}" class="file-body">
+					<p class="subtitle">{{ asset.static_asset.get_source_type_display }}</p>
+					<h4>{{ asset.name }}</h4>
+				</a>
+				{% else %}
+				<a href="{{ child_collection.url }}" class="file-body">
+					<p class="subtitle">Folder</p>
+					<h4>{{ child_collection.name }}</h4>
+				</a>
+				{% endif %}
+			</div>
+		</div>

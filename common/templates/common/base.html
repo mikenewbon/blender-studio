@@ -68,14 +68,7 @@
 	</nav>
 
 
-	{% block breadcrumbs %}{% endblock breadcrumbs %}
-	{% comment %} <nav class="navbar-secondary" aria-label="breadcrumbs">
-		<div class="content-holder">
-			<div class="container-md">
 
-			</div>
-		</div>
-	</nav> {% endcomment %}
 
 	{% block jumbotron %}{% endblock jumbotron %}
 
@@ -126,11 +119,20 @@
 	{% endblock nav_drawer %}
 
 	<div class="content-holder">
+	{% block breadcrumbs %}{% endblock breadcrumbs %}
+	{% comment %} <nav class="navbar-secondary" aria-label="breadcrumbs">
+		<div class="content-holder">
+			<div class="container-md">
+
+			</div>
+		</div>
+	</nav> {% endcomment %}
 
 
 
 		{% block content %}{% endblock content %}
 	</div>
+	{% block content_extra %}{% endblock content_extra %}
 </body>
 
 </html>

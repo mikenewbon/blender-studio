@@ -75,27 +75,11 @@ has-secondary-nav
 
 {% block content %}
 
-<div class="container-xl pt-4">
+<div class="container-xl pt-3">
 
-	 {% if featured_artwork %}
-        <h2>Featured Artwork</h2>
-        {% for asset in featured_artwork %}
-            <img src="{{ asset.static_asset.preview.url }}" height="100">
-        {% endfor %}
-    {% endif %}
-
-
-	{% for collection, child_collections in collections.items %}
-	<div>
-		<h2><a href="{{ collection.url }}">{{ collection.name }}</a></h2>
-		<div>
-			{% for child_collection in child_collections %}
-			<p><a href="{{ child_collection.url }}">{{ child_collection.name }}</a></p>
-			{% endfor %}
-		</div>
-	</div>
-
-	{% endfor %}
+	{% block gallery_files %}{% endblock gallery_files %}
 
 </div>
 {% endblock content %}
+
+
