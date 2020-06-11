@@ -37,10 +37,14 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
         "Asset preview is auto-generated for images and videos. Required for other files."
     )
 
-    # TODO(Natalia): generate preview if not uploaded
-    @property  # or a field?
+    # TODO(Natalia): generate preview if source_preview not uploaded.
+    @property
     def preview(self):
-        return self.source_preview or self.source
+        if self.source_preview:
+            return self.source_preview
+        if self.source_type == AssetFileTypeChoices.image:
+            return self.source
+        # TODO(Natalia): Update this once we have auto-generated previews.
 
     @property
     def author_name(self) -> str:

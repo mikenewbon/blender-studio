@@ -27,7 +27,6 @@ class Collection(mixins.CreatedUpdatedMixin, models.Model):
     text = models.TextField(blank=True)
 
     preview = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
-    # TODO(Natalia): generate preview if not uploaded
     picture_16_9 = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
 
     def clean(self) -> None:
