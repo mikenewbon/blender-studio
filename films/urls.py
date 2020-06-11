@@ -1,6 +1,7 @@
 from django.urls import path
 
 from films.views import films, gallery
+from films.views.api.asset import asset as asset_api
 
 urlpatterns = [
     path('', films.FilmListView.as_view(), name='film-list'),
@@ -14,4 +15,5 @@ urlpatterns = [
         name='collection-detail',
     ),
     path('<slug:film_slug>/assets/<slug:asset_slug>', gallery.asset_detail, name='asset-detail'),
+    path('api/<int:film_pk>/assets/<int:asset_pk>', asset_api, name='asset-api'),
 ]
