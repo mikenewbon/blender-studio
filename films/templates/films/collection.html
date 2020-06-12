@@ -4,9 +4,10 @@
 
 <div>
 
-	{% if current_collection.parent.parent %}
-	<a href="{{ current_collection.parent.url }}" class="btn btn-sm btn-secondary  mb-3">Back to
-		{{ current_collection.parent.name }}</a>
+	{% if current_collection.parent %}
+	    <a href="{{ current_collection.parent.url }}" class="btn btn-sm btn-secondary  mb-3">
+            Back to {{ current_collection.parent.name }}
+        </a>
 	{% endif %}
 
 	<p class="subtitle">{{ current_collection.parent.name }}</p>
@@ -16,15 +17,15 @@
 		<div class="row row-cols-2 row-cols-sm-3 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
 
 			{% if nested_collections %}
-			{% for child_collection in nested_collections %}
-			{% include "components/file.html" with asset=asset %}
-			{% endfor %}
+                {% for child_collection in nested_collections %}
+                    {% include "components/file.html" with asset=asset %}
+                {% endfor %}
 			{% endif %}
 
 			{% if current_assets %}
-			{% for asset in current_assets %}
-			{% include "components/file.html" with asset=asset %}
-			{% endfor %}
+                {% for asset in current_assets %}
+                    {% include "components/file.html" with asset=asset %}
+                {% endfor %}
 			{% endif %}
 
 		</div>
@@ -35,10 +36,10 @@
 {% endblock gallery_files %}
 
 {% block content_extra %}
-{% if current_assets %}
-{% for asset in current_assets %}
-{% include "components/modal_asset.html" with asset=asset %}
-{% include "components/modal_asset_zoom.html" with asset=asset %}
-{% endfor %}
-{% endif %}
+    {% if current_assets %}
+        {% for asset in current_assets %}
+            {% include "components/modal_asset.html" with asset=asset %}
+            {% include "components/modal_asset_zoom.html" with asset=asset %}
+        {% endfor %}
+    {% endif %}
 {% endblock content_extra %}
