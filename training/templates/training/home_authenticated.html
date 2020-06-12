@@ -1,66 +1,80 @@
-{% extends 'training/base.html' %}
+{% extends 'training/base_training.html' %}
 
-{% import 'common/components.html' as components %}
-{% import 'training/components.html' as training_components %}
 
 {% block jumbotron %}
-    {% call components.jumbotron() %}
-        <h1>Training</h1>
-        <p class="mb-0">
-            Learn from our expert team. Classes, workshops and production lessons with .blend files
-            included.
-        </p>
-    {% endcall %}
+<div style="background-image:url('value/{{ value }}')" class="jumbotron jumbotron-fluid jumbotron-overlay header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5 col-xl-4">
+                <div class="jumbotron-body">
+                    <h1>Training</h1>
+                    <p class="mb-0">
+                        Learn from our expert team. Classes, workshops and production lessons with .blend files
+                        included.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock jumbotron %}
 
 {% block content %}
+<div class="container-xl pt-5">
     <section class="">
         <div class="row">
             <div class="col-md-6 mb-3">
-                {{ components.searchbar(placeholder="Search tags and keywords") }}
+                <div class="input-group">
+                    <div class="input-group-prepend"><span class="input-group-text"><i
+                                class="material-icons">search</i></span>
+                    </div>
+                    <input type="text" placeholder="Search tags and keywords" class="form-control">
+                </div>
             </div>
             <div class="col-md-3 col-6 mb-3">
-                {% call components.select() %}
+                <select class="custom-select">
                     {% for type in TrainingType %}
-                        <option value="{{ type.value }}">{{ type.label }}</option>
+                    <option value="{{ type.value }}">{{ type.label }}</option>
                     {% endfor %}
-                {% endcall %}
+                </select>
             </div>
             <div class="col-md-3 col-6 mb-3">
-                {% call components.select() %}
+                <select class="custom-select">
                     {% for type in TrainingDifficulty %}
-                        <option value="{{ type.value }}">{{ type.label }}</option>
+                    <option value="{{ type.value }}">{{ type.label }}</option>
                     {% endfor %}
-                {% endcall %}
+                </select>
             </div>
         </div>
     </section>
     {% if recently_watched_sections %}
-        <section class="mb-3">
-            <h2>Continue training</h2>
-            <p>Recently watched sections will appear here with your position saved</p>
-            {% call components.cards() %}
-                {% for section in recently_watched_sections %}
-                    {{ training_components.card_section(section) }}
-                {% endfor %}
-            {% endcall %}
-        </section>
+    <section class="mb-3">
+        <h2>Continue training</h2>
+        <p>Recently watched sections will appear here with your position saved</p>
+        <div class="row">
+            {% for section in recently_watched_sections %}
+            {% include "training/components/card_section.html" with section=section %}
+            {% endfor %}
+        </div>
+    </section>
     {% endif %}
     <section class="mb-3">
         <h2>Your saved training</h2>
         <p>You can add and remove items from this list by clicking the plus or the tick</p>
-        {% call components.cards() %}
+        <div class="row">
             {% for training in favorited_trainings %}
-                {{ training_components.card_training(training) }}
+            {% include "training/components/card_training.html" with training=training %}
             {% endfor %}
-        {% endcall %}
+        </div>
     </section>
     <section>
         <h2>All training</h2>
-        {% call components.cards() %}
+        <div class="row">
             {% for training in all_trainings %}
-                {{ training_components.card_training(training) }}
+            {% include "training/components/card_training.html" with training=training %}
+            
             {% endfor %}
-        {% endcall %}
+        </div>
     </section>
+</div>
 {% endblock content %}

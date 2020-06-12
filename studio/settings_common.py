@@ -47,7 +47,6 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
         'DIRS': [
-            str(BASE_DIR / 'training/templates'),
             str(BASE_DIR / 'comments/templates'),
             str(BASE_DIR / 'common/templates'),
         ],
@@ -68,6 +67,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
+            str(BASE_DIR / 'training/templates'),
             str(BASE_DIR / 'templates'),
             str(BASE_DIR / 'films/templates'),
         ],

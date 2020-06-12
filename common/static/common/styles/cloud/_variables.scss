@@ -113,6 +113,9 @@ $theme-colors: map-merge(
 		"dark": $dark,
 		"transparent": $transparent,
 		"input": $input-gray,
+		"beginner": $green,
+		"intermediate": $blue,
+		"advanced": $red,
 	),
 	$theme-colors
 );
