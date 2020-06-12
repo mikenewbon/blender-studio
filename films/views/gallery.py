@@ -55,8 +55,8 @@ def collection_list(request: HttpRequest, film_slug: str) -> HttpResponse:
 
 def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str) -> HttpResponse:
     # TODO(Natalia): what about unpublished films and assets?
-    film = get_object_or_404(Film, slug=film_slug)
-    collection = get_object_or_404(Collection, slug=collection_slug)
+    film = get_object_or_404(Film, slug=film_slug, is_published=True)
+    collection = get_object_or_404(Collection, slug=collection_slug, film_id=film.id)
     child_collections = collection.child_collections.order_by('order').prefetch_related(
         Prefetch('assets', queryset=film.assets.order_by('order'), to_attr='coll_assets')
     )
@@ -79,7 +79,7 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
 
 
 def asset_detail(request: HttpRequest, film_slug: str, asset_slug: str) -> HttpResponse:
-    film = get_object_or_404(Film, slug=film_slug)
-    asset = get_object_or_404(Asset, slug=asset_slug)
+    film = get_object_or_404(Film, slug=film_slug, is_published=True)
+    asset = get_object_or_404(Asset, slug=asset_slug, film_id=film.id, is_published=True)
 
     return render(request, 'films/asset_detail.html', {'film': film, 'asset': asset})
