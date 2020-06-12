@@ -81,7 +81,7 @@ has-secondary-nav
 	<div>
 
 		<p class="subtitle">{{ film.title }}</p>
-		<h2>Featured Artowrk</h2>
+		<h2>Featured Artwork</h2>
 
 		<div class="files">
 			<div class="row row-cols-2 row-cols-sm-3 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
@@ -101,33 +101,8 @@ has-secondary-nav
 
 </div>
 
-<div id="gallery-modal" class="modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Modal body text goes here.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Save changes</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
+<div id="gallery-modal" class="modal modal-asset" tabindex="-1" role="dialog" aria-hidden="true">
+{#    TODO(Natalia): modal div, the contents from "modal_asset.html" are added here. Where to put this? #}
 </div>
 
 {% endblock content %}
-
-{% block content_extra %}
-    {% if featured_artwork %}
-        {% for asset in featured_artwork %}
-            {% include "components/modal_asset.html" with asset=asset %}
-            {% include "components/modal_asset_zoom.html" with asset=asset %}
-        {% endfor %}
-    {% endif %}
-{% endblock content_extra %}

@@ -34,12 +34,3 @@
 </div>
 
 {% endblock gallery_files %}
-
-{% block content_extra %}
-    {% if current_assets %}
-        {% for asset in current_assets %}
-            {% include "components/modal_asset.html" with asset=asset %}
-            {% include "components/modal_asset_zoom.html" with asset=asset %}
-        {% endfor %}
-    {% endif %}
-{% endblock content_extra %}

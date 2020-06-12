@@ -12,7 +12,9 @@
         {% endif %}
 
         {% if not child_collection %}
-            <a href="{{ asset.url }}" data-toggle="modal" data-target="#gallery-modal" class="file-body" data-url="/films/api/1/assets/1"></a>
+            <h1>  </h1>
+            <a href="{{ asset.url }}" data-toggle="modal" data-target="#gallery-modal"
+               class="file-body" data-url="{% url 'asset-api' film.id asset.id %}"></a>
             <btn class="btn btn-secondary btn-ctrl-xs btn-save-media" data-toggle="dropdown" href="#">
                 <i class="material-icons btn-material-icons">more_horiz</i>
             </btn>
