@@ -3,12 +3,22 @@
 
 window.asset = (function asset() {
     document.addEventListener('DOMContentLoaded', () => {
-        document.getElementsByClassName('file-body').forEach(element => {
-            console.log(element.className);
+        document.getElementsByClassName('file').forEach(element => {
             element.addEventListener('click', event => {
-                event.preventDefault();
-                console.log('click click');
-            });
+                console.log(element)
+                // event.preventDefault();  // doesn't change anything...
+                fetch(`../api/2/assets/4`).then(response => {
+                    console.log('response:', response)
+                    if (response.status >= 200 && response.status < 300) {
+                        return Promise.resolve(response);
+                    }
+                    return Promise.reject(new Error(response.statusText));
+                })
+                // .then(response => response.json())
+                .then(response => console.log(response));
+            })
         });
     });
+
+    return 42
 })();

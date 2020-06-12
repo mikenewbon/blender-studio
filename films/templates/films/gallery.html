@@ -88,9 +88,9 @@ has-secondary-nav
 
 
 				{% if featured_artwork %}
-				{% for asset in featured_artwork %}
-				{% include "components/file.html" with asset=asset %}
-				{% endfor %}
+                    {% for asset in featured_artwork %}
+                        {% include "components/file.html" with asset=asset %}
+                    {% endfor %}
 				{% endif %}
 
 			</div>
@@ -103,10 +103,10 @@ has-secondary-nav
 {% endblock content %}
 
 {% block content_extra %}
-{% if featured_artwork %}
-{% for asset in featured_artwork %}
-{% include "components/modal_asset.html" with asset=asset %}
-{% include "components/modal_asset_zoom.html" with asset=asset %}
-{% endfor %}
-{% endif %}
+    {% if featured_artwork %}
+        {% for asset in featured_artwork %}
+            {% include "components/modal_asset.html" with asset=asset %}
+            {% include "components/modal_asset_zoom.html" with asset=asset %}
+        {% endfor %}
+    {% endif %}
 {% endblock content_extra %}
