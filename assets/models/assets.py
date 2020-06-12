@@ -1,9 +1,13 @@
-from assets.models import License, StorageBackend
-from common import mixins
-from common.upload_paths import get_upload_to_hashed_path
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models.fields.files import FieldFile
+from django.core.files.storage import FileSystemStorage
+from storages.backends.gcloud import GoogleCloudStorage
+
+from assets.models import License, StorageBackend, StorageBackendCategoryChoices
+from common import mixins
+from common.upload_paths import get_upload_to_hashed_path
 
 
 class AssetFileTypeChoices(models.TextChoices):
@@ -12,8 +16,32 @@ class AssetFileTypeChoices(models.TextChoices):
     video = 'video', 'Video'
 
 
+class DynamicStorageFieldFile(FieldFile):
+    def __init__(self, instance: "StaticAsset", field, name):
+        super(DynamicStorageFieldFile, self).__init__(instance, field, name)
+        if instance.storage_backend == StorageBackendCategoryChoices.gcs:
+            self.storage: GoogleCloudStorage = GoogleCloudStorage()
+            if instance.storage_backend.bucket_name:
+                self.storage.bucket_name = instance.storage_backend.bucket_name
+        else:
+            self.storage = FileSystemStorage()
+
+
+class DynamicStorageFileField(models.FileField):
+    attr_class = DynamicStorageFieldFile
+
+    def pre_save(self, model_instance: "StaticAsset", add):
+        if model_instance.storage_backend == StorageBackendCategoryChoices.gcs:
+            storage = GoogleCloudStorage()
+        else:
+            storage = FileSystemStorage()
+        self.storage = storage
+        file = super(DynamicStorageFileField, self).pre_save(model_instance, add)
+        return file
+
+
 class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
-    source = models.FileField(upload_to=get_upload_to_hashed_path)
+    source = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
     source_type = models.CharField(choices=AssetFileTypeChoices.choices, max_length=5)
     # TODO(Natalia): source type validation
     original_filename = models.CharField(max_length=128, editable=False)
