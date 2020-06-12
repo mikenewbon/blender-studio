@@ -1,10 +1,11 @@
 from django.http import JsonResponse
 from django.http.request import HttpRequest
+from django.shortcuts import render
 
 from films.models import Asset
 
 
-def asset(request: HttpRequest, film_pk: int, asset_pk: int) -> JsonResponse:
+def asset(request: HttpRequest, film_pk: int, asset_pk: int):
     asset = (
         Asset.objects.filter(pk=asset_pk)
         .select_related(
@@ -16,6 +17,8 @@ def asset(request: HttpRequest, film_pk: int, asset_pk: int) -> JsonResponse:
         )
         .get()
     )
+
+    return render(request, 'components/modal_asset.html', {'asset': asset})
 
     return JsonResponse(
         {

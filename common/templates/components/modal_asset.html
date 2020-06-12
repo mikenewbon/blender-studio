@@ -6,15 +6,7 @@
 		<div class="modal-content bg-dark">
 
 			<div class="modal-header p-0 bg-secondary">
-				{% comment %} <button class="modal-navigation previous btn btn-ctrl" href="#">
-					<i class="material-icons btn-material-icons">navigate_before</i>
-				</button> {% endcomment %}
-				<a data-toggle="modal" data-target="#asset-{{ asset.id }}-zoom" class="modal-asset-image-wrapper" href="#">
-					<img class="" src="{{ asset.static_asset.preview.url }}">
-				</a>
-				{% comment %} <button class="modal-navigation next btn btn-ctrl" href="#">
-					<i class="material-icons btn-material-icons">navigate_next</i>
-				</button> {% endcomment %}
+
 			</div>
 			<div class="modal-body">
 				<p class="subtitle small">{{ asset.static_asset.get_source_type_display }}</p>
@@ -22,7 +14,7 @@
 				<div class="training-toolbar-container">
 					<div class="training-toolbar-details">
 						<div class="text-muted x-small">
-							<p class="d-inline mr-3">{{ asset.date_created|date:"jS F Y" }}</p>
+							<p class="d-inline mr-3">{{ asset.date_created }}</p>
 						</div>
 					</div>
 
