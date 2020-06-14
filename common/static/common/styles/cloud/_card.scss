@@ -131,6 +131,10 @@
 			.btn-save-media {
 				top: $spacer/2;
 				right: $spacer/2;
+				@extend .btn-secondary;
+				&.checked{
+					@extend .btn-primary;
+				}
 			}
 
 			.progress {

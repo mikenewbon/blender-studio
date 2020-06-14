@@ -15,7 +15,7 @@ window.cardTraining = (function cardTraining() {
     _setupEventListeners() {
       this.favoriteElement.addEventListener('click', this._postFavorite.bind(this));
     }
-
+    // TODO(Mike): Ask Nat to look at this - clicking favorite
     _postFavorite() {
       const { favoriteElement } = this;
       ajax

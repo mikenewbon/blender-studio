@@ -7,8 +7,8 @@
                 <i class="material-icons btn-material-icons">extension</i>
                 {{ training.difficulty.label }}
             </div>
+            {% include 'training/components/card_button_favorite.html' with class='btn-save-media card-training-favorite' checked=training.favorited %}
             {% comment %}
-            {{ badge_difficulty(label=training.difficulty.label, color=difficulty_color) }}
             {{ card_training_checkbox_favorite(checked=training.favorited, class=['btn-save-media', 'card-training-favorite']) }}
             {% endcomment %}
         </div>
