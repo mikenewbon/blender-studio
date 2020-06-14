@@ -16,3 +16,4 @@ node_modules/
 /public/
 /yarn-error.log
 .venv/
+.python-version
