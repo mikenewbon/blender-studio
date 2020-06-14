@@ -19,7 +19,7 @@ class AssetFileTypeChoices(models.TextChoices):
 class DynamicStorageFieldFile(FieldFile):
     def __init__(self, instance: "StaticAsset", field, name):
         super(DynamicStorageFieldFile, self).__init__(instance, field, name)
-        if instance.storage_backend == StorageBackendCategoryChoices.gcs:
+        if instance.storage_backend.category == StorageBackendCategoryChoices.gcs.value:
             self.storage: GoogleCloudStorage = GoogleCloudStorage()
             if instance.storage_backend.bucket_name:
                 self.storage.bucket_name = instance.storage_backend.bucket_name
@@ -31,7 +31,7 @@ class DynamicStorageFileField(models.FileField):
     attr_class = DynamicStorageFieldFile
 
     def pre_save(self, model_instance: "StaticAsset", add):
-        if model_instance.storage_backend == StorageBackendCategoryChoices.gcs:
+        if model_instance.storage_backend.category == StorageBackendCategoryChoices.gcs.value:
             storage = GoogleCloudStorage()
         else:
             storage = FileSystemStorage()
@@ -60,7 +60,7 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
         StorageBackend, on_delete=models.CASCADE, related_name='assets'
     )
 
-    source_preview = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True)
+    source_preview = DynamicStorageFileField(upload_to=get_upload_to_hashed_path, blank=True)
     source_preview.description = (
         "Asset preview is auto-generated for images and videos. Required for other files."
     )

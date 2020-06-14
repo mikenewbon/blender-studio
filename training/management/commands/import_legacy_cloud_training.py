@@ -39,6 +39,36 @@ class Command(BaseCommand):
         training_doc_path = training_abspath / 'index.json'
         training_doc = self.load_doc(training_doc_path)
 
+        def add_static_asset_path(ob, property, file_path):
+            # Build the full path for the file. In Blender Cloud there is a convention to place all
+            # assets in a "_" directory at the root of the bucket.
+            file_path_full = f"_/{file_path}"
+            setattr(ob, property, file_path_full)
+            ob.save()
+
+        def add_images_to_training(training):
+            # Add images for the project
+            training_pictures = {'picture_16_9', 'picture_header'}
+            for picture in training_pictures:
+                self.stdout.write(self.style.NOTICE('Adding pictures for training %s' % training))
+                file_doc_path = (
+                        training_doc_path.parent / 'files' / str(
+                    training_doc[picture]) / 'file.json'
+                )
+                file_doc = self.load_doc(file_doc_path)
+                add_static_asset_path(training, picture, file_doc['file_path'])
+
+                # file_path_src = file_doc_path.parent / pathlib.Path(file_doc['file_path']).name
+                # file_path_rel = upload_paths.get_upload_to_hashed_path(
+                #     training, pathlib.Path(file_doc['file_path']).name
+                # )
+                # file_path_dst = pathlib.Path(settings.MEDIA_ROOT, file_path_rel)
+                # # Ensure destination directory
+                # file_path_dst.parent.mkdir(parents=True, exist_ok=True)
+                # # shutil.copy(str(file_path_src), str(file_path_dst))
+                # setattr(training, picture, str(file_path_rel))
+                # training.save()
+
         def get_or_create_training():
             # Fetch or create Training object
             self.stdout.write(self.style.NOTICE('Creating training %s' % training_doc['url']))
@@ -48,7 +78,13 @@ class Command(BaseCommand):
                     self.style.WARNING('Project %s already exists' % training_doc['url'])
                 )
             else:
-                storage = models_assets.StorageBackend.objects.create(name=training_doc['url'])
+                # Create a GCS storage backend (all training use this type of storage)
+                storage_backend: models_assets.StorageBackend = models_assets.StorageBackend.objects.create(
+                    name=training_doc['url'],
+                    category=models_assets.StorageBackendCategoryChoices.gcs,
+                    bucket_name=training_doc['_id'],
+                )
+
                 training = models_training.trainings.Training.objects.create(
                     name=training_doc['name'],
                     slug=training_doc['url'],
@@ -57,27 +93,8 @@ class Command(BaseCommand):
                     status=training_doc['status'],
                     type=training_doc['category'],
                     difficulty='beginner',
-                    storage=storage,
+                    storage_backend=storage_backend,
                 )
-            # Add images for the project
-            training_pictures = {'picture_16_9', 'picture_header'}
-            for picture in training_pictures:
-                self.stdout.write(self.style.NOTICE('Adding pictures for training %s' % training))
-                file_doc_path = (
-                    training_doc_path.parent / 'files' / str(training_doc[picture]) / 'file.json'
-                )
-                file_doc = self.load_doc(file_doc_path)
-                file_path_src = file_doc_path.parent / pathlib.Path(file_doc['file_path']).name
-                file_path_rel = upload_paths.get_upload_to_hashed_path(
-                    training, pathlib.Path(file_doc['file_path']).name
-                )
-                file_path_dst = pathlib.Path(settings.MEDIA_ROOT, file_path_rel)
-                # Ensure destination directory
-                file_path_dst.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy(str(file_path_src), str(file_path_dst))
-                # self.add_local_file(training, 'picture_16_9', file_path_rel)
-                setattr(training, picture, str(file_path_rel))
-                training.save()
 
             return training
 
@@ -108,7 +125,71 @@ class Command(BaseCommand):
                     date_created=date_created, date_updated=date_updated
                 )
                 chapter_index += 1
+                self.stdout.write(self.style.NOTICE('Creating sections for %s' % chapter_slug))
                 get_or_create_sections(chapter)
+
+        def attach_video_or_asset_to_section(section, section_doc, date_created, date_updated):
+            file_doc_path = (
+                    training_doc_path.parent
+                    / 'files'
+                    / str(section_doc['properties']['file'])
+                    / 'file.json'
+            )
+            file_doc = self.load_doc(file_doc_path)
+
+            # Create video
+            if section_doc['properties']['content_type'] == 'video':
+                # Proceed only if a version is found, and pick the first only
+                if 'variations' not in file_doc:
+                    return
+
+                try:
+                    video = section.video
+                except models_training.sections.Video.DoesNotExist:
+                    video = models_training.sections.Video.objects.create(
+                        section=section,
+                        size=25000,
+                        duration='10:00',
+                        file='stand/in/path.mp4',
+                        storage_backend=section.chapter.training.storage_backend,
+                    )
+                models_training.sections.Video.objects.filter(pk=video.pk).update(
+                    date_created=date_created, date_updated=date_updated
+                )
+
+                variation = file_doc['variations'][0]
+                add_static_asset_path(video, 'file', variation['file_path'])
+
+            elif section_doc['properties']['content_type'] == 'file':
+                if section.assets.exists():
+                    asset = section.assets.first()
+                else:
+                    asset = models_training.sections.Asset.objects.create(
+                        section=section,
+                        size=25000,
+                        file='stand/in/path.mp4',
+                        storage_backend=section.chapter.training.storage_backend,
+                    )
+                add_static_asset_path(asset, 'file', file_doc['file_path'])
+                models_training.sections.Asset.objects.filter(pk=asset.pk).update(
+                    date_created=date_created, date_updated=date_updated
+                )
+
+            # file_path_src = (
+            #     file_doc_path.parent / 'variations' / pathlib.Path(variation['file_path']).name
+            # )
+            # file_path_rel = upload_paths.get_upload_to_hashed_path(
+            #     video, pathlib.Path(variation['file_path']).name
+            # )
+            # file_path_dst = pathlib.Path(settings.MEDIA_ROOT, file_path_rel)
+            # # Ensure destination directory
+            # file_path_dst.parent.mkdir(parents=True, exist_ok=True)
+            # # Copy only if files don't exist
+            # if not file_path_dst.exists():
+            #     pass
+            #     # shutil.copy(str(file_path_src), str(file_path_dst))
+            # setattr(video, 'file', str(file_path_rel))
+            # video.save()
 
         def get_or_create_sections(chapter):
             chapter_abspath = training_abspath / 'chapters' / chapter.slug
@@ -119,6 +200,10 @@ class Command(BaseCommand):
                     continue
                 section_doc = self.load_doc(chapter_abspath / section_dir / 'index.json')
                 self.stdout.write(self.style.NOTICE('Creating section %s' % section_doc['name']))
+
+                if 'order' in section_doc['properties']:
+                    section_index = section_doc['properties']['order']
+
                 section = models_training.sections.Section.objects.get_or_create(
                     index=section_index,
                     chapter=chapter,
@@ -136,52 +221,10 @@ class Command(BaseCommand):
                     date_created=date_created, date_updated=date_updated
                 )
                 section_index += 1
-
-                # Create video, if available
-                if section_doc['properties']['content_type'] != 'video':
-                    continue
-
-                file_doc_path = (
-                    training_doc_path.parent
-                    / 'files'
-                    / str(section_doc['properties']['file'])
-                    / 'file.json'
-                )
-                file_doc = self.load_doc(file_doc_path)
-
-                # Proceed only if a version is found, and pick the first only
-                if 'variations' not in file_doc:
-                    continue
-
-                try:
-                    video = section.video
-                except models_training.sections.Video.DoesNotExist:
-                    video = models_training.sections.Video.objects.create(
-                        section=section, size=25000, duration='10:00', file='stand/in/path.mp4'
-                    )
-                models_training.sections.Video.objects.filter(pk=video.pk).update(
-                    date_created=date_created, date_updated=date_updated
-                )
-
-                variation = file_doc['variations'][0]
-
-                file_path_src = (
-                    file_doc_path.parent / 'variations' / pathlib.Path(variation['file_path']).name
-                )
-                file_path_rel = upload_paths.get_upload_to_hashed_path(
-                    video, pathlib.Path(variation['file_path']).name
-                )
-                file_path_dst = pathlib.Path(settings.MEDIA_ROOT, file_path_rel)
-                # Ensure destination directory
-                file_path_dst.parent.mkdir(parents=True, exist_ok=True)
-                # Copy only if files don't exist
-                if not file_path_dst.exists():
-                    shutil.copy(str(file_path_src), str(file_path_dst))
-                # self.add_local_file(training, 'picture_16_9', file_path_rel)
-                setattr(video, 'file', str(file_path_rel))
-                video.save()
+                attach_video_or_asset_to_section(section, section_doc, date_created, date_updated)
 
         training = get_or_create_training()
+        add_images_to_training(training)
         get_or_create_chapters(training)
         # Create Sections
 

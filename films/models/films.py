@@ -2,7 +2,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 
-from assets.models import StorageBackend
+from assets.models import StorageBackend, DynamicStorageFileField
+
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
 
@@ -14,7 +15,7 @@ class FilmStatus(models.TextChoices):
 
 
 class Film(mixins.CreatedUpdatedMixin, models.Model):
-    storage = models.OneToOneField(StorageBackend, on_delete=models.PROTECT)
+    storage_backend = models.OneToOneField(StorageBackend, on_delete=models.PROTECT)
     # TODO(Natalia): validation - either film or a training has to be null, but not both
 
     title = models.CharField(unique=True, max_length=512)
@@ -29,10 +30,10 @@ class Film(mixins.CreatedUpdatedMixin, models.Model):
     release_date.description = "Past or planned release date of the film."
     is_published = models.BooleanField(default=False)
 
-    logo = models.ImageField(upload_to=get_upload_to_hashed_path)
-    poster = models.ImageField(upload_to=get_upload_to_hashed_path)
-    picture_header = models.ImageField(upload_to=get_upload_to_hashed_path)
-    picture_16_9 = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
+    logo = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
+    poster = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
+    picture_header = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
+    picture_16_9 = DynamicStorageFileField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
     youtube_link = models.URLField(blank=True, null=True)
 
     def clean(self) -> None:

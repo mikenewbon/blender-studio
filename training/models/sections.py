@@ -2,6 +2,7 @@ from django.db import models
 from django.urls.base import reverse
 from django.utils.text import slugify
 
+from assets.models import DynamicStorageFileField, StorageBackend
 from comments.models import Comment
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
@@ -75,13 +76,14 @@ class SectionComment(models.Model):
 
 
 class Video(mixins.CreatedUpdatedMixin, models.Model):
+    storage_backend = models.ForeignKey(StorageBackend, on_delete=models.CASCADE)
     section = models.OneToOneField(Section, on_delete=models.CASCADE, related_name='video')
-    file = models.FileField(upload_to=get_upload_to_hashed_path)
+    file = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
     size = models.IntegerField()
     duration = models.DurationField(help_text='[DD] [[HH:]MM:]ss[.uuuuuu]')
 
     def __str__(self) -> str:
-        return self.file.path  # type: ignore
+        return self.file.name  # type: ignore
 
     @property
     def progress_url(self) -> str:
@@ -89,9 +91,10 @@ class Video(mixins.CreatedUpdatedMixin, models.Model):
 
 
 class Asset(mixins.CreatedUpdatedMixin, models.Model):
+    storage_backend = models.ForeignKey(StorageBackend, on_delete=models.CASCADE)
     section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='assets')
-    file = models.FileField(upload_to=get_upload_to_hashed_path)
+    file = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
     size = models.IntegerField()
 
     def __str__(self) -> str:
-        return self.file.path  # type: ignore
+        return self.file.name  # type: ignore
