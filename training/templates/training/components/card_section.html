@@ -1,11 +1,13 @@
+{% load static %}
+
 <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
     <div class="card card-media">
-        <div class="card-header" style='background-image: url("{{ image_placeholder }}")'>
-            {% comment %}
-            {{ progressbar(section.progress_fraction) }}
-            {% endcomment %}
+        <!-- TODO(Mike): Add real thumbnails for videos or inherit from course -->
+        <div class="card-header" style='background-image: url("{% static 'training/images/placeholders/card_training.png' %}")'>
+            {% include 'training/components/progress_bar.html' with fraction=section.progress_fraction %}
         </div>
         <a class="card-body" href="{{ section.url }}">
+            <p>{{ section. }}</p>
             <p class="card-subtitle">{{ section.training_name }}</p>
             <p class="card-subtitle">{{ section.chapter_name_with_index }}</p>
             <h2 class="card-title">{{ section.name_with_index }}</h2>

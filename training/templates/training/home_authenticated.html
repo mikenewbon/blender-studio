@@ -1,8 +1,9 @@
 {% extends 'training/base_training.html' %}
 
+{% load static %}
 
 {% block jumbotron %}
-<div style="background-image:url('value/{{ value }}')" class="jumbotron jumbotron-fluid jumbotron-overlay header">
+<div style="background-image:url('{% static 'training/images/placeholders/jumbotron.png' %}')" class="jumbotron jumbotron-fluid jumbotron-overlay header">
     <div class="container">
         <div class="row">
             <div class="col-lg-5 col-xl-4">
@@ -20,19 +21,21 @@
 {% endblock jumbotron %}
 
 {% block content %}
-<div class="container-xl pt-5">
+<div class="container-xl pt-3">
     <section class="">
         <div class="row">
             <div class="col-md-6 mb-3">
                 <div class="input-group">
-                    <div class="input-group-prepend"><span class="input-group-text"><i
-                                class="material-icons">search</i></span>
+                    <div class="input-group-prepend"><span class="input-group-text">
+                        <i class="material-icons">search</i>
+                    </span>
                     </div>
                     <input type="text" placeholder="Search tags and keywords" class="form-control">
                 </div>
             </div>
             <div class="col-md-3 col-6 mb-3">
                 <select class="custom-select">
+                    <!-- TODO(Mike): Get nat to fix this -->
                     {% for type in TrainingType %}
                     <option value="{{ type.value }}">{{ type.label }}</option>
                     {% endfor %}
@@ -49,6 +52,10 @@
     </section>
     {% if recently_watched_sections %}
     <section class="mb-3">
+        {% for type in TrainingType %}
+        <p>{{ type.label }}</p>
+        <p>{{ type.value }}</p>
+        {% endfor %}
         <h2>Continue training</h2>
         <p>Recently watched sections will appear here with your position saved</p>
         <div class="row">

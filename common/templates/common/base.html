@@ -28,7 +28,7 @@
 		</button>
 
 		<a href="/" class="navbar-brand">
-			<img src="{% static 'common/images/blender_cloud_logo.svg' %}" alt="Blender Cloud">
+			<img src="{% static 'common/images/blender_cloud_logo.svg' %}" alt="Blender Studio">
 		</a>
 
 		<div class="navbar-main-nav list-group list-group-flush list-group-horizontal">
@@ -119,20 +119,112 @@
 	{% endblock nav_drawer %}
 
 	<div class="content-holder">
-	{% block breadcrumbs %}{% endblock breadcrumbs %}
-	{% comment %} <nav class="navbar-secondary" aria-label="breadcrumbs">
-		<div class="content-holder">
-			<div class="container-md">
+		{% block breadcrumbs %}{% endblock breadcrumbs %}
+		{% comment %} <nav class="navbar-secondary" aria-label="breadcrumbs">
+			<div class="content-holder">
+				<div class="container-md">
 
+				</div>
 			</div>
-		</div>
-	</nav> {% endcomment %}
+		</nav> {% endcomment %}
 
 
 
 		{% block content %}{% endblock content %}
 	</div>
 	{% block content_extra %}{% endblock content_extra %}
+	<footer class="bg-navigation py-4">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3 col-md-4 mb-4 mb-md-0">
+					<a href="#">
+						<img src="{% static 'common/images/blender_cloud_logo.svg' %}" class="mb-2">
+					</a>
+					<p class="text-muted x-small">Blender Studio is the creative hub for your projects, prowered by Free	and Open Source Software.</p>
+					<div class="footer-social-media">
+						<a href="#" class="mr-3">
+							<img src="{% static 'common/images/icons/facebook.svg' %}">
+						</a>
+						<a href="#" class="mr-3">
+							<img src="{% static 'common/images/icons/twitter.svg' %}">
+						</a>
+						<a href="#">
+							<img src="{% static 'common/images/icons/youtube.svg' %}">
+						</a>
+					</div>
+				</div>
+				<div class="col-md-8 offset-lg-1">
+					<div class="row text-white">
+						<div class="col-md-3 col-6"><a href="#" class="h3 text-white">Training</a>
+							<ul>
+								<li>
+									<a href="#" class="small text-white">Courses</a>
+								</li>
+								<li>
+									<a href="#" class="small text-white">Workshops</a>
+								</li>
+								<li>
+									<a href="#" class="small text-white">Production Lessons</a>
+								</li>
+							</ul><a href="#" class="h3 text-white">Films</a>
+						</div>
+						<div class="col-md-3 col-6"><a href="#" class="h3 text-white">Libraries</a>
+							<ul>
+								<li>
+									<a href="#" class="small text-white">HDRIs</a>
+								</li>
+								<li>
+									<a href="#" class="small text-white">Textures</a>
+								</li>
+								<li>
+									<a href="#" class="small text-white">Characters</a>
+								</li>
+								<li>
+									<a href="#" class="small text-white">Art Gallery</a>
+								</li>
+							</ul>
+						</div>
+						<div class="col-md-3 col-6">
+							<a href="#" class="h3 text-white">Services</a>
+							<ul>
+								<li>
+									<a href="#" class="small text-white">Add-on</a>
+								</li>
+								<li>
+									<a href="#" class="small text-white">Blender Sync</a>
+								</li>
+								<li>
+									<a href="#" class="small text-white">Attract</a>
+								</li>
+								<li>
+									<a href="#" class="small text-white">Flamenco</a>
+								</li>
+								<li>
+									<a href="#" class="small text-white">Image Sharing</a>
+								</li>
+							</ul>
+						</div>
+						<div class="col-md-3 col-6">
+							<a href="#" class="h3 text-white">Cloud</a>
+							<ul>
+								<li>
+									<a href="#" class="small text-white">Blog</a>
+								</li>
+								<li>
+									<a href="#" class="small text-white">Terms &amp; Conditions</a>
+								</li>
+								<li>
+									<a href="#" class="small text-white">Privacy Policy</a>
+								</li>
+							</ul>
+							<a href="#" class="small text-white">Blender.org</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+
 </body>
 
 </html>
