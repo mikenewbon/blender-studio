@@ -18,6 +18,7 @@ mistune = "^0.8.4"
 looper = {git = "git://git.blender.org/looper.git", branch = "master"}
 Pillow = "^7.1.2"
 django-storages = {extras = ["google"], version = "^1.9.1"}
+pymongo = "^3.10.1"
 
 [tool.poetry.dev-dependencies]
 black = {version = "*", allow-prereleases = true}
