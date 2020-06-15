@@ -1,3 +1,4 @@
+import datetime
 import os
 import pathlib
 import shutil
@@ -153,11 +154,15 @@ class Command(BaseCommand):
 
             def get_or_create_asset(node_doc):
                 self.stdout.write(self.style.NOTICE(f"Creating asset {node_doc['_id']}"))
+                if 'file' not in node_doc['properties']:
+                    self.stdout.write(self.style.WARNING(f"File property not found in asset "
+                                                         f"{node_doc['_id']}"))
+                    return
                 file_doc = self.get_file_object(film_doc_path, str(node_doc['properties']['file']))
                 # Get first variation for video
                 # TODO(fsiddi) Handle storage of original file and variations
                 if node_doc['properties']['content_type'] == 'video':
-                    if 'variation' not in file_doc:
+                    if 'variations' not in file_doc:
                         self.stdout.write(self.style.WARNING(f"Missing variation in video file "
                                                              f"{file_doc['_id']}"))
                         return
@@ -183,11 +188,10 @@ class Command(BaseCommand):
                     static_asset.save()
 
                 if node_doc['properties']['content_type'] == 'video':
-                    v = models_assets.Video.objects.get_or_create(
+                    models_assets.Video.objects.get_or_create(
                         static_asset=static_asset,
+                        duration_seconds=datetime.timedelta(minutes=5),
                     )
-                    v.duration_seconds = 10
-                    v.save()
                 elif node_doc['properties']['content_type'] == 'image':
                     models_assets.Image.objects.get_or_create(
                         static_asset=static_asset,
@@ -202,12 +206,13 @@ class Command(BaseCommand):
 
                 node_id = str(node_doc['_id'])
 
+                description = '' if 'description' not in node_doc else node_doc['description']
                 asset = models_film.Asset.objects.get_or_create(
                     film=film,
                     collection=parent,
                     order=order,
                     name=node_doc['name'],
-                    description=node_doc['description'],
+                    description=description,
                     slug=node_id,
                     is_published=True,
                     category='artwork',
