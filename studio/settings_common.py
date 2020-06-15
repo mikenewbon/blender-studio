@@ -57,7 +57,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'training.context_processors.enums',
             ],
             'undefined': jinja2.StrictUndefined,
             'environment': 'common.jinja2.environment',
@@ -78,6 +77,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+				'training.context_processors.enums',
             ]
         },
     },
