@@ -120,18 +120,22 @@ class Command(BaseCommand):
 
             def get_or_create_collection(node_doc):
                 if 'parent' in node_doc and node_doc['parent']:
+                    if str(node_doc['_id']) == str(node_doc['parent']):
+                        print('Self parent detected')
+                        return
                     parent_node_doc = self.load_doc(film_nodes_path / str(node_doc['parent']) / 'index.json')
                     parent = get_or_create_collection(parent_node_doc)
                 else:
                     parent = None
 
                 node_id = str(node_doc['_id'])
+                description = '' if 'description' not in node_doc else node_doc['description']
                 collection = models_film.Collection.objects.get_or_create(
                     film=film,
                     parent=parent,
                     order=1,
                     name=node_doc['name'],
-                    text=node_doc['description'],
+                    text=description,
                     slug=node_id,
                     storage_backend=film.storage_backend,
                 )[0]
@@ -146,8 +150,8 @@ class Command(BaseCommand):
                 return collection
 
             def get_or_create_asset(node_doc):
+                print(f"Creating asset {node_doc['_id']}")
                 file_doc = self.get_file_object(film_doc_path, str(node_doc['properties']['file']))
-
                 # Get first variation for video
                 # TODO(fsiddi) Handle storage of original file and variations
                 if node_doc['properties']['content_type'] == 'video':
@@ -168,7 +172,7 @@ class Command(BaseCommand):
                     storage_backend=film.storage_backend,
                 )[0]
 
-                if 'picture' in node_doc:
+                if 'picture' in node_doc and node_doc['picture']:
                     file_doc = self.get_file_object(film_doc_path,
                                                     str(node_doc['picture']))
 
