@@ -27,7 +27,7 @@ don't change it.
     - Add `'127.0.0.1'` to allowed hosts.
     - Optionally: configure your IDE database connection.
 6. In the project folder, run migrations: `./manage.py migrate`
-7. Create a superuser: `./manage.py createsuperuser`
+7. Create a superuser: `echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'password')" | python manage.py shell`
 8. Run the project: `./manage.py runserver`
 
 
