@@ -6,6 +6,15 @@
 		<div class="modal-content bg-dark">
 
 			<div class="modal-header p-0 bg-secondary">
+{#                <button class="modal-navigation previous btn btn-ctrl" href="#">#}
+{#					<i class="material-icons btn-material-icons">navigate_before</i>#}
+{#				</button>#}
+				<a data-toggle="modal" data-target="#asset-{{ asset.id }}-zoom" class="modal-asset-image-wrapper" href="#">
+					<img class="" src="{{ asset.static_asset.preview.url }}">
+				</a>
+{#				<button class="modal-navigation next btn btn-ctrl" href="#">#}
+{#					<i class="material-icons btn-material-icons">navigate_next</i>#}
+{#				</button>#}
 
 			</div>
 			<div class="modal-body">

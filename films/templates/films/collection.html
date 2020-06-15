@@ -18,7 +18,7 @@
 
 			{% if nested_collections %}
                 {% for child_collection in nested_collections %}
-                    {% include "components/file.html" with asset=asset %}
+                    {% include "components/file.html" %}
                 {% endfor %}
 			{% endif %}
 

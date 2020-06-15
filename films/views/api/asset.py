@@ -18,4 +18,6 @@ def asset(request: HttpRequest, film_pk: int, asset_pk: int) -> HttpResponse:
         .get()
     )
 
-    return render(request, 'components/modal_asset.html', {'asset': asset})
+    return render(request, 'components/modal_asset.html', {'asset': asset}, using='django')
+    # TODO: rewrite all the common templates to use django, not jinja
+

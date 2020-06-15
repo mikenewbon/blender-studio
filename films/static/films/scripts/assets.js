@@ -6,23 +6,21 @@ window.asset = (function asset() {
         document.getElementsByClassName('file-body').forEach(element => {
             element.addEventListener('click', event => {
                 fetch(element.dataset.url).then(response => {
-                    if (response.status >= 200 && response.status < 300) {
-                        return Promise.resolve(response);
-                    }
-                    return Promise.reject(new Error(response.statusText));
-                }).then(response => {
-                    const html = response.text()
+                    return response.text();
+                }).then(html => {
                     const template = document.createElement('template');
                     template.innerHTML = html.trim();
 
-                    const modal = document.getElementById("gallery-modal")
-                    if (modal.childElementCount !== 0) {
-                        modal.children[0].replaceWith(template.content);
-                    } else {
+                    const modal = document.getElementById('gallery-modal')
+                    if (modal.childElementCount === 0) {
                         modal.appendChild(template.content);
+                    } else {
+                        modal.children[0].replaceWith(template.content);
                     }
-                })
-            })
+                }).catch(err => {
+                    console.warn('Something went wrong.', err);
+                });
+            });
         });
     });
 })();
