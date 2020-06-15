@@ -30,7 +30,7 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
     collection = models.ForeignKey(
         Collection, blank=True, null=True, on_delete=models.SET_NULL, related_name='assets'
     )
-    order = models.IntegerField()
+    order = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=512)
     slug = models.SlugField(blank=True)
     description = models.TextField()

@@ -17,7 +17,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('training_dir', type=str)
         parser.add_argument(
-            '-s', '--slug', dest='training_names', action='append', help="provides trianing slugs"
+            '-s', '--slug', dest='training_names', action='append', help="provides training slugs"
         )
         parser.add_argument(
             '--all', action='store_true', help='Import all trainings in the directory',
@@ -201,8 +201,8 @@ class Command(BaseCommand):
                 section_doc = self.load_doc(chapter_abspath / section_dir / 'index.json')
                 self.stdout.write(self.style.NOTICE('Creating section %s' % section_doc['name']))
 
-                if 'order' in section_doc['properties']:
-                    section_index = section_doc['properties']['order']
+                # if 'order' in section_doc['properties']:
+                #     section_index = section_doc['properties']['order']
 
                 section = models_training.sections.Section.objects.get_or_create(
                     index=section_index,

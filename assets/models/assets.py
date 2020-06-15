@@ -45,7 +45,7 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
     source_type = models.CharField(choices=AssetFileTypeChoices.choices, max_length=5)
     # TODO(Natalia): source type validation
     original_filename = models.CharField(max_length=128, editable=False)
-    size_bytes = models.IntegerField(editable=False)
+    size_bytes = models.BigIntegerField(editable=False)
 
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='uploaded_assets')
     user.description = "The user who uploaded the asset."
@@ -60,7 +60,7 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
         StorageBackend, on_delete=models.CASCADE, related_name='assets'
     )
 
-    source_preview = DynamicStorageFileField(upload_to=get_upload_to_hashed_path, blank=True)
+    source_preview = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True)
     source_preview.description = (
         "Asset preview is auto-generated for images and videos. Required for other files."
     )
