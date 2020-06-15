@@ -52,10 +52,6 @@
     </section>
     {% if recently_watched_sections %}
     <section class="mb-3">
-        {% for type in TrainingType %}
-        <p>{{ type.label }}</p>
-        <p>{{ type.value }}</p>
-        {% endfor %}
         <h2>Continue training</h2>
         <p>Recently watched sections will appear here with your position saved</p>
         <div class="row">
@@ -79,7 +75,7 @@
         <div class="row">
             {% for training in all_trainings %}
             {% include "training/components/card_training.html" with training=training %}
-            
+
             {% endfor %}
         </div>
     </section>
