@@ -1,0 +1,7 @@
+<li class="breadcrumb-item">
+        {% if url is not none %}
+            <a href="{{ url }}">{{ label }}</a>
+        {% else %}
+            {{ label }}
+        {% endif %}
+    </li>

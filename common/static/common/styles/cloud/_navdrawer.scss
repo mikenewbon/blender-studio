@@ -199,6 +199,19 @@
 
 		&-link {
 			flex-grow: 1;
+			&.active{
+				.subtitle{
+					color: $primary;
+				}
+			}
+			.subtitle{
+				font-size: $x-small-font-size;
+				color: $gray-500;
+			}
+		}
+
+		.subtitle{
+
 		}
 
 		&.complete {

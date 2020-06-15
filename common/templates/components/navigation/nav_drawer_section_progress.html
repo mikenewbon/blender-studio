@@ -1,0 +1,28 @@
+<li class="drawer-nav-section {% if finished %}complete{% endif %}">
+        <a href="{{ href }}" class="drawer-nav-section-link {% if active %}active{% endif %}">
+            <div class="drawer-nav-section-icon">
+
+                {% if finished %}
+                    <i class="material-icons">done</i>
+                {% else %}
+                    <i class="material-icons">play_arrow</i>
+                {% endif %}
+				<!-- TODO(Mike): Nat needs to check this progress_fraction is actually returning a real value, test completion returning 1.0 and remove the wierd if -->
+                <svg width="30" height="30"
+                     class="drawer-nav-section-icon-progress"
+                     style="--progress-fraction: {% if finished %} 1.0 {% else %} {{ progress_fraction }} {% endif %}">
+                    <circle cx="15" cy="15" r="14"/>
+                </svg>
+            </div>
+
+            <div>
+				{% if subtitle %}
+				<p class="subtitle">{{ subtitle }}</p>
+				{% endif %}
+                <h4>{{ title }}</h4>
+            </div>
+        </a>
+        {% if admin_change_href is not none %}
+            <a href="{{ admin_change_href }}">edit</a>
+        {% endif %}
+    </li>

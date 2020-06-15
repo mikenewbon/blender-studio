@@ -7,10 +7,9 @@
             {% include 'training/components/progress_bar.html' with fraction=section.progress_fraction %}
         </div>
         <a class="card-body" href="{{ section.url }}">
-            <p>{{ section. }}</p>
             <p class="card-subtitle">{{ section.training_name }}</p>
-            <p class="card-subtitle">{{ section.chapter_name_with_index }}</p>
-            <h2 class="card-title">{{ section.name_with_index }}</h2>
+            {% comment %} <p class="card-subtitle">{{ section.chapter_name_with_index }}</p> {% endcomment %}
+            <h2 class="card-title mb-0">{{ section.name_with_index }}</h2>
         </a>
     </div>
 </div>
