@@ -93,7 +93,8 @@ class Command(BaseCommand):
                 )
             else:
                 # Create a GCS storage backend (all film use this type of storage)
-                storage_backend: models_assets.StorageBackend = models_assets.StorageBackend.objects.create(
+                storage_backend: models_assets.StorageBackend = models_assets.StorageBackend.\
+                    objects.create(
                     name=film_doc['url'],
                     category=models_assets.StorageBackendCategoryChoices.gcs,
                     bucket_name=film_doc['_id'],
@@ -121,9 +122,10 @@ class Command(BaseCommand):
             def get_or_create_collection(node_doc):
                 if 'parent' in node_doc and node_doc['parent']:
                     if str(node_doc['_id']) == str(node_doc['parent']):
-                        print('Self parent detected')
+                        self.stdout.write(self.style.WARNING('Self parent detected'))
                         return
-                    parent_node_doc = self.load_doc(film_nodes_path / str(node_doc['parent']) / 'index.json')
+                    parent_node_doc = self.load_doc(film_nodes_path /
+                                                    str(node_doc['parent']) / 'index.json')
                     parent = get_or_create_collection(parent_node_doc)
                 else:
                     parent = None
@@ -150,13 +152,14 @@ class Command(BaseCommand):
                 return collection
 
             def get_or_create_asset(node_doc):
-                print(f"Creating asset {node_doc['_id']}")
+                self.stdout.write(self.style.NOTICE(f"Creating asset {node_doc['_id']}"))
                 file_doc = self.get_file_object(film_doc_path, str(node_doc['properties']['file']))
                 # Get first variation for video
                 # TODO(fsiddi) Handle storage of original file and variations
                 if node_doc['properties']['content_type'] == 'video':
                     if 'variation' not in file_doc:
-                        print('Missing variation in video file')
+                        self.stdout.write(self.style.WARNING(f"Missing variation in video file "
+                                                             f"{file_doc['_id']}"))
                         return
                     variation = file_doc['variations'][0]
                     source_path = f"_/{variation['file_path']}"
