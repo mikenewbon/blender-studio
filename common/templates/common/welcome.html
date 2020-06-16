@@ -221,6 +221,11 @@
 				</div>
 			</div>
 		</div>
+		<div class="row">
+            {% for training in all_trainings|slice:":3" %}
+            {% include "training/components/card_training.html" with training=training %}
+            {% endfor %}
+        </div>
 	</section>
 
 	<section class="mb-5">
