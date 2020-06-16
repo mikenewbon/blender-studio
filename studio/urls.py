@@ -15,7 +15,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('oauth/', include(blender_id_oauth_client.urls)),
     path('', TemplateView.as_view(template_name="common/home.html")),
-    path('welcome/', TemplateView.as_view(template_name="common/welcome.html")),
+    path('welcome/', welcome_view, name='welcome'),
     path('comments/', include(comments.urls)),
     path('films/', include(films.urls)),
     path('training/', include(training.urls)),
