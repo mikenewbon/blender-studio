@@ -1,6 +1,7 @@
 {% load static %}
 <div class="col">
 	<div class="file">
+{#    TODO(Mike): split this file into `folder.html` and `file.html` #}
 		{% if child_collection %}
             {% if child_collection.preview %}
                 <div class="file-header" style="background-image:url({{ child_collection.preview.url }})">
@@ -12,7 +13,7 @@
         {% endif %}
 
         {% if not child_collection %}
-            <a href="{{ asset.url }}" data-toggle="modal" data-target="#gallery-modal"
+            <a href="#" data-toggle="modal" data-target="#gallery-modal"
                class="file-body" data-url="{% url 'api-asset' asset.id %}"></a>
             <btn class="btn btn-secondary btn-ctrl-xs btn-save-media" data-toggle="dropdown" href="#">
                 <i class="material-icons btn-material-icons">more_horiz</i>
@@ -29,7 +30,7 @@
     </div>
 
     {% if not child_collection %}
-        <a href="{{ asset.url }}" data-toggle="modal" data-target="#gallery-modal" class="file-body"
+        <a href="#" data-toggle="modal" data-target="#gallery-modal" class="file-body"
            data-url="{% url 'api-asset' asset.id %}">
             <p class="subtitle">{{ asset.static_asset.get_source_type_display }}</p>
             <h4>{{ asset.name }}</h4>
