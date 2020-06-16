@@ -14,8 +14,8 @@ import films.urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('oauth/', include(blender_id_oauth_client.urls)),
-    path('', TemplateView.as_view(template_name="home.html")),
-    path('welcome/', TemplateView.as_view(template_name="welcome.html")),
+    path('', TemplateView.as_view(template_name="common/home.html")),
+    path('welcome/', TemplateView.as_view(template_name="common/welcome.html")),
     path('comments/', include(comments.urls)),
     path('films/', include(films.urls)),
     path('training/', include(training.urls)),

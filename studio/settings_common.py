@@ -45,7 +45,9 @@ MEDIA_ROOT = BASE_DIR / 'public/media'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': [str(BASE_DIR / 'comments/templates'), str(BASE_DIR / 'common/templates'),],
+        'DIRS': [
+            str(BASE_DIR / 'comments/templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -62,9 +64,9 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            str(BASE_DIR / 'training/templates'),
-            str(BASE_DIR / 'templates'),
+            str(BASE_DIR / 'common/templates'),
             str(BASE_DIR / 'films/templates'),
+            str(BASE_DIR / 'training/templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
