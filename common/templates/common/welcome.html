@@ -222,11 +222,38 @@
 			</div>
 		</div>
 		<div class="row">
-            {% for training in all_trainings|slice:":3" %}
-            {% include "training/components/card_training.html" with training=training %}
-            {% endfor %}
-        </div>
+			{% for training in sample_trainings %}
+			{% include "training/components/card_training.html" with training=training %}
+			{% endfor %}
+		</div>
+		<div class="row justify-content-center mb-0">
+			<div class="col-md-6 text-center">
+				<p class="mb-0">Want to see more? <a href="/training">Explore all Blender Studio Training</a>.</p>
+			</div>
+		</div>
 	</section>
+</div>
+
+<div style="background-image:url('{% static 'common/images/welcome/coffee-run-background.png' %}')"
+	class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content jumbotron header">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6 col-xl-5">
+				<div class="jumbotron-body">
+					<p class="subtitle">Featured Project</p>
+					<h1 class="mb-2">Coffee Run</h1>
+					<p>This 2d-scroller-inspired short film will take you on the journey of a lifetime, as we sip on a
+						cup of coffee.</p>
+					<p class="mb-4">Coffee Run (currently in development) is directed by Hjalti Hjalmarsson and produced
+						by the team at Blender Animation Studio. This 2d-scroller-inspired short film will take you on
+						the journey of a lifetime, as we sip on a cup of coffee.</p>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Premiere" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" %}
+
+			{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Production Log #02" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" %}
 
 	<section class="mb-5">
 		<div class="row justify-content-center mb-3">
