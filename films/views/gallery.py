@@ -54,7 +54,6 @@ def collection_list(request: HttpRequest, film_slug: str) -> HttpResponse:
 
 
 def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str) -> HttpResponse:
-    # TODO(Natalia): what about unpublished films and assets?
     film = get_object_or_404(Film, slug=film_slug, is_published=True)
     collection = get_object_or_404(Collection, slug=collection_slug, film_id=film.id)
     child_collections = collection.child_collections.order_by('order').prefetch_related(

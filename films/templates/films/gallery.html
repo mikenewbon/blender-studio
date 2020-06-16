@@ -40,7 +40,7 @@ has-secondary-nav
 
 <div class="drawer-nav-group">
 	<h3 class="drawer-nav-dropdown {% if collapsed %}collapsed{% endif %}" data-toggle="collapse"
-		data-target="#gallery-modal">
+		data-target="#collection-{{ collection.id }}">
 		<i class="material-icons">keyboard_arrow_down</i>
 		{{ collection.name }}
 	</h3>
