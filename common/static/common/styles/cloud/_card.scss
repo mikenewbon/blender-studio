@@ -50,7 +50,7 @@
 		}
 	}
 
-	
+
 
 	&-small {
 		.card-subtitle {
@@ -371,22 +371,46 @@
 // Accordion
 //
 
+
 .accordion {
 	>.card {
+		margin-bottom: 0;
 		overflow: hidden;
 
 		&:not(:last-of-type) {
-			border-bottom: 0;
+			border-bottom: 1px solid $highlight-white;
 			@include border-bottom-radius(0);
 		}
 
 		&:not(:first-of-type) {
 			@include border-top-radius(0);
 		}
-
+		.card-body{
+			padding-top: 0;
+		}
 		>.card-header {
+			padding:0;
 			@include border-radius(0);
 			margin-bottom: -$card-border-width;
+			.btn{
+				text-decoration: none;
+				width: 100%;
+				text-align: left;
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				align-items: center;
+				padding: $spacer;
+				color: white;
+				&:hover{
+					span{
+						text-decoration: underline;
+					}
+					i{
+						text-decoration: none;
+					}
+				}
+			}
 		}
 	}
 }
