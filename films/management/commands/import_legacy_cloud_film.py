@@ -35,6 +35,7 @@ class Command(BaseCommand):
             model.save()
 
     def get_file_object(self, film_doc_path, file_id):
+        self.stdout.write(self.style.NOTICE(f"\t Getting file {file_id}"))
         file_doc_path = (
                 film_doc_path.parent
                 / 'files'
@@ -120,14 +121,16 @@ class Command(BaseCommand):
             # Create Chapters
             film_nodes_path = film_abspath / 'nodes'
 
-            def get_or_create_collection(node_doc):
+            def get_or_create_collection(node_doc, as_parent=False):
+                tab_char = "\t" if as_parent else ""
+                self.stdout.write(self.style.NOTICE(f"{tab_char}Creating collection {node_doc['_id']}"))
                 if 'parent' in node_doc and node_doc['parent']:
                     if str(node_doc['_id']) == str(node_doc['parent']):
                         self.stdout.write(self.style.WARNING('Self parent detected'))
                         return
                     parent_node_doc = self.load_doc(film_nodes_path /
                                                     str(node_doc['parent']) / 'index.json')
-                    parent = get_or_create_collection(parent_node_doc)
+                    parent = get_or_create_collection(parent_node_doc, as_parent=True)
                 else:
                     parent = None
 
@@ -237,7 +240,7 @@ class Command(BaseCommand):
         add_images_to_film(film)
         get_or_create_collections_and_assets(film)
 
-        self.stdout.write(self.style.SUCCESS('All is great'))
+        self.stdout.write(self.style.SUCCESS(f"All is great for {film.title}"))
 
     def handle(self, *args, **options):
         dirname_abspath = pathlib.Path(options['film_dir'])
