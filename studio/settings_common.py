@@ -45,9 +45,7 @@ MEDIA_ROOT = BASE_DIR / 'public/media'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': [
-            str(BASE_DIR / 'comments/templates'),
-        ],
+        'DIRS': [str(BASE_DIR / 'comments/templates'), str(BASE_DIR / 'common/templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
