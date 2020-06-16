@@ -60,7 +60,7 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
         StorageBackend, on_delete=models.CASCADE, related_name='assets'
     )
 
-    source_preview = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True)
+    source_preview = DynamicStorageFileField(upload_to=get_upload_to_hashed_path, blank=True)
     source_preview.description = (
         "Asset preview is auto-generated for images and videos. Required for other files."
     )
