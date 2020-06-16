@@ -1,0 +1,24 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-xl mt-5">
+	<section class="mb-4">
+		<!-- Latest Updates -->
+		<div class="row justify-content-center my-3">
+			<div class="col-md-6 text-center">
+				<p class="subtitle">Blender Studio</p>
+				<h1>Welcome</h1>
+				<p clas="mb-0">Welcome to the Blender Studio - currently still under construction.</p>
+			</div>
+		</div>
+	</section>
+
+	{% if request.user.is_authenticated %}
+		<p>Yay! {{ request.user }} is authenticated! </p>
+	{% else %}
+		<p>Oh no! {{ request.user }} is not authenticated! </p>
+	{% endif %}
+
+</div>
+{% endblock content %}

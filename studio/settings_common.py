@@ -13,7 +13,6 @@ INSTALLED_APPS = [
     'films',
     'subscriptions',
     'training',
-
     'looper',
     'blender_id_oauth_client',
     'pipeline',
@@ -46,10 +45,7 @@ MEDIA_ROOT = BASE_DIR / 'public/media'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': [
-            str(BASE_DIR / 'comments/templates'),
-            str(BASE_DIR / 'common/templates'),
-        ],
+        'DIRS': [str(BASE_DIR / 'comments/templates'), str(BASE_DIR / 'common/templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,7 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-				'training.context_processors.enums',
+                'training.context_processors.enums',
             ]
         },
     },
