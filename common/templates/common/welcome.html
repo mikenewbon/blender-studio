@@ -2,23 +2,58 @@
 {% load static %}
 
 {% block content %}
-<div class="container-xl mt-5">
-	<section class="mb-4">
-		<!-- Latest Updates -->
-		<div class="row justify-content-center my-3">
-			<div class="col-md-6 text-center">
-				<p class="subtitle">Blender Studio</p>
-				<h1>Welcome</h1>
-				<p clas="mb-0">Welcome to the Blender Studio - currently still under construction.</p>
+<div style="background-image:url('{% static 'common/images/welcome/welcome-header.jpeg' %}')"
+	class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content jumbotron header">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-7 col-md-8">
+				<div class="jumbotron-body">
+					<h1 class="mb-2">Learn to make Movies from the Blender Animation Team</h1>
+					<p>Follow along with our exper team at your own pace - on every subject from Animation to UV
+						unwrapping.</p>
+					<p class="mb-4">With <strong>400+ hours of training</strong> and <strong>1000's of production
+							files</strong>, you're getting the best resources Blender has to offer.</p>
+					{% comment %} <div class="row mb-4 justify-content-stretch">
+						<div class="col-md-4 d-flex flex-column justify-content-between">
+							<h3>Learn from our expert team</h3>
+							<p class="small">Classes, workshops and production lessons with .blend files included.
+							</p>
+						</div>
+						<div class="col-md-4 d-flex flex-column justify-content-between">
+							<h3>Download 1000s of files and assets</h3>
+							<p class="small">Production quality HDRI’s, textures and fully rigged characters.</p>
+						</div>
+						<div class="col-md-4 d-flex flex-column justify-content-between">
+							<h3>Use our production software</h3>
+							<p class="small">Featuring task tracking, render management and asset libraries.</p>
+						</div>
+					</div> {% endcomment %}
+					<div class="d-flex flex-row align-items-center">
+						<btn class="btn btn-lg btn-primary mr-4">Join the Blender Studio</btn>
+						<div class="d-inline-block">
+							<p class="mb-0">Access to all training, assets<br>and films for €9.90/month</p>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-	</section>
+	</div>
 
-	{% if request.user.is_authenticated %}
-		<p>Yay! {{ request.user }} is authenticated! </p>
-	{% else %}
-		<p>Oh no! {{ request.user }} is not authenticated! </p>
-	{% endif %}
+</div>
+<div class="container-xl mt-5">
+	<section class="mb-5">
+		<div class="row justify-content-center mb-4">
+			<div class="col-md-6 text-center">
+				<h2>From A to UV, we’ve got it covered.</h2>
+				<p class="mb-0">With courses covering every major topic in Blender, you get the tools to learn, explore and grow as an artist with the Blender Studio.</p>
+			</div>
+		</div>
+		<div class="row">
+            {% for training in all_trainings|slice:":3" %}
+            {% include "training/components/card_training.html" with training=training %}
+            {% endfor %}
+        </div>
+	</section>
 
 </div>
 {% endblock content %}

@@ -1,4 +1,5 @@
 footer {
+	margin-top: auto;
 	@include media-breakpoint-down(sm){
 		text-align: center;
 	}
@@ -12,4 +13,11 @@ footer {
 	@include media-breakpoint-down(sm){
 		width: 48px;
 	}
+}
+
+// Pushes the footer down the the bottom of the page using margin-top auto on footer
+body{
+	min-height: calc(100vh - #{$navbar-height});
+	display: flex;
+	flex-direction: column;
 }

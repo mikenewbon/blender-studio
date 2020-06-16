@@ -47,7 +47,7 @@
 				<span>News</span>
 			</a>
 		</div>
-
+		{% if request.user.is_authenticated %}
 		<div class="searchbar-wrapper">
 			<div class="searchbar">
 				<div class="input-group-prepend"><span class="input-group-text"><i
@@ -56,6 +56,7 @@
 				<input type="text" placeholder="Search tags and keywords" class="form-control">
 			</div>
 		</div>
+
 		<div data-toggle="dropdown" class="btn btn-nav nav-profile">
 			<div style="background-image:url('https://blender.chat/avatar/MikeNewbon');" class="profile"></div>
 			<div class="dropdown-menu profile-dropdown"><a href="" class="dropdown-item"><i
@@ -67,6 +68,23 @@
 				<a href="" class="dropdown-item"><i class="material-icons">exit_to_app</i> <span>Sign Out</span></a>
 			</div>
 		</div>
+		{% else %}
+		<div class="p-2">
+			<a href="/admin/login" class="btn btn-transparent">Login</a>
+			<a href="#" class="btn btn-primary">Join Blender Studio</a>
+		</div>
+		{% endif %}
+		{% comment %} <div data-toggle="dropdown" class="btn btn-nav nav-profile">
+			<div style="background-image:url('https://blender.chat/avatar/MikeNewbon');" class="profile"></div>
+			<div class="dropdown-menu profile-dropdown"><a href="" class="dropdown-item"><i
+						class="material-icons">home</i>
+					<span>My Cloud</span></a><a href="" class="dropdown-item"><i class="material-icons">settings</i>
+					<span>Settings</span></a><a href="" class="dropdown-item"><i class="material-icons">credit_card</i>
+					<span>Subscription</span></a>
+				<div class="dropdown-divider"></div>
+				<a href="" class="dropdown-item"><i class="material-icons">exit_to_app</i> <span>Sign Out</span></a>
+			</div>
+		</div> {% endcomment %}
 	</nav>
 
 
