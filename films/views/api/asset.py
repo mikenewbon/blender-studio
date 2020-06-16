@@ -5,7 +5,7 @@ from django.shortcuts import render
 from films.models import Asset
 
 
-def asset(request: HttpRequest, film_pk: int, asset_pk: int) -> HttpResponse:
+def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
     asset = (
         Asset.objects.filter(pk=asset_pk)
         .select_related(
@@ -19,5 +19,3 @@ def asset(request: HttpRequest, film_pk: int, asset_pk: int) -> HttpResponse:
     )
 
     return render(request, 'components/modal_asset.html', {'asset': asset}, using='django')
-    # TODO: rewrite all the common templates to use django, not jinja
-
