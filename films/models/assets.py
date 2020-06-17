@@ -14,7 +14,7 @@ class AssetCategory(models.TextChoices):
 
 
 class Asset(mixins.CreatedUpdatedMixin, models.Model):
-    """ This represents the leaf of the tree of film-related resources.
+    """This represents the leaf of the tree of film-related resources.
 
     An asset can be of one of the three types: image, video, or file.
     """
@@ -60,7 +60,7 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
 
 
 class AssetComment(models.Model):
-    """ This is an intermediary model between Asset and Comment.
+    """This is an intermediary model between Asset and Comment.
 
     An AssetComment should in fact only relate to one Comment, hence the
     OneToOne comment field.

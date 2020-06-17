@@ -76,9 +76,9 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
 
     @property
     def author_name(self) -> str:
-        """ Get the asset's author full name.
+        """Get the asset's author full name.
 
-        Usually the author of the asset will be the same as the user who uploads the asset. """
+        Usually the author of the asset will be the same as the user who uploads the asset."""
         if self.author:
             return self.author.get_full_name()
         return self.user.get_full_name()
