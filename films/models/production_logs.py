@@ -3,7 +3,9 @@ from datetime import date, timedelta
 from django.contrib.auth.models import User
 from django.db import models
 
+from assets.models import DynamicStorageFileField
 from common import mixins
+from common.upload_paths import get_upload_to_hashed_path
 from films.models import Asset, Film
 
 
@@ -11,13 +13,22 @@ class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
     """A log (collection) of all authors' production log entries in one week."""
 
     film = models.ForeignKey(Film, on_delete=models.CASCADE, related_name='production_logs')
+    name = models.CharField(max_length=512, blank=True)
+    name.description = 'If not provided, will be set to "This week on <film title>".'
     description = models.TextField()
     start_date = models.DateField(default=date.today)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
+    youtube_link = models.URLField(blank=True)
+    picture_16_9 = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
 
     @property
     def end_date(self):
         return self.start_date + timedelta(days=7)
+
+    def clean(self):
+        super().clean()
+        if not self.name:
+            self.name = f'This week on {self.film.title}'
 
 
 class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
