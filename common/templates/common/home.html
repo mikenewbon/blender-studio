@@ -2,44 +2,357 @@
 {% load static %}
 
 {% block content %}
-<div class="container-xl mt-4">
-	<section class="mb-4">
-		<!-- Latest Updates -->
-		<div class="row justify-content-center my-3">
-			<div class="col-md-6 text-center">
-				<p class="subtitle">Blender Studio</p>
-				<h1>Home</h1>
-				<p clas="mb-0">Welcome to the Blender Studio - currently still under construction.</p>
-			</div>
-		</div>
-	</section>
-	<section>
+
+<div style="background-image:url('{% static 'common/images/home/settlers-bg.png' %}')"
+	class="jumbotron jumbotron-fluid jumbotron-overlay overlay-light  jumbotron header">
+	<div class="container">
 		<div class="row">
+			<div class="col-lg-6 col-xl-5">
+				<a href="/films/coffee-run" class="jumbotron-body">
+					<p class="subtitle">Featured Project</p>
+					<h1 class="mb-2">Settlers</h1>
+					<p>A gift from the Blender Animation Studio team to the community. Free character rigs and sets.</p>
+					<p class="mb-4">Settlers is a collection of character rigs, environments and animated scenes,
+						created by the Blender Animation Studio team and shared with the community as they are made.
+						Completely free, for everyone. Download all the assets and create your own animations!</p>
+				</a>
+			</div>
+		</div>
+		<div class="row">
+			{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Settlers Production Log #02" description="Our first fully completed character, Lunte, is ready for download as we begin our next, Gabby! Check out all the latest production videos and walk-throughs today." card_classes="mb-0" %}
 
-			<div class="col-12 col-sm-6 col-lg-6 card-grid-item">
-				<div class="card card-dark card-media text-center">
-					<div class="card-header" style="background-image:url({% static 'films/images/spring-header.png' %})">
-						<a href="/films" class="card-header-link"></a>
-					</div>
-					<a class="card-body" href="/films">
-						<h2 class="card-title">Films</h2>
-						<p class="card-text">Check out all of the Blender Studio's Open Movies.</p>
-					</a>
+			{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Settlers Production Log #01" description="And we’re off! The first week of production has seen lots of progress and lots of uploads - come check out what we’ve been up to and download all of the assets here." card_classes="mb-0" %}
+
+			{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Settlers. A new free and open project" description="Check out the announcement here!" card_classes="mb-0" %}
+		</div>
+	</div>
+</div>
+
+<div class="container-xl mt-5">
+	<section class="mb-5">
+		<div class="row mb-3">
+			<div class="col">
+				<h2 class="mb-0">Featured Training</h2>
+				<p class="mb-3">Want to see more? <a href="/training">Explore all training</a>.</p>
+			</div>
+		</div>
+		<div class="row">
+			{% for training in sample_trainings %}
+			{% include "components/cards/card_training.html" with training=training %}
+			{% endfor %}
+		</div>
+	</section>
+
+	<section class="mb-5">
+		<div class="row">
+			<div class="col-md-8">
+				<div>
+					<h2 class="mb-0">Featured Films</h2>
+					<p class="mb-3">Want to see more? <a href="/training">Explore all films</a>.</p>
+				</div>
+				<div class="row">
+					{% for films in sample_films %}
+					{% include "films/components/card_film.html" with film=films card_sizes="col-6" %}
+					{% endfor %}
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div>
+					<h2 class="mb-0">Latest News</h2>
+					<p class="mb-3">Want to see more? <a href="/training">Explore all news</a>.</p>
+				</div>
+				<div class="row">
+					{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Settlers Production Log #02" description="Our first fully completed character, Lunte, is ready for download as we begin our next, Gabby! Check out all the latest production videos and walk-throughs today." card_sizes="col-12" %}
+					{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Settlers Production Log #02" description="Our first fully completed character, Lunte, is ready for download as we begin our next, Gabby! Check out all the latest production videos and walk-throughs today." card_sizes="col-12" card_classes="mb-0" %}
 				</div>
 			</div>
 
-			<div class="col-12 col-sm-6 col-lg-6 card-grid-item">
-				<div class="card card-dark card-media text-center">
-					<div class="card-header" style="background-image:url({% static 'films/images/files-example.jpg' %})">
-						<a href="/training" class="card-header-link"></a>
-					</div>
-					<a class="card-body" href="/training">
-						<h2 class="card-title">Training</h2>
-						<p class="card-text">Discover all the training Blender Studio has to offer.</p>
-					</a>
+		</div>
+	</section>
+
+</div>
+
+<div style="background-image:url('{% static 'training/images/placeholders/jumbotron.png' %}')"
+	class="jumbotron jumbotron-fluid jumbotron-overlay jumbotron header">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6 col-xl-5">
+				<a href="/training" class="jumbotron-body">
+					<p class="subtitle">Featured Training</p>
+					<h1 class="mb-2">Anglerfish Creature Workshop</h1>
+					<p class="mb-3">Follow Andy Goralczyk during the making of this fantastical creature from sculpting
+						to final render in Eevee.</p>
+				</a>
+				<div class="pills">
+					{% include 'components/cards/pill.html' with label="Sculpting" %}
+					{% include 'components/cards/pill.html' with label="Texturing" %}
+					{% include 'components/cards/pill.html' with label="Retopology" %}
+					{% include 'components/cards/pill.html' with label="Rigging" %}
+					{% include 'components/cards/pill.html' with label="Lighting" %}
+					{% include 'components/cards/pill.html' with label="Rendering" %}
 				</div>
 			</div>
 		</div>
-	</section>
+	</div>
 </div>
+
+<div class="container-xl my-5">
+	<div class="row justify-content-center mb-3">
+		<div class="col-md-6 text-center">
+			<h2 class="mb-0">This week in the Blender Studio</h2>
+			<p class="mb-0">Want to see more? <a href="/films">Explore all projects</a>.</p>
+		</div>
+	</div>
+	<div class="update-feed">
+
+		<div class="update-feed-week">
+			<div class="update-feed-week-column column-left">
+				<div class="update-feed-week-icon">
+					<i class="material-icons">calendar_today</i>
+				</div>
+			</div>
+			<div class="update-feed-week-column column-right">
+				<div class="update-feed-week-header">
+					<p>1st - 7th March</p>
+				</div>
+
+				<div class="update-feed-individual mt-3">
+					<div class="update-feed-individual-summary">
+						<div class="row">
+							<div class="col-4">
+								<img class="img-fluid" src="{% static 'films/images/posters/coffeerun.png' %}">
+							</div>
+							<div class="col-8">
+								<p class="subtitle x-small">Open Movie</p>
+								<h4>Coffee Run</h4>
+								<p class="small">This 2d-scroller-inspired short film will take you on the journey of a
+									lifetime.</p>
+							</div>
+
+						</div>
+
+					</div>
+					<div class="update-feed-individual-files">
+						<div class="files">
+							<div class="row row-cols-1 row-cols-md-4  row-cols-2">
+								<div class="col">
+									<a class="file" href="#">
+										<div class="file-header"
+											style="background-image:url({% static 'films/images/files-example.jpg' %})">
+										</div>
+										<div class="file-body">
+											<p class="subtitle">Folder</p>
+											<h4>About this Training</h4>
+										</div>
+									</a>
+								</div>
+								<div class="col">
+									<a class="file" href="#">
+										<div class="file-header"
+											style="background-image:url({% static 'films/images/files-example.jpg' %})">
+										</div>
+										<div class="file-body">
+											<p class="subtitle">Folder</p>
+											<h4>About this Training</h4>
+										</div>
+									</a>
+								</div>
+								<div class="col">
+									<a class="file" href="#">
+										<div class="file-header"
+											style="background-image:url({% static 'films/images/files-example.jpg' %})">
+										</div>
+										<div class="file-body">
+											<p class="subtitle">Folder</p>
+											<h4>About this Training</h4>
+										</div>
+									</a>
+								</div>
+								<div class="col">
+									<a class="file" href="#">
+										<div class="file-header"
+											style="background-image:url({% static 'films/images/files-example.jpg' %})">
+										</div>
+										<div class="file-body">
+											<p class="subtitle">Folder</p>
+											<h4>About this Training</h4>
+										</div>
+									</a>
+								</div>
+								<div class="col">
+									<a class="file" href="#">
+										<div class="file-header"
+											style="background-image:url({% static 'films/images/files-example.jpg' %})">
+										</div>
+										<div class="file-body">
+											<p class="subtitle">Folder</p>
+											<h4>About this Training</h4>
+										</div>
+									</a>
+								</div>
+								<div class="col">
+									<a class="file" href="#">
+										<div class="file-header"
+											style="background-image:url({% static 'films/images/files-example.jpg' %})">
+										</div>
+										<div class="file-body">
+											<p class="subtitle">Image</p>
+											<h4>Poster.jpeg</h4>
+										</div>
+									</a>
+								</div>
+								<div class="col">
+									<a class="file" href="#">
+										<div class="file-header"
+											style="background-image:url({% static 'films/images/files-example.jpg' %})">
+										</div>
+										<div class="file-body">
+											<p class="subtitle">Video</p>
+											<h4>Spring.mp4</h4>
+										</div>
+									</a>
+								</div>
+								<div class="col">
+									<a class="file" href="#">
+										<div class="file-header"
+											style="background-image:url({% static 'films/images/files-example.jpg' %})">
+										</div>
+										<div class="file-body">
+											<p class="subtitle">Blend File</p>
+											<h4>Scene.blend</h4>
+										</div>
+									</a>
+								</div>
+							</div>
+						</div>
+						<div class="row update-feed-individual-files-show-more">
+							<div class="col text-center">
+								<a href="#" class="btn btn-sm btn-secondary">Show more</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="update-feed-individual mt-3">
+					<div class="update-feed-individual-summary">
+						<div class="row">
+							<div class="col-4">
+								<img class="img-fluid" src="{% static 'films/images/posters/settlers.jpg' %}">
+							</div>
+							<div class="col-8">
+								<p class="subtitle x-small">Open Movie</p>
+								<h4>Settlers</h4>
+								<p class="small">A gift from the Blender Animation Studio team to the community. Free character rigs and sets.</p>
+							</div>
+
+						</div>
+
+					</div>
+					<div class="update-feed-individual-files">
+						<div class="files">
+							<div class="row row-cols-1 row-cols-md-4  row-cols-2">
+								<div class="col">
+									<a class="file" href="#">
+										<div class="file-header"
+											style="background-image:url({% static 'films/images/files-example.jpg' %})">
+										</div>
+										<div class="file-body">
+											<p class="subtitle">Folder</p>
+											<h4>About this Training</h4>
+										</div>
+									</a>
+								</div>
+								<div class="col">
+									<a class="file" href="#">
+										<div class="file-header"
+											style="background-image:url({% static 'films/images/files-example.jpg' %})">
+										</div>
+										<div class="file-body">
+											<p class="subtitle">Folder</p>
+											<h4>About this Training</h4>
+										</div>
+									</a>
+								</div>
+								<div class="col">
+									<a class="file" href="#">
+										<div class="file-header"
+											style="background-image:url({% static 'films/images/files-example.jpg' %})">
+										</div>
+										<div class="file-body">
+											<p class="subtitle">Folder</p>
+											<h4>About this Training</h4>
+										</div>
+									</a>
+								</div>
+								<div class="col">
+									<a class="file" href="#">
+										<div class="file-header"
+											style="background-image:url({% static 'films/images/files-example.jpg' %})">
+										</div>
+										<div class="file-body">
+											<p class="subtitle">Folder</p>
+											<h4>About this Training</h4>
+										</div>
+									</a>
+								</div>
+								<div class="col">
+									<a class="file" href="#">
+										<div class="file-header"
+											style="background-image:url({% static 'films/images/files-example.jpg' %})">
+										</div>
+										<div class="file-body">
+											<p class="subtitle">Folder</p>
+											<h4>About this Training</h4>
+										</div>
+									</a>
+								</div>
+								<div class="col">
+									<a class="file" href="#">
+										<div class="file-header"
+											style="background-image:url({% static 'films/images/files-example.jpg' %})">
+										</div>
+										<div class="file-body">
+											<p class="subtitle">Image</p>
+											<h4>Poster.jpeg</h4>
+										</div>
+									</a>
+								</div>
+								<div class="col">
+									<a class="file" href="#">
+										<div class="file-header"
+											style="background-image:url({% static 'films/images/files-example.jpg' %})">
+										</div>
+										<div class="file-body">
+											<p class="subtitle">Video</p>
+											<h4>Spring.mp4</h4>
+										</div>
+									</a>
+								</div>
+								<div class="col">
+									<a class="file" href="#">
+										<div class="file-header"
+											style="background-image:url({% static 'films/images/files-example.jpg' %})">
+										</div>
+										<div class="file-body">
+											<p class="subtitle">Blend File</p>
+											<h4>Scene.blend</h4>
+										</div>
+									</a>
+								</div>
+							</div>
+						</div>
+						<div class="row update-feed-individual-files-show-more">
+							<div class="col text-center">
+								<a href="#" class="btn btn-sm btn-secondary">Show more</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</div>
+
 {% endblock content %}

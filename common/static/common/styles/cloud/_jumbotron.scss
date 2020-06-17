@@ -45,6 +45,16 @@
 				);
 			}
 		}
+		&.overlay-light{
+			&:before {
+				background: linear-gradient(270.34deg, rgba(0, 0, 0, 0) 45.08%, rgba(0, 0, 0, 0.25) 80.66%);
+			}
+		}
+		&.overlay-medium{
+			&:before {
+				background: linear-gradient(270.34deg, rgba(0, 0, 0, 0) 45.08%, rgba(0, 0, 0, 0.4) 80.66%);
+			}
+		}
 		&.overlay-wide-content {
 			&:before {
 				background: radial-gradient(

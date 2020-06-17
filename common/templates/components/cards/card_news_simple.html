@@ -1,6 +1,6 @@
 <!-- TODO(Mike): When news is actually implimented - add items here -->
-<div class="col-12 col-sm-6 col-lg-4 card-grid-item">
-	<div class="card">
+<div class="{{ card_sizes|default:"col-12 col-sm-6 col-lg-4" }} card-grid-item">
+	<div class="card {{ card_classes }}">
 		<a class="card-body" href="{{ url }}">
 			<p class="card-subtitle">{{ subtitle }}</p>
 			<h2 class="card-title">{{ title }}</h2>

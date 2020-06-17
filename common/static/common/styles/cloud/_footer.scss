@@ -1,5 +1,6 @@
 footer {
 	margin-top: auto;
+	border-top: 1px solid $highlight-white;
 	@include media-breakpoint-down(sm){
 		text-align: center;
 	}

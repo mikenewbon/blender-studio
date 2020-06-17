@@ -1,4 +1,4 @@
-<div class="col-12 col-sm-6 col-lg-4 card-grid-item">
+<div class="{{ card_sizes|default:"col-12 col-sm-6 col-lg-4" }} card-grid-item">
 	<div class="card card-dark card-media card-poster">
 		<div class="card-header" style='background-image: url({{ film.poster.url }})'>
 			<a href="{{ film.url }}" class="card-header-link"></a>

@@ -44,14 +44,14 @@
 	<section class="mb-5">
 		<div class="row justify-content-center mb-3">
 			<div class="col-md-6 text-center">
-				<h2>From A to UV, we’ve got it covered.</h2>
+				<h2 class="mb-0">From A to UV, we’ve got it covered.</h2>
 				<p class="mb-0">With courses covering every major topic in Blender, you get the tools to learn, explore
 					and grow as an artist with the Blender Studio.</p>
 			</div>
 		</div>
 		<div class="row">
 			{% for training in sample_trainings %}
-			{% include "training/components/card_training.html" with training=training %}
+			{% include "components/cards/card_training.html" with training=training %}
 			{% endfor %}
 		</div>
 		<div class="row justify-content-center mb-0">
@@ -63,11 +63,11 @@
 </div>
 
 <div style="background-image:url('{% static 'common/images/welcome/coffee-run-background.png' %}')"
-	class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content jumbotron header">
+	class="jumbotron jumbotron-fluid jumbotron-overlay overlay-medium jumbotron header">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-6 col-xl-5">
-				<div class="jumbotron-body">
+				<a href="/films/coffee-run" class="jumbotron-body">
 					<p class="subtitle">Featured Project</p>
 					<h1 class="mb-2">Coffee Run</h1>
 					<p>This 2d-scroller-inspired short film will take you on the journey of a lifetime, as we sip on a
@@ -75,15 +75,15 @@
 					<p class="mb-4">Coffee Run (currently in development) is directed by Hjalti Hjalmarsson and produced
 						by the team at Blender Animation Studio. This 2d-scroller-inspired short film will take you on
 						the journey of a lifetime, as we sip on a cup of coffee.</p>
-				</div>
+				</a>
 			</div>
 		</div>
 		<div class="row">
-			{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Premiere" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" %}
+			{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Premiere" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" card_classes="mb-0" %}
 
-			{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Production Log #02" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" %}
+			{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Production Log #02" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" card_classes="mb-0" %}
 
-			{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Production Log #01" description="Coffee Run was announced just a couple of weeks ago, but it has been in the works for a while already." %}
+			{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Production Log #01" description="Coffee Run was announced just a couple of weeks ago, but it has been in the works for a while already." card_classes="mb-0" %}
 		</div>
 	</div>
 </div>
@@ -92,7 +92,7 @@
 	<section class="mb-5">
 		<div class="row justify-content-center mb-3">
 			<div class="col-md-6 text-center">
-				<h2>Support Blender Open Movies</h2>
+				<h2 class="mb-0">Support Blender Open Movies</h2>
 				<p class="mb-0">The Blender Open Movie projects are made possible by subscriptions to the Blender
 					Studio.</p>
 			</div>
@@ -116,7 +116,7 @@
 	<div class="container-xl">
 		<div class="row justify-content-center mb-3">
 			<div class="col-md-6 text-center">
-				<h2>Meet the team.</h2>
+				<h2 class="mb-0">Meet the team.</h2>
 				<p class="mb-0">With courses covering every major topic in Blender, you get the tools to learn, explore
 					and grow as an artist with the Blender Studio.</p>
 			</div>
@@ -226,7 +226,7 @@
 	<section class="mb-5">
 		<div class="row justify-content-center mb-3">
 			<div class="col-md-6 text-center">
-				<h2>Frequently Asked Questions</h2>
+				<h2 class="mb-0">Frequently Asked Questions</h2>
 				<p class="mb-0">If you have any further questions about the cloud - you can contact one of the team on
 					<a href="https://blender.chat/channel/blender-cloud">Blender Chat</a> by logging in with your
 					Blender ID.</p>
