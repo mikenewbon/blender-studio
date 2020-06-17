@@ -51,7 +51,7 @@
 		</div>
 		<div class="row">
 			{% for training in featured_trainings|slice:':3' %}
-                {% include "common/components/cards/card_training.html" with training=training %}
+			{% include "common/components/cards/card_training.html" with training=training %}
 			{% endfor %}
 		</div>
 		<div class="row justify-content-center mb-0">
@@ -99,7 +99,7 @@
 		</div>
 		<div class="row">
 			{% for film in featured_films|slice:':3' %}
-                {% include "films/components/card_film.html" with film=film %}
+			{% include "films/components/card_film.html" with film=film %}
 			{% endfor %}
 		</div>
 		<div class="row justify-content-center mb-0">
@@ -221,46 +221,17 @@
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			{% for training in featured_trainings|slice:':3' %}
-                {% include "common/components/cards/card_training.html" with training=training %}
-			{% endfor %}
-		</div>
-		<div class="row justify-content-center mb-0">
-			<div class="col-md-6 text-center">
-				<p class="mb-0">Want to see more? <a href="/training">Explore all Blender Studio Training</a>.</p>
-			</div>
-		</div>
 	</section>
-</div>
 
-<div style="background-image:url('{% static 'common/images/welcome/coffee-run-background.png' %}')"
-	class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content jumbotron header">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-6 col-xl-5">
-				<div class="jumbotron-body">
-					<p class="subtitle">Featured Project</p>
-					<h1 class="mb-2">Coffee Run</h1>
-					<p>This 2d-scroller-inspired short film will take you on the journey of a lifetime, as we sip on a
-						cup of coffee.</p>
-					<p class="mb-4">Coffee Run (currently in development) is directed by Hjalti Hjalmarsson and produced
-						by the team at Blender Animation Studio. This 2d-scroller-inspired short film will take you on
-						the journey of a lifetime, as we sip on a cup of coffee.</p>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			{% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Premiere" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" %}
-
-			{% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Production Log #02" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" %}
 
 	<section class="mb-5">
 		<div class="row justify-content-center mb-3">
 			<div class="col-md-6 text-center">
 				<h2 class="mb-0">Frequently Asked Questions</h2>
-				<p class="mb-0">If you have any further questions about the cloud - you can contact one of the team on
-					<a href="https://blender.chat/channel/blender-cloud">Blender Chat</a> by logging in with your
+				<p class="mb-0">If you have any further questions about the cloud - you can contact one of the
+					team on
+					<a href="https://blender.chat/channel/blender-cloud">Blender Chat</a> by logging in with
+					your
 					Blender ID.</p>
 			</div>
 		</div>
@@ -272,20 +243,28 @@
 						<div class="card-header" id="faqHeadingWhatIsBlenderStudio">
 							<h5 class="mb-0">
 								<button class="btn btn-link" type="button" data-toggle="collapse"
-									data-target="#faqCollapseWhatIsBlenderStudio" aria-expanded="false" aria-controls="faqCollapseWhatIsBlenderStudio">
-									<span>What is Blender Studio?</span> <i class="material-icons">keyboard_arrow_down</i>
+									data-target="#faqCollapseWhatIsBlenderStudio" aria-expanded="false"
+									aria-controls="faqCollapseWhatIsBlenderStudio">
+									<span>What is Blender Studio?</span> <i
+										class="material-icons">keyboard_arrow_down</i>
 								</button>
 							</h5>
 						</div>
-						<div id="faqCollapseWhatIsBlenderStudio" class="collapse" aria-labelledby="faqHeadingWhatIsBlenderStudio"
-							data-parent="#faqGeneral">
+						<div id="faqCollapseWhatIsBlenderStudio" class="collapse"
+							aria-labelledby="faqHeadingWhatIsBlenderStudio" data-parent="#faqGeneral">
 							<div class="card-body">
-								Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
-								squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck
-								quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it
-								squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-								craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur
-								butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth
+								Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+								richardson ad
+								squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
+								truck
+								quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
+								bird on it
+								squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
+								helvetica,
+								craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
+								excepteur
+								butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
+								aesthetic synth
 								nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
 							</div>
 						</div>
@@ -294,20 +273,27 @@
 						<div class="card-header" id="faqHeadingHowIsMyMoneySpent">
 							<h5 class="mb-0">
 								<button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-									data-target="#faqCollapseHowIsMyMoneySpent" aria-expanded="false" aria-controls="faqCollapseHowIsMyMoneySpent">
+									data-target="#faqCollapseHowIsMyMoneySpent" aria-expanded="false"
+									aria-controls="faqCollapseHowIsMyMoneySpent">
 									<span>How is my money spent</span> <i class="material-icons">keyboard_arrow_down</i>
 								</button>
 							</h5>
 						</div>
-						<div id="faqCollapseHowIsMyMoneySpent" class="collapse" aria-labelledby="faqHeadingHowIsMyMoneySpent"
-							data-parent="#faqGeneral">
+						<div id="faqCollapseHowIsMyMoneySpent" class="collapse"
+							aria-labelledby="faqHeadingHowIsMyMoneySpent" data-parent="#faqGeneral">
 							<div class="card-body small">
-								Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
-								squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck
-								quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it
-								squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-								craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur
-								butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth
+								Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+								richardson ad
+								squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
+								truck
+								quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
+								bird on it
+								squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
+								helvetica,
+								craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
+								excepteur
+								butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
+								aesthetic synth
 								nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
 							</div>
 						</div>
@@ -316,20 +302,28 @@
 						<div class="card-header" id="faqHeadingHowSupportBlender">
 							<h5 class="mb-0">
 								<button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-									data-target="#faqCollapseHowSupportBlender" aria-expanded="false" aria-controls="faqCollapseHowSupportBlender">
-									<span>How does Blender Studio support Blender?</span> <i class="material-icons">keyboard_arrow_down</i>
+									data-target="#faqCollapseHowSupportBlender" aria-expanded="false"
+									aria-controls="faqCollapseHowSupportBlender">
+									<span>How does Blender Studio support Blender?</span> <i
+										class="material-icons">keyboard_arrow_down</i>
 								</button>
 							</h5>
 						</div>
-						<div id="faqCollapseHowSupportBlender" class="collapse" aria-labelledby="faqHeadingHowSupportBlender"
-							data-parent="#faqGeneral">
+						<div id="faqCollapseHowSupportBlender" class="collapse"
+							aria-labelledby="faqHeadingHowSupportBlender" data-parent="#faqGeneral">
 							<div class="card-body small">
-								Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
-								squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck
-								quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it
-								squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-								craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur
-								butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth
+								Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+								richardson ad
+								squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
+								truck
+								quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
+								bird on it
+								squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
+								helvetica,
+								craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
+								excepteur
+								butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
+								aesthetic synth
 								nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
 							</div>
 						</div>
@@ -344,20 +338,28 @@
 						<div class="card-header" id="faqHeadingPaymentMethod">
 							<h5 class="mb-0">
 								<button class="btn btn-link" type="button" data-toggle="collapse"
-									data-target="#faqCollapsePaymentMethod" aria-expanded="false" aria-controls="faqCollapsePaymentMethod">
-									<span>What payment methods do you accept</span> <i class="material-icons">keyboard_arrow_down</i>
+									data-target="#faqCollapsePaymentMethod" aria-expanded="false"
+									aria-controls="faqCollapsePaymentMethod">
+									<span>What payment methods do you accept</span> <i
+										class="material-icons">keyboard_arrow_down</i>
 								</button>
 							</h5>
 						</div>
 						<div id="faqCollapsePaymentMethod" class="collapse" aria-labelledby="faqHeadingPaymentMethod"
 							data-parent="#faqPayment">
 							<div class="card-body">
-								Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
-								squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck
-								quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it
-								squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-								craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur
-								butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth
+								Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+								richardson ad
+								squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
+								truck
+								quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
+								bird on it
+								squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
+								helvetica,
+								craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
+								excepteur
+								butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
+								aesthetic synth
 								nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
 							</div>
 						</div>
@@ -366,20 +368,28 @@
 						<div class="card-header" id="faqHeadingCancelSubscription">
 							<h5 class="mb-0">
 								<button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-									data-target="#faqColapseCancelSubscription" aria-expanded="false" aria-controls="faqColapseCancelSubscription">
-									<span>How easy is it to cancel my subscription?</span> <i class="material-icons">keyboard_arrow_down</i>
+									data-target="#faqColapseCancelSubscription" aria-expanded="false"
+									aria-controls="faqColapseCancelSubscription">
+									<span>How easy is it to cancel my subscription?</span> <i
+										class="material-icons">keyboard_arrow_down</i>
 								</button>
 							</h5>
 						</div>
-						<div id="faqColapseCancelSubscription" class="collapse" aria-labelledby="faqHeadingCancelSubscription"
-							data-parent="#faqPayment">
+						<div id="faqColapseCancelSubscription" class="collapse"
+							aria-labelledby="faqHeadingCancelSubscription" data-parent="#faqPayment">
 							<div class="card-body small">
-								Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
-								squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck
-								quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it
-								squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-								craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur
-								butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth
+								Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+								richardson ad
+								squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
+								truck
+								quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
+								bird on it
+								squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
+								helvetica,
+								craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
+								excepteur
+								butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
+								aesthetic synth
 								nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
 							</div>
 						</div>
@@ -388,7 +398,8 @@
 						<div class="card-header" id="faqHeadingRefund">
 							<h5 class="mb-0">
 								<button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-									data-target="#faqColapseRefund" aria-expanded="false" aria-controls="faqColapseRefund">
+									data-target="#faqColapseRefund" aria-expanded="false"
+									aria-controls="faqColapseRefund">
 									<span>Can I get a refund?</span> <i class="material-icons">keyboard_arrow_down</i>
 								</button>
 							</h5>
@@ -396,12 +407,18 @@
 						<div id="faqColapseRefund" class="collapse" aria-labelledby="faqHeadingRefund"
 							data-parent="#faqPayment">
 							<div class="card-body small">
-								Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
-								squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck
-								quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it
-								squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-								craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur
-								butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth
+								Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+								richardson ad
+								squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
+								truck
+								quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
+								bird on it
+								squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
+								helvetica,
+								craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
+								excepteur
+								butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
+								aesthetic synth
 								nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
 							</div>
 						</div>
