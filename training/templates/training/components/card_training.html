@@ -9,7 +9,7 @@
 				{{ training.difficulty.label }}
 			</div>
 			{% if request.user.is_authenticated %}
-			{% include 'training/components/card_button_favorite.html' with class='btn-save-media card-training-favorite' checked=training.favorited %}
+			    {% include 'training/components/card_button_favorite.html' with class='btn-save-media card-training-favorite' checked=training.favorited %}
 			{% endif %}
 			{% comment %}
 			TODO(Mike): get this working and remove old code
@@ -25,8 +25,8 @@
 
 		<div class="card-footer">
 			<div class="pills {% comment %}{{ class|join(' ') }}{% endcomment %}">
-				{% for tag in training.tags %}
-				{% include 'components/cards/pill.html' with label=tag %}
+				{% for tag in training.tags.all %}
+				    {% include 'common/components/cards/pill.html' with label=tag %}
 				{% endfor %}
 			</div>
 		</div>

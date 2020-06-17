@@ -14,7 +14,7 @@ nav-drawer-wide
 
 <div class="drawer-nav-group">
 	<ol class="drawer-nav-list">
-		{% include 'components/navigation/nav_drawer_section.html' with title='About this training' subtitle='Overview' href=navigation.overview_url active=navigation.overview_active admin_change_href=navigation.training_admin_url %}
+		{% include 'common/components/navigation/nav_drawer_section.html' with title='About this training' subtitle='Overview' href=navigation.overview_url active=navigation.overview_active admin_change_href=navigation.training_admin_url %}
 	</ol>
 </div>
 
@@ -29,7 +29,7 @@ nav-drawer-wide
 		class="training-nav-list collapse {% if  chapter_navigation.current %}show{% endif %}">
 
 		{% for section_navigation in chapter_navigation.sections %}
-		{% include 'components/navigation/nav_drawer_section_progress.html' with title=section_navigation.name subtitle='Video' href=section_navigation.url active=section_navigation.current started=section_navigation.started finished=section_navigation.finished progress_fraction=section_navigation.progress_fraction admin_change_href=section_navigation.admin_url %}
+            {% include 'common/components/navigation/nav_drawer_section_progress.html' with title=section_navigation.name subtitle='Video' href=section_navigation.url active=section_navigation.current started=section_navigation.started finished=section_navigation.finished progress_fraction=section_navigation.progress_fraction admin_change_href=section_navigation.admin_url %}
 		{% endfor %}
 
 	</ol>

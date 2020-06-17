@@ -18,13 +18,13 @@
 
 			{% if nested_collections %}
                 {% for child_collection in nested_collections %}
-                    {% include "components/file.html" %}
+                    {% include "common/components/file.html" %}
                 {% endfor %}
 			{% endif %}
 
 			{% if current_assets %}
                 {% for asset in current_assets %}
-                    {% include "components/file.html" with asset=asset %}
+                    {% include "common/components/file.html" with asset=asset %}
                 {% endfor %}
 			{% endif %}
 

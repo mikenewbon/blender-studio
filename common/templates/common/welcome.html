@@ -51,7 +51,7 @@
 		</div>
 		<div class="row">
 			{% for training in sample_trainings %}
-			{% include "components/cards/card_training.html" with training=training %}
+                {% include "common/components/cards/card_training.html" with training=training %}
 			{% endfor %}
 		</div>
 		<div class="row justify-content-center mb-0">
@@ -79,11 +79,11 @@
 			</div>
 		</div>
 		<div class="row">
-			{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Premiere" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" card_classes="mb-0" %}
+			{% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Premiere" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" card_classes="mb-0" %}
 
-			{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Production Log #02" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" card_classes="mb-0" %}
+			{% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Production Log #02" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" card_classes="mb-0" %}
 
-			{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Production Log #01" description="Coffee Run was announced just a couple of weeks ago, but it has been in the works for a while already." card_classes="mb-0" %}
+			{% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Production Log #01" description="Coffee Run was announced just a couple of weeks ago, but it has been in the works for a while already." card_classes="mb-0" %}
 		</div>
 	</div>
 </div>
@@ -223,7 +223,7 @@
 		</div>
 		<div class="row">
 			{% for training in sample_trainings %}
-			{% include "training/components/card_training.html" with training=training %}
+                {% include "common/components/cards/card_training.html" with training=training %}
 			{% endfor %}
 		</div>
 		<div class="row justify-content-center mb-0">
@@ -251,9 +251,9 @@
 			</div>
 		</div>
 		<div class="row">
-			{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Premiere" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" %}
+			{% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Premiere" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" %}
 
-			{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Production Log #02" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" %}
+			{% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Production Log #02" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" %}
 
 	<section class="mb-5">
 		<div class="row justify-content-center mb-3">

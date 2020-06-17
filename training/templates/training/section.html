@@ -27,10 +27,10 @@
 <nav class="navbar-secondary" aria-label="breadcrumbs">
 	<div class="container-xl">
 		<ol class="breadcrumb">
-			{% include 'components/navigation/breadcrumb.html' with label='Home' url='/' %}
-			{% include 'components/navigation/breadcrumb.html' with label=training.name url=training.url %}
-			{% include 'components/navigation/breadcrumb.html' with label=chapter.name_with_index %}
-			{% include 'components/navigation/breadcrumb.html' with label=section.name_with_index %}
+			{% include 'common/components/navigation/breadcrumb.html' with label='Home' url='/' %}
+			{% include 'common/components/navigation/breadcrumb.html' with label=training.name url=training.url %}
+			{% include 'common/components/navigation/breadcrumb.html' with label=chapter.name_with_index %}
+			{% include 'common/components/navigation/breadcrumb.html' with label=section.name_with_index %}
 		</ol>
 	</div>
 </nav>
@@ -41,7 +41,7 @@
 	{% if video is not none %}
 	<div class="row mb-3">
 		<div class="col training-video">
-			{% include 'components/video_player.html' with url=video.url progress_url=video.progress_url start_position=video.start_position %}
+			{% include 'common/components/video_player.html' with url=video.url progress_url=video.progress_url start_position=video.start_position %}
 		</div>
 	</div>
 	{% endif %}
@@ -84,7 +84,7 @@
 							<p class="subtitle small">Autoplay Next Section</p>
 							<h3 class="mb-0">02. Point Tracking - Part 2</h3>
 						</div>
-						{% include 'components/checkbox_toggle.html' with checked=False %}
+						{% include 'common/components/checkbox_toggle.html' with checked=False %}
 					</div>
 					{% else %}
 					<div class="row mb-2 justify-content-between">
@@ -112,7 +112,7 @@
 							<p class="subtitle small">Autoplay Next Section</p>
 							<h3 class="mb-0">02. Point Tracking - Part 2</h3>
 						</div>
-						{% include 'components/checkbox_toggle.html' with checked=False %}
+						{% include 'common/components/checkbox_toggle.html' with checked=False %}
 					</div>
 					{% else %}
 					<div class="row mb-2 justify-content-between">

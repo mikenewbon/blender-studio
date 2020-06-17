@@ -19,11 +19,11 @@
 			</div>
 		</div>
 		<div class="row">
-			{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Settlers Production Log #02" description="Our first fully completed character, Lunte, is ready for download as we begin our next, Gabby! Check out all the latest production videos and walk-throughs today." card_classes="mb-0" %}
+			{% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Settlers Production Log #02" description="Our first fully completed character, Lunte, is ready for download as we begin our next, Gabby! Check out all the latest production videos and walk-throughs today." card_classes="mb-0" %}
 
-			{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Settlers Production Log #01" description="And we’re off! The first week of production has seen lots of progress and lots of uploads - come check out what we’ve been up to and download all of the assets here." card_classes="mb-0" %}
+			{% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Settlers Production Log #01" description="And we’re off! The first week of production has seen lots of progress and lots of uploads - come check out what we’ve been up to and download all of the assets here." card_classes="mb-0" %}
 
-			{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Settlers. A new free and open project" description="Check out the announcement here!" card_classes="mb-0" %}
+			{% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Settlers. A new free and open project" description="Check out the announcement here!" card_classes="mb-0" %}
 		</div>
 	</div>
 </div>
@@ -38,7 +38,7 @@
 		</div>
 		<div class="row">
 			{% for training in sample_trainings %}
-			{% include "components/cards/card_training.html" with training=training %}
+                {% include "common/components/cards/card_training.html" with training=training %}
 			{% endfor %}
 		</div>
 	</section>
@@ -62,8 +62,8 @@
 					<p class="mb-3">Want to see more? <a href="/training">Explore all news</a>.</p>
 				</div>
 				<div class="row">
-					{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Settlers Production Log #02" description="Our first fully completed character, Lunte, is ready for download as we begin our next, Gabby! Check out all the latest production videos and walk-throughs today." card_sizes="col-12" %}
-					{% include 'components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Settlers Production Log #02" description="Our first fully completed character, Lunte, is ready for download as we begin our next, Gabby! Check out all the latest production videos and walk-throughs today." card_sizes="col-12" card_classes="mb-0" %}
+					{% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Settlers Production Log #02" description="Our first fully completed character, Lunte, is ready for download as we begin our next, Gabby! Check out all the latest production videos and walk-throughs today." card_sizes="col-12" %}
+					{% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Settlers Production Log #02" description="Our first fully completed character, Lunte, is ready for download as we begin our next, Gabby! Check out all the latest production videos and walk-throughs today." card_sizes="col-12" card_classes="mb-0" %}
 				</div>
 			</div>
 
@@ -84,12 +84,12 @@
 						to final render in Eevee.</p>
 				</a>
 				<div class="pills">
-					{% include 'components/cards/pill.html' with label="Sculpting" %}
-					{% include 'components/cards/pill.html' with label="Texturing" %}
-					{% include 'components/cards/pill.html' with label="Retopology" %}
-					{% include 'components/cards/pill.html' with label="Rigging" %}
-					{% include 'components/cards/pill.html' with label="Lighting" %}
-					{% include 'components/cards/pill.html' with label="Rendering" %}
+					{% include 'common/components/cards/pill.html' with label="Sculpting" %}
+					{% include 'common/components/cards/pill.html' with label="Texturing" %}
+					{% include 'common/components/cards/pill.html' with label="Retopology" %}
+					{% include 'common/components/cards/pill.html' with label="Rigging" %}
+					{% include 'common/components/cards/pill.html' with label="Lighting" %}
+					{% include 'common/components/cards/pill.html' with label="Rendering" %}
 				</div>
 			</div>
 		</div>

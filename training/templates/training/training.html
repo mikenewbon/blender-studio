@@ -5,8 +5,8 @@
 
 		<div class="container-xl">
 			<ol class="breadcrumb">
-				{% include 'components/navigation/breadcrumb.html' with label='Home' url='/' %}
-				{% include 'components/navigation/breadcrumb.html' with label=training.name %}
+				{% include 'common/components/navigation/breadcrumb.html' with label='Home' url='/' %}
+				{% include 'common/components/navigation/breadcrumb.html' with label=training.name %}
 			</ol>
 		</div>
 
@@ -27,7 +27,7 @@
 
 					<div class="pills training-toolbar-pills">
 						{% for tag in training.tags %}
-						{% include 'components/cards/pill.html' with label=tag %}
+                            {% include 'common/components/cards/pill.html' with label=tag %}
 						{% endfor %}
 					</div>
 

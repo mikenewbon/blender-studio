@@ -18,4 +18,4 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
         .get()
     )
 
-    return render(request, 'components/modal_asset.html', {'asset': asset}, using='django')
+    return render(request, 'common/components/modal_asset.html', {'asset': asset}, using='django')
