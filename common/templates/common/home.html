@@ -37,7 +37,7 @@
 			</div>
 		</div>
 		<div class="row">
-			{% for training in sample_trainings %}
+			{% for training in featured_trainings|slice:':3' %}
                 {% include "common/components/cards/card_training.html" with training=training %}
 			{% endfor %}
 		</div>
@@ -51,8 +51,8 @@
 					<p class="mb-3">Want to see more? <a href="/training">Explore all films</a>.</p>
 				</div>
 				<div class="row">
-					{% for films in sample_films %}
-					{% include "films/components/card_film.html" with film=films card_sizes="col-6" %}
+					{% for film in featured_films|slice:':2' %}
+                        {% include "films/components/card_film.html" with film=film card_sizes="col-6" %}
 					{% endfor %}
 				</div>
 			</div>

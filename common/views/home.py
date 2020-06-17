@@ -10,8 +10,8 @@ from training.models import Training
 @require_safe
 def home(request: HttpRequest) -> HttpResponse:
     context = {
-        'sample_films': Film.objects.filter(is_featured=True)[:2],
-        'sample_trainings': Training.objects.filter(is_featured=True)[:2],
+        'featured_films': Film.objects.filter(is_featured=True),
+        'featured_trainings': Training.objects.filter(is_featured=True),
     }
 
     return render(request, 'common/home.html', context)
@@ -20,8 +20,8 @@ def home(request: HttpRequest) -> HttpResponse:
 @require_safe
 def welcome(request: HttpRequest) -> HttpResponse:
     context = {
-        'sample_films': Film.objects.filter(is_featured=True)[:3],
-        'sample_trainings': Training.objects.filter(is_featured=True)[:3],
+        'featured_films': Film.objects.filter(is_featured=True),
+        'featured_trainings': Training.objects.filter(is_featured=True),
     }
 
     return render(request, 'common/welcome.html', context)
