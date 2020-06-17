@@ -33,7 +33,7 @@ def get_gallery_drawer_context(film: Film) -> Dict[str, Any]:
 
     nested_collections: Dict[Collection, QuerySet[Collection]] = dict()
     for c in top_level_collections:
-        nested_collections[c] = c.nested
+        nested_collections[c] = c.nested  # type: ignore[attr-defined]
 
     return {
         'collections': nested_collections,
@@ -62,7 +62,7 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
 
     collection_contents: Dict[Collection, QuerySet[Asset]] = dict()
     for c in child_collections:
-        collection_contents[c] = c.coll_assets
+        collection_contents[c] = c.coll_assets  # type: ignore[attr-defined]
 
     drawer_menu_context = get_gallery_drawer_context(film)
 

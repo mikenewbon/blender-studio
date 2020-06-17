@@ -1,8 +1,11 @@
+from typing import Optional
+
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.db import models
-from django.db.models.fields.files import FieldFile
 from django.core.files.storage import FileSystemStorage
+from django.db import models
+from django.db.models import FileField
+from django.db.models.fields.files import FieldFile
 from storages.backends.gcloud import GoogleCloudStorage
 
 from assets.models import License, StorageBackend, StorageBackendCategoryChoices
@@ -17,12 +20,18 @@ class AssetFileTypeChoices(models.TextChoices):
 
 
 class DynamicStorageFieldFile(FieldFile):
-    def __init__(self, instance: "StaticAsset", field, name):
+    def __init__(self, instance: models.Model, field: FileField, name: Optional[str]):
         super(DynamicStorageFieldFile, self).__init__(instance, field, name)
-        if instance.storage_backend.category == StorageBackendCategoryChoices.gcs.value:
+
+        assert hasattr(instance, 'storage_backend'), (
+            f'{self.__class__.__name__} cannot be used in {instance.__class__.__name__}, '
+            f'which does not have the `storage_backend` field.'
+        )
+
+        if instance.storage_backend.category == StorageBackendCategoryChoices.gcs:  # type: ignore[attr-defined]
             self.storage: GoogleCloudStorage = GoogleCloudStorage()
-            if instance.storage_backend.bucket_name:
-                self.storage.bucket_name = instance.storage_backend.bucket_name
+            if instance.storage_backend.bucket_name:  # type: ignore[attr-defined]
+                self.storage.bucket_name = instance.storage_backend.bucket_name  # type: ignore[attr-defined]
         else:
             self.storage = FileSystemStorage()
 
@@ -30,13 +39,18 @@ class DynamicStorageFieldFile(FieldFile):
 class DynamicStorageFileField(models.FileField):
     attr_class = DynamicStorageFieldFile
 
-    def pre_save(self, model_instance: "StaticAsset", add):
-        if model_instance.storage_backend.category == StorageBackendCategoryChoices.gcs.value:
+    def pre_save(self, model_instance: models.Model, add: bool) -> FieldFile:
+        assert hasattr(model_instance, 'storage_backend'), (
+            f'{self.__class__.__name__} cannot be used in {model_instance.__class__.__name__}, '
+            f'which does not have the `storage_backend` field.'
+        )
+
+        if model_instance.storage_backend.category == StorageBackendCategoryChoices.gcs:  # type: ignore[attr-defined]
             storage = GoogleCloudStorage()
         else:
             storage = FileSystemStorage()
         self.storage = storage
-        file = super(DynamicStorageFileField, self).pre_save(model_instance, add)
+        file: FieldFile = super(DynamicStorageFileField, self).pre_save(model_instance, add)
         return file
 
 

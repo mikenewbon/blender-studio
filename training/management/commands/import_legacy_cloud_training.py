@@ -52,8 +52,7 @@ class Command(BaseCommand):
             for picture in training_pictures:
                 self.stdout.write(self.style.NOTICE('Adding pictures for training %s' % training))
                 file_doc_path = (
-                        training_doc_path.parent / 'files' / str(
-                    training_doc[picture]) / 'file.json'
+                    training_doc_path.parent / 'files' / str(training_doc[picture]) / 'file.json'
                 )
                 file_doc = self.load_doc(file_doc_path)
                 add_static_asset_path(training, picture, file_doc['file_path'])
@@ -130,10 +129,10 @@ class Command(BaseCommand):
 
         def attach_video_or_asset_to_section(section, section_doc, date_created, date_updated):
             file_doc_path = (
-                    training_doc_path.parent
-                    / 'files'
-                    / str(section_doc['properties']['file'])
-                    / 'file.json'
+                training_doc_path.parent
+                / 'files'
+                / str(section_doc['properties']['file'])
+                / 'file.json'
             )
             file_doc = self.load_doc(file_doc_path)
 

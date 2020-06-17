@@ -36,12 +36,7 @@ class Command(BaseCommand):
 
     def get_file_object(self, film_doc_path, file_id):
         self.stdout.write(self.style.NOTICE(f"\t Getting file {file_id}"))
-        file_doc_path = (
-                film_doc_path.parent
-                / 'files'
-                / str(file_id)
-                / 'file.json'
-        )
+        file_doc_path = film_doc_path.parent / 'files' / str(file_id) / 'file.json'
         return self.load_doc(file_doc_path)
 
     def add_static_asset_path(self, ob, property, file_path):
@@ -70,8 +65,7 @@ class Command(BaseCommand):
             for picture in film_pictures:
                 self.stdout.write(self.style.NOTICE('Adding pictures for film %s' % film))
                 file_doc_path = (
-                        film_doc_path.parent / 'files' / str(
-                    film_doc[picture]) / 'file.json'
+                    film_doc_path.parent / 'files' / str(film_doc[picture]) / 'file.json'
                 )
                 file_doc = self.load_doc(file_doc_path)
                 add_static_asset_path(film, picture, file_doc['file_path'])
@@ -79,8 +73,10 @@ class Command(BaseCommand):
             film_pictures = {'poster', 'logo'}
             for picture in film_pictures:
                 file_doc_path = (
-                        film_doc_path.parent / 'files' / str(
-                    film_doc['extension_props']['cloud'][picture]) / 'file.json'
+                    film_doc_path.parent
+                    / 'files'
+                    / str(film_doc['extension_props']['cloud'][picture])
+                    / 'file.json'
                 )
                 file_doc = self.load_doc(file_doc_path)
                 add_static_asset_path(film, picture, file_doc['file_path'])
@@ -90,13 +86,10 @@ class Command(BaseCommand):
             self.stdout.write(self.style.NOTICE('Creating film %s' % film_doc['url']))
             if models_film.films.Film.objects.filter(slug=film_doc['url']).exists():
                 film = models_film.films.Film.objects.get(slug=film_doc['url'])
-                self.stdout.write(
-                    self.style.WARNING('Project %s already exists' % film_doc['url'])
-                )
+                self.stdout.write(self.style.WARNING('Project %s already exists' % film_doc['url']))
             else:
                 # Create a GCS storage backend (all film use this type of storage)
-                storage_backend: models_assets.StorageBackend = models_assets.StorageBackend.\
-                    objects.create(
+                storage_backend: models_assets.StorageBackend = models_assets.StorageBackend.objects.create(
                     name=film_doc['url'],
                     category=models_assets.StorageBackendCategoryChoices.gcs,
                     bucket_name=film_doc['_id'],
@@ -123,13 +116,16 @@ class Command(BaseCommand):
 
             def get_or_create_collection(node_doc, as_parent=False):
                 tab_char = "\t" if as_parent else ""
-                self.stdout.write(self.style.NOTICE(f"{tab_char}Creating collection {node_doc['_id']}"))
+                self.stdout.write(
+                    self.style.NOTICE(f"{tab_char}Creating collection {node_doc['_id']}")
+                )
                 if 'parent' in node_doc and node_doc['parent']:
                     if str(node_doc['_id']) == str(node_doc['parent']):
                         self.stdout.write(self.style.WARNING('Self parent detected'))
                         return
-                    parent_node_doc = self.load_doc(film_nodes_path /
-                                                    str(node_doc['parent']) / 'index.json')
+                    parent_node_doc = self.load_doc(
+                        film_nodes_path / str(node_doc['parent']) / 'index.json'
+                    )
                     parent = get_or_create_collection(parent_node_doc, as_parent=True)
                 else:
                     parent = None
@@ -158,16 +154,22 @@ class Command(BaseCommand):
             def get_or_create_asset(node_doc):
                 self.stdout.write(self.style.NOTICE(f"Creating asset {node_doc['_id']}"))
                 if 'file' not in node_doc['properties']:
-                    self.stdout.write(self.style.WARNING(f"File property not found in asset "
-                                                         f"{node_doc['_id']}"))
+                    self.stdout.write(
+                        self.style.WARNING(
+                            f"File property not found in asset " f"{node_doc['_id']}"
+                        )
+                    )
                     return
                 file_doc = self.get_file_object(film_doc_path, str(node_doc['properties']['file']))
                 # Get first variation for video
                 # TODO(fsiddi) Handle storage of original file and variations
                 if node_doc['properties']['content_type'] == 'video':
                     if 'variations' not in file_doc:
-                        self.stdout.write(self.style.WARNING(f"Missing variation in video file "
-                                                             f"{file_doc['_id']}"))
+                        self.stdout.write(
+                            self.style.WARNING(
+                                f"Missing variation in video file " f"{file_doc['_id']}"
+                            )
+                        )
                         return
                     variation = file_doc['variations'][0]
                     source_path = f"_/{variation['file_path']}"
@@ -184,25 +186,22 @@ class Command(BaseCommand):
                 )[0]
 
                 if 'picture' in node_doc and node_doc['picture']:
-                    file_doc = self.get_file_object(film_doc_path,
-                                                    str(node_doc['picture']))
+                    file_doc = self.get_file_object(film_doc_path, str(node_doc['picture']))
 
                     static_asset.source_preview = f"_/{file_doc['file_path']}"
                     static_asset.save()
 
                 if node_doc['properties']['content_type'] == 'video':
                     models_assets.Video.objects.get_or_create(
-                        static_asset=static_asset,
-                        duration_seconds=datetime.timedelta(minutes=5),
+                        static_asset=static_asset, duration_seconds=datetime.timedelta(minutes=5),
                     )
                 elif node_doc['properties']['content_type'] == 'image':
-                    models_assets.Image.objects.get_or_create(
-                        static_asset=static_asset,
-                    )
+                    models_assets.Image.objects.get_or_create(static_asset=static_asset,)
 
                 if 'parent' in node_doc and node_doc['parent']:
                     parent_node_doc = self.load_doc(
-                        film_nodes_path / str(node_doc['parent']) / 'index.json')
+                        film_nodes_path / str(node_doc['parent']) / 'index.json'
+                    )
                     parent = get_or_create_collection(parent_node_doc)
                 else:
                     parent = None
