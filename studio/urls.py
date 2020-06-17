@@ -3,18 +3,17 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import TemplateView
 
 import comments.urls
 import films.urls
 import subscriptions.urls
 import training.urls
-from common.views.welcome import welcome as welcome_view
+from common.views.home import home as home_view, welcome as welcome_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('oauth/', include(blender_id_oauth_client.urls)),
-    path('', TemplateView.as_view(template_name="common/home.html")),
+    path('', home_view, name='home'),
     path('welcome/', welcome_view, name='welcome'),
     path('comments/', include(comments.urls)),
     path('films/', include(films.urls)),
