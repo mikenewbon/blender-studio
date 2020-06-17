@@ -26,7 +26,7 @@ class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
     class Meta:
         verbose_name_plural = 'production log entries'
 
-    log_group = models.ForeignKey(
+    production_log = models.ForeignKey(
         ProductionLog, on_delete=models.CASCADE, related_name='log_entries'
     )
     description = models.TextField()
