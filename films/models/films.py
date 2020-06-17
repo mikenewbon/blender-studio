@@ -29,11 +29,14 @@ class Film(mixins.CreatedUpdatedMixin, models.Model):
     release_date = models.DateField(blank=True, null=True)
     release_date.description = "Past or planned release date of the film."
     is_published = models.BooleanField(default=False)
+    is_featured = models.BooleanField(default=False)
 
     logo = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
     poster = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
     picture_header = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
-    picture_16_9 = DynamicStorageFileField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
+    picture_16_9 = DynamicStorageFileField(
+        upload_to=get_upload_to_hashed_path, blank=True, null=True
+    )
     youtube_link = models.URLField(blank=True, null=True)
 
     def clean(self) -> None:
