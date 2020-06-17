@@ -23,6 +23,9 @@ class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
 class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
     """A collection of assets created by one author during one week."""
 
+    class Meta:
+        verbose_name_plural = 'production log entries'
+
     log_group = models.ForeignKey(
         ProductionLog, on_delete=models.CASCADE, related_name='log_entries'
     )
