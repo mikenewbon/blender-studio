@@ -3,7 +3,7 @@ from datetime import date, timedelta
 from django.contrib.auth.models import User
 from django.db import models
 
-from assets.models import DynamicStorageFileField
+from assets.models import DynamicStorageFileField, StorageBackend
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
 from films.models import Asset, Film
@@ -17,8 +17,11 @@ class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
     name.description = 'If not provided, will be set to "This week on <film title>".'
     description = models.TextField()
     start_date = models.DateField(default=date.today)
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='production_logs')
     youtube_link = models.URLField(blank=True)
+    storage_backend = models.ForeignKey(
+        StorageBackend, on_delete=models.CASCADE, related_name='production_logs'
+    )
     picture_16_9 = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
 
     @property
@@ -29,6 +32,9 @@ class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
         super().clean()
         if not self.name:
             self.name = f'This week on {self.film.title}'
+
+    def __str__(self):
+        return f"{self.film.title} Production Log {self.start_date}"
 
 
 class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
@@ -58,6 +64,12 @@ class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
         if self.author:
             return self.author.get_full_name()
         return self.user.get_full_name()
+
+    def __str__(self):
+        return (
+            f'{self.production_log.film.title}: {self.author_name} Production Log Entry '
+            f'{self.production_log.start_date}'
+        )
 
 
 class ProductionLogEntryAsset(models.Model):
