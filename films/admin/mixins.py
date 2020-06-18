@@ -7,8 +7,6 @@ from django.http.request import HttpRequest
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
-from films.models import collections, films, assets, production_logs
-
 
 class EditLinkMixin:
     def __init_subclass__(cls, **kwargs):
@@ -41,51 +39,3 @@ class EditLinkMixin:
         return 'Save and continue editing to create a link'
 
     get_edit_link.short_description = 'Edit link'
-
-
-class AssetInline(admin.StackedInline):
-    model = assets.Asset
-    extra = 1
-
-
-@admin.register(collections.Collection)
-class CollectionAdmin(admin.ModelAdmin):
-    inlines = [AssetInline]
-
-
-class CollectionInline(EditLinkMixin, admin.StackedInline):
-    model = collections.Collection
-    extra = 1
-
-
-@admin.register(films.Film)
-class FilmAdmin(admin.ModelAdmin):
-    inlines = [CollectionInline]
-
-
-class ProductionLogEntryAssetInline(admin.StackedInline):
-    model = production_logs.ProductionLogEntryAsset
-    show_change_link = True
-    extra = 1
-
-
-@admin.register(production_logs.ProductionLogEntry)
-class ProductionLogEntryAdmin(admin.ModelAdmin):
-    date_hierarchy = 'production_log__start_date'
-    list_display = ['__str__', 'production_log']
-    inlines = [ProductionLogEntryAssetInline]
-
-
-class ProductionLogEntryInline(EditLinkMixin, admin.StackedInline):
-    model = production_logs.ProductionLogEntry
-    show_change_link = True
-    extra = 1
-
-
-@admin.register(production_logs.ProductionLog)
-class ProductionLogAdmin(admin.ModelAdmin):
-    list_display = ['__str__', 'name']
-    inlines = [ProductionLogEntryInline]
-
-
-admin.site.register(assets.Asset)
