@@ -1,0 +1,28 @@
+@import "../vendor/bootstrap/type";
+
+.x-large {
+	@include font-size($x-large-font-size);
+	font-weight: $font-weight-normal;
+}
+
+large,
+.large {
+	@include font-size($large-font-size);
+	font-weight: $font-weight-normal;
+}
+
+x-small,
+.x-small {
+	@include font-size($x-small-font-size);
+	font-weight: $font-weight-normal;
+}
+
+u,
+.underline {
+	text-decoration: underline;
+}
+
+.subtitle{
+	color: $primary;
+	margin-bottom: 0;
+}

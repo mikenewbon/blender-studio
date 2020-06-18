@@ -1,0 +1,74 @@
+@import "../vendor/bootstrap/jumbotron";
+
+.jumbotron {
+	margin-bottom: 0;
+	background: center / cover;
+	position: relative;
+
+	.card-pills {
+		margin-top: $spacer;
+	}
+	.film-logo {
+		max-height: 200px;
+		max-width: 400px;
+		width: 100%;
+	}
+	&.jumbotron-overlay {
+		&:before {
+			display: block;
+			content: close-quote;
+			width: 100%;
+			height: 100%;
+			background: radial-gradient(
+				75.4% 209.68% at 75.4% 51.9%,
+				rgba(0, 0, 0, 0) 30.35%,
+				rgba(0, 0, 0, 0.75) 100%
+			);
+			position: absolute;
+			top: 0;
+			left: 0;
+			@include media-breakpoint-down(sm) {
+				background: rgba(0, 0, 0, 0.5);
+			}
+		}
+		&.overlay-flipped {
+			&:before {
+				background: radial-gradient(
+					95.13% 205.95% at 27.8% 43.3%,
+					rgba(0, 0, 0, 0) 0%,
+					rgba(0, 0, 0, 0.5325) 100%
+				);
+			}
+		}
+		&.overlay-light {
+			&:before {
+				background: linear-gradient(270.34deg, rgba(0, 0, 0, 0) 45.08%, rgba(0, 0, 0, 0.25) 80.66%);
+			}
+		}
+		&.overlay-medium {
+			&:before {
+				background: linear-gradient(270.34deg, rgba(0, 0, 0, 0) 45.08%, rgba(0, 0, 0, 0.4) 80.66%);
+			}
+		}
+		&.overlay-wide-content {
+			&:before {
+				background: radial-gradient(
+					78.58% 218.51% at 78.58% 51.9%,
+					rgba(0, 0, 0, 0) 11.87%,
+					rgba(0, 0, 0, 0.525) 34.9%,
+					rgba(0, 0, 0, 0.75) 100%
+				);
+			}
+		}
+	}
+}
+
+a.jumbotron-body {
+	color: white;
+	&:hover {
+		text-decoration: none;
+		h1 {
+			text-decoration: underline;
+		}
+	}
+}

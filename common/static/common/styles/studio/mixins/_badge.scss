@@ -1,0 +1,10 @@
+@import "../../vendor/bootstrap/mixins/badge";
+
+
+@mixin badge-variant($bg) {
+  @at-root a#{&} {
+    @include hover-focus() {
+      background-color: background-yiq($bg);
+    }
+  }
+}

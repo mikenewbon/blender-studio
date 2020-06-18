@@ -1,0 +1,6 @@
+@import "../../vendor/bootstrap/mixins/grid";
+
+@mixin make-container($gutter: $grid-gutter-width) {
+  padding-right: $gutter;
+  padding-left: $gutter;
+}

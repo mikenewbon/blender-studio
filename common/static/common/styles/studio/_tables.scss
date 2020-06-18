@@ -1,0 +1,13 @@
+@import "../vendor/bootstrap/tables";
+
+.table {
+	tr:first-of-type {
+		td{
+			border-top: 0;
+		}
+	}
+}
+
+.table-sm {
+	font-size: $small-font-size;
+}

@@ -1,0 +1,17 @@
+@import "../vendor/bootstrap/images";
+
+.img-width-100{
+	width:100%;
+}
+
+//
+// Porifle Pictures
+//
+
+.profile {
+	width: 1.875rem;
+	height: 1.875rem;
+	background: center / cover;
+	border-radius: 50%;
+	align-self: center;
+}

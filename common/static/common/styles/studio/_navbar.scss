@@ -1,0 +1,145 @@
+@import "../vendor/bootstrap/navbar";
+
+body{
+	margin-top: $navbar-height;
+}
+
+.navbar {
+	min-height: $navbar-height;
+	transition: margin-left $nav-drawer-animation-duration;
+	padding: $navbar-padding-y $navbar-padding-x;
+	border-bottom: 1px solid $highlight-white;
+	flex-wrap: no-wrap; // allow us to do the line break for collapsing content
+	align-items: stretch;
+	// padding: $navbar-padding-y $navbar-padding-x;
+	@include fixed-top;
+	z-index: 1040;
+	background: $navigation-gray;
+	// Because flex properties aren't inherited, we need to redeclare these first
+	// few properties so that content nested within behave properly.
+	.profile {
+		margin-left: 0;
+	}
+	.navdrawertoggle {
+		display: none;
+		@include media-breakpoint-down(sm) {
+			display: flex;
+		}
+		i {
+			font-size: $x-large-font-size;
+		}
+	}
+	.searchbar-wrapper{
+		padding: 0 $spacer/2;
+	}
+	.navbar-main-nav{
+		flex-grow: 1;
+		align-items: center;
+		color: rgba($white, .5);
+		@include media-breakpoint-down(sm) {
+			display: none;
+		}
+		.list-group-item{
+			height: 100%;
+			display: flex;
+			align-items: center;
+			white-space: nowrap;
+			@include hover-focus{
+				background: $highlight-white;
+				text-decoration: none;
+				color:$white;
+			}
+		}
+		span{
+			margin: 0;
+
+		}
+	}
+	.searchbar {
+		margin: 0 auto;
+		max-width: 380px;
+		padding-top: $spacer/2;
+		padding-bottom: $spacer/2;
+		position: relative;
+		display: flex;
+		align-items: stretch;
+	}
+	@include media-breakpoint-down(sm) {
+		.container {
+			max-width: 100%;
+			padding-left: 0;
+			padding-right: 0;
+		}
+		.navdrawertoggle {
+			display: flex;
+		}
+		.searchbar-wrapper {
+			display: none;
+		}
+	}
+
+	.container,
+	.container-fluid {
+		align-items: stretch;
+	}
+}
+
+.navbar-secondary {
+	position: sticky;
+	background: $navigation-gray;
+	border-top: 1px solid $highlight-white;
+	border-bottom: 1px solid $highlight-white;
+	top: $navbar-height;
+	z-index: 1030;
+	@include media-breakpoint-down(sm) {
+		z-index: 1020;
+	}
+	.content-holder{
+		margin-top: 0;
+		border-top: none;
+	}
+	.container, .container-fluid {
+		padding: 0;
+	}
+	.list-group,
+	.breadcrumb {
+		padding: 0 $spacer;
+		overflow-x: scroll;
+		flex-wrap: wrap;
+		@include media-breakpoint-down(sm) {
+			flex-wrap: nowrap;
+		}
+		&::-webkit-scrollbar {
+			display: none;
+		}
+		scrollbar-width: none;
+	}
+	.breadcrumb-item {
+		white-space: nowrap;
+		display: flex;
+		padding: $spacer/2 0;
+		&:last-child {
+			padding-right: $spacer;
+		}
+	}
+	.list-group-item{
+		white-space: nowrap;
+		@include hover-focus{
+			background: $highlight-white;
+			text-decoration: none;
+			color:$white;
+		}
+	}
+}
+
+.navbar-brand {
+	padding: 0 $spacer;
+	display: flex;
+	align-items: center;
+	padding-top: 0;
+	padding-bottom: 0;
+	margin-right: 0;
+	img{
+		@include img-fluid();
+	}
+}

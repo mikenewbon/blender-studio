@@ -1,0 +1,35 @@
+@import "../../vendor/bootstrap/mixins/buttons";
+
+// Button variants
+//
+// Easily pump out default styles, as well as :hover, :focus, :active,
+// and disabled options for all buttons
+
+@mixin button-variant(
+	$background,
+	$border,
+	$hover-background: background-yiq($background),
+	$hover-border: lighten($border, 10%),
+	$active-background: lighten($background, 10%),
+	$active-border: lighten($border, 12.5%)
+) {
+	p {
+		color: rgba(color-yiq($background), 0.5);
+	}
+
+	@include hover() {
+		color: color-yiq($background);
+		text-decoration: underline;
+	}
+
+	@mixin button-outline-variant(
+		$color,
+		$color-hover: color-yiq($color),
+		$active-background: $color,
+		$active-border: $color
+	) {
+		@include hover() {
+			text-decoration: underline;
+		}
+	}
+}
