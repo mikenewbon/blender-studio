@@ -23,17 +23,19 @@ class DynamicStorageFieldFile(FieldFile):
     def __init__(self, instance: models.Model, field: FileField, name: Optional[str]):
         super(DynamicStorageFieldFile, self).__init__(instance, field, name)
 
-        assert hasattr(instance, 'storage_backend'), (
+        assert hasattr(instance.__class__, 'storage_backend'), (
             f'{self.__class__.__name__} cannot be used in {instance.__class__.__name__}, '
             f'which does not have the `storage_backend` field.'
         )
 
-        if instance.storage_backend.category == StorageBackendCategoryChoices.gcs:  # type: ignore[attr-defined]
-            self.storage: GoogleCloudStorage = GoogleCloudStorage()
-            if instance.storage_backend.bucket_name:  # type: ignore[attr-defined]
-                self.storage.bucket_name = instance.storage_backend.bucket_name  # type: ignore[attr-defined]
-        else:
-            self.storage = FileSystemStorage()
+        if instance.storage_backend_id:
+            # The `if` prevents an unhandled exception if one tries to save without a storage_backend
+            if instance.storage_backend.category == StorageBackendCategoryChoices.gcs:  # type: ignore[attr-defined]
+                self.storage: GoogleCloudStorage = GoogleCloudStorage()
+                if instance.storage_backend.bucket_name:  # type: ignore[attr-defined]
+                    self.storage.bucket_name = instance.storage_backend.bucket_name  # type: ignore[attr-defined]
+            else:
+                self.storage = FileSystemStorage()
 
 
 class DynamicStorageFileField(models.FileField):
@@ -99,8 +101,10 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
 
     def clean(self):
         super().clean()
-        self.original_filename = self.source.file.name
-        self.size_bytes = self.source.size
+        if self.source:
+            # The `if` prevents an unhandled exception if one tries to save without a source
+            self.original_filename = self.source.file.name
+            self.size_bytes = self.source.size
 
         if self.source_type == AssetFileTypeChoices.file and not self.source_preview:
             raise ValidationError(
