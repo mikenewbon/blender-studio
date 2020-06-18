@@ -16,6 +16,7 @@ def with_name(name: str, func: T) -> T:
 class ChapterInline(admin.TabularInline):
     show_change_link = True
     model = chapters.Chapter
+    prepopulated_fields = {'slug': ('name',)}
     ordering = ('index',)
 
 
@@ -25,9 +26,10 @@ class TagInline(admin.TabularInline):
 
 @admin.register(trainings.Training)
 class TrainingAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('name',)}
     list_display = [
         '__str__',
-        with_name('url', lambda obj: format_html("<a href='{url}'>{url}</a>", url=obj.url)),
+        with_name('url', lambda obj: format_html('<a href="{url}">{url}</a>', url=obj.url)),
     ]
     inlines = [ChapterInline, TagInline]
 
@@ -35,11 +37,13 @@ class TrainingAdmin(admin.ModelAdmin):
 class SectionInline(admin.TabularInline):
     show_change_link = True
     model = sections.Section
+    prepopulated_fields = {'slug': ('name',)}
     ordering = ('index',)
 
 
 @admin.register(chapters.Chapter)
 class ChapterAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('name',)}
     inlines = [SectionInline]
 
 
@@ -55,9 +59,10 @@ class AssetInline(admin.TabularInline):
 
 @admin.register(sections.Section)
 class SectionAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('name',)}
     list_display = [
         '__str__',
-        with_name('url', lambda obj: format_html("<a href='{url}'>{url}</a>", url=obj.url)),
+        with_name('url', lambda obj: format_html('<a href="{url}">{url}</a>', url=obj.url)),
     ]
     inlines = [VideoInline, AssetInline]
 

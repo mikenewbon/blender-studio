@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.db.models import Model
 from django.http.request import HttpRequest
 from django.urls import reverse
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 
 
 class EditLinkMixin:
@@ -35,7 +35,11 @@ class EditLinkMixin:
             url = reverse(
                 f'admin:{obj._meta.app_label}_{obj._meta.model_name}_change', args=[obj.pk]
             )
-            return mark_safe(f'<a href="{url}">Edit this {obj._meta.verbose_name} separately</a>')
+            return format_html(
+                '<a href="{url}">Edit this {obj_name} separately</a>',
+                url=url,
+                obj_name=obj._meta.verbose_name,
+            )
         return 'Save and continue editing to create a link'
 
     get_edit_link.short_description = 'Edit link'
