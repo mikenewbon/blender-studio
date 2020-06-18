@@ -37,7 +37,7 @@ class Film(mixins.CreatedUpdatedMixin, models.Model):
     picture_16_9 = DynamicStorageFileField(
         upload_to=get_upload_to_hashed_path, blank=True, null=True
     )
-    youtube_link = models.URLField(blank=True, null=True)
+    youtube_link = models.URLField(blank=True)
 
     def clean(self) -> None:
         super().clean()
