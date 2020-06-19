@@ -1,0 +1,282 @@
+{% extends 'films/base_films.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-xl pt-4">
+	<section class="mb-5">
+		<!-- Latest Updates -->
+		<div class="row justify-content-center">
+			<div class="col-md-6 text-center">
+				<h2 text>Latest Updates</h2>
+				<p clas="mb-0">Want to see more updates from Coffee Run? <a href="#">See all weeklies</a></p>
+			</div>
+		</div>
+
+
+		<div class="update-feed">
+
+			<div class="update-feed-week">
+				<div class="update-feed-week-column column-left">
+					<div class="update-feed-week-icon">
+						<i class="material-icons">calendar_today</i>
+					</div>
+				</div>
+				<div class="update-feed-week-column column-right">
+					<div class="update-feed-week-header">
+						<p>1st - 7th March</p>
+						<h3>Production Week 7</h3>
+					</div>
+
+					<div class="update-feed-individual">
+						<div class="update-feed-individual-summary">
+							<a href="#">
+								<img src="{% static 'films/images/coffee-run-16-9.png' %}">
+							</a>
+						</div>
+						<div class="update-feed-individual-files">
+							<h3>This week on Coffee Run</h3>
+							<p>This week i’m working on the paint-overs for the Restaurant and Coffee shop. Getting the
+								atmosphere for these settings right is important to the story delivery.</p>
+							<p>This week i’m working on the paint-overs for the Restaurant and Coffee shop. Getting the
+								atmosphere for these settings right is important to the story delivery.</p>
+							<a href="#">Read the full blog</a>
+						</div>
+					</div>
+
+					<div class="update-feed-individual">
+						<div class="update-feed-individual-summary">
+							<div class="update-feed-individual-summary-profile">
+								<div style="background-image:url('https://blender.chat/avatar/MikeNewbon');"
+									class="profile-image profile ml-2">
+								</div>
+								<div class="col-auto">
+									<p class="subtitle text-white-50 x-small">Author</p>
+									<h4 class="comment-name">Mike Newbon</h4>
+								</div>
+							</div>
+							<p class="small">This week i’m working on the paint-overs for the Restaurant and Coffee
+								shop.
+								Getting the atmosphere for these settings right is important to the story delivery.</p>
+						</div>
+						<div class="update-feed-individual-files">
+							<div class="files">
+								<div class="row row-cols-1 row-cols-md-4  row-cols-2">
+									<div class="col">
+										<a class="file" href="#">
+											<div class="file-header"
+												style="background-image:url({% static 'films/images/files-example.jpg' %})">
+											</div>
+											<div class="file-body">
+												<p class="subtitle">Folder</p>
+												<h4>About this Training</h4>
+											</div>
+										</a>
+									</div>
+									<div class="col">
+										<a class="file" href="#">
+											<div class="file-header"
+												style="background-image:url({% static 'films/images/files-example.jpg' %})">
+											</div>
+											<div class="file-body">
+												<p class="subtitle">Image</p>
+												<h4>Poster.jpeg</h4>
+											</div>
+										</a>
+									</div>
+									<div class="col">
+										<a class="file" href="#">
+											<div class="file-header"
+												style="background-image:url({% static 'films/images/files-example.jpg' %})">
+											</div>
+											<div class="file-body">
+												<p class="subtitle">Video</p>
+												<h4>Spring.mp4</h4>
+											</div>
+										</a>
+									</div>
+									<div class="col">
+										<a class="file" href="#">
+											<div class="file-header"
+												style="background-image:url({% static 'films/images/files-example.jpg' %})">
+											</div>
+											<div class="file-body">
+												<p class="subtitle">Blend File</p>
+												<h4>Scene.blend</h4>
+											</div>
+										</a>
+									</div>
+								</div>
+							</div>
+							<div class="row update-feed-individual-files-show-more">
+								<div class="col text-center">
+									<a href="#" class="btn btn-sm btn-secondary">Show more</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="update-feed-individual">
+						<div class="update-feed-individual-summary">
+							<div class="update-feed-individual-summary-profile">
+								<div style="background-image:url('https://blender.chat/avatar/MikeNewbon');"
+									class="profile ml-2">
+								</div>
+								<div class="col-auto">
+									<p class="subtitle text-white-50 x-small">Author</p>
+									<h4 class="comment-name">Mike Newbon</h4>
+								</div>
+							</div>
+							<p class="small">This week i’m working on the paint-overs for the Restaurant and Coffee
+								shop.
+								Getting the atmosphere for these settings right is important to the story delivery.</p>
+						</div>
+						<div class="update-feed-individual-files">
+							<div class="files">
+								<div class="row row-cols-1 row-cols-md-4  row-cols-2">
+									<div class="col">
+										<a class="file" href="#">
+											<div class="file-header"
+												style="background-image:url({% static 'films/images/files-example.jpg' %})">
+											</div>
+											<div class="file-body">
+												<p class="subtitle">Folder</p>
+												<h4>About this Training</h4>
+											</div>
+										</a>
+									</div>
+									<div class="col">
+										<a class="file" href="#">
+											<div class="file-header"
+												style="background-image:url({% static 'films/images/files-example.jpg' %})">
+											</div>
+											<div class="file-body">
+												<p class="subtitle">Image</p>
+												<h4>Poster.jpeg</h4>
+											</div>
+										</a>
+									</div>
+									<div class="col">
+										<a class="file" href="#">
+											<div class="file-header"
+												style="background-image:url({% static 'films/images/files-example.jpg' %})">
+											</div>
+											<div class="file-body">
+												<p class="subtitle">Video</p>
+												<h4>Spring.mp4</h4>
+											</div>
+										</a>
+									</div>
+									<div class="col">
+										<a class="file" href="#">
+											<div class="file-header"
+												style="background-image:url({% static 'films/images/files-example.jpg' %})">
+											</div>
+											<div class="file-body">
+												<p class="subtitle">Blend File</p>
+												<h4>Scene.blend</h4>
+											</div>
+										</a>
+									</div>
+								</div>
+							</div>
+							<div class="row update-feed-individual-files-show-more">
+								<div class="col text-center">
+									<a href="#" class="btn btn-sm btn-secondary">Show more</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="update-feed-week">
+				<div class="update-feed-week-column column-left">
+					<div class="update-feed-week-icon">
+						<i class="material-icons">calendar_today</i>
+					</div>
+				</div>
+				<div class="update-feed-week-column column-right">
+					<div class="update-feed-week-header">
+						<p class="subtitle small">1st - 7th March</p>
+						<h3>Production Week 7</h3>
+					</div>
+					<div class="update-feed-individual">
+						<div class="update-feed-individual-summary">
+							<div class="update-feed-individual-summary-profile">
+								<div style="background-image:url('https://blender.chat/avatar/MikeNewbon');"
+									class="profile ml-2">
+								</div>
+								<div class="col-auto">
+									<p class="subtitle text-white-50 x-small">Author</p>
+									<h4 class="comment-name">Mike Newbon</h4>
+								</div>
+							</div>
+							<p class="small">This week i’m working on the paint-overs for the Restaurant and Coffee
+								shop.
+								Getting the atmosphere for these settings right is important to the story delivery.</p>
+						</div>
+						<div class="update-feed-individual-files">
+							<div class="files">
+								<div class="row row-cols-1 row-cols-md-4  row-cols-2">
+									<div class="col">
+										<a class="file" href="#">
+											<div class="file-header"
+												style="background-image:url({% static 'films/images/files-example.jpg' %})">
+											</div>
+											<div class="file-body">
+												<p class="subtitle">Folder</p>
+												<h4>About this Training</h4>
+											</div>
+										</a>
+									</div>
+									<div class="col">
+										<a class="file" href="#">
+											<div class="file-header"
+												style="background-image:url({% static 'films/images/files-example.jpg' %})">
+											</div>
+											<div class="file-body">
+												<p class="subtitle">Image</p>
+												<h4>Poster.jpeg</h4>
+											</div>
+										</a>
+									</div>
+									<div class="col">
+										<a class="file" href="#">
+											<div class="file-header"
+												style="background-image:url({% static 'films/images/files-example.jpg' %})">
+											</div>
+											<div class="file-body">
+												<p class="subtitle">Video</p>
+												<h4>Spring.mp4</h4>
+											</div>
+										</a>
+									</div>
+									<div class="col">
+										<a class="file" href="#">
+											<div class="file-header"
+												style="background-image:url({% static 'films/images/files-example.jpg' %})">
+											</div>
+											<div class="file-body">
+												<p class="subtitle">Blend File</p>
+												<h4>Scene.blend</h4>
+											</div>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="row">
+			<div class="col text-center">
+				<p clas="mb-0">Want to see more updates from Coffee Run? <a href="#">See all weeklies</a></p>
+			</div>
+		</div>
+	</section>
+</div>
+{% endblock content %}

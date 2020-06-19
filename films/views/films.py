@@ -26,9 +26,3 @@ def about(request: HttpRequest, film_slug: str) -> HttpResponse:
     film = get_object_or_404(Film, slug=film_slug, is_published=True)
     context = {'film': film}
     return render(request, 'films/about.html', context)
-
-
-def weeklies(request: HttpRequest, film_slug: str) -> HttpResponse:
-    film = get_object_or_404(Film, slug=film_slug, is_published=True)
-    context = {'film': film}
-    return render(request, 'films/weeklies.html', context)
