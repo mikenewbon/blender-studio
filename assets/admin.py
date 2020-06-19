@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from assets.models import assets, licenses, storages, AssetFileTypeChoices
+from assets.models import assets, licenses, storages
 
 
 @admin.register(licenses.License)
@@ -10,11 +10,13 @@ class LicenseAdmin(admin.ModelAdmin):
 
 class ImageInline(admin.TabularInline):
     model = assets.Image
+    show_change_link = True
     extra = 0
 
 
 class VideoInline(admin.TabularInline):
     model = assets.Video
+    show_change_link = True
     extra = 0
 
 
@@ -45,6 +47,4 @@ class StaticAssetAdmin(admin.ModelAdmin):
     list_filter = ['source_type', 'user', 'storage_backend__film__title']
 
 
-# admin.site.register(assets.Image)
-# admin.site.register(assets.Video)
 admin.site.register(storages.StorageBackend)

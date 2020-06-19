@@ -19,8 +19,11 @@ class EditLinkMixin:
         self, request: HttpRequest, obj: Optional[Model] = None
     ) -> Sequence[Union[Callable[..., Any], str]]:
         """Show the edit link at the top of the inline form"""
-        fields = ['get_edit_link', *super().get_fields(request, obj)]
-        return fields
+        fields = super().get_fields(request, obj)
+        return [
+            'get_edit_link',
+            *[field for field in fields if field != 'get_edit_link'],
+        ]
 
     def get_readonly_fields(
         self, request: HttpRequest, obj: Optional[Model] = None

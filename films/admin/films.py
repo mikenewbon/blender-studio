@@ -6,6 +6,7 @@ from films.models import assets, collections, films
 
 class AssetInline(admin.StackedInline):
     model = assets.Asset
+    show_change_link = True
     extra = 1
     prepopulated_fields = {'slug': ('name',)}
 
@@ -18,6 +19,7 @@ class CollectionAdmin(admin.ModelAdmin):
 
 class CollectionInline(EditLinkMixin, admin.StackedInline):
     model = collections.Collection
+    show_change_link = True
     prepopulated_fields = {'slug': ('name',)}
     extra = 1
 
