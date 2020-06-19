@@ -1,10 +1,21 @@
-@import "../../vendor/bootstrap/mixins/badge";
+// @import "../../vendor/bootstrap/mixins/badge";
 
+// EDITED
 
 @mixin badge-variant($bg) {
-  @at-root a#{&} {
-    @include hover-focus() {
-      background-color: background-yiq($bg);
-    }
-  }
+	color: color-yiq($bg);
+	background-color: $bg;
+
+	@at-root a#{&} {
+		@include hover-focus() {
+			color: color-yiq($bg);
+			background-color: background-yiq($bg);
+		}
+
+		&:focus,
+		&.focus {
+			outline: 0;
+			box-shadow: 0 0 0 $badge-focus-width rgba($bg, 0.5);
+		}
+	}
 }

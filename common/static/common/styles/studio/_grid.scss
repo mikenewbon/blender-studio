@@ -1,16 +1,6 @@
 @import "../vendor/bootstrap/grid";
-// Container widths
-//
-// Set the container width, and override it for fixed navbars in media queries.
 
-@if $enable-grid-classes {
-  // Single container class with breakpoint max-widths
-  .container {
-    @include make-container();
-	@include make-container-max-widths();
-	@include media-breakpoint-down(sm) {
-		padding-left: $spacer;
-		padding-right:$spacer;
-	}
-  }
+.container, .container-fluid, .container-xl, .container-lg, .container-md, .container-sm{
+	padding-left: $spacer;
+	padding-right: $spacer;
 }

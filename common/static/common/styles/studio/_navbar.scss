@@ -9,7 +9,7 @@ body{
 	transition: margin-left $nav-drawer-animation-duration;
 	padding: $navbar-padding-y $navbar-padding-x;
 	border-bottom: 1px solid $highlight-white;
-	flex-wrap: no-wrap; // allow us to do the line break for collapsing content
+	flex-wrap: nowrap; // allow us to do the line break for collapsing content
 	align-items: stretch;
 	// padding: $navbar-padding-y $navbar-padding-x;
 	@include fixed-top;

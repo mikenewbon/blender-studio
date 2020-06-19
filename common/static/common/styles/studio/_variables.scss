@@ -29,7 +29,7 @@ $grays: map-merge(
 		"600": $gray-600,
 		"700": $gray-700,
 		"800": $gray-800,
-		"900": $gray-900
+		"900": $gray-900,
 	),
 	$grays
 );
@@ -84,7 +84,7 @@ $warning: $yellow !default;
 $danger: $red !default;
 $light: $white !default;
 $dark: $charcoal-gray !default;
-$transparent: rgba(0,0,0,0);
+$transparent: rgba(0, 0, 0, 0);
 
 $theme-colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
@@ -131,7 +131,7 @@ $yiq-text-dark: $charcoal-gray !default;
 $yiq-text-light: $white !default;
 
 // Characters which are escaped by the escape-svg function
-$escaped-characters: (("<", "%3c"), (">", "%3e"), ("#", "%23")) !default;
+$escaped-characters: (("<", "%3c"), (">", "%3e"), ("#", "%23"), ("(", "%28"), (")", "%29")) !default;
 
 // Options
 //
@@ -164,18 +164,18 @@ $spacers: map-merge(
 	(
 		0: 0,
 		1: (
-			$spacer * 0.25
+			$spacer * 0.25,
 		),
 		2: (
-			$spacer * 0.5
+			$spacer * 0.5,
 		),
 		3: $spacer,
 		4: (
-			$spacer * 2
+			$spacer * 2,
 		),
 		5: (
-			$spacer * 4
-		)
+			$spacer * 4,
+		),
 	),
 	$spacers
 );
@@ -189,7 +189,7 @@ $sizes: map-merge(
 		50: 50%,
 		75: 75%,
 		100: 100%,
-		auto: auto
+		auto: auto,
 	),
 	$sizes
 );
@@ -228,7 +228,7 @@ $grid-breakpoints: (
 	sm: 576px,
 	md: 768px,
 	lg: 992px,
-	xl: 1200px
+	xl: 1200px,
 ) !default;
 
 @include _assert-ascending($grid-breakpoints, "$grid-breakpoints");
@@ -242,7 +242,7 @@ $container-max-widths: (
 	sm: 540px,
 	md: 720px,
 	lg: 960px,
-	xl: 1140px
+	xl: 1140px,
 ) !default;
 
 @include _assert-ascending($container-max-widths, "$container-max-widths");
@@ -344,8 +344,8 @@ $lead-font-weight: 300 !default;
 
 $x-large-font-size: 1.5rem !default;
 $large-font-size: 1.125rem !default;
-$small-font-size: .875rem !default;
-$x-small-font-size: .75rem !default;
+$small-font-size: 0.875rem !default;
+$x-small-font-size: 0.75rem !default;
 
 $text-muted: $gray-600 !default;
 
@@ -460,11 +460,10 @@ $btn-padding-x-nav: 1.25rem !default;
 $btn-font-size-nav: $font-size-base !default;
 $btn-line-height-nav: 1 !default;
 
-$btn-padding-y-ctrl-sm: .3125rem !default;
-$btn-padding-x-ctrl-sm: .3125rem !default;
+$btn-padding-y-ctrl-sm: 0.3125rem !default;
+$btn-padding-x-ctrl-sm: 0.3125rem !default;
 $btn-font-size-ctrl-sm: $font-size-base * 1.5 !default;
 $btn-line-height-ctrl-sm: 1 !default;
-
 
 $btn-padding-y-ctrl-xs: 0rem !default;
 $btn-padding-x-ctrl-xs: 0rem !default;
@@ -697,7 +696,7 @@ $custom-file-box-shadow: $input-box-shadow !default;
 $custom-file-button-color: $custom-file-color !default;
 $custom-file-button-bg: $input-group-addon-bg !default;
 $custom-file-text: (
-	en: "Browse"
+	en: "Browse",
 ) !default;
 
 // Form validation
@@ -718,12 +717,12 @@ $form-validation-states: map-merge(
 	(
 		"valid": (
 			"color": $form-feedback-valid-color,
-			"icon": $form-feedback-icon-valid
+			"icon": $form-feedback-icon-valid,
 		),
 		"invalid": (
 			"color": $form-feedback-invalid-color,
-			"icon": $form-feedback-icon-invalid
-		)
+			"icon": $form-feedback-icon-invalid,
+		),
 	),
 	$form-validation-states
 );
@@ -800,12 +799,11 @@ $navbar-light-brand-hover-color: $navbar-light-active-color !default;
 $navbar-dark-brand-color: $navbar-dark-active-color !default;
 $navbar-dark-brand-hover-color: $navbar-dark-active-color !default;
 
-
 //Navdrawer
 
 $nav-drawer-width-closed: 0px !default;
 $nav-drawer-width-open: 380px !default;
-$nav-drawer-animation-duration: .5s;
+$nav-drawer-animation-duration: 0.5s;
 
 // Dropdowns
 //
@@ -834,10 +832,11 @@ $dropdown-link-active-bg: $component-active-bg !default;
 
 $dropdown-link-disabled-color: $gray-600 !default;
 
-$dropdown-item-padding-y: $spacer /2 !default;
+$dropdown-item-padding-y: $spacer / 2 !default;
 $dropdown-item-padding-x: $spacer !default;
 
 $dropdown-header-color: $gray-600 !default;
+$dropdown-header-padding: $dropdown-padding-y $dropdown-item-padding-x !default;
 
 // Pagination
 
@@ -1040,9 +1039,9 @@ $alert-color-level: 6 !default;
 
 // Progress bars
 
-$progress-height: .25rem !default;
+$progress-height: 0.25rem !default;
 $progress-font-size: $font-size-base * 0.75 !default;
-$progress-bg: rgba(255, 255, 255, .5) !default;
+$progress-bg: rgba(255, 255, 255, 0.5) !default;
 $progress-border-radius: 0 !default;
 $progress-box-shadow: null !default;
 $progress-bar-color: $white !default;
@@ -1093,7 +1092,7 @@ $figure-caption-color: $gray-600 !default;
 
 $breadcrumb-font-size: $small-font-size !default;
 
-$breadcrumb-padding-y: $spacer /2  !default;
+$breadcrumb-padding-y: $spacer / 2 !default;
 $breadcrumb-padding-x: 0 !default;
 $breadcrumb-item-padding: 0.5rem !default;
 
@@ -1168,6 +1167,7 @@ $pre-scrollable-max-height: 340px !default;
 $displays: none, inline, inline-block, block, table, table-row, table-cell, flex, inline-flex !default;
 $overflows: auto, hidden !default;
 $positions: static, relative, absolute, fixed, sticky !default;
+$user-selects: all, auto, none !default;
 
 // Printing
 

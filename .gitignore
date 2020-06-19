@@ -17,3 +17,4 @@ node_modules/
 /yarn-error.log
 .venv/
 .python-version
+studio/blender-cloud-credentials.json
