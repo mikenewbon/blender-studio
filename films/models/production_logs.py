@@ -12,6 +12,10 @@ from films.models import Asset, Film
 class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
     """A log (collection) of all authors' production log entries in one week."""
 
+    class Meta:
+        verbose_name = 'production weekly'
+        verbose_name_plural = 'production weeklies'
+
     film = models.ForeignKey(Film, on_delete=models.CASCADE, related_name='production_logs')
     name = models.CharField(max_length=512, blank=True)
     name.description = 'If not provided, will be set to "This week on <film title>".'
@@ -34,17 +38,21 @@ class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
             self.name = f'This week on {self.film.title}'
 
     def __str__(self):
-        return f"{self.film.title} Production Log {self.start_date}"
+        return f"{self.film.title} Production Weekly {self.start_date}"
 
 
 class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
     """A collection of assets created by one author during one week."""
 
     class Meta:
-        verbose_name_plural = 'production log entries'
+        verbose_name = 'production weekly entry'
+        verbose_name_plural = 'production weekly entries'
 
     production_log = models.ForeignKey(
-        ProductionLog, on_delete=models.CASCADE, related_name='log_entries'
+        ProductionLog,
+        on_delete=models.CASCADE,
+        related_name='log_entries',
+        verbose_name='production weekly',
     )
     description = models.TextField()
 
@@ -67,7 +75,7 @@ class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
 
     def __str__(self):
         return (
-            f'{self.production_log.film.title}: {self.author_name} Production Log Entry '
+            f'{self.production_log.film.title}: {self.author_name}\'s Production Weekly Entry '
             f'{self.production_log.start_date}'
         )
 
@@ -79,7 +87,13 @@ class ProductionLogEntryAsset(models.Model):
     OneToOne asset field.
     """
 
+    class Meta:
+        verbose_name = 'production weekly entry asset'
+
     asset = models.OneToOneField(Asset, on_delete=models.CASCADE)
     production_log_entry = models.ForeignKey(
         ProductionLogEntry, on_delete=models.CASCADE, related_name='entry_assets'
     )
+
+    def __str__(self):
+        return f'{self.asset.name} - {self.asset.date_created:%d %b %Y}'
