@@ -80,4 +80,6 @@ class ProductionLogEntryAsset(models.Model):
     """
 
     asset = models.OneToOneField(Asset, on_delete=models.CASCADE)
-    production_log_entry = models.ForeignKey(ProductionLogEntry, on_delete=models.CASCADE)
+    production_log_entry = models.ForeignKey(
+        ProductionLogEntry, on_delete=models.CASCADE, related_name='entry_assets'
+    )

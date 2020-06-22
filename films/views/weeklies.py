@@ -15,9 +15,7 @@ def production_log_list(request: HttpRequest, film_slug: str) -> HttpResponse:
         .order_by('-start_date')
         .prefetch_related(Prefetch('log_entries', to_attr='entries'))
     )
-    prefetch_related_objects(
-        production_logs, 'entries__productionlogentryasset_set__asset__static_asset'
-    )
+    prefetch_related_objects(production_logs, 'entries__entry_assets__asset__static_asset')
     # Altogether, 6 database queries are executed to retrieve te film, logs and assets.
 
     context = {
