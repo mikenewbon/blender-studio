@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from films.admin.mixins import EditLinkMixin
 from films.models import assets, collections, films
 
 
@@ -30,20 +29,11 @@ class AssetInline(admin.StackedInline):
 class CollectionAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     inlines = [AssetInline]
-    list_display = ['__str__', 'film']
+    list_display = ['__str__', 'film', 'order', 'parent']
     list_filter = ['film', 'parent']
-
-
-class CollectionInline(admin.StackedInline):
-    model = collections.Collection
-    show_change_link = True
-    prepopulated_fields = {'slug': ('name',)}
-    extra = 0
-    list_filter = ['film', 'parent']
+    search_fields = ['name']
 
 
 @admin.register(films.Film)
 class FilmAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
-    # inlines = [CollectionInline]
-    # TODO(Natalia): only show a link or paginate collections in Change form?

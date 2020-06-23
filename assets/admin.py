@@ -13,12 +13,14 @@ class ImageInline(admin.TabularInline):
     model = assets.Image
     show_change_link = True
     extra = 0
+    max_num = 1
 
 
 class VideoInline(admin.TabularInline):
     model = assets.Video
     show_change_link = True
     extra = 0
+    max_num = 1
 
 
 @admin.register(assets.StaticAsset)
