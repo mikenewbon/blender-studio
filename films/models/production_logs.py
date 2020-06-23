@@ -19,14 +19,34 @@ class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
     film = models.ForeignKey(Film, on_delete=models.CASCADE, related_name='production_logs')
     name = models.CharField(max_length=512, blank=True)
     name.description = 'If not provided, will be set to "This week on <film title>".'
-    description = models.TextField()
+    summary = models.TextField()
     start_date = models.DateField(default=date.today)
-    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='production_logs')
+    user = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name='uploaded_production_logs'
+    )
+    user.description = "The user who uploaded the weekly production log."
+    author = models.ForeignKey(
+        User,
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
+        related_name='authored_production_logs',
+    )
+    author.description = "The actual author of the summary in the weekly production log."
     youtube_link = models.URLField(blank=True)
     storage_backend = models.ForeignKey(
         StorageBackend, on_delete=models.CASCADE, related_name='production_logs'
     )
     picture_16_9 = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
+
+    @property
+    def author_name(self) -> str:
+        """Get the production log summary's author full name.
+
+        Usually the author of the log will be the same as the user who uploads it."""
+        if self.author:
+            return self.author.get_full_name()
+        return self.user.get_full_name()
 
     @property
     def end_date(self):

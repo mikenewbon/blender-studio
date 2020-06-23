@@ -20,7 +20,8 @@ class ProductionLogEntryAssetInline(admin.StackedInline):
         if db_field.name == 'asset':
             kwargs['queryset'] = Asset.objects.filter(
                 Q(static_asset__author=request.user)
-                | (Q(static_asset__author__isnull=True) & Q(static_asset__user=request.user))
+                | (Q(static_asset__author__isnull=True) & Q(static_asset__user=request.user)),
+                is_published=True,
             )
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
