@@ -7,8 +7,9 @@ from django.forms.models import ModelChoiceField
 from django.http.request import HttpRequest
 from django.utils import timezone
 
+from common.mixins import AdminUserDefaultMixin
 from films.admin.mixins import EditLinkMixin
-from films.models import production_logs, Asset, ProductionLog
+from films.models import production_logs, Asset
 
 
 class ProductionLogEntryAssetInline(admin.StackedInline):
@@ -32,21 +33,21 @@ class ProductionLogEntryAssetInline(admin.StackedInline):
 
 
 @admin.register(production_logs.ProductionLogEntry)
-class ProductionLogEntryAdmin(admin.ModelAdmin):
+class ProductionLogEntryAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
     date_hierarchy = 'production_log__start_date'
     list_display = ['__str__', 'production_log']
     inlines = [ProductionLogEntryAssetInline]
     list_filter = ['production_log__film', 'production_log', 'user', 'author']
 
 
-class ProductionLogEntryInline(EditLinkMixin, admin.StackedInline):
+class ProductionLogEntryInline(EditLinkMixin, AdminUserDefaultMixin, admin.StackedInline):
     model = production_logs.ProductionLogEntry
     show_change_link = True
     extra = 0
 
 
 @admin.register(production_logs.ProductionLog)
-class ProductionLogAdmin(admin.ModelAdmin):
+class ProductionLogAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
     list_display = ['__str__', 'name']
     inlines = [ProductionLogEntryInline]
     fieldsets = (

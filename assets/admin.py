@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from assets.models import assets, licenses, storages
+from common.mixins import AdminUserDefaultMixin
 
 
 @admin.register(licenses.License)
@@ -21,7 +22,7 @@ class VideoInline(admin.TabularInline):
 
 
 @admin.register(assets.StaticAsset)
-class StaticAssetAdmin(admin.ModelAdmin):
+class StaticAssetAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
     inlines = [ImageInline, VideoInline]
     fieldsets = (
         (

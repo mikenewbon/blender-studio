@@ -28,7 +28,7 @@ class DynamicStorageFieldFile(FieldFile):
             f'which does not have the `storage_backend` field.'
         )
 
-        if instance.storage_backend_id:
+        if instance.storage_backend_id:  # type: ignore[attr-defined]
             # The `if` prevents an unhandled exception if one tries to save without a storage_backend
             if instance.storage_backend.category == StorageBackendCategoryChoices.gcs:  # type: ignore[attr-defined]
                 self.storage: GoogleCloudStorage = GoogleCloudStorage()
