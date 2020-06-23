@@ -59,7 +59,7 @@
         border-bottom: 2px solid $input-gray;
 		@extend .row;
         &-files {
-			@extend .col-md-8;
+			@extend .col-md-9;
             > :last-child {
                 margin-bottom: $spacer;
             }
@@ -76,7 +76,7 @@
             }
         }
         &-summary {
-			@extend .col-md-4;
+			@extend .col-md-3;
             >*:last-child {
                 margin-bottom: $spacer;
             }
