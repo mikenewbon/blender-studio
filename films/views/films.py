@@ -1,3 +1,4 @@
+from django.db.models.query import Prefetch
 from django.http import HttpResponse
 from django.http.request import HttpRequest
 from django.shortcuts import render, get_object_or_404
@@ -19,7 +20,9 @@ class FilmListView(ListView):
 def film_detail(request: HttpRequest, film_slug: str) -> HttpResponse:
     film = get_object_or_404(Film, slug=film_slug, is_published=True)
     featured_artwork = film.assets.filter(is_published=True, is_featured=True)
-    production_logs = film.production_logs.order_by('-start_date')
+    production_logs = film.production_logs.order_by('-start_date').prefetch_related(
+        Prefetch('log_entries', to_attr='entries')
+    )
 
     context = {
         'film': film,
