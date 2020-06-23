@@ -44,3 +44,7 @@ class ProductionLogEntryInline(EditLinkMixin, admin.StackedInline):
 class ProductionLogAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'name']
     inlines = [ProductionLogEntryInline]
+    fieldsets = (
+        (None, {'fields': ['film', 'name', 'start_date', 'user', 'storage_backend']},),
+        ('Summary', {'fields': ['summary', 'author', 'picture_16_9', 'youtube_link']}),
+    )
