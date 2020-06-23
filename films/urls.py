@@ -6,7 +6,7 @@ from films.views.api.asset import asset as api_asset
 urlpatterns = [
     path('api/assets/<int:asset_pk>', api_asset, name='api-asset'),
     path('', films.FilmListView.as_view(), name='film-list'),
-    path('<slug:film_slug>', films.FilmDetailView.as_view(), name='film-detail'),
+    path('<slug:film_slug>', films.film_detail, name='film-detail'),
     path('<slug:film_slug>/about', films.about, name='film-about'),
     path('<slug:film_slug>/gallery', gallery.collection_list, name='film-gallery'),
     path('<slug:film_slug>/weeklies', weeklies.production_log_list, name='film-weeklies'),
