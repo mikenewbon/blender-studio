@@ -44,7 +44,7 @@ class StaticAssetAdmin(admin.ModelAdmin):
             },
         ),
     )
-    list_filter = ['source_type', 'user', 'storage_backend__film__title']
+    list_filter = ['source_type', 'user', 'author', 'storage_backend__film__title']
 
 
 admin.site.register(storages.StorageBackend)
