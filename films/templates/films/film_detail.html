@@ -11,7 +11,7 @@
 		{% if film.status != "2_released" %}
 		<!-- Latest Updates -->
 
-		<div class="row justify-content-center">
+		<div class="row justify-content-center mb-3">
 			<div class="col-md-6 text-center">
 				<h2 class="mb-0">Latest Updates</h2>
 				<p class="mb-0">Want to see more updates from {{ film.title }}?
@@ -19,88 +19,7 @@
 			</div>
 		</div>
 
-		<div class="update-feed">
-
-			{% for production_log in production_logs %}
-			<div class="update-feed-week">
-				<div class="update-feed-week-column column-left">
-					<div class="update-feed-week-icon">
-						<i class="material-icons">calendar_today</i>
-					</div>
-				</div>
-				<div class="update-feed-week-column column-right">
-					<div class="update-feed-week-header">
-						{% if production_log.start_date.month == production_log.end_date.month %}
-						<p>{{ production_log.start_date|date:'jS' }} - {{ production_log.end_date|date:'jS M' }} </p>
-						{% else %}
-						<p>{{ production_log.start_date|date:'jS M' }} - {{ production_log.end_date|date:'jS M' }} </p>
-						{% endif %}
-						<h3>{{ production_log.name }}</h3>
-					</div>
-
-					<div class="update-feed-individual">
-						<div class="update-feed-individual-summary">
-							<a href="#">
-								<img src="{{ production_log.picture_16_9.url }}">
-							</a>
-						</div>
-						<div class="update-feed-individual-files">
-							<h3>This week on {{ film.title }}</h3>
-							<p>{{ production_log.description }}</p>
-							<a href="#">Read the full blog</a>
-						</div>
-					</div>
-
-					{% for entry in production_log.entries %}
-					<div class="update-feed-individual">
-						<div class="update-feed-individual-summary">
-							<div class="update-feed-individual-summary-profile">
-								<div style="background-image:url('https://blender.chat/avatar/MikeNewbon');"
-									class="profile-image profile ml-2">
-								</div>
-								<div class="col-auto">
-									<p class="subtitle text-white-50 x-small">{{ entry.author_role }}</p>
-									<h4 class="comment-name">{{ entry.author_name }}</h4>
-								</div>
-							</div>
-							<p class="small">{{ entry.description }}</p>
-						</div>
-						<div class="update-feed-individual-files">
-							<div class="files">
-								<div class="row row-cols-1 row-cols-md-4  row-cols-2">
-									{% for entry_asset in entry.entry_assets.all %}
-									<div class="col">
-										<a class="file" href="#">
-											<div class="file-header"
-												style="background-image:url({{ entry_asset.asset.static_asset.preview.url }})">
-											</div>
-											<div class="file-body">
-												<p class="subtitle">{{ entry_asset.asset.static_asset.source_type }}</p>
-												<h4>{{ entry_asset.asset.name }}</h4>
-											</div>
-										</a>
-									</div>
-									{% endfor %}
-
-								</div>
-							</div>
-
-							<div class="row update-feed-individual-files-show-more">
-								<div class="col text-center">
-									<a href="#" class="btn btn-sm btn-secondary">Show more</a>
-								</div>
-							</div>
-
-						</div>
-					</div>
-
-					{% endfor %}
-				</div>
-			</div>
-
-			{% endfor %}
-
-		</div>
+		{% include "films/components/update_feed.html" with production_logs=production_logs %}
 
 		<div class="row">
 			<div class="col text-center">
