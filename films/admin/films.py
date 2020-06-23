@@ -33,7 +33,7 @@ class CollectionAdmin(admin.ModelAdmin):
     list_filter = ['film', 'parent']
 
 
-class CollectionInline(EditLinkMixin, admin.StackedInline):
+class CollectionInline(admin.StackedInline):
     model = collections.Collection
     show_change_link = True
     prepopulated_fields = {'slug': ('name',)}
@@ -44,4 +44,5 @@ class CollectionInline(EditLinkMixin, admin.StackedInline):
 @admin.register(films.Film)
 class FilmAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
-    inlines = [CollectionInline]
+    # inlines = [CollectionInline]
+    # TODO(Natalia): only show a link or paginate collections in Change form?
