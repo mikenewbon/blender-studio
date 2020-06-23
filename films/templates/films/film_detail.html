@@ -14,7 +14,7 @@
 		<div class="row justify-content-center">
 			<div class="col-md-6 text-center">
 				<h2 class="mb-0">Latest Updates</h2>
-				<p clas="mb-0">Want to see more updates from {{ film.title }}?
+				<p class="mb-0">Want to see more updates from {{ film.title }}?
 					<a href="{% url 'film-weeklies' film.slug %}">See all weeklies</a></p>
 			</div>
 		</div>
@@ -104,35 +104,44 @@
 
 		<div class="row">
 			<div class="col text-center">
-				<p clas="mb-0">Want to see more updates from {{ film.title }}?
+				<p class="mb-0">Want to see more updates from {{ film.title }}?
 					<a href="{% url 'film-weeklies' film.slug %}">See all weeklies</a></p>
 			</div>
 		</div>
 		{% else %}
 
-		<div class="row justify-content-center">
+		<div class="row justify-content-center mb-3">
 			<div class="col-md-6 text-center">
 				<h2 class="mb-0">Featured Gallery</h2>
-				<p clas="mb-0">Want to see more?
+				<p class="mb-0">Want to see more?
 					<a href="{% url 'film-gallery' film.slug %}">Explore the Gallery</a></p>
 			</div>
 		</div>
-		<div class="files">
-			<div class="row row-cols-2 row-cols-sm-3 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
-				{% if featured_artwork %}
-				{% for asset in featured_artwork %}
-				{% include "common/components/file.html" with asset=asset %}
-				{% endfor %}
-				{% endif %}
+
+		{% if featured_artwork %}
+		<div class="grid">
+			{% for asset in featured_artwork %}
+			<div class="grid-item">
+				<a href="#" data-toggle="modal" data-target="#gallery-modal" data-url="{% url 'api-asset' asset.id %}">
+					<img src="{{ asset.static_asset.preview.url }}">
+				</a>
+			</div>
+			{% endfor %}
+		</div>
+
+		{% else %}
+		<div class="row bg-secondary">
+			<div class="col my-4 text-center">
+				<h3 class="mb-0">No Featured Artwork to display</h3>
 			</div>
 		</div>
 
 		{% endif %}
 
-
+		{% endif %}
 	</section>
 </div>
 
-<!-- TODO(Mike): Add everything else (Waiting on Gallery Data, weeklies, blog posts, etc)-->
+<!-- TODO(Mike): Add blog posts -->
 
 {% endblock %}

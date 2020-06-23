@@ -3,7 +3,7 @@
 
 window.asset = (function asset() {
 	document.addEventListener('DOMContentLoaded', () => {
-		document.querySelectorAll('.file a[data-toggle*="modal"]').forEach(element => {
+		document.querySelectorAll('.file a[data-toggle*="modal"], .grid a[data-toggle*="modal"]').forEach(element => {
 			element.addEventListener('click', event => {
 				fetch(element.dataset.url).then(response => {
 					return response.text();
