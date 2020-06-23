@@ -62,22 +62,12 @@
 							<div class="files">
 								<div class="row row-cols-1 row-cols-md-4  row-cols-2">
 									{% for entry_asset in entry.entry_assets.all|slice:':4' %}
-									<div class="col">
-										<a class="file" href="#">
-											<div class="file-header"
-												style="background-image:url({{ entry_asset.asset.static_asset.preview.url }})">
-											</div>
-											<div class="file-body">
-												<p class="subtitle">{{ entry_asset.asset.static_asset.source_type }}</p>
-												<h4>{{ entry_asset.asset.name }}</h4>
-											</div>
-										</a>
-									</div>
+									{% include "common/components/file.html" with asset=entry_asset.asset %}
 									{% endfor %}
 									{% if entry.entry_assets.all|length > 4 %}
 									<div class="collapse" id="entry-{{ entry.id }}">
 										{% for entry_asset in entry.entry_assets.all|slice:'4:' %}
-											{% include "common/components/file.html" with asset=entry_asset.asset %}
+										{% include "common/components/file.html" with asset=entry_asset.asset %}
 										{% endfor %}
 									</div>
 									{% endif %}
@@ -86,7 +76,9 @@
 							{% if entry.entry_assets.all|length > 4 %}
 							<div class="row update-feed-individual-files-show-more">
 								<div class="col text-center">
-									<a data-toggle="collapse" href="#entry-{{ entry.id }}" role="button" aria-expanded="false" aria-controls="entry-{{ entry.id }}" class="btn btn-sm btn-secondary collapsed show-more-less">Show </a>
+									<a data-toggle="collapse" href="#entry-{{ entry.id }}" role="button"
+										aria-expanded="false" aria-controls="entry-{{ entry.id }}"
+										class="btn btn-sm btn-secondary collapsed show-more-less">Show </a>
 								</div>
 							</div>
 							{% endif %}
@@ -104,5 +96,8 @@
 	</section>
 </div>
 
-{% comment %} {{ production_logs|json_script:"hello-data" }} {% endcomment %}
+<div id="gallery-modal" class="modal modal-asset" tabindex="-1" role="dialog" aria-hidden="true">
+{#    TODO(Natalia): this is the modal div, the contents from "modal_asset.html" are added here. #}
+</div>
+
 {% endblock content %}

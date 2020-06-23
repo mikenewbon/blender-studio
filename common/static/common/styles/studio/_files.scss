@@ -1,5 +1,5 @@
-.files{
-	.col{
+.files {
+	.col {
 		margin-bottom: $spacer;
 	}
 }
@@ -9,14 +9,14 @@
 	@extend .card-media;
 	@extend .card-dark;
 	margin-bottom: 0;
-	height:100%;
+	height: 100%;
 	text-align: center;
-	&:hover{
+	&:hover {
 		background-color: tint($navigation-gray, 10%);
-		.subtitle{
+		.subtitle {
 			text-decoration: none;
 		}
-		h4{
+		h4 {
 			text-decoration: underline;
 		}
 	}
@@ -31,22 +31,32 @@
 		@extend .card-body;
 		padding: $spacer/2;
 	}
-	&-header{
+	&-header {
 		@extend .card-header;
-		background-size: contain;
-		background-repeat: no-repeat;
-		>a{
+		width: 100%;
+		> a {
+			padding: $spacer/2;
 			width: 100%;
 			height: 100%;
 			position: absolute;
-			left: 0;
 			top: 0;
+			left: 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
 		}
+	}
+	&-icon {
+		height: 100%;
+	}
+	&-image {
+		max-height: calc(100% + #{$spacer});
+		max-width: calc(100% + #{$spacer});
 	}
 }
 
-a.file{
-	&:hover{
+a.file {
+	&:hover {
 		text-decoration: none;
 	}
 }
