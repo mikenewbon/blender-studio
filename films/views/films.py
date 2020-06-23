@@ -7,6 +7,7 @@ from django.views.decorators.http import require_safe
 from django.views.generic.list import ListView
 
 from films.models import Film
+from films.views.weeklies import get_production_logs_for_context
 
 
 @method_decorator(require_safe, name='dispatch')
@@ -20,14 +21,11 @@ class FilmListView(ListView):
 def film_detail(request: HttpRequest, film_slug: str) -> HttpResponse:
     film = get_object_or_404(Film, slug=film_slug, is_published=True)
     featured_artwork = film.assets.filter(is_published=True, is_featured=True)
-    production_logs = film.production_logs.order_by('-start_date').prefetch_related(
-        Prefetch('log_entries', to_attr='entries')
-    )
 
     context = {
         'film': film,
         'featured_artwork': featured_artwork,
-        'production_logs': production_logs,
+        'production_logs': get_production_logs_for_context(film),
     }
 
     return render(request, 'films/film_detail.html', context)

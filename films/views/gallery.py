@@ -9,7 +9,7 @@ from films.models import Film, Collection, Asset
 
 
 def get_gallery_drawer_context(film: Film) -> Dict[str, Any]:
-    """ A helper function that retrieves collections for drawer menu gallery.
+    """A helper function that retrieves collections for drawer menu gallery.
 
     The collections are ordered and nested, ready to be looped over in templates.
     Also the fake 'Featured Artwork' collection is created.

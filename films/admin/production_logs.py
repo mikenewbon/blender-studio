@@ -15,7 +15,7 @@ class ProductionLogEntryAssetInline(admin.StackedInline):
     extra = 0
 
     def formfield_for_foreignkey(
-        self, db_field: ForeignKey, request: Optional[HttpRequest], **kwargs: Any
+        self, db_field: 'ForeignKey[Any, Any]', request: Optional[HttpRequest], **kwargs: Any
     ) -> Optional[ModelChoiceField]:
         if db_field.name == 'asset':
             kwargs['queryset'] = Asset.objects.filter(
