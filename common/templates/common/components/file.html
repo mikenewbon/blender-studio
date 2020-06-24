@@ -2,7 +2,8 @@
 <div class="col">
 	<div class="file">
 		<div class="file-header">
-			<a href="#" data-toggle="modal" data-target="#file-modal" data-url="{% url 'api-asset' asset.id %}">
+			<a href="#" data-toggle="modal" data-target="#file-modal"
+                    data-url="{% url 'api-asset' asset.id %}?from_site={{ from_site }}">
 				{% if asset.static_asset.preview %}
 				<img class="file-image" src="{{ asset.static_asset.preview.url }}">
 				{% else %}
@@ -20,7 +21,7 @@
 			</div>
 		</div>
 		<a href="#" data-toggle="modal" data-target="#file-modal" class="file-body"
-			data-url="{% url 'api-asset' asset.id %}">
+			data-url="{% url 'api-asset' asset.id %}?from_site={{ from_site }}">
 			<p class="subtitle">{{ asset.static_asset.get_source_type_display }}</p>
 			<h4>{{ asset.name }}</h4>
 		</a>

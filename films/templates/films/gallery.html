@@ -89,7 +89,7 @@ has-secondary-nav
 
 				{% if featured_artwork %}
                     {% for asset in featured_artwork %}
-                        {% include "common/components/file.html" with asset=asset %}
+                        {% include "common/components/file.html" with asset=asset from_site="featured_artwork" %}
                     {% endfor %}
 				{% endif %}
 

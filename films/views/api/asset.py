@@ -8,6 +8,16 @@ from films.models import Asset
 
 @require_safe
 def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
+    """This view renders an asset modal, with the links to the previous and next assets.
+
+    The request's URL is expected to contain a query string 'from_site=...' with one of the
+    following values:
+    - 'weeklies' - for assets inside production log entries in the 'Weeklies' website section,
+    - 'featured_artwork' - for featured assets in the 'Gallery' section,
+    - 'gallery' - for assets inside collections in the 'Gallery section.
+    If there is no 'from_site' parameter, or it has another value, the previous and next
+    assets are set to the current asset.
+    """
     asset = (
         Asset.objects.filter(pk=asset_pk)
         .select_related(
@@ -23,10 +33,9 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
     )
 
     # TODO(Natalia): refactor this
-    if request.GET.get('context') == 'weeklies':
-        log_entry_assets = Asset.objects.filter(
-            productionlogentryasset__production_log_entry=asset.productionlogentryasset.production_log_entry
-        ).order_by('date_created')
+    from_site = request.GET.get('from_site')
+
+    if from_site == 'weeklies':
         try:
             previous_asset = asset.get_previous_by_date_created(
                 productionlogentryasset__production_log_entry=asset.productionlogentryasset.production_log_entry
@@ -51,7 +60,7 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
                 .order_by('date_created')
                 .first()
             )
-    elif request.GET.get('context') == 'featured_artwork':
+    elif from_site == 'featured_artwork':
         try:
             previous_asset = asset.get_previous_by_date_created(
                 film=asset.film, is_published=True, is_featured=True
@@ -72,7 +81,7 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
                 .order_by('date_created')
                 .first()
             )
-    else:  # the default context is the gallery
+    elif from_site == 'gallery':
         collection_assets = Asset.objects.filter(
             is_published=True, collection=asset.collection
         ).order_by('order')
@@ -83,9 +92,12 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
         next_asset = collection_assets.filter(order__gt=asset.order).first()
         if not next_asset:
             next_asset = collection_assets.first()
+    else:
+        previous_asset = next_asset = asset
 
     context = {
         'asset': asset,
+        'from_site': from_site,
         'previous_asset': previous_asset,
         'next_asset': next_asset,
     }
