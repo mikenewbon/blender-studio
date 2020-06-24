@@ -6,13 +6,16 @@
 		<div class="modal-content bg-dark">
 
 			<div class="modal-header p-0 bg-secondary">
-                <button class="modal-navigation previous btn btn-ctrl" href="#">
+                <button class="modal-navigation previous btn btn-ctrl" href="#"
+                        data-url="{% url 'api-asset' previous_asset.id %}">
 					<i class="material-icons btn-material-icons">navigate_before</i>
 				</button>
 				<a data-toggle="modal" data-target="#asset-{{ asset.id }}-zoom" class="modal-asset-image-wrapper" href="#">
 					<img class="" src="{{ asset.static_asset.preview.url }}">
 				</a>
-				<button class="modal-navigation next btn btn-ctrl" href="#">
+				<button class="modal-navigation next btn btn-ctrl" href="#"
+{#                        data-toggle="modal" data-target="#file-modal"#}
+                        data-url="{% url 'api-asset' next_asset.id %}">>
 					<i class="material-icons btn-material-icons">navigate_next</i>
 				</button>
 
@@ -31,7 +34,7 @@
 						<a class="btn btn-sm btn-dark"><i
 								class="material-icons btn-material-icons btn-material-icons-lg">favorite_border</i>
 							Like</a>
-						<a href="{{ asset.static_asset.source.url }}" download  class="btn btn-sm btn-dark">Download</a>
+						<a href="{{ asset.static_asset.source.url }}" download class="btn btn-sm btn-dark">Download</a>
 						<button data-toggle="dropdown" class="btn btn-sm btn-ctrl-sm btn-dark">
 
 							<i class="material-icons btn-material-icons">more_horiz</i>

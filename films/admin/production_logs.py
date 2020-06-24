@@ -20,9 +20,10 @@ class ProductionLogEntryAssetInline(admin.StackedInline):
     def formfield_for_foreignkey(
         self, db_field: 'ForeignKey[Any, Any]', request: Optional[HttpRequest], **kwargs: Any
     ) -> Optional[ModelChoiceField]:
+        """In the asset choice dropdown, only show published assets created
+        in the last 7 days by the current user."""
+        # TODO(Natalia): add filtering by film, show assets since the last log
         if db_field.name == 'asset':
-            # Only show published assets created in the last 7 days by the current user
-            # TODO(Natalia): add filtering by film, show assets since the last log
             kwargs['queryset'] = Asset.objects.filter(
                 Q(static_asset__author=request.user)
                 | (Q(static_asset__author__isnull=True) & Q(static_asset__user=request.user)),
@@ -51,6 +52,6 @@ class ProductionLogAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
     list_display = ['__str__', 'name']
     inlines = [ProductionLogEntryInline]
     fieldsets = (
-        (None, {'fields': ['film', 'name', 'start_date', 'user', 'storage_backend']},),
+        (None, {'fields': ['film', 'name', 'start_date', 'user', 'storage_backend']}),
         ('Summary', {'fields': ['summary', 'author', 'picture_16_9', 'youtube_link']}),
     )
