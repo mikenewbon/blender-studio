@@ -48,12 +48,12 @@
 						<div class="row row-cols-1 row-cols-md-4  row-cols-2">
 						<!--TODO(Mike): Need an API to handle file requests-->
 							{% for entry_asset in entry.entry_assets.all|slice:':4' %}
-							{% include "common/components/file.html" with asset=entry_asset.asset from_site="weeklies" %}
+							{% include "common/components/file.html" with asset=entry_asset.asset site_context="weeklies" %}
 							{% endfor %}
 							{% if entry.entry_assets.all|length > 4 %}
 							<div class="collapse" id="entry-{{ entry.id }}">
 								{% for entry_asset in entry.entry_assets.all|slice:'4:' %}
-								{% include "common/components/file.html" with asset=entry_asset.asset from_site="weeklies" %}
+								{% include "common/components/file.html" with asset=entry_asset.asset site_context="weeklies" %}
 								{% endfor %}
 							</div>
 							{% endif %}

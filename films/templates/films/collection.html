@@ -24,7 +24,7 @@
 
 			{% if current_assets %}
                 {% for asset in current_assets %}
-                    {% include "common/components/file.html" with asset=asset from_site="gallery" %}
+                    {% include "common/components/file.html" with asset=asset site_context="gallery" %}
                 {% endfor %}
 			{% endif %}
 

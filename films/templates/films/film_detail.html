@@ -42,7 +42,7 @@
 			{% for asset in featured_artwork %}
 			<div class="grid-item">
 				<a href="#" data-toggle="modal" data-target="#file-modal"
-                        data-url="{% url 'api-asset' asset.id %}?from_site=featured_artwork">
+                        data-url="{% url 'api-asset' asset.id %}?site_context=featured_artwork">
 					<img src="{{ asset.static_asset.preview.url }}">
 				</a>
 			</div>

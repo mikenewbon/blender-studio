@@ -1,7 +1,25 @@
 /* global ajax:false */
-// TODO(Natalia): Figure out what to assign it to (window.asset? and why?)
 
 window.asset = (function asset() {
+	document.addEventListener('DOMContentLoaded', () => {
+		document.querySelectorAll(
+			'.file a[data-toggle*="modal"], .grid a[data-toggle*="modal"]'
+		).forEach(element => {
+			element.addEventListener('click', () => { getModalHtml(element); });
+		});
+	});
+
+	function getModalHtml(element) {
+		fetch(element.dataset.url).then(response => {
+			return response.text();
+		}).then(html => {
+			createModal(html);
+			addButtonClickEvent();
+		}).catch(err => {
+			console.warn('Something went wrong.', err);
+		});
+	}
+
 	function createModal(html) {
 		const template = document.createElement('template');
 		template.innerHTML = html.trim();
@@ -25,31 +43,7 @@ window.asset = (function asset() {
 		document.querySelectorAll(
 			'.modal button.previous, .modal button.next'
 		).forEach(button => {
-			button.addEventListener('click', event => {
-				fetch(button.dataset.url).then(response => {
-					return response.text();
-				}).then(html => {
-					createModal(html);
-					addButtonClickEvent();
-				});
-			});
+			button.addEventListener('click', () => { getModalHtml(button); });
 		});
 	}
-
-	document.addEventListener('DOMContentLoaded', () => {
-		document.querySelectorAll(
-			'.file a[data-toggle*="modal"], .grid a[data-toggle*="modal"]'
-		).forEach(element => {
-			element.addEventListener('click', event => {
-				fetch(element.dataset.url).then(response => {
-					return response.text();
-				}).then(html => {
-					createModal(html);
-					addButtonClickEvent();
-				}).catch(err => {
-					console.warn('Something went wrong.', err);
-				});
-			});
-		});
-	});
 })();
