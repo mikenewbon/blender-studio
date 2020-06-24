@@ -11,7 +11,7 @@ window.asset = (function asset() {
 					const template = document.createElement('template');
 					template.innerHTML = html.trim();
 
-					const modal = document.getElementById('gallery-modal')
+					const modal = document.getElementById('file-modal')
 					if (modal.childElementCount === 0) {
 						modal.appendChild(template.content);
 					} else {
