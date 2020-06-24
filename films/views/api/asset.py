@@ -1,3 +1,5 @@
+from typing import Dict, Union, Optional
+
 from django.http import HttpResponse
 from django.http.request import HttpRequest
 from django.shortcuts import render
@@ -6,35 +8,30 @@ from django.views.decorators.http import require_safe
 from films.models import Asset
 
 
-@require_safe
-def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
-    """This view renders an asset modal, with the links to the previous and next assets.
+def get_asset_context(asset: Asset, site_context: Optional[str]) -> Dict[str, Union[str, Asset]]:
+    """A helper function that creates the context dictionary for the api-asset view.
 
-    The request's URL is expected to contain a query string 'site_context=...' with one of the
-    following values:
+    Params:
+    - asset - the asset to be displayed in the modal;
+    - site_context - value retrieved from the query string's 'site_context' parameter;
+
+    The request's URL is expected to contain a query string 'site_context=...' with one
+    of the following values:
     - 'weeklies' - for assets inside production log entries in the 'Weeklies' website section,
     - 'featured_artwork' - for featured assets in the 'Gallery' section,
     - 'gallery' - for assets inside collections in the 'Gallery section.
     If there is no 'site_context' parameter, or it has another value, the previous and next
     assets are set to the current asset.
+    The name 'site_context' is to be distinguishable from the '(template) context' variable.
+
+    Returns:
+    A dictionary with the following keys:
+    - 'asset' - the asset to display,
+    - 'previous_asset' - the previous asset from the current context,
+    - 'next_asset' - the next asset from the current context,
+    - 'site_context' - a string; it can be reused in HTML components which need to add
+    a query string to the asset modal URL.
     """
-    asset = (
-        Asset.objects.filter(pk=asset_pk)
-        .select_related(
-            'film',
-            'collection',
-            'static_asset',
-            'static_asset__license',
-            'static_asset__author',
-            'static_asset__user',
-            'entry_asset__production_log_entry',
-        )
-        .get()
-    )
-
-    # TODO(Natalia): refactor this
-    site_context = request.GET.get('site_context')
-
     if site_context == 'weeklies':
         try:
             previous_asset = asset.get_previous_by_date_created(
@@ -101,5 +98,26 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
         'next_asset': next_asset,
         'site_context': site_context,
     }
+
+    return context
+
+
+@require_safe
+def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
+    """This view renders an asset modal, with the links to the previous and next assets."""
+    asset = (
+        Asset.objects.filter(pk=asset_pk)
+        .select_related(
+            'film',
+            'collection',
+            'static_asset',
+            'static_asset__license',
+            'static_asset__author',
+            'static_asset__user',
+            'entry_asset__production_log_entry',
+        )
+        .get()
+    )
+    context = get_asset_context(asset, request.GET.get('site_context'))
 
     return render(request, 'common/components/modal_asset.html', context, using='django')
