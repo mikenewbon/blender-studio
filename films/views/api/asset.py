@@ -27,7 +27,7 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
             'static_asset__license',
             'static_asset__author',
             'static_asset__user',
-            'productionlogentryasset__production_log_entry',
+            'entry_asset__production_log_entry',
         )
         .get()
     )
@@ -38,24 +38,24 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
     if site_context == 'weeklies':
         try:
             previous_asset = asset.get_previous_by_date_created(
-                productionlogentryasset__production_log_entry=asset.productionlogentryasset.production_log_entry
+                entry_asset__production_log_entry=asset.entry_asset.production_log_entry
             )
         except Asset.DoesNotExist:
             previous_asset = (
                 Asset.objects.filter(
-                    productionlogentryasset__production_log_entry=asset.productionlogentryasset.production_log_entry
+                    entry_asset__production_log_entry=asset.entry_asset.production_log_entry
                 )
                 .order_by('date_created')
                 .last()
             )
         try:
             next_asset = asset.get_next_by_date_created(
-                productionlogentryasset__production_log_entry=asset.productionlogentryasset.production_log_entry
+                entry_asset__production_log_entry=asset.entry_asset.production_log_entry
             )
         except Asset.DoesNotExist:
             next_asset = (
                 Asset.objects.filter(
-                    productionlogentryasset__production_log_entry=asset.productionlogentryasset.production_log_entry
+                    entry_asset__production_log_entry=asset.entry_asset.production_log_entry
                 )
                 .order_by('date_created')
                 .first()

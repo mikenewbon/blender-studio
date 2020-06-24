@@ -110,7 +110,7 @@ class ProductionLogEntryAsset(models.Model):
     class Meta:
         verbose_name = 'production weekly entry asset'
 
-    asset = models.OneToOneField(Asset, on_delete=models.CASCADE)
+    asset = models.OneToOneField(Asset, on_delete=models.CASCADE, related_name='entry_asset')
     production_log_entry = models.ForeignKey(
         ProductionLogEntry, on_delete=models.CASCADE, related_name='entry_assets'
     )
