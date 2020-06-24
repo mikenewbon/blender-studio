@@ -63,7 +63,6 @@
 	height: 100vh;
 	position: fixed;
 	z-index: 1020;
-	top: 0;
 	border-right: 1px solid $highlight-white;
 	transform: translateX(-$nav-drawer-width-open);
 	transition: transform $nav-drawer-animation-duration;
@@ -110,18 +109,21 @@
 }
 
 .nav-drawer-spacer {
-	height: $navbar-height;
-	width: $nav-drawer-width-open;
+	height: 0;
+	width: 100%;
 	display: flex;
 	align-items: stretch;
 }
 
 .has-secondary-nav{
 	.nav-drawer-spacer {
-		@include media-breakpoint-down(sm) {
-			height: $navbar-height;
-		}
-		height: $navbar-height + 41px;
+		// @include media-breakpoint-down(sm) {
+		// 	height: $navbar-height;
+		// }
+		height: auto;
+	}
+	.nav-drawer{
+		height: calc(100vh - #{4});
 	}
 }
 
