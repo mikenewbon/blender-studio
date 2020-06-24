@@ -8,7 +8,6 @@ from films.models import Asset
 
 @require_safe
 def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
-    """"""
     asset = (
         Asset.objects.filter(pk=asset_pk)
         .select_related(
@@ -24,7 +23,7 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
     )
 
     # TODO(Natalia): refactor this
-    if request.GET['context'] == 'weeklies':
+    if request.GET.get('context') == 'weeklies':
         log_entry_assets = Asset.objects.filter(
             productionlogentryasset__production_log_entry=asset.productionlogentryasset.production_log_entry
         ).order_by('date_created')
@@ -52,7 +51,7 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
                 .order_by('date_created')
                 .first()
             )
-    elif request.GET['context'] == 'featured_artwork':
+    elif request.GET.get('context') == 'featured_artwork':
         try:
             previous_asset = asset.get_previous_by_date_created(
                 film=asset.film, is_published=True, is_featured=True
