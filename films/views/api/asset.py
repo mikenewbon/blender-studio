@@ -120,4 +120,11 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
     )
     context = get_asset_context(asset, request.GET.get('site_context'))
 
-    return render(request, 'common/components/modal_asset.html', context, using='django')
+    return render(request, 'common/components/modal_asset.html', context)
+
+
+@require_safe
+def asset_zoom(request: HttpRequest, asset_pk: int) -> HttpResponse:
+    asset = Asset.objects.filter(pk=asset_pk).select_related('static_asset').get()
+
+    return render(request, 'common/components/modal_asset_zoom.html', {'asset': asset})

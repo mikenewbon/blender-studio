@@ -10,7 +10,8 @@
                         data-url="{% url 'api-asset' previous_asset.id %}?site_context={{ site_context }}">
 					<i class="material-icons btn-material-icons">navigate_before</i>
 				</button>
-				<a data-toggle="modal" data-target="#asset-{{ asset.id }}-zoom" class="modal-asset-image-wrapper" href="#">
+				<a data-toggle="modal" data-target="#file-zoom-modal" class="modal-asset-image-wrapper"
+                        href="#" data-url="{% url 'api-asset-zoom' asset.id %}">
 					<img class="" src="{{ asset.static_asset.preview.url }}">
 				</a>
 				<button class="modal-navigation next btn btn-ctrl" href="#"
