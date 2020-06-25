@@ -1,4 +1,3 @@
-from django.db.models.query import Prefetch
 from django.http import HttpResponse
 from django.http.request import HttpRequest
 from django.shortcuts import render, get_object_or_404
@@ -6,7 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_safe
 from django.views.generic.list import ListView
 
-from films.models import Film
+from films.models import Film, FilmStatus
 from films.views.weeklies import get_production_logs_for_context
 
 
@@ -25,8 +24,9 @@ def film_detail(request: HttpRequest, film_slug: str) -> HttpResponse:
     context = {
         'film': film,
         'featured_artwork': featured_artwork,
-        'production_logs': get_production_logs_for_context(film),
     }
+    if film.status != FilmStatus.released:
+        context['production_logs'] = get_production_logs_for_context(film)
 
     return render(request, 'films/film_detail.html', context)
 

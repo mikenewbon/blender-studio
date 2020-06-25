@@ -1,10 +1,12 @@
-from django.db.models import prefetch_related_objects, QuerySet
-from django.db.models.query import Prefetch
+from django.core.paginator import Page, Paginator
+from django.db.models.query import Prefetch, QuerySet
 from django.http import HttpResponse
 from django.http.request import HttpRequest
 from django.shortcuts import get_object_or_404, render
 
 from films.models import Film, ProductionLog, ProductionLogEntryAsset
+
+DEFAULT_LOGS_PAGE_SIZE = 3
 
 
 def get_production_logs_for_context(film: Film) -> 'QuerySet[ProductionLog]':
@@ -33,6 +35,11 @@ def get_production_logs_for_context(film: Film) -> 'QuerySet[ProductionLog]':
         production_log_dict[log] = {}
         for entry in log.log_entries.all():
             production_log_dict[log][entry] = [entry_asset.asset for entry_asset in entry.assets]
+
+    # TODO(Natalia): paginator accepts a query set, not a dict
+    # page_number = request.GET.get('page')
+    # paginator = Paginator(production_logs, page_size)
+    # production_logs_page = paginator.get_page(page_number)
 
     return production_log_dict
 
