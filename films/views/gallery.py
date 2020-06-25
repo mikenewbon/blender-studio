@@ -74,7 +74,7 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
         **drawer_menu_context,
     }
 
-    return render(request, 'films/collection.html', context)
+    return render(request, 'films/collection_detail.html', context)
 
 
 def asset_detail(request: HttpRequest, film_slug: str, asset_slug: str) -> HttpResponse:
