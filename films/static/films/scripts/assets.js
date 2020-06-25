@@ -70,13 +70,11 @@ window.asset = (function asset() {
 			'.modal button.previous, .modal button.next'
 		).forEach(button => {
 			button.addEventListener('click', () => getModalHtml(button));
-			console.log('next-prev')
 		});
 		document.querySelectorAll(
 			'.modal a[data-toggle*="modal"]'
 		).forEach(element => {
 			element.addEventListener('click', () => getZoomModalHtml(element));
-			console.log('zoom')
 		});
 	}
 })();
