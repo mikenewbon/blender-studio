@@ -368,7 +368,7 @@ $circle-circumference: $circle-diameter * 3.14;
 }
 
 .drawer-nav-dropdown {
-	padding: $spacer/2 $spacer;
+	padding: $spacer/2 $spacer $spacer/2 $spacer/2;
 	cursor: pointer;
 
 	&.collapsed {
@@ -376,7 +376,24 @@ $circle-circumference: $circle-diameter * 3.14;
 			transform: rotate(-90deg);
 		}
 	}
+	&-wrapper{
+		padding: 0 0 0 $spacer/2;
+		display: flex;
+		align-items: center;
+		.btn-ctrl{
+			line-height: 0;
+		}
+		.drawer-nav-dropdown{
+			color: white;
+			flex-grow: 1;
+			&:hover{
+				background: $highlight-white;
+				text-decoration: none;
 
+
+			}
+		}
+	}
 	i {
 		transition: transform 0.35s ease;
 		margin-right: $spacer/2;
