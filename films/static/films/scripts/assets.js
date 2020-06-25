@@ -1,6 +1,7 @@
 /* global ajax:false */
 
 window.asset = (function asset() {
+
 	document.addEventListener('DOMContentLoaded', () => {
 		document.querySelectorAll(
 			'.file a[data-toggle*="modal"], .grid a[data-toggle*="modal"]'
@@ -51,8 +52,6 @@ window.asset = (function asset() {
 	}
 
 	function createZoomModal(html, elementId) {
-		const base_modal = document.getElementById('file-modal');
-		$(base_modal).modal('hide');  // removes all the children :/
 
 		const template = document.createElement('template');
 		template.innerHTML = html.trim();
@@ -63,10 +62,7 @@ window.asset = (function asset() {
 		} else {
 			modal.children[0].replaceWith(template.content);
 		}
-		$(modal).on('hidden.bs.modal', event => {
-			modal.innerHTML = "";
-			$(base_modal).modal('show');  // empty modal background, no children
-		});
+
 	}
 
 	function addButtonClickEvent() {
@@ -74,11 +70,13 @@ window.asset = (function asset() {
 			'.modal button.previous, .modal button.next'
 		).forEach(button => {
 			button.addEventListener('click', () => getModalHtml(button));
+			console.log('next-prev')
 		});
 		document.querySelectorAll(
 			'.modal a[data-toggle*="modal"]'
 		).forEach(element => {
 			element.addEventListener('click', () => getZoomModalHtml(element));
+			console.log('zoom')
 		});
 	}
 })();
