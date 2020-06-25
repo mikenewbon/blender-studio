@@ -117,7 +117,8 @@ body{
 	.breadcrumb-item {
 		white-space: nowrap;
 		display: flex;
-		padding: $spacer/2 0;
+		padding-top: $spacer/2;
+		padding-bottom: $spacer/2;
 		&:last-child {
 			padding-right: $spacer;
 		}

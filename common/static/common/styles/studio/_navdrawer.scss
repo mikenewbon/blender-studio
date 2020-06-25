@@ -66,6 +66,8 @@
 	border-right: 1px solid $highlight-white;
 	transform: translateX(-$nav-drawer-width-open);
 	transition: transform $nav-drawer-animation-duration;
+	display: flex;
+	flex-direction: column;
 	&-body {
 		height: 100%;
 		max-height: calc(100vh - #{$navbar-height});
@@ -123,7 +125,7 @@
 		height: auto;
 	}
 	.nav-drawer{
-		height: calc(100vh - #{4});
+		height: calc(100vh - (#{$navbar-height} + 1px));
 	}
 }
 
