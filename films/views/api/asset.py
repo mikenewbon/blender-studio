@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Dict, Union, Optional, List
+from typing import Dict, Union, Optional
 
 from django.http import HttpResponse
 from django.http.request import HttpRequest
@@ -17,14 +17,78 @@ class SiteContexts(Enum):
     GALLERY = 'gallery'
 
 
-def get_previous_by_order_and_date_created(asset: Asset, collection_assets: List[Asset]) -> Asset:
+def get_previous_asset_in_weeklies(asset: Asset) -> Asset:
+    current_log_entry = asset.entry_asset.production_log_entry
+    try:
+        previous_asset = asset.get_previous_by_date_created(
+            entry_asset__production_log_entry=current_log_entry, is_published=True,
+        )
+    except Asset.DoesNotExist:
+        previous_asset = (
+            Asset.objects.filter(
+                entry_asset__production_log_entry=current_log_entry, is_published=True,
+            )
+            .order_by('date_created')
+            .last()
+        )
+    return previous_asset
+
+
+def get_next_asset_in_weeklies(asset: Asset) -> Asset:
+    current_log_entry = asset.entry_asset.production_log_entry
+    try:
+        next_asset = asset.get_next_by_date_created(
+            entry_asset__production_log_entry=current_log_entry, is_published=True,
+        )
+    except Asset.DoesNotExist:
+        next_asset = (
+            Asset.objects.filter(
+                entry_asset__production_log_entry=current_log_entry, is_published=True,
+            )
+            .order_by('date_created')
+            .first()
+        )
+    return next_asset
+
+
+def get_previous_asset_in_featured_artwork(asset: Asset) -> Asset:
+    try:
+        previous_asset = asset.get_previous_by_date_created(
+            film=asset.film, is_published=True, is_featured=True
+        )
+    except Asset.DoesNotExist:
+        previous_asset = (
+            Asset.objects.filter(film=asset.film, is_published=True, is_featured=True)
+            .order_by('date_created')
+            .last()
+        )
+    return previous_asset
+
+
+def get_next_asset_in_featured_artwork(asset: Asset) -> Asset:
+    try:
+        next_asset = asset.get_next_by_date_created(
+            film=asset.film, is_published=True, is_featured=True
+        )
+    except Asset.DoesNotExist:
+        next_asset = (
+            Asset.objects.filter(film=asset.film, is_published=True, is_featured=True)
+            .order_by('date_created')
+            .first()
+        )
+    return next_asset
+
+
+def get_previous_asset_in_gallery(asset: Asset) -> Asset:
+    collection_assets = list(asset.collection.assets.order_by('order', 'date_created'))
     asset_index = collection_assets.index(asset)
     return collection_assets[asset_index - 1]
 
 
-def get_next_by_order_and_date_created(asset: Asset, collection_assets: List[Asset]) -> Asset:
+def get_next_asset_in_gallery(asset: Asset) -> Asset:
+    collection_assets = list(asset.collection.assets.order_by('order', 'date_created'))
     asset_index = collection_assets.index(asset)
-    return collection_assets[(asset_index + 1) % len(asset)]
+    return collection_assets[(asset_index + 1) % len(collection_assets)]
 
 
 def get_asset_context(asset: Asset, site_context: Optional[str]) -> Dict[str, Union[str, Asset]]:
@@ -32,11 +96,19 @@ def get_asset_context(asset: Asset, site_context: Optional[str]) -> Dict[str, Un
 
     The request's URL is expected to contain a query string 'site_context=...' with one
     of the following values (see the SiteContexts enum):
-    - 'weeklies' - for assets inside production log entries in the 'Weeklies' website section,
-    - 'featured_artwork' - for featured assets in the 'Gallery' section,
-    - 'gallery' - for assets inside collections in the 'Gallery section.
+    - 'weeklies' - for assets inside production log entries in the 'Weeklies' website section;
+        they are sorted by their `date_created`,
+    - 'featured_artwork' - for featured assets in the 'Gallery' section; they are sorted by
+        their `date_created`,
+    - 'gallery' - for assets inside collections in the 'Gallery section; they are sorted by
+        their `order` and `date_created` (`order` may not define an unambiguous order).
     If there is no 'site_context' parameter, or it has another value, the previous and next
     assets are set to the current asset.
+
+    If the current asset is the first one in the given context, previous_asset is set
+    to the last one in the context. If the current asset is the last one, its next_asset
+    will be the first in the context.
+
     The name 'site_context' is to be distinguishable from the '(template) context' variable.
 
     Args:
@@ -52,60 +124,14 @@ def get_asset_context(asset: Asset, site_context: Optional[str]) -> Dict[str, Un
         a query string to the asset modal URL.
     """
     if site_context == SiteContexts.WEEKLIES.value:
-        current_log_entry = asset.entry_asset.production_log_entry
-        try:
-            previous_asset = asset.get_previous_by_date_created(
-                entry_asset__production_log_entry=current_log_entry, is_published=True,
-            )
-        except Asset.DoesNotExist:
-            previous_asset = (
-                Asset.objects.filter(
-                    entry_asset__production_log_entry=current_log_entry, is_published=True,
-                )
-                .order_by('date_created')
-                .last()
-            )
-        try:
-            next_asset = asset.get_next_by_date_created(
-                entry_asset__production_log_entry=current_log_entry, is_published=True,
-            )
-        except Asset.DoesNotExist:
-            next_asset = (
-                Asset.objects.filter(
-                    entry_asset__production_log_entry=current_log_entry, is_published=True,
-                )
-                .order_by('date_created')
-                .first()
-            )
+        previous_asset = get_previous_asset_in_weeklies(asset)
+        next_asset = get_next_asset_in_weeklies(asset)
     elif site_context == SiteContexts.FEATURED_ARTWORK.value:
-        try:
-            previous_asset = asset.get_previous_by_date_created(
-                film=asset.film, is_published=True, is_featured=True
-            )
-        except Asset.DoesNotExist:
-            previous_asset = (
-                Asset.objects.filter(film=asset.film, is_published=True, is_featured=True)
-                .order_by('date_created')
-                .last()
-            )
-        try:
-            next_asset = asset.get_next_by_date_created(
-                film=asset.film, is_published=True, is_featured=True
-            )
-        except Asset.DoesNotExist:
-            next_asset = (
-                Asset.objects.filter(film=asset.film, is_published=True, is_featured=True)
-                .order_by('date_created')
-                .first()
-            )
+        previous_asset = get_previous_asset_in_featured_artwork(asset)
+        next_asset = get_next_asset_in_featured_artwork(asset)
     elif site_context == SiteContexts.GALLERY.value:
-        collection_assets = list(
-            Asset.objects.filter(is_published=True, collection=asset.collection).order_by(
-                'order', 'date_created'
-            )
-        )
-        previous_asset = get_previous_by_order_and_date_created(asset, collection_assets)
-        next_asset = get_next_by_order_and_date_created(asset, collection_assets)
+        previous_asset = get_previous_asset_in_gallery(asset)
+        next_asset = get_next_asset_in_gallery(asset)
     else:
         previous_asset = next_asset = asset
 
