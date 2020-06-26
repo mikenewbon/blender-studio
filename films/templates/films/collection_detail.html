@@ -16,8 +16,8 @@
 	<div class="files">
 		<div class="row row-cols-2 row-cols-sm-3 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
 
-			{% if nested_collections %}
-                {% for child_collection in nested_collections %}
+			{% if child_collections %}
+                {% for child_collection in child_collections %}
                     {% include "common/components/folder.html" %}
                 {% endfor %}
 			{% endif %}

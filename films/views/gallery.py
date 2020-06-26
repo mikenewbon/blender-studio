@@ -18,12 +18,10 @@ def get_gallery_drawer_context(film: Film) -> Dict[str, Any]:
     Returns a dictionary:
     'collections': <a dict of all the collections with their nested collections>,
     'featured_artwork': <a queryset of film assets marked as featured>.
-
-    This function is likely to be removed in the future; for now it helps avoid duplicated code.
     """
     top_level_collections = (
         film.collections.filter(parent__isnull=True)
-        .order_by('order')
+        .order_by('order', 'date_created')
         .prefetch_related(
             Prefetch(
                 'child_collections',
@@ -62,14 +60,7 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
     collection = get_object_or_404(Collection, slug=collection_slug, film_id=film.id)
     child_collections = collection.child_collections.order_by(
         'order', 'date_created'
-    ).prefetch_related(
-        Prefetch('assets', queryset=film.assets.order_by('order'), to_attr='coll_assets')
     )
-
-    collection_contents: Dict[Collection, QuerySet[Asset]] = dict()
-    for c in child_collections:
-        collection_contents[c] = c.coll_assets  # type: ignore[attr-defined]
-
     drawer_menu_context = get_gallery_drawer_context(film)
 
     context = {
@@ -78,7 +69,7 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
         'current_assets': collection.assets.filter(is_published=True).order_by(
             'order', 'date_created'
         ),
-        'nested_collections': collection_contents,
+        'child_collections': child_collections,
         **drawer_menu_context,
     }
 
