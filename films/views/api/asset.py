@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Dict, Union, Optional, List
 
 from django.http import HttpResponse
@@ -6,6 +7,14 @@ from django.shortcuts import render
 from django.views.decorators.http import require_safe
 
 from films.models import Asset
+
+
+class SiteContexts(Enum):
+    """Defines possible values of the site_context query parameter."""
+
+    WEEKLIES = 'weeklies'
+    FEATURED_ARTWORK = 'featured_artwork'
+    GALLERY = 'gallery'
 
 
 def get_previous_by_order_and_date_created(asset: Asset, collection_assets: List[Asset]) -> Asset:
@@ -22,7 +31,7 @@ def get_asset_context(asset: Asset, site_context: Optional[str]) -> Dict[str, Un
     """Creates context for the api-asset view: the current, previous and next assets.
 
     The request's URL is expected to contain a query string 'site_context=...' with one
-    of the following values:
+    of the following values (see the SiteContexts enum):
     - 'weeklies' - for assets inside production log entries in the 'Weeklies' website section,
     - 'featured_artwork' - for featured assets in the 'Gallery' section,
     - 'gallery' - for assets inside collections in the 'Gallery section.
@@ -42,7 +51,7 @@ def get_asset_context(asset: Asset, site_context: Optional[str]) -> Dict[str, Un
         - 'site_context' - a string; it can be reused in HTML components which need to add
         a query string to the asset modal URL.
     """
-    if site_context == 'weeklies':
+    if site_context == SiteContexts.WEEKLIES.value:
         current_log_entry = asset.entry_asset.production_log_entry
         try:
             previous_asset = asset.get_previous_by_date_created(
@@ -68,7 +77,7 @@ def get_asset_context(asset: Asset, site_context: Optional[str]) -> Dict[str, Un
                 .order_by('date_created')
                 .first()
             )
-    elif site_context == 'featured_artwork':
+    elif site_context == SiteContexts.FEATURED_ARTWORK.value:
         try:
             previous_asset = asset.get_previous_by_date_created(
                 film=asset.film, is_published=True, is_featured=True
@@ -89,7 +98,7 @@ def get_asset_context(asset: Asset, site_context: Optional[str]) -> Dict[str, Un
                 .order_by('date_created')
                 .first()
             )
-    elif site_context == 'gallery':
+    elif site_context == SiteContexts.GALLERY.value:
         collection_assets = list(
             Asset.objects.filter(is_published=True, collection=asset.collection).order_by(
                 'order', 'date_created'
