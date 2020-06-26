@@ -1,7 +1,7 @@
 from django.urls import path
 
 from films.views import films, gallery, weeklies
-from films.views.api.asset import asset as api_asset, asset_zoom
+from films.views.api.assets import asset as api_asset, asset_zoom
 urlpatterns = [
     path('api/assets/<int:asset_pk>', api_asset, name='api-asset'),
     path('api/assets/<int:asset_pk>/zoom', asset_zoom, name='api-asset-zoom'),
