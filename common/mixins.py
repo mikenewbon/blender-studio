@@ -1,4 +1,4 @@
-from typing import Optional, Any
+from typing import Optional, Any, cast
 
 from django.contrib import admin
 from django.db import models
@@ -18,17 +18,17 @@ class CreatedUpdatedMixin(models.Model):
 class AdminUserDefaultMixin:
     """Sets the 'user' field in a form in Django Admin to the current user."""
 
-    def __init_subclass__(cls, **kwargs):
+    def __init_subclass__(cls, **kwargs: Any):
         super().__init_subclass__(**kwargs)
         assert issubclass(
             cls, admin.options.BaseModelAdmin
         ), f'{cls.__name__} has to be a subclass of BaseModelAdmin to use the UserDefaultMixin'
 
     def formfield_for_foreignkey(
-        self, db_field: 'ForeignKey[Any, Any]', request: HttpRequest, **kwargs: Any
+        self, db_field: 'ForeignKey[Any, Any]', request: Optional[HttpRequest], **kwargs: Any
     ) -> Optional[ModelChoiceField]:
         if db_field.name == 'user':
-            kwargs['initial'] = request.user.id
+            kwargs['initial'] = cast(HttpRequest, request).user.id
         formfield: Optional[ModelChoiceField] = super().formfield_for_foreignkey(
             db_field, request, **kwargs
         )

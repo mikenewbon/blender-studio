@@ -1,12 +1,12 @@
 from enum import Enum
-from typing import Dict, Union, Optional
+from typing import Dict, Union, cast, List, Optional
 
 from django.http import HttpResponse
 from django.http.request import HttpRequest
 from django.shortcuts import render
 from django.views.decorators.http import require_safe
 
-from films.models import Asset
+from films.models import Asset, Collection
 
 
 class SiteContexts(Enum):
@@ -24,12 +24,13 @@ def get_previous_asset_in_weeklies(asset: Asset) -> Asset:
             entry_asset__production_log_entry=current_log_entry, is_published=True,
         )
     except Asset.DoesNotExist:
-        previous_asset = (
+        previous_asset = cast(
+            Asset,
             Asset.objects.filter(
                 entry_asset__production_log_entry=current_log_entry, is_published=True,
             )
             .order_by('date_created')
-            .last()
+            .last(),
         )
     return previous_asset
 
@@ -41,12 +42,13 @@ def get_next_asset_in_weeklies(asset: Asset) -> Asset:
             entry_asset__production_log_entry=current_log_entry, is_published=True,
         )
     except Asset.DoesNotExist:
-        next_asset = (
+        next_asset = cast(
+            Asset,
             Asset.objects.filter(
                 entry_asset__production_log_entry=current_log_entry, is_published=True,
             )
             .order_by('date_created')
-            .first()
+            .first(),
         )
     return next_asset
 
@@ -57,10 +59,11 @@ def get_previous_asset_in_featured_artwork(asset: Asset) -> Asset:
             film=asset.film, is_published=True, is_featured=True
         )
     except Asset.DoesNotExist:
-        previous_asset = (
+        previous_asset = cast(
+            Asset,
             Asset.objects.filter(film=asset.film, is_published=True, is_featured=True)
             .order_by('date_created')
-            .last()
+            .last(),
         )
     return previous_asset
 
@@ -71,27 +74,32 @@ def get_next_asset_in_featured_artwork(asset: Asset) -> Asset:
             film=asset.film, is_published=True, is_featured=True
         )
     except Asset.DoesNotExist:
-        next_asset = (
+        next_asset = cast(
+            Asset,
             Asset.objects.filter(film=asset.film, is_published=True, is_featured=True)
             .order_by('date_created')
-            .first()
+            .first(),
         )
     return next_asset
 
 
 def get_previous_asset_in_gallery(asset: Asset) -> Asset:
-    collection_assets = list(asset.collection.assets.order_by('order', 'date_created'))
+    collection = cast(Collection, asset.collection)
+    collection_assets = list(collection.assets.order_by('order', 'date_created'))
     asset_index = collection_assets.index(asset)
     return collection_assets[asset_index - 1]
 
 
 def get_next_asset_in_gallery(asset: Asset) -> Asset:
-    collection_assets = list(asset.collection.assets.order_by('order', 'date_created'))
+    collection = cast(Collection, asset.collection)
+    collection_assets: List[Asset] = list(collection.assets.order_by('order', 'date_created'))
     asset_index = collection_assets.index(asset)
     return collection_assets[(asset_index + 1) % len(collection_assets)]
 
 
-def get_asset_context(asset: Asset, site_context: Optional[str]) -> Dict[str, Union[str, Asset]]:
+def get_asset_context(
+    asset: Asset, site_context: Optional[str]
+) -> Dict[str, Union[Asset, str, None]]:
     """Creates context for the api-asset view: the current, previous and next assets.
 
     The request's URL is expected to contain a query string 'site_context=...' with one

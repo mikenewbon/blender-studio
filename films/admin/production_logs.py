@@ -23,7 +23,7 @@ class ProductionLogEntryAssetInline(admin.StackedInline):
         """In the asset choice dropdown, only show published assets created
         in the last 7 days by the current user."""
         # TODO(Natalia): add filtering by film, show assets since the last log
-        if db_field.name == 'asset':
+        if db_field.name == 'asset' and request is not None:
             kwargs['queryset'] = Asset.objects.filter(
                 Q(static_asset__author=request.user)
                 | (Q(static_asset__author__isnull=True) & Q(static_asset__user=request.user)),

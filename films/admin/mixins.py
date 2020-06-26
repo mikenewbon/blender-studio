@@ -9,7 +9,7 @@ from django.utils.html import format_html
 
 
 class EditLinkMixin:
-    def __init_subclass__(cls, **kwargs):
+    def __init_subclass__(cls, **kwargs: Any):
         super().__init_subclass__(**kwargs)
         assert issubclass(
             cls, admin.options.InlineModelAdmin
