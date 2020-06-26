@@ -6,7 +6,7 @@
 		<div class="modal-content bg-dark">
 
 			<div class="modal-header p-0 bg-secondary">
-				{% if asset.id != previous_asset.id %}
+				{% if previous_asset %}
                 <button class="modal-navigation previous btn btn-ctrl" href="#"
                         data-url="{% url 'api-asset' previous_asset.id %}?site_context={{ site_context }}">
 					<i class="material-icons btn-material-icons">navigate_before</i>
@@ -16,7 +16,7 @@
                         href="#" data-url="{% url 'api-asset-zoom' asset.id %}">
 					<img class="" src="{{ asset.static_asset.preview.url }}" alt="asset preview">
 				</a>
-				{% if asset.id != next_asset.id %}
+				{% if next_asset %}
 				<button class="modal-navigation next btn btn-ctrl" href="#"
                         data-url="{% url 'api-asset' next_asset.id %}?site_context={{ site_context }}">
 					<i class="material-icons btn-material-icons">navigate_next</i>

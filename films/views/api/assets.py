@@ -17,84 +17,68 @@ class SiteContexts(Enum):
     GALLERY = 'gallery'
 
 
-def get_previous_asset_in_weeklies(asset: Asset) -> Asset:
+def get_previous_asset_in_weeklies(asset: Asset) -> Optional[Asset]:
     current_log_entry = asset.entry_asset.production_log_entry
+    previous_asset: Optional[Asset]
     try:
         previous_asset = asset.get_previous_by_date_created(
             entry_asset__production_log_entry=current_log_entry, is_published=True,
         )
     except Asset.DoesNotExist:
-        previous_asset = cast(
-            Asset,
-            Asset.objects.filter(
-                entry_asset__production_log_entry=current_log_entry, is_published=True,
-            )
-            .order_by('date_created')
-            .last(),
-        )
+        previous_asset = None
     return previous_asset
 
 
-def get_next_asset_in_weeklies(asset: Asset) -> Asset:
+def get_next_asset_in_weeklies(asset: Asset) -> Optional[Asset]:
     current_log_entry = asset.entry_asset.production_log_entry
+    next_asset: Optional[Asset]
     try:
         next_asset = asset.get_next_by_date_created(
             entry_asset__production_log_entry=current_log_entry, is_published=True,
         )
     except Asset.DoesNotExist:
-        next_asset = cast(
-            Asset,
-            Asset.objects.filter(
-                entry_asset__production_log_entry=current_log_entry, is_published=True,
-            )
-            .order_by('date_created')
-            .first(),
-        )
+        next_asset = None
     return next_asset
 
 
-def get_previous_asset_in_featured_artwork(asset: Asset) -> Asset:
+def get_previous_asset_in_featured_artwork(asset: Asset) -> Optional[Asset]:
+    previous_asset: Optional[Asset]
     try:
         previous_asset = asset.get_previous_by_date_created(
             film=asset.film, is_published=True, is_featured=True
         )
     except Asset.DoesNotExist:
-        previous_asset = cast(
-            Asset,
-            Asset.objects.filter(film=asset.film, is_published=True, is_featured=True)
-            .order_by('date_created')
-            .last(),
-        )
+        previous_asset = None
     return previous_asset
 
 
-def get_next_asset_in_featured_artwork(asset: Asset) -> Asset:
+def get_next_asset_in_featured_artwork(asset: Asset) -> Optional[Asset]:
+    next_asset: Optional[Asset]
     try:
         next_asset = asset.get_next_by_date_created(
             film=asset.film, is_published=True, is_featured=True
         )
     except Asset.DoesNotExist:
-        next_asset = cast(
-            Asset,
-            Asset.objects.filter(film=asset.film, is_published=True, is_featured=True)
-            .order_by('date_created')
-            .first(),
-        )
+        next_asset = None
     return next_asset
 
 
-def get_previous_asset_in_gallery(asset: Asset) -> Asset:
+def get_previous_asset_in_gallery(asset: Asset) -> Optional[Asset]:
     collection = cast(Collection, asset.collection)
     collection_assets = list(collection.assets.order_by('order', 'date_created'))
     asset_index = collection_assets.index(asset)
+    if asset_index == 0:
+        return None
     return collection_assets[asset_index - 1]
 
 
-def get_next_asset_in_gallery(asset: Asset) -> Asset:
+def get_next_asset_in_gallery(asset: Asset) -> Optional[Asset]:
     collection = cast(Collection, asset.collection)
     collection_assets: List[Asset] = list(collection.assets.order_by('order', 'date_created'))
     asset_index = collection_assets.index(asset)
-    return collection_assets[(asset_index + 1) % len(collection_assets)]
+    if asset_index == len(collection_assets) - 1:
+        return None
+    return collection_assets[(asset_index + 1)]
 
 
 def get_asset_context(
@@ -110,12 +94,9 @@ def get_asset_context(
         their `date_created`,
     - 'gallery' - for assets inside collections in the 'Gallery section; they are sorted by
         their `order` and `date_created` (`order` may not define an unambiguous order).
-    If there is no 'site_context' parameter, or it has another value, the previous and next
-    assets are set to the current asset.
-
-    If the current asset is the first one in the given context, previous_asset is set
-    to the last one in the context. If the current asset is the last one, its next_asset
-    will be the first in the context.
+    If 'site_context' parameter has another value, is not provided, or the current asset
+    is the first one or the last one in the given context, the previous and next
+    assets are set to None.
 
     The name 'site_context' is to be distinguishable from the '(template) context' variable.
 
