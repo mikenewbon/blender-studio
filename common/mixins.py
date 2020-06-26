@@ -25,8 +25,11 @@ class AdminUserDefaultMixin:
         ), f'{cls.__name__} has to be a subclass of BaseModelAdmin to use the UserDefaultMixin'
 
     def formfield_for_foreignkey(
-        self, db_field: ForeignKey, request: Optional[HttpRequest], **kwargs: Any
+        self, db_field: 'ForeignKey[Any, Any]', request: HttpRequest, **kwargs: Any
     ) -> Optional[ModelChoiceField]:
         if db_field.name == 'user':
             kwargs['initial'] = request.user.id
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+        formfield: Optional[ModelChoiceField] = super().formfield_for_foreignkey(
+            db_field, request, **kwargs
+        )
+        return formfield

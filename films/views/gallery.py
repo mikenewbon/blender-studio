@@ -9,7 +9,7 @@ from films.models import Film, Collection, Asset
 
 
 def get_gallery_drawer_context(film: Film) -> Dict[str, Any]:
-    """A helper function that retrieves collections for drawer menu gallery.
+    """Retrieves collections for drawer menu in gallery.
 
     The collections are ordered and nested, ready to be looped over in templates.
     Also the fake 'Featured Artwork' collection is created.
@@ -26,7 +26,9 @@ def get_gallery_drawer_context(film: Film) -> Dict[str, Any]:
         .order_by('order')
         .prefetch_related(
             Prefetch(
-                'child_collections', queryset=film.collections.order_by('order'), to_attr='nested'
+                'child_collections',
+                queryset=film.collections.order_by('order', 'date_created'),
+                to_attr='nested',
             )
         )
     )
@@ -37,7 +39,9 @@ def get_gallery_drawer_context(film: Film) -> Dict[str, Any]:
 
     return {
         'collections': nested_collections,
-        'featured_artwork': film.assets.filter(is_featured=True, is_published=True),
+        'featured_artwork': film.assets.filter(is_featured=True, is_published=True).order_by(
+            'date_created'
+        ),
     }
 
 
@@ -56,7 +60,9 @@ def collection_list(request: HttpRequest, film_slug: str) -> HttpResponse:
 def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str) -> HttpResponse:
     film = get_object_or_404(Film, slug=film_slug, is_published=True)
     collection = get_object_or_404(Collection, slug=collection_slug, film_id=film.id)
-    child_collections = collection.child_collections.order_by('order').prefetch_related(
+    child_collections = collection.child_collections.order_by(
+        'order', 'date_created'
+    ).prefetch_related(
         Prefetch('assets', queryset=film.assets.order_by('order'), to_attr='coll_assets')
     )
 
@@ -69,7 +75,9 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
     context = {
         'film': film,
         'current_collection': collection,
-        'current_assets': collection.assets.all(),
+        'current_assets': collection.assets.filter(is_published=True).order_by(
+            'order', 'date_created'
+        ),
         'nested_collections': collection_contents,
         **drawer_menu_context,
     }

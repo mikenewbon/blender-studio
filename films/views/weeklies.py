@@ -8,7 +8,7 @@ from films.models import Film, ProductionLog
 
 
 def get_production_logs_for_context(film: Film) -> 'QuerySet[ProductionLog]':
-    """A helper function that retrieves production logs for film weeklies context.
+    """Retrieve production logs for film weeklies context.
 
     The returned queryset contains production logs and all their related objects
     used in templates:
@@ -20,6 +20,7 @@ def get_production_logs_for_context(film: Film) -> 'QuerySet[ProductionLog]':
     production_logs = film.production_logs.order_by('-start_date').prefetch_related(
         Prefetch('log_entries', to_attr='entries')
     )
+    # TODO: Sort entries' assets by 'date_created' (for consistency with the order in modals)
     prefetch_related_objects(
         production_logs,
         'entries__author',
