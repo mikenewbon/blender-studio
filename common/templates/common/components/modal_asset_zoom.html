@@ -5,6 +5,7 @@
 				<a class="btn btn-sm btn-dark">
 					<i class="material-icons btn-material-icons btn-material-icons-lg">favorite_border</i>
 					Like
+{#                  TODO(Natalia): Implement likes#}
 				</a>
 				<a href="{{ asset.static_asset.source.url }}" download class="btn btn-sm btn-dark">Download</a>
 				<button data-toggle="dropdown" class="btn btn-sm btn-ctrl-sm btn-dark">
@@ -23,7 +24,7 @@
 			</div>
 		</div>
 		<div class="modal-body">
-			<img class="" src="{{ asset.static_asset.preview.url }}">
+			<img class="" src="{{ asset.static_asset.preview.url }}" alt="asset preview">
 		</div>
 	</div>
 </div>

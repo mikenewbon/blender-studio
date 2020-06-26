@@ -5,9 +5,9 @@
 			<a href="#" data-toggle="modal" data-target="#file-modal"
                     data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
 				{% if asset.static_asset.preview %}
-				<img class="file-image" src="{{ asset.static_asset.preview.url }}">
+				<img class="file-image" src="{{ asset.static_asset.preview.url }}" alt="asset preview">
 				{% else %}
-				<img class="file-icon" src="{% static "common/images/icons/file.svg" %}">
+				<img class="file-icon" src="{% static "common/images/icons/file.svg" %}" alt="asset preview">
 				{% endif %}
 			</a>
 			<btn class="btn btn-secondary btn-ctrl-xs btn-save-media" data-toggle="dropdown" href="#">

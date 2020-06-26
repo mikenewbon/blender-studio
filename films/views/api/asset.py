@@ -112,7 +112,7 @@ def get_asset_context(asset: Asset, site_context: Optional[str]) -> Dict[str, Un
 
 @require_safe
 def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
-    """This view renders an asset modal, with the links to the previous and next assets."""
+    """Renders an asset modal, with the links to the previous and next assets."""
     asset = (
         Asset.objects.filter(pk=asset_pk)
         .select_related(
@@ -127,7 +127,6 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
         .get()
     )
     context = get_asset_context(asset, request.GET.get('site_context'))
-    print('site_context', request.GET.get('site_context'), "\n", context)
 
     return render(request, 'common/components/modal_asset.html', context)
 
