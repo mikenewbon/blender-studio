@@ -7,7 +7,6 @@ has-secondary-nav
 {% endblock bodyclasses %}
 
 {% block nav_drawer_inner %}
-
 <div class="drawer-nav-header">
 	<p class="subtitle">Gallery</p>
 	<h2>{{ film.title }}</h2>
@@ -16,9 +15,8 @@ has-secondary-nav
 <div class="drawer-nav-group">
 	<ol class="drawer-nav-list">
 		<li class="drawer-nav-section">
-			<!-- TODO(Mike): active state JS -->
 			<a href="{% url 'film-gallery' film_slug=film.slug %}"
-				class="drawer-nav-section-link {% if active %}active{% endif %}">
+				class="drawer-nav-section-link">
 				<div class="drawer-nav-section-icon">
 					<i class="material-icons">view_carousel</i>
 					<svg width="30" height="30" class="drawer-nav-section-icon-progress">
@@ -26,7 +24,7 @@ has-secondary-nav
 					</svg>
 				</div>
 				<div>
-					<p class="subtitle x-small">Collection</p>
+
 					<h4>Featured Artwork</h4>
 				</div>
 			</a>
@@ -40,32 +38,28 @@ has-secondary-nav
 {% for collection, child_collections in collections.items %}
 
 <div class="drawer-nav-group">
-	<div class="drawer-nav-dropdown-wrapper">
-		<div class="btn btn-ctrl" data-toggle="collapse"
+	<div class="drawer-nav-dropdown-wrapper ">
+		<div class="btn btn-ctrl {% if current_collection.parent != collection %}collapsed{% endif %}" data-toggle="collapse"
 		data-target="#collection-{{ collection.id }}">
 			<i class="material-icons">keyboard_arrow_down</i>
 		</div>
-		<a class="drawer-nav-dropdown h3" href="{{ collection.url }}">{{ collection.name }}</a>
+		<a class="drawer-nav-dropdown h3 " href="{{ collection.url }}"><span>{{ collection.name }}</span></a>
 	</div>
 	{% comment %} <h3 class="drawer-nav-dropdown {% if collapsed %}collapsed{% endif %}" data-toggle="collapse"
 		data-target="#collection-{{ collection.id }}">
 		<i class="material-icons">keyboard_arrow_down</i>
 		{{ collection.name }}
 	</h3> {% endcomment %}
-	<ol id="collection-{{ collection.id }}" class="drawer-nav-list collapse {% if not collapsed %}show{% endif %}">
+	<ol id="collection-{{ collection.id }}" class="drawer-nav-list collapse {% if current_collection.parent == collection %}show{% endif %}">
 
 		{% for child_collection in child_collections %}
 		<li class="drawer-nav-section">
-			<a href="{{ child_collection.url }}" class="drawer-nav-section-link {% if active %}active{% endif %}">
+			<a href="{{ child_collection.url }}" class="drawer-nav-section-link">
 				<div class="drawer-nav-section-icon">
-					<i class="material-icons">view_carousel</i>
-					<svg width="30" height="30" class="drawer-nav-section-icon-progress">
-						<circle cx="15" cy="15" r="14" />
-					</svg>
+					<i class="material-icons">folder</i>
 				</div>
 				<div>
-					<p class="subtitle x-small">Collection</p>
-					<h4>{{ child_collection.name }}</h4>
+					<h4><span>{{ child_collection.name }}</span></h4>
 				</div>
 			</a>
 			{% if admin_change_href is not none %}

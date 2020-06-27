@@ -40,7 +40,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
 	// adds active class to any nav item with a href that matches the current url
-	document.querySelectorAll('a.list-group-item[href="' + location.pathname + '"]').forEach((link) => {
+	document.querySelectorAll('a.list-group-item[href="' + location.pathname + '"], a.drawer-nav-section-link[href="' + location.pathname + '"], a.drawer-nav-dropdown[href="' + location.pathname + '"]').forEach((link) => {
 		link.classList.add('active');
 	})
 
@@ -50,11 +50,6 @@ document.addEventListener("DOMContentLoaded", function () {
 			link.classList.add('active');
 		}
 	});
-
-	// adds active class to any nav item with a href that matches the current url (Training/gallery) TODO(Mike): Clean this repetion up
-	document.querySelectorAll('a.drawer-nav-section-link[href="' + location.pathname + '"]').forEach((link) => {
-		link.classList.add('active');
-	})
 });
 
 
