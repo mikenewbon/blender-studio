@@ -196,8 +196,8 @@
 	list-style: none;
 	margin: 0;
 	padding: 0;
-	&.collapse, &.collapsing{
-		margin-left: $spacer;
+	&.collapse,
+	&.collapsing {
 	}
 
 	.drawer-nav-section {
@@ -206,8 +206,15 @@
 		justify-content: space-between;
 
 		&-link {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
 			flex-grow: 1;
+			i {
+				margin-right: $spacer/2;
+			}
 			&.active {
+				color: $primary;
 				.subtitle {
 					color: $primary;
 				}
@@ -230,14 +237,12 @@
 			}
 		}
 		&:first-of-type {
-			margin-top: $spacer/2;
 			.drawer-nav-section-icon:after {
 				content: none;
 			}
 		}
 
 		&:last-of-type {
-			margin-bottom: $spacer/2;
 			.drawer-nav-section-icon:before {
 				content: none;
 			}
@@ -310,7 +315,7 @@
 	overflow: hidden;
 
 	a {
-		padding: $spacer/2 $spacer;
+		padding: $spacer/4*3 $spacer;
 		color: inherit;
 		display: flex;
 		flex-direction: row;
@@ -339,7 +344,7 @@ $circle-circumference: $circle-diameter * 3.14;
 	justify-content: center;
 	align-items: center;
 	background-color: $input-gray;
-	margin-right: $spacer;
+	margin-right: $spacer/2;
 	position: relative;
 	flex-shrink: 0;
 	align-self: flex-start;
@@ -375,30 +380,7 @@ $circle-circumference: $circle-diameter * 3.14;
 .drawer-nav-dropdown {
 	padding: $spacer/2 $spacer $spacer/2 $spacer/2;
 	cursor: pointer;
-	span{
-		position: relative;
-		&:after{
-			content: close-quote;
-			display: block;
-			width: calc(100% + #{$spacer});
-			height: calc(100% + #{$spacer/2});
-			background: $highlight-white;
-			top: -$spacer/4;
-			left: -$spacer/2;
-			position: absolute;
-			opacity: 0;
-			z-index: -1;
-			border-radius: $spacer/2;
-		}
-	}
-	&.active{
-		color: $primary;
-		span{
-			&::after{
-				opacity: 1;
-			}
-		}
-	}
+
 	&.collapsed {
 		i {
 			transform: rotate(-90deg);
@@ -413,34 +395,27 @@ $circle-circumference: $circle-diameter * 3.14;
 			position: relative;
 			line-height: 0;
 			padding: 20px;
-			transition: transform 0.15s ease-in-out;
-			&::after {
-				content: close-quote;
-				background: $highlight-white;
-				display: block;
-				width: $spacer*2;
-				height: $spacer*2;
-				position: absolute;
-				left: 50%;
-				top: 50%;
-				z-index: -1;
-				border-radius: 50%;
-				transform: translate(-50%, -50%) scale(0);
-				transition: transform .1s ease-in-out;
+			i {
+				transition: transform 0.15s ease-in-out;
 			}
+
 			&:hover {
-				&::after{
-					transform: translate(-50%, -50%) scale(1);
-				}
+				background: $highlight-white;
 			}
 			&.collapsed {
-				transform: rotate(-90deg);
+				i {
+					transform: rotate(-90deg);
+				}
 			}
 		}
 		.drawer-nav-dropdown {
 			padding: $spacer;
-			color: white;
 			flex-grow: 1;
+			color: white;
+			&.active {
+				background: $highlight-white;
+				color: $primary;
+			}
 			&:hover {
 				background: $highlight-white;
 				text-decoration: none;
