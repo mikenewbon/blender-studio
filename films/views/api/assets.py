@@ -122,7 +122,7 @@ def get_asset_context(
         previous_asset = get_previous_asset_in_gallery(asset)
         next_asset = get_next_asset_in_gallery(asset)
     else:
-        previous_asset = next_asset = asset
+        previous_asset = next_asset = None
 
     context = {
         'asset': asset,
