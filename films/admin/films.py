@@ -6,6 +6,7 @@ from films.models import assets, collections, films
 @admin.register(assets.Asset)
 class AssetAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
+    list_display = ['__str__', 'order', 'film', 'collection']
     list_filter = [
         'film',
         'collection',

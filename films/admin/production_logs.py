@@ -35,10 +35,16 @@ class ProductionLogEntryAssetInline(admin.StackedInline):
 
 @admin.register(production_logs.ProductionLogEntry)
 class ProductionLogEntryAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
+    inlines = [ProductionLogEntryAssetInline]
     date_hierarchy = 'production_log__start_date'
     list_display = ['__str__', 'production_log']
-    inlines = [ProductionLogEntryAssetInline]
-    list_filter = ['production_log__film', 'production_log', 'user', 'author']
+    list_filter = [
+        'production_log__film',
+        'production_log',
+        'user',
+        'author',
+        'production_log__start_date',
+    ]
 
 
 class ProductionLogEntryInline(EditLinkMixin, AdminUserDefaultMixin, admin.StackedInline):
@@ -49,8 +55,10 @@ class ProductionLogEntryInline(EditLinkMixin, AdminUserDefaultMixin, admin.Stack
 
 @admin.register(production_logs.ProductionLog)
 class ProductionLogAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
-    list_display = ['__str__', 'name']
     inlines = [ProductionLogEntryInline]
+    date_hierarchy = 'start_date'
+    list_display = ['__str__', 'name', 'start_date']
+    list_filter = ['film', 'start_date']
     fieldsets = (
         (None, {'fields': ['film', 'name', 'start_date', 'user', 'storage_backend']}),
         ('Summary', {'fields': ['summary', 'author', 'picture_16_9', 'youtube_link']}),

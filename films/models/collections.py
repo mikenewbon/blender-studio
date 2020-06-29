@@ -36,7 +36,9 @@ class Collection(mixins.CreatedUpdatedMixin, models.Model):
             self.slug = slugify(self.name)
 
     def __str__(self):
-        return self.name
+        if self.order:
+            return f'({self.order}) {self.name}'
+        return f'(-) {self.name}'
 
     def get_absolute_url(self) -> str:
         return self.url
