@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.http.request import HttpRequest
 from django.shortcuts import get_object_or_404, render
 
-from films.models import Film, ProductionLog
+from films.models import Film, ProductionLog, ProductionLogEntryAsset
 
 
 def get_production_logs_for_context(film: Film) -> 'QuerySet[ProductionLog]':
@@ -15,20 +15,26 @@ def get_production_logs_for_context(film: Film) -> 'QuerySet[ProductionLog]':
      - production log entries (under the `entries` attribute of a production log),
      - assets and static assets related to log entries,
      - entries authors and users (used to get each entry's author_name).
-    Altogether, this function sends 7 database queries.
+    Altogether, this function sends 5 database queries.
     """
     production_logs = film.production_logs.order_by('-start_date').prefetch_related(
-        Prefetch('log_entries', to_attr='entries')
+        'log_entries__author',
+        'log_entries__user',
+        Prefetch(
+            'log_entries__entry_assets',
+            queryset=ProductionLogEntryAsset.objects.select_related('asset__static_asset').order_by(
+                'asset__date_created'
+            ),
+            to_attr='assets',
+        ),
     )
-    # TODO: Sort entries' assets by 'date_created' (for consistency with the order in modals)
-    prefetch_related_objects(
-        production_logs,
-        'entries__author',
-        'entries__user',
-        'entries__entry_assets__asset__static_asset',
-    )
+    production_log_dict = {}
+    for log in production_logs:
+        production_log_dict[log] = {}
+        for entry in log.log_entries.all():
+            production_log_dict[log][entry] = [entry_asset.asset for entry_asset in entry.assets]
 
-    return production_logs
+    return production_log_dict
 
 
 def production_log_list(request: HttpRequest, film_slug: str) -> HttpResponse:
