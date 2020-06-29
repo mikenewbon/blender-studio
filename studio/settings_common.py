@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'sorl.thumbnail',
 ]
 
 MIDDLEWARE = [
