@@ -1,9 +1,19 @@
+import datetime as dt
 from unittest.mock import patch
 
 from django.test import TestCase
 from django.urls.base import reverse
 
-from common.factories.films import FilmFactory, CollectionFactory, AssetFactory
+from common.factories.assets import StaticAssetFactory
+from common.factories.films import (
+    FilmFactory,
+    CollectionFactory,
+    AssetFactory,
+    ProductionLogFactory,
+    ProductionLogEntryFactory,
+    ProductionLogEntryAssetFactory,
+)
+from common.factories.user import UserFactory
 from films.views.api.assets import SiteContexts
 
 
@@ -178,6 +188,81 @@ class TestAssetOrderingInFeaturedArtwork(TestCase):
             self.featured_asset_1,
             self.featured_asset_2,
             self.featured_asset_3,
+        ]
+        for previous_asset, asset, next_asset in zip(assets, assets[1:], assets[2:]):
+            response = self.client.get(
+                f'{reverse("api-asset", args=(asset.pk,))}?site_context={self.site_context}'
+            )
+
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.context.get('previous_asset'), previous_asset)
+            self.assertEqual(response.context.get('asset'), asset)
+            self.assertEqual(response.context.get('next_asset'), next_asset)
+
+
+class TestAssetOrderingInWeeklies(TestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.site_context = SiteContexts.WEEKLIES.value
+
+        author_a = UserFactory()
+        author_b = UserFactory()
+
+        film = FilmFactory()
+        log_start_date = dt.date(2020, 6, 1)
+        prod_log = ProductionLogFactory(film=film, start_date=log_start_date)
+        entry_a = ProductionLogEntryFactory(production_log=prod_log, author=author_a)
+
+        cls.asset_a_0 = AssetFactory(film=film, static_asset=StaticAssetFactory(user=author_a))
+        cls.asset_a_1 = AssetFactory(film=film, static_asset=StaticAssetFactory(user=author_a))
+        cls.asset_a_2 = AssetFactory(film=film, static_asset=StaticAssetFactory(user=author_a))
+        cls.asset_a_3 = AssetFactory(film=film, static_asset=StaticAssetFactory(user=author_a))
+
+        # author's A assets should be sorted by date_created
+        ProductionLogEntryAssetFactory(production_log_entry=entry_a, asset=cls.asset_a_0)
+        ProductionLogEntryAssetFactory(production_log_entry=entry_a, asset=cls.asset_a_1)
+        ProductionLogEntryAssetFactory(production_log_entry=entry_a, asset=cls.asset_a_2)
+        ProductionLogEntryAssetFactory(production_log_entry=entry_a, asset=cls.asset_a_3)
+
+        # assets from other production log entries should not be included in the context
+        other_asset_a = AssetFactory(
+            film=film,
+            static_asset=StaticAssetFactory(user=author_a, date_created=dt.date(1997, 12, 2)),
+        )
+        other_entry = ProductionLogEntryFactory(
+            user=author_a, production_log=ProductionLogFactory(start_date=dt.date(1997, 12, 1))
+        )
+        ProductionLogEntryAssetFactory(production_log_entry=other_entry, asset=other_asset_a)
+        asset_b = AssetFactory(film=film, static_asset=StaticAssetFactory(user=author_b))
+        entry_b = ProductionLogEntryFactory(production_log=prod_log, author=author_b)
+        ProductionLogEntryAssetFactory(production_log_entry=entry_b, asset=asset_b)
+
+    def test_previous_asset_for_first_asset_is_none(self):
+        first_asset = self.asset_a_0
+        response = self.client.get(
+            f'{reverse("api-asset", args=(first_asset.pk,))}?site_context={self.site_context}'
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context.get('asset'), first_asset)
+        self.assertEqual(response.context.get('previous_asset'), None)
+
+    def test_next_asset_for_last_asset_is_none(self):
+        last_asset = self.asset_a_3
+        response = self.client.get(
+            f'{reverse("api-asset", args=(last_asset.pk,))}?site_context={self.site_context}'
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context.get('asset'), last_asset)
+        self.assertEqual(response.context.get('next_asset'), None)
+
+    def test_assets_in_production_log_entry_sorted_by_date_created(self):
+        assets = [
+            self.asset_a_0,
+            self.asset_a_1,
+            self.asset_a_2,
+            self.asset_a_3,
         ]
         for previous_asset, asset, next_asset in zip(assets, assets[1:], assets[2:]):
             response = self.client.get(

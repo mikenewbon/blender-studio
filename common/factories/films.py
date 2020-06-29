@@ -1,7 +1,15 @@
 import factory
 
 from common.factories.assets import StaticAssetFactory, StorageBackendFactory
-from films.models import Film, Collection, Asset
+from common.factories.user import UserFactory
+from films.models import (
+    Film,
+    Collection,
+    Asset,
+    ProductionLog,
+    ProductionLogEntry,
+    ProductionLogEntryAsset,
+)
 
 
 class FilmFactory(factory.DjangoModelFactory):
@@ -38,3 +46,32 @@ class AssetFactory(factory.DjangoModelFactory):
 
     name = factory.Faker('text', max_nb_chars=30)
     is_published = True
+
+
+class ProductionLogFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = ProductionLog
+
+    film = factory.SubFactory(FilmFactory)
+    summary = factory.Faker('text')
+    user = factory.SubFactory(UserFactory)
+    storage_backend = factory.SelfAttribute('film.storage_backend')
+    picture_16_9 = factory.Faker('file_path', category='image')
+
+
+class ProductionLogEntryFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = ProductionLogEntry
+
+    production_log = factory.SubFactory(ProductionLogFactory)
+    description = factory.Faker('text')
+    user = factory.SubFactory(UserFactory)
+    author_role = factory.Faker('job')
+
+
+class ProductionLogEntryAssetFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = ProductionLogEntryAsset
+
+    asset = factory.SubFactory(AssetFactory)
+    production_log_entry = factory.SubFactory(ProductionLogEntryFactory)
