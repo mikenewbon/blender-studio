@@ -14,6 +14,8 @@ Blender has to offer.
 
 ### Development
 
+For the full developer documentation, see the [docs folder](docs).
+
 #### Requirements
 
 - Python 3.8.x
@@ -43,10 +45,13 @@ and it must not be committed.
 6. In the command line, activate the virtual environment created by poetry:
     ```source $(poetry env info --path)/bin/activate```
     - Configure your IDE to use the venv by default.
-7. Install pre-commit hooks (see below for details): ```pre-commit install```
-8. In the project folder, run migrations: `./manage.py migrate`
-9. Create a superuser: `echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'password')" | python manage.py shell`
-10. Run the project: `./manage.py runserver`
+7. In the project folder, run migrations: `./manage.py migrate`
+8. Create a superuser: `echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'password')" | python manage.py shell`
+9. Run the project: `./manage.py runserver`
+10. (Optional) Install pre-commit hooks (see [here](docs/development.md#before-commiting) for details):
+```pre-commit install```
+
+See also how to [populate the database with data](docs/development.md#data-import).
 
 
 ### Credits
