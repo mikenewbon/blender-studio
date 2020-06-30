@@ -58,17 +58,15 @@ def collection_list(request: HttpRequest, film_slug: str) -> HttpResponse:
 def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str) -> HttpResponse:
     film = get_object_or_404(Film, slug=film_slug, is_published=True)
     collection = get_object_or_404(Collection, slug=collection_slug, film_id=film.id)
-    child_collections = collection.child_collections.order_by(
-        'order', 'date_created'
-    )
+    child_collections = collection.child_collections.order_by('order', 'date_created')
     drawer_menu_context = get_gallery_drawer_context(film)
 
     context = {
         'film': film,
         'current_collection': collection,
-        'current_assets': collection.assets.filter(is_published=True).order_by(
-            'order', 'date_created'
-        ),
+        'current_assets': collection.assets.filter(is_published=True)
+        .order_by('order', 'date_created')
+        .select_related('static_asset'),
         'child_collections': child_collections,
         **drawer_menu_context,
     }

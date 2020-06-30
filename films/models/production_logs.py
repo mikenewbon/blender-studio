@@ -50,7 +50,8 @@ class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
 
     @property
     def end_date(self):
-        return self.start_date + timedelta(days=7)
+        """The last day of a weekly log is the start_date + 6 days"""
+        return self.start_date + timedelta(days=6)
 
     def clean(self):
         super().clean()
