@@ -11,9 +11,9 @@ Apps:
 To be extracted to a separate app:
  - [progress](#progress) - currently inside [training](#training)
  
-TODO:
+Not implemented yet:
  - [user and profile](#user-profile)
- - flat pages - e.g. an "About" page of a released film
+ - flat pages - e.g. an 'About' page of a released film
  
 Other:
  - `common` directory - contains the code that is used (or we plan to use it) in more than one app:
@@ -21,6 +21,39 @@ Other:
  - **Project** - this word may refer to a film or a training. In production, there'll be exactly one
  storage backend (GCS, S3, etc.) per project. We don't have a `Project` model at the moment, but
  there's a chance that it changes in the future.
+
+### Models simplified hierarchy
+
+The main, 'highest-level' models in the entire project are the **Film** and **Training**. 
+
+##### Film
+Resources related to films are gathered in **Collections**, which can contain further (nested)
+collections, as well as **Assets**. An asset represents an individual resource displayed on the web page,
+such as an artwork or a production file, also including the metadata (e.g. its ordinal number for ordering
+in the collection, or description).
+
+Films also have **Production Logs**, containing all the work published during a given week by all the
+authors. Production Logs are made up of **Production Log Entries**: sets of **Assets** created
+by individual authors. The Assets in the Production Log Entries are the same objects that are also
+displayed in Collections.
+
+On a lower level, each asset has a foreign key to a **Static Asset**, which represents the asset file
+itself: a video, an image, or another file. Data included in the Static Asset model refers to the file
+(e.g. author, license, etc.), and not to the place where it is displayed.
+
+Static Assets which are videos or images have additional models -- **Video** and **Image**,
+respectively -- with a OneToOneField to Static Asset. These models contain some additional fields
+with information specific to videos and images.
+
+##### Training
+Trainings comprise **Chapters**, which in turn contain **Sections**. 
+The main difference between chapters and films' collections is that collections can be nested.
+The Section model is linked to a **Video** via a OneToOneField. Together, they form an equivalent
+of an Asset with a Static Asset in films, more or less. 
+
+In training, there also is an **Asset** model, but it differs from the Asset model in films.
+It represents an extra file attached to a Section. 
+
  
 ## Assets
 
@@ -39,11 +72,13 @@ We want the entire `assets` app (i.e. file-representing models: `StaticAsset`, `
 to be portable, and independent of the other apps. In particular, the `DynamicStorageFileField`
 should be left inside this app, even though it is used in other apps' models as well.
 
-**Licenses:**
-For now, we only have licenses for film-related resources. They are obligatory for any
-static asset (image, video, file).
+##### Licenses
+For now, licenses are only added to static asset (image, video, file).
 
-**Storage Backends:** ...
+##### Storage Backends
+Storage backend is a place to store all the film-related or training-related files.
+In production, there'll be exactly one storage backend (GCS, S3, etc.) per project, i.e. per film or
+per training. 
  
  
 ## Blog
@@ -140,7 +175,7 @@ Could be extracted to a separate app. Has to be added to films, too.
 
 
 ## Subscriptions
-...
+This has to be documented yet.
 
 
 ## Training

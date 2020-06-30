@@ -1,9 +1,4 @@
-# General Project Information
-
-The project is written in Django, with Django templates and some Java Script.
-
-
-## Tricky parts
+# Tricky parts
 
 ### Templates 
 ##### Jinja
@@ -19,7 +14,7 @@ templates with regular ones in the future.
 
 
 
-##### Media files
+### Media files
 
 Media files (e.g. static assets, preview images of collections, training section videos, etc. - all the
 other files that can be uploaded with model instances, in the entire project) are uploaded to nested
@@ -34,10 +29,11 @@ video variants, auto-generated thumbnails, etc.) can be saved in the same direct
 file.
 
 
-##### URLs
+### URLs
 
 It would be nice to have the urls matching the ones in the "old" cloud. 
 
+##### Films
 For the time being, the urls for film-related resources are separated: 
 for collections, it's `<film_slug>/<collection_slug>`, and for assets — `<film_slug>/assets/<asset-slug>`.
 
@@ -45,10 +41,11 @@ In the future, however, we would like to set up some routing and use one pattern
 collections and assets: `<film_slug>/<collection-or-asset_uuid>`, with the slugs being replaced
 with uuids to ensure their uniqueness. 
 
-[TODO] Training app routing follows its own rules.
+##### Training
+Training app routing has to be documented yet.
 
 
-##### Asset modals
+### Asset modals
 Film asset modals could potentially be reused in trainings. That's why they are in the `common` directory.
 
 Film asset modals are used in a couple of places: in Weeklies, in Gallery (in real collections and
