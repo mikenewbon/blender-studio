@@ -2,9 +2,12 @@ from django.urls import path
 
 from films.views import films, gallery, weeklies
 from films.views.api.assets import asset as api_asset, asset_zoom
+from films.views.api.production_logs import production_logs_page
+
 urlpatterns = [
     path('api/assets/<int:asset_pk>', api_asset, name='api-asset'),
     path('api/assets/<int:asset_pk>/zoom', asset_zoom, name='api-asset-zoom'),
+    path('api/films/<int:film_pk>/logs', production_logs_page, name='api-logs-page'),
     path('', films.FilmListView.as_view(), name='film-list'),
     path('<slug:film_slug>', films.film_detail, name='film-detail'),
     path('<slug:film_slug>/about', films.about, name='film-about'),

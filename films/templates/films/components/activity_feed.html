@@ -75,6 +75,33 @@
 		</div>
 	</div>
 
-	{% endfor %}
+    {% endfor %}
+
+{#    TODO(Natalia): add classes to this div (should differ from the button inside a log) #}
+    <div>
+        <div class="col text-center">
+            <a data-toggle="collapse" data-url="{% url 'api-logs-page' film.id %}"
+               href="#" role="button" aria-expanded="false" aria-controls="entry-{{ entry.id }}"
+               class="btn btn-sm btn-secondary collapsed show-more-less">Show </a>
+        </div>
+    </div>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if production_logs_page.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ production_logs_page.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ production_logs_page.number }} of {{ production_logs_page.paginator.num_pages }}.
+            </span>
+
+            {% if production_logs_page.has_next %}
+                <a href="?page={{ production_logs_page.next_page_number }}">next</a>
+                <a href="?page={{ production_logs_page.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
 
 </div>
