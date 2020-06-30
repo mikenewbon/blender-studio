@@ -7,19 +7,17 @@ Apps:
  - [films](#films)
  - [subscriptions](#subscriptions)
  - [training](#training)
-
-Additionally:
- - `common` directory - contains the code that is used (or we plan to use it) in more than one app:
- scripts, template bases or components, test factories, etc.
  
 To be extracted to a separate app:
- - [progress](#progress)
+ - [progress](#progress) - currently inside [training](#training)
  
 TODO:
  - [user and profile](#user-profile)
- - flat pages - e.g. an "About" page of a film
+ - flat pages - e.g. an "About" page of a released film
  
 Other:
+ - `common` directory - contains the code that is used (or we plan to use it) in more than one app:
+ scripts, template bases or components, test factories, etc.
  - **Project** - this word may refer to a film or a training. In production, there'll be exactly one
  storage backend (GCS, S3, etc.) per project. We don't have a `Project` model at the moment, but
  there's a chance that it changes in the future.
@@ -69,14 +67,29 @@ How to add comments to a new model — say, `Asset`:
 
 ## Films
 
-
+##### Film
+A **Film** has three `status` options (defined in the `FilmStatus` text choices class):
+0. in development
+1. in production
+2. released
+Films in development and production have their production logs (see [below](#production-logs--weeklies))
+displayed in their 'About' page.
 
 **Collections** can contain film-related assets. They can also contain other collections (nested
 collections, child collections). For now, the front end does not expect nested collections to
 contain further nested collections. However, this restriction does not apply at the database level.
+Collections in a film or a parent collection are sorted by their `order` attribute.
 
-**Asset (model in films app) vs. StaticAsset (model in assets app):**  
+##### Asset ordering
+Assets in a collection are sorted by their `order` and `date_created` attribute. The `order` field
+is not required, there is also no constraint on it to enforce unequivocal ordering in a collection,
+hence the additional `date_created` field. 
+Maintaining consistent ordering is difficult, especially if the order of collections or asset changes,
+and it would be even more difficult with the above mentioned restrictions in place. It would be
+useful to have the `order` attributes in the entire collection reassigned automatically whenever
+a user changes the `order` of one asset. 
 
+##### Asset (model in films app) vs. StaticAsset (model in assets app)
 - Static Asset is more "low-level" and represents an uploaded file; we want to have a less 
 generic model that could be extracted and reused in other apps (e.g. blog, training). 
 Therefore Static Asset should not contain any relationships to other apps.
@@ -84,12 +97,26 @@ Therefore Static Asset should not contain any relationships to other apps.
 is displayed. As a model in the 'films' app, asset may belong to a Collection, and is a part (leaf)
 of the tree-like structure of film-related resources.
 
+<table>
+    <tr>
+    <td>Caution: There's also an `Asset` model in the training app, but it represents
+    a slightly different thing: it is an additional file related to a training section
+    (not its main video).</td>
+    </tr>
+</table>
 
-Caution: There's also an `Asset` model in the training app, but it represents a slightly different 
-thing: it is an additional file related to a training section (not its main video).
+##### `is_published` flag
+Film and Asset models have the `is_published` flag. It is set to `False` by default. It could be
+useful to prepare a model instance in advance, and publish it with simply a change of the flag
+at an appropriate moment. The Collection model doesn't have such a flag.
+
+In film-, collection- and asset-related views, the respective querysets are filtered to only include
+the objects with `is_published=True`. For example, attempting to access an asset in an unpublished
+film should result in a 404 Not Found error, even if the asset itself is marked as published.
+This is not checked in the api-asset view, though (perhaps it should be).
 
 
-**Production Logs / Weeklies:**
+##### Production Logs / Weeklies
 The production logs are also called "weeklies" or "production weeklies" in the website and the admin
 panel. We stick to "production logs" in the back end code, though. 
 
@@ -97,7 +124,8 @@ panel. We stick to "production logs" in the back end code, though.
 in the project timeline along with the blog posts (or a blog post could just mention that there's
 a new production log available, and link to it). 
 
-- **ProductionLogEntry** — contains multiple assets, all created by one author during a particular week
+- **ProductionLogEntry** — contains multiple assets, all created by one author during a particular week.
+Assets in an entry are sorted by their creation date (`date_created` field).
 
 - **ProductionLogEntryAsset** — an intermediary table between the `Asset` and `ProductionLogEntry` models.  
 
@@ -118,8 +146,12 @@ Could be extracted to a separate app. Has to be added to films, too.
 ## Training
 
 A training consists of chapters, which in turn are made up of sections.
+It has a "Training Status" choice field, with two values: published and unpublished. 
+It may be a good idea to replace this field with the `is_published` flag (like in
+[films](#is_published-flag)).
 
 Sections within a chapter are ordered by their `index` attribute. So are chapters in a training.
+The value of `index` has to be unique per chapter or training, respectively.
 
 Each **Section** contains a video (its main content), represented by the **Video** model.
 It can also contain an arbitrary number of other files, stored as **Asset** instances.

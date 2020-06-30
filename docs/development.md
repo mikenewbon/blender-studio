@@ -1,15 +1,15 @@
 # Development
 
-### Set-up 
+## Set-up 
 
-See [Development](../README.md#local-development) instructions.
+See [Development](../README.md#development) instructions.
 
 
-### Data import
+## Data import
 ...
 
 
-### Workflow
+## Workflow
 
 #### Before commiting
 
@@ -29,5 +29,5 @@ entire project.
 #### Git workflow
 
 - rebase, don't merge
-- branches overview: master, develop, other branches stemming from develop
-- other conventions
+- [TODO] branches overview: master, develop, other branches stemming from develop
+- [TODO] other conventions

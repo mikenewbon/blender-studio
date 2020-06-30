@@ -1,6 +1,6 @@
 # Blender Studio
 
-### Overview
+## Overview
 
 TODO: replace it with some real introduction
 
@@ -12,7 +12,7 @@ Blender has to offer.
 
 
 
-### Development
+## Development
 
 For the full developer documentation, see the [docs folder](docs).
 
