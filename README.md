@@ -1,6 +1,6 @@
 # Blender Studio
 
-## Overview
+### Overview
 
 TODO: replace it with some real introduction
 
@@ -12,7 +12,7 @@ Blender has to offer.
 
 
 
-### Local Development
+### Development
 
 #### Requirements
 
@@ -49,17 +49,7 @@ and it must not be committed.
 10. Run the project: `./manage.py runserver`
 
 
-#### Before commiting
-
-[Pre-commit hooks](https://pre-commit.com) are responsible for automatically running black, mypy,
-etc. on the staged files, before each commit. If there are issues, committing is aborted.
-
-In case of emergency, it is possible to 
-[disable one or more hooks](https://pre-commit.com/#temporarily-disabling-hooks). To completely 
-disable all the hooks, run `pre-commit uninstall`.
-
-You can also execute the `test.sh` script: it runs mypy, black, tests, eslint, and stylelint on the
-entire project.
+### Credits
 
 
-## License
+### License
