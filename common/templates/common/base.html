@@ -107,11 +107,8 @@
 	{% block nav_drawer %}
 
 	<nav class="nav-drawer">
-		<div class="nav-drawer-spacer">
-			<div class="list-group list-group-flush list-group-horizontal small">
-				<p class="list-group-item mb-0">Weeklies</p>
-			</div>
-		</div>
+    {% block nav_drawer_spacer %}
+    {% endblock nav_drawer_spacer %}
 		<div class="nav-drawer-body">
 			<div class="px-2 py-2 d-block d-md-none">
 				<div class="input-group mb-0">
