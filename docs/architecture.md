@@ -22,7 +22,7 @@ Other:
  storage backend (GCS, S3, etc.) per project. We don't have a `Project` model at the moment, but
  there's a chance that it changes in the future.
 
-### Models simplified hierarchy
+### Models (simplified) hierarchy
 
 The main, 'highest-level' models in the entire project are the **Film** and **Training**. 
 
@@ -175,7 +175,7 @@ Could be extracted to a separate app. Has to be added to films, too.
 
 
 ## Subscriptions
-This has to be documented yet.
+This has to be documented yet. It is not actually used at this stage.
 
 
 ## Training

@@ -20,6 +20,7 @@ The full developer documentation is in the [docs folder](docs).
     3. [Data import](docs/development.md#data-import)
     4. [Workflow](docs/development.md#workflow)
  - [Architecture Overview](docs/architecture.md)
+    1. [Models (simplified) hierarchy](docs/architecture.md#models-simplified-hierarchy)
  - [Miscellaneous facts](docs/miscellaneous.md)
     1. [Templates](docs/miscellaneous.md#templates)
         - [Jinja](docs/miscellaneous.md#jinja)
