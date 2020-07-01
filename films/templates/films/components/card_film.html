@@ -1,9 +1,9 @@
-<div class="{{ card_sizes|default:"col-12 col-sm-6 col-lg-4" }} card-grid-item">
+<div class="{{ card_sizes|default:"col-12 col-sm-6 col-md-4 col-lg-4" }} card-grid-item">
   <div class="card card-dark card-media card-poster">
     <div class="card-header">
       <a href="{{ film.url }}" class="card-header-link">
 
-        {% include "common/components/helpers/image_set.html" with alt=film.title classes="img-fluid" img_source=film.poster xs_size="50" sm_size="50" md_size="500" lg_size="500" xl_size="1000" %}
+        {% include "common/components/helpers/image_set.html" with alt=film.title classes="img-fluid" img_source=film.poster xs_size="500" sm_size="360" md_size="300" lg_size="360" xl_size="360" %}
 
       </a>
       {% if film.status != "2_released" %}
