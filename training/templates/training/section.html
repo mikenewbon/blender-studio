@@ -27,7 +27,6 @@
 <nav class="navbar-secondary" aria-label="breadcrumbs">
 	<div class="container-xl">
 		<ol class="breadcrumb">
-			{% include 'common/components/navigation/breadcrumb.html' with label='Home' url='/' %}
 			{% include 'common/components/navigation/breadcrumb.html' with label=training.name url=training.url %}
 			{% include 'common/components/navigation/breadcrumb.html' with label=chapter.name_with_index %}
 			{% include 'common/components/navigation/breadcrumb.html' with label=section.name_with_index %}

@@ -207,6 +207,66 @@
   list-style: none;
   margin: 0;
   padding: 0;
+
+  &.training {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    .drawer-nav-section-icon {
+
+      &::before,
+      &::after {
+        background: $input-gray;
+        content: close-quote;
+        height: 500%;
+        left: 50%;
+        position: absolute;
+        width: 2px;
+        z-index: -1;
+      }
+
+      &::before {
+        transform: translate(-50%, 50%);
+      }
+
+      &::after {
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    .drawer-nav-section {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      &-link {
+        flex-grow: 1;
+      }
+
+      &.complete {
+        +.drawer-nav-section .drawer-nav-section-icon:after {
+          background-color: $primary;
+        }
+
+        .drawer-nav-section-icon:before {
+          background-color: $primary;
+        }
+      }
+
+      &:first-of-type {
+        .drawer-nav-section-icon:after {
+          content: none;
+        }
+      }
+
+      &:last-of-type {
+        .drawer-nav-section-icon:before {
+          content: none;
+        }
+      }
+    }
+  }
 }
 
 .drawer-nav-section {
@@ -214,23 +274,7 @@
   flex-direction: row;
   justify-content: space-between;
   overflow: hidden;
-
-  a {
-    padding: $spacer/4*3 $spacer;
-    color: inherit;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    &.active {
-      background-color: $highlight-white;
-    }
-
-    &:hover {
-      background-color: $highlight-white;
-      text-decoration: none;
-    }
-  }
+  position: relative;
 
   &.complete {
     +.drawer-nav-section .drawer-nav-section-icon {
@@ -265,24 +309,35 @@
 
 .drawer-nav-section-link {
   align-items: center;
+  color: inherit;
   display: flex;
   flex-direction: row;
   flex-grow: 1;
+  padding: ($spacer / 4 * 3) $spacer;
 
-  > i {
-    margin-right: $spacer / 2;
+  &:hover {
+    background-color: $highlight-white;
+    color:$white;
+    text-decoration: none;
+  }
+
+  >i {
+    margin-right: ($spacer / 2);
   }
 
   &.active {
+    background-color: $highlight-white;
     color: $primary;
 
     .subtitle {
       color: $primary;
     }
-    h4{
+
+    h4 {
       color: $white;
     }
-    .drawer-nav-section-icon{
+
+    .drawer-nav-section-icon {
       color: $white;
     }
   }
@@ -293,90 +348,44 @@
   }
 }
 
-.training-nav-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.drawer-nav-section-edit {
+  color: $white;
+  line-height: 0;
+  opacity: .5;
+  padding: ($spacer / 2);
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
 
-  .drawer-nav-section-icon {
-    &:before {
-      content: close-quote;
-      width: 2px;
-      background: $input-gray;
-      height: 500%;
-      position: absolute;
-      left: 50%;
-      transform: translate(-50%, 50%);
-      z-index: -1;
-    }
 
-    &:after {
-      content: close-quote;
-      width: 2px;
-      background: $input-gray;
-      height: 500%;
-      position: absolute;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: -1;
-    }
-  }
-
-  .drawer-nav-section {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-
-    &-link {
-      flex-grow: 1;
-    }
-
-    &.complete {
-      +.drawer-nav-section .drawer-nav-section-icon:after {
-        background-color: $primary;
-      }
-
-      .drawer-nav-section-icon:before {
-        background-color: $primary;
-      }
-    }
-
-    &:first-of-type {
-      .drawer-nav-section-icon:after {
-        content: none;
-      }
-    }
-
-    &:last-of-type {
-      .drawer-nav-section-icon:before {
-        content: none;
-      }
-    }
+  &:hover {
+    color: $white;
+    opacity: 1;
   }
 }
+
 
 .drawer-nav-header {
   padding: $spacer;
 }
-
-
 
 $circle-radius: 14;
 $circle-diameter: $circle-radius * 2;
 $circle-circumference: $circle-diameter * 3.14;
 
 .drawer-nav-section-icon {
-  width: 30px;
-  height: 30px;
+  align-items: center;
+  align-self: flex-start;
+  background-color: $input-gray;
   border-radius: 50%;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: $input-gray;
-  margin-right: $spacer/2;
-  position: relative;
   flex-shrink: 0;
-  align-self: flex-start;
+  height: 30px;
+  justify-content: center;
+  margin-right: ($spacer / 2);
+  position: relative;
+  width: 30px;
 
   &.progress {
     border: 2px solid $primary;
@@ -406,8 +415,6 @@ $circle-circumference: $circle-diameter * 3.14;
   }
 }
 
-
-
 .drawer-nav-dropdown-wrapper {
   display: flex;
 
@@ -433,8 +440,10 @@ $circle-circumference: $circle-diameter * 3.14;
 }
 
 .drawer-nav-dropdown {
+  align-items: center;
   color: $white;
   cursor: pointer;
+  display: flex;
   flex-grow: 1;
   padding: $spacer;
 
@@ -456,6 +465,7 @@ $circle-circumference: $circle-diameter * 3.14;
   }
 
   i {
+    align-self: flex-start;
     margin-right: $spacer / 2;
     transition: transform .35s ease;
     vertical-align: text-top;

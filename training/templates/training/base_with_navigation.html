@@ -13,9 +13,9 @@ nav-drawer-wide
 </div>
 
 <div class="drawer-nav-group">
-  <ol class="drawer-nav-list">
+
     {% include 'common/components/navigation/nav_drawer_section.html' with title='About this training' subtitle='Overview' href=navigation.overview_url active=navigation.overview_active admin_change_href=navigation.training_admin_url %}
-  </ol>
+
 </div>
 
 {% for chapter_navigation in navigation.chapters %}
@@ -28,7 +28,7 @@ nav-drawer-wide
     </a>
   </div>
   <ol id="nav-{{ chapter_navigation.slug }}"
-    class="drawer-nav-list collapse {% if  chapter_navigation.current %}show{% endif %}">
+    class="drawer-nav-list training collapse {% if  chapter_navigation.current %}show{% endif %}">
 
     {% for section_navigation in chapter_navigation.sections %}
     {% include 'common/components/navigation/nav_drawer_section_progress.html' with title=section_navigation.name subtitle='Video' href=section_navigation.url active=section_navigation.current started=section_navigation.started finished=section_navigation.finished progress_fraction=section_navigation.progress_fraction admin_change_href=section_navigation.admin_url %}

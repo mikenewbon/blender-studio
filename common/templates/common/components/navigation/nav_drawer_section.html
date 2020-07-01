@@ -1,17 +1,19 @@
 <li class="drawer-nav-section">
-	<a href="{{ href }}" class="drawer-nav-section-link {% if active %}active{% endif %}">
-		<div class="drawer-nav-section-icon">
-			<i class="material-icons">insert_drive_file</i>
-			<svg width="30" height="30" class="drawer-nav-section-icon-progress">
-				<circle cx="15" cy="15" r="14" />
-			</svg>
-		</div>
-		<div>
-			<p class="subtitle">{{ subtitle }}</p>
-			<h4>{{ title }}</h4>
-		</div>
-	</a>
-	{% if admin_change_href is not none %}
-	<a href="{{ admin_change_href }}">edit</a>
-	{% endif %}
+  <a href="{{ href }}" class="drawer-nav-section-link {% if active %}active{% endif %}">
+    <div class="drawer-nav-section-icon">
+      <i class="material-icons">insert_drive_file</i>
+      <svg width="30" height="30" class="drawer-nav-section-icon-progress">
+        <circle cx="15" cy="15" r="14" />
+      </svg>
+    </div>
+    <div>
+      <p class="subtitle">{{ subtitle }}</p>
+      <h4>{{ title }}</h4>
+    </div>
+  </a>
+  {% if admin_change_href is not none %}
+  <a class="drawer-nav-section-edit" href="{{ admin_change_href }}">
+    <i class="material-icons">create</i>
+  </a>
+  {% endif %}
 </li>
