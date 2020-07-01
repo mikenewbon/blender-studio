@@ -1,0 +1,19 @@
+{% load thumbnail %}
+
+<img
+  srcset="
+    {% thumbnail img_source xs_size as im %}{{ im.url }} {{ xs_size }}w{% endthumbnail %},
+    {% thumbnail img_source sm_size as im %}{{ im.url }} {{ sm_size }}w{% endthumbnail %},
+    {% thumbnail img_source md_size as im %}{{ im.url }} {{ md_size }}w{% endthumbnail %},
+    {% thumbnail img_source lg_size as im %}{{ im.url }} {{ lg_size }}w{% endthumbnail %},
+    {% thumbnail img_source xl_size as im %}{{ im.url }} {{ xl_size }}w{% endthumbnail %}"
+  sizes="
+  (max-width: 575px) {{ xs_size }}px,
+  (max-width: 767px) {{ sm_size }}px,
+  (max-width: 991px) {{ md_size }}px,
+  (max-width: 1199px) {{ lg_size }}px,
+  {{ xl_size }}px"
+  src="{% thumbnail img_source xl_size as im %}{{ im.url }}{% endthumbnail %}"
+  class="{{ classes }}"
+  alt="{{ alt }}"
+>

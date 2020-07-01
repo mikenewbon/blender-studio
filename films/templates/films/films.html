@@ -3,13 +3,13 @@
 {% block content %}
 
 <div class="container-xl pt-4">
-	{% include "common/components/simple_header.html" with title="Films" subtitle="The iconic Blender Open Movies. Featuring all the production files, assets, artwork, and never-seen-before content." %}
+  {% include "common/components/simple_header.html" with title="Films" subtitle="The iconic Blender Open Movies. Featuring all the production files, assets, artwork, and never-seen-before content." %}
 
-	<div class="row">
-		{% for film in object_list %}
-			{% include "films/components/card_film.html" with film=film %}
-		{% endfor %}
-	</div>
+  <div class="row">
+    {% for film in object_list %}
+    {% include "films/components/card_film.html" with film=film %}
+    {% endfor %}
+  </div>
 
 </div>
 

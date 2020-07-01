@@ -1,17 +1,21 @@
 <div class="{{ card_sizes|default:"col-12 col-sm-6 col-lg-4" }} card-grid-item">
-	<div class="card card-dark card-media card-poster">
-		<div class="card-header" style='background-image: url({{ film.poster.url }})'>
-			<a href="{{ film.url }}" class="card-header-link"></a>
-			{% if film.status != "2_released" %}
-			<div class="badge badge-difficulty badge-primary">
-				<i class="material-icons btn-material-icons">theaters</i>
-				{{ film.get_status_display }}
-			</div>
-			{% endif %}
-		</div>
-		<a class="card-body" href="{{ film.url }}">
-			<h2 class="card-title">{{ film.title }}</h2>
-			<p class="card-text">{{ film.description }}</p>
-		</a>
-	</div>
+  <div class="card card-dark card-media card-poster">
+    <div class="card-header">
+      <a href="{{ film.url }}" class="card-header-link">
+
+        {% include "common/components/helpers/image_set.html" with alt=film.title classes="img-fluid" img_source=film.poster xs_size="50" sm_size="50" md_size="500" lg_size="500" xl_size="1000" %}
+
+      </a>
+      {% if film.status != "2_released" %}
+      <div class="badge badge-difficulty badge-primary">
+        <i class="material-icons btn-material-icons">theaters</i>
+        {{ film.get_status_display }}
+      </div>
+      {% endif %}
+    </div>
+    <a class="card-body" href="{{ film.url }}">
+      <h2 class="card-title">{{ film.title }}</h2>
+      <p class="card-text">{{ film.description }}</p>
+    </a>
+  </div>
 </div>

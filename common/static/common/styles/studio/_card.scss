@@ -1,176 +1,187 @@
-
-
 .card {
-	margin-bottom: $spacer;
-	flex-grow: 1;
-	&-dark {
-		background-color: $navigation-gray;
+  margin-bottom: $spacer;
+  flex-grow: 1;
 
-		.card-body {
-			color: $white;
+  &-dark {
+    background-color: $navigation-gray;
 
-			@include hover() {
-				color: white;
-				text-decoration: none;
+    .card-body {
+      color: $white;
 
-				.card-title {
-					text-decoration: underline;
-				}
-			}
-		}
-	}
+      @include hover() {
+        color: white;
+        text-decoration: none;
+
+        .card-title {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
 
 
-	&-small {
-		.card-subtitle {
-			font-size: $small-font-size;
-		}
+  &-small {
+    .card-subtitle {
+      font-size: $small-font-size;
+    }
 
-		.card-text {
-			font-size: $small-font-size;
-		}
-	}
+    .card-text {
+      font-size: $small-font-size;
+    }
+  }
 
-	&-body {
-		@include hover() {
-			color: $card-color;
-			text-decoration: none;
-			.card-title {
-				text-decoration: underline;
-			}
-		}
-	}
+  &-body {
+    @include hover() {
+      color: $card-color;
+      text-decoration: none;
 
-	&-header {
-		background-size: cover;
-		background-position: center;
-	}
+      .card-title {
+        text-decoration: underline;
+      }
+    }
+  }
 
-	&-media {
-		&.card-poster {
-			.card-header{
-				padding-bottom: 142.5%;
-			}
-			text-align: center;
-		}
-		.card-header {
-			width: 100%;
-			position: relative;
-			padding-top: 0;
-			padding-bottom: 56.25%;
+  &-header {
+    background-size: cover;
+    background-position: center;
+  }
 
-			>* {
-				position: absolute;
-			}
+  &-media {
+    &.card-poster {
+      text-align: center;
 
-			.badge-difficulty {
-				top: $spacer/2;
-				left: $spacer/2;
-			}
+      .card-header {
+        padding: 0;
+      }
 
-			.btn-save-media {
-				top: $spacer/2;
-				right: $spacer/2;
-				@extend .btn-secondary;
-				&.checked{
-					@extend .btn-primary;
-				}
-			}
+      .card-header-link {
+        position: static;
 
-			.progress {
-				width: 100%;
-				position: absolute;
-				bottom: 0;
-				left: 0;
-			}
-		}
-	}
+        img {
+          width: 100%;
+        }
+      }
+    }
 
-	&-subtitle {
-		color: $primary;
-		margin-bottom: 0;
-	}
+    .card-header {
+      width: 100%;
+      position: relative;
+      padding-top: 0;
+      padding-bottom: 56.25%;
+
+      >* {
+        position: absolute;
+      }
+
+      .badge-difficulty {
+        top: $spacer/2;
+        left: $spacer/2;
+      }
+
+      .btn-save-media {
+        top: $spacer/2;
+        right: $spacer/2;
+        @extend .btn-secondary;
+
+        &.checked {
+          @extend .btn-primary;
+        }
+      }
+
+      .progress {
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
+    }
+  }
+
+  &-subtitle {
+    color: $primary;
+    margin-bottom: 0;
+  }
 }
 
 .card-header-link {
-	width: 100%;
-	height: 100%;
-	left: 0;
-	top: 0;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
 }
 
 .card-grid-item {
-	display: flex;
+  display: flex;
 }
 
 .card .card-text:last-child {
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .card-link {
-	@include hover() {
-		text-decoration: none;
-	}
+  @include hover() {
+    text-decoration: none;
+  }
 
-	+.card-link {
-		margin-left: $card-spacer-x;
-	}
+  +.card-link {
+    margin-left: $card-spacer-x;
+  }
 }
 
 // Optional textual caps
 //
 
 .card-footer {
-	padding: 0 $card-spacer-x 20px $card-spacer-x;
-	margin-top: -$spacer/2;
+  padding: 0 $card-spacer-x 20px $card-spacer-x;
+  margin-top: -$spacer/2;
 }
 
 .card-img,
 .card-img-top,
 .card-img-bottom,
 .card-img-top-left {
-	flex-shrink: 0; // For IE: https://github.com/twbs/bootstrap/issues/29396
-	width: 100%; // Required because we use flexbox and this inherently applies align-self: stretch
+  flex-shrink: 0; // For IE: https://github.com/twbs/bootstrap/issues/29396
+  width: 100%; // Required because we use flexbox and this inherently applies align-self: stretch
 }
 
 .card-img-top-left {
-	@include border-top-left-radius($card-inner-border-radius);
+  @include border-top-left-radius($card-inner-border-radius);
 }
 
 // Card deck
 
 .card-deck {
-	&.card-deck-lg {
-		@include media-breakpoint-up(lg) {
-			display: flex;
-			flex-flow: row wrap;
-			margin-right: -$card-deck-margin;
-			margin-left: -$card-deck-margin;
+  &.card-deck-lg {
+    @include media-breakpoint-up(lg) {
+      display: flex;
+      flex-flow: row wrap;
+      margin-right: -$card-deck-margin;
+      margin-left: -$card-deck-margin;
 
-			.card {
-				// Flexbugs #4: https://github.com/philipwalton/flexbugs#flexbug-4
-				flex: 1 0 0%;
-				margin-right: $card-deck-margin;
-				margin-bottom: 0; // Override the default
-				margin-left: $card-deck-margin;
-			}
-		}
-	}
+      .card {
+        // Flexbugs #4: https://github.com/philipwalton/flexbugs#flexbug-4
+        flex: 1 0 0%;
+        margin-right: $card-deck-margin;
+        margin-bottom: 0; // Override the default
+        margin-left: $card-deck-margin;
+      }
+    }
+  }
 
-	@include media-breakpoint-up(md) {
-		display: flex;
-		flex-flow: row wrap;
-		margin-right: -$card-deck-margin;
-		margin-left: -$card-deck-margin;
+  @include media-breakpoint-up(md) {
+    display: flex;
+    flex-flow: row wrap;
+    margin-right: -$card-deck-margin;
+    margin-left: -$card-deck-margin;
 
-		.card {
-			// Flexbugs #4: https://github.com/philipwalton/flexbugs#flexbug-4
-			flex: 1 0 0%;
-			margin-right: $card-deck-margin;
-			margin-bottom: 0; // Override the default
-			margin-left: $card-deck-margin;
-		}
-	}
+    .card {
+      // Flexbugs #4: https://github.com/philipwalton/flexbugs#flexbug-4
+      flex: 1 0 0%;
+      margin-right: $card-deck-margin;
+      margin-bottom: 0; // Override the default
+      margin-left: $card-deck-margin;
+    }
+  }
 }
 
 //
@@ -179,38 +190,43 @@
 
 
 .accordion {
-	>.card {
-		margin-bottom: 0;
+  >.card {
+    margin-bottom: 0;
 
-		&:not(:last-of-type) {
-			border-bottom: 1px solid $highlight-white;
-		}
-		.card-body{
-			padding-top: 0;
-		}
-		>.card-header {
-			padding:0;
-			.btn{
-				text-decoration: none;
-				width: 100%;
-				text-align: left;
-				display: flex;
-				flex-direction: row;
-				justify-content: space-between;
-				align-items: center;
-				padding: $spacer;
-				color: white;
-				&:hover{
-					span{
-						text-decoration: underline;
-					}
-					i{
-						text-decoration: none;
-					}
-				}
-			}
-		}
-	}
+    &:not(:last-of-type) {
+      border-bottom: 1px solid $highlight-white;
+    }
+
+    .card-body {
+      padding-top: 0;
+    }
+
+    >.card-header {
+      padding: 0;
+
+      .btn {
+        text-decoration: none;
+        width: 100%;
+        text-align: left;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: $spacer;
+        color: white;
+
+        &:hover {
+          span {
+            text-decoration: underline;
+          }
+
+          i {
+            text-decoration: none;
+          }
+        }
+      }
+    }
+  }
 }
 
 //
@@ -218,97 +234,97 @@
 //
 
 .card-scrollbar {
-	.card-body {
-		@include media-breakpoint-up(lg) {
-			position: absolute;
-			height: 100%;
-			overflow-y: scroll;
-		}
+  .card-body {
+    @include media-breakpoint-up(lg) {
+      position: absolute;
+      height: 100%;
+      overflow-y: scroll;
+    }
 
-		&::-webkit-scrollbar {
-			width: 10px;
-		}
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
 
-		&::-webkit-scrollbar-track {
-			background: none;
-		}
+    &::-webkit-scrollbar-track {
+      background: none;
+    }
 
-		&::-webkit-scrollbar-thumb {
-			background: $highlight-white;
-		}
-	}
+    &::-webkit-scrollbar-thumb {
+      background: $highlight-white;
+    }
+  }
 }
 
 .card-comment {
-	.card-body {
-		display: block;
-	}
+  .card-body {
+    display: block;
+  }
 }
 
 .comment {
-	.profile {
-		position: relative;
-		flex: 0 0 auto;
-		max-width: 100%;
-	}
+  .profile {
+    position: relative;
+    flex: 0 0 auto;
+    max-width: 100%;
+  }
 
-	.comment {
-		// padding-top: $spacer/2;
-		padding-left: $spacer;
-		position: relative;
+  .comment {
+    // padding-top: $spacer/2;
+    padding-left: $spacer;
+    position: relative;
 
-		&::before {
-			display: block;
-			position: absolute;
-			left: $spacer/2;
-			height: 100%;
-			width: 2px;
-			background: $highlight-white;
-			top: 0;
-			content: close-quote;
-		}
-	}
+    &::before {
+      display: block;
+      position: absolute;
+      left: $spacer/2;
+      height: 100%;
+      width: 2px;
+      background: $highlight-white;
+      top: 0;
+      content: close-quote;
+    }
+  }
 
-	&-header {
-		// margin-bottom: $spacer/2 ;
-	}
+  &-header {
+    // margin-bottom: $spacer/2 ;
+  }
 
-	&-name {
-		margin-bottom: 0;
-	}
+  &-name {
+    margin-bottom: 0;
+  }
 
-	&-date {
-		font-size: $x-small-font-size;
-		color: $text-muted;
-		margin-bottom: 0;
-	}
+  &-date {
+    font-size: $x-small-font-size;
+    color: $text-muted;
+    margin-bottom: 0;
+  }
 
-	&-text {
-		margin-bottom: 0;
-		font-size: $small-font-size;
-	}
+  &-text {
+    margin-bottom: 0;
+    font-size: $small-font-size;
+  }
 
-	&-action {
-		font-size: $x-small-font-size;
-		display: inline;
-	}
+  &-action {
+    font-size: $x-small-font-size;
+    display: inline;
+  }
 
-	&-likes {
-		//display: flex;
-		//flex-direction: row;
-		//align-items: center;
+  &-likes {
+    //display: flex;
+    //flex-direction: row;
+    //align-items: center;
 
-		.checkbox-like {
-			display: inline;
-			vertical-align: middle;
-			margin-bottom: 0;
-			font-size: $large-font-size;
-		}
+    .checkbox-like {
+      display: inline;
+      vertical-align: middle;
+      margin-bottom: 0;
+      font-size: $large-font-size;
+    }
 
-		&-count {
-			font-size: $x-small-font-size;
-			display: inline;
-			color: $text-muted;
-		}
-	}
+    &-count {
+      font-size: $x-small-font-size;
+      display: inline;
+      color: $text-muted;
+    }
+  }
 }
