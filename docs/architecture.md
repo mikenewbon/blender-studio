@@ -24,6 +24,8 @@ Other:
 
 ### Models (simplified) hierarchy
 
+![A simplified schema of the main models](img/models_simplified_hierarchy.png)
+
 The main, 'highest-level' models in the entire project are the **Film** and **Training**. 
 
 ##### Film
