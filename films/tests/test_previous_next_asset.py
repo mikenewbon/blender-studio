@@ -86,13 +86,13 @@ class TestAssetOrderingInGallery(TestCase):
         other_film = FilmFactory()
         other_collection = CollectionFactory(film=other_film)
 
-        # assets from collection A: should be sorted by (order, date_created)
+        # assets from collection A: should be sorted by (order, name)
         cls.asset_a_2 = AssetFactory(
-            film=film, collection=cls.collection_a, order=2, is_featured=True
+            film=film, collection=cls.collection_a, order=2, name='Aa', is_featured=True
         )
-        cls.asset_a_3 = AssetFactory(film=film, collection=cls.collection_a)
-        cls.asset_a_0 = AssetFactory(film=film, collection=cls.collection_a, order=1)
-        cls.asset_a_1 = AssetFactory(film=film, collection=cls.collection_a, order=1)
+        cls.asset_a_3 = AssetFactory(film=film, collection=cls.collection_a, name='Aa')
+        cls.asset_a_0 = AssetFactory(film=film, collection=cls.collection_a, order=1, name='Bb')
+        cls.asset_a_1 = AssetFactory(film=film, collection=cls.collection_a, order=1, name='Cc')
 
         # assets from other films and collections, should not be included in context:
         asset_b_0 = AssetFactory(film=film, collection=collection_b, is_featured=True)
@@ -120,7 +120,7 @@ class TestAssetOrderingInGallery(TestCase):
         self.assertEqual(response.context.get('asset'), last_asset)
         self.assertEqual(response.context.get('next_asset'), None)
 
-    def test_assets_from_collection_sorted_by_order_and_date_created(self):
+    def test_assets_from_collection_sorted_by_order_and_name(self):
         assets = [self.asset_a_0, self.asset_a_1, self.asset_a_2, self.asset_a_3]
 
         for previous_asset, asset, next_asset in zip(assets, assets[1:], assets[2:]):
@@ -225,10 +225,7 @@ class TestAssetOrderingInWeeklies(TestCase):
         ProductionLogEntryAssetFactory(production_log_entry=entry_a, asset=cls.asset_a_3)
 
         # assets from other production log entries should not be included in the context
-        other_asset_a = AssetFactory(
-            film=film,
-            static_asset=StaticAssetFactory(user=author_a, date_created=dt.date(1997, 12, 2)),
-        )
+        other_asset_a = AssetFactory(film=film, static_asset=StaticAssetFactory(user=author_a))
         other_entry = ProductionLogEntryFactory(
             user=author_a, production_log=ProductionLogFactory(start_date=dt.date(1997, 12, 1))
         )

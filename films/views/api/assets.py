@@ -65,7 +65,7 @@ def get_next_asset_in_featured_artwork(asset: Asset) -> Optional[Asset]:
 
 def get_previous_asset_in_gallery(asset: Asset) -> Optional[Asset]:
     collection = cast(Collection, asset.collection)
-    collection_assets = list(collection.assets.order_by('order', 'date_created'))
+    collection_assets = list(collection.assets.order_by('order', 'name'))
     asset_index = collection_assets.index(asset)
     if asset_index == 0:
         return None
@@ -74,7 +74,7 @@ def get_previous_asset_in_gallery(asset: Asset) -> Optional[Asset]:
 
 def get_next_asset_in_gallery(asset: Asset) -> Optional[Asset]:
     collection = cast(Collection, asset.collection)
-    collection_assets: List[Asset] = list(collection.assets.order_by('order', 'date_created'))
+    collection_assets: List[Asset] = list(collection.assets.order_by('order', 'name'))
     asset_index = collection_assets.index(asset)
     if asset_index == len(collection_assets) - 1:
         return None
@@ -93,7 +93,7 @@ def get_asset_context(
     - 'featured_artwork' - for featured assets in the 'Gallery' section; they are sorted by
         their `date_created`,
     - 'gallery' - for assets inside collections in the 'Gallery section; they are sorted by
-        their `order` and `date_created` (`order` may not define an unambiguous order).
+        their `order` and `name` (`order` may not define an unambiguous order).
     If 'site_context' parameter has another value, is not provided, or the current asset
     is the first one or the last one in the given context, the previous and next
     assets are set to None.

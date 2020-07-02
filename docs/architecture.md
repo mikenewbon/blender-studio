@@ -7,14 +7,14 @@ Apps:
  - [films](#films)
  - [subscriptions](#subscriptions)
  - [training](#training)
- 
+
 To be extracted to a separate app:
  - [progress](#progress) - currently inside [training](#training)
- 
+
 Not implemented yet:
  - [user and profile](#user-profile)
  - flat pages - e.g. an 'About' page of a released film
- 
+
 Other:
  - `common` directory - contains the code that is used (or we plan to use it) in more than one app:
  scripts, template bases or components, test factories, etc.
@@ -26,7 +26,7 @@ Other:
 
 ![A simplified schema of the main models](img/models_simplified_hierarchy.png)
 
-The main, 'highest-level' models in the entire project are the **Film** and **Training**. 
+The main, 'highest-level' models in the entire project are the **Film** and **Training**.
 
 ##### Film
 Resources related to films are gathered in **Collections**, which can contain further (nested)
@@ -48,15 +48,15 @@ respectively -- with a OneToOneField to Static Asset. These models contain some 
 with information specific to videos and images.
 
 ##### Training
-Trainings comprise **Chapters**, which in turn contain **Sections**. 
+Trainings comprise **Chapters**, which in turn contain **Sections**.
 The main difference between chapters and films' collections is that collections can be nested.
 The Section model is linked to a **Video** via a OneToOneField. Together, they form an equivalent
-of an Asset with a Static Asset in films, more or less. 
+of an Asset with a Static Asset in films, more or less.
 
 In training, there also is an **Asset** model, but it differs from the Asset model in films.
-It represents an extra file attached to a Section. 
+It represents an extra file attached to a Section.
 
- 
+
 ## Assets
 
 **Static Assets** represent the files uploaded in the cloud.
@@ -64,7 +64,7 @@ It represents an extra file attached to a Section.
 Static assets can be of three types (`source_type` attribute): image, video, or (a generic) file.
 
 **Images** and **Videos** should be represented by their respective models: `Image` and `Video`,
-which provide additional attributes like resolution or duration. These models additionally 
+which provide additional attributes like resolution or duration. These models additionally
 have a one-to-one reference to a Static Asset instance, containing all the other data.
 
 Preview pictures for image and video can be generated automatically (e.g. by the `sorl-thumbnail`
@@ -80,19 +80,19 @@ For now, licenses are only added to static asset (image, video, file).
 ##### Storage Backends
 Storage backend is a place to store all the film-related or training-related files.
 In production, there'll be exactly one storage backend (GCS, S3, etc.) per project, i.e. per film or
-per training. 
- 
- 
+per training.
+
+
 ## Blog
 WIP at an early stage.
 
 Sem started working on the models in the 'blog' app. Posts will usually be related to films,
 and displayed in the 'weeklies' section alongside production logs. However, it could be potentially
 useful to be able to also add posts about trainings.
- 
+
 ## Comments
 
-Comments are a self-contained, reusable app. We don't want to have to change their models 
+Comments are a self-contained, reusable app. We don't want to have to change their models
 whenever they are reused for another app, so they shouldn't be linked to external models in any way.
 
 How to add comments to a new model — say, `Asset`:
@@ -118,17 +118,17 @@ contain further nested collections. However, this restriction does not apply at 
 Collections in a film or a parent collection are sorted by their `order` attribute.
 
 ##### Asset ordering
-Assets in a collection are sorted by their `order` and `date_created` attribute. The `order` field
+Assets in a collection are sorted by their `order` and `name` attribute. The `order` field
 is not required, there is also no constraint on it to enforce unequivocal ordering in a collection,
-hence the additional `date_created` field. 
+hence the additional `name` field.
 Maintaining consistent ordering is difficult, especially if the order of collections or asset changes,
 and it would be even more difficult with the above mentioned restrictions in place. It would be
 useful to have the `order` attributes in the entire collection reassigned automatically whenever
-a user changes the `order` of one asset. 
+a user changes the `order` of one asset.
 
 ##### Asset (model in films app) vs. StaticAsset (model in assets app)
-- Static Asset is more "low-level" and represents an uploaded file; we want to have a less 
-generic model that could be extracted and reused in other apps (e.g. blog, training). 
+- Static Asset is more "low-level" and represents an uploaded file; we want to have a less
+generic model that could be extracted and reused in other apps (e.g. blog, training).
 Therefore Static Asset should not contain any relationships to other apps.
 - Asset contains the metadata, and represents the web page where the file (artwork, training video, etc.)
 is displayed. As a model in the 'films' app, asset may belong to a Collection, and is a part (leaf)
@@ -155,16 +155,16 @@ This is not checked in the api-asset view, though (perhaps it should be).
 
 ##### Production Logs / Weeklies
 The production logs are also called "weeklies" or "production weeklies" in the website and the admin
-panel. We stick to "production logs" in the back end code, though. 
+panel. We stick to "production logs" in the back end code, though.
 
 - **ProductionLog** — all the log entries from one week. This is akin to a blog post, and can be shown
 in the project timeline along with the blog posts (or a blog post could just mention that there's
-a new production log available, and link to it). 
+a new production log available, and link to it).
 
 - **ProductionLogEntry** — contains multiple assets, all created by one author during a particular week.
 Assets in an entry are sorted by their creation date (`date_created` field).
 
-- **ProductionLogEntryAsset** — an intermediary table between the `Asset` and `ProductionLogEntry` models.  
+- **ProductionLogEntryAsset** — an intermediary table between the `Asset` and `ProductionLogEntry` models.
 
 At the moment, we don't consider it necessary to have any relation between a production log and a
 blog post on the database level. This can all be handled manually.
@@ -183,7 +183,7 @@ This has to be documented yet. It is not actually used at this stage.
 ## Training
 
 A training consists of chapters, which in turn are made up of sections.
-It has a "Training Status" choice field, with two values: published and unpublished. 
+It has a "Training Status" choice field, with two values: published and unpublished.
 It may be a good idea to replace this field with the `is_published` flag (like in
 [films](#is_published-flag)).
 
