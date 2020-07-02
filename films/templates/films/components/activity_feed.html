@@ -1,5 +1,5 @@
 <div class="update-feed">
-	{% for production_log, production_log_entries in production_logs.items %}
+	{% for production_log in production_logs %}
 	<div class="update-feed-week">
 		<div class="update-feed-week-column column-left">
 			<div class="update-feed-week-icon">
@@ -29,7 +29,7 @@
 			</div>
 			{% endif %}
 
-			{% for entry, assets in production_log_entries.items %}
+			{% for entry in production_log.log_entries.all %}
 			<div class="update-feed-individual">
 				<div class="update-feed-individual-summary">
 					<div class="update-feed-individual-summary-profile">
@@ -47,19 +47,19 @@
 					<div class="files">
 						<div class="row row-cols-1 row-cols-md-4  row-cols-2">
 						<!--TODO(Mike): Need an API to handle file requests-->
-							{% for asset in assets|slice:':4' %}
-							{% include "common/components/file.html" with asset=asset site_context="weeklies" %}
+							{% for entry_asset in entry.assets|slice:':4' %}
+							{% include "common/components/file.html" with asset=entry_asset.asset site_context="weeklies" %}
 							{% endfor %}
-							{% if assets|length > 4 %}
+							{% if entry.assets|length > 4 %}
 							<div class="collapse" id="entry-{{ entry.id }}">
-								{% for asset in assets|slice:'4:' %}
-								{% include "common/components/file.html" with asset=asset site_context="weeklies" %}
+								{% for entry_asset in entry.assets|slice:'4:' %}
+								{% include "common/components/file.html" with asset=entry_asset.asset site_context="weeklies" %}
 								{% endfor %}
 							</div>
 							{% endif %}
 						</div>
 					</div>
-					{% if assets|length > 4 %}
+					{% if entry.assets|length > 4 %}
 					<div class="row update-feed-individual-files-show-more">
 						<div class="col text-center">
 							<a data-toggle="collapse" href="#entry-{{ entry.id }}" role="button" aria-expanded="false"
