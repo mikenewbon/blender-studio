@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_safe
 
 from films.models import Film
-from films.views.weeklies import get_production_logs_for_context, DEFAULT_LOGS_PAGE_SIZE
+from films.views.weeklies import get_production_logs_for_context
 
 
 @require_safe

@@ -14,20 +14,16 @@ window.productionLogs = (function productionLogs() {
     });
 
     function getMoreLogs(element) {
-        console.log(element.dataset.url);
+        // console.log(element.dataset.url);
         fetch(element.dataset.url).then(response => {
             return response.text();
         }).then(html => {
-            // console.log('response arrived');
-            // console.log(html);
-
             const template = document.createElement('template');
 		    template.innerHTML = html.trim();
 
-		    const logsPage = document.getElementById(activityFeedId);
-		    logsPage.appendChild(template.content);
-
-            // TODO: insert the response in the right place in the DOM
+		    const activityFeed = document.getElementById(activityFeedId);
+		    activityFeed.children[activityFeed.children.length - 1].replaceWith(template.content);
+		    // TODO(Natalia): add event handler to the new button
         }).catch(err => {
             console.warn('Something went wrong.', err);
         })

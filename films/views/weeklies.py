@@ -58,8 +58,6 @@ def get_production_logs_for_context(
 
 def production_log_list(request: HttpRequest, film_slug: str) -> HttpResponse:
     film = get_object_or_404(Film, slug=film_slug, is_published=True)
-    # page_number = request.GET.get('page')
-    # per_page = request.GET.get('per_page')
     context = {
         'film': film,
         'production_logs_page': get_production_logs_for_context(film),
