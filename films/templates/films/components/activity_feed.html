@@ -1,5 +1,5 @@
 <div class="update-feed">
-	{% for production_log in production_logs %}
+	{% for production_log in production_logs_page %}
 	<div class="update-feed-week">
 		<div class="update-feed-week-column column-left">
 			<div class="update-feed-week-icon">
@@ -80,8 +80,8 @@
 {#    TODO(Natalia): add classes to this div (should differ from the button inside a log) #}
     <div>
         <div class="col text-center">
-            <a data-toggle="collapse" data-url="{% url 'api-logs-page' film.id %}"
-               href="#" role="button" aria-expanded="false" aria-controls="entry-{{ entry.id }}"
+            <a data-toggle="collapse" data-url="{% url 'api-logs-page' film.id %}?page=2"
+               href="#" role="button" aria-expanded="false" aria-controls="log-{{ production_log.id }}"
                class="btn btn-sm btn-secondary collapsed show-more-less">Show </a>
         </div>
     </div>

@@ -48,6 +48,8 @@ def get_production_logs_for_context(
             to_attr='assets',
         ),
     )
+    page_number = int(page_number) if page_number else 1
+    per_page = int(per_page) if per_page else DEFAULT_LOGS_PAGE_SIZE
     paginator = Paginator(production_logs, per_page)
     production_logs_page = paginator.get_page(page_number)
 
@@ -56,11 +58,11 @@ def get_production_logs_for_context(
 
 def production_log_list(request: HttpRequest, film_slug: str) -> HttpResponse:
     film = get_object_or_404(Film, slug=film_slug, is_published=True)
-    page_number = request.GET.get('page')
-    per_page = request.GET.get('per_page')
+    # page_number = request.GET.get('page')
+    # per_page = request.GET.get('per_page')
     context = {
         'film': film,
-        'production_logs': get_production_logs_for_context(film, page_number, per_page),
+        'production_logs_page': get_production_logs_for_context(film),
     }
 
     return render(request, 'films/weeklies.html', context)
