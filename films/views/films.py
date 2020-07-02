@@ -26,7 +26,7 @@ def film_detail(request: HttpRequest, film_slug: str) -> HttpResponse:
         'featured_artwork': featured_artwork,
     }
     if film.status != FilmStatus.released:
-        context['production_logs'] = get_production_logs_for_context(film)
+        context['production_logs_page'] = get_production_logs_for_context(film)
 
     return render(request, 'films/film_detail.html', context)
 
