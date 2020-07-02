@@ -6,7 +6,7 @@ from django.views.decorators.http import require_safe
 from django.views.generic.list import ListView
 
 from films.models import Film, FilmStatus
-from films.views.weeklies import get_production_logs_for_context
+from films.views.api.production_logs import get_production_logs_page
 
 
 @method_decorator(require_safe, name='dispatch')
@@ -26,7 +26,7 @@ def film_detail(request: HttpRequest, film_slug: str) -> HttpResponse:
         'featured_artwork': featured_artwork,
     }
     if film.status != FilmStatus.released:
-        context['production_logs_page'] = get_production_logs_for_context(film)
+        context['production_logs_page'] = get_production_logs_page(film)
 
     return render(request, 'films/film_detail.html', context)
 
