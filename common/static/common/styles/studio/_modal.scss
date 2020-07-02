@@ -1,105 +1,145 @@
 .modal-asset {
-	// stops blocking of background dissmiss of modal.
-	// Only needed if you're rendering a wrapper around the modal content.
-	> div {
-		pointer-events: none;
-		> *:not(.modal-dialog) {
-			pointer-events: auto;
-		}
-	}
-	.modal-dialog {
-		@extend .modal-lg;
-	}
 
-	.modal-header {
-		padding: 0;
-		text-align: center;
-		position: relative;
+  // stops blocking of background dissmiss of modal.
+  // Only needed if you're rendering a wrapper around the modal content.
+  >div {
+    pointer-events: none;
 
-		.modal-asset-image-wrapper {
-			width: 100%;
-			cursor: zoom-in;
-		}
+    >*:not(.modal-dialog) {
+      pointer-events: auto;
+    }
+  }
 
-		img {
-			max-height: 75vh;
-			width: auto;
+  .modal-dialog {
+    @extend .modal-lg;
 
-			max-width: 100%;
-			margin: 0 auto;
-		}
-	}
+    height: 100%;
+    padding: $spacer 0;
+    margin: 0 auto;
+
+    @include media-breakpoint-down(md) {
+      padding: 0;
+    }
+  }
+
+  .modal-header {
+    padding: 0;
+    text-align: center;
+    position: relative;
+    flex-direction: column;
+
+    .modal-asset-image-wrapper {
+      width: 100%;
+      cursor: zoom-in;
+    }
+
+    img {
+      max-height: 75vh;
+      width: auto;
+
+      max-width: 100%;
+      margin: 0 auto;
+    }
+  }
+}
+
+.modal-mobile-header {
+  padding: $spacer;
+  text-align: left;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+
+  .modal-mobile-header-text {
+    padding-right: ($spacer / 2);
+  }
+
+  button {
+    position: static;
+    margin: -($spacer / 2);
+  }
 }
 
 .modal-navigation {
-	position: absolute;
+  position: absolute;
+  position: fixed;
+  pointer-events: auto;
+  z-index: 1000;
 
-	&.modal-close {
-		top: $spacer;
-		right: $spacer;
-		position: fixed;
-		@include media-breakpoint-down(md) {
-			top: 0;
-			right: 0;
-			background: $highlight-black;
-		}
-	}
+  &.modal-close {
+    top: $spacer;
+    right: $spacer;
 
-	&.next {
-		top: 50%;
-		right: -40px;
-		transform: translate(50%, -50%);
-		@include media-breakpoint-down(md) {
-			right: 0;
-			transform: translate(0%, -50%);
-			background: $highlight-black;
-		}
-	}
 
-	&.previous {
-		top: 50%;
-		left: -40px;
-		transform: translate(-50%, -50%);
-		@include media-breakpoint-down(md) {
-			left: 0;
-			transform: translate(0%, -50%);
-			background: $highlight-black;
-		}
-	}
+    @include media-breakpoint-down(md) {
+      top: 0;
+      right: 0;
+    }
+  }
+
+  &.next {
+    top: 50%;
+    right: ($spacer * 2);
+    transform: translate(50%, -50%);
+
+    @include media-breakpoint-down(md) {
+      display: none;
+    }
+  }
+
+  &.previous {
+    top: 50%;
+    left: ($spacer * 2);
+    transform: translate(-50%, -50%);
+
+    @include media-breakpoint-down(md) {
+      display: none;
+    }
+  }
+}
+
+.modal-inner-wrapper {
+  min-height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
 }
 
 .modal-asset-zoom {
-	.modal-content {
-		height: 100%;
-	}
+  .modal-content {
+    height: 100%;
+  }
 
-	.modal-dialog {
-		margin: 0;
-		width: 100%;
-		max-width: 100%;
-		height: 100vh;
-	}
+  .modal-dialog {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    height: 100vh;
+  }
 
-	.modal-body {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		height: 100%;
-		width: 100%;
-		padding: 0;
-	}
+  .modal-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+  }
 
-	img {
-		max-width: 100%;
-		max-height: 100%;
-		display: block;
-		margin: 0 auto;
-	}
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    margin: 0 auto;
+  }
 
-	.modal-header {
-		z-index: 1;
-		position: absolute;
-		top: $spacer;
-		right: $spacer;
-	}
+  .modal-header {
+    z-index: 1;
+    position: absolute;
+    top: $spacer;
+    right: $spacer;
+  }
 }
