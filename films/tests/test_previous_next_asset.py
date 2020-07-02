@@ -23,8 +23,8 @@ class TestSiteContextResolution(TestCase):
         cls.asset = AssetFactory()
         cls.other_asset = AssetFactory(film=cls.asset.film, collection=cls.asset.collection)
 
-    @patch('films.views.api.assets.get_next_asset_in_gallery', return_value=AssetFactory())
-    @patch('films.views.api.assets.get_previous_asset_in_gallery', return_value=AssetFactory())
+    @patch('films.views.api.assets.get_next_asset_in_gallery', return_value=None)
+    @patch('films.views.api.assets.get_previous_asset_in_gallery', return_value=None)
     def test_gallery_site_context(self, get_previous_asset_mock, get_next_asset_mock):
         query_string = f'site_context={SiteContexts.GALLERY.value}'
         response = self.client.get(f'{reverse("api-asset", args=(self.asset.pk,))}?{query_string}')
@@ -33,10 +33,8 @@ class TestSiteContextResolution(TestCase):
         get_previous_asset_mock.assert_called_once_with(self.asset)
         get_next_asset_mock.assert_called_once_with(self.asset)
 
-    @patch('films.views.api.assets.get_next_asset_in_featured_artwork', return_value=AssetFactory())
-    @patch(
-        'films.views.api.assets.get_previous_asset_in_featured_artwork', return_value=AssetFactory()
-    )
+    @patch('films.views.api.assets.get_next_asset_in_featured_artwork', return_value=None)
+    @patch('films.views.api.assets.get_previous_asset_in_featured_artwork', return_value=None)
     def test_featured_artwork_site_context(self, get_previous_asset_mock, get_next_asset_mock):
         query_string = f'site_context={SiteContexts.FEATURED_ARTWORK.value}'
         response = self.client.get(f'{reverse("api-asset", args=(self.asset.pk,))}?{query_string}')
@@ -45,8 +43,8 @@ class TestSiteContextResolution(TestCase):
         get_previous_asset_mock.assert_called_once_with(self.asset)
         get_next_asset_mock.assert_called_once_with(self.asset)
 
-    @patch('films.views.api.assets.get_next_asset_in_weeklies', return_value=AssetFactory())
-    @patch('films.views.api.assets.get_previous_asset_in_weeklies', return_value=AssetFactory())
+    @patch('films.views.api.assets.get_next_asset_in_weeklies', return_value=None)
+    @patch('films.views.api.assets.get_previous_asset_in_weeklies', return_value=None)
     def test_weeklies_site_context(self, get_previous_asset_mock, get_next_asset_mock):
         query_string = f'site_context={SiteContexts.WEEKLIES.value}'
         response = self.client.get(f'{reverse("api-asset", args=(self.asset.pk,))}?{query_string}')
