@@ -80,13 +80,10 @@
 </div>
 
 {% if production_logs_page.has_next %}
-{#    TODO(Natalia): add classes to this div (should differ from the button inside an entry) #}
-  <div>
-      <div class="col text-center">
-          <a data-toggle="collapse"
-             data-url="{% url 'api-logs-page' film.id %}?page={{ production_logs_page.next_page_number }}"
-             href="#" role="button" aria-expanded="false" aria-controls="log-{{ production_log.id }}"
-             class="btn btn-sm btn-secondary collapsed show-more-less">Show </a>
-      </div>
+  <div class="col text-center">
+      <a data-toggle="collapse"
+         data-url="{% url 'api-logs-page' film.id %}?page={{ production_logs_page.next_page_number }}"
+         href="#" role="button" aria-expanded="false" aria-controls="log-{{ production_log.id }}"
+         class="btn btn-sm btn-secondary collapsed show-more-less">Show </a>
   </div>
 {% endif %}
