@@ -13,31 +13,40 @@ that poetry takes care of -- there's no need to install anything manually.
 ## Set up instructions
 
 1. Clone the repo.
+2. Checkout the develop branch (master may be considerably outdated).
 2. Run `poetry install`
    - if the installation of psycopg2 fails, make sure that you have the required
-   apt packages installed ([more details](https://www.psycopg.org/docs/install.html)).
+   apt packages installed ([more details](https://www.psycopg.org/docs/install.html#build-prerequisites)).
 
 3. Create a PostgreSQL user named `studio`:
     ```sudo -u postgres createuser -d -l -P studio```
 4. Create a database named `studio`:
     ```sudo -u postgres createdb -O studio studio```
-5. Add `studio.local` to `/etc/hosts` as an alias of localhost.
+5. Add `studio.local` to `/etc/hosts` as an alias of 127.0.0.1:
+    ```
+   127.0.0.1    localhost studio.local  # studio.local can be added on the same line as localhost
+    ...
+   ```
 5. Create a `settings.py` file (copy of `settings.example.py`). This file is gitignored,
 and it must not be committed.
     - Change the `'PASSWORD'` variable in the `DATABASE` settings.
+    - All the settings in settings.py that ultimately have to be changed are set to 'CHANGE-ME'.
+    You can look for this phrase to make sure that everything that needs to be adjusted, has been
+    adjusted. However, for local development at this stage only the database password actually has
+    to be set for the project to run.
     - Optionally: configure your IDE database connection.
 6. In the command line, activate the virtual environment created by poetry:
     ```poetry shell```
     - Configure your IDE to use the venv by default.
 7. In the project folder, run migrations: `./manage.py migrate`
 8. Create a superuser: `echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'password')" | python manage.py shell`
-9. Run the server: `./manage.py runserver`
+9. Run the server: `./manage.py runserver`. The project will be available at `studio.local:8000`.
 10. (Optional) Install pre-commit hooks (see [pre-commit details](docs/development.md#before-commiting)):
 ```pre-commit install```
 
 
 ## Data import
-You can add objects to the database via the Django's Admin.
+You can add objects to the database manually via the Django's Admin panel.
 There are also commands that import data from the Cloud, but running them requires some additional
 arrangements - ask Francesco about it.
 

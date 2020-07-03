@@ -67,15 +67,15 @@ Static assets can be of three types (`source_type` attribute): image, video, or 
 which provide additional attributes like resolution or duration. These models additionally
 have a one-to-one reference to a Static Asset instance, containing all the other data.
 
-Preview pictures for image and video can be generated automatically (e.g. by the `sorl-thumbnail`
-library), but for the `file` source type, adding a preview is obligatory.
+Preview pictures for all assets are obligatory. However, for images and videos they can be
+generated automatically (e.g. by the `sorl-thumbnail` library).
 
 We want the entire `assets` app (i.e. file-representing models: `StaticAsset`, `Image`, `Video`)
 to be portable, and independent of the other apps. In particular, the `DynamicStorageFileField`
 should be left inside this app, even though it is used in other apps' models as well.
 
 ##### Licenses
-For now, licenses are only added to static asset (image, video, file).
+For now, licenses are only added to static assets (image, video, file).
 
 ##### Storage Backends
 Storage backend is a place to store all the film-related or training-related files.
@@ -109,16 +109,17 @@ A **Film** has three `status` options (defined in the `FilmStatus` text choices 
 0. in development
 1. in production
 2. released
-Films in development and production have their production logs (see [below](#production-logs--weeklies))
+Films in development and production have their [production logs](#production-logs--weeklies)
 displayed in their 'About' page.
 
 **Collections** can contain film-related assets. They can also contain other collections (nested
-collections, child collections). For now, the front end does not expect nested collections to
+collections). For now, the front end does not expect nested collections to
 contain further nested collections. However, this restriction does not apply at the database level.
-Collections in a film or a parent collection are sorted by their `order` attribute.
+Collections in a film or a parent collection are sorted in the view by their `order` and `name`
+attributes - just like [the assets](#asset-ordering).
 
 ##### Asset ordering
-Assets in a collection are sorted by their `order` and `name` attribute. The `order` field
+Assets in a collection are sorted by their `order` and `name` attributes. The `order` field
 is not required, there is also no constraint on it to enforce unequivocal ordering in a collection,
 hence the additional `name` field.
 Maintaining consistent ordering is difficult, especially if the order of collections or asset changes,
@@ -181,7 +182,6 @@ This has to be documented yet. It is not actually used at this stage.
 
 
 ## Training
-
 A training consists of chapters, which in turn are made up of sections.
 It has a "Training Status" choice field, with two values: published and unpublished.
 It may be a good idea to replace this field with the `is_published` flag (like in

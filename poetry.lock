@@ -95,7 +95,6 @@ requests-oauthlib = "^1.0"
 reference = "f8c00db0cd2597a80bc5c0cf3ddbc46c400e9684"
 type = "git"
 url = "git@gitlab.com:blender-institute/blender-id-oauth-client.git"
-
 [[package]]
 category = "main"
 description = "Braintree Python Library"
@@ -220,7 +219,7 @@ description = "Pipeline is an asset packaging library for Django."
 name = "django-pipeline"
 optional = false
 python-versions = "*"
-version = "1.7.0"
+version = "2.0.4"
 
 [[package]]
 category = "main"
@@ -539,7 +538,6 @@ requests = "^2.22"
 reference = "26f1941052fd59adb641e0bd631d11731df00f85"
 type = "git"
 url = "git://git.blender.org/looper.git"
-
 [[package]]
 category = "main"
 description = "Safely add untrusted strings to HTML/XML markup."
@@ -947,7 +945,7 @@ python-versions = "*"
 version = "0.2.5"
 
 [metadata]
-content-hash = "105c109bec482ddfe5c4bdf4eb5e61a6ce4223d9497400a514ea120eb249a408"
+content-hash = "78f5bc432c2bc25e1a748cd8d604cde4878af34598b63b5354b8892d49ff4682"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -1029,8 +1027,8 @@ django-debug-toolbar = [
     {file = "django_debug_toolbar-2.2-py3-none-any.whl", hash = "sha256:ff94725e7aae74b133d0599b9bf89bd4eb8f5d2c964106e61d11750228c8774c"},
 ]
 django-pipeline = [
-    {file = "django-pipeline-1.7.0.tar.gz", hash = "sha256:0ded22b974e3d627c27fc490ef5b23fcdcf0cdb00b704d628b5ca6d0b010d6fe"},
-    {file = "django_pipeline-1.7.0-py2.py3-none-any.whl", hash = "sha256:f7da70f00aa4baea3e0811f88927a116425deee05871fa2bfd2f8247f42d8847"},
+    {file = "django-pipeline-2.0.4.tar.gz", hash = "sha256:cac66c77211ccaadecf2ba036cb3cc76574010980ad8c3c685b608b316882144"},
+    {file = "django_pipeline-2.0.4-py2.py3-none-any.whl", hash = "sha256:c5d05f11a39327e3b6460d5264ce7c98616b22d7622016a549118d2a9624a003"},
 ]
 django-storages = [
     {file = "django-storages-1.9.1.tar.gz", hash = "sha256:a59e9923cbce7068792f75344ed7727021ee4ac20f227cf17297d0d03d141e91"},

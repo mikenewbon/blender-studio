@@ -82,7 +82,7 @@ SUPPORTED_CURRENCIES = {'EUR', 'USD'}
 # Get the latest from https://dev.maxmind.com/geoip/geoip2/geolite2/. Note that you should check
 # whether we are allowed to redistribute the file according to the new license (per 2020) if you
 # want to check the file into the repository.
-GEOIP2_DB = '/path/to/GeoLite2-Country.mmdb'
+GEOIP2_DB = 'CHANGE-ME/GeoLite2-Country.mmdb'
 
 GOOGLE_RECAPTCHA_SITE_KEY = 'CHANGE_ME'
 GOOGLE_RECAPTCHA_SECRET_KEY = 'CHANGE_ME'
