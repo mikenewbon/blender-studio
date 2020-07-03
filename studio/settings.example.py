@@ -10,23 +10,23 @@ from studio.settings_common import *
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
-SECRET_KEY = '7ijgr7*_l=x^f0!((j!*sdfsdfsdf*xfbf3vcz0=#!5aai85$h3ck6l9m3c'
+SECRET_KEY = 'CHANGE_ME'
 DEBUG = True
 ALLOWED_HOSTS: List[str] = ['studio.local']
 
 BLENDER_ID = {
     # MUST end in a slash:
     "BASE_URL": "http://id.local:8000/",
-    "OAUTH_CLIENT": "dsfsd",
-    "OAUTH_SECRET": "sdfsdfsd",
+    "OAUTH_CLIENT": "CHANGE_ME",
+    "OAUTH_SECRET": "CHANGE_ME",
 }
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'studio',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'USER': 'studio',
+        'PASSWORD': 'CHANGE_ME',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -35,14 +35,14 @@ DATABASES = {
 GATEWAYS = {
     'braintree': {
         'environment': braintree.Environment.Sandbox,
-        'merchant_id': '-snip-',
-        'public_key': '-snip-',
-        'private_key': '-snip-',
+        'merchant_id': 'CHANGE_ME',
+        'public_key': 'CHANGE_ME',
+        'private_key': 'CHANGE_ME',
         # Merchant Account IDs for different currencies.
         # Configured in Braintree: Account → Merchant Account Info.
         'merchant_account_ids': {
-            'EUR': 'merchant-account-id-for-eur',
-            'USD': 'merchant-account-id-for-usd',
+            'EUR': 'CHANGE_ME',
+            'USD': 'CHANGE_ME',
         },
     },
     # No settings, but a key is required here to activate the gateway.
@@ -84,5 +84,5 @@ SUPPORTED_CURRENCIES = {'EUR', 'USD'}
 # want to check the file into the repository.
 GEOIP2_DB = '/path/to/GeoLite2-Country.mmdb'
 
-GOOGLE_RECAPTCHA_SITE_KEY = '-snip-'
-GOOGLE_RECAPTCHA_SECRET_KEY = '-snip-'
+GOOGLE_RECAPTCHA_SITE_KEY = 'CHANGE_ME'
+GOOGLE_RECAPTCHA_SECRET_KEY = 'CHANGE_ME'

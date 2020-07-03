@@ -14,44 +14,48 @@ that poetry takes care of -- there's no need to install anything manually.
 
 1. Clone the repo.
 2. Run `poetry install`
-   - if the installation of psycopg2 fails, make sure that you have the required 
-   apt packages installed (more details [here](https://www.psycopg.org/docs/install.html)).
+   - if the installation of psycopg2 fails, make sure that you have the required
+   apt packages installed ([more details](https://www.psycopg.org/docs/install.html)).
 
-3. Create a database named `studio` in psql console:
-    ```CREATE DATABASE studio;```
-4. Set user password in psql console:
-    ```ALTER USER postgres PASSWORD 'MyNewPassword';```
+3. Create a PostgreSQL user named `studio`:
+    ```sudo -u postgres createuser -d -l -P studio```
+4. Create a database named `studio`:
+    ```sudo -u postgres createdb -O studio studio```
+5. Add `studio.local` to `/etc/hosts` as an alias of localhost.
 5. Create a `settings.py` file (copy of `settings.example.py`). This file is gitignored,
 and it must not be committed.
     - Change the `'PASSWORD'` variable in the `DATABASE` settings.
-    - Add `'127.0.0.1'` to allowed hosts.
     - Optionally: configure your IDE database connection.
 6. In the command line, activate the virtual environment created by poetry:
-    ```source $(poetry env info --path)/bin/activate```
+    ```poetry shell```
     - Configure your IDE to use the venv by default.
 7. In the project folder, run migrations: `./manage.py migrate`
 8. Create a superuser: `echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'password')" | python manage.py shell`
 9. Run the server: `./manage.py runserver`
-10. (Optional) Install pre-commit hooks (see [here](docs/development.md#before-commiting) for details):
+10. (Optional) Install pre-commit hooks (see [pre-commit details](docs/development.md#before-commiting)):
 ```pre-commit install```
 
 
 ## Data import
-Ask Francesco about it.
+You can add objects to the database via the Django's Admin.
+There are also commands that import data from the Cloud, but running them requires some additional
+arrangements - ask Francesco about it.
 
 
 ## Workflow
 
-#### Before commiting
+#### Before committing
+
+The following assumes that the virtual environment is activated: `poetry shell`.
 
 [Pre-commit hooks](https://pre-commit.com) are responsible for automatically running black, mypy,
 etc. on the staged files, before each commit. If there are issues, committing is aborted.
 
 The pre-commit configuration is in the [.pre-commit-config.yaml](../.pre-commit-config.yaml) file.
 
-In case of emergency, it is possible to 
-[disable one or more hooks](https://pre-commit.com/#temporarily-disabling-hooks). To completely 
-disable all the hooks, run `pre-commit uninstall`.
+In case of emergency, it is possible to
+[disable one or more hooks](https://pre-commit.com/#temporarily-disabling-hooks). To completely
+disable all the hooks, run `pre-commit uninstall`. To enable them again, run `pre-commit install`.
 
 You can also execute the `test.sh` script: it runs mypy, black, tests, eslint, and stylelint on the
 entire project (so it's slower and more likely to error out).
