@@ -3,7 +3,7 @@
 }
 .grid-item, .grid-sizer{
     width: 50%;
-    @include media-breakpoint-down(md) {
+    @include media-breakpoint-down(sm) {
         width: 100%;
     }
     padding:$spacer/2;

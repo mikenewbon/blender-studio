@@ -1,10 +1,10 @@
 <div id="asset-{{ asset.id }}" class="modal-inner-wrapper">
-  <button class="modal-navigation modal-close btn btn-ctrl d-none d-md-block" href="#" data-dismiss="modal">
+  <button class="modal-navigation modal-close btn btn-ctrl d-none d-md-block" data-dismiss="modal">
     <i class="material-icons btn-material-icons">close</i>
   </button>
   <div class="modal-dialog" role="document">
     {% if previous_asset %}
-    <button class="modal-navigation previous btn btn-ctrl" href="#"
+    <button class="modal-navigation previous btn btn-ctrl"
       data-url="{% url 'api-asset' previous_asset.id %}?site_context={{ site_context }}">
       <i class="material-icons btn-material-icons">navigate_before</i>
     </button>
@@ -18,14 +18,16 @@
             <p class="subtitle x-small">{{ asset.static_asset.get_source_type_display }}</p>
             <h3 class="mb-0">{{ asset.name }}</h3>
           </div>
-          <button class="modal-navigation modal-close btn btn-ctrl" href="#" data-dismiss="modal">
+          <button class="modal-navigation modal-close btn btn-ctrl" data-dismiss="modal">
             <i class="material-icons btn-material-icons">close</i>
           </button>
         </div>
 
         <a data-toggle="modal" data-target="#file-zoom-modal" class="modal-asset-image-wrapper" href="#"
           data-url="{% url 'api-asset-zoom' asset.id %}">
-          <img class="" src="{{ asset.static_asset.preview.url }}" alt="asset preview">
+
+          {% include "common/components/helpers/image_set.html" with alt=asset.name classes="img-fluid" img_source=asset.static_asset.preview xs_size="575" sm_size="780" md_size="780" lg_size="780" xl_size="780" %}
+
         </a>
 
       </div>
@@ -73,7 +75,7 @@
       </div>
     </div>
     {% if next_asset %}
-    <button class="modal-navigation next btn btn-ctrl" href="#"
+    <button class="modal-navigation next btn btn-ctrl"
       data-url="{% url 'api-asset' next_asset.id %}?site_context={{ site_context }}">
       <i class="material-icons btn-material-icons">navigate_next</i>
     </button>

@@ -4,257 +4,272 @@
 <html lang="en">
 
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Blender Studio{% block title_append %}{% endblock title_append %}</title>
-	<meta name="description" content="Blender Studio">
-	<meta name="author" content="Blender Institute">
-	<link rel="shortcut icon" href="{% static 'common/images/favicon/favicon.ico' %}">
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blender Studio{% block title_append %}{% endblock title_append %}</title>
+  <meta name="description" content="Blender Studio">
+  <meta name="author" content="Blender Institute">
+  <link rel="shortcut icon" href="{% static 'common/images/favicon/favicon.ico' %}">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-	{% stylesheet 'studio' %}
-	{% javascript 'vendor' %}
-	{% javascript 'studio' %}
+  {% stylesheet 'studio' %}
+  {% javascript 'vendor' %}
+  {% javascript 'studio' %}
 
-	{% block html_templates %}{% endblock %}
-	{% block scripts %}{% endblock scripts %}
+  {% block html_templates %}{% endblock %}
+  {% block scripts %}{% endblock scripts %}
 </head>
 
 <body class="{% block bodyclasses %}{% endblock bodyclasses %}">
-	<!-- When the body has a nav-drawer, it should have the class 'has-nav-drawer' and when it's wide, 'has-nav-drawer nav-drawer-wide' -->
-	<nav class="navbar">
+  <!-- When the body has a nav-drawer, it should have the class 'has-nav-drawer' and when it's wide, 'has-nav-drawer nav-drawer-wide' -->
+  <nav class="navbar">
 
-		<button class="btn btn-nav navdrawertoggle">
-			<i class="material-icons">menu</i>
-		</button>
+    <button class="btn btn-nav navdrawertoggle">
+      <i class="material-icons">menu</i>
+    </button>
 
-		<a href="/" class="navbar-brand">
-			<img src="{% static 'common/images/blender_cloud_logo.svg' %}" alt="Blender Studio">
-		</a>
+    <a href="/" class="navbar-brand">
+      <img src="{% static 'common/images/blender_cloud_logo.svg' %}" alt="Blender Studio">
+    </a>
 
-		<div class="navbar-main-nav list-group list-group-flush list-group-horizontal">
-			<a href="/films/" class="list-group-item">
-				<span>Films</span>
-			</a>
-			<a href="/training/" class="list-group-item">
-				<span>Training</span>
-			</a>
-			<a href="/services/" class="list-group-item">
-				<span>Services</span>
-			</a>
-			<a href="/news/" class="list-group-item">
-				<span>News</span>
-			</a>
-		</div>
-		{% if request.user.is_authenticated %}
-		<div class="searchbar-wrapper">
-			<div class="searchbar">
-				<div class="input-group-prepend"><span class="input-group-text"><i
-							class="material-icons">search</i></span>
-				</div>
-				<input type="text" placeholder="Search tags and keywords" class="form-control">
-			</div>
-		</div>
+    <div class="navbar-main-nav list-group list-group-flush list-group-horizontal">
+      <a href="/films/" class="list-group-item">
+        <span>Films</span>
+      </a>
+      <a href="/training/" class="list-group-item">
+        <span>Training</span>
+      </a>
+      <a href="/services/" class="list-group-item">
+        <span>Services</span>
+      </a>
+      <a href="/news/" class="list-group-item">
+        <span>News</span>
+      </a>
+    </div>
+    {% if request.user.is_authenticated %}
+    <div class="searchbar-wrapper">
+      <div class="searchbar">
+        <div class="input-group-prepend"><span class="input-group-text"><i class="material-icons">search</i></span>
+        </div>
+        <input type="text" placeholder="Search tags and keywords" class="form-control">
+      </div>
+    </div>
 
-		<div data-toggle="dropdown" class="btn btn-nav nav-profile">
-			<div style="background-image:url('https://blender.chat/avatar/MikeNewbon');" class="profile"></div>
-			<div class="dropdown-menu profile-dropdown"><a href="" class="dropdown-item"><i
-						class="material-icons">home</i>
-					<span>My Cloud</span></a><a href="" class="dropdown-item"><i class="material-icons">settings</i>
-					<span>Settings</span></a><a href="" class="dropdown-item"><i class="material-icons">credit_card</i>
-					<span>Subscription</span></a>
-				<div class="dropdown-divider"></div>
-				<a href="" class="dropdown-item"><i class="material-icons">exit_to_app</i> <span>Sign Out</span></a>
-			</div>
-		</div>
-		{% else %}
-		<div class="p-2">
-			<a href="/admin/login" class="btn btn-transparent">Login</a>
-			<a href="#" class="btn btn-primary">Join Blender Studio</a>
-		</div>
-		{% endif %}
-		{% comment %} <div data-toggle="dropdown" class="btn btn-nav nav-profile">
-			<div style="background-image:url('https://blender.chat/avatar/MikeNewbon');" class="profile"></div>
-			<div class="dropdown-menu profile-dropdown"><a href="" class="dropdown-item"><i
-						class="material-icons">home</i>
-					<span>My Cloud</span></a><a href="" class="dropdown-item"><i class="material-icons">settings</i>
-					<span>Settings</span></a><a href="" class="dropdown-item"><i class="material-icons">credit_card</i>
-					<span>Subscription</span></a>
-				<div class="dropdown-divider"></div>
-				<a href="" class="dropdown-item"><i class="material-icons">exit_to_app</i> <span>Sign Out</span></a>
-			</div>
-		</div> {% endcomment %}
-	</nav>
+    <div data-toggle="dropdown" class="btn btn-nav nav-profile">
+      <div style="background-image:url('https://blender.chat/avatar/MikeNewbon');" class="profile"></div>
+      <div class="dropdown-menu profile-dropdown">
+
+        <a href="/" class="dropdown-item">
+          <i class="material-icons">home</i>
+          <span>My Cloud</span>
+        </a>
+
+        <a href="/settings" class="dropdown-item">
+          <i class="material-icons">settings</i>
+          <span>Settings</span>
+        </a>
+
+        <a href="/settings/subscription" class="dropdown-item">
+          <i class="material-icons">credit_card</i>
+          <span>Subscription</span>
+        </a>
+
+        <div class="dropdown-divider"></div>
+
+        <a href="/logout" class="dropdown-item">
+          <i class="material-icons">exit_to_app</i>
+          <span>Sign Out</span>
+        </a>
+
+      </div>
+    </div>
+    {% else %}
+    <div class="p-2">
+      <a href="/admin/login" class="btn btn-transparent">Login</a>
+      <a href="#" class="btn btn-primary">Join Blender Studio</a>
+    </div>
+    {% endif %}
+    {% comment %} <div data-toggle="dropdown" class="btn btn-nav nav-profile">
+      <div style="background-image:url('https://blender.chat/avatar/MikeNewbon');" class="profile"></div>
+      <div class="dropdown-menu profile-dropdown"><a href="" class="dropdown-item"><i class="material-icons">home</i>
+          <span>My Cloud</span></a><a href="" class="dropdown-item"><i class="material-icons">settings</i>
+          <span>Settings</span></a><a href="" class="dropdown-item"><i class="material-icons">credit_card</i>
+          <span>Subscription</span></a>
+        <div class="dropdown-divider"></div>
+        <a href="" class="dropdown-item"><i class="material-icons">exit_to_app</i> <span>Sign Out</span></a>
+      </div>
+    </div> {% endcomment %}
+  </nav>
 
 
 
 
-	{% block jumbotron %}{% endblock jumbotron %}
+  {% block jumbotron %}{% endblock jumbotron %}
 
 
-	{% block secondary_nav %}{% endblock secondary_nav %}
-	{% comment %} <div class="navbar-secondary">
-		<div class="content-holder">
-			<div class="container-md">
-				<div class="list-group list-group-flush list-group-horizontal small">
+  {% block secondary_nav %}{% endblock secondary_nav %}
+  {% comment %} <div class="navbar-secondary">
+    <div class="content-holder">
+      <div class="container-xl">
+        <div class="list-group list-group-flush list-group-horizontal small">
 
-				</div>
-			</div>
-		</div>
-	</div> {% endcomment %}
+        </div>
+      </div>
+    </div>
+  </div> {% endcomment %}
 
-	{% block nav_drawer %}
+  {% block nav_drawer %}
 
-	<nav class="nav-drawer">
+  <nav class="nav-drawer">
     {% block nav_drawer_spacer %}
     {% endblock nav_drawer_spacer %}
-		<div class="nav-drawer-body">
-			<div class="px-2 py-2 d-block d-md-none">
-				<div class="input-group mb-0">
-					<div class="input-group-prepend">
-						<span class="input-group-text">
-							<i class="material-icons">search</i></span>
-					</div><input class="form-control" type="text" placeholder="Search tags and keywords" />
-				</div>
-			</div>
-			<ul class="nav-drawer-list mb-0 global-navigation">
-				{% comment %} <li><a class="btn-nav active" href="/"><i class="material-icons">home</i>
-						<span>Home</span></a></li> {% endcomment %}
-				<li><a class="btn-nav" href="/training/"><i
-							class="material-icons">local_library</i><span>Training</span></a></li>
-				<li><a class="btn-nav" href="/films/"><i class="material-icons">movie</i> <span>Films</span></a>
-				</li>
-				<li><a class="btn-nav" href="#"><i class="material-icons">cloud</i> <span>Services</span></a></li>
-				<li><a class="btn-nav" href="/news/"><i class="material-icons">chat_bubble</i> <span>News</span></a>
-				</li>
-			</ul>
-			{% block nav_drawer_inner %}
-			{% endblock nav_drawer_inner %}
-		</div>
-		<div class="drawer-overlay"></div>
-	</nav>
+    <div class="nav-drawer-body">
+      <div class="px-2 py-2 d-block d-md-none">
+        <div class="input-group mb-0">
+          <div class="input-group-prepend">
+            <span class="input-group-text">
+              <i class="material-icons">search</i></span>
+          </div><input class="form-control" type="text" placeholder="Search tags and keywords" />
+        </div>
+      </div>
+      <ul class="nav-drawer-list mb-0 global-navigation">
+        {% comment %} <li><a class="btn-nav active" href="/"><i class="material-icons">home</i>
+            <span>Home</span></a></li> {% endcomment %}
+        <li><a class="btn-nav" href="/training/"><i class="material-icons">local_library</i><span>Training</span></a>
+        </li>
+        <li><a class="btn-nav" href="/films/"><i class="material-icons">movie</i> <span>Films</span></a>
+        </li>
+        <li><a class="btn-nav" href="#"><i class="material-icons">cloud</i> <span>Services</span></a></li>
+        <li><a class="btn-nav" href="/news/"><i class="material-icons">chat_bubble</i> <span>News</span></a>
+        </li>
+      </ul>
+      {% block nav_drawer_inner %}
+      {% endblock nav_drawer_inner %}
+    </div>
+    <div class="drawer-overlay"></div>
+  </nav>
 
-	{% endblock nav_drawer %}
+  {% endblock nav_drawer %}
 
-	<div class="content-holder">
-		{% block breadcrumbs %}{% endblock breadcrumbs %}
-		{% comment %} <nav class="navbar-secondary" aria-label="breadcrumbs">
-			<div class="content-holder">
-				<div class="container-md">
+  <div class="content-holder">
+    {% block breadcrumbs %}{% endblock breadcrumbs %}
+    {% comment %} <nav class="navbar-secondary" aria-label="breadcrumbs">
+      <div class="content-holder">
+        <div class="container-xl">
 
-				</div>
-			</div>
-		</nav> {% endcomment %}
+        </div>
+      </div>
+    </nav> {% endcomment %}
 
 
 
-		{% block content %}{% endblock content %}
-	</div>
+    {% block content %}{% endblock content %}
+  </div>
 
-	<footer class="bg-navigation py-4">
-		<div class="content-holder">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-3 col-md-4 mb-4 mb-md-0">
-						<a href="#">
-							<img src="{% static 'common/images/blender_cloud_logo.svg' %}" class="mb-2">
-						</a>
-						<p class="text-muted x-small">Blender Studio is the creative hub for your projects, powered by
-							Free
-							and Open Source Software.</p>
-						<div class="footer-social-media">
-							<a href="#" class="mr-3">
-								<img src="{% static 'common/images/icons/facebook.svg' %}">
-							</a>
-							<a href="#" class="mr-3">
-								<img src="{% static 'common/images/icons/twitter.svg' %}">
-							</a>
-							<a href="#">
-								<img src="{% static 'common/images/icons/youtube.svg' %}">
-							</a>
-						</div>
-					</div>
-					<div class="col-md-8 offset-lg-1">
-						<div class="row text-white">
-							<div class="col-md-3 col-6"><a href="#" class="h3 text-white">Training</a>
-								<ul>
-									<li>
-										<a href="#" class="small text-white">Courses</a>
-									</li>
-									<li>
-										<a href="#" class="small text-white">Workshops</a>
-									</li>
-									<li>
-										<a href="#" class="small text-white">Production Lessons</a>
-									</li>
-								</ul><a href="#" class="h3 text-white">Films</a>
-							</div>
-							<div class="col-md-3 col-6"><a href="#" class="h3 text-white">Libraries</a>
-								<ul>
-									<li>
-										<a href="#" class="small text-white">HDRIs</a>
-									</li>
-									<li>
-										<a href="#" class="small text-white">Textures</a>
-									</li>
-									<li>
-										<a href="#" class="small text-white">Characters</a>
-									</li>
-									<li>
-										<a href="#" class="small text-white">Art Gallery</a>
-									</li>
-								</ul>
-							</div>
-							<div class="col-md-3 col-6">
-								<a href="#" class="h3 text-white">Services</a>
-								<ul>
-									<li>
-										<a href="#" class="small text-white">Add-on</a>
-									</li>
-									<li>
-										<a href="#" class="small text-white">Blender Sync</a>
-									</li>
-									<li>
-										<a href="#" class="small text-white">Attract</a>
-									</li>
-									<li>
-										<a href="#" class="small text-white">Flamenco</a>
-									</li>
-									<li>
-										<a href="#" class="small text-white">Image Sharing</a>
-									</li>
-								</ul>
-							</div>
-							<div class="col-md-3 col-6">
-								<a href="#" class="h3 text-white">Cloud</a>
-								<ul>
-									<li>
-										<a href="#" class="small text-white">Blog</a>
-									</li>
-									<li>
-										<a href="#" class="small text-white">Terms &amp; Conditions</a>
-									</li>
-									<li>
-										<a href="#" class="small text-white">Privacy Policy</a>
-									</li>
-								</ul>
-								<a href="#" class="small text-white">Blender.org</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</footer>
+  <footer class="bg-navigation py-4">
+    <div class="content-holder">
+      <div class="container-xl">
+        <div class="row">
+          <div class="col-lg-3 col-md-4 mb-4 mb-md-0">
+            <a href="#">
+              <img src="{% static 'common/images/blender_cloud_logo.svg' %}" alt="Blender Studio" class="mb-2">
+            </a>
+            <p class="text-muted x-small">Blender Studio is the creative hub for your projects, powered by
+              Free
+              and Open Source Software.</p>
+            <div class="footer-social-media">
+              <a href="#" class="mr-3">
+                <img src="{% static 'common/images/icons/facebook.svg' %}">
+              </a>
+              <a href="#" class="mr-3">
+                <img src="{% static 'common/images/icons/twitter.svg' %}">
+              </a>
+              <a href="#">
+                <img src="{% static 'common/images/icons/youtube.svg' %}">
+              </a>
+            </div>
+          </div>
+          <div class="col-md-8 offset-lg-1">
+            <div class="row text-white">
+              <div class="col-md-3 col-6"><a href="#" class="h3 text-white">Training</a>
+                <ul>
+                  <li>
+                    <a href="#" class="small text-white">Courses</a>
+                  </li>
+                  <li>
+                    <a href="#" class="small text-white">Workshops</a>
+                  </li>
+                  <li>
+                    <a href="#" class="small text-white">Production Lessons</a>
+                  </li>
+                </ul><a href="#" class="h3 text-white">Films</a>
+              </div>
+              <div class="col-md-3 col-6"><a href="#" class="h3 text-white">Libraries</a>
+                <ul>
+                  <li>
+                    <a href="#" class="small text-white">HDRIs</a>
+                  </li>
+                  <li>
+                    <a href="#" class="small text-white">Textures</a>
+                  </li>
+                  <li>
+                    <a href="#" class="small text-white">Characters</a>
+                  </li>
+                  <li>
+                    <a href="#" class="small text-white">Art Gallery</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-md-3 col-6">
+                <a href="#" class="h3 text-white">Services</a>
+                <ul>
+                  <li>
+                    <a href="#" class="small text-white">Add-on</a>
+                  </li>
+                  <li>
+                    <a href="#" class="small text-white">Blender Sync</a>
+                  </li>
+                  <li>
+                    <a href="#" class="small text-white">Attract</a>
+                  </li>
+                  <li>
+                    <a href="#" class="small text-white">Flamenco</a>
+                  </li>
+                  <li>
+                    <a href="#" class="small text-white">Image Sharing</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-md-3 col-6">
+                <a href="#" class="h3 text-white">Cloud</a>
+                <ul>
+                  <li>
+                    <a href="#" class="small text-white">Blog</a>
+                  </li>
+                  <li>
+                    <a href="#" class="small text-white">Terms &amp; Conditions</a>
+                  </li>
+                  <li>
+                    <a href="#" class="small text-white">Privacy Policy</a>
+                  </li>
+                </ul>
+                <a href="#" class="small text-white">Blender.org</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
 
-	<div id="file-modal" class="modal modal-asset" tabindex="-1" role="dialog" aria-hidden="true">
-		{# This is the modal div, the contents from "modal_asset.html" are inserted here. #}
-	</div>
+  <div id="file-modal" class="modal modal-asset" tabindex="-1" role="dialog" aria-hidden="true">
+    {# This is the modal div, the contents from "modal_asset.html" are inserted here. #}
+  </div>
 
-	<div id="file-zoom-modal" class="modal modal-asset-zoom" tabindex="-1" role="dialog" aria-hidden="true">
-		{# This is the zoom modal div, the contents from "modal_asset_zoom.html" are inserted here. #}
-	</div>
+  <div id="file-zoom-modal" class="modal modal-asset-zoom" tabindex="-1" role="dialog" aria-hidden="true">
+    {# This is the zoom modal div, the contents from "modal_asset_zoom.html" are inserted here. #}
+  </div>
 
 </body>
 

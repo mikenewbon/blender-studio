@@ -18,6 +18,11 @@
     margin: 0 auto;
 
     @include media-breakpoint-down(md) {
+      max-width: calc(100vw - (#{$spacer} * 6));
+    }
+
+    @include media-breakpoint-down(sm) {
+      max-width: 100%;
       padding: 0;
     }
   }
@@ -80,20 +85,20 @@
 
   &.next {
     top: 50%;
-    right: ($spacer * 2);
+    right: ($spacer * 1.5);
     transform: translate(50%, -50%);
 
-    @include media-breakpoint-down(md) {
+    @include media-breakpoint-down(sm) {
       display: none;
     }
   }
 
   &.previous {
     top: 50%;
-    left: ($spacer * 2);
+    left: ($spacer * 1.5);
     transform: translate(-50%, -50%);
 
-    @include media-breakpoint-down(md) {
+    @include media-breakpoint-down(sm) {
       display: none;
     }
   }
