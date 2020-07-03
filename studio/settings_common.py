@@ -149,7 +149,7 @@ PIPELINE = {
         'studio': {
             'source_filenames': ('common/styles/studio/studio.scss',),
             'output_filename': 'css/studio.css',
-            'extra_context': {'media': 'screen,projection'},
+            'extra_context': {'media': 'screen'},
         },
     },
     'COMPILERS': ('libsasscompiler.LibSassCompiler',),

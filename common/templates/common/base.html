@@ -77,7 +77,7 @@
 
         <div class="dropdown-divider"></div>
 
-        <a href="/logout" class="dropdown-item">
+        <a href="/oauth/logout" class="dropdown-item">
           <i class="material-icons">exit_to_app</i>
           <span>Sign Out</span>
         </a>
@@ -86,7 +86,7 @@
     </div>
     {% else %}
     <div class="p-2">
-      <a href="/admin/login" class="btn btn-transparent">Login</a>
+      <a href="/oauth/login" class="btn btn-transparent">Login</a>
       <a href="#" class="btn btn-primary">Join Blender Studio</a>
     </div>
     {% endif %}
@@ -180,13 +180,13 @@
               and Open Source Software.</p>
             <div class="footer-social-media">
               <a href="#" class="mr-3">
-                <img src="{% static 'common/images/icons/facebook.svg' %}">
+                <img alt="Facebook Logo" src="{% static 'common/images/icons/facebook.svg' %}">
               </a>
               <a href="#" class="mr-3">
-                <img src="{% static 'common/images/icons/twitter.svg' %}">
+                <img alt="Twitter Logo" src="{% static 'common/images/icons/twitter.svg' %}">
               </a>
               <a href="#">
-                <img src="{% static 'common/images/icons/youtube.svg' %}">
+                <img alt="YouTube Logo" src="{% static 'common/images/icons/youtube.svg' %}">
               </a>
             </div>
           </div>
