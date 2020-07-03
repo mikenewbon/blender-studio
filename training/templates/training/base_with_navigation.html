@@ -13,9 +13,9 @@ nav-drawer-wide
 </div>
 
 <div class="drawer-nav-group">
-
+  <ol class="drawer-nav-list training">
     {% include 'common/components/navigation/nav_drawer_section.html' with title='About this training' subtitle='Overview' href=navigation.overview_url active=navigation.overview_active admin_change_href=navigation.training_admin_url %}
-
+  </ol>
 </div>
 
 {% for chapter_navigation in navigation.chapters %}

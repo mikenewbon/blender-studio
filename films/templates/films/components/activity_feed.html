@@ -24,7 +24,7 @@
 				</div>
 				<div class="update-feed-individual-files">
 					<h3>This week on {{ film.title }}</h3>
-					<p>{{ production_log.summary | safe | linebreaks }}</p>
+					{{ production_log.summary | safe | linebreaks }}
 				</div>
 			</div>
 			{% endif %}
