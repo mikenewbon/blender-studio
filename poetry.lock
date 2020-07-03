@@ -95,6 +95,7 @@ requests-oauthlib = "^1.0"
 reference = "f8c00db0cd2597a80bc5c0cf3ddbc46c400e9684"
 type = "git"
 url = "git@gitlab.com:blender-institute/blender-id-oauth-client.git"
+
 [[package]]
 category = "main"
 description = "Braintree Python Library"
@@ -200,6 +201,18 @@ version = "6.1.2"
 dev = ["tox", "black", "django", "pytest", "pytest-django", "djangorestframework", "graphene-django"]
 maintainer = ["transifex-client", "zest.releaser", "django"]
 test = ["pytest", "pytest-django", "pytest-cov", "graphene-django"]
+
+[[package]]
+category = "dev"
+description = "A configurable set of panels that display various debug information about the current request/response."
+name = "django-debug-toolbar"
+optional = false
+python-versions = ">=3.5"
+version = "2.2"
+
+[package.dependencies]
+Django = ">=1.11"
+sqlparse = ">=0.2.0"
 
 [[package]]
 category = "main"
@@ -526,6 +539,7 @@ requests = "^2.22"
 reference = "26f1941052fd59adb641e0bd631d11731df00f85"
 type = "git"
 url = "git://git.blender.org/looper.git"
+
 [[package]]
 category = "main"
 description = "Safely add untrusted strings to HTML/XML markup."
@@ -933,7 +947,7 @@ python-versions = "*"
 version = "0.2.5"
 
 [metadata]
-content-hash = "27df979c6d3f50a8323c76d48259da5ee305cd6318f714f145c86b8994dd2c62"
+content-hash = "105c109bec482ddfe5c4bdf4eb5e61a6ce4223d9497400a514ea120eb249a408"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -1009,6 +1023,10 @@ django = [
 django-countries = [
     {file = "django-countries-6.1.2.tar.gz", hash = "sha256:e2ae9b76f9a0b5f3f365b5b81fe4972df0a5878c930139586f43f7d6d50a9594"},
     {file = "django_countries-6.1.2-py3-none-any.whl", hash = "sha256:2e852c9693818d64d28758a720a0cb8277673ac495af8b855c4dc64940703bd2"},
+]
+django-debug-toolbar = [
+    {file = "django-debug-toolbar-2.2.tar.gz", hash = "sha256:eabbefe89881bbe4ca7c980ff102e3c35c8e8ad6eb725041f538988f2f39a943"},
+    {file = "django_debug_toolbar-2.2-py3-none-any.whl", hash = "sha256:ff94725e7aae74b133d0599b9bf89bd4eb8f5d2c964106e61d11750228c8774c"},
 ]
 django-pipeline = [
     {file = "django-pipeline-1.7.0.tar.gz", hash = "sha256:0ded22b974e3d627c27fc490ef5b23fcdcf0cdb00b704d628b5ca6d0b010d6fe"},
