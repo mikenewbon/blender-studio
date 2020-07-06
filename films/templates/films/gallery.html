@@ -7,12 +7,12 @@ has-secondary-nav
 {% endblock bodyclasses %}
 
 {% block nav_drawer_spacer %}
-		<div class="nav-drawer-spacer">
-			<div class="list-group list-group-flush list-group-horizontal small">
-				<p class="list-group-item mb-0">Weeklies</p>
-			</div>
-		</div>
-    {% endblock nav_drawer_spacer %}
+<div class="nav-drawer-spacer">
+  <div class="list-group list-group-flush list-group-horizontal small">
+    <p class="list-group-item mb-0">Weeklies</p>
+  </div>
+</div>
+{% endblock nav_drawer_spacer %}
 
 {% block nav_drawer_inner %}
 
@@ -87,8 +87,8 @@ has-secondary-nav
     <h2>Featured Artwork</h2>
 
     <div class="files">
-      <div class="row row-cols-2 row-cols-sm-3 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
-
+      <div class="card-columns">
+      {% comment %} <div class="row row-cols-2 row-cols-sm-3 row-cols-md-2 row-cols-lg-3 row-cols-xl-4"> {% endcomment %}
 
         {% if featured_artwork %}
         {% for asset in featured_artwork %}

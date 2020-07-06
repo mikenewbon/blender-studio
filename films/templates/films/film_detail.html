@@ -7,71 +7,60 @@
 
 {% block content %}
 <div class="container-xl pt-4">
-	<section class="mb-5">
-		{% if film.status != "2_released" %}
-		<!-- Latest Updates -->
+  <section class="mb-4">
+    {% if film.status != "2_released" %}
+    <!-- Latest Updates -->
 
-		<div class="row justify-content-center mb-3">
-			<div class="col-md-6 text-center">
-				<h2 class="mb-0">Latest Updates</h2>
-				<p class="mb-0">Want to see more updates from {{ film.title }}?
-					<a href="{% url 'film-weeklies' film.slug %}">See all weeklies</a></p>
-			</div>
-		</div>
-
-    <div id="activity-feed">
-		  {% include "films/components/activity_feed.html" %}
+    <div class="row justify-content-center mb-3">
+      <div class="col-md-6 text-center">
+        <h2 class="mb-0">Latest Updates</h2>
+        <p class="mb-0">Want to see more updates from {{ film.title }}?
+          <a href="{% url 'film-weeklies' film.slug %}">See all weeklies</a></p>
+      </div>
     </div>
 
-		<div class="row">
-			<div class="col text-center">
-				<p class="mb-0">Want to see more updates from {{ film.title }}?
-					<a href="{% url 'film-weeklies' film.slug %}">See all weeklies</a></p>
-			</div>
-		</div>
-		{% else %}
+    <div id="activity-feed">
+      {% include "films/components/activity_feed.html" %}
+    </div>
 
-		<div class="row justify-content-center mb-3">
-			<div class="col-md-6 text-center">
-				<h2 class="mb-0">Featured Gallery</h2>
-				<p class="mb-0">Want to see more?
-					<a href="{% url 'film-gallery' film.slug %}">Explore the Gallery</a></p>
-			</div>
-		</div>
+    <div class="row">
+      <div class="col text-center">
+        <p class="mb-0">Want to see more updates from {{ film.title }}?
+          <a href="{% url 'film-weeklies' film.slug %}">See all weeklies</a></p>
+      </div>
+    </div>
+    {% else %}
 
-		{% if featured_artwork %}
-		<div class="grid">
-			{% for asset in featured_artwork %}
-			<div class="grid-item">
-				<a href="#" data-toggle="modal" data-target="#file-modal"
-                        data-url="{% url 'api-asset' asset.id %}?site_context=featured_artwork">
-					<img src="{{ asset.static_asset.preview.url }}" alt="asset preview">
-				</a>
-			</div>
-			{% endfor %}
-		</div>
-		<script>
-			var $grid = $('.grid').masonry({
-				itemSelector: '.grid-item',
-				columnWidth: '.grid-item',
-				percentPosition: true,
-			});
+    <div class="row justify-content-center mb-3">
+      <div class="col-md-6 text-center">
+        <h2 class="mb-0">Featured Gallery</h2>
+        <p class="mb-0">Want to see more?
+          <a href="{% url 'film-gallery' film.slug %}">Explore the Gallery</a></p>
+      </div>
+    </div>
 
-			$grid.imagesLoaded().progress(function () {
-				$grid.masonry('layout');
-			});
-		</script>
-		{% else %}
-		<div class="row bg-secondary">
-			<div class="col my-4 text-center">
-				<h3 class="mb-0">No Featured Artwork to display</h3>
-			</div>
-		</div>
+    {% if featured_artwork %}
 
-		{% endif %}
+    <div class="files">
+      <div class="card-columns card-columns-2">
 
-		{% endif %}
-	</section>
+        {% for asset in featured_artwork %}
+        {% include "common/components/file.html" with asset=asset site_context="featured_artwork" %}
+        {% endfor %}
+
+      </div>
+    </div>
+    {% else %}
+    <div class="row bg-secondary">
+      <div class="col my-4 text-center">
+        <h3 class="mb-0">No Featured Artwork to display</h3>
+      </div>
+    </div>
+
+    {% endif %}
+
+    {% endif %}
+  </section>
 </div>
 
 <!-- TODO(Mike): Add blog posts -->

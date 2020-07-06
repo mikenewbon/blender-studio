@@ -1,62 +1,97 @@
 .files {
-	.col {
-		margin-bottom: $spacer;
-	}
+  .card-columns {
+    column-gap: $spacer;
+    orphans: 1;
+    widows: 1;
+
+    @include media-breakpoint-down(md) {
+      column-count: 2;
+    }
+
+    @include media-breakpoint-down(sm) {
+      column-count: 2;
+    }
+
+    @include media-breakpoint-down(xs) {
+      column-count: 2;
+    }
+  }
 }
 
 .file {
-	@extend .card;
-	@extend .card-media;
-	@extend .card-dark;
-	margin-bottom: 0;
-	height: 100%;
-	text-align: center;
-	&:hover {
-		background-color: tint($navigation-gray, 10%);
-		.subtitle {
-			text-decoration: none;
-		}
-		h4 {
-			text-decoration: underline;
-		}
-	}
+  @extend .card;
+  @extend .card-media;
+  @extend .card-dark;
+  margin-bottom: 0;
+  height: 100%;
+  text-align: center;
+  display: inline-block;
+  width: 100%;
 
-	.subtitle {
-		font-size: $x-small-font-size;
-	}
-	h4 {
-		margin-bottom: 0;
-	}
-	&-body {
-		@extend .card-body;
-		padding: $spacer/2;
-	}
-	&-header {
-		@extend .card-header;
-		width: 100%;
-		> a {
-			padding: $spacer/2;
-			width: 100%;
-			height: 100%;
-			position: absolute;
-			top: 0;
-			left: 0;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
-	}
-	&-icon {
-		height: 100%;
-	}
-	&-image {
-		max-height: calc(100% + #{$spacer});
-		max-width: calc(100% + #{$spacer});
-	}
+  &:hover {
+    background-color: tint($navigation-gray, 10%);
+
+    .subtitle {
+      text-decoration: none;
+    }
+
+    h4 {
+      text-decoration: underline;
+    }
+  }
+
+  .subtitle {
+    font-size: $x-small-font-size;
+  }
+
+  h4 {
+    margin-bottom: 0;
+  }
+
+  &-body {
+    @extend .card-body;
+    padding: $spacer/2;
+    display: block;
+  }
+
+  &-header {
+    position: relative;
+    width: 100%;
+    padding: 0;
+
+    >a {
+      // padding: $spacer/2;
+      width: 100%;
+      height: 100%;
+      // position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    button {
+      position: absolute;
+      top: $spacer / 2;
+      right: $spacer / 2;
+      @include media-breakpoint-down(sm) {
+        display: none;
+      }
+    }
+  }
+
+  &-icon {
+    height: 100%;
+  }
+
+  &-image {
+    width: 100%;
+  }
 }
 
 a.file {
-	&:hover {
-		text-decoration: none;
-	}
+  &:hover {
+    text-decoration: none;
+  }
 }
