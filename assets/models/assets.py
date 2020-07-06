@@ -23,17 +23,17 @@ class DynamicStorageFieldFile(FieldFile):
     def __init__(self, instance: models.Model, field: FileField, name: Optional[str]):
         super(DynamicStorageFieldFile, self).__init__(instance, field, name)
 
-        assert hasattr(instance.__class__, 'storage_backend'), (
+        assert hasattr(instance.__class__, 'storage_location'), (
             f'{self.__class__.__name__} cannot be used in {instance.__class__.__name__}, '
-            f'which does not have the `storage_backend` field.'
+            f'which does not have the `storage_location` field.'
         )
 
-        if instance.storage_backend_id:  # type: ignore[attr-defined]
-            # The `if` prevents an unhandled exception if one tries to save without a storage_backend
-            if instance.storage_backend.category == StorageLocationCategoryChoices.gcs:  # type: ignore[attr-defined]
+        if instance.storage_location_id:  # type: ignore[attr-defined]
+            # The `if` prevents an unhandled exception if one tries to save without a storage_location
+            if instance.storage_location.category == StorageLocationCategoryChoices.gcs:  # type: ignore[attr-defined]
                 self.storage: GoogleCloudStorage = GoogleCloudStorage()
-                if instance.storage_backend.bucket_name:  # type: ignore[attr-defined]
-                    self.storage.bucket_name = instance.storage_backend.bucket_name  # type: ignore[attr-defined]
+                if instance.storage_location.bucket_name:  # type: ignore[attr-defined]
+                    self.storage.bucket_name = instance.storage_location.bucket_name  # type: ignore[attr-defined]
             else:
                 self.storage = FileSystemStorage()
 
@@ -42,12 +42,12 @@ class DynamicStorageFileField(models.FileField):
     attr_class = DynamicStorageFieldFile
 
     def pre_save(self, model_instance: models.Model, add: bool) -> FieldFile:
-        assert hasattr(model_instance, 'storage_backend'), (
+        assert hasattr(model_instance, 'storage_location'), (
             f'{self.__class__.__name__} cannot be used in {model_instance.__class__.__name__}, '
-            f'which does not have the `storage_backend` field.'
+            f'which does not have the `storage_location` field.'
         )
 
-        if model_instance.storage_backend.category == StorageLocationCategoryChoices.gcs:  # type: ignore[attr-defined]
+        if model_instance.storage_location.category == StorageLocationCategoryChoices.gcs:  # type: ignore[attr-defined]
             storage = GoogleCloudStorage()
         else:
             storage = FileSystemStorage()
@@ -72,7 +72,7 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
     license = models.ForeignKey(
         License, null=True, on_delete=models.SET_NULL, related_name='assets'
     )
-    storage_backend = models.ForeignKey(
+    storage_location = models.ForeignKey(
         StorageLocation, on_delete=models.CASCADE, related_name='assets'
     )
 

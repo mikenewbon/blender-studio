@@ -14,7 +14,7 @@ class FilmListView(ListView):
     model = Film
     queryset = (
         Film.objects.filter(is_published=True)
-        .select_related('storage_backend')
+        .select_related('storage_location')
         .order_by('status', '-release_date')
     )
     template_name = 'films/films.html'

@@ -19,7 +19,7 @@ Other:
  - `common` directory - contains the code that is used (or we plan to use it) in more than one app:
  scripts, template bases or components, test factories, etc.
  - **Project** - this word may refer to a film or a training. In production, there'll be exactly one
- storage backend (GCS, S3, etc.) per project. We don't have a `Project` model at the moment, but
+ storage location (GCS, S3, etc.) per project. We don't have a `Project` model at the moment, but
  there's a chance that it changes in the future.
 
 ### Models (simplified) hierarchy
@@ -77,9 +77,9 @@ should be left inside this app, even though it is used in other apps' models as 
 ##### Licenses
 For now, licenses are only added to static assets (image, video, file).
 
-##### Storage Backends
-Storage backend is a place to store all the film-related or training-related files.
-In production, there'll be exactly one storage backend (GCS, S3, etc.) per project, i.e. per film or
+##### Storage locations
+Storage location is a place to store all the film-related or training-related files.
+In production, there'll be exactly one storage location (GCS, S3, etc.) per project, i.e. per film or
 per training.
 
 

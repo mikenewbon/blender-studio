@@ -88,8 +88,8 @@ class Command(BaseCommand):
                 film = models_film.films.Film.objects.get(slug=film_doc['url'])
                 self.stdout.write(self.style.WARNING('Project %s already exists' % film_doc['url']))
             else:
-                # Create a GCS storage backend (all film use this type of storage)
-                storage_backend: models_assets.StorageLocation = models_assets.StorageLocation.objects.create(
+                # Create a GCS storage location (all films use this type of storage)
+                storage_location: models_assets.StorageLocation = models_assets.StorageLocation.objects.create(
                     name=film_doc['url'],
                     category=models_assets.StorageLocationCategoryChoices.gcs,
                     bucket_name=film_doc['_id'],
@@ -101,7 +101,7 @@ class Command(BaseCommand):
                     description=film_doc['summary'],
                     summary=film_doc['description'],
                     status=models_film.FilmStatus.released,
-                    storage_backend=storage_backend,
+                    storage_location=storage_location,
                     picture_header='place/holder.jpg',
                     logo='place/holder.jpg',
                     poster='place/holder.jpg',
@@ -139,7 +139,7 @@ class Command(BaseCommand):
                     name=node_doc['name'],
                     text=description,
                     slug=node_id,
-                    storage_backend=film.storage_backend,
+                    storage_location=film.storage_location,
                 )[0]
                 if 'picture' in node_doc and node_doc['picture']:
                     file_doc = self.get_file_object(film_doc_path, str(node_doc['picture']))
@@ -182,7 +182,7 @@ class Command(BaseCommand):
                     original_filename=file_doc['name'],
                     size_bytes=file_doc['length'],
                     user_id=1,
-                    storage_backend=film.storage_backend,
+                    storage_location=film.storage_location,
                 )[0]
 
                 if 'picture' in node_doc and node_doc['picture']:

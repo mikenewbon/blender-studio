@@ -24,7 +24,7 @@ class Collection(mixins.CreatedUpdatedMixin, models.Model):
     slug = models.SlugField(blank=True)
     text = models.TextField(blank=True)
 
-    storage_backend = models.ForeignKey(StorageLocation, on_delete=models.CASCADE)
+    storage_location = models.ForeignKey(StorageLocation, on_delete=models.CASCADE)
     preview = DynamicStorageFileField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
     picture_16_9 = DynamicStorageFileField(
         upload_to=get_upload_to_hashed_path, blank=True, null=True

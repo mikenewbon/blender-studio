@@ -5,7 +5,7 @@ from assets.models import StaticAsset, AssetFileTypeChoices, StorageLocation, Li
 from common.factories.user import UserFactory
 
 
-class StorageBackendFactory(factory.DjangoModelFactory):
+class StorageLocationFactory(factory.DjangoModelFactory):
     class Meta:
         model = StorageLocation
 
@@ -31,4 +31,4 @@ class StaticAssetFactory(factory.DjangoModelFactory):
     size_bytes = 100
     user = factory.SubFactory(UserFactory)
     license = factory.SubFactory(LicenseFactory)
-    storage_backend = factory.SubFactory(StorageBackendFactory)
+    storage_location = factory.SubFactory(StorageLocationFactory)

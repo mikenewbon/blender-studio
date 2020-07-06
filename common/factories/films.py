@@ -1,6 +1,6 @@
 import factory
 
-from common.factories.assets import StaticAssetFactory, StorageBackendFactory
+from common.factories.assets import StaticAssetFactory, StorageLocationFactory
 from common.factories.user import UserFactory
 from films.models import (
     Film,
@@ -20,7 +20,7 @@ class FilmFactory(factory.DjangoModelFactory):
     slug = factory.Faker('slug')
     is_published = True
 
-    storage_backend = factory.SubFactory(StorageBackendFactory)
+    storage_location = factory.SubFactory(StorageLocationFactory)
 
 
 class CollectionFactory(factory.DjangoModelFactory):
@@ -31,7 +31,7 @@ class CollectionFactory(factory.DjangoModelFactory):
     name = factory.Faker('text', max_nb_chars=30)
     slug = factory.Faker('slug')
 
-    storage_backend = factory.SelfAttribute('film.storage_backend')
+    storage_location = factory.SelfAttribute('film.storage_location')
 
 
 class AssetFactory(factory.DjangoModelFactory):
@@ -41,7 +41,7 @@ class AssetFactory(factory.DjangoModelFactory):
     film = factory.SubFactory(FilmFactory)
     collection = factory.SubFactory(CollectionFactory, film=factory.SelfAttribute('..film'))
     static_asset = factory.SubFactory(
-        StaticAssetFactory, storage_backend=factory.SelfAttribute('..film.storage_backend')
+        StaticAssetFactory, storage_location=factory.SelfAttribute('..film.storage_location')
     )
 
     name = factory.Faker('text', max_nb_chars=30)
@@ -55,7 +55,7 @@ class ProductionLogFactory(factory.DjangoModelFactory):
     film = factory.SubFactory(FilmFactory)
     summary = factory.Faker('text')
     user = factory.SubFactory(UserFactory)
-    storage_backend = factory.SelfAttribute('film.storage_backend')
+    storage_location = factory.SelfAttribute('film.storage_location')
     picture_16_9 = factory.Faker('file_path', category='image')
 
 

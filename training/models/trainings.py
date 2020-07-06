@@ -33,7 +33,7 @@ class Training(mixins.CreatedUpdatedMixin, models.Model):
             models.Index(fields=['status', 'difficulty', 'type']),
         ]
 
-    storage_backend = models.OneToOneField(StorageLocation, on_delete=models.PROTECT)
+    storage_location = models.OneToOneField(StorageLocation, on_delete=models.PROTECT)
     # TODO(Natalia): validation - either film or a training has to be null, but not both
 
     name = models.CharField(unique=True, max_length=512)

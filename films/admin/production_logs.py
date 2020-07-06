@@ -60,6 +60,6 @@ class ProductionLogAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
     list_display = ['__str__', 'name', 'start_date']
     list_filter = ['film', 'start_date']
     fieldsets = (
-        (None, {'fields': ['film', 'name', 'start_date', 'user', 'storage_backend']}),
+        (None, {'fields': ['film', 'name', 'start_date', 'user', 'storage_location']}),
         ('Summary', {'fields': ['summary', 'author', 'picture_16_9', 'youtube_link']}),
     )

@@ -76,7 +76,7 @@ class SectionComment(models.Model):
 
 
 class Video(mixins.CreatedUpdatedMixin, models.Model):
-    storage_backend = models.ForeignKey(StorageLocation, on_delete=models.CASCADE)
+    storage_location = models.ForeignKey(StorageLocation, on_delete=models.CASCADE)
     section = models.OneToOneField(Section, on_delete=models.CASCADE, related_name='video')
     file = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
     size_bytes = models.BigIntegerField(editable=False)
@@ -97,7 +97,7 @@ class Video(mixins.CreatedUpdatedMixin, models.Model):
 
 
 class Asset(mixins.CreatedUpdatedMixin, models.Model):
-    storage_backend = models.ForeignKey(StorageLocation, on_delete=models.CASCADE)
+    storage_location = models.ForeignKey(StorageLocation, on_delete=models.CASCADE)
     section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='assets')
     file = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
     size = models.IntegerField()

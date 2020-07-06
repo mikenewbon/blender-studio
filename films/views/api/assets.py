@@ -146,7 +146,7 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
             'static_asset__license',
             'static_asset__author',
             'static_asset__user',
-            'static_asset__storage_backend',
+            'static_asset__storage_location',
             'entry_asset__production_log_entry',
         )
         .get()
@@ -158,6 +158,6 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
 
 @require_safe
 def asset_zoom(request: HttpRequest, asset_pk: int) -> HttpResponse:
-    asset = Asset.objects.filter(pk=asset_pk).select_related('static_asset__storage_backend').get()
+    asset = Asset.objects.filter(pk=asset_pk).select_related('static_asset__storage_location').get()
 
     return render(request, 'common/components/modal_asset_zoom.html', {'asset': asset})

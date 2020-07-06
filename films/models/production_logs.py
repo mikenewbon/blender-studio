@@ -34,7 +34,7 @@ class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
     )
     author.description = "The actual author of the summary in the weekly production log."
     youtube_link = models.URLField(blank=True)
-    storage_backend = models.ForeignKey(
+    storage_location = models.ForeignKey(
         StorageLocation, on_delete=models.CASCADE, related_name='production_logs'
     )
     picture_16_9 = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)

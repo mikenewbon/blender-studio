@@ -77,8 +77,8 @@ class Command(BaseCommand):
                     self.style.WARNING('Project %s already exists' % training_doc['url'])
                 )
             else:
-                # Create a GCS storage backend (all training use this type of storage)
-                storage_backend: models_assets.StorageLocation = models_assets.StorageLocation.objects.create(
+                # Create a GCS storage location (all trainings use this type of storage)
+                storage_location: models_assets.StorageLocation = models_assets.StorageLocation.objects.create(
                     name=training_doc['url'],
                     category=models_assets.StorageLocationCategoryChoices.gcs,
                     bucket_name=training_doc['_id'],
@@ -92,7 +92,7 @@ class Command(BaseCommand):
                     status=training_doc['status'],
                     type=training_doc['category'],
                     difficulty='beginner',
-                    storage_backend=storage_backend,
+                    storage_location=storage_location,
                 )
 
             return training
@@ -150,7 +150,7 @@ class Command(BaseCommand):
                         size=25000,
                         duration='10:00',
                         file='stand/in/path.mp4',
-                        storage_backend=section.chapter.training.storage_backend,
+                        storage_location=section.chapter.training.storage_location,
                     )
                 models_training.sections.Video.objects.filter(pk=video.pk).update(
                     date_created=date_created, date_updated=date_updated
@@ -167,7 +167,7 @@ class Command(BaseCommand):
                         section=section,
                         size=25000,
                         file='stand/in/path.mp4',
-                        storage_backend=section.chapter.training.storage_backend,
+                        storage_location=section.chapter.training.storage_location,
                     )
                 add_static_asset_path(asset, 'file', file_doc['file_path'])
                 models_training.sections.Asset.objects.filter(pk=asset.pk).update(

@@ -3,7 +3,7 @@
 ### Templates
 ##### Jinja
 Templates in some parts of the project used to be rendered with Jinja2. We're switching to Django
-template backend, but the comments are still based on Jinja. There may also be leftover Jinja macros in
+template location, but the comments are still based on Jinja. There may also be leftover Jinja macros in
 the project; some of them have served as reference, but for the most part they probably could be removed.
 
 
