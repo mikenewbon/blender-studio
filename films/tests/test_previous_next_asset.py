@@ -43,10 +43,10 @@ class TestSiteContextResolution(TestCase):
         get_previous_asset_mock.assert_called_once_with(self.asset)
         get_next_asset_mock.assert_called_once_with(self.asset)
 
-    @patch('films.views.api.assets.get_next_asset_in_weeklies', return_value=None)
-    @patch('films.views.api.assets.get_previous_asset_in_weeklies', return_value=None)
-    def test_weeklies_site_context(self, get_previous_asset_mock, get_next_asset_mock):
-        query_string = f'site_context={SiteContexts.WEEKLIES.value}'
+    @patch('films.views.api.assets.get_next_asset_in_production_logs', return_value=None)
+    @patch('films.views.api.assets.get_previous_asset_in_production_logs', return_value=None)
+    def test_production_logs_site_context(self, get_previous_asset_mock, get_next_asset_mock):
+        query_string = f'site_context={SiteContexts.PRODUCTION_LOGS.value}'
         response = self.client.get(f'{reverse("api-asset", args=(self.asset.pk,))}?{query_string}')
 
         self.assertEqual(response.status_code, 200)
@@ -198,10 +198,10 @@ class TestAssetOrderingInFeaturedArtwork(TestCase):
             self.assertEqual(response.context.get('next_asset'), next_asset)
 
 
-class TestAssetOrderingInWeeklies(TestCase):
+class TestAssetOrderingInProductionLogs(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
-        cls.site_context = SiteContexts.WEEKLIES.value
+        cls.site_context = SiteContexts.PRODUCTION_LOGS.value
 
         author_a = UserFactory()
         author_b = UserFactory()

@@ -14,4 +14,4 @@ def production_log_list(request: HttpRequest, film_slug: str) -> HttpResponse:
         'show_more_button': True,
     }
 
-    return render(request, 'films/weeklies.html', context)
+    return render(request, 'films/production_logs.html', context)

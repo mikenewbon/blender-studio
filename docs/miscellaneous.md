@@ -59,7 +59,7 @@ The context therefore is defined by a query string `?site_context=...` added to 
 URL in all the relevant templates, as well as in the components used to display the modal.
 The `site_context` values can be the following:
 
-- `'weeklies'` - for assets inside production log entries (in the 'Weeklies' website section or elsewhere),
+- `'production_logs'` - for assets inside production log entries (in the 'Weeklies' website section or elsewhere),
 - `'featured_artwork'` - for featured assets in the 'Gallery' section,
 - `'gallery'` - for assets inside collections in the 'Gallery section.
 

@@ -12,12 +12,12 @@ from films.models import Asset, Collection
 class SiteContexts(Enum):
     """Defines possible values of the site_context query parameter."""
 
-    WEEKLIES = 'weeklies'
+    PRODUCTION_LOGS = 'production_logs'
     FEATURED_ARTWORK = 'featured_artwork'
     GALLERY = 'gallery'
 
 
-def get_previous_asset_in_weeklies(asset: Asset) -> Optional[Asset]:
+def get_previous_asset_in_production_logs(asset: Asset) -> Optional[Asset]:
     current_log_entry = asset.entry_asset.production_log_entry
     previous_asset: Optional[Asset]
     try:
@@ -29,7 +29,7 @@ def get_previous_asset_in_weeklies(asset: Asset) -> Optional[Asset]:
     return previous_asset
 
 
-def get_next_asset_in_weeklies(asset: Asset) -> Optional[Asset]:
+def get_next_asset_in_production_logs(asset: Asset) -> Optional[Asset]:
     current_log_entry = asset.entry_asset.production_log_entry
     next_asset: Optional[Asset]
     try:
@@ -88,7 +88,7 @@ def get_asset_context(
 
     The request's URL is expected to contain a query string 'site_context=...' with one
     of the following values (see the SiteContexts enum):
-    - 'weeklies' - for assets inside production log entries in the 'Weeklies' website section;
+    - 'production_logs' - for assets inside production log entries in the 'Weeklies' website section;
         they are sorted by their `date_created`,
     - 'featured_artwork' - for featured assets in the 'Gallery' section; they are sorted by
         their `date_created`,
@@ -112,9 +112,9 @@ def get_asset_context(
         - 'site_context' - a string; it can be reused in HTML components which need to add
         a query string to the asset modal URL.
     """
-    if site_context == SiteContexts.WEEKLIES.value:
-        previous_asset = get_previous_asset_in_weeklies(asset)
-        next_asset = get_next_asset_in_weeklies(asset)
+    if site_context == SiteContexts.PRODUCTION_LOGS.value:
+        previous_asset = get_previous_asset_in_production_logs(asset)
+        next_asset = get_next_asset_in_production_logs(asset)
     elif site_context == SiteContexts.FEATURED_ARTWORK.value:
         previous_asset = get_previous_asset_in_featured_artwork(asset)
         next_asset = get_next_asset_in_featured_artwork(asset)

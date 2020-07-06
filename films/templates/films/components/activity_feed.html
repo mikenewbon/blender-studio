@@ -49,13 +49,13 @@
               <!--TODO(Mike): Need an API to handle file requests-->
               {% for entry_asset in entry.assets|slice:':4' %}
               <div class="col">
-                {% include "common/components/file.html" with asset=entry_asset.asset site_context="weeklies" %}
+                {% include "common/components/file.html" with asset=entry_asset.asset site_context="production_logs" %}
               </div>
               {% endfor %}
               {% if entry.assets|length > 4 %}
               <div class="collapse" id="entry-{{ entry.id }}">
                 {% for entry_asset in entry.assets|slice:'4:' %}
-                {% include "common/components/file.html" with asset=entry_asset.asset site_context="weeklies" %}
+                {% include "common/components/file.html" with asset=entry_asset.asset site_context="production_logs" %}
                 {% endfor %}
               </div>
               {% endif %}

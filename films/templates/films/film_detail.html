@@ -15,7 +15,7 @@
       <div class="col-md-6 text-center">
         <h2 class="mb-0">Latest Updates</h2>
         <p class="mb-0">Want to see more updates from {{ film.title }}?
-          <a href="{% url 'film-weeklies' film.slug %}">See all weeklies</a></p>
+          <a href="{% url 'film-production-logs' film.slug %}">See all weeklies</a></p>
       </div>
     </div>
 
@@ -26,7 +26,7 @@
     <div class="row">
       <div class="col text-center">
         <p class="mb-0">Want to see more updates from {{ film.title }}?
-          <a href="{% url 'film-weeklies' film.slug %}">See all weeklies</a></p>
+          <a href="{% url 'film-production-logs' film.slug %}">See all weeklies</a></p>
       </div>
     </div>
     {% else %}

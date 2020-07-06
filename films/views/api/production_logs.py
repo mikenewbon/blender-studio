@@ -17,7 +17,7 @@ def get_production_logs_page(
     page_number: Optional[Union[int, str]] = 1,
     per_page: Optional[Union[int, str]] = DEFAULT_LOGS_PAGE_SIZE,
 ) -> paginator.Page:
-    """Retrieve production logs for film weeklies context.
+    """Retrieve production logs for film production logs context.
 
     Altogether, this function sends 5 database queries.
 
