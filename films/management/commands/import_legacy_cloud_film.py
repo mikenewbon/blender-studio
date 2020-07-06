@@ -91,7 +91,7 @@ class Command(BaseCommand):
                 # Create a GCS storage backend (all film use this type of storage)
                 storage_backend: models_assets.StorageBackend = models_assets.StorageBackend.objects.create(
                     name=film_doc['url'],
-                    category=models_assets.StorageBackendCategoryChoices.gcs,
+                    category=models_assets.StorageLocationCategoryChoices.gcs,
                     bucket_name=film_doc['_id'],
                 )
 

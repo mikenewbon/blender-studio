@@ -80,7 +80,7 @@ class Command(BaseCommand):
                 # Create a GCS storage backend (all training use this type of storage)
                 storage_backend: models_assets.StorageBackend = models_assets.StorageBackend.objects.create(
                     name=training_doc['url'],
-                    category=models_assets.StorageBackendCategoryChoices.gcs,
+                    category=models_assets.StorageLocationCategoryChoices.gcs,
                     bucket_name=training_doc['_id'],
                 )
 

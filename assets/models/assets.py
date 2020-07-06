@@ -8,7 +8,7 @@ from django.db.models import FileField
 from django.db.models.fields.files import FieldFile
 from storages.backends.gcloud import GoogleCloudStorage
 
-from assets.models import License, StorageBackend, StorageBackendCategoryChoices
+from assets.models import License, StorageBackend, StorageLocationCategoryChoices
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
 
@@ -30,7 +30,7 @@ class DynamicStorageFieldFile(FieldFile):
 
         if instance.storage_backend_id:  # type: ignore[attr-defined]
             # The `if` prevents an unhandled exception if one tries to save without a storage_backend
-            if instance.storage_backend.category == StorageBackendCategoryChoices.gcs:  # type: ignore[attr-defined]
+            if instance.storage_backend.category == StorageLocationCategoryChoices.gcs:  # type: ignore[attr-defined]
                 self.storage: GoogleCloudStorage = GoogleCloudStorage()
                 if instance.storage_backend.bucket_name:  # type: ignore[attr-defined]
                     self.storage.bucket_name = instance.storage_backend.bucket_name  # type: ignore[attr-defined]
@@ -47,7 +47,7 @@ class DynamicStorageFileField(models.FileField):
             f'which does not have the `storage_backend` field.'
         )
 
-        if model_instance.storage_backend.category == StorageBackendCategoryChoices.gcs:  # type: ignore[attr-defined]
+        if model_instance.storage_backend.category == StorageLocationCategoryChoices.gcs:  # type: ignore[attr-defined]
             storage = GoogleCloudStorage()
         else:
             storage = FileSystemStorage()
