@@ -8,7 +8,7 @@ from django.db.models import FileField
 from django.db.models.fields.files import FieldFile
 from storages.backends.gcloud import GoogleCloudStorage
 
-from assets.models import License, StorageBackend, StorageLocationCategoryChoices
+from assets.models import License, StorageLocation, StorageLocationCategoryChoices
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
 
@@ -73,7 +73,7 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
         License, null=True, on_delete=models.SET_NULL, related_name='assets'
     )
     storage_backend = models.ForeignKey(
-        StorageBackend, on_delete=models.CASCADE, related_name='assets'
+        StorageLocation, on_delete=models.CASCADE, related_name='assets'
     )
 
     source_preview = DynamicStorageFileField(upload_to=get_upload_to_hashed_path, blank=True)

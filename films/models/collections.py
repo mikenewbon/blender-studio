@@ -2,7 +2,7 @@ from django.db import models
 from django.urls.base import reverse
 from django.utils.text import slugify
 
-from assets.models import DynamicStorageFileField, StorageBackend
+from assets.models import DynamicStorageFileField, StorageLocation
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
 from films.models import films
@@ -24,7 +24,7 @@ class Collection(mixins.CreatedUpdatedMixin, models.Model):
     slug = models.SlugField(blank=True)
     text = models.TextField(blank=True)
 
-    storage_backend = models.ForeignKey(StorageBackend, on_delete=models.CASCADE)
+    storage_backend = models.ForeignKey(StorageLocation, on_delete=models.CASCADE)
     preview = DynamicStorageFileField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
     picture_16_9 = DynamicStorageFileField(
         upload_to=get_upload_to_hashed_path, blank=True, null=True

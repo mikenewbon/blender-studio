@@ -3,7 +3,7 @@ from datetime import date, timedelta
 from django.contrib.auth.models import User
 from django.db import models
 
-from assets.models import DynamicStorageFileField, StorageBackend
+from assets.models import DynamicStorageFileField, StorageLocation
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
 from films.models import Asset, Film
@@ -35,7 +35,7 @@ class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
     author.description = "The actual author of the summary in the weekly production log."
     youtube_link = models.URLField(blank=True)
     storage_backend = models.ForeignKey(
-        StorageBackend, on_delete=models.CASCADE, related_name='production_logs'
+        StorageLocation, on_delete=models.CASCADE, related_name='production_logs'
     )
     picture_16_9 = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
 

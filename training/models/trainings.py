@@ -3,7 +3,7 @@ from django.db import models
 from django.urls.base import reverse
 from django.utils.text import slugify
 
-from assets.models import StorageBackend, DynamicStorageFileField
+from assets.models import StorageLocation, DynamicStorageFileField
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
 from training.models import tags
@@ -33,7 +33,7 @@ class Training(mixins.CreatedUpdatedMixin, models.Model):
             models.Index(fields=['status', 'difficulty', 'type']),
         ]
 
-    storage_backend = models.OneToOneField(StorageBackend, on_delete=models.PROTECT)
+    storage_backend = models.OneToOneField(StorageLocation, on_delete=models.PROTECT)
     # TODO(Natalia): validation - either film or a training has to be null, but not both
 
     name = models.CharField(unique=True, max_length=512)

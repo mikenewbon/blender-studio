@@ -6,7 +6,7 @@ class StorageLocationCategoryChoices(models.TextChoices):
     gcs = 'gcs', 'Google Cloud Storage'
 
 
-class StorageBackend(models.Model):
+class StorageLocation(models.Model):
     name = models.CharField(max_length=512)
     category = models.CharField(
         choices=StorageLocationCategoryChoices.choices,

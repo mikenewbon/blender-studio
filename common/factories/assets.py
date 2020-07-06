@@ -1,13 +1,13 @@
 import factory
 from factory import fuzzy
 
-from assets.models import StaticAsset, AssetFileTypeChoices, StorageBackend, License
+from assets.models import StaticAsset, AssetFileTypeChoices, StorageLocation, License
 from common.factories.user import UserFactory
 
 
 class StorageBackendFactory(factory.DjangoModelFactory):
     class Meta:
-        model = StorageBackend
+        model = StorageLocation
 
     name = factory.Faker('text', max_nb_chars=15)
 

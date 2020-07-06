@@ -89,7 +89,7 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.WARNING('Project %s already exists' % film_doc['url']))
             else:
                 # Create a GCS storage backend (all film use this type of storage)
-                storage_backend: models_assets.StorageBackend = models_assets.StorageBackend.objects.create(
+                storage_backend: models_assets.StorageLocation = models_assets.StorageLocation.objects.create(
                     name=film_doc['url'],
                     category=models_assets.StorageLocationCategoryChoices.gcs,
                     bucket_name=film_doc['_id'],

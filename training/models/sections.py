@@ -2,7 +2,7 @@ from django.db import models
 from django.urls.base import reverse
 from django.utils.text import slugify
 
-from assets.models import DynamicStorageFileField, StorageBackend
+from assets.models import DynamicStorageFileField, StorageLocation
 from comments.models import Comment
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
@@ -76,7 +76,7 @@ class SectionComment(models.Model):
 
 
 class Video(mixins.CreatedUpdatedMixin, models.Model):
-    storage_backend = models.ForeignKey(StorageBackend, on_delete=models.CASCADE)
+    storage_backend = models.ForeignKey(StorageLocation, on_delete=models.CASCADE)
     section = models.OneToOneField(Section, on_delete=models.CASCADE, related_name='video')
     file = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
     size_bytes = models.BigIntegerField(editable=False)
@@ -97,7 +97,7 @@ class Video(mixins.CreatedUpdatedMixin, models.Model):
 
 
 class Asset(mixins.CreatedUpdatedMixin, models.Model):
-    storage_backend = models.ForeignKey(StorageBackend, on_delete=models.CASCADE)
+    storage_backend = models.ForeignKey(StorageLocation, on_delete=models.CASCADE)
     section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='assets')
     file = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
     size = models.IntegerField()
