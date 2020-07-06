@@ -12,7 +12,11 @@ from films.views.api.production_logs import get_production_logs_page
 @method_decorator(require_safe, name='dispatch')
 class FilmListView(ListView):
     model = Film
-    queryset = Film.objects.filter(is_published=True).order_by('status', '-release_date')
+    queryset = (
+        Film.objects.filter(is_published=True)
+        .select_related('storage_backend')
+        .order_by('status', '-release_date')
+    )
     template_name = 'films/films.html'
 
 

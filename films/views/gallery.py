@@ -66,7 +66,7 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
         'current_collection': collection,
         'current_assets': collection.assets.filter(is_published=True)
         .order_by('order', 'name')
-        .select_related('static_asset'),
+        .select_related('static_asset__storage_backend'),
         'child_collections': child_collections,
         **drawer_menu_context,
     }
