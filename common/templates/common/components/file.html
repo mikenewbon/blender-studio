@@ -6,7 +6,7 @@
         data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
         {% if asset.static_asset.preview %}
 
-        {% include "common/components/helpers/image_set.html" with alt=asset.name classes="file-image" img_source=asset.static_asset.preview xs_size="350" sm_size="350" md_size="350" lg_size="350" xl_size="350" %}
+        {% include "common/components/helpers/image_set.html" with alt=asset.name classes="file-image" img_source=asset.static_asset.preview xsmall_width="350" small_width="350" medium_width="350" large_width="350" xlarge_width="350" %}
 
         {% else %}
         <img class="file-icon" src="{% static "common/images/icons/file.svg" %}" alt="asset preview">

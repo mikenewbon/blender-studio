@@ -26,7 +26,7 @@
         <a data-toggle="modal" data-target="#file-zoom-modal" class="modal-asset-image-wrapper" href="#"
           data-url="{% url 'api-asset-zoom' asset.id %}">
 
-          {% include "common/components/helpers/image_set.html" with alt=asset.name classes="img-fluid" img_source=asset.static_asset.preview xs_size="575" sm_size="780" md_size="780" lg_size="780" xl_size="780" %}
+          {% include "common/components/helpers/image_set.html" with alt=asset.name classes="img-fluid" img_source=asset.static_asset.preview xsmall_width="576" small_width="768" medium_width="768" large_width="870" xlarge_width="780" %}
 
         </a>
 
