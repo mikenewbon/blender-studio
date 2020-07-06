@@ -79,8 +79,9 @@ class Video(mixins.CreatedUpdatedMixin, models.Model):
     storage_backend = models.ForeignKey(StorageBackend, on_delete=models.CASCADE)
     section = models.OneToOneField(Section, on_delete=models.CASCADE, related_name='video')
     file = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
-    size = models.IntegerField()
+    size_bytes = models.BigIntegerField(editable=False)
     duration = models.DurationField(help_text='[DD] [[HH:]MM:]ss[.uuuuuu]')
+    duration.description = 'Video duration in the format [DD] [[HH:]MM:]ss[.uuuuuu]'
 
     def __str__(self) -> str:
         return self.file.name  # type: ignore
@@ -88,6 +89,11 @@ class Video(mixins.CreatedUpdatedMixin, models.Model):
     @property
     def progress_url(self) -> str:
         return reverse('video_progress', kwargs={'video_pk': self.pk})
+
+    def clean(self):
+        super().clean()
+        if self.file:
+            self.size_bytes = self.file.size
 
 
 class Asset(mixins.CreatedUpdatedMixin, models.Model):

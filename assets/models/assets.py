@@ -119,7 +119,8 @@ class Video(mixins.CreatedUpdatedMixin, models.Model):
     static_asset = models.OneToOneField(StaticAsset, on_delete=models.CASCADE)
     resolution = models.CharField(max_length=32, blank=True)
     resolution_text = models.CharField(max_length=32, blank=True)
-    duration_seconds = models.DurationField(help_text='[DD] [[HH:]MM:]ss[.uuuuuu]')
+    duration = models.DurationField(help_text='[DD] [[HH:]MM:]ss[.uuuuuu]')
+    duration.description = 'Video duration in the format [DD] [[HH:]MM:]ss[.uuuuuu]'
     play_count = models.PositiveIntegerField(default=0, editable=False)
 
     def __str__(self) -> str:
