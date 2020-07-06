@@ -35,6 +35,10 @@
       text-decoration: none;
     }
 
+    .file-image+.file-icon {
+      background-color: tint($navigation-gray, 10%);
+    }
+
     h4 {
       text-decoration: underline;
     }
@@ -75,6 +79,7 @@
       position: absolute;
       top: $spacer / 2;
       right: $spacer / 2;
+
       @include media-breakpoint-down(sm) {
         display: none;
       }
@@ -83,15 +88,51 @@
 
   &-icon {
     height: 100%;
+    width: 50%;
   }
 
   &-image {
     width: 100%;
+
+    +.file-icon {
+      position: absolute;
+      top: $spacer / 2;
+      left: $spacer / 2;
+      width: $spacer * 2;
+      height: $spacer * 2;
+      padding: $spacer / 2;
+      background: $navigation-gray;
+      border-radius: $spacer;
+    }
   }
 }
 
 a.file {
   &:hover {
     text-decoration: none;
+  }
+}
+
+.update-feed {
+  .files {
+    .col {
+      margin-bottom: $spacer;
+    }
+  }
+
+  .file-header {
+    padding-bottom: 56.25%;
+    a {
+      padding: $spacer / 2;
+    }
+    > *{
+      position: absolute;
+    }
+  }
+
+  .file-image {
+    width: auto;
+    max-height: calc(100% + #{$spacer});
+    max-width: calc(100% + #{$spacer});
   }
 }

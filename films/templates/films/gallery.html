@@ -38,14 +38,14 @@ has-secondary-nav
 
 <div class="drawer-nav-group">
   <div class="drawer-nav-dropdown-wrapper ">
-    {% if child_collections %}
-    <div class="btn btn-ctrl {% if current_collection.parent != collection %}collapsed{% endif %}"
-      data-toggle="collapse" data-target="#collection-{{ collection.id }}">
+
+    <a class="drawer-nav-dropdown h3 {% if current_collection.parent != collection and current_collection != collection %}collapsed{% endif %}"
+      href="{{ collection.url }}">
+      {% if child_collections %}
       <i class="material-icons">keyboard_arrow_down</i>
-    </div>
-    {% endif %}
-    <a class="drawer-nav-dropdown h3 " href="{{ collection.url }}"><i
-        class="material-icons">folder</i>{{ collection.name }}</a>
+      {% endif %}
+      {{ collection.name }}
+    </a>
   </div>
   {% comment %} <h3 class="drawer-nav-dropdown {% if collapsed %}collapsed{% endif %}" data-toggle="collapse"
     data-target="#collection-{{ collection.id }}">
@@ -53,7 +53,7 @@ has-secondary-nav
     {{ collection.name }}
   </h3> {% endcomment %}
   <ol id="collection-{{ collection.id }}"
-    class="drawer-nav-list collapse {% if current_collection.parent == collection %}show{% endif %}">
+    class="drawer-nav-list collapse {% if current_collection.parent == collection or current_collection == collection %}show{% endif %}">
 
     {% for child_collection in child_collections %}
     <li class="drawer-nav-section">
@@ -88,20 +88,21 @@ has-secondary-nav
 
     <div class="files">
       <div class="card-columns">
-      {% comment %} <div class="row row-cols-2 row-cols-sm-3 row-cols-md-2 row-cols-lg-3 row-cols-xl-4"> {% endcomment %}
+        {% comment %} <div class="row row-cols-2 row-cols-sm-3 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+          {% endcomment %}
 
-        {% if featured_artwork %}
-        {% for asset in featured_artwork %}
-        {% include "common/components/file.html" with asset=asset site_context="featured_artwork" %}
-        {% endfor %}
-        {% endif %}
+          {% if featured_artwork %}
+          {% for asset in featured_artwork %}
+          {% include "common/components/file.html" with asset=asset site_context="featured_artwork" %}
+          {% endfor %}
+          {% endif %}
 
+        </div>
       </div>
+
     </div>
+    {% endblock gallery_files %}
 
   </div>
-  {% endblock gallery_files %}
 
-</div>
-
-{% endblock content %}
+  {% endblock content %}
