@@ -57,7 +57,7 @@
     </div>
 
     <div data-toggle="dropdown" class="btn btn-nav nav-profile">
-      <div style="background-image:url('https://blender.chat/avatar/MikeNewbon');" class="profile"></div>
+      <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');" class="profile"></div>
       <div class="dropdown-menu profile-dropdown">
 
         <a href="/" class="dropdown-item">
@@ -90,16 +90,6 @@
       <a href="#" class="btn btn-primary">Join Blender Studio</a>
     </div>
     {% endif %}
-    {% comment %} <div data-toggle="dropdown" class="btn btn-nav nav-profile">
-      <div style="background-image:url('https://blender.chat/avatar/MikeNewbon');" class="profile"></div>
-      <div class="dropdown-menu profile-dropdown"><a href="" class="dropdown-item"><i class="material-icons">home</i>
-          <span>My Cloud</span></a><a href="" class="dropdown-item"><i class="material-icons">settings</i>
-          <span>Settings</span></a><a href="" class="dropdown-item"><i class="material-icons">credit_card</i>
-          <span>Subscription</span></a>
-        <div class="dropdown-divider"></div>
-        <a href="" class="dropdown-item"><i class="material-icons">exit_to_app</i> <span>Sign Out</span></a>
-      </div>
-    </div> {% endcomment %}
   </nav>
 
 
@@ -270,6 +260,22 @@
   <div id="file-zoom-modal" class="modal modal-asset-zoom" tabindex="-1" role="dialog" aria-hidden="true">
     {# This is the zoom modal div, the contents from "modal_asset_zoom.html" are inserted here. #}
   </div>
+
+  <div id="videoModal" class="modal modal-asset"  tabindex="-1" role="dialog"
+  aria-hidden="true">
+  <button class="modal-navigation modal-close btn btn-ctrl" data-dismiss="modal">
+    <i class="material-icons btn-material-icons">close</i>
+  </button>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark">
+      <div class="modal-body p-0">
+        <div class="embed-responsive embed-responsive-16by9 js-youtube-embed">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 

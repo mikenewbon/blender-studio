@@ -1,4 +1,3 @@
-{% load static %}
 <div style="background-image:url({{ film.picture_header.url }})"
   class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content header">
   <div class="container-xl">
@@ -10,7 +9,7 @@
             {{ film.summary|linebreaksbr }}
           </p>
           {% if film.youtube_link != "" %}
-          <button class="btn btn-primary mb-0" data-toggle="modal" data-target="#watchVideoModal">Watch
+          <button class="btn btn-primary mb-0 video-modal-link" data-toggle="modal" data-target="#videoModal" data-video="{{ film.youtube_link }}">Watch
             {{ film.title }}</button>
           <a class="btn btn-transparent mb-0" href="{% url 'film-gallery' film.slug %}">Explore
             Content</a>
@@ -22,46 +21,3 @@
     </div>
   </div>
 </div>
-
-<div class="modal modal-asset" id="watchVideoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <button class="modal-navigation modal-close btn btn-ctrl" data-dismiss="modal">
-    <i class="material-icons btn-material-icons">close</i>
-  </button>
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content bg-dark">
-      <div class="modal-body p-0">
-        <div class="embed-responsive embed-responsive-16by9 js-youtube-embed">
-
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- TODO(Mike): Move this into a external script? Speak with Francesco about local vs global -->
-<script>
-  function getYouTubeID(url) {
-    let video_url = url;
-    let video_id = video_url.split('v=')[1];
-    let ampersandPosition = video_id.indexOf('&');
-    if (ampersandPosition != -1) {
-      video_id = video_id.substring(0, ampersandPosition);
-    }
-    return video_id;
-  }
-
-  function insertYouTubeEmbed(url, element) {
-    let id = getYouTubeID(url);
-    let iframeMarkup = '<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/' + id +
-      '" allowfullscreen></iframe>';
-
-    document.querySelectorAll(element).forEach((item) => {
-      item.innerHTML = iframeMarkup;
-    })
-  }
-
-  document.addEventListener("DOMContentLoaded", function () {
-    insertYouTubeEmbed('{{ film.youtube_link }}', '.js-youtube-embed')
-  });
-</script>

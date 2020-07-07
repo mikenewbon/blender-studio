@@ -1,14 +1,15 @@
+{% load static %}
 {% extends 'training/base_with_navigation.html' %}
 
 {% block breadcrumbs %}
 <nav class="navbar-secondary" aria-label="breadcrumbs">
 
-		<div class="container-xl">
-			<ol class="breadcrumb">
-				{% include 'common/components/navigation/breadcrumb.html' with label='Home' url='/' %}
-				{% include 'common/components/navigation/breadcrumb.html' with label=training.name %}
-			</ol>
-		</div>
+  <div class="container-xl">
+    <ol class="breadcrumb">
+      {% include 'common/components/navigation/breadcrumb.html' with label='Home' url='/' %}
+      {% include 'common/components/navigation/breadcrumb.html' with label=training.name %}
+    </ol>
+  </div>
 
 </nav>
 
@@ -16,88 +17,88 @@
 
 {% block content %}
 <div class="container-xl pt-3">
-	<section>
-		<img src="{{ training.picture_header }}" class="img-fluid img-width-100 mb-3" alt="">
-		<div class="row">
-			<div class="col-md-8">
-				<p class="subtitle">{{ training.type.label }}</p>
-				<h1 class="">{{ training.name }}</h1>
-				<!--<p>{{ training.description }}</p>-->
-				<div class="training-toolbar-container">
+  <section>
+    <img src="{{ training.picture_header }}" class="img-fluid img-width-100 mb-3" alt="">
+    <div class="row">
+      <div class="col-md-8">
+        <p class="subtitle">{{ training.type.label }}</p>
+        <h1 class="">{{ training.name }}</h1>
+        <!--<p>{{ training.description }}</p>-->
+        <div class="training-toolbar-container">
 
-					<div class="pills training-toolbar-pills">
-						{% for tag in training.tags %}
-                            {% include 'common/components/cards/pill.html' with label=tag %}
-						{% endfor %}
-					</div>
+          <div class="pills training-toolbar-pills">
+            {% for tag in training.tags %}
+            {% include 'common/components/cards/pill.html' with label=tag %}
+            {% endfor %}
+          </div>
 
-					<div class="training-toolbar">
-						<a class="btn btn-sm btn-dark"><i
-								class="material-icons btn-material-icons btn-material-icons-lg">add</i> Save</a>
+          <div class="training-toolbar">
+            <a class="btn btn-sm btn-dark"><i class="material-icons btn-material-icons btn-material-icons-lg">add</i>
+              Save</a>
 
-						<button data-toggle="dropdown" class="btn btn-sm btn-ctrl-sm btn-dark">
+            <button data-toggle="dropdown" class="btn btn-sm btn-ctrl-sm btn-dark">
 
-							<i class="material-icons btn-material-icons">more_horiz</i>
+              <i class="material-icons btn-material-icons">more_horiz</i>
 
-							<div class="dropdown-menu dropdown-menu-right">
-								<a href="#" class="dropdown-item">
-									<i class="material-icons">flag</i>
-									<span>Report Problem</span>
-								</a>
-							</div>
-						</button>
-					</div>
-				</div>
-				<section class="mb-3">{{ training.summary }}</section>
-			</div>
+              <div class="dropdown-menu dropdown-menu-right">
+                <a href="#" class="dropdown-item">
+                  <i class="material-icons">flag</i>
+                  <span>Report Problem</span>
+                </a>
+              </div>
+            </button>
+          </div>
+        </div>
+        <section class="mb-3">{{ training.summary }}</section>
+      </div>
 
-			<div class="col-md-4">
-				<div class="card card-dark">
-					<div class="card-body">
-						<h3>About this {{ training.type.label }}</h3>
-						<table class="table table-sm mb-0">
-							<tbody>
-								<tr>
-									<td>Difficulty</td>
-									<td class="text-right">
-										<div class="badge badge-difficulty badge-{{ training.difficulty.value }}">
-											<i class="material-icons btn-material-icons">extension</i>
-											{{ training.difficulty.label }}
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td>Last updated</td>
-									<td class="text-right">{{ training.date_updated|date:"jS F Y" }}</td>
-								</tr>
-								<tr>
-									<td>Estimated duration</td>
-									<td class="text-right">4h 32m</td>
-								</tr>
-								<tr>
-									<td colspan="2" class="pb-0">
-										<div class="container-fluid">
-											<div class="row mb-2">
-												<div style="background-image:url('https://blender.chat/avatar/MikeNewbon');"
-													class="profile"></div>
-												<div class="col-auto">
-													<p class="subtitle x-small">Author</p>
-													<h4 class="comment-name">Mike Newbon</h4>
-												</div>
-											</div>
-										</div>
+      <div class="col-md-4">
+        <div class="card card-dark">
+          <div class="card-body">
+            <h3>About this {{ training.type.label }}</h3>
+            <table class="table table-sm mb-0">
+              <tbody>
+                <tr>
+                  <td>Difficulty</td>
+                  <td class="text-right">
+                    <div class="badge badge-difficulty badge-{{ training.difficulty.value }}">
+                      <i class="material-icons btn-material-icons">extension</i>
+                      {{ training.difficulty.label }}
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Last updated</td>
+                  <td class="text-right">{{ training.date_updated|date:"jS F Y" }}</td>
+                </tr>
+                <tr>
+                  <td>Estimated duration</td>
+                  <td class="text-right">4h 32m</td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="pb-0">
+                    <div class="container-fluid">
+                      <div class="row mb-2">
+                        <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');"
+                          class="profile"></div>
+                        <div class="col-auto">
+                          <p class="subtitle x-small">Author</p>
+                          <h4 class="comment-name">Mike Newbon</h4>
+                        </div>
+                      </div>
+                    </div>
 
-										<p class="mb-0">Blender Artist. Co-Founder of blendFX. Shading,
-											Pipeline, Tracking,
-											Python Scripting. Also: Knitting.</p>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+                    <p class="mb-0">Blender Artist. Co-Founder of blendFX. Shading,
+                      Pipeline, Tracking,
+                      Python Scripting. Also: Knitting.</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
 {% endblock content %}

@@ -1,3 +1,4 @@
+{% load static %}
 <div class="update-feed">
   {% for production_log in production_logs_page %}
   <div class="update-feed-week">
@@ -18,13 +19,22 @@
       {% if production_log.summary %}
       <div class="update-feed-individual">
         <div class="update-feed-individual-summary">
+          {% if production_log.youtube_link != "" %}
+          <a class="video-modal-link video-preview" data-toggle="modal" data-target="#videoModal" data-video="{{ production_log.youtube_link }}">
+            <img src="{{ production_log.picture_16_9.url }}" alt="Video Preview">
+          </a>
+          {% else %}
           <a href="#">
             <img src="{{ production_log.picture_16_9.url }}" alt="production log preview">
           </a>
+          {% endif %}
         </div>
         <div class="update-feed-individual-files">
           <h3>This week on {{ film.title }}</h3>
           {{ production_log.summary | safe | linebreaks }}
+          {% if production_log.youtube_link != "" %}
+          <a href="{{ production_log.youtube_link }}" class="video-modal-link" data-toggle="modal" data-target="#videoModal" data-video="{{ production_log.youtube_link }}">Watch the video</a>
+          {% endif %}
         </div>
       </div>
       {% endif %}
@@ -33,7 +43,7 @@
       <div class="update-feed-individual">
         <div class="update-feed-individual-summary">
           <div class="update-feed-individual-summary-profile">
-            <div style="background-image:url('https://blender.chat/avatar/MikeNewbon');"
+            <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');"
               class="profile-image profile ml-2">
             </div>
             <div class="col-auto">
