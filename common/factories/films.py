@@ -1,4 +1,7 @@
 import factory
+import uuid
+from django.conf import settings
+from factory import fuzzy
 
 from common.factories.assets import StaticAssetFactory, StorageLocationFactory
 from common.factories.user import UserFactory
@@ -9,7 +12,13 @@ from films.models import (
     ProductionLog,
     ProductionLogEntry,
     ProductionLogEntryAsset,
+    FilmStatus,
+    AssetCategory,
 )
+
+
+def generate_image_path() -> str:
+    return f'tests/images/{uuid.uuid4()}.jpg'
 
 
 class FilmFactory(factory.DjangoModelFactory):
@@ -18,9 +27,19 @@ class FilmFactory(factory.DjangoModelFactory):
 
     title = factory.Faker('text', max_nb_chars=20)
     slug = factory.Faker('slug')
+    description = factory.Faker('sentence')
+    summary = factory.Faker('paragraph')
+    status = fuzzy.FuzzyChoice(FilmStatus.choices, getter=lambda c: c[0])
+    release_date = factory.Faker('date')
     is_published = True
 
-    storage_location = factory.SubFactory(StorageLocationFactory)
+    logo = factory.LazyFunction(generate_image_path)
+    poster = factory.LazyFunction(generate_image_path)
+    picture_header = factory.LazyFunction(generate_image_path)
+
+    storage_location = factory.SubFactory(
+        StorageLocationFactory, name=factory.SelfAttribute('..title')
+    )
 
 
 class CollectionFactory(factory.DjangoModelFactory):
@@ -30,6 +49,7 @@ class CollectionFactory(factory.DjangoModelFactory):
     film = factory.SubFactory(FilmFactory)
     name = factory.Faker('text', max_nb_chars=30)
     slug = factory.Faker('slug')
+    text = factory.Faker('paragraph')
 
     storage_location = factory.SelfAttribute('film.storage_location')
 
@@ -45,6 +65,9 @@ class AssetFactory(factory.DjangoModelFactory):
     )
 
     name = factory.Faker('text', max_nb_chars=30)
+    slug = factory.Faker('slug')
+    description = factory.Faker('paragraph')
+    category = fuzzy.FuzzyChoice(AssetCategory.choices, getter=lambda c: c[0])
     is_published = True
 
 
@@ -56,7 +79,7 @@ class ProductionLogFactory(factory.DjangoModelFactory):
     summary = factory.Faker('text')
     user = factory.SubFactory(UserFactory)
     storage_location = factory.SelfAttribute('film.storage_location')
-    picture_16_9 = factory.Faker('file_path', category='image')
+    picture_16_9 = factory.LazyFunction(generate_image_path)
 
 
 class ProductionLogEntryFactory(factory.DjangoModelFactory):
