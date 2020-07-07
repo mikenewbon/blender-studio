@@ -17,6 +17,7 @@ class ProductionLogEntryAssetInline(admin.StackedInline):
     show_change_link = True
     extra = 0
 
+    # TODO(Natalia): uncomment the filter kwargs when we finish development
     def formfield_for_foreignkey(
         self, db_field: 'ForeignKey[Any, Any]', request: Optional[HttpRequest], **kwargs: Any
     ) -> Optional[ModelChoiceField]:
@@ -25,10 +26,10 @@ class ProductionLogEntryAssetInline(admin.StackedInline):
         # TODO(Natalia): add filtering by film, show assets since the last log
         if db_field.name == 'asset' and request is not None:
             kwargs['queryset'] = Asset.objects.filter(
-                Q(static_asset__author=request.user)
-                | (Q(static_asset__author__isnull=True) & Q(static_asset__user=request.user)),
+                # Q(static_asset__author=request.user)
+                # | (Q(static_asset__author__isnull=True) & Q(static_asset__user=request.user)),
                 is_published=True,
-                date_created__gte=timezone.now() - dt.timedelta(days=7),
+                # date_created__gte=timezone.now() - dt.timedelta(days=7),
             )
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
