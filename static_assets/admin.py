@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from assets.models import assets, licenses, storages
+from static_assets.models import static_assets, licenses, storages
 from common.mixins import AdminUserDefaultMixin
 
 
@@ -10,20 +10,20 @@ class LicenseAdmin(admin.ModelAdmin):
 
 
 class ImageInline(admin.TabularInline):
-    model = assets.Image
+    model = static_assets.Image
     show_change_link = True
     extra = 0
     max_num = 1
 
 
 class VideoInline(admin.TabularInline):
-    model = assets.Video
+    model = static_assets.Video
     show_change_link = True
     extra = 0
     max_num = 1
 
 
-@admin.register(assets.StaticAsset)
+@admin.register(static_assets.StaticAsset)
 class StaticAssetAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
     inlines = [ImageInline, VideoInline]
     fieldsets = (
@@ -32,7 +32,7 @@ class StaticAssetAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
             {
                 'fields': [
                     field.name
-                    for field in assets.StaticAsset._meta.get_fields()
+                    for field in static_assets.StaticAsset._meta.get_fields()
                     if field.editable and field.name != 'id'
                 ],
             },

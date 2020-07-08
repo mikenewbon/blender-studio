@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 
-from assets.models import StorageLocation, DynamicStorageFileField
+from static_assets.models import StorageLocation, DynamicStorageFileField
 
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path

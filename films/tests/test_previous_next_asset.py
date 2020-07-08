@@ -4,7 +4,7 @@ from unittest.mock import patch
 from django.test import TestCase
 from django.urls.base import reverse
 
-from common.factories.assets import StaticAssetFactory
+from common.factories.static_assets import StaticAssetFactory
 from common.factories.films import (
     FilmFactory,
     CollectionFactory,

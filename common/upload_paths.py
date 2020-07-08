@@ -4,7 +4,7 @@ import uuid
 from pathlib import Path
 
 if typing.TYPE_CHECKING:
-    import assets.models.StaticAsset
+    import static_assets.models.StaticAsset
     import films
     import training
 
@@ -16,7 +16,7 @@ def generate_hash_from_filename(filename: str) -> str:
 
 
 ModelWithFile = typing.Union[
-    'assets.models.StaticAsset',
+    'static_assets.models.StaticAsset',
     'films.models.Film',
     'films.models.Collection',
     'training.models.Training',

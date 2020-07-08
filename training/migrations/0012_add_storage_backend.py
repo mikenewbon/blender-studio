@@ -25,7 +25,7 @@ def reverse_func(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('assets', '0004_squashed_0010_alter_fields_in_models'),
+        ('static_assets', '0004_squashed_0010_alter_fields_in_models'),
         ('training', '0011_add_dynamic_file_fields'),
     ]
 
@@ -33,25 +33,25 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='asset',
             name='storage_backend',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='assets.StorageBackend'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='static_assets.StorageBackend'),
             preserve_default=False,
         ),
         migrations.RunPython(set_backend_asset, reverse_func),
         migrations.AlterField(
             model_name='asset',
             name='storage_backend',
-            field=models.ForeignKey(null=False, on_delete=django.db.models.deletion.CASCADE, to='assets.StorageBackend'),
+            field=models.ForeignKey(null=False, on_delete=django.db.models.deletion.CASCADE, to='static_assets.StorageBackend'),
         ),
         migrations.AddField(
             model_name='video',
             name='storage_backend',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='assets.StorageBackend'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='static_assets.StorageBackend'),
             preserve_default=False,
         ),
         migrations.RunPython(set_backend_video, reverse_func),
         migrations.AlterField(
             model_name='video',
             name='storage_backend',
-            field=models.ForeignKey(null=False, on_delete=django.db.models.deletion.CASCADE, to='assets.StorageBackend'),
+            field=models.ForeignKey(null=False, on_delete=django.db.models.deletion.CASCADE, to='static_assets.StorageBackend'),
         ),
     ]

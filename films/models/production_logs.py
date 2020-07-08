@@ -3,7 +3,7 @@ from datetime import date, timedelta
 from django.contrib.auth.models import User
 from django.db import models
 
-from assets.models import DynamicStorageFileField, StorageLocation
+from static_assets.models import DynamicStorageFileField, StorageLocation
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
 from films.models import Asset, Film

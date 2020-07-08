@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('films', '0020_squashed_0025_alter_model_fields_and_options'),
         ('training', '0015_alter_video_size_bytes'),
-        ('assets', '0004_squashed_0010_alter_fields_in_models'),
+        ('static_assets', '0004_squashed_0010_alter_fields_in_models'),
     ]
 
     operations = [

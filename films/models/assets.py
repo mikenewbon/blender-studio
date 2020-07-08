@@ -24,7 +24,7 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
 
     film = models.ForeignKey('Film', on_delete=models.CASCADE, related_name='assets')
     static_asset = models.ForeignKey(
-        'assets.StaticAsset', on_delete=models.CASCADE, related_name='assets'
+        'static_assets.StaticAsset', on_delete=models.CASCADE, related_name='assets'
     )
 
     collection = models.ForeignKey(

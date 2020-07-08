@@ -2,11 +2,10 @@ import random
 import uuid
 
 import factory
-from django.conf import settings
 from factory import fuzzy
 
-from assets.models import StaticAsset, AssetFileTypeChoices, StorageLocation, License
 from common.factories.user import UserFactory
+from static_assets.models import StaticAsset, StaticAssetFileTypeChoices, StorageLocation, License
 
 
 def generate_file_path() -> str:
@@ -37,7 +36,7 @@ class StaticAssetFactory(factory.DjangoModelFactory):
         model = StaticAsset
 
     source = factory.LazyFunction(generate_file_path)
-    source_type = fuzzy.FuzzyChoice(AssetFileTypeChoices, getter=lambda c: c.value)
+    source_type = fuzzy.FuzzyChoice(StaticAssetFileTypeChoices, getter=lambda c: c.value)
     size_bytes = 100
     user = factory.SubFactory(UserFactory)
     license = factory.SubFactory(LicenseFactory)

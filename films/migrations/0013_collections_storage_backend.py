@@ -18,7 +18,7 @@ def reverse_func(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('assets', '0004_squashed_0010_alter_fields_in_models'),
+        ('static_assets', '0004_squashed_0010_alter_fields_in_models'),
         ('films', '0004_squashed_0012_alter_fields_in_models'),
     ]
 
@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='collection',
             name='storage_backend',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='assets.StorageBackend'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='static_assets.StorageBackend'),
             preserve_default=False,
         ),
         migrations.RunPython(set_backend_collection, reverse_func),
@@ -34,6 +34,6 @@ class Migration(migrations.Migration):
             model_name='collection',
             name='storage_backend',
             field=models.ForeignKey(null=False, on_delete=django.db.models.deletion.CASCADE,
-                                    to='assets.StorageBackend'),
+                                    to='static_assets.StorageBackend'),
         ),
     ]

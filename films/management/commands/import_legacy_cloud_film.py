@@ -8,7 +8,7 @@ from django.core.management.base import BaseCommand
 from django.core.files import File
 from django.conf import settings
 
-from assets import models as models_assets
+from static_assets import models as models_assets
 from common import upload_paths
 
 

@@ -7,7 +7,7 @@ BASE_DIR = pathlib.Path(__file__).absolute().parent.parent
 # Application definition
 
 INSTALLED_APPS = [
-    'assets',
+    'static_assets',
     'comments',
     'common',
     'films',

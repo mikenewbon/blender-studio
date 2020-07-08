@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('assets', '0001_initial'),
+        ('static_assets', '0001_initial'),
         ('films', '0001_initial'),
     ]
 
@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='film',
             name='storage',
-            field=models.OneToOneField(default=1, on_delete=django.db.models.deletion.PROTECT, to='assets.StorageBackend'),
+            field=models.OneToOneField(default=1, on_delete=django.db.models.deletion.PROTECT, to='static_assets.StorageBackend'),
             preserve_default=False,
         ),
     ]

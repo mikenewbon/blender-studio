@@ -8,12 +8,12 @@ from django.db.models import FileField
 from django.db.models.fields.files import FieldFile
 from storages.backends.gcloud import GoogleCloudStorage
 
-from assets.models import License, StorageLocation, StorageLocationCategoryChoices
+from static_assets.models import License, StorageLocation, StorageLocationCategoryChoices
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
 
 
-class AssetFileTypeChoices(models.TextChoices):
+class StaticAssetFileTypeChoices(models.TextChoices):
     file = 'file', 'File'
     image = 'image', 'Image'
     video = 'video', 'Video'
@@ -58,7 +58,7 @@ class DynamicStorageFileField(models.FileField):
 
 class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
     source = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
-    source_type = models.CharField(choices=AssetFileTypeChoices.choices, max_length=5)
+    source_type = models.CharField(choices=StaticAssetFileTypeChoices.choices, max_length=5)
     # TODO(Natalia): source type validation
     original_filename = models.CharField(max_length=128, editable=False)
     size_bytes = models.BigIntegerField(editable=False)
@@ -70,10 +70,10 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
     )
     author.description = "The actual author of the artwork/learning materials."
     license = models.ForeignKey(
-        License, null=True, on_delete=models.SET_NULL, related_name='assets'
+        License, null=True, on_delete=models.SET_NULL, related_name='static_assets'
     )
     storage_location = models.ForeignKey(
-        StorageLocation, on_delete=models.CASCADE, related_name='assets'
+        StorageLocation, on_delete=models.CASCADE, related_name='static_assets'
     )
 
     source_preview = DynamicStorageFileField(upload_to=get_upload_to_hashed_path, blank=True)
@@ -86,7 +86,7 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
     def preview(self):
         if self.source_preview:
             return self.source_preview
-        if self.source_type == AssetFileTypeChoices.image:
+        if self.source_type == StaticAssetFileTypeChoices.image:
             return self.source
         # TODO(Natalia): Update this once we have auto-generated previews.
 
@@ -106,9 +106,9 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
             self.original_filename = self.source.file.name
             self.size_bytes = self.source.size
 
-        if self.source_type == AssetFileTypeChoices.file and not self.source_preview:
+        if self.source_type == StaticAssetFileTypeChoices.file and not self.source_preview:
             raise ValidationError(
-                f'Source preview has to be provided for `{AssetFileTypeChoices.file}` source type.'
+                f'Source preview has to be provided for `{StaticAssetFileTypeChoices.file}` source type.'
             )
 
     def __str__(self):

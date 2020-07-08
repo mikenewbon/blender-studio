@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('assets', '0001_initial'),
+        ('static_assets', '0001_initial'),
     ]
 
     operations = [
@@ -79,7 +79,7 @@ class Migration(migrations.Migration):
                 ('view_count', models.PositiveIntegerField(default=0)),
                 ('visibility', models.BooleanField(default=False)),
                 ('collection', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='assets', to='films.Collection')),
-                ('static_asset', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='assets', to='assets.StaticAsset')),
+                ('static_asset', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='assets', to='static_assets.StaticAsset')),
             ],
         ),
         migrations.AddConstraint(

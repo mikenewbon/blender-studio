@@ -3,7 +3,7 @@ import uuid
 from django.conf import settings
 from factory import fuzzy
 
-from common.factories.assets import StaticAssetFactory, StorageLocationFactory
+from common.factories.static_assets import StaticAssetFactory, StorageLocationFactory
 from common.factories.user import UserFactory
 from films.models import (
     Film,
