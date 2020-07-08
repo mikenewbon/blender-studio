@@ -25,7 +25,7 @@ def reverse_func(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('assets', '0006_rename_storage_backend'),
+        ('assets', '0004_squashed_0010_alter_fields_in_models'),
         ('training', '0011_add_dynamic_file_fields'),
     ]
 

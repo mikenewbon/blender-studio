@@ -8,8 +8,6 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    replaces = [('films', '0004_auto_20200603_1552'), ('films', '0005_add_film_release_date_and_link'), ('films', '0006_rename_film_status_choices'), ('films', '0007_auto_20200608_1258'), ('films', '0008_asset_is_featured'), ('films', '0009_asset_film'), ('films', '0010_rename_storage_backend'), ('films', '0011_add_dynamic_file_fields'), ('films', '0012_order_allow_null')]
-
     dependencies = [
         ('films', '0003_auto_20200603_0859'),
     ]

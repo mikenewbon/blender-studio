@@ -7,11 +7,9 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    replaces = [('films', '0020_film_youtube_link_blank_not_null'), ('films', '0021_productionlogentryasset_related_name'), ('films', '0022_verbose_names_in_production_logs'), ('films', '0023_productionlog_author_and_summary'), ('films', '0024_productionlogentryasset_related_name'), ('films', '0025_rename_storage_backend_fields')]
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('films', '0019_add_storage_backend_to_production_log'),
+        ('films', '0015_squashed_0019_production_log_models'),
     ]
 
     operations = [

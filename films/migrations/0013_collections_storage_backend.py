@@ -18,8 +18,8 @@ def reverse_func(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('assets', '0006_rename_storage_backend'),
-        ('films', '0012_order_allow_null'),
+        ('assets', '0004_squashed_0010_alter_fields_in_models'),
+        ('films', '0004_squashed_0012_alter_fields_in_models'),
     ]
 
     operations = [

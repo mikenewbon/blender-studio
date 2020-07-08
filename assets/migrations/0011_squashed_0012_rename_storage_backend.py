@@ -5,12 +5,10 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
 
-    replaces = [('assets', '0011_rename_storage_backend'), ('assets', '0012_rename_storage_backend_fields')]
-
     dependencies = [
-        ('films', '0024_productionlogentryasset_related_name'),
+        ('films', '0020_squashed_0025_alter_model_fields_and_options'),
         ('training', '0015_alter_video_size_bytes'),
-        ('assets', '0010_rename_static_asset_duration'),
+        ('assets', '0004_squashed_0010_alter_fields_in_models'),
     ]
 
     operations = [

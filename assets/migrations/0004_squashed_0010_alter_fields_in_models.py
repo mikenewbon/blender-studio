@@ -9,10 +9,8 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    replaces = [('assets', '0004_auto_20200608_1258'), ('assets', '0005_storage_backends'), ('assets', '0006_rename_storage_backend'), ('assets', '0007_big_integer_field'), ('assets', '0008_static_asset_preview'), ('assets', '0009_source_preview_as_dynamic_file'), ('assets', '0010_rename_static_asset_duration')]
-
     dependencies = [
-        ('assets', '0003_auto_20200603_0859'),
+        ('assets', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 

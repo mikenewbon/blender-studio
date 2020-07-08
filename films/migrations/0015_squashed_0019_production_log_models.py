@@ -10,11 +10,9 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    replaces = [('films', '0015_production_log_models'), ('films', '0016_production_name_entries_plural_name'), ('films', '0017_rename_log_group_field'), ('films', '0018_productionlog_add_name_picture_link'), ('films', '0019_add_storage_backend_to_production_log')]
-
     dependencies = [
         ('films', '0014_film_is_featured'),
-        ('assets', '0009_source_preview_as_dynamic_file'),
+        ('assets', '0004_squashed_0010_alter_fields_in_models'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
