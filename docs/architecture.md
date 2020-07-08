@@ -1,7 +1,7 @@
 # Architecture Overview
 
 Apps:
- - [assets](#assets)
+ - [static_assets](#static-assets)
  - [blog](#blog)
  - [comments](#comments)
  - [films](#films)
@@ -57,7 +57,7 @@ In training, there also is an **Asset** model, but it differs from the Asset mod
 It represents an extra file attached to a Section.
 
 
-## Assets
+## Static Assets
 
 **Static Assets** represent the files uploaded in the cloud.
 
@@ -67,10 +67,10 @@ Static assets can be of three types (`source_type` attribute): image, video, or 
 which provide additional attributes like resolution or duration. These models additionally
 have a one-to-one reference to a Static Asset instance, containing all the other data.
 
-Preview pictures for all assets are obligatory. However, for images and videos they can be
+Preview pictures for all static assets are obligatory. However, for images and videos they can be
 generated automatically (e.g. by the `sorl-thumbnail` library).
 
-We want the entire `assets` app (i.e. file-representing models: `StaticAsset`, `Image`, `Video`)
+We want the entire `static_assets` app (i.e. file-representing models: `StaticAsset`, `Image`, `Video`)
 to be portable, and independent of the other apps. In particular, the `DynamicStorageFileField`
 should be left inside this app, even though it is used in other apps' models as well.
 
@@ -127,7 +127,7 @@ and it would be even more difficult with the above mentioned restrictions in pla
 useful to have the `order` attributes in the entire collection reassigned automatically whenever
 a user changes the `order` of one asset.
 
-##### Asset (model in films app) vs. StaticAsset (model in assets app)
+##### Asset (model in films app) vs. StaticAsset (model in static_assets app)
 - Static Asset is more "low-level" and represents an uploaded file; we want to have a less
 generic model that could be extracted and reused in other apps (e.g. blog, training).
 Therefore Static Asset should not contain any relationships to other apps.

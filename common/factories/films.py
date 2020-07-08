@@ -1,6 +1,6 @@
-import factory
 import uuid
-from django.conf import settings
+
+import factory
 from factory import fuzzy
 
 from common.factories.static_assets import StaticAssetFactory, StorageLocationFactory
