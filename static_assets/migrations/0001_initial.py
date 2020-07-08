@@ -24,6 +24,9 @@ class Migration(migrations.Migration):
                 ('description', models.TextField()),
                 ('url', models.URLField()),
             ],
+            options={
+                'db_table': 'assets_license',
+            },
         ),
         migrations.CreateModel(
             name='StaticAsset',
@@ -41,6 +44,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'abstract': False,
+                'db_table': 'assets_staticasset',
             },
         ),
         migrations.CreateModel(
@@ -49,6 +53,9 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=512)),
             ],
+            options={
+                'db_table': 'assets_storagelocation',
+            },
         ),
         migrations.CreateModel(
             name='Video',
@@ -64,6 +71,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'abstract': False,
+                'db_table': 'assets_video',
             },
         ),
         migrations.AddField(
@@ -88,6 +96,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'abstract': False,
+                'db_table': 'assets_image',
             },
         ),
     ]
