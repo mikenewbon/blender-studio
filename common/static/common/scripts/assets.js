@@ -19,6 +19,7 @@ window.asset = (function asset() {
       // Remove modal content on hide
       $(this).on('hidden.bs.modal', event => {
         $(this).empty();
+        loadingSpinner(this);
       });
       // Give modal focus on open
       $(this).on('shown.bs.modal', function () {
@@ -38,7 +39,16 @@ window.asset = (function asset() {
     });
   });
 
+  function loadingSpinner(element){
+    const spinner = '<div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>';
+    element.innerHTML = spinner;
+  };
+
 	function getModalHtml(element, modalId) {
+    if (element.classList.contains('modal-navigation')){
+      loadingSpinner(document.querySelector('#' + baseModalId))
+    };
+
 		fetch(element.dataset.url).then(response => {
 			return response.text();
 		}).then(html => {
