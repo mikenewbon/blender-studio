@@ -12,7 +12,7 @@ window.asset = (function asset() {
 		});
   });
 
-  // Using Jquery due to BootStrap events only being avaiable here.
+  // Using Jquery due to BootStrap events only being available here.
   // TODO(Mike): When Bootstrap 5 is added, switch to regular JS.
   $( document ).ready(function() {
     $('.modal').each(function(i){
@@ -43,12 +43,12 @@ window.asset = (function asset() {
     const spinner = '<div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>';
     const close = '<button class="modal-navigation modal-close btn btn-ctrl d-none d-md-block" data-dismiss="modal"><i class="material-icons btn-material-icons">close</i></button>'
     element.innerHTML = spinner + close;
-  };
+  }
 
 	function getModalHtml(element, modalId) {
     if (element.classList.contains('modal-navigation')){
       loadingSpinner(document.querySelector('#' + baseModalId))
-    };
+    }
 
 		fetch(element.dataset.url).then(response => {
 			return response.text();

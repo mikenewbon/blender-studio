@@ -1,20 +1,21 @@
 /* global ajax:false */
 
 window.productionLogs = (function productionLogs() {
-    const activityFeedId = 'activity-feed';
+    const activityFeedSelector = '#activity-feed';
+    const loadMoreWeeksButtonSelector = '#load-more-weeks';
 
     document.addEventListener('DOMContentLoaded', () => {
         addButtonClickEvent();
     });
 
     function addButtonClickEvent() {
-        document.querySelectorAll(
-            'a.btn.btn-sm.btn-secondary.collapsed.show-more-less'
-        ).forEach(element => {
-            element.addEventListener('click', () => {
-                getMoreLogs(element);
-            })
-        })
+        const loadMoreWeeksButton = document.querySelector(loadMoreWeeksButtonSelector);
+        if (loadMoreWeeksButton) {
+            loadMoreWeeksButton.addEventListener(
+          'click', event => {
+              getMoreLogs(event.target);
+          });
+        }
     }
 
     function getMoreLogs(element) {
@@ -24,7 +25,7 @@ window.productionLogs = (function productionLogs() {
             const template = document.createElement('template');
 		    template.innerHTML = html.trim();
 
-		    const activityFeed = document.getElementById(activityFeedId);
+		    const activityFeed = document.querySelector(activityFeedSelector);
 		    activityFeed.children[activityFeed.children.length - 1].replaceWith(template.content);
 
 		    addButtonClickEvent();
