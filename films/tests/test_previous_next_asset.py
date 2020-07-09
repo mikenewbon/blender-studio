@@ -92,7 +92,7 @@ class TestAssetOrderingInGallery(TestCase):
         other_film = FilmFactory()
         other_collection = CollectionFactory(film=other_film)
 
-        # assets from collection A: should be sorted by (order, name)
+        # Assets from collection A: should be sorted by (order, name)
         cls.asset_a_2 = AssetFactory(
             film=film, collection=cls.collection_a, order=2, name='Aa', is_featured=True
         )
@@ -100,7 +100,7 @@ class TestAssetOrderingInGallery(TestCase):
         cls.asset_a_0 = AssetFactory(film=film, collection=cls.collection_a, order=1, name='Bb')
         cls.asset_a_1 = AssetFactory(film=film, collection=cls.collection_a, order=1, name='Cc')
 
-        # assets from other films and collections, should not be included in context:
+        # Assets from other films and collections, should not be included in context:
         asset_b_0 = AssetFactory(film=film, collection=collection_b, is_featured=True)
         asset_c_0 = AssetFactory(film=film, collection=collection_c, is_featured=True)
         other_asset_0 = AssetFactory(film=other_film, collection=other_collection)
@@ -154,7 +154,7 @@ class TestAssetOrderingInFeaturedArtwork(TestCase):
         other_film = FilmFactory()
         other_collection = CollectionFactory(film=other_film)
 
-        # all the featured assets from the film should be sorted by date_created:
+        # All the featured assets from the film should be sorted by date_created:
         cls.featured_asset_0 = AssetFactory(
             film=film, collection=collection_a, order=2, is_featured=True
         )
@@ -165,7 +165,7 @@ class TestAssetOrderingInFeaturedArtwork(TestCase):
         asset_a_2 = AssetFactory(film=film, collection=collection_a, order=3)
         cls.featured_asset_3 = AssetFactory(film=film, collection=collection_a, is_featured=True)
 
-        # assets from the other film should not be included in context:
+        # Assets from the other film should not be included in context:
         other_asset_0 = AssetFactory(film=other_film, collection=other_collection)
         other_asset_1 = AssetFactory(film=other_film, collection=other_collection, is_featured=True)
 
@@ -226,13 +226,13 @@ class TestAssetOrderingInProductionLogs(TestCase):
         cls.asset_a_2 = AssetFactory(film=film, static_asset=StaticAssetFactory(user=author_a))
         cls.asset_a_3 = AssetFactory(film=film, static_asset=StaticAssetFactory(user=author_a))
 
-        # author's A assets should be sorted by date_created
+        # Author's A assets should be sorted by date_created
         ProductionLogEntryAssetFactory(production_log_entry=entry_a, asset=cls.asset_a_0)
         ProductionLogEntryAssetFactory(production_log_entry=entry_a, asset=cls.asset_a_1)
         ProductionLogEntryAssetFactory(production_log_entry=entry_a, asset=cls.asset_a_2)
         ProductionLogEntryAssetFactory(production_log_entry=entry_a, asset=cls.asset_a_3)
 
-        # assets from other production log entries should not be included in the context
+        # Assets from other production log entries should not be included in the context
         other_asset_a = AssetFactory(film=film, static_asset=StaticAssetFactory(user=author_a))
         other_entry = ProductionLogEntryFactory(
             user=author_a, production_log=ProductionLogFactory(start_date=dt.date(1997, 12, 1))
