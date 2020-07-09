@@ -157,3 +157,11 @@
     right: $spacer;
   }
 }
+
+.modal-backdrop {
+  background: $highlight-black-xstrong;
+  backdrop-filter: blur(10px);
+  &.show {
+    opacity: 1;
+  }
+}

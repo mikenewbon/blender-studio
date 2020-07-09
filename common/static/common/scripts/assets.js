@@ -12,16 +12,30 @@ window.asset = (function asset() {
 		});
   });
 
+  // Using Jquery due to BootStrap events only being avaiable here.
+  // TODO(Mike): When Bootstrap 5 is added, switch to regular JS.
   $( document ).ready(function() {
     $('.modal').each(function(i){
+      // Remove modal content on hide
       $(this).on('hidden.bs.modal', event => {
         $(this).empty();
       });
+      // Give modal focus on open
+      $(this).on('shown.bs.modal', function () {
+        $(this).trigger('focus')
+      })
     })
-    //TODO(Mike): When Bootstrap 5 is added, switch to regular JS.
-    // modal.addEventListener('hidden.bs.modal', event =>{
-    // 	modal.innerHTML="";
-    // })
+    // Left-Right keyboard events
+    $('#file-modal').keydown(function( event ) {
+      switch(event.key){
+        case "ArrowRight":
+          $('#file-modal .modal-navigation.next').trigger('click');
+          break;
+        case "ArrowLeft":
+          $('#file-modal .modal-navigation.previous').trigger('click');
+          break;
+      }
+    });
   });
 
 	function getModalHtml(element, modalId) {
@@ -32,6 +46,7 @@ window.asset = (function asset() {
 		}).then(() =>{
       // Create a new video player for the modal
       const player = new Plyr(document.querySelector('.video-player video'));
+      document.querySelector('.modal').focus();
     }).catch(err => {
 			console.warn('Something went wrong.', err);
 		});
