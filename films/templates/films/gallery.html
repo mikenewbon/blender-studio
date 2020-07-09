@@ -77,7 +77,13 @@ has-secondary-nav
 {% block content %}
 
 <div class="container-xl pt-3">
-
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb pt-0">
+    <li class="breadcrumb-item"><a href="#">Home</a></li>
+    <li class="breadcrumb-item"><a href="#">Library</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Data</li>
+  </ol>
+</nav>
   {% block gallery_files %}
   <div>
 

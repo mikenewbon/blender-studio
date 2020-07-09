@@ -26,9 +26,12 @@
   height: 100%;
   display: inline-block;
   width: 100%;
+  transition: $transition-base;
 
-  &:hover {
+  &:hover,
+  .file-body a:hover {
     background-color: tint($navigation-gray, 10%);
+    text-decoration: none;
 
     .subtitle {
       text-decoration: none;
@@ -39,7 +42,13 @@
     }
 
     h4 {
-      text-decoration: underline;
+      text-decoration: none;
+    }
+
+    .video-preview {
+      &::after {
+        background: rgba($primary, 1);
+      }
     }
   }
 
@@ -55,7 +64,22 @@
   &-body {
     @extend .card-body;
     padding: $spacer/2;
+    position: relative;
     display: block;
+
+    a {
+      color: $white;
+    }
+
+    button {
+      position: absolute;
+      top: $spacer / 2;
+      right: $spacer / 2;
+
+      @include media-breakpoint-down(sm) {
+        display: none;
+      }
+    }
   }
 
   &-header {
@@ -75,14 +99,13 @@
       align-items: center;
     }
 
-    button {
+    .badge-video-duration {
       position: absolute;
-      top: $spacer / 2;
-      right: $spacer / 2;
+      bottom: $spacer / 4;
+      right: $spacer / 4;
+      color: $white;
 
-      @include media-breakpoint-down(sm) {
-        display: none;
-      }
+      // background: $highlight-black-xstrong;
     }
   }
 
@@ -139,22 +162,24 @@ a.file {
   }
 }
 
+// This is a play-button overlay for videos
+// .video-preview {
+//   position: relative;
 
-.video-preview {
-  position: relative;
-
-  &::after {
-    @extend .material-icons;
-    content: "play_arrow";
-    display: block;
-    color: $primary;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    font-size: $spacer * 3;
-    text-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
-    background: $highlight-black-xstrong;
-    border-radius: 50%;
-  }
-}
+//   &::after {
+//     @extend .material-icons;
+//     content: "play_arrow";
+//     display: block;
+//     color: $white;
+//     position: absolute;
+//     padding: $spacer / 2;
+//     left: 50%;
+//     top: 50%;
+//     transform: translate(-50%, -50%);
+//     font-size: $spacer * 1.5;
+//     text-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+//     background: rgba($primary, .8);
+//     border-radius: 50%;
+//     transition: $transition-base;
+//   }
+// }

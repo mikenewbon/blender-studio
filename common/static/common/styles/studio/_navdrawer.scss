@@ -315,7 +315,7 @@
   flex-direction: row;
   flex-grow: 1;
   padding: ($spacer / 4 * 3) $spacer;
-
+  transition: $transition-base;
   &:hover {
     background-color: $highlight-white;
     color: $white;
@@ -447,7 +447,7 @@ $circle-circumference: $circle-diameter * 3.14;
   display: flex;
   flex-grow: 1;
   padding: $spacer;
-
+  transition: $transition-base;
   &.collapsed {
     i {
       transform: rotate(-90deg);
