@@ -3,8 +3,8 @@ import uuid
 import factory
 from factory import fuzzy
 
-from common.factories.static_assets import StaticAssetFactory, StorageLocationFactory
-from common.factories.user import UserFactory
+from common.tests.factories.static_assets import StaticAssetFactory, StorageLocationFactory
+from common.tests.factories.users import UserFactory
 from films.models import (
     Film,
     Collection,

@@ -4,7 +4,7 @@ import uuid
 import factory
 from factory import fuzzy
 
-from common.factories.user import UserFactory
+from common.tests.factories.users import UserFactory
 from static_assets.models import StaticAsset, StaticAssetFileTypeChoices, StorageLocation, License
 
 
