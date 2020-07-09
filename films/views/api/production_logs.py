@@ -44,7 +44,7 @@ def get_production_logs_page(
         Prefetch(
             'log_entries__entry_assets',
             queryset=ProductionLogEntryAsset.objects.select_related(
-                'asset__static_asset__storage_location'
+                'asset__static_asset__storage_location', 'asset__static_asset__video',
             ).order_by('asset__date_created'),
             to_attr='assets',
         ),
