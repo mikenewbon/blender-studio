@@ -10,14 +10,29 @@ window.asset = (function asset() {
 		).forEach(element => {
 			element.addEventListener('click', () => getModalHtml(element, baseModalId));
 		});
-	});
+  });
+
+  $( document ).ready(function() {
+    $('.modal').each(function(i){
+      $(this).on('hidden.bs.modal', event => {
+        $(this).empty();
+      });
+    })
+    //TODO(Mike): When Bootstrap 5 is added, switch to regular JS.
+    // modal.addEventListener('hidden.bs.modal', event =>{
+    // 	modal.innerHTML="";
+    // })
+  });
 
 	function getModalHtml(element, modalId) {
 		fetch(element.dataset.url).then(response => {
 			return response.text();
 		}).then(html => {
 			createModal(html, modalId);
-		}).catch(err => {
+		}).then(() =>{
+      // Create a new video player for the modal
+      const player = new Plyr(document.querySelector('.video-player video'));
+    }).catch(err => {
 			console.warn('Something went wrong.', err);
 		});
 	}
@@ -25,20 +40,13 @@ window.asset = (function asset() {
 	function createModal(html, modalId) {
 		const template = document.createElement('template');
 		template.innerHTML = html.trim();
-
 		const modal = document.getElementById(modalId);
 		if (modal.childElementCount === 0) {
 			modal.appendChild(template.content);
 		} else {
 			modal.children[0].replaceWith(template.content);
 		}
-		$(modal).on('hidden.bs.modal', event => {
-			modal.innerHTML = "";
-		});
-		//TODO(Mike): When Bootstrap 5 is added, switch to regular JS.
-		// modal.addEventListener('hidden.bs.modal', event =>{
-		// 	modal.innerHTML="";
-		// })
+
 		if (modalId === baseModalId) {
 			addButtonClickEvent();
 		}

@@ -1,98 +1,112 @@
 .update-feed {
+  margin-bottom: $spacer;
+
+  &-week {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+
+    &-column {
+      &.column-left {
+        flex-shrink: 1;
+        position: relative;
+
+        &:before {
+          content: close-quote;
+          display: block;
+          width: 2px;
+          height: 100%;
+          position: absolute;
+          left: 50%;
+          top: 0;
+          transform: translateX(-50%);
+          background: $input-gray;
+          z-index: -1;
+        }
+      }
+
+      &.column-right {
+        flex-grow: 1;
+        margin-left: $spacer/2;
+      }
+    }
+
+    &-icon {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: $input-gray;
+      border-radius: 50%;
+      position: relative;
+
+      i {
+        font-size: $font-size-md;
+      }
+
+
+    }
+
+    &-header {
+      p {
+        @extend .subtitle;
+        @extend .small;
+      }
+    }
+  }
+
+  .update-feed-week:last-of-type .update-feed-individual:last-of-type {
+    margin-bottom: 0;
+  }
+
+  &-individual {
     margin-bottom: $spacer;
-    &-week {
-        display: flex;
-        flex-direction: row;
-        overflow: hidden;
-        &-column {
-            &.column-left {
-                flex-shrink: 1;
-                position: relative;
-                &:before {
-                    content: close-quote;
-                    display: block;
-                    width: 2px;
-                    height: 100%;
-                    position: absolute;
-                    left: 50%;
-                    top: 0;
-                    transform: translateX(-50%);
-                    background: $input-gray;
-                    z-index: -1;
-                }
-            }
+    border-bottom: 2px solid $input-gray;
+    @extend .row;
 
-            &.column-right {
-                flex-grow: 1;
-                margin-left: $spacer/2;
-            }
-        }
+    &-files {
+      @extend .col-md-9;
 
-        &-icon {
-            width: 30px;
-            height: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: $input-gray;
-            border-radius: 50%;
-            position: relative;
-
-            i {
-                font-size: $font-size-md;
-            }
-
-
-		}
-		&-header {
-			p{
-				@extend .subtitle;
-				@extend .small;
-			}
-		}
-    }
-    .update-feed-week:last-of-type .update-feed-individual:last-of-type{
-        margin-bottom: 0;
-    }
-    &-individual {
+      > :last-child {
         margin-bottom: $spacer;
-        border-bottom: 2px solid $input-gray;
-		@extend .row;
-        &-files {
-			@extend .col-md-9;
-            > :last-child {
-                margin-bottom: $spacer;
-            }
-            &-show-more{
-                margin-top: $spacer;
-            }
-            > a{
-                display: inline-block;
-            }
-            .files{
-                .row{
-                    margin-bottom: -$spacer;
-                }
-            }
+      }
+
+      &-show-more {
+        margin-top: $spacer;
+      }
+
+      >a {
+        display: inline-block;
+      }
+
+      .files {
+        .row {
+          margin-bottom: -$spacer;
         }
-        &-summary {
-			@extend .col-md-3;
-            >*:last-child {
-                margin-bottom: $spacer;
-            }
-            > a{
-				display: inline-block;
-				img{
-					@extend .img-fluid;
-				}
-			}
-			&-profile {
-				@extend .row;
-				margin-bottom: $spacer/2;
-			}
-        }
+      }
     }
+
+    &-summary {
+      @extend .col-md-3;
+
+      >*:last-child {
+        margin-bottom: $spacer;
+      }
+
+      >a {
+        display: inline-block;
+
+        img {
+          @extend .img-fluid;
+        }
+      }
+
+      &-profile {
+        @extend .row;
+        margin-bottom: $spacer/2;
+      }
+    }
+  }
 
 }
-
-

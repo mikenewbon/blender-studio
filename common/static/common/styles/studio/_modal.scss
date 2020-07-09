@@ -38,7 +38,16 @@
       cursor: zoom-in;
     }
 
-    img {
+    .video-player {
+      width: 100%;
+
+      .plyr__video-wrapper {
+        background: #282828;
+      }
+    }
+
+    img,
+    video {
       max-height: 75vh;
       width: auto;
 

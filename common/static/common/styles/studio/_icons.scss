@@ -1,19 +1,31 @@
 .material-icons {
-	font-weight: normal !important;
+  font-family: 'Material Icons';
+  font-weight: normal !important;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
 }
 
 .icon-inline {
-	line-height: $line-height-base;
-	vertical-align: top;
+  line-height: $line-height-base;
+  vertical-align: top;
 }
 
 .btn-material-icons {
-	vertical-align: top;
-	line-height: 1;
-	font-size: 1em;
+  vertical-align: top;
+  line-height: 1;
+  font-size: 1em;
 }
 
-.btn-material-icons-lg{
-	margin: calc(-.25em/1.5) 0;
-	font-size: 1.5em;
+.btn-material-icons-lg {
+  margin: calc(-.25em/1.5) 0;
+  font-size: 1.5em;
 }

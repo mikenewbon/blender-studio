@@ -144,26 +144,17 @@ a.file {
   position: relative;
 
   &::after {
-    font-family: 'Material Icons';
-    font-weight: normal;
-    font-style: normal;
-    font-size: 24px;
-    line-height: 1;
-    letter-spacing: normal;
-    text-transform: none;
-    display: inline-block;
-    white-space: nowrap;
-    word-wrap: normal;
-    direction: ltr;
-    -webkit-font-feature-settings: 'liga';
-    -webkit-font-smoothing: antialiased;
-
-    content: "play_circle_filled";i
+    @extend .material-icons;
+    content: "play_arrow";
     display: block;
     color: $primary;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+    font-size: $spacer * 3;
+    text-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+    background: $highlight-black-xstrong;
+    border-radius: 50%;
   }
 }
