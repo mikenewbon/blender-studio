@@ -3,13 +3,6 @@
 {% block gallery_files %}
 
 <div>
-
-	{% if current_collection.parent %}
-	    <a href="{{ current_collection.parent.url }}" class="btn btn-sm btn-secondary  mb-3">
-            Back to {{ current_collection.parent.name }}
-        </a>
-	{% endif %}
-
 	<p class="subtitle">{{ current_collection.parent.name }}</p>
 	<h2>{{ current_collection.name }}</h2>
 

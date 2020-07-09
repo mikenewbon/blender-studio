@@ -105,6 +105,8 @@ $theme-colors: map-merge(("primary": $primary,
     "navigation": $navigation-gray,
     "highlight": $highlight-white,
     "darkhighlight": $highlight-black,
+    "highlight-strong": $highlight-white-xstrong,
+    "darkhighlight-strong": $highlight-black-xstrong,
     "light": $light,
     "dark": $dark,
     "transparent": $transparent,
@@ -1047,7 +1049,7 @@ $progress-bar-transition: width 0.6s ease !default;
 
 // List group
 
-$list-group-color: $white !default;
+$list-group-color: $highlight-white-xstrong !default;
 $list-group-bg: null !default;
 $list-group-border-color: null !default;
 $list-group-border-width: 0 !default;
@@ -1057,7 +1059,7 @@ $list-group-item-padding-y: $spacer/2 !default;
 $list-group-item-padding-x: $spacer !default;
 
 $list-group-hover-bg: null !default;
-$list-group-active-color: $primary !default;
+$list-group-active-color: $white !default;
 $list-group-active-bg: $highlight-white !default;
 $list-group-active-border-color: $list-group-active-bg !default;
 

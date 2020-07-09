@@ -203,6 +203,7 @@
 }
 
 .drawer-nav-list {
+  color: $highlight-white-xstrong;
   background: $highlight-black-strong;
   list-style: none;
   margin: 0;
@@ -317,7 +318,7 @@
 
   &:hover {
     background-color: $highlight-white;
-    color:$white;
+    color: $white;
     text-decoration: none;
   }
 
@@ -327,7 +328,7 @@
 
   &.active {
     background-color: $highlight-white;
-    color: $primary;
+    color: $white;
 
     .subtitle {
       color: $primary;
@@ -469,5 +470,16 @@ $circle-circumference: $circle-diameter * 3.14;
     margin-right: $spacer / 2;
     transition: transform .35s ease;
     vertical-align: text-top;
+
+    &+span {
+      // if the span is next to an icon, no margin
+      margin-left: 0;
+    }
   }
+
+  span {
+    // 24px is the size of the material icon
+    margin-left: 24px + ($spacer / 2);
+  }
+
 }

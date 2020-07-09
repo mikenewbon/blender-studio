@@ -40,19 +40,16 @@ has-secondary-nav
   <div class="drawer-nav-dropdown-wrapper ">
 
     <a class="drawer-nav-dropdown h3 {% if current_collection.parent != collection and current_collection != collection %}collapsed{% endif %}"
-      href="{{ collection.url }}" data-toggle="collapse"
-    data-target="#collection-{{ collection.id }}">
+      href="{{ collection.url }}" data-toggle="collapse" data-target="#collection-{{ collection.id }}">
       {% if child_collections %}
       <i class="material-icons">keyboard_arrow_down</i>
       {% endif %}
-      {{ collection.name }}
+      <span>
+        {{ collection.name }}
+      </span>
     </a>
   </div>
-  {% comment %} <h3 class="drawer-nav-dropdown {% if collapsed %}collapsed{% endif %}" data-toggle="collapse"
-    data-target="#collection-{{ collection.id }}">
-    <i class="material-icons">keyboard_arrow_down</i>
-    {{ collection.name }}
-  </h3> {% endcomment %}
+
   <ol id="collection-{{ collection.id }}"
     class="drawer-nav-list collapse {% if current_collection.parent == collection or current_collection == collection %}show{% endif %}">
 
@@ -107,3 +104,28 @@ has-secondary-nav
   </div>
 
   {% endblock content %}
+
+  {% block footer %}
+  <footer class="bg-navigation py-2">
+    <div class="content-holder">
+      <div class="container-xl">
+        <div class="row">
+
+          <div class="col-12">
+            <div class="row">
+              <div class="col-auto">
+                <a href="#" class="small text-highlight-strong">Terms &amp; Conditions</a>
+              </div>
+              <div class="col-auto">
+                <a href="#" class="small text-highlight-strong">Privacy Policy</a>
+              </div>
+              <div class="col-auto">
+                <a href="#" class="small text-highlight-strong">Blender.org</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  {% endblock footer%}

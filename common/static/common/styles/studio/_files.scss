@@ -24,7 +24,6 @@
   @extend .card-dark;
   margin-bottom: 0;
   height: 100%;
-  text-align: center;
   display: inline-block;
   width: 100%;
 
@@ -45,6 +44,7 @@
   }
 
   .subtitle {
+    color: $highlight-white-xstrong;
     font-size: $x-small-font-size;
   }
 
