@@ -2,10 +2,10 @@ from django.db import models
 from django.urls.base import reverse
 from django.utils.text import slugify
 
-from static_assets.models import DynamicStorageFileField, StorageLocation
 from comments.models import Comment
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
+from static_assets.models import DynamicStorageFileField, StorageLocation
 from training.models import chapters
 
 
@@ -76,7 +76,7 @@ class SectionComment(models.Model):
 
 
 class Video(mixins.CreatedUpdatedMixin, models.Model):
-    storage_location = models.ForeignKey(StorageLocation, on_delete=models.CASCADE)
+    storage_location = models.ForeignKey(StorageLocation, on_delete=models.PROTECT, editable=False)
     section = models.OneToOneField(Section, on_delete=models.CASCADE, related_name='video')
     file = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
     size_bytes = models.BigIntegerField(editable=False)
@@ -94,13 +94,22 @@ class Video(mixins.CreatedUpdatedMixin, models.Model):
         super().clean()
         if self.file:
             self.size_bytes = self.file.size
+        if self.section:
+            self.storage_location = self.section.chapter.training.storage_location
 
 
 class Asset(mixins.CreatedUpdatedMixin, models.Model):
-    storage_location = models.ForeignKey(StorageLocation, on_delete=models.CASCADE)
+    storage_location = models.ForeignKey(StorageLocation, on_delete=models.PROTECT, editable=False)
     section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='assets')
     file = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
-    size = models.IntegerField()
+    size_bytes = models.IntegerField(editable=False)
 
     def __str__(self) -> str:
         return self.file.name  # type: ignore
+
+    def clean(self):
+        super().clean()
+        if self.file:
+            self.size_bytes = self.file.size
+        if self.section:
+            self.storage_location = self.section.chapter.training.storage_location

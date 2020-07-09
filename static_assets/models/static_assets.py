@@ -73,7 +73,7 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
         License, null=True, on_delete=models.SET_NULL, related_name='static_assets'
     )
     storage_location = models.ForeignKey(
-        StorageLocation, on_delete=models.CASCADE, related_name='static_assets'
+        StorageLocation, on_delete=models.PROTECT, related_name='static_assets'
     )
 
     source_preview = DynamicStorageFileField(upload_to=get_upload_to_hashed_path, blank=True)

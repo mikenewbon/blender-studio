@@ -16,7 +16,6 @@ class FilmStatus(models.TextChoices):
 
 class Film(mixins.CreatedUpdatedMixin, models.Model):
     storage_location = models.OneToOneField(StorageLocation, on_delete=models.PROTECT)
-    # TODO(Natalia): validation - either film or a training has to be null, but not both
 
     title = models.CharField(unique=True, max_length=512)
     slug = models.SlugField(unique=True, blank=True)

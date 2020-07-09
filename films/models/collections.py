@@ -24,7 +24,7 @@ class Collection(mixins.CreatedUpdatedMixin, models.Model):
     slug = models.SlugField(blank=True)
     text = models.TextField(blank=True)
 
-    storage_location = models.ForeignKey(StorageLocation, on_delete=models.CASCADE)
+    storage_location = models.ForeignKey(StorageLocation, on_delete=models.PROTECT, editable=False)
     preview = DynamicStorageFileField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
     picture_16_9 = DynamicStorageFileField(
         upload_to=get_upload_to_hashed_path, blank=True, null=True
@@ -34,6 +34,8 @@ class Collection(mixins.CreatedUpdatedMixin, models.Model):
         super().clean()
         if not self.slug:
             self.slug = slugify(self.name)
+        if self.film:
+            self.storage_location = self.film.storage_location
 
     def __str__(self):
         if self.order:

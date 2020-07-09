@@ -35,7 +35,7 @@ class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
     author.description = "The actual author of the summary in the weekly production log."
     youtube_link = models.URLField(blank=True)
     storage_location = models.ForeignKey(
-        StorageLocation, on_delete=models.CASCADE, related_name='production_logs'
+        StorageLocation, on_delete=models.PROTECT, related_name='production_logs', editable=False,
     )
     picture_16_9 = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
 
@@ -55,8 +55,10 @@ class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
 
     def clean(self):
         super().clean()
-        if not self.name:
-            self.name = f'This week on {self.film.title}'
+        if self.film_id:
+            self.storage_location = self.film.storage_location
+            if not self.name:
+                self.name = f'This week on {self.film.title}'
 
     def __str__(self):
         return f"{self.film.title} Production Weekly {self.start_date}"
