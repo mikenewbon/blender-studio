@@ -251,8 +251,8 @@ $border-width: 0px !default;
 $border-color: $gray-300 !default;
 
 $border-radius: 2px !default;
-$border-radius-lg: 2px !default;
-$border-radius-sm: 2px !default;
+$border-radius-lg: $border-radius !default;
+$border-radius-sm: $border-radius !default;
 
 $rounded-pill: 50rem !default;
 

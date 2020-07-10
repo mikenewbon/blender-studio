@@ -79,7 +79,7 @@ has-secondary-nav
 <div class="container-xl pt-3">
 
   <nav aria-label="breadcrumb">
-    <ol class="breadcrumb pt-0 pb-3">
+    <ol class="breadcrumb pt-0 pb-3 side-scroll">
       {% if current_collection.parent == null %}
       <li class="breadcrumb-item active">
         {{ film.title }}
@@ -113,6 +113,7 @@ has-secondary-nav
       {% endif %}
 
     </ol>
+
   </nav>
   {% block gallery_files %}
 

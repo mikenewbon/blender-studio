@@ -72,6 +72,15 @@
   width: $nav-drawer-width-open;
   z-index: 1020;
 
+
+  .navbar-secondary {
+
+    .list-group,
+    .breadcrumb {
+      padding: 0 ($spacer / 2);
+    }
+  }
+
   &-body {
     @include media-breakpoint-up(md) {
       &::-webkit-scrollbar {
@@ -98,6 +107,7 @@
     left: 0;
     transform: translateY(-100%);
     width: 100%;
+    border-right: 0;
   }
 
   .drawer-overlay {
@@ -146,7 +156,8 @@
     flex-wrap: wrap;
 
     &>li {
-      width: 50%;
+      width: 25%;
+      text-align: center;
     }
   }
 
@@ -158,6 +169,7 @@
       color: $white;
       display: flex;
       flex-wrap: wrap;
+      justify-content: center;
 
       &.active {
         color: $primary;
@@ -316,6 +328,7 @@
   flex-grow: 1;
   padding: ($spacer / 4 * 3) $spacer;
   transition: $transition-base;
+
   &:hover {
     background-color: $highlight-white;
     color: $white;
@@ -448,6 +461,7 @@ $circle-circumference: $circle-diameter * 3.14;
   flex-grow: 1;
   padding: $spacer;
   transition: $transition-base;
+
   &.collapsed {
     i {
       transform: rotate(-90deg);

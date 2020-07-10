@@ -85,9 +85,9 @@
       </div>
     </div>
     {% else %}
-    <div class="p-2">
-      <a href="/oauth/login" class="btn btn-transparent">Login</a>
-      <a href="#" class="btn btn-primary">Join Blender Studio</a>
+    <div class="navbar-login-wrapper">
+      <a href="/oauth/login" class="btn btn-transparent d-none d-sm-inline-block">Login</a>
+      <a href="#" class="btn btn-primary ">Join <span class="d-none d-lg-inline-block">Blender Studio</span></a>
     </div>
     {% endif %}
   </nav>
@@ -123,17 +123,19 @@
           </div><input class="form-control" type="text" placeholder="Search tags and keywords" />
         </div>
       </div>
-      <ul class="nav-drawer-list mb-0 global-navigation">
-        {% comment %} <li><a class="btn-nav active" href="/"><i class="material-icons">home</i>
-            <span>Home</span></a></li> {% endcomment %}
-        <li><a class="btn-nav" href="/training/"><i class="material-icons">local_library</i><span>Training</span></a>
-        </li>
-        <li><a class="btn-nav" href="/films/"><i class="material-icons">movie</i> <span>Films</span></a>
-        </li>
-        <li><a class="btn-nav" href="#"><i class="material-icons">cloud</i> <span>Services</span></a></li>
-        <li><a class="btn-nav" href="/news/"><i class="material-icons">chat_bubble</i> <span>News</span></a>
-        </li>
-      </ul>
+      <div class="navbar-secondary d-md-none">
+        <div class="content-holder">
+          <div class="container-xl">
+            <div class="list-group list-group-flush list-group-horizontal small">
+              <a class="list-group-item" href="/films/">Films</a>
+              <a class="list-group-item" href="/training/">Training</a>
+              <a class="list-group-item" href="#">Services</a>
+              <a class="list-group-item" href="/news/">News</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {% block nav_drawer_inner %}
       {% endblock nav_drawer_inner %}
     </div>

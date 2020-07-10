@@ -1,7 +1,28 @@
 .breadcrumb {
+  @include media-breakpoint-down(md) {
+    flex-wrap: nowrap;
+    margin: 0 (-$spacer);
+    padding: 0 $spacer;
+    overflow-x: auto;
+  }
+
   .breadcrumb-item {
+    white-space: nowrap;
+
+    &:last-of-type {
+      padding-right: $spacer;
+    }
+
     a {
       color: $breadcrumb-link-color;
     }
+  }
+}
+
+.side-scroll {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
