@@ -15,11 +15,13 @@ window.asset = (function asset() {
   // Using Jquery due to BootStrap events only being available here.
   // TODO(Mike): When Bootstrap 5 is added, switch to regular JS.
   $( document ).ready(function() {
-    $('.modal').each(function(i){
+    $('#file-modal').each(function(i){
       // Remove modal content on hide
       $(this).on('hidden.bs.modal', event => {
         $(this).empty();
-        loadingSpinner(this);
+        if(this.classList.contains('modal-asset')){
+          loadingSpinner(this);
+        }
       });
       // Give modal focus on open
       $(this).on('shown.bs.modal', function () {

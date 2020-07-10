@@ -68,12 +68,18 @@
     &-files {
       @extend .col-md-9;
 
+      margin-bottom: $spacer;
+
       &-show-more {
         margin-bottom: $spacer;
       }
 
       >a {
         display: inline-block;
+      }
+      &>:last-child{
+        margin-bottom: 0;
+
       }
     }
 
