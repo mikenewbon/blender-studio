@@ -4,6 +4,9 @@ import jinja2
 
 BASE_DIR = pathlib.Path(__file__).absolute().parent.parent
 
+ADMIN_SITE_HEADER = 'Blender Studio Admin'
+ADMIN_SITE_TITLE = 'Blender Studio'
+
 # Application definition
 
 INSTALLED_APPS = [

@@ -10,6 +10,10 @@ import subscriptions.urls
 import training.urls
 from common.views.home import home as home_view, welcome as welcome_view
 
+admin.site.site_header = settings.ADMIN_SITE_HEADER
+admin.site.site_title = settings.ADMIN_SITE_TITLE
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('oauth/', include(blender_id_oauth_client.urls)),
