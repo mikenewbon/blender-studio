@@ -1,0 +1,13 @@
+// any class with .show-more-less will toggle the more 'more/less' depending on wether it's .collpased
+.show-more-less{
+	&.collapsed{
+		&:after{
+			content: 'more';
+		}
+	}
+	&:not(.collapsed){
+		&:after{
+			content: 'less';
+		}
+	}
+}
