@@ -109,9 +109,12 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
 
     def clean(self):
         super().clean()
+        if not self.pk and self.source:
+            # Save the original filename only on asset creation.
+            self.original_filename = self.source.file.name
+
         if self.source:
             # The `if` prevents an unhandled exception if one tries to save without a source
-            self.original_filename = self.source.file.name
             self.size_bytes = self.source.size
 
         if self.source_type == StaticAssetFileTypeChoices.file and not self.source_preview:

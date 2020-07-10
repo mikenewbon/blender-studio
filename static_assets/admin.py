@@ -21,6 +21,7 @@ class VideoInline(admin.TabularInline):
     show_change_link = True
     extra = 0
     max_num = 1
+    readonly_fields = ['play_count']
 
 
 @admin.register(static_assets.StaticAsset)
@@ -31,9 +32,16 @@ class StaticAssetAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
             None,
             {
                 'fields': [
-                    field.name
-                    for field in static_assets.StaticAsset._meta.get_fields()
-                    if field.editable and field.name != 'id'
+                    'source',
+                    'original_filename',
+                    'size_bytes',
+                    'source_type',
+                    'user',
+                    'author',
+                    'license',
+                    'storage_location',
+                    'source_preview',
+                    'date_created',
                 ],
             },
         ),
@@ -57,6 +65,7 @@ class StaticAssetAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
         'storage_location__film__title',
         'source_type',
     ]
+    readonly_fields = ['original_filename', 'size_bytes', 'date_created']
 
 
 admin.site.register(storages.StorageLocation)

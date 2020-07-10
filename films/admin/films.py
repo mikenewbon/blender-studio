@@ -27,6 +27,7 @@ class AssetAdmin(admin.ModelAdmin):
         'static_asset__author__first_name',
         'static_asset__author__last_name',
     ]
+    autocomplete_fields = ['static_asset']
 
 
 class AssetInline(admin.StackedInline):
@@ -35,6 +36,7 @@ class AssetInline(admin.StackedInline):
     prepopulated_fields = {'slug': ('name',)}
     readonly_fields = ['date_created']
     extra = 0
+    autocomplete_fields = ['static_asset']
 
 
 @admin.register(collections.Collection)
@@ -43,7 +45,8 @@ class CollectionAdmin(admin.ModelAdmin):
     inlines = [AssetInline]
     list_display = ['__str__', 'film', 'order', 'parent']
     list_filter = ['film', 'parent']
-    search_fields = ['name']
+    search_fields = ['name', 'film__title']
+    autocomplete_fields = ['parent']
 
 
 @admin.register(films.Film)
