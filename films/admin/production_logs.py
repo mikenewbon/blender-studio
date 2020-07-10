@@ -16,6 +16,7 @@ class ProductionLogEntryAssetInline(admin.StackedInline):
     model = production_logs.ProductionLogEntryAsset
     show_change_link = True
     extra = 0
+    autocomplete_fields = ['asset']
 
     # TODO(Natalia): uncomment the filter kwargs when we finish development
     def formfield_for_foreignkey(
@@ -46,6 +47,7 @@ class ProductionLogEntryAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
         'author',
         'production_log__start_date',
     ]
+    readonly_fields = ['date_created']
 
 
 class ProductionLogEntryInline(EditLinkMixin, AdminUserDefaultMixin, admin.StackedInline):
@@ -60,7 +62,8 @@ class ProductionLogAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
     date_hierarchy = 'start_date'
     list_display = ['__str__', 'name', 'start_date']
     list_filter = ['film', 'start_date']
+    readonly_fields = ['date_created']
     fieldsets = (
         (None, {'fields': ['film', 'name', 'start_date', 'user']}),
-        ('Summary', {'fields': ['summary', 'author', 'picture_16_9', 'youtube_link']}),
+        ('Summary', {'fields': ['picture_16_9', 'youtube_link', 'author', 'summary']}),
     )

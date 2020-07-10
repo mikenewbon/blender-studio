@@ -6,6 +6,7 @@ from films.models import assets, collections, films
 @admin.register(assets.Asset)
 class AssetAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
+    readonly_fields = ['date_created']
     list_display = ['__str__', 'order', 'film', 'collection']
     list_filter = [
         'film',
@@ -17,12 +18,22 @@ class AssetAdmin(admin.ModelAdmin):
         'static_asset__user',
         'static_asset__author',
     ]
+    search_fields = [
+        'name',
+        'film__title',
+        'collection__name',
+        'static_asset__user__first_name',
+        'static_asset__user__last_name',
+        'static_asset__author__first_name',
+        'static_asset__author__last_name',
+    ]
 
 
 class AssetInline(admin.StackedInline):
     model = assets.Asset
     show_change_link = True
     prepopulated_fields = {'slug': ('name',)}
+    readonly_fields = ['date_created']
     extra = 0
 
 

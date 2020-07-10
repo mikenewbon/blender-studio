@@ -1,9 +1,8 @@
-from typing import Optional, Any, cast
+from typing import Optional, Any, Union, List, Tuple
 
 from django.contrib import admin
 from django.db import models
-from django.db.models.fields.related import ForeignKey
-from django.forms.models import ModelChoiceField
+from django.db.models.base import Model
 from django.http.request import HttpRequest
 
 
@@ -16,7 +15,9 @@ class CreatedUpdatedMixin(models.Model):
 
 
 class AdminUserDefaultMixin:
-    """Sets the 'user' field in a form in Django Admin to the current user."""
+    """On object creation, sets the 'user' field in the form in Admin to the current user.
+
+    The field value will be displayed as read-only in the form."""
 
     def __init_subclass__(cls, **kwargs: Any):
         super().__init_subclass__(**kwargs)
@@ -24,12 +25,15 @@ class AdminUserDefaultMixin:
             cls, admin.options.BaseModelAdmin
         ), f'{cls.__name__} has to be a subclass of BaseModelAdmin to use the UserDefaultMixin'
 
-    def formfield_for_foreignkey(
-        self, db_field: 'ForeignKey[Any, Any]', request: Optional[HttpRequest], **kwargs: Any
-    ) -> Optional[ModelChoiceField]:
-        if db_field.name == 'user':
-            kwargs['initial'] = cast(HttpRequest, request).user.id
-        formfield: Optional[ModelChoiceField] = super().formfield_for_foreignkey(
-            db_field, request, **kwargs
-        )
-        return formfield
+    def get_readonly_fields(
+        self, request: HttpRequest, obj: Optional[Model] = None
+    ) -> Union[List[str], Tuple[str]]:
+        """Display (non-editable) user field in the form"""
+        readonly_fields = ['user', *super().get_readonly_fields(request, obj)]
+        return readonly_fields
+
+    def save_model(self, request: Any, obj: Any, form: Any, change: Any) -> None:
+        """Associate created object with the current user."""
+        if not obj.pk:
+            obj.user = request.user
+        super().save_model(request, obj, form, change)

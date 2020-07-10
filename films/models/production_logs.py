@@ -3,10 +3,10 @@ from datetime import date, timedelta
 from django.contrib.auth.models import User
 from django.db import models
 
-from static_assets.models import DynamicStorageFileField, StorageLocation
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
 from films.models import Asset, Film
+from static_assets.models import DynamicStorageFileField, StorageLocation
 
 
 class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
@@ -17,22 +17,32 @@ class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
         verbose_name_plural = 'production weeklies'
 
     film = models.ForeignKey(Film, on_delete=models.CASCADE, related_name='production_logs')
-    name = models.CharField(max_length=512, blank=True)
+    name = models.CharField(
+        'weekly title',
+        max_length=512,
+        blank=True,
+        help_text='If not provided, will be set to <em>"This week on [film title]"</em>.',
+    )
     name.description = 'If not provided, will be set to "This week on <film title>".'
     summary = models.TextField()
     start_date = models.DateField(default=date.today)
     user = models.ForeignKey(
-        User, on_delete=models.PROTECT, related_name='uploaded_production_logs'
+        User,
+        on_delete=models.PROTECT,
+        related_name='uploaded_production_logs',
+        verbose_name='created by',
     )
-    user.description = "The user who uploaded the weekly production log."
+    user.description = 'The user who created the weekly production log.'
     author = models.ForeignKey(
         User,
         blank=True,
         null=True,
         on_delete=models.PROTECT,
         related_name='authored_production_logs',
+        verbose_name='author (optional)',
+        help_text='The actual author of the summary in the weekly production log',
     )
-    author.description = "The actual author of the summary in the weekly production log."
+    author.description = 'The actual author of the summary in the weekly production log.'
     youtube_link = models.URLField(blank=True)
     storage_location = models.ForeignKey(
         StorageLocation, on_delete=models.PROTECT, related_name='production_logs', editable=False,
@@ -79,12 +89,23 @@ class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
     )
     description = models.TextField()
 
-    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='uploaded_log_entries')
-    user.description = "The user who uploaded the production log entry."
-    author = models.ForeignKey(
-        User, blank=True, null=True, on_delete=models.PROTECT, related_name='authored_log_entries'
+    user = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name='uploaded_log_entries',
+        verbose_name='created by',
     )
-    author.description = "The actual author of the assets in the production log entry."
+    user.description = 'The user who created the production log entry.'
+    author = models.ForeignKey(
+        User,
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
+        related_name='authored_log_entries',
+        verbose_name='author (optional)',
+        help_text='The actual author of the assets in the production log entry',
+    )
+    author.description = 'The actual author of the assets in the production log entry.'
     author_role = models.CharField(max_length=512)
 
     @property

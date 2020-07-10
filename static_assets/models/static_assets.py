@@ -8,9 +8,9 @@ from django.db.models import FileField
 from django.db.models.fields.files import FieldFile
 from storages.backends.gcloud import GoogleCloudStorage
 
-from static_assets.models import License, StorageLocation, StorageLocationCategoryChoices
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
+from static_assets.models import License, StorageLocation, StorageLocationCategoryChoices
 
 
 class StaticAssetFileTypeChoices(models.TextChoices):
@@ -63,12 +63,20 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
     original_filename = models.CharField(max_length=128, editable=False)
     size_bytes = models.BigIntegerField(editable=False)
 
-    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='uploaded_assets')
-    user.description = "The user who uploaded the asset."
-    author = models.ForeignKey(
-        User, blank=True, null=True, on_delete=models.PROTECT, related_name='authored_assets'
+    user = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name='uploaded_assets', verbose_name='created by'
     )
-    author.description = "The actual author of the artwork/learning materials."
+    user.description = 'The user who created the static asset.'
+    author = models.ForeignKey(
+        User,
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
+        related_name='authored_assets',
+        verbose_name='author (optional)',
+        help_text='The actual author of the artwork/learning materials',
+    )
+    author.description = 'The actual author of the artwork/learning materials.'
     license = models.ForeignKey(
         License, null=True, on_delete=models.SET_NULL, related_name='static_assets'
     )

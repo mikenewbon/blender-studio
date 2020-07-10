@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from static_assets.models import static_assets, licenses, storages
 from common.mixins import AdminUserDefaultMixin
+from static_assets.models import static_assets, licenses, storages
 
 
 @admin.register(licenses.License)
@@ -48,6 +48,15 @@ class StaticAssetAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
         ),
     )
     list_filter = ['source_type', 'user', 'author', 'storage_location__film__title']
+    search_fields = [
+        'original_filename',
+        'user__first_name',
+        'user__last_name',
+        'author__first_name',
+        'author__last_name',
+        'storage_location__film__title',
+        'source_type',
+    ]
 
 
 admin.site.register(storages.StorageLocation)
