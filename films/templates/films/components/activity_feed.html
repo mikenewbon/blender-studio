@@ -58,18 +58,22 @@
             <div class="row row-cols-1 row-cols-md-4  row-cols-2">
               <!--TODO(Mike): Need an API to handle file requests-->
               {% for entry_asset in entry.assets|slice:':4' %}
-              <div class="col">
-                {% include "common/components/file.html" with asset=entry_asset.asset site_context="production_logs" %}
-              </div>
+                <div class="col">
+                  {% include "common/components/file.html" with asset=entry_asset.asset site_context="production_logs" %}
+                </div>
               {% endfor %}
-              {% if entry.assets|length > 4 %}
-              <div class="collapse" id="entry-{{ entry.id }}">
-                {% for entry_asset in entry.assets|slice:'4:' %}
-                {% include "common/components/file.html" with asset=entry_asset.asset site_context="production_logs" %}
-                {% endfor %}
-              </div>
-              {% endif %}
             </div>
+            {% if entry.assets|length > 4 %}
+              <div class="collapse" id="entry-{{ entry.id }}">
+                <div class="row row-cols-1 row-cols-md-4  row-cols-2">
+                  {% for entry_asset in entry.assets|slice:'4:' %}
+                  <div class="col">
+                    {% include "common/components/file.html" with asset=entry_asset.asset site_context="production_logs" %}
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
           </div>
           {% if entry.assets|length > 4 %}
           <div class="row update-feed-individual-files-show-more">
