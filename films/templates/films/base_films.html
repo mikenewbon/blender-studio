@@ -15,7 +15,7 @@ has-secondary-nav
 				<a class="list-group-item" href="{% url 'film-about' film_slug=film.slug %}">
 					About
 				</a>
-				<a class="list-group-item" href="{% url 'film-gallery' film_slug=film.slug %}">
+				<a class="list-group-item {% if current_collection %}active{% endif %}" href="{% url 'film-gallery' film_slug=film.slug %}">
 					Gallery
 				</a>
 				<a class="list-group-item" href="{% url 'film-production-logs' film_slug=film.slug %}">

@@ -1097,8 +1097,9 @@ $breadcrumb-item-padding: 0.5rem !default;
 $breadcrumb-margin-bottom: 0 !default;
 
 $breadcrumb-bg: null !default;
+$breadcrumb-link-color: $white !default;
 $breadcrumb-divider-color: $gray-600 !default;
-$breadcrumb-active-color: $gray-600 !default;
+$breadcrumb-active-color: $highlight-white-xstrong !default;
 $breadcrumb-divider: quote("/") !default;
 
 $breadcrumb-border-radius: $border-radius !default;

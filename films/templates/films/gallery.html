@@ -20,7 +20,7 @@ has-secondary-nav
   <p class="subtitle">Gallery</p>
   <h2>{{ film.title }}</h2>
 </div>
-{% if featured_artwork %}
+
 <div class="drawer-nav-group">
 
   <div class="drawer-nav-dropdown-wrapper">
@@ -33,7 +33,7 @@ has-secondary-nav
     {% endif %}
   </div>
 </div>
-{% endif %}
+
 {% for collection, child_collections in collections.items %}
 
 <div class="drawer-nav-group">
@@ -77,61 +77,93 @@ has-secondary-nav
 {% block content %}
 
 <div class="container-xl pt-3">
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb pt-0">
-    <li class="breadcrumb-item"><a href="#">Home</a></li>
-    <li class="breadcrumb-item"><a href="#">Library</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Data</li>
-  </ol>
-</nav>
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb pt-0 pb-3">
+      {% if current_collection.parent == null %}
+      <li class="breadcrumb-item active">
+        {{ film.title }}
+      </li>
+      {% else %}
+      <li class="breadcrumb-item">
+        <a href="{% url 'film-gallery' film_slug=film.slug %}">{{ film.title }}</a>
+      </li>
+      {% endif %}
+
+      <!--TODO(Mike): Manage this in Python and replace when done.-->
+      {% if current_collection.parent.parent.parent %}
+      <li class="breadcrumb-item">
+        <a
+          href="{{ current_collection.parent.parent.parent.url }}">{{ current_collection.parent.parent.parent.name }}</a>
+      </li>
+      {% endif %}
+
+      {% if current_collection.parent.parent %}
+      <li class="breadcrumb-item">
+        <a href="{{ current_collection.parent.parent.url }}">{{ current_collection.parent.parent.name }}</a>
+      </li>
+      {% endif %}
+
+      {% if current_collection.parent%}
+      <li class="breadcrumb-item">
+        <a href="{{ current_collection.parent.url }}">{{ current_collection.parent.name }}</a>
+      </li>
+
+      <li class="breadcrumb-item active">{{ current_collection.name }}</li>
+      {% endif %}
+
+    </ol>
+  </nav>
   {% block gallery_files %}
+
   <div>
 
-    <p class="subtitle">{{ film.title }}</p>
-    <h2>Featured Artwork</h2>
-
     <div class="files">
+      {% if featured_artwork %}
       <div class="card-columns">
-        {% comment %} <div class="row row-cols-2 row-cols-sm-3 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
-          {% endcomment %}
 
-          {% if featured_artwork %}
-          {% for asset in featured_artwork %}
-          {% include "common/components/file.html" with asset=asset site_context="featured_artwork" %}
-          {% endfor %}
-          {% endif %}
+        {% for asset in featured_artwork %}
+        {% include "common/components/file.html" with asset=asset site_context="featured_artwork" %}
+        {% endfor %}
 
+      </div>
+      {% else %}
+      <div class="d-inline-block w-100 bg-secondary">
+        <div class=" my-4 text-center">
+          <h3 class="mb-0">No Featured Artwork to display</h3>
         </div>
       </div>
-
+      {% endif %}
     </div>
-    {% endblock gallery_files %}
 
   </div>
+  {% endblock gallery_files %}
 
-  {% endblock content %}
+</div>
 
-  {% block footer %}
-  <footer class="bg-navigation py-2">
-    <div class="content-holder">
-      <div class="container-xl">
-        <div class="row">
+{% endblock content %}
 
-          <div class="col-12">
-            <div class="row">
-              <div class="col-auto">
-                <a href="#" class="small text-highlight-strong">Terms &amp; Conditions</a>
-              </div>
-              <div class="col-auto">
-                <a href="#" class="small text-highlight-strong">Privacy Policy</a>
-              </div>
-              <div class="col-auto">
-                <a href="#" class="small text-highlight-strong">Blender.org</a>
-              </div>
+{% block footer %}
+<footer class="bg-navigation py-2">
+  <div class="content-holder">
+    <div class="container-xl">
+      <div class="row">
+
+        <div class="col-12">
+          <div class="row">
+            <div class="col-auto">
+              <a href="#" class="small text-highlight-strong">Terms &amp; Conditions</a>
+            </div>
+            <div class="col-auto">
+              <a href="#" class="small text-highlight-strong">Privacy Policy</a>
+            </div>
+            <div class="col-auto">
+              <a href="#" class="small text-highlight-strong">Blender.org</a>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </footer>
-  {% endblock footer%}
+  </div>
+</footer>
+{% endblock footer%}
