@@ -10,23 +10,24 @@ ADMIN_SITE_TITLE = 'Blender Studio'
 # Application definition
 
 INSTALLED_APPS = [
-    'static_assets',
     'comments',
     'common',
     'films',
+    'static_assets',
     'subscriptions',
     'training',
-    'looper',
-    'blender_id_oauth_client',
-    'pipeline',
     'django.contrib.admin',
+    'django.contrib.admindocs',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+    'blender_id_oauth_client',
     'debug_toolbar',
+    'looper',
+    'pipeline',
     'sorl.thumbnail',
 ]
 

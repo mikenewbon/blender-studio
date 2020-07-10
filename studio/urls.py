@@ -15,6 +15,7 @@ admin.site.site_title = settings.ADMIN_SITE_TITLE
 
 
 urlpatterns = [
+    path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
     path('oauth/', include(blender_id_oauth_client.urls)),
     path('', home_view, name='home'),
