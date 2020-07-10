@@ -40,7 +40,7 @@ has-secondary-nav
   <div class="drawer-nav-dropdown-wrapper ">
 
     <a class="drawer-nav-dropdown h3 {% if current_collection.parent != collection and current_collection != collection %}collapsed{% endif %}"
-      href="{{ collection.url }}" data-toggle="collapse" data-target="#collection-{{ collection.id }}">
+      href="{{ collection.url }}" {% if child_collections %}data-toggle="collapse" data-target="#collection-{{ collection.id }}"{% endif %}>
       {% if child_collections %}
       <i class="material-icons">keyboard_arrow_down</i>
       {% endif %}
