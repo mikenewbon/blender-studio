@@ -151,7 +151,6 @@ at an appropriate moment. The Collection model doesn't have such a flag.
 In film-, collection- and asset-related views, the respective querysets are filtered to only include
 the objects with `is_published=True`. For example, attempting to access an asset in an unpublished
 film should result in a 404 Not Found error, even if the asset itself is marked as published.
-This is not checked in the api-asset view, though (perhaps it should be).
 
 
 ##### Production Logs / Weeklies

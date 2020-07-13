@@ -3,6 +3,7 @@ from typing import Dict, Union, cast, List, Optional
 
 from django.http import HttpResponse
 from django.http.request import HttpRequest
+from django.http.response import Http404
 from django.shortcuts import render
 from django.views.decorators.http import require_safe
 
@@ -65,7 +66,7 @@ def get_next_asset_in_featured_artwork(asset: Asset) -> Optional[Asset]:
 
 def get_previous_asset_in_gallery(asset: Asset) -> Optional[Asset]:
     collection = cast(Collection, asset.collection)
-    collection_assets = list(collection.assets.order_by('order', 'name'))
+    collection_assets = list(collection.assets.filter(is_published=True).order_by('order', 'name'))
     asset_index = collection_assets.index(asset)
     if asset_index == 0:
         return None
@@ -74,7 +75,7 @@ def get_previous_asset_in_gallery(asset: Asset) -> Optional[Asset]:
 
 def get_next_asset_in_gallery(asset: Asset) -> Optional[Asset]:
     collection = cast(Collection, asset.collection)
-    collection_assets: List[Asset] = list(collection.assets.order_by('order', 'name'))
+    collection_assets = list(collection.assets.filter(is_published=True).order_by('order', 'name'))
     asset_index = collection_assets.index(asset)
     if asset_index == len(collection_assets) - 1:
         return None
@@ -84,12 +85,12 @@ def get_next_asset_in_gallery(asset: Asset) -> Optional[Asset]:
 def get_asset_context(
     asset: Asset, site_context: Optional[str]
 ) -> Dict[str, Union[Asset, str, None]]:
-    """Creates context for the api-asset view: the current, previous and next assets.
+    """Creates context for the api-asset view: the current, previous and next published assets.
 
     The request's URL is expected to contain a query string 'site_context=...' with one
     of the following values (see the SiteContexts enum):
-    - 'production_logs' - for assets inside production log entries in the 'Weeklies' website section;
-        they are sorted by their `date_created`,
+    - 'production_logs' - for assets inside production log entries in the 'Weeklies' website
+        section; they are sorted by their `date_created`,
     - 'featured_artwork' - for featured assets in the 'Gallery' section; they are sorted by
         their `date_created`,
     - 'gallery' - for assets inside collections in the 'Gallery section; they are sorted by
@@ -137,20 +138,24 @@ def get_asset_context(
 @require_safe
 def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
     """Renders an asset modal, with the links to the previous and next assets."""
-    asset = (
-        Asset.objects.filter(pk=asset_pk)
-        .select_related(
-            'film',
-            'collection',
-            'static_asset',
-            'static_asset__license',
-            'static_asset__author',
-            'static_asset__user',
-            'static_asset__storage_location',
-            'entry_asset__production_log_entry',
+    try:
+        asset = (
+            Asset.objects.filter(pk=asset_pk, is_published=True)
+            .select_related(
+                'film',
+                'collection',
+                'static_asset',
+                'static_asset__license',
+                'static_asset__author',
+                'static_asset__user',
+                'static_asset__storage_location',
+                'entry_asset__production_log_entry',
+            )
+            .get()
         )
-        .get()
-    )
+    except Asset.DoesNotExist:
+        raise Http404('No asset matches the given query.')
+
     context = get_asset_context(asset, request.GET.get('site_context'))
 
     return render(request, 'common/components/modal_asset.html', context)
@@ -158,6 +163,13 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
 
 @require_safe
 def asset_zoom(request: HttpRequest, asset_pk: int) -> HttpResponse:
-    asset = Asset.objects.filter(pk=asset_pk).select_related('static_asset__storage_location').get()
+    try:
+        asset = (
+            Asset.objects.filter(pk=asset_pk, is_published=True)
+            .select_related('static_asset__storage_location')
+            .get()
+        )
+    except Asset.DoesNotExist:
+        raise Http404('No asset matches the given query.')
 
     return render(request, 'common/components/modal_asset_zoom.html', {'asset': asset})
