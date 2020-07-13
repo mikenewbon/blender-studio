@@ -27,12 +27,7 @@
 
       transform: translateX(0);
 
-      .drawer-overlay {
-        @include media-breakpoint-down(lg) {
-          opacity: 1;
-          pointer-events: auto;
-        }
-      }
+
     }
   }
 }
@@ -109,23 +104,6 @@
     width: 100%;
     border-right: 0;
   }
-
-  .drawer-overlay {
-    @include media-breakpoint-down(sm) {
-      left: 0;
-      top: 100%;
-    }
-
-    background: $highlight-black-xstrong;
-    height: 100vh;
-    left: 100%;
-    opacity: 0;
-    pointer-events: none;
-    position: absolute;
-    top: 0;
-    transition: opacity $nav-drawer-animation-duration;
-    width: 100vw;
-  }
 }
 
 .nav-drawer-spacer {
@@ -142,10 +120,6 @@
 .has-secondary-nav {
   .nav-drawer-spacer {
     height: auto;
-  }
-
-  .nav-drawer {
-    height: calc(100vh - (#{$navbar-height} + 1px));
   }
 }
 
@@ -455,7 +429,7 @@ $circle-circumference: $circle-diameter * 3.14;
 
 .drawer-nav-dropdown {
   align-items: center;
-  color: $white;
+  color: $highlight-white-xstrong;
   cursor: pointer;
   display: flex;
   flex-grow: 1;
@@ -470,7 +444,7 @@ $circle-circumference: $circle-diameter * 3.14;
 
   &.active {
     background: $highlight-white;
-    color: $primary;
+    color: $white;
   }
 
   &:hover {

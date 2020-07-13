@@ -800,7 +800,7 @@ $navbar-dark-brand-hover-color: $navbar-dark-active-color !default;
 //Navdrawer
 
 $nav-drawer-width-closed: 0px !default;
-$nav-drawer-width-open: 380px !default;
+$nav-drawer-width-open: 350px !default;
 $nav-drawer-animation-duration: 0.5s;
 
 // Dropdowns
@@ -874,7 +874,7 @@ $jumbotron-bg: $gray-200 !default;
 
 // Cards
 
-$card-spacer-y: $spacer !default;
+$card-spacer-y: $spacer / 2 !default;
 $card-spacer-x: $spacer !default;
 $card-border-width: $border-width !default;
 $card-border-radius: $border-radius !default;
