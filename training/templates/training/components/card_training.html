@@ -26,7 +26,7 @@
 		<div class="card-footer">
 			<div class="pills {% comment %}{{ class|join(' ') }}{% endcomment %}">
 				{% for tag in training.tags.all %}
-				    {% include 'common/components/cards/pill.html' with label=tag %}
+				    {% include 'common/components/cards/pill.html' with label=tag.name %}
 				{% endfor %}
 			</div>
 		</div>

@@ -1,15 +1,20 @@
-<div style="background-image:url({{ film.picture_header.url }})"
-  class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content header">
+<div class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content header">
+  <div class="jumbotron-bg-wrapper">
+    {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=film.picture_header xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
+
+    {% comment %} <img class="jumbotron-bg" src="{{ film.picture_header.url }}"> {% endcomment %}
+  </div>
   <div class="container-xl">
     <div class="row">
-      <div class="col-lg-6 col-xl-5">
+      <div class="col-md-7 col-lg-6 col-xl-5">
         <div class="jumbotron-body">
           <img class="mb-3 film-logo" src="{{ film.logo.url }}">
           <p class="mb-3">
             {{ film.summary|linebreaksbr }}
           </p>
           {% if film.youtube_link != "" %}
-          <button class="btn btn-primary mb-0 video-modal-link" data-toggle="modal" data-target="#videoModal" data-video="{{ film.youtube_link }}">Watch
+          <button class="btn btn-primary mb-0 video-modal-link" data-toggle="modal" data-target="#videoModal"
+            data-video="{{ film.youtube_link }}">Watch
             {{ film.title }}</button>
           <a class="btn btn-transparent mb-0" href="{% url 'film-gallery' film.slug %}">Explore
             Content</a>
