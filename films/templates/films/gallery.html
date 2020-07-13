@@ -41,7 +41,8 @@ has-secondary-nav
   <div class="drawer-nav-dropdown-wrapper ">
 
     <a class="drawer-nav-dropdown h3 {% if current_collection.parent != collection and current_collection != collection %}collapsed{% endif %}"
-      href="{{ collection.url }}" {% if child_collections %}data-toggle="collapse" data-target="#collection-{{ collection.id }}"{% endif %}>
+      href="{{ collection.url }}" {% if child_collections %}data-toggle="collapse"
+      data-target="#collection-{{ collection.id }}" {% endif %}>
       {% if child_collections %}
       <i class="material-icons">keyboard_arrow_down</i>
       {% endif %}
@@ -78,7 +79,7 @@ has-secondary-nav
 {% block content %}
 
 <div class="container-xl pt-3">
-{% show_breadcrumbs %}
+  {% show_breadcrumbs %}
 
   {% block gallery_files %}
 
