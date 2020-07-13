@@ -1,5 +1,6 @@
 {% extends 'films/base_films.html' %}
 {% load static %}
+{% load film_extras %}
 
 {% block bodyclasses %}
 has-nav-drawer
@@ -77,44 +78,8 @@ has-secondary-nav
 {% block content %}
 
 <div class="container-xl pt-3">
+{% show_breadcrumbs %}
 
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb pt-0 pb-3 side-scroll">
-      {% if current_collection.parent == null %}
-      <li class="breadcrumb-item active">
-        {{ film.title }}
-      </li>
-      {% else %}
-      <li class="breadcrumb-item">
-        <a href="{% url 'film-gallery' film_slug=film.slug %}">{{ film.title }}</a>
-      </li>
-      {% endif %}
-
-      <!--TODO(Mike): Manage this in Python and replace when done.-->
-      {% if current_collection.parent.parent.parent %}
-      <li class="breadcrumb-item">
-        <a
-          href="{{ current_collection.parent.parent.parent.url }}">{{ current_collection.parent.parent.parent.name }}</a>
-      </li>
-      {% endif %}
-
-      {% if current_collection.parent.parent %}
-      <li class="breadcrumb-item">
-        <a href="{{ current_collection.parent.parent.url }}">{{ current_collection.parent.parent.name }}</a>
-      </li>
-      {% endif %}
-
-      {% if current_collection.parent%}
-      <li class="breadcrumb-item">
-        <a href="{{ current_collection.parent.url }}">{{ current_collection.parent.name }}</a>
-      </li>
-
-      <li class="breadcrumb-item active">{{ current_collection.name }}</li>
-      {% endif %}
-
-    </ol>
-
-  </nav>
   {% block gallery_files %}
 
   <div>
