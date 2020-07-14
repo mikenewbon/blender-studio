@@ -3,16 +3,22 @@
 window.productionLogs = (function productionLogs() {
     const activityFeedSelector = '#activity-feed';
     const loadMoreWeeksButtonSelector = '#load-more-weeks';
+    const spinner = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading more weeks...'
 
     document.addEventListener('DOMContentLoaded', () => {
         addButtonClickEvent();
     });
+
+    function addSpinner(element){
+      element.innerHTML = spinner;
+    }
 
     function addButtonClickEvent() {
         const loadMoreWeeksButton = document.querySelector(loadMoreWeeksButtonSelector);
         if (loadMoreWeeksButton) {
             loadMoreWeeksButton.addEventListener(
           'click', event => {
+              addSpinner(event.target);
               getMoreLogs(event.target);
           });
         }
