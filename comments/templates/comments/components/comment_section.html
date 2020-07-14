@@ -3,12 +3,6 @@
 <div class="comment-section" data-comment-url="{{ comments.comment_url }}"
    data-profile-image-url="{{ comments.profile_image_url }}">
   <h3>{{ comments.number_of_comments }} Comments</h3>
-{#  {% include 'comments/components/comment_input.html' with button_label='Comment' class='comment-main-input' %}#}
   {% comment_input profile_image_url=comments.profile_image_url button_label='Comment' div_class='comment-main-input'%}
-  <div class="comments">
-    {% for c in comments.comment_trees %}
-      {% include 'comments/components/comment.html' with comment=c %}
-{#      # TODO(Natalia): display replies#}
-    {% endfor %}
-  </div>
+  {% include 'comments/components/comment_tree.html' with comment_trees=comments.comment_trees %}
 </div>
