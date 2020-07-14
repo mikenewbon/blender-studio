@@ -183,3 +183,24 @@ a.file {
 //     transition: $transition-base;
 //   }
 // }
+
+.gallery-load-overlay {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - #{$nav-drawer-width});
+  height: 100%;
+  background: $highlight-black-xstrong;
+  justify-content: center;
+  align-items: center;
+  margin-left: $nav-drawer-width;
+  pointer-events: none;
+  transition: $transition-fade;
+  display: flex;
+  backdrop-filter: blur(10px);
+
+  &.show {
+    opacity: 1;
+  }
+}

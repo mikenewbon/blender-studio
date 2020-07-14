@@ -1,7 +1,7 @@
 .has-nav-drawer {
   .content-holder {
     @include media-breakpoint-up(md) {
-      margin-left: $nav-drawer-width-open;
+      margin-left: $nav-drawer-width;
     }
   }
 
@@ -16,7 +16,7 @@
   &.nav-drawer-open {
     .content-holder {
       @include media-breakpoint-up(md) {
-        margin-left: $nav-drawer-width-open;
+        margin-left: $nav-drawer-width;
       }
     }
 
@@ -62,9 +62,9 @@
   flex-direction: column;
   height: 100vh;
   position: fixed;
-  transform: translateX(-$nav-drawer-width-open);
+  transform: translateX(-$nav-drawer-width);
   transition: transform $nav-drawer-animation-duration;
-  width: $nav-drawer-width-open;
+  width: $nav-drawer-width;
   z-index: 1020;
 
 

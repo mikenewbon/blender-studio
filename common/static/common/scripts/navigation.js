@@ -12,6 +12,12 @@
         navDrawerToggle();
       });
     });
+
+    document.querySelectorAll('a.drawer-nav-dropdown:not([data-toggle])').forEach(i => {
+      i.addEventListener('click', () => {
+        document.querySelector('.gallery-load-overlay').classList.add('show');
+      })
+    });
   });
 
   // TODO(sem): Why do we wrap this function in `$`? What does that do?
