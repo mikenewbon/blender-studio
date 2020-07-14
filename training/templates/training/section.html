@@ -5,10 +5,22 @@
 {% block html_templates %}
 {{ block.super }}
 {% comment %}
-{{ comment_components.comment_template() }}
-{{ comment_components.comment_reply_input_template() }}
-{{ comment_components.comment_edit_input_template() }}
+{{ comment_components.comment_template }}
+{{ comment_components.comment_reply_input_template }}
+{{ comment_components.comment_edit_input_template }}
 {% endcomment %}
+<template id="comment-template">
+  {% include 'comments/components/comment.html' %}
+</template>
+
+<template id="comment-reply-input-template">
+  {% include 'comments/components/comment_input.html' with button_label='Reply' class='comment-reply-input' %}
+</template>
+
+<template id="comment-edit-input-template">
+  {% include 'comments/components/comment_input.html' with button_label='Save' class='comment-edit-input' %}
+</template>
+
 {% endblock html_templates %}
 
 {% block scripts %}
@@ -95,9 +107,9 @@
 
         </div>
       </div>
-      <!-- TODO(Mike): Re-add comments when it's ported out of django -->
-      {% comment %} <section class="mb-3">{{ comment_components.comment_section(comments) }}</section>
-      {% endcomment %}
+
+      <section class="mb-3">{% include 'comments/components/comment_section.html' %}</section>
+
     </div>
     <div class="col-md-4">
       <div class="card card-dark d-none d-md-block">

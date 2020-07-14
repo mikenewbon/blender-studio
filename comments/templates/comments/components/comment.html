@@ -1,0 +1,52 @@
+{% load static %}
+
+<div class="row comment"
+   data-comment-id="{{ comment.id }}"
+   data-profile-image-url="{{ comment.profile_image_url }}"
+   data-like-url="{{ comment.like_url }}"
+   {% if comment.edit_url is not none %}data-edit-url="{{ comment.edit_url }}"{% endif %}
+   {% if comment.delete_url is not none %}data-delete-url="{{ comment.delete_url }}"{% endif %}>
+  <div class="col comment-content">
+    <div class="row comment-header">
+      <div class="col-auto pr-0 d-flex">
+        <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');"
+             class="profile col-profile"></div>
+      </div>
+      <div class="col-auto">
+        <h4 class="comment-name">{{ comment.username }}</h4>
+        <p class="comment-date">{{ comment.date_created|date:"jS F Y" }}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <p class="comment-text">{{ comment.message }}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col d-flex align-items-center">
+        <div class="comment-likes">
+          <button class="btn btn-ctrl-xs checkbox-like"
+              {% if comment.liked %}data-checked="checked"{% endif %}>
+            <i class="material-icons btn-material-icons checkbox-like-icon-checked text-primary">favorite</i>
+            <i class="material-icons btn-material-icons checkbox-like-icon-unchecked">favorite_border</i>
+          </button>
+          <span class="comment-likes-count">{{ comment.likes }}</span>
+        </div>
+        <a href="" class="comment-action comment-reply">Reply</a>
+        <a href="" class="comment-action comment-edit">Edit</a>
+        <a href="" class="comment-action comment-delete">Delete</a>
+      </div>
+
+    </div>
+  </div>
+  <div class="col-md-12 comment-edit-inputs">
+  </div>
+  <div class="col-md-12 comment-reply-inputs">
+  </div>
+  <div class="col-md-12 replies">
+{#    TODO(Natalia): rewrite this#}
+{#    {% if caller is defined %}#}
+{#      {{ caller() }}#}
+{#    {% endif %}#}
+  </div>
+</div>
