@@ -186,11 +186,11 @@ a.file {
 
 .gallery-load-overlay {
   opacity: 0;
-  position: absolute;
-  top: 0;
+  position: fixed;
+  bottom: 0;
   left: 0;
   width: calc(100% - #{$nav-drawer-width});
-  height: 100%;
+  height: calc(100% - #{$navbar-height});
   background: $highlight-black-xstrong;
   justify-content: center;
   align-items: center;
@@ -201,6 +201,13 @@ a.file {
   backdrop-filter: blur(10px);
 
   &.show {
+    pointer-events: auto;
     opacity: 1;
+  }
+}
+
+.has-secondary-nav{
+  .gallery-load-overlay{
+    height: calc(100% - #{$navbar-height + 43px});
   }
 }

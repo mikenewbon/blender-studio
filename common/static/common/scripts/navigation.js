@@ -13,7 +13,7 @@
       });
     });
 
-    document.querySelectorAll('a.drawer-nav-dropdown:not([data-toggle])').forEach(i => {
+    document.querySelectorAll('a.drawer-nav-dropdown:not([data-toggle]), .drawer-nav-section a').forEach(i => {
       i.addEventListener('click', () => {
         document.querySelector('.gallery-load-overlay').classList.add('show');
       })

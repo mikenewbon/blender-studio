@@ -1,24 +1,27 @@
 footer {
-	margin-top: auto;
-	border-top: 1px solid $highlight-white;
-	@include media-breakpoint-down(sm){
-		text-align: center;
-	}
-	ul {
-		@include list-unstyled();
-	}
+  margin-top: auto;
+  border-top: 1px solid $highlight-white;
+  z-index: $zindex-dropdown;
+
+  @include media-breakpoint-down(sm) {
+    text-align: center;
+  }
+
+  ul {
+    @include list-unstyled();
+  }
 }
 
-.footer-social-media img{
+.footer-social-media img {
 
-	@include media-breakpoint-down(sm){
-		width: 48px;
-	}
+  @include media-breakpoint-down(sm) {
+    width: 48px;
+  }
 }
 
 // Pushes the footer down the the bottom of the page using margin-top auto on footer
-body{
-	min-height: calc(100vh - #{$navbar-height});
-	display: flex;
-	flex-direction: column;
+body {
+  min-height: calc(100vh - #{$navbar-height});
+  display: flex;
+  flex-direction: column;
 }
