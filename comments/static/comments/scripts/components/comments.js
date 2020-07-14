@@ -215,6 +215,7 @@ window.comments = (function comments() {
     editUrl,
     deleteUrl
   ) {
+    // console.log('id: ', id, 'profileImageUrl: ', profileImageUrl, 'msg: ', message)
     const template = document.getElementById('comment-template');
     const element = template.content.cloneNode(true).querySelector(`.${Comment.className}`);
     element.dataset.commentId = id;

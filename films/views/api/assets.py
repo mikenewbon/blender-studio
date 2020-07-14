@@ -1,13 +1,23 @@
+import json
 from enum import Enum
-from typing import Dict, Union, cast, List, Optional
+from typing import Dict, Union, cast, Optional, List
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.db.models.aggregates import Count
+from django.db.models.expressions import Exists, OuterRef, Case, Value, When
+from django.db.models.fields import BooleanField
 from django.http import HttpResponse
 from django.http.request import HttpRequest
-from django.http.response import Http404
+from django.http.response import Http404, JsonResponse
 from django.shortcuts import render
-from django.views.decorators.http import require_safe
+from django.views.decorators.http import require_safe, require_POST
 
-from films.models import Asset, Collection
+from comments import typed_templates
+from comments.models import Comment, Like
+from comments.views.common import comments_to_template_type
+from common.types import assert_cast
+from films.models import Asset, Collection, AssetComment
 
 
 class SiteContexts(Enum):
@@ -83,8 +93,8 @@ def get_next_asset_in_gallery(asset: Asset) -> Optional[Asset]:
 
 
 def get_asset_context(
-    asset: Asset, site_context: Optional[str]
-) -> Dict[str, Union[Asset, str, None]]:
+    asset: Asset, site_context: Optional[str], user: User,
+) -> Dict[str, Union[Asset, typed_templates.Comments, str, None]]:
     """Creates context for the api-asset view: the current, previous and next published assets.
 
     The request's URL is expected to contain a query string 'site_context=...' with one
@@ -125,14 +135,36 @@ def get_asset_context(
     else:
         previous_asset = next_asset = None
 
+    comments: List[Comment] = get_comments(asset.pk, user.pk)
+    user_is_moderator = user.has_perm('asset.moderate_comment')
+
     context = {
         'asset': asset,
         'previous_asset': previous_asset,
         'next_asset': next_asset,
         'site_context': site_context,
+        'comments': comments_to_template_type(comments, asset.comment_url, user_is_moderator),
     }
 
     return context
+
+
+def get_comments(asset_pk: int, user_pk: int) -> List[Comment]:
+    """Fetch annotated comments for the asset given by the `asset_pk`."""
+    comments = list(
+        Comment.objects.filter(asset__pk=asset_pk)
+        .annotate(
+            liked=Exists(Like.objects.filter(comment_id=OuterRef('pk'), user_id=user_pk)),
+            number_of_likes=Count('likes'),
+            owned_by_current_user=Case(
+                When(user_id=user_pk, then=Value(True)),
+                default=Value(False),
+                output_field=BooleanField(),
+            ),
+        )
+        .all()
+    )
+    return comments
 
 
 @require_safe
@@ -151,12 +183,13 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
                 'static_asset__storage_location',
                 'entry_asset__production_log_entry',
             )
+            .prefetch_related('comments__user', 'comments__reply_to', 'comments__replies')
             .get()
         )
     except Asset.DoesNotExist:
         raise Http404('No asset matches the given query.')
 
-    context = get_asset_context(asset, request.GET.get('site_context'))
+    context = get_asset_context(asset, request.GET.get('site_context'), request.user)
 
     return render(request, 'common/components/modal_asset.html', context)
 
@@ -173,3 +206,38 @@ def asset_zoom(request: HttpRequest, asset_pk: int) -> HttpResponse:
         raise Http404('No asset matches the given query.')
 
     return render(request, 'common/components/modal_asset_zoom.html', {'asset': asset})
+
+
+@require_POST
+@login_required
+def comment(request: HttpRequest, *, asset_pk: int) -> JsonResponse:
+    parsed_body = json.loads(request.body)
+
+    reply_to_pk = None if parsed_body['reply_to'] is None else int(parsed_body['reply_to'])
+    message = assert_cast(str, parsed_body['message'])
+
+    def create_comment(
+        *, user_pk: int, asset_pk: int, message: str, reply_to_pk: Optional[int]
+    ) -> Comment:
+        comment = Comment.objects.create(user_id=user_pk, message=message, reply_to_id=reply_to_pk)
+        AssetComment.objects.create(comment_id=comment.id, asset_id=asset_pk)
+        return comment
+
+    comment = create_comment(
+        user_pk=request.user.pk, asset_pk=asset_pk, message=message, reply_to_pk=reply_to_pk
+    )
+
+    return JsonResponse(
+        {
+            'id': comment.pk,
+            'username': comment.username,
+            'profile_image_url': 'https://blender.chat/avatar/fsiddi',
+            'date_string': comment.date_created.strftime('%d %B %Y - %H:%M'),
+            'message': comment.message,
+            'like_url': comment.like_url,
+            'liked': False,
+            'likes': 0,
+            'edit_url': comment.edit_url,
+            'delete_url': comment.delete_url,
+        }
+    )

@@ -6,7 +6,7 @@ register = template.Library()
 
 
 @register.inclusion_tag('comments/components/comment_input.html')
-def comment_input(profile_image_url: str, button_label: str, div_class: str) -> Dict:
+def comment_input(profile_image_url: str, button_label: str, div_class: str) -> Dict[str, str]:
     """
     Creates a comment input form.
 

@@ -5,11 +5,6 @@
 
 {% block html_templates %}
 {{ block.super }}
-{% comment %}
-{{ comment_components.comment_template }}
-{{ comment_components.comment_reply_input_template }}
-{{ comment_components.comment_edit_input_template }}
-{% endcomment %}
 <template id="comment-template">
   {% include 'comments/components/comment.html' %}
 </template>
