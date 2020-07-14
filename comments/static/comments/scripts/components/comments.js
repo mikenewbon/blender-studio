@@ -297,6 +297,10 @@ window.comments = (function comments() {
     _postComment() {
       const { commentSection, inputElement } = this;
       const message = inputElement.value;
+      if (message === '') {
+        return
+      }
+
       inputElement.value = '';
 
       ajax
