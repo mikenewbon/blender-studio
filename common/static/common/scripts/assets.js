@@ -60,6 +60,9 @@ window.asset = (function asset() {
       // Create a new video player for the modal
       const player = new Plyr(document.querySelector('.video-player video'));
       document.querySelector('.modal').focus();
+
+      // Trigger activation of comment event listeners
+			activateComments();
     }).catch(err => {
 			console.warn('Something went wrong.', err);
 		});
@@ -95,5 +98,10 @@ window.asset = (function asset() {
 				'click', () => getModalHtml(element, zoomModalId)
 			);
 		});
+	}
+
+	function activateComments() {
+  	const event = new CustomEvent('DOMContentLoaded', {bubbles: true});
+  	document.querySelector('.modal').dispatchEvent(event);
 	}
 })();
