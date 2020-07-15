@@ -3,16 +3,9 @@ from django.contrib import admin
 from films.models import assets, collections, films
 
 
-class AssetCommentInline(admin.TabularInline):
-    model = assets.AssetComment
-    show_change_link = True
-    extra = 0
-
-
 @admin.register(assets.Asset)
 class AssetAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
-    inlines = [AssetCommentInline]
     readonly_fields = ['date_created']
     list_display = ['__str__', 'order', 'film', 'collection']
     list_filter = [

@@ -57,12 +57,6 @@ class AssetInline(admin.TabularInline):
     model = sections.Asset
 
 
-class SectionCommentInline(admin.TabularInline):
-    show_change_link = True
-    model = sections.SectionComment
-    extra = 0
-
-
 @admin.register(sections.Section)
 class SectionAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
@@ -70,7 +64,7 @@ class SectionAdmin(admin.ModelAdmin):
         '__str__',
         with_name('url', lambda obj: format_html('<a href="{url}">{url}</a>', url=obj.url)),
     ]
-    inlines = [VideoInline, AssetInline, SectionCommentInline]
+    inlines = [VideoInline, AssetInline]
     list_filter = [
         'chapter__training__type',
         'chapter__training__difficulty',
