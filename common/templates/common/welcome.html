@@ -2,432 +2,446 @@
 {% load static %}
 
 {% block content %}
-<div style="background-image:url('{% static 'common/images/welcome/welcome-header.jpeg' %}')"
-	class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content jumbotron header">
-	<div class="container-xl">
-		<div class="row">
-			<div class="col-lg-7 col-md-8">
-				<div class="jumbotron-body">
-					<h1 class="mb-2">Learn to make Movies from the Blender Animation Team</h1>
-					<p>Follow along with our expert team at your own pace - on every subject from Animation to UV
-						unwrapping.</p>
-					<p class="mb-4">With <strong>400+ hours of training</strong> and <strong>1000's of production
-							files</strong>, you're getting the best resources Blender has to offer.</p>
-					{% comment %} <div class="row mb-4 justify-content-stretch">
-						<div class="col-md-4 d-flex flex-column justify-content-between">
-							<h3>Learn from our expert team</h3>
-							<p class="small">Classes, workshops and production lessons with .blend files included.
-							</p>
-						</div>
-						<div class="col-md-4 d-flex flex-column justify-content-between">
-							<h3>Download 1000s of files and assets</h3>
-							<p class="small">Production quality HDRI’s, textures and fully rigged characters.</p>
-						</div>
-						<div class="col-md-4 d-flex flex-column justify-content-between">
-							<h3>Use our production software</h3>
-							<p class="small">Featuring task tracking, render management and asset libraries.</p>
-						</div>
-					</div> {% endcomment %}
-					<div class="d-flex flex-row align-items-center">
-						<button class="btn btn-lg btn-primary mr-4">Join the Blender Studio</button>
-						<div class="d-inline-block">
-							<p class="mb-0">Access to all training, assets<br>and films for €9.90/month</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+<div class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content jumbotron header">
+  <div class="jumbotron-bg-wrapper">
+    <img class="jumbotron-bg" src="{% static "common/images/welcome/welcome-header.jpeg" %}">
+    <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
+    {% comment %}
+    {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
+    {% endcomment %}
+  </div>
+  <div class="container-xl">
+    <div class="row">
+      <div class="col-lg-7 col-md-8">
+        <div class="jumbotron-body">
+          <h1 class="mb-2">Learn to make Movies from the Blender Animation Team</h1>
+          <p>Follow along with our expert team at your own pace - on every subject from Animation to UV
+            unwrapping.</p>
+          <p class="mb-4">With <strong>400+ hours of training</strong> and <strong>1000's of production
+              files</strong>, you're getting the best resources Blender has to offer.</p>
+          {% comment %} <div class="row mb-4 justify-content-stretch">
+            <div class="col-md-4 d-flex flex-column justify-content-between">
+              <h3>Learn from our expert team</h3>
+              <p class="small">Classes, workshops and production lessons with .blend files included.
+              </p>
+            </div>
+            <div class="col-md-4 d-flex flex-column justify-content-between">
+              <h3>Download 1000s of files and assets</h3>
+              <p class="small">Production quality HDRI’s, textures and fully rigged characters.</p>
+            </div>
+            <div class="col-md-4 d-flex flex-column justify-content-between">
+              <h3>Use our production software</h3>
+              <p class="small">Featuring task tracking, render management and asset libraries.</p>
+            </div>
+          </div> {% endcomment %}
+          <div class="d-flex flex-row align-items-center">
+            <button class="btn btn-lg btn-primary mr-4">Join the Blender Studio</button>
+            <div class="d-inline-block">
+              <p class="mb-0">Access to all training, assets<br>and films for €9.90/month</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>
 <div class="container-xl mt-5">
-	<section class="mb-5">
-		<div class="row justify-content-center mb-3">
-			<div class="col-md-6 text-center">
-				<h2 class="mb-0">From A to UV, we’ve got it covered.</h2>
-				<p class="mb-0">With courses covering every major topic in Blender, you get the tools to learn, explore
-					and grow as an artist with the Blender Studio.</p>
-			</div>
-		</div>
-		<div class="row">
-			{% for training in featured_trainings|slice:':3' %}
-			{% include "common/components/cards/card_training.html" with training=training %}
-			{% endfor %}
-		</div>
-		<div class="row justify-content-center mb-0">
-			<div class="col-md-6 text-center">
-				<p class="mb-0">Want to see more? <a href="/training">Explore all Blender Studio Training</a>.</p>
-			</div>
-		</div>
-	</section>
+  <section class="mb-5">
+    <div class="row justify-content-center mb-3">
+      <div class="col-md-6 text-center">
+        <h2 class="mb-0">From A to UV, we’ve got it covered.</h2>
+        <p class="mb-0">With courses covering every major topic in Blender, you get the tools to learn, explore
+          and grow as an artist with the Blender Studio.</p>
+      </div>
+    </div>
+    <div class="row">
+      {% for training in featured_trainings|slice:':3' %}
+      {% include "common/components/cards/card_training.html" with training=training %}
+      {% endfor %}
+    </div>
+    <div class="row justify-content-center mb-0">
+      <div class="col-md-6 text-center">
+        <p class="mb-0">Want to see more? <a href="/training">Explore all Blender Studio Training</a>.</p>
+      </div>
+    </div>
+  </section>
 </div>
 
-<div style="background-image:url('{% static 'common/images/welcome/coffee-run-background.png' %}')"
-	class="jumbotron jumbotron-fluid jumbotron-overlay overlay-medium jumbotron header">
-	<div class="container-xl">
-		<div class="row">
-			<div class="col-lg-6 col-xl-5">
-				<a href="/films/coffee-run" class="jumbotron-body">
-					<p class="subtitle">Featured Project</p>
-					<h1 class="mb-2">Coffee Run</h1>
-					<p>This 2d-scroller-inspired short film will take you on the journey of a lifetime, as we sip on a
-						cup of coffee.</p>
-					<p class="mb-4">Coffee Run (currently in development) is directed by Hjalti Hjalmarsson and produced
-						by the team at Blender Animation Studio. This 2d-scroller-inspired short film will take you on
-						the journey of a lifetime, as we sip on a cup of coffee.</p>
-				</a>
-			</div>
-		</div>
-		<div class="row">
-			{% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Premiere" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" card_classes="mb-0" %}
+<div class="jumbotron jumbotron-fluid jumbotron-overlay overlay-medium jumbotron header">
+  <div class="jumbotron-bg-wrapper">
+    <img class="jumbotron-bg" src="{% static "common/images/welcome/coffee-run-background.png" %}">
+    <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
+    {% comment %}
+    {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
+    {% endcomment %}
+  </div>
+  <div class="container-xl">
+    <div class="row">
+      <div class="col-lg-6 col-xl-5">
+        <a href="/films/coffee-run" class="jumbotron-body">
+          <p class="subtitle">Featured Project</p>
+          <h1 class="mb-2">Coffee Run</h1>
+          <p>This 2d-scroller-inspired short film will take you on the journey of a lifetime, as we sip on a
+            cup of coffee.</p>
+          <p class="mb-4">Coffee Run (currently in development) is directed by Hjalti Hjalmarsson and produced
+            by the team at Blender Animation Studio. This 2d-scroller-inspired short film will take you on
+            the journey of a lifetime, as we sip on a cup of coffee.</p>
+        </a>
+      </div>
+    </div>
+    <div class="row">
+      {% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Premiere" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" card_classes="mb-0" %}
 
-			{% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Production Log #02" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" card_classes="mb-0" %}
+      {% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Production Log #02" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" card_classes="mb-0" %}
 
-			{% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Production Log #01" description="Coffee Run was announced just a couple of weeks ago, but it has been in the works for a while already." card_classes="mb-0" %}
-		</div>
-	</div>
+      {% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Production Log #01" description="Coffee Run was announced just a couple of weeks ago, but it has been in the works for a while already." card_classes="mb-0" %}
+    </div>
+  </div>
 </div>
 
 <div class="container-xl mt-5">
-	<section class="mb-5">
-		<div class="row justify-content-center mb-3">
-			<div class="col-md-6 text-center">
-				<h2 class="mb-0">Support Blender Open Movies</h2>
-				<p class="mb-0">The Blender Open Movie projects are made possible by subscriptions to the Blender
-					Studio.</p>
-			</div>
-		</div>
-		<div class="row">
-			{% for film in featured_films|slice:':3' %}
-			{% include "films/components/card_film.html" with film=film %}
-			{% endfor %}
-		</div>
-		<div class="row justify-content-center mb-0">
-			<div class="col-md-6 text-center">
-				<p class="mb-0">Learn more about our other <a href="/films">open movies</a> and <a href="#">how your
-						contribution is used</a>.</p>
-			</div>
-		</div>
-	</section>
+  <section class="mb-5">
+    <div class="row justify-content-center mb-3">
+      <div class="col-md-6 text-center">
+        <h2 class="mb-0">Support Blender Open Movies</h2>
+        <p class="mb-0">The Blender Open Movie projects are made possible by subscriptions to the Blender
+          Studio.</p>
+      </div>
+    </div>
+    <div class="row">
+      {% for film in featured_films|slice:':3' %}
+      {% include "films/components/card_film.html" with film=film %}
+      {% endfor %}
+    </div>
+    <div class="row justify-content-center mb-0">
+      <div class="col-md-6 text-center">
+        <p class="mb-0">Learn more about our other <a href="/films">open movies</a> and <a href="#">how your
+            contribution is used</a>.</p>
+      </div>
+    </div>
+  </section>
 
 </div>
 
 <section class="mb-5">
-	<div class="container-xl">
-		<div class="row justify-content-center mb-3">
-			<div class="col-md-6 text-center">
-				<h2 class="mb-0">Meet the team.</h2>
-				<p class="mb-0">With courses covering every major topic in Blender, you get the tools to learn, explore
-					and grow as an artist with the Blender Studio.</p>
-			</div>
-		</div>
-	</div>
-	<div class="container-fluid">
-		<div class="row">
+  <div class="container-xl">
+    <div class="row justify-content-center mb-3">
+      <div class="col-md-6 text-center">
+        <h2 class="mb-0">Meet the team.</h2>
+        <p class="mb-0">With courses covering every major topic in Blender, you get the tools to learn, explore
+          and grow as an artist with the Blender Studio.</p>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
 
-			<div class="col-6 col-sm-4 col-lg-3 col-xl-2 card-grid-item">
-				<div class="card card-dark card-media card-poster">
-					<div class="card-header"
-						style="background-image: url({% static 'common/images/welcome/portraits/sybren.jpg' %})">
-					</div>
-					<div class="card-body">
-						<h3 class="mb-0">Sybren Stüvel</h3>
-						<p class="subtitle text-sm">Blender Developer</p>
-					</div>
-				</div>
-			</div>
+      <div class="col-6 col-sm-4 col-lg-3 col-xl-2 card-grid-item">
+        <div class="card card-dark card-media card-poster">
+          <div class="card-header"
+            style="background-image: url({% static 'common/images/welcome/portraits/sybren.jpg' %})">
+          </div>
+          <div class="card-body">
+            <h3 class="mb-0">Sybren Stüvel</h3>
+            <p class="subtitle text-sm">Blender Developer</p>
+          </div>
+        </div>
+      </div>
 
-			<div class="col-6 col-sm-4 col-lg-3 col-xl-2 card-grid-item">
-				<div class="card card-dark card-media card-poster">
-					<div class="card-header"
-						style="background-image: url({% static 'common/images/welcome/portraits/andy.jpg' %})">
-					</div>
-					<div class="card-body">
-						<h3 class="mb-0">Andy Goralczyk</h3>
-						<p class="subtitle text-sm">Art director, lighting</p>
-					</div>
-				</div>
-			</div>
+      <div class="col-6 col-sm-4 col-lg-3 col-xl-2 card-grid-item">
+        <div class="card card-dark card-media card-poster">
+          <div class="card-header"
+            style="background-image: url({% static 'common/images/welcome/portraits/andy.jpg' %})">
+          </div>
+          <div class="card-body">
+            <h3 class="mb-0">Andy Goralczyk</h3>
+            <p class="subtitle text-sm">Art director, lighting</p>
+          </div>
+        </div>
+      </div>
 
-			<div class="col-6 col-sm-4 col-lg-3 col-xl-2 card-grid-item">
-				<div class="card card-dark card-media card-poster">
-					<div class="card-header"
-						style="background-image: url({% static 'common/images/welcome/portraits/julien.jpg' %})">
-					</div>
-					<div class="card-body">
-						<h3 class="mb-0">Julien Kaspar</h3>
-						<p class="subtitle text-sm">Sculpting & Modelling</p>
-					</div>
-				</div>
-			</div>
+      <div class="col-6 col-sm-4 col-lg-3 col-xl-2 card-grid-item">
+        <div class="card card-dark card-media card-poster">
+          <div class="card-header"
+            style="background-image: url({% static 'common/images/welcome/portraits/julien.jpg' %})">
+          </div>
+          <div class="card-body">
+            <h3 class="mb-0">Julien Kaspar</h3>
+            <p class="subtitle text-sm">Sculpting & Modelling</p>
+          </div>
+        </div>
+      </div>
 
-			<div class="col-6 col-sm-4 col-lg-3 col-xl-2 card-grid-item">
-				<div class="card card-dark card-media card-poster">
-					<div class="card-header"
-						style="background-image: url({% static 'common/images/welcome/portraits/demeter.jpg' %})">
-					</div>
-					<div class="card-body">
-						<h3 class="mb-0">Demeter Dzadik</h3>
-						<p class="subtitle text-sm">Rigging</p>
-					</div>
-				</div>
-			</div>
+      <div class="col-6 col-sm-4 col-lg-3 col-xl-2 card-grid-item">
+        <div class="card card-dark card-media card-poster">
+          <div class="card-header"
+            style="background-image: url({% static 'common/images/welcome/portraits/demeter.jpg' %})">
+          </div>
+          <div class="card-body">
+            <h3 class="mb-0">Demeter Dzadik</h3>
+            <p class="subtitle text-sm">Rigging</p>
+          </div>
+        </div>
+      </div>
 
-			<div class="col-6 col-sm-4 col-lg-3 col-xl-2 card-grid-item">
-				<div class="card card-dark card-media card-poster">
-					<div class="card-header"
-						style="background-image: url({% static 'common/images/welcome/portraits/simon.jpg' %})">
-					</div>
-					<div class="card-body">
-						<h3 class="mb-0">Simon Thommes</h3>
-						<p class="subtitle text-sm">Shading & Node Artist</p>
-					</div>
-				</div>
-			</div>
+      <div class="col-6 col-sm-4 col-lg-3 col-xl-2 card-grid-item">
+        <div class="card card-dark card-media card-poster">
+          <div class="card-header"
+            style="background-image: url({% static 'common/images/welcome/portraits/simon.jpg' %})">
+          </div>
+          <div class="card-body">
+            <h3 class="mb-0">Simon Thommes</h3>
+            <p class="subtitle text-sm">Shading & Node Artist</p>
+          </div>
+        </div>
+      </div>
 
-			<div class="col-6 col-sm-4 col-lg-3 col-xl-2 card-grid-item">
-				<div class="card card-dark card-media card-poster">
-					<div class="card-header"
-						style="background-image: url({% static 'common/images/welcome/portraits/hjalti.jpg' %})">
-					</div>
-					<div class="card-body">
-						<h3 class="mb-0">Hjalti Hjálmarsson</h3>
-						<p class="subtitle text-sm">Animator, Director</p>
-					</div>
-				</div>
-			</div>
+      <div class="col-6 col-sm-4 col-lg-3 col-xl-2 card-grid-item">
+        <div class="card card-dark card-media card-poster">
+          <div class="card-header"
+            style="background-image: url({% static 'common/images/welcome/portraits/hjalti.jpg' %})">
+          </div>
+          <div class="card-body">
+            <h3 class="mb-0">Hjalti Hjálmarsson</h3>
+            <p class="subtitle text-sm">Animator, Director</p>
+          </div>
+        </div>
+      </div>
 
-		</div>
-	</div>
+    </div>
+  </div>
 </section>
 
 <div class="container-xl mt-5">
-	<section class="mb-5">
-		<div class="row mb-3">
-			<div class="col">
-				<div class="jumbotron jumbotron-overlay overlay-flipped header"
-					style="background-image:url('{% static 'common/images/welcome/dweebs-bg.png' %}')">
-					<div class="row">
-						<div class="col-md-5 offset-md-6">
-							<div class="jumbotron-body py-4">
-								<h1>Subscribe to Blender Studio today</h1>
-								<p class="mb-4">Join Blender Studio and get access to hundreds of hours of training,
-									production assets and files from the open movies as well as a platform to learn at
-									your own pace, in your own time.</p>
-								<button class="btn btn-lg btn-primary">Subscribe for €9.90/month</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+  <section class="mb-5">
+    <div class="row mb-3">
+      <div class="col">
+        <div class="jumbotron jumbotron-overlay overlay-flipped header">
+          <div class="jumbotron-bg-wrapper">
+            <img class="jumbotron-bg" src="{% static "common/images/welcome/dweebs-bg.png" %}">
+            <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
+            {% comment %}
+            {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
+            {% endcomment %}
+          </div>
+          <div class="row">
+            <div class="col-md-5 offset-md-6">
+              <div class="jumbotron-body py-4">
+                <h1>Subscribe to Blender Studio today</h1>
+                <p class="mb-4">Join Blender Studio and get access to hundreds of hours of training,
+                  production assets and files from the open movies as well as a platform to learn at
+                  your own pace, in your own time.</p>
+                <button class="btn btn-lg btn-primary">Subscribe for €9.90/month</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
 
-	<section class="mb-5">
-		<div class="row justify-content-center mb-3">
-			<div class="col-md-6 text-center">
-				<h2 class="mb-0">Frequently Asked Questions</h2>
-				<p class="mb-0">If you have any further questions about the cloud - you can contact one of the
-					team on
-					<a href="https://blender.chat/channel/blender-cloud">Blender Chat</a> by logging in with
-					your
-					Blender ID.</p>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-6">
-				<h3 class="text-center">General</h3>
-				<div class="accordion" id="faqGeneral">
-					<div class="card card-dark">
-						<div class="card-header" id="faqHeadingWhatIsBlenderStudio">
-							<h5 class="mb-0">
-								<button class="btn btn-link" type="button" data-toggle="collapse"
-									data-target="#faqCollapseWhatIsBlenderStudio" aria-expanded="false"
-									aria-controls="faqCollapseWhatIsBlenderStudio">
-									<span>What is Blender Studio?</span> <i
-										class="material-icons">keyboard_arrow_down</i>
-								</button>
-							</h5>
-						</div>
-						<div id="faqCollapseWhatIsBlenderStudio" class="collapse"
-							aria-labelledby="faqHeadingWhatIsBlenderStudio" data-parent="#faqGeneral">
-							<div class="card-body">
-								Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-								richardson ad
-								squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
-								truck
-								quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
-								bird on it
-								squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
-								helvetica,
-								craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
-								excepteur
-								butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
-								aesthetic synth
-								nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-							</div>
-						</div>
-					</div>
-					<div class="card card-dark">
-						<div class="card-header" id="faqHeadingHowIsMyMoneySpent">
-							<h5 class="mb-0">
-								<button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-									data-target="#faqCollapseHowIsMyMoneySpent" aria-expanded="false"
-									aria-controls="faqCollapseHowIsMyMoneySpent">
-									<span>How is my money spent</span> <i class="material-icons">keyboard_arrow_down</i>
-								</button>
-							</h5>
-						</div>
-						<div id="faqCollapseHowIsMyMoneySpent" class="collapse"
-							aria-labelledby="faqHeadingHowIsMyMoneySpent" data-parent="#faqGeneral">
-							<div class="card-body small">
-								Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-								richardson ad
-								squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
-								truck
-								quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
-								bird on it
-								squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
-								helvetica,
-								craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
-								excepteur
-								butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
-								aesthetic synth
-								nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-							</div>
-						</div>
-					</div>
-					<div class="card card-dark">
-						<div class="card-header" id="faqHeadingHowSupportBlender">
-							<h5 class="mb-0">
-								<button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-									data-target="#faqCollapseHowSupportBlender" aria-expanded="false"
-									aria-controls="faqCollapseHowSupportBlender">
-									<span>How does Blender Studio support Blender?</span> <i
-										class="material-icons">keyboard_arrow_down</i>
-								</button>
-							</h5>
-						</div>
-						<div id="faqCollapseHowSupportBlender" class="collapse"
-							aria-labelledby="faqHeadingHowSupportBlender" data-parent="#faqGeneral">
-							<div class="card-body small">
-								Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-								richardson ad
-								squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
-								truck
-								quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
-								bird on it
-								squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
-								helvetica,
-								craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
-								excepteur
-								butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
-								aesthetic synth
-								nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+  <section class="mb-5">
+    <div class="row justify-content-center mb-3">
+      <div class="col-md-6 text-center">
+        <h2 class="mb-0">Frequently Asked Questions</h2>
+        <p class="mb-0">If you have any further questions about the cloud - you can contact one of the
+          team on
+          <a href="https://blender.chat/channel/blender-cloud">Blender Chat</a> by logging in with
+          your
+          Blender ID.</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <h3 class="text-center">General</h3>
+        <div class="accordion" id="faqGeneral">
+          <div class="card card-dark">
+            <div class="card-header" id="faqHeadingWhatIsBlenderStudio">
+              <h5 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse"
+                  data-target="#faqCollapseWhatIsBlenderStudio" aria-expanded="false"
+                  aria-controls="faqCollapseWhatIsBlenderStudio">
+                  <span>What is Blender Studio?</span> <i class="material-icons">keyboard_arrow_down</i>
+                </button>
+              </h5>
+            </div>
+            <div id="faqCollapseWhatIsBlenderStudio" class="collapse" aria-labelledby="faqHeadingWhatIsBlenderStudio"
+              data-parent="#faqGeneral">
+              <div class="card-body">
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+                richardson ad
+                squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
+                truck
+                quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
+                bird on it
+                squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
+                helvetica,
+                craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
+                excepteur
+                butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
+                aesthetic synth
+                nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+              </div>
+            </div>
+          </div>
+          <div class="card card-dark">
+            <div class="card-header" id="faqHeadingHowIsMyMoneySpent">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                  data-target="#faqCollapseHowIsMyMoneySpent" aria-expanded="false"
+                  aria-controls="faqCollapseHowIsMyMoneySpent">
+                  <span>How is my money spent</span> <i class="material-icons">keyboard_arrow_down</i>
+                </button>
+              </h5>
+            </div>
+            <div id="faqCollapseHowIsMyMoneySpent" class="collapse" aria-labelledby="faqHeadingHowIsMyMoneySpent"
+              data-parent="#faqGeneral">
+              <div class="card-body small">
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+                richardson ad
+                squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
+                truck
+                quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
+                bird on it
+                squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
+                helvetica,
+                craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
+                excepteur
+                butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
+                aesthetic synth
+                nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+              </div>
+            </div>
+          </div>
+          <div class="card card-dark">
+            <div class="card-header" id="faqHeadingHowSupportBlender">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                  data-target="#faqCollapseHowSupportBlender" aria-expanded="false"
+                  aria-controls="faqCollapseHowSupportBlender">
+                  <span>How does Blender Studio support Blender?</span> <i
+                    class="material-icons">keyboard_arrow_down</i>
+                </button>
+              </h5>
+            </div>
+            <div id="faqCollapseHowSupportBlender" class="collapse" aria-labelledby="faqHeadingHowSupportBlender"
+              data-parent="#faqGeneral">
+              <div class="card-body small">
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+                richardson ad
+                squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
+                truck
+                quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
+                bird on it
+                squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
+                helvetica,
+                craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
+                excepteur
+                butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
+                aesthetic synth
+                nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-			<div class="col-md-6">
-				<h3 class="text-center">Payment & Billing</h3>
-				<div class="accordion" id="faqPayment">
-					<div class="card card-dark">
-						<div class="card-header" id="faqHeadingPaymentMethod">
-							<h5 class="mb-0">
-								<button class="btn btn-link" type="button" data-toggle="collapse"
-									data-target="#faqCollapsePaymentMethod" aria-expanded="false"
-									aria-controls="faqCollapsePaymentMethod">
-									<span>What payment methods do you accept</span> <i
-										class="material-icons">keyboard_arrow_down</i>
-								</button>
-							</h5>
-						</div>
-						<div id="faqCollapsePaymentMethod" class="collapse" aria-labelledby="faqHeadingPaymentMethod"
-							data-parent="#faqPayment">
-							<div class="card-body">
-								Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-								richardson ad
-								squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
-								truck
-								quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
-								bird on it
-								squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
-								helvetica,
-								craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
-								excepteur
-								butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
-								aesthetic synth
-								nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-							</div>
-						</div>
-					</div>
-					<div class="card card-dark">
-						<div class="card-header" id="faqHeadingCancelSubscription">
-							<h5 class="mb-0">
-								<button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-									data-target="#faqColapseCancelSubscription" aria-expanded="false"
-									aria-controls="faqColapseCancelSubscription">
-									<span>How easy is it to cancel my subscription?</span> <i
-										class="material-icons">keyboard_arrow_down</i>
-								</button>
-							</h5>
-						</div>
-						<div id="faqColapseCancelSubscription" class="collapse"
-							aria-labelledby="faqHeadingCancelSubscription" data-parent="#faqPayment">
-							<div class="card-body small">
-								Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-								richardson ad
-								squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
-								truck
-								quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
-								bird on it
-								squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
-								helvetica,
-								craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
-								excepteur
-								butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
-								aesthetic synth
-								nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-							</div>
-						</div>
-					</div>
-					<div class="card card-dark">
-						<div class="card-header" id="faqHeadingRefund">
-							<h5 class="mb-0">
-								<button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-									data-target="#faqColapseRefund" aria-expanded="false"
-									aria-controls="faqColapseRefund">
-									<span>Can I get a refund?</span> <i class="material-icons">keyboard_arrow_down</i>
-								</button>
-							</h5>
-						</div>
-						<div id="faqColapseRefund" class="collapse" aria-labelledby="faqHeadingRefund"
-							data-parent="#faqPayment">
-							<div class="card-body small">
-								Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-								richardson ad
-								squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
-								truck
-								quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
-								bird on it
-								squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
-								helvetica,
-								craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
-								excepteur
-								butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
-								aesthetic synth
-								nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+      <div class="col-md-6">
+        <h3 class="text-center">Payment & Billing</h3>
+        <div class="accordion" id="faqPayment">
+          <div class="card card-dark">
+            <div class="card-header" id="faqHeadingPaymentMethod">
+              <h5 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse"
+                  data-target="#faqCollapsePaymentMethod" aria-expanded="false"
+                  aria-controls="faqCollapsePaymentMethod">
+                  <span>What payment methods do you accept</span> <i class="material-icons">keyboard_arrow_down</i>
+                </button>
+              </h5>
+            </div>
+            <div id="faqCollapsePaymentMethod" class="collapse" aria-labelledby="faqHeadingPaymentMethod"
+              data-parent="#faqPayment">
+              <div class="card-body">
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+                richardson ad
+                squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
+                truck
+                quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
+                bird on it
+                squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
+                helvetica,
+                craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
+                excepteur
+                butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
+                aesthetic synth
+                nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+              </div>
+            </div>
+          </div>
+          <div class="card card-dark">
+            <div class="card-header" id="faqHeadingCancelSubscription">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                  data-target="#faqColapseCancelSubscription" aria-expanded="false"
+                  aria-controls="faqColapseCancelSubscription">
+                  <span>How easy is it to cancel my subscription?</span> <i
+                    class="material-icons">keyboard_arrow_down</i>
+                </button>
+              </h5>
+            </div>
+            <div id="faqColapseCancelSubscription" class="collapse" aria-labelledby="faqHeadingCancelSubscription"
+              data-parent="#faqPayment">
+              <div class="card-body small">
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+                richardson ad
+                squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
+                truck
+                quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
+                bird on it
+                squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
+                helvetica,
+                craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
+                excepteur
+                butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
+                aesthetic synth
+                nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+              </div>
+            </div>
+          </div>
+          <div class="card card-dark">
+            <div class="card-header" id="faqHeadingRefund">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                  data-target="#faqColapseRefund" aria-expanded="false" aria-controls="faqColapseRefund">
+                  <span>Can I get a refund?</span> <i class="material-icons">keyboard_arrow_down</i>
+                </button>
+              </h5>
+            </div>
+            <div id="faqColapseRefund" class="collapse" aria-labelledby="faqHeadingRefund" data-parent="#faqPayment">
+              <div class="card-body small">
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+                richardson ad
+                squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
+                truck
+                quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
+                bird on it
+                squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
+                helvetica,
+                craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
+                excepteur
+                butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
+                aesthetic synth
+                nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-	</section>
+  </section>
 </div>
 
 {% endblock content %}

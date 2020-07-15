@@ -3,79 +3,83 @@
 {% load static %}
 
 {% block jumbotron %}
-<div style="background-image:url('{% static 'training/images/placeholders/jumbotron.png' %}')" class="jumbotron jumbotron-fluid jumbotron-overlay header">
-    <div class="container-xl">
-        <div class="row">
-            <div class="col-lg-5 col-xl-4">
-                <div class="jumbotron-body">
-                    <h1>Training</h1>
-                    <p class="mb-0">
-                        Learn from our expert team. Classes, workshops and production lessons with .blend files
-                        included.
-                    </p>
-                </div>
-            </div>
+<div class="jumbotron jumbotron-fluid jumbotron-overlay header">
+  <div class="jumbotron-bg-wrapper">
+    <img class="jumbotron-bg" src="{% static "training/images/placeholders/jumbotron.png" %}">
+    <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
+    {% comment %} {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %} {% endcomment %}
+  </div>
+  <div class="container-xl">
+    <div class="row">
+      <div class="col-lg-5 col-xl-4">
+        <div class="jumbotron-body">
+          <h1>Training</h1>
+          <p class="mb-0">
+            Learn from our expert team. Classes, workshops and production lessons with .blend files included.
+          </p>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 {% endblock jumbotron %}
 
 {% block content %}
 <div class="container-xl pt-3">
-    <section class="">
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <div class="input-group">
-                    <div class="input-group-prepend"><span class="input-group-text">
-                        <i class="material-icons">search</i>
-                    </span>
-                    </div>
-                    <input type="text" placeholder="Search tags and keywords" class="form-control">
-                </div>
-            </div>
-            <div class="col-md-3 col-6 mb-3">
-                <select class="custom-select">
-                    {% for type in TrainingType %}
-                        <option value="{{ type.value }}">{{ type.label }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-3 col-6 mb-3">
-                <select class="custom-select">
-                    {% for type in TrainingDifficulty %}
-                        <option value="{{ type.value }}">{{ type.label }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+  <section class="">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <div class="input-group">
+          <div class="input-group-prepend"><span class="input-group-text">
+              <i class="material-icons">search</i>
+            </span>
+          </div>
+          <input type="text" placeholder="Search tags and keywords" class="form-control">
         </div>
-    </section>
-    {% if recently_watched_sections %}
-    <section class="mb-3">
-        <h2>Continue training</h2>
-        <p>Recently watched sections will appear here with your position saved</p>
-        <div class="row">
-            {% for section in recently_watched_sections %}
-                {% include "training/components/card_section.html" with section=section %}
-            {% endfor %}
-        </div>
-    </section>
-    {% endif %}
-    <section class="mb-3">
-        <h2>Your saved training</h2>
-        <p>You can add and remove items from this list by clicking the plus or the tick</p>
-        <div class="row">
-            {% for training in favorited_trainings %}
-                {% include "training/components/card_training.html" with training=training %}
-            {% endfor %}
-        </div>
-    </section>
-    <section>
-        <h2>All training</h2>
-        <div class="row">
-            {% for training in all_trainings %}
-                {% include "training/components/card_training.html" with training=training %}
-            {% endfor %}
-        </div>
-    </section>
+      </div>
+      <div class="col-md-3 col-6 mb-3">
+        <select class="custom-select">
+          {% for type in TrainingType %}
+          <option value="{{ type.value }}">{{ type.label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3 col-6 mb-3">
+        <select class="custom-select">
+          {% for type in TrainingDifficulty %}
+          <option value="{{ type.value }}">{{ type.label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </section>
+  {% if recently_watched_sections %}
+  <section class="mb-3">
+    <h2>Continue training</h2>
+    <p>Recently watched sections will appear here with your position saved</p>
+    <div class="row">
+      {% for section in recently_watched_sections %}
+      {% include "training/components/card_section.html" with section=section %}
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+  <section class="mb-3">
+    <h2>Your saved training</h2>
+    <p>You can add and remove items from this list by clicking the plus or the tick</p>
+    <div class="row">
+      {% for training in favorited_trainings %}
+      {% include "training/components/card_training.html" with training=training %}
+      {% endfor %}
+    </div>
+  </section>
+  <section>
+    <h2>All training</h2>
+    <div class="row">
+      {% for training in all_trainings %}
+      {% include "training/components/card_training.html" with training=training %}
+      {% endfor %}
+    </div>
+  </section>
 </div>
 {% endblock content %}

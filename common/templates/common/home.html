@@ -3,12 +3,16 @@
 
 {% block content %}
 
-<div style="background-image:url('{% static 'common/images/home/settlers-bg.png' %}')"
-	class="jumbotron jumbotron-fluid jumbotron-overlay overlay-light  jumbotron header">
+<div class="jumbotron jumbotron-fluid jumbotron-overlay overlay-light  jumbotron header">
+  <div class="jumbotron-bg-wrapper">
+    <img class="jumbotron-bg" src="{% static "common/images/home/settlers-bg.png" %}">
+    <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
+    {% comment %} {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %} {% endcomment %}
+  </div>
 	<div class="container-xl">
 		<div class="row">
 			<div class="col-lg-6 col-xl-5">
-				<a href="/films/coffee-run" class="jumbotron-body">
+				<a href="/films/settlers" class="jumbotron-body">
 					<p class="subtitle">Featured Project</p>
 					<h1 class="mb-2">Settlers</h1>
 					<p>A gift from the Blender Animation Studio team to the community. Free character rigs and sets.</p>
@@ -72,8 +76,12 @@
 
 </div>
 
-<div style="background-image:url('{% static 'training/images/placeholders/jumbotron.png' %}')"
-	class="jumbotron jumbotron-fluid jumbotron-overlay jumbotron header">
+<div class="jumbotron jumbotron-fluid jumbotron-overlay jumbotron header">
+  <div class="jumbotron-bg-wrapper">
+    <img class="jumbotron-bg" src="{% static "training/images/placeholders/jumbotron.png" %}">
+    <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
+    {% comment %} {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %} {% endcomment %}
+  </div>
 	<div class="container-xl">
 		<div class="row">
 			<div class="col-lg-6 col-xl-5">
