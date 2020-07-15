@@ -32,7 +32,13 @@ def comments_to_template_type(
             ),
             delete_url=(
                 comment.delete_url
-                if assert_cast(bool, getattr(comment, 'owned_by_current_user')) or user_is_moderator
+                if (
+                    comment.replies.count() == 0
+                    and (
+                        assert_cast(bool, getattr(comment, 'owned_by_current_user'))
+                        or user_is_moderator
+                    )
+                )
                 else None
             ),
         )
