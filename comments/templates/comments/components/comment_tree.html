@@ -1,12 +1,5 @@
 <div class="comments">
   {% for c in comment_trees %}
-    {% include 'comments/components/comment.html' with comment=c %}
-    {% if c.replies %}
-      <div class="row comment">
-        <div class="col-md-12">
-          {% include 'comments/components/comment_tree.html' with comment_trees=c.replies %}
-        </div>
-      </div>
-    {% endif %}
+    {% include 'comments/components/comment.html' with comment=c comment_trees=c.replies %}
   {% endfor %}
 </div>
