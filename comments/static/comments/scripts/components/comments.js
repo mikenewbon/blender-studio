@@ -114,7 +114,7 @@ window.comments = (function comments() {
     }
 
     prependReply(comment) {
-      const repliesElement = this.element.querySelector('.replies');
+      const repliesElement = this.element.querySelector('.replies .comments');
       repliesElement.prepend(comment.element);
     }
 

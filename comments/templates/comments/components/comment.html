@@ -40,8 +40,10 @@
   <div class="col-md-12 comment-reply-inputs">
   </div>
   <div class="col-md-12 replies">
-    {% if c.replies %}
-    {% include 'comments/components/comment_tree.html' with comment_trees=c.replies %}
-    {% endif %}
+    <div class="comments">
+      {% if c.replies %}
+      {% include 'comments/components/comment_tree.html' with comment_trees=c.replies %}
+      {% endif %}
+    </div>
   </div>
 </div>

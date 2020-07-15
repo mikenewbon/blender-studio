@@ -5,4 +5,5 @@
   <h3>{{ comments.number_of_comments }} Comments</h3>
   {% comment_input profile_image_url=comments.profile_image_url button_label='Comment' div_class='comment-main-input'%}
   {% include 'comments/components/comment_tree.html' with comment_trees=comments.comment_trees %}
+  <div class="comments"></div>
 </div>

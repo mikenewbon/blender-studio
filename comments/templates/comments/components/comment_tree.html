@@ -1,5 +1,3 @@
-<div class="comments">
-  {% for c in comment_trees %}
-    {% include 'comments/components/comment.html' with comment=c comment_trees=c.replies %}
-  {% endfor %}
-</div>
+{% for c in comment_trees %}
+{% include 'comments/components/comment.html' with comment=c comment_trees=c.replies %}
+{% endfor %}
