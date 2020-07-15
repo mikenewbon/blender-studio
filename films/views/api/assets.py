@@ -4,6 +4,7 @@ from typing import Dict, Union, cast, Optional, List
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db import transaction
 from django.db.models.aggregates import Count
 from django.db.models.expressions import Exists, OuterRef, Case, Value, When
 from django.db.models.fields import BooleanField
@@ -216,6 +217,7 @@ def comment(request: HttpRequest, *, asset_pk: int) -> JsonResponse:
     reply_to_pk = None if parsed_body['reply_to'] is None else int(parsed_body['reply_to'])
     message = assert_cast(str, parsed_body['message'])
 
+    @transaction.atomic
     def create_comment(
         *, user_pk: int, asset_pk: int, message: str, reply_to_pk: Optional[int]
     ) -> Comment:

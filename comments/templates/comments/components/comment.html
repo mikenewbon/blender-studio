@@ -4,8 +4,8 @@
    data-comment-id="{{ comment.id }}"
    data-profile-image-url="{{ comment.profile_image_url }}"
    data-like-url="{{ comment.like_url }}"
-   {% if comment.edit_url is not none %}data-edit-url="{{ comment.edit_url }}"{% endif %}
-   {% if comment.delete_url is not none %}data-delete-url="{{ comment.delete_url }}"{% endif %}>
+   {% if comment.edit_url is not None %}data-edit-url="{{ comment.edit_url }}"{% endif %}
+   {% if comment.delete_url is not None %}data-delete-url="{{ comment.delete_url }}"{% endif %}>
   <div class="col comment-content">
     <div class="row comment-header">
       <div class="col-auto pr-0 d-flex">
