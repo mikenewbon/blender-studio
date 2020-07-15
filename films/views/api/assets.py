@@ -5,8 +5,7 @@ from typing import Dict, Union, cast, Optional, List
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import transaction
-from django.db.models.aggregates import Count
-from django.db.models.expressions import Exists, OuterRef, Case, Value, When
+from django.db.models import Count, Exists, OuterRef, Case, Value, When
 from django.db.models.fields import BooleanField
 from django.http import HttpResponse
 from django.http.request import HttpRequest
