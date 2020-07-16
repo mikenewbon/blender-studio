@@ -62,6 +62,10 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
     def comment_url(self) -> str:
         return reverse('api-asset-comment', kwargs={'asset_pk': self.pk},)
 
+    @property
+    def admin_url(self) -> str:
+        return reverse('admin:films_asset_change', args=[self.pk])
+
 
 class AssetComment(models.Model):
     """This is an intermediary model between Asset and Comment.

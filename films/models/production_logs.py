@@ -2,6 +2,7 @@ from datetime import date, timedelta
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls.base import reverse
 
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
@@ -73,6 +74,10 @@ class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
     def __str__(self):
         return f"{self.film.title} Production Weekly {self.start_date}"
 
+    @property
+    def admin_url(self) -> str:
+        return reverse('admin:films_production_log_change', args=[self.pk])
+
 
 class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
     """A collection of assets created by one author during one week."""
@@ -122,6 +127,10 @@ class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
             f'{self.production_log.film.title}: {self.author_name}\'s Production Weekly Entry '
             f'{self.production_log.start_date}'
         )
+
+    @property
+    def admin_url(self) -> str:
+        return reverse('admin:films_production_log_entry_change', args=[self.pk])
 
 
 class ProductionLogEntryAsset(models.Model):

@@ -52,3 +52,7 @@ class Film(mixins.CreatedUpdatedMixin, models.Model):
     @property
     def url(self) -> str:
         return reverse('film-detail', kwargs={'film_slug': self.slug})
+
+    @property
+    def admin_url(self) -> str:
+        return reverse('admin:films_film_change', args=[self.pk])

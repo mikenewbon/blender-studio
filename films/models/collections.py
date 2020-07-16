@@ -50,3 +50,7 @@ class Collection(mixins.CreatedUpdatedMixin, models.Model):
         return reverse(
             'collection-detail', kwargs={'film_slug': self.film.slug, 'collection_slug': self.slug}
         )
+
+    @property
+    def admin_url(self) -> str:
+        return reverse('admin:films_collection_change', args=[self.pk])
