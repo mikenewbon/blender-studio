@@ -19,7 +19,7 @@ def production_log_list(request: HttpRequest, film_slug: str) -> HttpResponse:
         An instance of :model:`films.Film`.
     ``production_logs_page``
         A single page of the latest production logs for the ``film``, sorted by their
-        ``date_created`` descending.
+        descending ``date_created``.
     ``show_more_button``
         A bool set to True. Has to have a truthy value for the 'Load more weeks' button
         to be displayed in the :template:`films/components/activity_feed.html` template.
@@ -32,7 +32,6 @@ def production_log_list(request: HttpRequest, film_slug: str) -> HttpResponse:
     ``user_can_edit_asset``
         A bool specifying whether the current user should be able to edit
         :model:`films.Asset` items displayed in the production log entries.
-
 
     **Template:**
 
