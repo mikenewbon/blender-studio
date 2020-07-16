@@ -28,6 +28,11 @@ def film_detail(request: HttpRequest, film_slug: str) -> HttpResponse:
     context = {
         'film': film,
         'featured_artwork': featured_artwork,
+        'admin_url': (
+            film.admin_url
+            if request.user.is_staff and request.user.has_perm('films.change_film')
+            else None
+        ),
     }
     if film.status != FilmStatus.released:
         context['production_logs_page'] = get_production_logs_page(film)
@@ -38,5 +43,12 @@ def film_detail(request: HttpRequest, film_slug: str) -> HttpResponse:
 @require_safe
 def about(request: HttpRequest, film_slug: str) -> HttpResponse:
     film = get_object_or_404(Film, slug=film_slug, is_published=True)
-    context = {'film': film}
+    context = {
+        'film': film,
+        'admin_url': (
+            film.admin_url
+            if request.user.is_staff and request.user.has_perm('films.change_film')
+            else None
+        ),
+    }
     return render(request, 'films/about.html', context)

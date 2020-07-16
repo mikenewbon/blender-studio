@@ -1,5 +1,6 @@
 from typing import Dict, Any
 
+from django.contrib.auth.models import User
 from django.db.models import QuerySet
 from django.db.models.query import Prefetch
 from django.http import HttpResponse, HttpRequest
@@ -8,16 +9,22 @@ from django.shortcuts import get_object_or_404, render
 from films.models import Film, Collection, Asset
 
 
-def get_gallery_drawer_context(film: Film) -> Dict[str, Any]:
-    """Retrieves collections for drawer menu in gallery.
+def get_gallery_drawer_context(film: Film, user: User) -> Dict[str, Any]:
+    """Retrieves collections for drawer menu in film gallery.
 
     The collections are ordered and nested, ready to be looped over in templates.
     Also the fake 'Featured Artwork' collection is created.
     This function sends TWO database queries (1: fetch film top-level collections,
     2: fetch their child collections, ordered).
-    Returns a dictionary:
-    'collections': <a dict of all the collections with their nested collections>,
-    'featured_artwork': <a queryset of film assets marked as featured>.
+    Args:
+        film: A Film model instance.
+        user: The currently logged-in user.
+    Returns:
+         A dictionary with the following keys:
+        'collections': a dict of all the collections with their nested collections,
+        'featured_artwork': a queryset of film assets marked as featured,
+        'user_can_edit_collection': a bool specifying whether the current user
+            should be able to edit collection items displayed in the drawer menu.
     """
     top_level_collections = (
         film.collections.filter(parent__isnull=True)
@@ -40,6 +47,7 @@ def get_gallery_drawer_context(film: Film) -> Dict[str, Any]:
         'featured_artwork': film.assets.filter(is_featured=True, is_published=True).order_by(
             'date_created'
         ),
+        'user_can_edit_collection': (user.is_staff and user.has_perm('films.change_collection')),
     }
 
 
@@ -65,16 +73,25 @@ def collection_list(request: HttpRequest, film_slug: str) -> HttpResponse:
         A queryset of :model:`films.Asset`-s belonging to the film and marked as featured.
         The featured assets are displayed on entering the gallery; also needed for the
         drawer menu (where the 'Featured Artwork' fake collection is added).
+    ``user_can_edit_collection``
+        A bool specifying whether the current user should be able to edit
+        :model:`films.Collection` items displayed in the drawer menu.
+    ``user_can_edit_asset``
+        A bool specifying whether the current user should be able to edit
+        :model:`films.Asset` items (featured assets displayed on the main gallery page).
 
     **Template:**
 
     :template:`films/gallery.html`
     """
     film = get_object_or_404(Film, slug=film_slug)
-    drawer_menu_context = get_gallery_drawer_context(film)
+    drawer_menu_context = get_gallery_drawer_context(film, request.user)
 
     context = {
         'film': film,
+        'user_can_edit_asset': (
+            request.user.is_staff and request.user.has_perm('films.change_asset')
+        ),
         **drawer_menu_context,
     }
 
@@ -106,6 +123,13 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
     ``featured_artwork``
         A queryset of :model:`films.Asset`-s belonging to the film and marked as featured;
         needed for the drawer menu (where the 'Featured Artwork' fake collection is added).
+    ``user_can_edit_collection``
+        A bool specifying whether the current user should be able to edit
+        :model:`films.Collection` items displayed in the drawer menu.
+    ``user_can_edit_asset``
+        A bool specifying whether the current user should be able to edit
+        :model:`films.Asset` items displayed in the collection page.
+
 
     **Template:**
 
@@ -124,6 +148,9 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
         .order_by('order', 'name')
         .select_related('static_asset__storage_location'),
         'child_collections': child_collections,
+        'user_can_edit_asset': (
+            request.user.is_staff and request.user.has_perm('films.change_asset')
+        ),
         **drawer_menu_context,
     }
 
