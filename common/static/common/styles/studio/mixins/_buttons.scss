@@ -18,7 +18,7 @@
 
 	@include hover() {
 		color: color-yiq($background);
-		text-decoration: underline;
+		// text-decoration: underline;
 		@include gradient-bg($hover-background);
 		border-color: $hover-border;
 	}

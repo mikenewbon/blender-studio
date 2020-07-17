@@ -1,92 +1,159 @@
-.comment-section {
-  .comment-content {
-    // margin-left: $spacer/2;
-    // margin-bottom: $spacer/2;
+.comment {
+
+  &:not([data-edit-url])>.comment-content {
+    .comment-edit {
+      display: none;
+    }
+  }
+
+  &:not([data-delete-url])>.comment-content {
+    .comment-delete {
+      display: none;
+    }
   }
 
   .comment {
-    &:not([data-edit-url])>.comment-content {
-      .comment-edit {
-        display: none;
-      }
-    }
+    padding-left: $spacer;
+    position: relative;
 
-    &:not([data-delete-url])>.comment-content {
-      .comment-delete {
-        display: none;
-      }
+    &::before {
+      display: block;
+      position: absolute;
+      left: $spacer/2;
+      height: 100%;
+      width: 2px;
+      background: $highlight-white;
+      top: 0;
+      content: close-quote;
     }
   }
 
-  .comment-input {
-    display: flex;
-    flex-direction: row;
-    margin-top: $spacer/2;
-    margin-bottom: $spacer/2;
-  }
+}
 
-  .comment-likes {
-    padding: 0 $spacer/2;
-    height: 100%;
+.comment-section {
+  .checkbox-like {
+    padding: 7px;
     display: flex;
-    flex-direction: row;
     align-items: center;
-    margin-left: -$spacer/2;
+    font-size: $font-size-md;
 
-    .checkbox-like {
-      margin-right: $spacer/4;
+    span {
+      margin-left: $spacer / 4;
+      font-weight: $font-weight-normal;
+      font-size: $small-font-size;
+    }
 
+    .checkbox-like-icon-unchecked {
+      display: initial;
+    }
+
+    .checkbox-like-icon-checked {
+      display: none;
+    }
+
+    &[data-checked] {
       .checkbox-like-icon-unchecked {
-        display: initial;
+        display: none;
       }
 
       .checkbox-like-icon-checked {
-        display: none;
-      }
-
-      &[data-checked] {
-        .checkbox-like-icon-unchecked {
-          display: none;
-        }
-
-        .checkbox-like-icon-checked {
-          display: initial;
-        }
-
-        &:hover {
-          text-decoration: initial;
-        }
+        display: initial;
       }
 
       &:hover {
         text-decoration: initial;
       }
     }
+
+    &:hover {
+      text-decoration: initial;
+    }
   }
 }
 
-.col-profile {
-  position: relative;
-  padding-right: 10px;
-  padding-left: 10px;
+.comment-input {
+  display: flex;
+  flex-direction: row;
+  margin-top: $spacer/2;
+  margin-bottom: $spacer/2;
+}
+
+.comment-likes {
+  padding: 0 $spacer/2;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: -$spacer / 2;
+}
+
+.comment-content-inner {
+  margin-bottom: $spacer / 2;
 }
 
 .comment-action {
   padding: $spacer/2;
-  // margin-right: $spacer;
 }
 
 .comment-name-date-wrapper {
   display: flex;
   align-items: center;
-  .profile{
+  margin-bottom: $spacer / 4;
+
+  .profile {
     padding: 0;
-    width: $small-font-size;
-    height: $small-font-size;
+    width: $font-size-md;
+    height: $font-size-md;
     margin-right: $spacer / 4;
   }
 }
 
+.comment-text {
+  font-size: $small-font-size;
+  margin-bottom: $spacer / 4;
+}
+
+.comment-toolbar {
+  .btn {
+    color: $highlight-white-xstrong;
+
+    &:hover {
+      color: $white;
+    }
+  }
+}
+
+.comment-dropdown {
+  padding: 4px;
+}
+
+.comment-name {
+  margin-bottom: 0;
+}
+
 .comment-date {
   margin-left: $spacer / 2;
+  font-size: $x-small-font-size;
+  color: $text-muted;
+  margin-bottom: 0;
+}
+
+.comment-action {
+  font-size: $x-small-font-size;
+  display: inline;
+}
+
+.comment-likes {
+  .checkbox-like {
+    display: inline;
+    vertical-align: middle;
+    margin-bottom: 0;
+    font-size: $large-font-size;
+  }
+
+  .comment-count {
+    font-size: $x-small-font-size;
+    display: inline;
+    color: $text-muted;
+  }
 }
