@@ -137,7 +137,7 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
     film = get_object_or_404(Film, slug=film_slug, is_published=True)
     collection = get_object_or_404(Collection, slug=collection_slug, film_id=film.id)
     child_collections = collection.child_collections.order_by('order', 'name')
-    drawer_menu_context = get_gallery_drawer_context(film)
+    drawer_menu_context = get_gallery_drawer_context(film, request.user)
 
     context = {
         'film': film,
