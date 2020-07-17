@@ -39,6 +39,10 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
         return '<deleted>' if self.user is None else self.user.username
 
     @property
+    def full_name(self) -> str:
+        return '<deleted>' if self.user is None else self.user.get_full_name()
+
+    @property
     def like_url(self) -> str:
         return reverse('comment_like', kwargs={'comment_pk': self.pk})
 
