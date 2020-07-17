@@ -1,9 +1,11 @@
 {% load comment_extras %}
 
 <div class="comment-section" data-comment-url="{{ comments.comment_url }}"
-     data-profile-image-url="{{ comments.profile_image_url }}">
+  data-profile-image-url="{{ comments.profile_image_url }}">
   <h3>{{ comments.number_of_comments }} Comments</h3>
   {% comment_input profile_image_url=comments.profile_image_url button_label='Comment' div_class='comment-main-input'%}
-  {% include 'comments/components/comment_tree.html' with comment_trees=comments.comment_trees %}
-  <div class="comments"></div>
+
+  <div class="comments">
+    {% include 'comments/components/comment_tree.html' with comment_trees=comments.comment_trees %}
+  </div>
 </div>
