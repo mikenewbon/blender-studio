@@ -75,3 +75,18 @@
   padding: $spacer/2;
   // margin-right: $spacer;
 }
+
+.comment-name-date-wrapper {
+  display: flex;
+  align-items: center;
+  .profile{
+    padding: 0;
+    width: $small-font-size;
+    height: $small-font-size;
+    margin-right: $spacer / 4;
+  }
+}
+
+.comment-date {
+  margin-left: $spacer / 2;
+}
