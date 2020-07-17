@@ -16,7 +16,7 @@ class Comments:
 @dc.dataclass
 class CommentTree:
     id: int
-    username: str
+    full_name: str
     date: datetime.datetime
     message: str
     like_url: str

@@ -17,7 +17,7 @@ def comments_to_template_type(
     def build_tree(comment: Comment) -> typed_templates.CommentTree:
         return typed_templates.CommentTree(
             id=comment.pk,
-            username=comment.username,
+            full_name=comment.full_name,
             date=comment.date_created,
             message=comment.message,
             like_url=comment.like_url,

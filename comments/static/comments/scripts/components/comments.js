@@ -205,7 +205,7 @@ window.comments = (function comments() {
 
   Comment.create = function create(
     id,
-    username,
+    fullName,
     profileImageUrl,
     dateString,
     message,
@@ -224,7 +224,7 @@ window.comments = (function comments() {
     element.dataset.editUrl = editUrl;
     element.dataset.deleteUrl = deleteUrl;
     element.querySelector('.profile').style.backgroundImage = `url('${profileImageUrl}')`;
-    element.querySelector('.comment-name').innerText = username;
+    element.querySelector('.comment-name').innerText = fullName;
     element.querySelector('.comment-date').innerText = dateString;
     element.querySelector('.comment-text').innerText = message;
     element.querySelector('.comment-likes-count').innerText = likes;
@@ -311,7 +311,7 @@ window.comments = (function comments() {
         .then(data => {
           const comment = Comment.create(
             data.id,
-            data.username,
+            data.full_name,
             data.profile_image_url,
             data.date_string,
             data.message,
@@ -376,7 +376,7 @@ window.comments = (function comments() {
         .then(data => {
           const comment = Comment.create(
             data.id,
-            data.username,
+            data.full_name,
             data.profile_image_url,
             data.date_string,
             data.message,
