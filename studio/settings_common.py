@@ -1,7 +1,5 @@
 import pathlib
 
-import jinja2
-
 BASE_DIR = pathlib.Path(__file__).absolute().parent.parent
 
 ADMIN_SITE_HEADER = 'Blender Studio Admin'
@@ -51,26 +49,9 @@ MEDIA_ROOT = BASE_DIR / 'public/media'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': [
-            str(BASE_DIR / 'comments/templates'),
-        ],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-            'undefined': jinja2.StrictUndefined,
-            'environment': 'common.jinja2.environment',
-            'extensions': ['pipeline.jinja2.PipelineExtension'],
-        },
-    },
-    {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
+            str(BASE_DIR / 'comments/templates'),
             str(BASE_DIR / 'common/templates'),
             str(BASE_DIR / 'films/templates'),
             str(BASE_DIR / 'training/templates'),
