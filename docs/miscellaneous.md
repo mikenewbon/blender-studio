@@ -2,9 +2,10 @@
 
 ### Templates
 ##### Jinja
-Templates in some parts of the project used to be rendered with Jinja2. We're switching to Django
-template location, but the comments are still based on Jinja. There may also be leftover Jinja macros in
-the project; some of them have served as reference, but for the most part they probably could be removed.
+Templates in some parts of the project used to be rendered with Jinja2. We've rewritten
+them all to use the Django template backend. There may also be leftover Jinja macros in
+the project; some of them have served as reference, but for the most part they probably
+could already be removed.
 
 
 ##### Typed templates
@@ -45,7 +46,7 @@ with uuids to ensure their uniqueness.
 Training app routing has to be documented yet.
 
 
-### Ass
+### Asset modals
 
 Film assets are displayed in a couple of places: in Weeklies, in Gallery (in real collections and
 in the featured assets 'collection'), in the film detail ('About') page of unreleased films.

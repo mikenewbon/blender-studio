@@ -1,10 +1,11 @@
 # Architecture Overview
 
 Apps:
- - [static_assets](#static-assets)
  - [blog](#blog)
  - [comments](#comments)
+ - [common](#common)
  - [films](#films)
+ - [static_assets](#static-assets)
  - [subscriptions](#subscriptions)
  - [training](#training)
 
@@ -13,14 +14,12 @@ To be extracted to a separate app:
 
 Not implemented yet:
  - [user and profile](#user-profile)
- - flat pages - e.g. an 'About' page of a released film
 
 Other:
- - `common` directory - contains the code that is used (or we plan to use it) in more than one app:
- scripts, template bases or components, test factories, etc.
  - **Project** - this word may refer to a film or a training. In production, there'll be exactly one
  storage location (GCS, S3, etc.) per project. We don't have a `Project` model at the moment, but
  there's a chance that it changes in the future.
+ - flat pages - at the moment only used for the films' ["About" pages](#about-pages).
 
 ### Models (simplified) hierarchy
 
@@ -57,49 +56,36 @@ In training, there also is an **Asset** model, but it differs from the Asset mod
 It represents an extra file attached to a Section.
 
 
-## Static Assets
-
-**Static Assets** represent the files uploaded in the cloud.
-
-Static assets can be of three types (`source_type` attribute): image, video, or (a generic) file.
-
-**Images** and **Videos** should be represented by their respective models: `Image` and `Video`,
-which provide additional attributes like resolution or duration. These models additionally
-have a one-to-one reference to a Static Asset instance, containing all the other data.
-
-Preview pictures for all static assets are obligatory. However, for images and videos they can be
-generated automatically (e.g. by the `sorl-thumbnail` library).
-
-We want the entire `static_assets` app (i.e. file-representing models: `StaticAsset`, `Image`, `Video`)
-to be portable, and independent of the other apps. In particular, the `DynamicStorageFileField`
-should be left inside this app, even though it is used in other apps' models as well.
-
-##### Licenses
-For now, licenses are only added to static assets (image, video, file).
-
-##### Storage locations
-Storage location is a place to store all the film-related or training-related files.
-In production, there'll be exactly one storage location (GCS, S3, etc.) per project, i.e. per film or
-per training.
-
-
 ## Blog
 WIP at an early stage.
 
-Sem started working on the models in the 'blog' app. Posts will usually be related to films,
+Sem started working on the models in the `blog` app. Posts will usually be related to films,
 and displayed in the 'weeklies' section alongside production logs. However, it could be potentially
 useful to be able to also add posts about trainings.
 
+
 ## Comments
 
-Comments are a self-contained, reusable app. We don't want to have to change their models
-whenever they are reused for another app, so they shouldn't be linked to external models in any way.
+Comments are a self-contained, reusable app. We don't want to have to change their 
+models whenever they are reused for another app, so they shouldn't be linked to external
+models in any way.
 
 How to add comments to a new model — say, `Asset`:
 
-- define an intermediary model for `Comment` and `Asset`, e.g. `AssetComment`,
+- in the `Asset`, add a `ManyToMany` field `comments`,
+- define an intermediary model for `Comment` and `Asset`, e.g. `AssetComment`, and set
+it as the `through` argument of the `Asset.comments` field,
 - in `AssetComment`, add a `ForeignKey` to `Asset`,
-- add a `OneToOneField` to `Comment` (each `AssetComment` should only relate to one `Comment`).
+- and a `OneToOneField` to `Comment` (each `AssetComment` should only relate to one
+`Comment`).
+
+Comment actions are handled with pure JS.
+
+
+## Common
+
+The `common` app contains the code that is used (or we plan to use it) in more than one app:
+scripts, template bases or components, test factories, utility functions, etc.
 
 
 ## Films
@@ -112,11 +98,15 @@ A **Film** has three `status` options (defined in the `FilmStatus` text choices 
 Films in development and production have their [production logs](#production-logs--weeklies)
 displayed in their 'About' page.
 
-**Collections** can contain film-related assets. They can also contain other collections (nested
-collections). For now, the front end does not expect nested collections to
-contain further nested collections. However, this restriction does not apply at the database level.
-Collections in a film or a parent collection are sorted in the view by their `order` and `name`
-attributes - just like [the assets](#asset-ordering).
+**Collections** can contain film-related assets. They can also contain other collections
+(nested collections). For now, the front end does not expect nested collections to
+contain further nested collections. However, this restriction does not apply at the
+database level. Collections in a film or a parent collection are sorted in the view by
+their `order` and `name` attributes - just like [the assets](#asset-ordering).
+
+An asset can have comments (from the [comments](#comments) app, linked via the intermediary
+**AssetComment** model).
+
 
 ##### Asset ordering
 Assets in a collection are sorted by their `order` and `name` attributes. The `order` field
@@ -172,8 +162,54 @@ blog post on the database level. This can all be handled manually.
 Probably we'll need slugs for these objects later.
 
 
+##### "About" pages: `flatpages`
+
+The "About" section for each film is a [flatpage](https://docs.djangoproject.com/en/stable/ref/contrib/flatpages/).
+It has to be created by hand for every film, with the url following the pattern:
+`/<film-title-slug>/about/`. The page contents are expected to be formatted
+in Markdown, which is converted to HTML on save.
+
+Under the hood, the `flatpages` application uses a custom `ExtendedFlatPage` model,
+with an additional foreign key to a film, and the `html_content` field storing
+the page content converted from Markdown to HTML.
+We use [mistune](https://mistune.readthedocs.io/) to do the rendering. 
+The flatpage view is overwritten to use this extended model.
+
+Since the only use case for flatpages at the moment is in the films app, all the related
+code is also stored in the films app.
+
+
 ## Progress
 Could be extracted to a separate app. Has to be added to films, too.
+
+
+## Static Assets
+
+**Static Assets** represent the files uploaded in the cloud.
+
+Static assets can be of three types (`source_type` attribute): image, video, or (a generic) file.
+
+**Images** and **Videos** should be represented by their respective models: `Image` and `Video`,
+which provide additional attributes like resolution or duration. These models additionally
+have a one-to-one reference to a Static Asset instance, containing all the other data.
+
+Preview pictures for all static assets are obligatory. However, for images and videos they can be
+generated automatically (e.g. by the `sorl-thumbnail` library).
+
+We want the entire `static_assets` app (i.e. file-representing models: `StaticAsset`, `Image`, `Video`)
+to be portable, and independent of the other apps. In particular, the `DynamicStorageFileField`
+should be left inside this app, even though it is used in other apps' models as well.
+
+##### Licenses
+For now, licenses are only added to static assets (image, video, file).
+
+##### Storage locations
+Storage location is a place to store all the film-related or training-related files.
+In production, there's exactly one storage location (GCS, S3 bucket, etc.) per project,
+i.e. per film or per training.
+
+There's a plan to move all the 'production' resources to one S3 bucket, because apparently
+it will make handling them much easier. 
 
 
 ## Subscriptions
@@ -186,22 +222,23 @@ It has a "Training Status" choice field, with two values: published and unpublis
 It may be a good idea to replace this field with the `is_published` flag (like in
 [films](#is_published-flag)).
 
-Sections within a chapter are ordered by their `index` attribute. So are chapters in a training.
+Sections within a chapter are ordered by their `index` attribute. So are chapters in a
+training.
 The value of `index` has to be unique per chapter or training, respectively.
 
 Each **Section** contains a video (its main content), represented by the **Video** model.
 It can also contain an arbitrary number of other files, stored as **Asset** instances.
-A section can have comments (from the [comments](#comments) app, linked via the **SectionComment**
-model).
+A section can have comments (from the [comments](#comments) app, linked via the
+**SectionComment** model).
 
-The training Asset model should not be confused with an identically named model in the films app.
-
+The training Asset model should not be confused with an identically named model in the
+films app.
 
 
 ## User and Profile
 For now, we use the Django's default `User` model.
 
 In the future, we'll most likely have a `Profile` with a `OneToOneField` to `User`.
-It enables creating profiles without registering users, as well as swapping profiles easily when
-a new user, for whom a profile has been created by admin, registers an account (this proved useful
-in the conference website).
+It enables creating profiles without registering users, as well as swapping profiles
+easily when a new user, for whom a profile has been created by admin, registers an
+account (this has proved useful in the conference website).

@@ -43,6 +43,9 @@ and it must not be committed.
 9. Run the server: `./manage.py runserver`. The project will be available at `studio.local:8000`.
 10. (Optional) Install pre-commit hooks (see [pre-commit details](docs/development.md#before-commiting)):
 ```pre-commit install```
+11. In the admin panel (http://studio.local:8000/admin), edit the `Site` object's domain.
+    The default domain is `example.com`; change it to `studio.local:8000`. This will make
+    it possible to immediately view objects created/edited via admin on site.
 
 
 ## Data import
