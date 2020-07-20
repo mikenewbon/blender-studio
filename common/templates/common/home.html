@@ -3,364 +3,44 @@
 
 {% block content %}
 
-<div class="jumbotron jumbotron-fluid jumbotron-overlay overlay-light  jumbotron header">
-  <div class="jumbotron-bg-wrapper">
-    <img class="jumbotron-bg" src="{% static "common/images/home/settlers-bg.png" %}">
-    <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
-    {% comment %} {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %} {% endcomment %}
-  </div>
-	<div class="container-xl">
-		<div class="row">
-			<div class="col-lg-6 col-xl-5">
-				<a href="/films/settlers" class="jumbotron-body">
-					<p class="subtitle">Featured Project</p>
-					<h1 class="mb-2">Settlers</h1>
-					<p>A gift from the Blender Animation Studio team to the community. Free character rigs and sets.</p>
-					<p class="mb-4">Settlers is a collection of character rigs, environments and animated scenes,
-						created by the Blender Animation Studio team and shared with the community as they are made.
-						Completely free, for everyone. Download all the assets and create your own animations!</p>
-				</a>
-			</div>
-		</div>
-		<div class="row">
-			{% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Settlers Production Log #02" description="Our first fully completed character, Lunte, is ready for download as we begin our next, Gabby!" card_classes="mb-lg-0" %}
+<div class="container-xl py-3">
+  <section>
 
-			{% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Settlers Production Log #01" description="And we’re off! The first week of production has seen lots of progress and lots of uploads." card_classes="mb-lg-0" %}
+    <div class="row mb-3">
+      <div class="col">
+        {% include 'common/components/cards/card_jumbotron.html' with img="https://s3-alpha-sig.figma.com/img/7ed7/f5ae/548c075b670dce7c2d09a8223d7a5f6f?Expires=1596412800&Signature=agzlWXxm8zuKzVz~nmYGiZc4i45f0QzpOD0WaRmZjDoXfkBfCyQcch75vWw2KUDJzMS1VykF-qGX1n3WuAhYo8lLQ-dMAKSmIovWnpA2iko8cTglZMW-JdEPxDBQ9wY-kQyaLmg-Qv5TUlfJQgY5CWtPJrc7J4ExsXTi3o2N6cYvWdVnuIGDL6yvcQT6L4tQ2p3f5vWAGhr-NShtXFmuAxL6xvaIXvc0Ej4R6zsDR1qvhzopyJECDYv~OhnsansKS6hTHNYihUW1tO-I8Z-Whbw4PfiJtfW5barmYKwHjzULldmOiVWg-U~nj6Emg8NgYXSMCkahDI8oXWqsCLaQ~w__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA" title="Coffee Run" subtitle="Open Movie" description="Coffee Run was directed by Hjalti Hjalmarsson and produced by the team at Blender Animation Studio.</p><p>Fueled by caffeine, a young woman runs through the bittersweet memories of her past relationship."  %}
+      </div>
+    </div>
 
-			{% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Settlers. A new free and open project" description="Blender Studio starts a new Open Project. Check out the announcement here!" card_classes="mb-0" %}
-		</div>
-	</div>
+    <div class="row blogs grid">
+
+      {% include "common/components/cards/card_blog.html" with img="https://s3-alpha-sig.figma.com/img/012d/fd1f/8c851df5067007aee4eb6db07c89e4da?Expires=1596412800&Signature=DvlCATyMdPAqj5Wg-9QL~iPha0Yo5~ghd16BfWpROwkkNRtq3QTmXMBKsiGrGeORScQcnvR8jf7jSqHsPfzTFI5j~y45OpKi78pp-fi2NMH1MORS1zeDLGQTKNbO8RrHr37junxWwBh66MKoRP3rcGcGw8NScdpQqyovp6QwuvRJh3IP-jC6dhO1mDk~NJkUrXwKKlCBf23RgB1Nx~HlephqAoHrk41G7DUXY-sYSkHZtgW9W41Kpo-M25XTpuvk5kPbK6sVc7LAnZVOe7nqKfJ0NMFCz5S7XkkUyhkYBnnpvIwPVkK133maLu-tW~8mH5ZLGPkxyvVw~OcvcopVWw__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA" title="Rain Rig 2.0 Released" description="Featuring new stretch bones, IK/FK toggle, improved UI and many bug fixes." new="true" date="Yesterday" subtitle="Rig Update" %}
+
+      {% include "common/components/cards/card_blog.html" with img="https://s3-alpha-sig.figma.com/img/a0e5/cd93/db0155ba03c02736bd4ce29575ad62e0?Expires=1596412800&Signature=EAlRJrvEnAESHmPUCzusr5y6GLpp-rGf-9wPZky3Y1r6qc~ByrnumBxlBUobhmVipO8kBwhZ83ZwYHjj1gPR9sw3lRwJEikKP8qsbj~MtFA8HO9Lc4E0YIXGISemoEBvttlypTKq8wp9g0kn3JHHfsp8kbbz1aLhANw7ottQBnWM7MJzPWQ8KHhDLYltDaLHOYxWA~DjW3QHvcyFvz0tmV6Ru9ICE5YxYKgCTmY3dRr2zX6XDyaQa-NN2rlQI6g8TwQ5p9spRUX8EU7nfNcRj7i-3ZQhyvrAzR64dFEHKG~IsR7CX96rRu5dmMP0oXNTwc7-PCIOQDUsLyr1B0PSIQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA" title="Procedural Shading Training" description="Simon Thommes releases the first chapters of his new shading course." new="true" date="Yesterday" subtitle="New Training" %}
+
+      {% include "common/components/cards/card_blog.html" with img="https://s3-alpha-sig.figma.com/img/d9f6/d678/e0d7bb1ad7a0c0dee2cb88395be774f0?Expires=1596412800&Signature=HaBgzfk-hQ8SGvpdJBoWKni2qrEP5zfXTgUtT37JvGgtkEe7KDMRZNRroeTN9U7n0IHe~lk3QEj~08HOedksnlNS6eI0NFnATRNdbzbbw6Gt9ScoskLEUgqHPseJ3pxf-bB5IRCq7ZcqI7EZPwS3ZMlbEwEPj94Tc6hEYlRoWR1jRYLomoZfG2CFW1ELLf5u74VcbmrOlSUw-QPjUJAmz13Rj5OELp7vRA5SRjIq9sonqVUVU8iycQUdo0RalZWl8Vr5ddbN2ufMmu-UIw5fPd7Q8mxiq2FExLGMALdKUyXEwtN~j3tv1mFpdU2RJ5LCPYGlGaJutmwIPxnP9lgAOg__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA" title="Scripting for Artists: Chapter 15 out now" description="Sybren roasts your addons and gives you the harsh feedback you deserve!" date="Last week" subtitle="New Episode" %}
+
+      {% include "common/components/cards/card_blog.html" with img="https://s3-alpha-sig.figma.com/img/d0b0/7e35/7ee7b9aaaed0e3971c84d5c2e5801147?Expires=1596412800&Signature=d2O9XBqwOS6t9EUHJJQb1zYWAPWyo4wIevaj49ws7NhRCYTEgtSn3byy4-iAddK8arLKea1vSKGs56p3dUMEGSLpL2hhoSsiRKqrqS4Iz4iBi7SzS~oLNNchjbA7PMXyFYAdlj4BuDH-f-fHHqlUezvOYalWIMo~eXlgzvtcBqzLebldNU-WjeZo~Scj9WYGYC5vWVZ8ZRSsPYdL3PibA85u8lMJ78W8nugIVWiR7sZ9S-K4fjeOCKAJzSCp~rrOSUM8ksxj75rY8Y6iKJQEAcLlO1BTFCZBSOitVsoOtN56AP7GG~dClSK4jQHZ5pmxr2HmopKf6eYIThxsDOXt2g__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA" title="Settlers: Gabby Concept" description="Viviens concept for the second settler in the group." date="Last week" subtitle="Recent Upload" %}
+
+      {% include "common/components/cards/card_blog.html" with img="https://s3-alpha-sig.figma.com/img/a0a6/faa6/cc6c722224954365e42a88b44862bd39?Expires=1596412800&Signature=BFUR0KW0l-F~KNE7OanOB5YIJDE8PHJ32D0ey4Dc9CtyQ~rFFP-IRlhSTqYkowig2zwQKOA63cduXVGGCC8Tgn2Fh3tllPd3zRcK6mNdXdBQwzZ5aTsMCyyM2vNV5erqwwn3O-~ZyqfwWuPZxiPUX8iWFWmGjzagiNpMzAelgcdXKHGGidOTmcyszFvqOrpp~rSlYJbXcN0KhpQ7KB9fDlYfA-pN9h8z6mYYP2Cuvc0OL3J4gjOVXxIrN3T60pKg9VGo4cRWfu9weNGutAd48MvS88h-zMJnIfMYygwXJdcGxzlBXOT120xrHhyiBpvzhHQTTEK6ApQzFZpd1lVBJA__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA" title="Blender 2.83 Splash Screen Released" description="Ian Hubert created this awesome scene, rendered in Eevee." date="2 weeks ago" subtitle="Splash Screen" %}
+
+      <div class="grid-sizer col-md-4"></div>
+
+    </div>
+
+  </section>
 </div>
 
-<div class="container-xl mt-5">
-	<section class="mb-5">
-		<div class="row mb-3">
-			<div class="col">
-				<h2 class="mb-0">Featured Training</h2>
-				<p class="mb-3">Want to see more? <a href="/training">Explore all training</a>.</p>
-			</div>
-		</div>
-		<div class="row">
-			{% for training in featured_trainings|slice:':3' %}
-                {% include "common/components/cards/card_training.html" with training=training %}
-			{% endfor %}
-		</div>
-	</section>
+<script>
+  var $grid = $('.grid').masonry({
+    itemSelector: '.grid-item',
+    columnWidth: '.grid-sizer',
+    percentPosition: true,
+  });
 
-	<section class="mb-5">
-		<div class="row">
-			<div class="col-md-8">
-				<div>
-					<h2 class="mb-0">Featured Films</h2>
-					<p class="mb-3">Want to see more? <a href="/training">Explore all films</a>.</p>
-				</div>
-				<div class="row">
-					{% for film in featured_films|slice:':2' %}
-                        {% include "films/components/card_film.html" with film=film card_sizes="col-6" %}
-					{% endfor %}
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div>
-					<h2 class="mb-0">Latest News</h2>
-					<p class="mb-3">Want to see more? <a href="/training">Explore all news</a>.</p>
-				</div>
-				<div class="row">
-					{% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Settlers Production Log #02" description="Our first fully completed character, Lunte, is ready for download as we begin our next, Gabby! Check out all the latest production videos and walk-throughs today." card_sizes="col-12" card_classes="card-dark" %}
-					{% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Settlers Production Log #02" description="Our first fully completed character, Lunte, is ready for download as we begin our next, Gabby! Check out all the latest production videos and walk-throughs today." card_sizes="col-12" card_classes="mb-0 card-dark" %}
-				</div>
-			</div>
-
-		</div>
-	</section>
-
-</div>
-
-<div class="jumbotron jumbotron-fluid jumbotron-overlay jumbotron header">
-  <div class="jumbotron-bg-wrapper">
-    <img class="jumbotron-bg" src="{% static "training/images/placeholders/jumbotron.png" %}">
-    <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
-    {% comment %} {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %} {% endcomment %}
-  </div>
-	<div class="container-xl">
-		<div class="row">
-			<div class="col-lg-6 col-xl-5">
-				<a href="/training" class="jumbotron-body">
-					<p class="subtitle">Featured Training</p>
-					<h1 class="mb-2">Anglerfish Creature Workshop</h1>
-					<p class="mb-3">Follow Andy Goralczyk during the making of this fantastical creature from sculpting
-						to final render in Eevee.</p>
-				</a>
-				<div class="pills">
-					{% include 'common/components/cards/pill.html' with label="Sculpting" %}
-					{% include 'common/components/cards/pill.html' with label="Texturing" %}
-					{% include 'common/components/cards/pill.html' with label="Retopology" %}
-					{% include 'common/components/cards/pill.html' with label="Rigging" %}
-					{% include 'common/components/cards/pill.html' with label="Lighting" %}
-					{% include 'common/components/cards/pill.html' with label="Rendering" %}
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="container-xl my-5">
-	<div class="row justify-content-center mb-3">
-		<div class="col-md-6 text-center">
-			<h2 class="mb-0">This week in the Blender Studio</h2>
-			<p class="mb-0">Want to see more? <a href="/films">Explore all projects</a>.</p>
-		</div>
-	</div>
-	<div class="update-feed">
-
-		<div class="update-feed-week">
-			<div class="update-feed-week-column column-left">
-				<div class="update-feed-week-icon">
-					<i class="material-icons">calendar_today</i>
-				</div>
-			</div>
-			<div class="update-feed-week-column column-right">
-				<div class="update-feed-week-header">
-					<p>1st - 7th March</p>
-				</div>
-
-				<div class="update-feed-individual mt-3">
-					<div class="update-feed-individual-summary">
-						<div class="row">
-							<div class="col-4">
-								<img class="img-fluid" src="{% static 'films/images/posters/coffeerun.png' %}">
-							</div>
-							<div class="col-8">
-								<p class="subtitle x-small">Open Movie</p>
-								<h4>Coffee Run</h4>
-								<p class="small">This 2d-scroller-inspired short film will take you on the journey of a
-									lifetime.</p>
-							</div>
-
-						</div>
-
-					</div>
-					<div class="update-feed-individual-files">
-						<div class="files">
-							<div class="row row-cols-1 row-cols-md-4  row-cols-2">
-								<div class="col">
-									<a class="file" href="#">
-										<div class="file-header"
-											style="background-image:url({% static 'films/images/files-example.jpg' %})">
-										</div>
-										<div class="file-body">
-											<p class="subtitle">Folder</p>
-											<h4>About this Training</h4>
-										</div>
-									</a>
-								</div>
-								<div class="col">
-									<a class="file" href="#">
-										<div class="file-header"
-											style="background-image:url({% static 'films/images/files-example.jpg' %})">
-										</div>
-										<div class="file-body">
-											<p class="subtitle">Folder</p>
-											<h4>About this Training</h4>
-										</div>
-									</a>
-								</div>
-								<div class="col">
-									<a class="file" href="#">
-										<div class="file-header"
-											style="background-image:url({% static 'films/images/files-example.jpg' %})">
-										</div>
-										<div class="file-body">
-											<p class="subtitle">Folder</p>
-											<h4>About this Training</h4>
-										</div>
-									</a>
-								</div>
-								<div class="col">
-									<a class="file" href="#">
-										<div class="file-header"
-											style="background-image:url({% static 'films/images/files-example.jpg' %})">
-										</div>
-										<div class="file-body">
-											<p class="subtitle">Folder</p>
-											<h4>About this Training</h4>
-										</div>
-									</a>
-								</div>
-								<div class="col">
-									<a class="file" href="#">
-										<div class="file-header"
-											style="background-image:url({% static 'films/images/files-example.jpg' %})">
-										</div>
-										<div class="file-body">
-											<p class="subtitle">Folder</p>
-											<h4>About this Training</h4>
-										</div>
-									</a>
-								</div>
-								<div class="col">
-									<a class="file" href="#">
-										<div class="file-header"
-											style="background-image:url({% static 'films/images/files-example.jpg' %})">
-										</div>
-										<div class="file-body">
-											<p class="subtitle">Image</p>
-											<h4>Poster.jpeg</h4>
-										</div>
-									</a>
-								</div>
-								<div class="col">
-									<a class="file" href="#">
-										<div class="file-header"
-											style="background-image:url({% static 'films/images/files-example.jpg' %})">
-										</div>
-										<div class="file-body">
-											<p class="subtitle">Video</p>
-											<h4>Spring.mp4</h4>
-										</div>
-									</a>
-								</div>
-								<div class="col">
-									<a class="file" href="#">
-										<div class="file-header"
-											style="background-image:url({% static 'films/images/files-example.jpg' %})">
-										</div>
-										<div class="file-body">
-											<p class="subtitle">Blend File</p>
-											<h4>Scene.blend</h4>
-										</div>
-									</a>
-								</div>
-							</div>
-						</div>
-						<div class="row update-feed-individual-files-show-more">
-							<div class="col text-center">
-								<a href="#" class="btn btn-sm btn-secondary">Show more</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="update-feed-individual mt-3">
-					<div class="update-feed-individual-summary">
-						<div class="row">
-							<div class="col-4">
-								<img class="img-fluid" src="{% static 'films/images/posters/settlers.jpg' %}">
-							</div>
-							<div class="col-8">
-								<p class="subtitle x-small">Open Movie</p>
-								<h4>Settlers</h4>
-								<p class="small">A gift from the Blender Animation Studio team to the community. Free character rigs and sets.</p>
-							</div>
-
-						</div>
-
-					</div>
-					<div class="update-feed-individual-files">
-						<div class="files">
-							<div class="row row-cols-1 row-cols-md-4  row-cols-2">
-								<div class="col">
-									<a class="file" href="#">
-										<div class="file-header"
-											style="background-image:url({% static 'films/images/files-example.jpg' %})">
-										</div>
-										<div class="file-body">
-											<p class="subtitle">Folder</p>
-											<h4>About this Training</h4>
-										</div>
-									</a>
-								</div>
-								<div class="col">
-									<a class="file" href="#">
-										<div class="file-header"
-											style="background-image:url({% static 'films/images/files-example.jpg' %})">
-										</div>
-										<div class="file-body">
-											<p class="subtitle">Folder</p>
-											<h4>About this Training</h4>
-										</div>
-									</a>
-								</div>
-								<div class="col">
-									<a class="file" href="#">
-										<div class="file-header"
-											style="background-image:url({% static 'films/images/files-example.jpg' %})">
-										</div>
-										<div class="file-body">
-											<p class="subtitle">Folder</p>
-											<h4>About this Training</h4>
-										</div>
-									</a>
-								</div>
-								<div class="col">
-									<a class="file" href="#">
-										<div class="file-header"
-											style="background-image:url({% static 'films/images/files-example.jpg' %})">
-										</div>
-										<div class="file-body">
-											<p class="subtitle">Folder</p>
-											<h4>About this Training</h4>
-										</div>
-									</a>
-								</div>
-								<div class="col">
-									<a class="file" href="#">
-										<div class="file-header"
-											style="background-image:url({% static 'films/images/files-example.jpg' %})">
-										</div>
-										<div class="file-body">
-											<p class="subtitle">Folder</p>
-											<h4>About this Training</h4>
-										</div>
-									</a>
-								</div>
-								<div class="col">
-									<a class="file" href="#">
-										<div class="file-header"
-											style="background-image:url({% static 'films/images/files-example.jpg' %})">
-										</div>
-										<div class="file-body">
-											<p class="subtitle">Image</p>
-											<h4>Poster.jpeg</h4>
-										</div>
-									</a>
-								</div>
-								<div class="col">
-									<a class="file" href="#">
-										<div class="file-header"
-											style="background-image:url({% static 'films/images/files-example.jpg' %})">
-										</div>
-										<div class="file-body">
-											<p class="subtitle">Video</p>
-											<h4>Spring.mp4</h4>
-										</div>
-									</a>
-								</div>
-								<div class="col">
-									<a class="file" href="#">
-										<div class="file-header"
-											style="background-image:url({% static 'films/images/files-example.jpg' %})">
-										</div>
-										<div class="file-body">
-											<p class="subtitle">Blend File</p>
-											<h4>Scene.blend</h4>
-										</div>
-									</a>
-								</div>
-							</div>
-						</div>
-						<div class="row update-feed-individual-files-show-more">
-							<div class="col text-center">
-								<a href="#" class="btn btn-sm btn-secondary">Show more</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-			</div>
-		</div>
-
-	</div>
-</div>
+  $grid.imagesLoaded().progress(function () {
+    $grid.masonry('layout');
+  });
+</script>
 
 {% endblock content %}

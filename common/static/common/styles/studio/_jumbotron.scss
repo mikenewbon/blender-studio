@@ -2,6 +2,8 @@
   margin-bottom: 0;
   background: center / cover;
   position: relative;
+  display: block;
+  color: $white;
 
   .card-pills {
     margin-top: $spacer;
@@ -11,6 +13,24 @@
     max-height: 200px;
     max-width: 400px;
     width: 100%;
+  }
+
+  .jumbotron-body>*:last-child {
+    margin-bottom: 0;
+  }
+}
+
+a.jumbotron {
+  &:hover {
+    text-decoration: none;
+    color: inherit;
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      text-decoration: underline;
+    }
   }
 }
 

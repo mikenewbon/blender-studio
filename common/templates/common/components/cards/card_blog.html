@@ -1,0 +1,34 @@
+{% load thumbnail %}
+<div class="grid-item">
+  <div class="blog">
+    <div class="blog-header">
+      <a href="#">
+        <img class="blog-image" src="{{ img }}">
+        {% comment %}
+        {% include "common/components/helpers/image_set.html" with alt="alt" classes="file-image" img_source=img xsmall_width="350" small_width="350" medium_width="350" large_width="350" xlarge_width="350" %}
+        {% endcomment %}
+      </a>
+    </div>
+    <a href="#" class="blog-body">
+
+        <h3>{{ title }}</h3>
+        <p>{{ description }}</p>
+
+    </a>
+    <a href="#" class="blog-footer">
+      <div class="blog-date">
+        {% if new %}
+        <div class="badge badge-primary">
+          New
+        </div>
+        {% else %}
+        <i class="material-icons btn-material-icons">schedule</i>
+        <p>{{ date }}</p>
+        {% endif %}
+      </div>
+      <p class="blog-topic">
+        {{ subtitle }}
+      </p>
+    </a>
+  </div>
+</div>
