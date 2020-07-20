@@ -19,7 +19,7 @@ def comments_to_template_type(
             id=comment.pk,
             full_name=comment.full_name,
             date=comment.date_created,
-            message=comment.message,
+            message=assert_cast(str, comment.message),
             like_url=comment.like_url,
             liked=assert_cast(bool, getattr(comment, 'liked')),
             likes=assert_cast(int, getattr(comment, 'number_of_likes')),

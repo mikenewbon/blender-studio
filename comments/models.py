@@ -1,3 +1,5 @@
+from typing import Any, Tuple, Dict
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls.base import reverse
@@ -60,7 +62,7 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
     def delete_url(self) -> str:
         return reverse('comment_delete', kwargs={'comment_pk': self.pk})
 
-    def delete(self):
+    def delete(self, using: Any = None, keep_parents: bool = False) -> Tuple[int, Dict[str, int]]:
         """
         Delete the comment if it has no replies; otherwise only mark it as deleted.
 
@@ -74,8 +76,9 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
         if self.replies.exists():
             self.date_deleted = timezone.now()
             self.save()
+            return 0, {self._meta.label: 0}
         else:
-            super().delete()
+            return super().delete(using=None, keep_parents=False)
 
 
 class Like(mixins.CreatedUpdatedMixin, models.Model):
