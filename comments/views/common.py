@@ -43,9 +43,36 @@ def comments_to_template_type(
             ),
         )
 
+    def build_deleted_tree(comment: Comment) -> typed_templates.CommentTree:
+        """
+        Prepare comments marked as deleted to be displayed in the comment tree.
+
+        Deleted comments with replies has to be kept in the database to preserve
+        the integrity of the conversation, but their message and user should not
+        be displayed. It should also be impossible to edit or delete them again.
+        """
+        return typed_templates.CommentTree(
+            id=comment.pk,
+            full_name='[deleted]',
+            date=comment.date_created,
+            message='[deleted]',
+            like_url=comment.like_url,
+            liked=False,
+            likes=0,
+            replies=[build_tree(reply) for reply in lookup.get(comment.pk, [])],
+            profile_image_url='https://blender.chat/avatar/MikeNewbon',
+            edit_url=None,
+            delete_url=None,
+        )
+
     return typed_templates.Comments(
         comment_url=comment_url,
         number_of_comments=len(comments),
-        comment_trees=[build_tree(comment) for comment in lookup.get(None, [])],
+        comment_trees=[
+            build_deleted_tree(comment)
+            if comment.is_deleted and comment.replies.exists()
+            else build_tree(comment)
+            for comment in lookup.get(None, [])
+        ],
         profile_image_url='https://blender.chat/avatar/fsiddi',
     )

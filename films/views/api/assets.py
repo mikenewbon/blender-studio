@@ -92,6 +92,24 @@ def get_next_asset_in_gallery(asset: Asset) -> Optional[Asset]:
     return collection_assets[(asset_index + 1)]
 
 
+def get_comments(asset_pk: int, user_pk: int) -> List[Comment]:
+    """Fetch annotated comments for the asset given by the `asset_pk`."""
+    comments = list(
+        Comment.objects.filter(asset__pk=asset_pk)
+        .annotate(
+            liked=Exists(Like.objects.filter(comment_id=OuterRef('pk'), user_id=user_pk)),
+            number_of_likes=Count('likes'),
+            owned_by_current_user=Case(
+                When(user_id=user_pk, then=Value(True)),
+                default=Value(False),
+                output_field=BooleanField(),
+            ),
+        )
+        .all()
+    )
+    return comments
+
+
 def get_asset_context(
     asset: Asset, site_context: Optional[str], user: User,
 ) -> Dict[str, Union[Asset, typed_templates.Comments, str, None, bool]]:
@@ -152,24 +170,6 @@ def get_asset_context(
     }
 
     return context
-
-
-def get_comments(asset_pk: int, user_pk: int) -> List[Comment]:
-    """Fetch annotated comments for the asset given by the `asset_pk`."""
-    comments = list(
-        Comment.objects.filter(asset__pk=asset_pk)
-        .annotate(
-            liked=Exists(Like.objects.filter(comment_id=OuterRef('pk'), user_id=user_pk)),
-            number_of_likes=Count('likes'),
-            owned_by_current_user=Case(
-                When(user_id=user_pk, then=Value(True)),
-                default=Value(False),
-                output_field=BooleanField(),
-            ),
-        )
-        .all()
-    )
-    return comments
 
 
 @require_safe

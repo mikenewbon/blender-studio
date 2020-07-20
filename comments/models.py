@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls.base import reverse
+from django.utils import timezone
 
 from common import mixins
 
@@ -17,7 +18,7 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
     )
 
     # If a comment has replies we prevent it from being deleted to ensure integrity of the
-    # conversation.
+    # conversation (see the `delete` method below).
     reply_to = models.ForeignKey(
         'Comment',
         null=True,
@@ -26,8 +27,8 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
         on_delete=models.PROTECT,
         related_name='replies',
     )
-
-    message = models.TextField()
+    message = models.TextField(null=True)
+    date_deleted = models.DateTimeField(null=True, editable=False)
 
     likes = models.ManyToManyField(User, through='Like', related_name='liked_comments')
 
@@ -43,6 +44,11 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
         return '<deleted>' if self.user is None else self.user.get_full_name()
 
     @property
+    def is_deleted(self) -> bool:
+        """Check if a comment with replies has been deleted."""
+        return self.date_deleted is not None
+
+    @property
     def like_url(self) -> str:
         return reverse('comment_like', kwargs={'comment_pk': self.pk})
 
@@ -53,6 +59,23 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
     @property
     def delete_url(self) -> str:
         return reverse('comment_delete', kwargs={'comment_pk': self.pk})
+
+    def delete(self):
+        """
+        Delete the comment if it has no replies; otherwise only mark it as deleted.
+
+        To preserve the integrity of the conversation, completely deleting comments
+        with replies is not allowed. However, we should allow users to remove
+        their comments from the website somehow. To achieve this, for comments with
+        replies, we set the `date_deleted` attribute to mark them as deleted (this
+        can be checked with the `is_deleted` property).
+        Comments without replies are deleted normally.
+        """
+        if self.replies.exists():
+            self.date_deleted = timezone.now()
+            self.save()
+        else:
+            super().delete()
 
 
 class Like(mixins.CreatedUpdatedMixin, models.Model):
