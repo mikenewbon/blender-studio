@@ -47,7 +47,7 @@ def comments_to_template_type(
         """
         Prepare comments marked as deleted to be displayed in the comment tree.
 
-        Deleted comments with replies has to be kept in the database to preserve
+        Deleted comments with replies have to be kept in the database to preserve
         the integrity of the conversation, but their message and user should not
         be displayed. It should also be impossible to edit or delete them again.
         """
