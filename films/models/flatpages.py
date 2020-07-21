@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.db import models
 from django.utils.text import slugify
 
@@ -36,7 +38,7 @@ class FilmFlatPage(mixins.CreatedUpdatedMixin, models.Model):
     )
     html_content = models.TextField(blank=True, editable=False)
 
-    def save(self, *args, **kwargs) -> None:
+    def save(self, *args: Any, **kwargs: Any) -> None:
         """Generates the html version of the content and saves the object."""
         if not self.slug:
             self.slug = slugify(self.title)

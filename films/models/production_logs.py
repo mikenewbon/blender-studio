@@ -120,7 +120,7 @@ class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
         Usually the author of the log entry will be the same as the user who uploads the entry."""
         if self.author:
             return self.author.get_full_name() or self.author.username
-        return self.user.get_full_name() or self.author.username
+        return self.user.get_full_name() or self.user.username
 
     def __str__(self):
         return (

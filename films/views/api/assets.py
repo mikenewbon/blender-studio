@@ -94,7 +94,7 @@ def get_next_asset_in_gallery(asset: Asset) -> Optional[Asset]:
 
 def get_asset_context(
     asset: Asset, site_context: Optional[str], user: User,
-) -> Dict[str, Union[Asset, typed_templates.Comments, str, None]]:
+) -> Dict[str, Union[Asset, typed_templates.Comments, str, None, bool]]:
     """Creates context for the api-asset view: the current, previous and next published assets.
 
     The request's URL is expected to contain a query string 'site_context=...' with one
