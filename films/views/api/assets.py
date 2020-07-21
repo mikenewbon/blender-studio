@@ -114,6 +114,7 @@ def get_asset_context(
     Args:
         asset: the asset to be displayed in the modal;
         site_context: value retrieved from the query string's 'site_context' parameter;
+        user: the currently logged-in user.
 
     Returns:
         A dictionary with the following keys:
@@ -121,7 +122,10 @@ def get_asset_context(
         - 'previous_asset' - the previous asset from the current context,
         - 'next_asset' - the next asset from the current context,
         - 'site_context' - a string; it can be reused in HTML components which need to add
-        a query string to the asset modal URL.
+        a query string to the asset modal URL,
+        - 'comments' - a typed_templates.Comments instance with comments,
+        - 'user_can_edit_asset' - a bool specifying whether the current user is able to edit
+        the displayed asset in the admin panel.
     """
     if site_context == SiteContexts.PRODUCTION_LOGS.value:
         previous_asset = get_previous_asset_in_production_logs(asset)
@@ -144,6 +148,7 @@ def get_asset_context(
         'next_asset': next_asset,
         'site_context': site_context,
         'comments': comments_to_template_type(comments, asset.comment_url, user_is_moderator),
+        'user_can_edit_asset': user.is_staff and user.has_perm('films.change_asset'),
     }
 
     return context
@@ -169,7 +174,27 @@ def get_comments(asset_pk: int, user_pk: int) -> List[Comment]:
 
 @require_safe
 def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
-    """Renders an asset modal, with the links to the previous and next assets."""
+    """
+    Renders a :model:`films.Asset` modal, with the links to the previous and next assets.
+
+    **Context**
+        ``asset``
+            The asset to display.
+        ``previous_asset``
+            The previous asset from the current site context.
+        ``next_asset``
+            The next asset from the current site context.
+        ``site_context``
+            A string specifying in which page the asset modal is opened; it can be reused
+            in HTML components which need to add a query string to the asset modal URL.
+        ``comments``
+            A typed_templates.Comments instance with the asset's comments.
+        ``user_can_edit_asset``
+            A bool specifying whether the current user is able to edit the displayed asset.
+
+    **Template**
+        :template:`common/components/modal_asset.html`
+    """
     try:
         asset = (
             Asset.objects.filter(pk=asset_pk, is_published=True)
