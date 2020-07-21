@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.text import slugify
 
 from common import mixins, markdown
 from films.models import Film
@@ -21,12 +22,17 @@ class FilmFlatPage(mixins.CreatedUpdatedMixin, models.Model):
         ]
 
     film = models.ForeignKey(Film, on_delete=models.CASCADE, related_name='flatpages')
-
+    title = models.CharField(
+        'Page title',
+        max_length=50,
+        help_text='It will be displayed as the section name in the navigation bar.',
+    )
     slug = models.SlugField(
         'Page slug',
+        blank=True,
         help_text=(
             'The page slug has to be unique per film. '
-            'It also serves as the title of a subsection of a film\'s page, e.g. "about".'
+            'If it is not filled, it will be the slugified page title.'
         ),
     )
     content = models.TextField(
@@ -37,8 +43,10 @@ class FilmFlatPage(mixins.CreatedUpdatedMixin, models.Model):
 
     def save(self, *args, **kwargs) -> None:
         """Generates the html version of the content and saves the object."""
+        if not self.slug:
+            self.slug = slugify(self.title)
         self.html_content = markdown.render(self.content)
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'Flat page "{self.slug}" of the film {self.film.title}'
+        return f'Flat page "{self.title}" of the film {self.film.title}'
