@@ -50,7 +50,24 @@ has-secondary-nav
         {{ collection.name }}
       </span>
     </a>
+    {% if user_can_edit_collection %}
+    <button class="btn btn-secondary btn-ctrl-xs btn-save-media" data-toggle="dropdown">
+      <i class="material-icons btn-material-icons">more_horiz</i>
+    </button>
+    <div class="dropdown-menu dropdown-menu-right">
+      <a href="{{ collection.admin_url }}" target="_blank" class="dropdown-item">
+        <i class="material-icons">create</i>
+        <span>Admin Edit</span>
+      </a>
+    </div>
+    {% endif %}
   </div>
+
+
+
+
+
+
 
   <ol id="collection-{{ collection.id }}"
     class="drawer-nav-list collapse {% if current_collection.parent == collection or current_collection == collection %}show{% endif %}">
@@ -63,8 +80,16 @@ has-secondary-nav
         <h4>{{ child_collection.name }}</h4>
 
       </a>
-      {% if admin_change_href is not none %}
-      <a href="{{ admin_change_href }}">edit</a>
+      {% if user_can_edit_collection %}
+      <button class="btn btn-secondary btn-ctrl-xs btn-save-media" data-toggle="dropdown">
+        <i class="material-icons btn-material-icons">more_horiz</i>
+      </button>
+      <div class="dropdown-menu dropdown-menu-right">
+        <a href="{{ child_collection.admin_url }}" target="_blank" class="dropdown-item">
+          <i class="material-icons">create</i>
+          <span>Admin Edit</span>
+        </a>
+      </div>
       {% endif %}
     </li>
 

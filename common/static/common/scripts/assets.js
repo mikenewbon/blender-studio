@@ -62,7 +62,8 @@ window.asset = (function asset() {
       document.querySelector('.modal').focus();
 
       // Trigger activation of comment event listeners
-			activateComments();
+      activateComments();
+      $('[data-toggle="tooltip"]').tooltip();
     }).catch(err => {
 			console.warn('Something went wrong.', err);
 		});

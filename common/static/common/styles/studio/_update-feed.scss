@@ -17,6 +17,7 @@
 }
 
 .update-feed-week-header {
+  position: relative;
   p {
     @extend .subtitle;
     @extend .small;

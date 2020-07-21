@@ -33,18 +33,12 @@
         <i class="material-icons">get_app</i>
         <span>Download</span>
       </a>
-      {% if request.user.is_staff %}
-      <!-- TODO(Mike): Get Nat to provide this link on the backend -->
-      <a href="/admin/films/asset/{{ asset.id }}/" class="dropdown-item">
+      {% if user_can_edit_asset %}
+      <a href="{{ asset.admin_url }}" target="_blank" class="dropdown-item">
         <i class="material-icons">create</i>
         <span>Admin Edit</span>
       </a>
       {% endif %}
     </div>
   </div>
-  {% comment %} <a href="#" data-toggle="modal" data-target="#file-modal" class="file-body"
-    data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
-    <p class="subtitle">{{ asset.static_asset.get_source_type_display }}</p>
-    <h4>{{ asset.name }}</h4>
-  </a> {% endcomment %}
 </div>

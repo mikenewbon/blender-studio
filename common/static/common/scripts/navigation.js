@@ -21,8 +21,8 @@
   });
 
   // TODO(sem): Why do we wrap this function in `$`? What does that do?
-  $(() => {
-    $('[data-toggle="tooltip"]').tooltip();
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
   });
 })();
 

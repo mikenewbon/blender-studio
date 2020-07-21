@@ -260,8 +260,14 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  overflow: hidden;
+
   position: relative;
+
+  button {
+    position: absolute;
+    top: $spacer / 2;
+    right: $spacer / 2;
+  }
 
   &.complete {
     +.drawer-nav-section .drawer-nav-section-icon {
@@ -405,6 +411,13 @@ $circle-circumference: $circle-diameter * 3.14;
 
 .drawer-nav-dropdown-wrapper {
   display: flex;
+  position: relative;
+
+  button {
+    position: absolute;
+    top: $spacer / 2;
+    right: $spacer / 2;
+  }
 
   .btn-ctrl {
     line-height: 0;
