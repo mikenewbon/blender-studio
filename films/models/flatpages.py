@@ -6,10 +6,12 @@ from films.models import Film
 
 class FilmFlatPage(mixins.CreatedUpdatedMixin, models.Model):
     """
-    A customised flat page model for film-related pages.
+    Stores a single film-related flat page.
 
-    It is heavily inspired by the django.contrib.flatpages.models.FlatPage model,
-    but without the unnecessary fields and with a few additional ones instead.
+    Disclaimer:
+    This model has been inspired by the django.contrib.flatpages.models.FlatPage model,
+    but its attributes and usage differ considerably from the original. It should be
+    treated as a 'regular' model.
     """
 
     class Meta:
@@ -22,7 +24,10 @@ class FilmFlatPage(mixins.CreatedUpdatedMixin, models.Model):
 
     slug = models.SlugField(
         'Page slug',
-        help_text='The page slug has to be unique per film. It may be the "type" of a film page, e.g. "about".',
+        help_text=(
+            'The page slug has to be unique per film. '
+            'It also serves as the title of a subsection of a film\'s page, e.g. "about".'
+        ),
     )
     content = models.TextField(
         blank=True,
@@ -31,8 +36,9 @@ class FilmFlatPage(mixins.CreatedUpdatedMixin, models.Model):
     html_content = models.TextField(blank=True, editable=False)
 
     def save(self, *args, **kwargs) -> None:
+        """Generates the html version of the content and saves the object."""
         self.html_content = markdown.render(self.content)
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'Flat page "{self.slug}" of {self.film.title}'
+        return f'Flat page "{self.slug}" of the film {self.film.title}'
