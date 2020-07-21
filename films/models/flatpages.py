@@ -8,11 +8,6 @@ from films.models import Film
 class FilmFlatPage(mixins.CreatedUpdatedMixin, models.Model):
     """
     Stores a single film-related flat page.
-
-    Disclaimer:
-    This model has been inspired by the django.contrib.flatpages.models.FlatPage model,
-    but its attributes and usage differ considerably from the original. It should be
-    treated as a 'regular' model.
     """
 
     class Meta:

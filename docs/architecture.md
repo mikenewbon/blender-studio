@@ -19,7 +19,7 @@ Other:
  - **Project** - this word may refer to a film or a training. In production, there'll be exactly one
  storage location (GCS, S3, etc.) per project. We don't have a `Project` model at the moment, but
  there's a chance that it changes in the future.
- - flat pages - at the moment only used for the films' ["About" pages](#about-pages).
+ - flat pages - at the moment only used for the films' ["About" pages](#film-flat-pages).
 
 ### Models (simplified) hierarchy
 
@@ -66,7 +66,7 @@ useful to be able to also add posts about trainings.
 
 ## Comments
 
-Comments are a self-contained, reusable app. We don't want to have to change their 
+Comments are a self-contained, reusable app. We don't want to have to change their
 models whenever they are reused for another app, so they shouldn't be linked to external
 models in any way.
 
@@ -96,7 +96,7 @@ A **Film** has three `status` options (defined in the `FilmStatus` text choices 
 1. in production
 2. released
 Films in development and production have their [production logs](#production-logs--weeklies)
-displayed in their 'About' page.
+displayed in their detail page.
 
 **Collections** can contain film-related assets. They can also contain other collections
 (nested collections). For now, the front end does not expect nested collections to
@@ -162,21 +162,29 @@ blog post on the database level. This can all be handled manually.
 Probably we'll need slugs for these objects later.
 
 
-##### "About" pages: `flatpages`
+##### Film flat pages
+<table>
+    <tr>
+    <td>In practice, at the moment we only use flat pages to create the "About" pages
+    for films. They will likely be used for other things in the future, though.</td>
+    </tr>
+</table>
 
-The "About" section for each film is a [flatpage](https://docs.djangoproject.com/en/stable/ref/contrib/flatpages/).
-It has to be created by hand for every film, with the url following the pattern:
-`/<film-title-slug>/about/`. The page contents are expected to be formatted
-in Markdown, which is converted to HTML on save.
+The `films.FilmFlatPage` model can be used to create film-related flat pages.
+A flat page is stored in the database rather than in the codebase. Consequently,
+it has to be created by hand for every film - this can be done via the admin panel.
 
-Under the hood, the `flatpages` application uses a custom `ExtendedFlatPage` model,
-with an additional foreign key to a film, and the `html_content` field storing
-the page content converted from Markdown to HTML.
-We use [mistune](https://mistune.readthedocs.io/) to do the rendering. 
-The flatpage view is overwritten to use this extended model.
+Flat pages can be used to add sections to a film's page: a link to each flat page
+will be added in the navigation bar. For example, the "About" section for each film
+is a 'flat page'.
 
-Since the only use case for flatpages at the moment is in the films app, all the related
-code is also stored in the films app.
+A flat page contents are expected to be formatted in Markdown, which is converted
+to HTML on save, and stored in the `html_content` field.
+We use [mistune](https://mistune.readthedocs.io/) to do the Markdown-to-HTML rendering.
+
+Although this model has been inspired by the django.contrib.flatpages.models.FlatPage
+model, its attributes and usage differ considerably from the 'original'. It should be
+treated as a normal model therefore.
 
 
 ## Progress
@@ -209,7 +217,7 @@ In production, there's exactly one storage location (GCS, S3 bucket, etc.) per p
 i.e. per film or per training.
 
 There's a plan to move all the 'production' resources to one S3 bucket, because apparently
-it will make handling them much easier. 
+it will make handling them much easier.
 
 
 ## Subscriptions
