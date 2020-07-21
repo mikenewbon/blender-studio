@@ -17,11 +17,17 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='productionlog',
             name='picture_16_9',
-            field=static_assets.models.static_assets.DynamicStorageFileField(upload_to=common.upload_paths.get_upload_to_hashed_path),
+            field=static_assets.models.static_assets.DynamicStorageFileField(
+                upload_to=common.upload_paths.get_upload_to_hashed_path
+            ),
         ),
         migrations.AlterField(
             model_name='productionlog',
             name='storage_location',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='production_logs', to='static_assets.StorageLocation'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='production_logs',
+                to='static_assets.StorageLocation',
+            ),
         ),
     ]

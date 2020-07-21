@@ -16,26 +16,57 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='productionlog',
             name='author',
-            field=models.ForeignKey(blank=True, help_text='The actual author of the summary in the weekly production log', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='authored_production_logs', to=settings.AUTH_USER_MODEL, verbose_name='author (optional)'),
+            field=models.ForeignKey(
+                blank=True,
+                help_text='The actual author of the summary in the weekly production log',
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='authored_production_logs',
+                to=settings.AUTH_USER_MODEL,
+                verbose_name='author (optional)',
+            ),
         ),
         migrations.AlterField(
             model_name='productionlog',
             name='name',
-            field=models.CharField(blank=True, help_text='If not provided, will be set to <em>"This week on [film title]"</em>.', max_length=512, verbose_name='weekly title'),
+            field=models.CharField(
+                blank=True,
+                help_text='If not provided, will be set to <em>"This week on [film title]"</em>.',
+                max_length=512,
+                verbose_name='weekly title',
+            ),
         ),
         migrations.AlterField(
             model_name='productionlog',
             name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='uploaded_production_logs', to=settings.AUTH_USER_MODEL, verbose_name='created by'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='uploaded_production_logs',
+                to=settings.AUTH_USER_MODEL,
+                verbose_name='created by',
+            ),
         ),
         migrations.AlterField(
             model_name='productionlogentry',
             name='author',
-            field=models.ForeignKey(blank=True, help_text='The actual author of the assets in the production log entry', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='authored_log_entries', to=settings.AUTH_USER_MODEL, verbose_name='author (optional)'),
+            field=models.ForeignKey(
+                blank=True,
+                help_text='The actual author of the assets in the production log entry',
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='authored_log_entries',
+                to=settings.AUTH_USER_MODEL,
+                verbose_name='author (optional)',
+            ),
         ),
         migrations.AlterField(
             model_name='productionlogentry',
             name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='uploaded_log_entries', to=settings.AUTH_USER_MODEL, verbose_name='created by'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='uploaded_log_entries',
+                to=settings.AUTH_USER_MODEL,
+                verbose_name='created by',
+            ),
         ),
     ]

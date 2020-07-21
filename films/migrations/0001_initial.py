@@ -32,62 +32,142 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Film',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name='ID'
+                    ),
+                ),
                 ('date_created', models.DateTimeField(auto_now_add=True)),
                 ('date_updated', models.DateTimeField(auto_now=True)),
                 ('title', models.TextField(unique=True)),
                 ('slug', models.SlugField(blank=True, unique=True)),
                 ('description', models.TextField()),
                 ('summary', models.TextField()),
-                ('status', models.TextField(choices=[('pre_production', 'In Development'), ('in_production', 'In Production'), ('released', 'Released')])),
+                (
+                    'status',
+                    models.TextField(
+                        choices=[
+                            ('pre_production', 'In Development'),
+                            ('in_production', 'In Production'),
+                            ('released', 'Released'),
+                        ]
+                    ),
+                ),
                 ('visibility', models.BooleanField(default=False)),
                 ('logo', models.FileField(upload_to=film_overview_upload_path)),
                 ('poster', models.FileField(upload_to=film_overview_upload_path)),
-                ('picture_header', models.FileField(blank=True, null=True, upload_to=film_overview_upload_path)),
-                ('picture_16_9', models.FileField(blank=True, null=True, upload_to=film_overview_upload_path)),
+                (
+                    'picture_header',
+                    models.FileField(blank=True, null=True, upload_to=film_overview_upload_path),
+                ),
+                (
+                    'picture_16_9',
+                    models.FileField(blank=True, null=True, upload_to=film_overview_upload_path),
+                ),
             ],
-            options={
-                'abstract': False,
-            },
+            options={'abstract': False,},
         ),
         migrations.CreateModel(
             name='Collection',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name='ID'
+                    ),
+                ),
                 ('date_created', models.DateTimeField(auto_now_add=True)),
                 ('date_updated', models.DateTimeField(auto_now=True)),
                 ('order', models.IntegerField()),
                 ('name', models.CharField(max_length=512)),
                 ('slug', models.SlugField(blank=True)),
                 ('text', models.TextField()),
-                ('picture_16_9', models.FileField(blank=True, null=True, upload_to=collection_overview_upload_path)),
-                ('film', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='collections', to='films.Film')),
-                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='child_collections', to='films.Collection')),
+                (
+                    'picture_16_9',
+                    models.FileField(
+                        blank=True, null=True, upload_to=collection_overview_upload_path
+                    ),
+                ),
+                (
+                    'film',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='collections',
+                        to='films.Film',
+                    ),
+                ),
+                (
+                    'parent',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='child_collections',
+                        to='films.Collection',
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
             name='Asset',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name='ID'
+                    ),
+                ),
                 ('date_created', models.DateTimeField(auto_now_add=True)),
                 ('date_updated', models.DateTimeField(auto_now=True)),
                 ('order', models.IntegerField()),
                 ('name', models.CharField(max_length=512)),
                 ('slug', models.SlugField(blank=True)),
                 ('description', models.TextField()),
-                ('category', models.CharField(choices=[('artwork', 'Artwork'), ('production_file', 'Production File'), ('production_lesson', 'Production Lesson')], db_index=True, max_length=17)),
+                (
+                    'category',
+                    models.CharField(
+                        choices=[
+                            ('artwork', 'Artwork'),
+                            ('production_file', 'Production File'),
+                            ('production_lesson', 'Production Lesson'),
+                        ],
+                        db_index=True,
+                        max_length=17,
+                    ),
+                ),
                 ('view_count', models.PositiveIntegerField(default=0)),
                 ('visibility', models.BooleanField(default=False)),
-                ('collection', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='assets', to='films.Collection')),
-                ('static_asset', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='assets', to='static_assets.StaticAsset')),
+                (
+                    'collection',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name='assets',
+                        to='films.Collection',
+                    ),
+                ),
+                (
+                    'static_asset',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='assets',
+                        to='static_assets.StaticAsset',
+                    ),
+                ),
             ],
         ),
         migrations.AddConstraint(
             model_name='collection',
-            constraint=models.UniqueConstraint(fields=('parent', 'order'), name='unique_ordering_per_collection'),
+            constraint=models.UniqueConstraint(
+                fields=('parent', 'order'), name='unique_ordering_per_collection'
+            ),
         ),
         migrations.AddConstraint(
             model_name='collection',
-            constraint=models.UniqueConstraint(fields=('parent', 'slug'), name='unique_slug_per_collection'),
+            constraint=models.UniqueConstraint(
+                fields=('parent', 'slug'), name='unique_slug_per_collection'
+            ),
         ),
     ]

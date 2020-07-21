@@ -40,10 +40,7 @@ GATEWAYS = {
         'private_key': 'CHANGE_ME',
         # Merchant Account IDs for different currencies.
         # Configured in Braintree: Account → Merchant Account Info.
-        'merchant_account_ids': {
-            'EUR': 'CHANGE_ME',
-            'USD': 'CHANGE_ME',
-        },
+        'merchant_account_ids': {'EUR': 'CHANGE_ME', 'USD': 'CHANGE_ME',},
     },
     # No settings, but a key is required here to activate the gateway.
     'bank': {},

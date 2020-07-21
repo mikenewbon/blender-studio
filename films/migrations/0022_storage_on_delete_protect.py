@@ -15,11 +15,20 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='collection',
             name='storage_location',
-            field=models.ForeignKey(editable=False, on_delete=django.db.models.deletion.PROTECT, to='static_assets.StorageLocation'),
+            field=models.ForeignKey(
+                editable=False,
+                on_delete=django.db.models.deletion.PROTECT,
+                to='static_assets.StorageLocation',
+            ),
         ),
         migrations.AlterField(
             model_name='productionlog',
             name='storage_location',
-            field=models.ForeignKey(editable=False, on_delete=django.db.models.deletion.PROTECT, related_name='production_logs', to='static_assets.StorageLocation'),
+            field=models.ForeignKey(
+                editable=False,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='production_logs',
+                to='static_assets.StorageLocation',
+            ),
         ),
     ]

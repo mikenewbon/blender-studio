@@ -15,14 +15,31 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='AssetComment',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('asset', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='films.Asset')),
-                ('comment', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='comments.Comment')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name='ID'
+                    ),
+                ),
+                (
+                    'asset',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to='films.Asset'
+                    ),
+                ),
+                (
+                    'comment',
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE, to='comments.Comment'
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
             model_name='asset',
             name='comments',
-            field=models.ManyToManyField(related_name='asset', through='films.AssetComment', to='comments.Comment'),
+            field=models.ManyToManyField(
+                related_name='asset', through='films.AssetComment', to='comments.Comment'
+            ),
         ),
     ]
