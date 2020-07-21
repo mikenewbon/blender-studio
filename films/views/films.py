@@ -84,6 +84,8 @@ def flatpage(request: HttpRequest, film_slug: str, page_slug: str) -> HttpRespon
 
     **Context:**
 
+    ``film``
+        A :model:`films.Film` instance; the film that the flatpage belongs to.
     ``flatpage``
         A :model:`films.FilmFlatPage` instance.
     ``user_can_edit_film``
@@ -100,6 +102,7 @@ def flatpage(request: HttpRequest, film_slug: str, page_slug: str) -> HttpRespon
     film = get_object_or_404(Film, slug=film_slug, is_published=True)
     flatpage = get_object_or_404(FilmFlatPage, film=film, slug=page_slug)
     context = {
+        'film': film,
         'flatpage': flatpage,
         'user_can_edit_film': (
             request.user.is_staff and request.user.has_perm('films.change_film')
