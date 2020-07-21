@@ -14,6 +14,7 @@ from films.models import (
     ProductionLogEntryAsset,
     FilmStatus,
     AssetCategory,
+    FilmFlatPage,
 )
 
 
@@ -98,3 +99,12 @@ class ProductionLogEntryAssetFactory(factory.DjangoModelFactory):
 
     asset = factory.SubFactory(AssetFactory)
     production_log_entry = factory.SubFactory(ProductionLogEntryFactory)
+
+
+class FilmFlatPageFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = FilmFlatPage
+
+    film = factory.SubFactory(FilmFactory)
+    title = factory.Faker('word')
+    content = factory.Faker('text')
