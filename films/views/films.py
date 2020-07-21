@@ -3,7 +3,7 @@ from django.http.request import HttpRequest
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_safe
 
-from films.models import Film, FilmStatus
+from films.models import Film, FilmStatus, FilmFlatPage
 from films.views.api.production_logs import get_production_logs_page
 
 
@@ -78,27 +78,34 @@ def film_detail(request: HttpRequest, film_slug: str) -> HttpResponse:
 
 
 @require_safe
-def about(request: HttpRequest, film_slug: str) -> HttpResponse:
+def flatpage(request: HttpRequest, film_slug: str, page_slug: str) -> HttpResponse:
     """
     Displays the "About" page of the :model:`films.Film` specified by the given slug.
 
     **Context:**
 
-    ``film``
-        An instance of :model:`films.Film`.
+    ``flatpage``
+        A :model:`films.FilmFlatPage` instance.
     ``user_can_edit_film``
-        A bool specifying whether the current user should be able to edit the
-        :model:`films.Film` displayed in the page.
+        A bool specifying whether the current user is able to edit the
+        :model:`films.Film` to which the page belongs.
+    ``user_can_edit_flatpage``
+        A bool specifying whether the current user is able to edit the
+        :model:`films.FilmFlatPage` displayed in the page.
 
     **Template:**
 
-    :template:`films/about.html`
+    :template:`films/flatpage.html`
     """
     film = get_object_or_404(Film, slug=film_slug, is_published=True)
+    flatpage = get_object_or_404(FilmFlatPage, film=film, slug=page_slug)
     context = {
-        'film': film,
+        'flatpage': flatpage,
         'user_can_edit_film': (
             request.user.is_staff and request.user.has_perm('films.change_film')
         ),
+        'user_can_edit_flatpage': (
+            request.user.is_staff and request.user.has_perm('films.change_filmflatpage')
+        ),
     }
-    return render(request, 'films/about.html', context)
+    return render(request, 'films/flatpage.html', context)

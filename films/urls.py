@@ -11,13 +11,13 @@ urlpatterns = [
     path('api/films/<int:film_pk>/logs', production_logs_page, name='api-logs-page'),
     path('', films.film_list, name='film-list'),
     path('<slug:film_slug>', films.film_detail, name='film-detail'),
-    path('<slug:film_slug>/about', films.about, name='film-about'),
     path('<slug:film_slug>/gallery', gallery.collection_list, name='film-gallery'),
     path(
         '<slug:film_slug>/production-logs',
         production_logs.production_log_list,
         name='film-production-logs',
     ),
+    path('<slug:film_slug>/pages/<slug:page_slug>', films.flatpage, name='film-flatpage'),
     path('<slug:film_slug>/assets/<slug:asset_slug>', gallery.asset_detail, name='asset-detail'),
     path(
         '<slug:film_slug>/<slug:collection_slug>',
