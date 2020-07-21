@@ -76,7 +76,7 @@ class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
 
     @property
     def admin_url(self) -> str:
-        return reverse('admin:films_production_log_change', args=[self.pk])
+        return reverse('admin:films_productionlog_change', args=[self.pk])
 
 
 class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
@@ -130,7 +130,7 @@ class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
 
     @property
     def admin_url(self) -> str:
-        return reverse('admin:films_production_log_entry_change', args=[self.pk])
+        return reverse('admin:films_productionlogentry_change', args=[self.pk])
 
 
 class ProductionLogEntryAsset(models.Model):
