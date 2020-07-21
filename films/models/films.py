@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
@@ -37,6 +38,7 @@ class Film(mixins.CreatedUpdatedMixin, models.Model):
         upload_to=get_upload_to_hashed_path, blank=True, null=True
     )
     youtube_link = models.URLField(blank=True)
+    crew = models.ManyToManyField(User, through='FilmCrew')
 
     def clean(self) -> None:
         super().clean()
@@ -56,3 +58,21 @@ class Film(mixins.CreatedUpdatedMixin, models.Model):
     @property
     def admin_url(self) -> str:
         return reverse('admin:films_film_change', args=[self.pk])
+
+
+class FilmCrew(models.Model):
+    """People that are involved in the film production.
+
+    Used to set their role (Director, Animator, Art Director, etc) and
+    display it in the production logs.
+    """
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    film = models.ForeignKey(Film, on_delete=models.CASCADE)
+    role = models.CharField(max_length=128)
+
+    class Meta:
+        unique_together = ['user', 'film']
+
+    def __str__(self) -> str:
+        return f"{self.user.username} - {self.role}"

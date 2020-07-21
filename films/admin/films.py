@@ -49,6 +49,12 @@ class CollectionAdmin(admin.ModelAdmin):
     autocomplete_fields = ['parent']
 
 
+class FilmCrewInlineAdmin(admin.TabularInline):
+    model = films.Film.crew.through
+    verbose_name_plural = 'Crew'
+
+
 @admin.register(films.Film)
 class FilmAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
+    inlines = (FilmCrewInlineAdmin,)
