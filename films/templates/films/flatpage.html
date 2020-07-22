@@ -3,9 +3,14 @@
 {% block content %}
 <div class="container-fluid pt-4">
   <section class="flat-page-content mb-4">
+    {% if user_can_edit_flatpage %}
+    <div class="admin-button">
+      <a href="{{ flatpage.admin_url }}" class="btn btn-sm btn-secondary admin-float">Edit Page</a>
+    </div>
+    {% endif %}
     <div class="text-center">
-    <p class="subtitle">{{ film.title }}</p>
-    <h1>{{ flatpage.title }}</h1>
+      <p class="subtitle">{{ film.title }}</p>
+      <h1>{{ flatpage.title }}</h1>
     </div>
     <div>{{ flatpage.html_content|safe }}</div>
   </section>

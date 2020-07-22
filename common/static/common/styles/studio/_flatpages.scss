@@ -1,17 +1,17 @@
 .flat-page-content {
   margin: 0 auto;
   max-width: 780px;
+  position: relative;
 
   img {
     max-width: 100%;
   }
 
-  table{
+  table {
     @extend .table;
   }
 
-  blockquote{
+  blockquote {
     @extend .blockquote;
   }
-
 }
