@@ -2,8 +2,8 @@
   @include media-breakpoint-down(md) {
     flex-wrap: nowrap;
     margin: 0 (-$spacer);
-    padding: 0 $spacer;
     overflow-x: auto;
+    padding: 0 $spacer;
   }
 
   .breadcrumb-item {

@@ -1,0 +1,17 @@
+.flat-page-content {
+  margin: 0 auto;
+  max-width: 780px;
+
+  img {
+    max-width: 100%;
+  }
+
+  table{
+    @extend .table;
+  }
+
+  blockquote{
+    @extend .blockquote;
+  }
+
+}

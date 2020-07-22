@@ -53,8 +53,8 @@
 
 .blog-body {
   @extend .card-body;
-  position: relative;
   display: block;
+  position: relative;
 
   >* {
     margin-bottom: 0;
@@ -66,8 +66,8 @@
 
   button {
     position: absolute;
-    top: $spacer / 2;
     right: $spacer / 2;
+    top: $spacer / 2;
 
     @include media-breakpoint-down(sm) {
       display: none;
@@ -77,15 +77,15 @@
 
 .blog-footer {
   @extend .card-footer;
+  align-items: center;
   display: flex;
   justify-content: space-between;
-  align-items: center;
 }
 
 .blog-date {
-  display: flex;
   align-items: center;
   color: $highlight-white-xstrong;
+  display: flex;
   font-size: $small-font-size;
 
   i {

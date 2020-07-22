@@ -1,13 +1,11 @@
-
-
 .table {
-	tr:first-of-type {
-		td{
-			border-top: 0;
-		}
-	}
+  tr:first-of-type {
+    td {
+      border-top: 0;
+    }
+  }
 }
 
 .table-sm {
-	font-size: $small-font-size;
+  font-size: $small-font-size;
 }

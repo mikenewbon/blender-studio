@@ -1,9 +1,9 @@
 .jumbotron {
-  margin-bottom: 0;
   background: center / cover;
-  position: relative;
-  display: block;
   color: $white;
+  display: block;
+  margin-bottom: 0;
+  position: relative;
 
   .card-pills {
     margin-top: $spacer;
@@ -22,8 +22,8 @@
 
 a.jumbotron {
   &:hover {
-    text-decoration: none;
     color: inherit;
+    text-decoration: none;
 
     h1,
     h2,
@@ -47,10 +47,10 @@ a.jumbotron {
     display: block;
     height: 100%;
     left: 0;
+    pointer-events: none;
     position: absolute;
     top: 0;
     width: 100%;
-    pointer-events: none;
   }
 
   &.overlay-flipped {
@@ -93,16 +93,16 @@ a.jumbotron-body {
 }
 
 .jumbotron-bg-wrapper {
+  height: 100%;
+  left: 0;
+  object-fit: cover;
   position: absolute;
   top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 .jumbotron-bg {
+  height: 100%;
   object-fit: cover;
   width: 100%;
-  height: 100%;
 }

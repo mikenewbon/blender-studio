@@ -97,12 +97,12 @@
   }
 
   @include media-breakpoint-down(sm) {
+    border-right: 0;
     display: block;
     height: auto;
     left: 0;
     transform: translateY(-100%);
     width: 100%;
-    border-right: 0;
   }
 }
 
@@ -130,8 +130,8 @@
     flex-wrap: wrap;
 
     &>li {
-      width: 25%;
       text-align: center;
+      width: 25%;
     }
   }
 
@@ -189,8 +189,8 @@
 }
 
 .drawer-nav-list {
-  color: $highlight-white-xstrong;
   background: $highlight-black-strong;
+  color: $highlight-white-xstrong;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -265,8 +265,8 @@
 
   button {
     position: absolute;
-    top: $spacer / 2;
     right: $spacer / 2;
+    top: $spacer / 2;
   }
 
   &.complete {
@@ -390,21 +390,21 @@ $circle-circumference: $circle-diameter * 3.14;
   }
 
   &-progress {
-    width: 100%;
-    height: 100%;
     border-radius: 50%;
+    height: 100%;
+    left: 0;
     position: absolute;
     top: 0;
-    left: 0;
     transform: rotate(-90deg);
+    width: 100%;
 
     circle {
-      stroke: $primary;
-      stroke-width: 2px;
       fill: none;
+      stroke: $primary;
       stroke-dasharray: $circle-circumference;
       stroke-dashoffset: calc((1 - var(--progress-fraction, 0)) * #{$circle-circumference}px);
       stroke-linecap: square;
+      stroke-width: 2px;
     }
   }
 }
@@ -415,8 +415,8 @@ $circle-circumference: $circle-diameter * 3.14;
 
   button {
     position: absolute;
-    top: $spacer / 2;
     right: $spacer / 2;
+    top: $spacer / 2;
   }
 
   .btn-ctrl {

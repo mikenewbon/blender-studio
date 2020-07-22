@@ -1,22 +1,22 @@
-
 .dropdown-menu {
-	.material-icons {
-		margin-right: $spacer/2;
-		vertical-align: middle;
-		line-height: 1;
-	}
-	p,
-	h1,
-	h2,
-	h3,
-	h4,
-	h5 {
-		margin-bottom: 0;
-	}
+  .material-icons {
+    line-height: 1;
+    margin-right: $spacer/2;
+    vertical-align: middle;
+  }
+
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    margin-bottom: 0;
+  }
 }
 
-.profile-dropdown{
-	z-index:1060;
-	right: 0;
-	left: auto;
+.profile-dropdown {
+  left: auto;
+  right: 0;
+  z-index: 1060;
 }

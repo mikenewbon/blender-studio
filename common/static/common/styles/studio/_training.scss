@@ -1,25 +1,27 @@
-.training-toolbar-container{
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	margin-bottom: $spacer;
-	flex-wrap: wrap;
+.training-toolbar-container {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: $spacer;
 }
 
-.training-toolbar{
-	flex-grow: 1;
-	justify-content: flex-end;
-	display: flex;
-	align-self: flex-start;
-	flex-shrink: 0;
+.training-toolbar {
+  align-self: flex-start;
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 0;
+  justify-content: flex-end;
 }
 
-.training-toolbar-details{
-	flex-wrap: nowrap;
+.training-toolbar-details {
+  flex-wrap: nowrap;
 }
 
-.training-video .video-player{
-	@include media-breakpoint-down(lg) {
-		margin: -20px -20px 0 -20px
-	}
+.training-video {
+  .video-player {
+    @include media-breakpoint-down(lg) {
+      margin: -20px -20px 0;
+    }
+  }
 }

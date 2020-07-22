@@ -3,16 +3,15 @@ body {
 }
 
 .navbar {
-  min-height: $navbar-height;
-  transition: margin-left $nav-drawer-animation-duration;
-  padding: $navbar-padding-y $navbar-padding-x;
+  @include fixed-top;
+  align-items: stretch;
+  background: $navigation-gray;
   border-bottom: 1px solid $highlight-white;
   flex-wrap: nowrap; // allow us to do the line break for collapsing content
-  align-items: stretch;
-  // padding: $navbar-padding-y $navbar-padding-x;
-  @include fixed-top;
+  min-height: $navbar-height;
+  padding: $navbar-padding-y $navbar-padding-x;
+  transition: margin-left $nav-drawer-animation-duration;
   z-index: 1040;
-  background: $navigation-gray;
 
   // Because flex properties aren't inherited, we need to redeclare these first
   // few properties so that content nested within behave properly.
@@ -21,11 +20,11 @@ body {
   }
 
   .navdrawertoggle {
-    display: none;
-
     @include media-breakpoint-down(sm) {
       display: flex;
     }
+
+    display: none;
 
     i {
       font-size: $x-large-font-size;
@@ -33,29 +32,30 @@ body {
   }
 
   .searchbar-wrapper {
-    padding: 0 $spacer/2;
+    padding: 0 $spacer / 2;
   }
 
   .navbar-main-nav {
-    flex-grow: 1;
-    align-items: center;
-    color: rgba($white, .5);
-
     @include media-breakpoint-down(sm) {
       display: none;
     }
 
-    .list-group-item {
-      height: 100%;
-      display: flex;
-      align-items: center;
-      white-space: nowrap;
+    align-items: center;
+    color: $highlight-white-xstrong;
+    flex-grow: 1;
 
+    .list-group-item {
       @include hover-focus {
         background: $highlight-white;
-        text-decoration: none;
         color: $white;
+        text-decoration: none;
       }
+
+      align-items: center;
+      display: flex;
+      height: 100%;
+      white-space: nowrap;
+
     }
 
     span {
@@ -65,13 +65,13 @@ body {
   }
 
   .searchbar {
+    align-items: stretch;
+    display: flex;
     margin: 0 auto;
     max-width: 380px;
-    padding-top: $spacer/2;
     padding-bottom: $spacer/2;
+    padding-top: $spacer/2;
     position: relative;
-    display: flex;
-    align-items: stretch;
   }
 
   @include media-breakpoint-down(sm) {
@@ -97,21 +97,21 @@ body {
 }
 
 .navbar-secondary {
-  position: sticky;
+  @include media-breakpoint-down(sm) {
+    position: static;
+    z-index: 1020;
+  }
+
   background: $navigation-gray;
-  border-top: 1px solid $highlight-white;
   border-bottom: 1px solid $highlight-white;
+  border-top: 1px solid $highlight-white;
+  position: sticky;
   top: $navbar-height;
   z-index: 1030;
 
-  @include media-breakpoint-down(sm) {
-    z-index: 1020;
-    position: static;
-  }
-
   .content-holder {
+    border-top: 0;
     margin-top: 0;
-    border-top: none;
   }
 
   .container,
@@ -121,26 +121,25 @@ body {
 
   .list-group,
   .breadcrumb {
-    padding: 0 $spacer;
-    overflow-x: scroll;
-    flex-wrap: wrap;
-
     @include media-breakpoint-down(sm) {
       flex-wrap: nowrap;
     }
 
+    flex-wrap: wrap;
+    overflow-x: scroll;
+    padding: 0 $spacer;
+    scrollbar-width: none;
+
     &::-webkit-scrollbar {
       display: none;
     }
-
-    scrollbar-width: none;
   }
 
   .breadcrumb-item {
-    white-space: nowrap;
     display: flex;
-    padding-top: $spacer/2;
     padding-bottom: $spacer/2;
+    padding-top: $spacer/2;
+    white-space: nowrap;
 
     &:last-child {
       padding-right: $spacer;
@@ -148,33 +147,30 @@ body {
   }
 
   .list-group-item {
-    white-space: nowrap;
-
     @include hover-focus {
       background: $highlight-white;
-      text-decoration: none;
       color: $white;
+      text-decoration: none;
     }
+
+    white-space: nowrap;
   }
 }
 
 .navbar-brand {
-  padding: 0 $spacer;
-  display: flex;
-  align-items: center;
-  padding-top: 0;
-  padding-bottom: 0;
-  margin-right: 0;
-
   @include media-breakpoint-down(sm) {
-    // padding-right: $spacer / 2;
     flex-grow: 1;
-    padding: 0;
     justify-content: center;
+    padding: 0;
   }
 
+  align-items: center;
+  display: flex;
+  margin-right: 0;
+  padding: 0 $spacer;
+
   img {
-    @include img-fluid();
+    @include img-fluid;
   }
 }
 

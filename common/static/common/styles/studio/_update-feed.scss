@@ -18,6 +18,7 @@
 
 .update-feed-week-header {
   position: relative;
+
   p {
     @extend .subtitle;
     @extend .small;
@@ -25,14 +26,14 @@
 }
 
 .update-feed-week-icon {
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
   align-items: center;
   background: $input-gray;
   border-radius: 50%;
+  display: flex;
+  height: 30px;
+  justify-content: center;
   position: relative;
+  width: 30px;
 
   i {
     font-size: $font-size-md;
@@ -44,16 +45,16 @@
     flex-shrink: 1;
     position: relative;
 
-    &:before {
+    &::before {
+      background: $input-gray;
       content: close-quote;
       display: block;
-      width: 2px;
       height: 100%;
-      position: absolute;
       left: 50%;
+      position: absolute;
       top: 0;
       transform: translateX(-50%);
-      background: $input-gray;
+      width: 2px;
       z-index: -1;
     }
   }
@@ -65,11 +66,9 @@
 }
 
 .update-feed-individual {
-  margin-bottom: $spacer;
-  border-bottom: 2px solid $input-gray;
   @extend .row;
-
-
+  border-bottom: 2px solid $input-gray;
+  margin-bottom: $spacer;
 
   &-summary {
     @extend .col-md-3;

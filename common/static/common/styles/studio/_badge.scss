@@ -1,37 +1,39 @@
-
 // Base class
 //
 // Requires one of the contextual, color modifier classes for `color` and
 // `background-color`.
 
 .badge {
-	@at-root a#{&} {
-		@include hover-focus() {
-			text-decoration: underline;
-		}
-	}
+  @at-root a#{&} {
+    @include hover-focus() {
+      text-decoration: underline;
+    }
+  }
 }
 
 
 .badge-pill {
-	background: $highlight-white;
-	color:$white;
+  background: $highlight-white;
+  color: $white;
 }
 
-.card .badge-pill{
-	background:$highlight-black;
-	color:$charcoal-gray;
+.card {
+  .badge-pill {
+    background: $highlight-black;
+    color: $charcoal-gray;
+  }
 }
 
 .pills {
 
-	margin-bottom: -$spacer/4;
-	margin-left: -$spacer/4;
-	display: flex;
-	flex-wrap:wrap;
-	// dont use the + method as on the next line it's offset.
-	.badge-pill {
-		margin-bottom: $spacer/4;
-		margin-left: $spacer/4;
-	}
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: -$spacer / 4;
+  margin-left: -$spacer / 4;
+
+  // dont use the + method as on the next line it's offset.
+  .badge-pill {
+    margin-bottom: $spacer / 4;
+    margin-left: $spacer / 4;
+  }
 }

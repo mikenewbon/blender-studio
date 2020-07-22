@@ -1,8 +1,12 @@
 {% extends 'films/base_films.html' %}
 
 {% block content %}
-<div class="container-xl pt-4">
-  <section class="mb-4">
+<div class="container-fluid pt-4">
+  <section class="flat-page-content mb-4">
+    <div class="text-center">
+    <p class="subtitle">{{ film.title }}</p>
+    <h1>{{ flatpage.title }}</h1>
+    </div>
     <div>{{ flatpage.html_content|safe }}</div>
   </section>
 </div>

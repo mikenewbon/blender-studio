@@ -17,34 +17,36 @@
     position: relative;
 
     &::before {
-      display: block;
-      position: absolute;
-      left: $spacer/2;
-      height: 100%;
-      width: 2px;
+
       background: $highlight-white;
-      top: 0;
       content: close-quote;
+      display: block;
+      height: 100%;
+      left: $spacer / 2;
+      position: absolute;
+      top: 0;
+      width: 2px;
+
     }
   }
 
 }
 
 .comment-section {
-  > .comments > .comment {
+  >.comments>.comment {
     margin-bottom: $spacer / 2;
   }
 
   .checkbox-like {
-    padding: 7px;
-    display: flex;
     align-items: center;
+    display: flex;
     font-size: $font-size-md;
+    padding: 7px;
 
     span {
-      margin-left: $spacer / 4;
-      font-weight: $font-weight-normal;
       font-size: $small-font-size;
+      font-weight: $font-weight-normal;
+      margin-left: $spacer / 4;
     }
 
     .checkbox-like-icon-unchecked {
@@ -78,17 +80,29 @@
 .comment-input {
   display: flex;
   flex-direction: row;
-  margin-top: $spacer/2;
-  margin-bottom: $spacer/2;
+  margin-bottom: $spacer / 2;
+  margin-top: $spacer / 2;
 }
 
 .comment-likes {
-  padding: 0 $spacer/2;
-  height: 100%;
+  align-items: center;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  height: 100%;
   margin-left: -$spacer / 2;
+  padding: 0 $spacer / 2;
+
+  .checkbox-like {
+    display: inline;
+    font-size: $large-font-size;
+    vertical-align: middle;
+  }
+
+  .comment-count {
+    color: $text-muted;
+    display: inline;
+    font-size: $x-small-font-size;
+  }
 }
 
 .comment-content-inner {
@@ -96,19 +110,21 @@
 }
 
 .comment-action {
-  padding: $spacer/2;
+  display: inline;
+  font-size: $x-small-font-size;
+  padding: $spacer / 2;
 }
 
 .comment-name-date-wrapper {
-  display: flex;
   align-items: center;
+  display: flex;
   margin-bottom: $spacer / 4;
 
   .profile {
-    padding: 0;
-    width: $font-size-md;
     height: $font-size-md;
     margin-right: $spacer / 4;
+    padding: 0;
+    width: $font-size-md;
   }
 }
 
@@ -136,28 +152,8 @@
 }
 
 .comment-date {
-  margin-left: $spacer / 2;
-  font-size: $x-small-font-size;
   color: $text-muted;
-  margin-bottom: 0;
-}
-
-.comment-action {
   font-size: $x-small-font-size;
-  display: inline;
-}
-
-.comment-likes {
-  .checkbox-like {
-    display: inline;
-    vertical-align: middle;
-    margin-bottom: 0;
-    font-size: $large-font-size;
-  }
-
-  .comment-count {
-    font-size: $x-small-font-size;
-    display: inline;
-    color: $text-muted;
-  }
+  margin-bottom: 0;
+  margin-left: $spacer / 2;
 }

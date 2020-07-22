@@ -1,21 +1,22 @@
 .card {
-  margin-bottom: $spacer;
   flex-grow: 1;
+  margin-bottom: $spacer;
 
   &-dark {
     background-color: $navigation-gray;
 
     .card-body {
-      color: $white;
 
-      @include hover() {
-        color: white;
+      @include hover {
+        color: $white;
         text-decoration: none;
 
         .card-title {
           text-decoration: underline;
         }
       }
+
+      color: $white;
     }
   }
 
@@ -31,7 +32,7 @@
   }
 
   &-body {
-    @include hover() {
+    @include hover {
       color: $card-color;
       text-decoration: none;
 
@@ -42,8 +43,8 @@
   }
 
   &-header {
-    background-size: cover;
     background-position: center;
+    background-size: cover;
     overflow: hidden;
   }
 
@@ -65,24 +66,24 @@
     }
 
     .card-header {
-      width: 100%;
-      position: relative;
-      padding-top: 0;
       padding-bottom: 56.25%;
+      padding-top: 0;
+      position: relative;
+      width: 100%;
 
       >* {
         position: absolute;
       }
 
       .badge-difficulty {
-        top: $spacer/2;
-        left: $spacer/2;
+        left: $spacer / 2;
+        top: $spacer / 2;
       }
 
       .btn-save-media {
-        top: $spacer/2;
-        right: $spacer/2;
         @extend .btn-secondary;
+        right: $spacer / 2;
+        top: $spacer / 2;
 
         &.checked {
           @extend .btn-primary;
@@ -90,10 +91,10 @@
       }
 
       .progress {
-        width: 100%;
-        position: absolute;
         bottom: 0;
         left: 0;
+        position: absolute;
+        width: 100%;
       }
     }
   }
@@ -103,25 +104,25 @@
     margin-bottom: 0;
     margin-top: 0;
   }
+
+  .card-text:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .card-header-link {
-  width: 100%;
   height: 100%;
   left: 0;
   top: 0;
+  width: 100%;
 }
 
 .card-grid-item {
   display: flex;
 }
 
-.card .card-text:last-child {
-  margin-bottom: 0;
-}
-
 .card-link {
-  @include hover() {
+  @include hover {
     text-decoration: none;
   }
 
@@ -134,8 +135,8 @@
 //
 
 .card-footer {
-  padding: 0 $card-spacer-x 20px $card-spacer-x;
-  margin-top: -$spacer/2;
+  margin-top: -$spacer / 2;
+  padding: 0 $card-spacer-x 20px;
 }
 
 .card-img,
@@ -163,9 +164,9 @@
       .card {
         // Flexbugs #4: https://github.com/philipwalton/flexbugs#flexbug-4
         flex: 1 0 0%;
-        margin-right: $card-deck-margin;
         margin-bottom: 0; // Override the default
         margin-left: $card-deck-margin;
+        margin-right: $card-deck-margin;
       }
     }
   }
@@ -173,15 +174,15 @@
   @include media-breakpoint-up(md) {
     display: flex;
     flex-flow: row wrap;
-    margin-right: -$card-deck-margin;
     margin-left: -$card-deck-margin;
+    margin-right: -$card-deck-margin;
 
     .card {
       // Flexbugs #4: https://github.com/philipwalton/flexbugs#flexbug-4
       flex: 1 0 0%;
-      margin-right: $card-deck-margin;
       margin-bottom: 0; // Override the default
       margin-left: $card-deck-margin;
+      margin-right: $card-deck-margin;
     }
   }
 }
@@ -207,15 +208,15 @@
       padding: 0;
 
       .btn {
-        text-decoration: none;
-        width: 100%;
-        text-align: left;
+        align-items: center;
+        color: white;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        align-items: center;
         padding: $spacer;
-        color: white;
+        text-align: left;
+        text-decoration: none;
+        width: 100%;
 
         &:hover {
           span {
@@ -238,9 +239,9 @@
 .card-scrollbar {
   .card-body {
     @include media-breakpoint-up(lg) {
-      position: absolute;
       height: 100%;
       overflow-y: scroll;
+      position: absolute;
     }
 
     &::-webkit-scrollbar {

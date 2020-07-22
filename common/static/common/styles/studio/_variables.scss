@@ -354,8 +354,8 @@ $blockquote-small-color: $gray-600 !default;
 $blockquote-small-font-size: $small-font-size !default;
 $blockquote-font-size: $font-size-base * 1.25 !default;
 
-$hr-border-color: rgba($black, 0.1) !default;
-$hr-border-width: $border-width !default;
+$hr-border-color: $highlight-white-strong !default;
+$hr-border-width: 1px !default;
 
 $mark-padding: 0.2em !default;
 
@@ -1157,7 +1157,7 @@ $kbd-font-size: $code-font-size !default;
 $kbd-color: $white !default;
 $kbd-bg: $gray-900 !default;
 
-$pre-color: $gray-900 !default;
+$pre-color: $pink !default;
 $pre-scrollable-max-height: 340px !default;
 
 // Utilities

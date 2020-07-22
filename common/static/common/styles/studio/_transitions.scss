@@ -1,13 +1,14 @@
 // any class with .show-more-less will toggle the more 'more/less' depending on whether it's .collapsed
-.show-more-less{
-	&.collapsed{
-		&:after{
-			content: 'more 'attr(data-objects-type);
-		}
-	}
-	&:not(.collapsed){
-		&:after{
-			content: 'less 'attr(data-objects-type);
-		}
-	}
+.show-more-less {
+  &.collapsed {
+    &::after {
+      content: 'more 'attr(data-objects-type);
+    }
+  }
+
+  &:not(.collapsed) {
+    &::after {
+      content: 'less 'attr(data-objects-type);
+    }
+  }
 }
