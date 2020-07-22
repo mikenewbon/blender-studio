@@ -5,14 +5,12 @@
     <img class="jumbotron-bg" src="{{ img }}">
     {% comment %} {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=img xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %} {% endcomment %}
   </div>
-  <div class="container-xl">
-    <div class="row">
-      <div class="col-md-7 col-lg-6 col-xl-5">
-        <div class="jumbotron-body">
-          <p class="subtitle">{{ subtitle }}</p>
-          <h1 class="mb-2">{{ title }}</h1>
-          {{ description|linebreaks }}
-        </div>
+  <div class="row">
+    <div class="col-md-7 col-lg-6 col-xl-5">
+      <div class="jumbotron-body">
+        <p class="subtitle">{{ subtitle }}</p>
+        <h1 class="mb-2">{{ title }}</h1>
+        {{ description|linebreaks }}
       </div>
     </div>
   </div>

@@ -6,8 +6,10 @@
   <section class="mb-5">
     <!-- Latest Updates -->
     <div class="row justify-content-center">
-      <div class="col-md-6 text-center">
-        <h2>Latest Updates</h2>
+      <div class="col-md-6 text-center mb-3">
+        <p class="subtitle">{{ film.title }}</p>
+        <h1 class="mb-0">Weeklies</h2>
+        <p>Follow the latest updates and progress on {{ film.title }} right here.</p>
         {% if user_can_edit_production_log %}
           <div>
             <a href="{% url 'admin:films_productionlog_add' %}" class="btn btn-sm btn-secondary">Add Weekly</a>

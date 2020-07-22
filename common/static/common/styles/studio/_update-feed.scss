@@ -77,11 +77,33 @@
       margin-bottom: $spacer;
     }
 
+    img {
+      @extend .img-fluid;
+    }
+
     >a {
       display: inline-block;
+    }
 
-      img {
-        @extend .img-fluid;
+    // This is a play-button overlay for videos
+    .video-preview {
+      cursor: pointer;
+      position: relative;
+
+      &::after {
+        @extend .material-icons;
+        background: rgba($primary, .8);
+        border-radius: 50%;
+        color: $white;
+        content: 'play_arrow';
+        display: block;
+        font-size: $spacer * 1.5;
+        left: 50%;
+        padding: $spacer / 2;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        transition: $transition-base;
       }
     }
   }

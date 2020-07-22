@@ -21,7 +21,7 @@
 
         <p>{{ production_log.start_date|date:'jS M' }} - {{ production_log.end_date|date:'jS M' }} </p>
         {% endif %}
-        <h3>{{ production_log.name }}</h3>
+        <h2>{{ production_log.name }}</h2>
 
         {% if user_can_edit_production_log %}
 
@@ -41,9 +41,7 @@
             <img src="{{ production_log.picture_16_9.url }}" alt="Video Preview">
           </a>
           {% else %}
-          <a href="#">
-            <img src="{{ production_log.picture_16_9.url }}" alt="production log preview">
-          </a>
+          <img src="{{ production_log.picture_16_9.url }}" alt="production log preview">
           {% endif %}
 
         </div>
@@ -70,8 +68,8 @@
               class="profile-image profile ml-2">
             </div>
             <div class="col-auto">
-              <p class="subtitle text-white-50 x-small">{{ entry.author_role }}</p>
               <h4 class="comment-name">{{ entry.author_name }}</h4>
+              <p class="subtitle text-white-50 x-small">{{ entry.author_role }}</p>
             </div>
           </div>
 
@@ -84,9 +82,9 @@
         </div>
         <div class="update-feed-individual-files">
           <div class="files">
-            <div class="row row-cols-1 row-cols-md-4  row-cols-2">
+            <div class="row row-cols-1 row-cols-md-3  row-cols-2">
               <!--TODO(Mike): Need an API to handle file requests-->
-              {% for entry_asset in entry.assets|slice:':4' %}
+              {% for entry_asset in entry.assets|slice:':3' %}
               <div class="col">
                 {% include "common/components/file.html" with asset=entry_asset.asset site_context="production_logs" %}
               </div>
@@ -94,8 +92,8 @@
             </div>
             {% if entry.assets|length > 4 %}
             <div class="collapse" id="entry-{{ entry.id }}">
-              <div class="row row-cols-1 row-cols-md-4  row-cols-2">
-                {% for entry_asset in entry.assets|slice:'4:' %}
+              <div class="row row-cols-1 row-cols-md-3  row-cols-2">
+                {% for entry_asset in entry.assets|slice:'3:' %}
                 <div class="col">
                   {% include "common/components/file.html" with asset=entry_asset.asset site_context="production_logs" %}
                 </div>

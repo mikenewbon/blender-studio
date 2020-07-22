@@ -26,6 +26,7 @@
     text-decoration: none;
 
     .subtitle {
+      color: $primary;
       text-decoration: none;
     }
 
@@ -34,6 +35,7 @@
     }
 
     h4 {
+      color: $white;
       text-decoration: none;
     }
 
@@ -47,10 +49,21 @@
   .subtitle {
     color: $highlight-white-xstrong;
     font-size: $x-small-font-size;
+    transition: $transition-base;
   }
 
   h4 {
+    color: $highlight-white-xstrong;
     margin-bottom: 0;
+    transition: $transition-base;
+  }
+
+  .btn {
+    color: $highlight-white-xstrong;
+
+    &:hover {
+      color: $white;
+    }
   }
 
   &-body {
@@ -135,6 +148,7 @@ a.file {
 
   .file-header {
     padding-bottom: 56.25%;
+    background: $highlight-white;
 
     a {
       padding: $spacer / 2;
@@ -151,28 +165,6 @@ a.file {
     width: auto;
   }
 }
-
-// This is a play-button overlay for videos
-// .video-preview {
-//   position: relative;
-
-//   &::after {
-//     @extend .material-icons;
-//     content: "play_arrow";
-//     display: block;
-//     color: $white;
-//     position: absolute;
-//     padding: $spacer / 2;
-//     left: 50%;
-//     top: 50%;
-//     transform: translate(-50%, -50%);
-//     font-size: $spacer * 1.5;
-//     text-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
-//     background: rgba($primary, .8);
-//     border-radius: 50%;
-//     transition: $transition-base;
-//   }
-// }
 
 .gallery-load-overlay {
   align-items: center;

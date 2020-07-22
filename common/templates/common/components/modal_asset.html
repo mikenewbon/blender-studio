@@ -45,9 +45,9 @@
             <div class="text-muted x-small">
               <p class="d-inline mr-2">{{ asset.date_created|date:"jS F Y" }}</p>
               {% if asset.static_asset.license %}
-              <a href="{{ asset.static_asset.license.slug }}" class="d-inline mr-2 text-muted">
-                <i class="material-icons icon-inline x-small" data-toggle="tooltip" data-placement="bottom"
-                  title="{{ asset.static_asset.license.description }}">info</i>
+              <a href="{{ asset.static_asset.license.url }}" target="_blank" class="d-inline mr-2 text-muted" data-toggle="tooltip" data-placement="bottom"
+                  title="{{ asset.static_asset.license.description }}">
+                <i class="material-icons icon-inline x-small" >info</i>
                 {{ asset.static_asset.license }}
               </a>
               {% endif %}
