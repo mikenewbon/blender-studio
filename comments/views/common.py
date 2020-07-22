@@ -40,6 +40,7 @@ def comments_to_template_type(
                 if assert_cast(bool, getattr(comment, 'owned_by_current_user')) or user_is_moderator
                 else None
             ),
+            edited=(comment.date_updated != comment.date_created),
         )
 
     def build_deleted_tree(comment: Comment) -> typed_templates.DeletedCommentTree:
