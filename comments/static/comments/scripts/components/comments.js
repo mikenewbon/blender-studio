@@ -54,22 +54,22 @@ window.comments = (function comments() {
     }
 
     _setupEventListeners() {
-      this.replyLink.addEventListener('click', event => {
+      this.replyLink && this.replyLink.addEventListener('click', event => {
         event.preventDefault();
         this._showReplyInput();
       });
 
-      this.editLink.addEventListener('click', event => {
+      this.editLink && this.editLink.addEventListener('click', event => {
         event.preventDefault();
         this._showEditInput();
       });
 
-      this.deleteLink.addEventListener('click', event => {
+      this.deleteLink && this.deleteLink.addEventListener('click', event => {
         event.preventDefault();
         this._postDeleteComment();
       });
 
-      this.likeButton.addEventListener('click', this._postLike.bind(this));
+      this.likeButton && this.likeButton.addEventListener('click', this._postLike.bind(this));
     }
 
     get replyInputsElement() {
