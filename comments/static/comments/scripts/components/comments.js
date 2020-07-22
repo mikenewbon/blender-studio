@@ -183,7 +183,11 @@ window.comments = (function comments() {
       const { deleteUrl, element } = this;
 
       ajax.jsonRequest('POST', deleteUrl).then(() => {
-        element.remove();
+        element.querySelector('.comment-text').textContent = "[deleted]";
+        element.querySelector('.comment-name').textContent = "[deleted]";
+
+        const commentToolbar = element.querySelector('.comment-toolbar');
+        commentToolbar && commentToolbar.remove();
       });
     }
 
