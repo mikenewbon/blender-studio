@@ -5,8 +5,6 @@ from typing import Dict, Union, cast, Optional, List
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import transaction
-from django.db.models import Count, Exists, OuterRef, Case, Value, When
-from django.db.models.fields import BooleanField
 from django.http import HttpResponse
 from django.http.request import HttpRequest
 from django.http.response import Http404, JsonResponse
@@ -14,7 +12,8 @@ from django.shortcuts import render
 from django.views.decorators.http import require_safe, require_POST
 
 from comments import typed_templates
-from comments.models import Comment, Like
+from comments.models import Comment
+from comments.queries import get_annotated_comments
 from comments.views.common import comments_to_template_type
 from common.types import assert_cast
 from films.models import Asset, Collection, AssetComment
@@ -92,25 +91,6 @@ def get_next_asset_in_gallery(asset: Asset) -> Optional[Asset]:
     return collection_assets[(asset_index + 1)]
 
 
-def get_comments(asset_pk: int, user_pk: int) -> List[Comment]:
-    """Fetch annotated comments for the asset given by the `asset_pk`."""
-    comments = list(
-        Comment.objects.filter(asset__pk=asset_pk)
-        .exclude(date_deleted__isnull=False, replies__isnull=True)
-        .annotate(
-            liked=Exists(Like.objects.filter(comment_id=OuterRef('pk'), user_id=user_pk)),
-            number_of_likes=Count('likes'),
-            owned_by_current_user=Case(
-                When(user_id=user_pk, then=Value(True)),
-                default=Value(False),
-                output_field=BooleanField(),
-            ),
-        )
-        .all()
-    )
-    return comments
-
-
 def get_asset_context(
     asset: Asset, site_context: Optional[str], user: User,
 ) -> Dict[str, Union[Asset, typed_templates.Comments, str, None, bool]]:
@@ -158,7 +138,7 @@ def get_asset_context(
     else:
         previous_asset = next_asset = None
 
-    comments: List[Comment] = get_comments(asset.pk, user.pk)
+    comments: List[Comment] = get_annotated_comments(asset, user.pk)
     user_is_moderator = user.has_perm('asset.moderate_comment')
 
     context = {
@@ -209,7 +189,6 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
                 'static_asset__storage_location',
                 'entry_asset__production_log_entry',
             )
-            .prefetch_related('comments__user', 'comments__reply_to', 'comments__replies')
             .get()
         )
     except Asset.DoesNotExist:

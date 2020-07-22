@@ -1,12 +1,10 @@
 import datetime
 from typing import List, Optional, Tuple, cast
 
-from django.db.models import Case, Exists, OuterRef, QuerySet, Value, When
-from django.db.models.aggregates import Count
-from django.db.models.fields import BooleanField
+from django.db.models import Exists, OuterRef, QuerySet
 
 from comments import models
-from comments.models import Like
+from comments.queries import get_annotated_comments
 from training.models import chapters, sections, trainings
 from training.models.progress import UserVideoProgress
 
@@ -92,17 +90,7 @@ def from_slug(
     chapter = section.chapter
     training = chapter.training
     training_favorited = cast(bool, getattr(section, 'training_favorited'))
-    comments = list(
-        section.comments.annotate(
-            liked=Exists(Like.objects.filter(comment_id=OuterRef('pk'), user_id=user_pk)),
-            number_of_likes=Count('likes'),
-            owned_by_current_user=Case(
-                When(user_id=user_pk, then=Value(True)),
-                default=Value(False),
-                output_field=BooleanField(),
-            ),
-        ).all()
-    )
+    comments = get_annotated_comments(section, user_pk)
     return training, training_favorited, chapter, section, video, assets, comments
 
 

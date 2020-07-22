@@ -26,7 +26,7 @@ class CommentTree:
     likes: int
     edit_url: Optional[str]
     delete_url: Optional[str]
-    edited: bool = False
+    edited: bool
 
 
 @dc.dataclass
@@ -38,4 +38,5 @@ class DeletedCommentTree(CommentTree):
     likes: Literal[0] = 0
     edit_url: Literal[None] = None
     delete_url: Literal[None] = None
+    edited: Literal[False] = False
     is_deleted: Literal[True] = True
