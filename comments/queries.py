@@ -75,3 +75,10 @@ def delete_comment(*, comment_pk: int, user_pk: int) -> None:
 def moderator_delete_comment(*, comment_pk: int) -> None:
     comment: models.Comment = models.Comment.objects.get(id=comment_pk)
     comment.delete()
+
+
+def moderator_archive_comment(*, comment_pk: int) -> bool:
+    comment: models.Comment = models.Comment.objects.get(id=comment_pk)
+    comment.is_archived = not comment.is_archived
+    comment.save()
+    return comment.is_archived
