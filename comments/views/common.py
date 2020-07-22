@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Sequence
+from typing import Dict, List, Optional, Sequence, Union
 
 from comments import typed_templates
 from comments.models import Comment
@@ -14,7 +14,12 @@ def comments_to_template_type(
 
         lookup.setdefault(reply_to_pk, []).append(comment)
 
-    def build_tree(comment: Comment) -> typed_templates.CommentTree:
+    def build_tree(
+        comment: Comment,
+    ) -> Union[typed_templates.CommentTree, typed_templates.DeletedCommentTree]:
+        if comment.is_deleted:
+            return build_deleted_tree(comment)
+
         return typed_templates.CommentTree(
             id=comment.pk,
             full_name=comment.full_name,
@@ -23,10 +28,7 @@ def comments_to_template_type(
             like_url=comment.like_url,
             liked=assert_cast(bool, getattr(comment, 'liked')),
             likes=assert_cast(int, getattr(comment, 'number_of_likes')),
-            replies=[
-                build_deleted_tree(reply) if reply.is_deleted else build_tree(reply)
-                for reply in lookup.get(comment.pk, [])
-            ],
+            replies=[build_tree(reply) for reply in lookup.get(comment.pk, [])],
             profile_image_url='https://blender.chat/avatar/MikeNewbon',
             edit_url=(
                 comment.edit_url
@@ -40,7 +42,7 @@ def comments_to_template_type(
             ),
         )
 
-    def build_deleted_tree(comment: Comment) -> typed_templates.CommentTree:
+    def build_deleted_tree(comment: Comment) -> typed_templates.DeletedCommentTree:
         """
         Prepare comments marked as deleted to be displayed in the comment tree.
 
@@ -48,29 +50,17 @@ def comments_to_template_type(
         the integrity of the conversation, but their message and user should not
         be displayed. It should also be impossible to edit or delete them again.
         """
-        return typed_templates.CommentTree(
+        return typed_templates.DeletedCommentTree(
             id=comment.pk,
-            full_name='[deleted]',
             date=comment.date_created,
-            message='[deleted]',
-            like_url=None,
-            liked=False,
-            likes=0,
-            replies=[
-                build_deleted_tree(reply) if reply.is_deleted else build_tree(reply)
-                for reply in lookup.get(comment.pk, [])
-            ],
+            replies=[build_tree(reply) for reply in lookup.get(comment.pk, [])],
             profile_image_url='https://blender.chat/avatar/MikeNewbon',
-            edit_url=None,
-            delete_url=None,
+            # TODO(Natalia): set an empty profile picture in deleted comments
         )
 
     return typed_templates.Comments(
         comment_url=comment_url,
         number_of_comments=len(comments),
-        comment_trees=[
-            build_deleted_tree(comment) if comment.is_deleted else build_tree(comment)
-            for comment in lookup.get(None, [])
-        ],
+        comment_trees=[build_tree(comment) for comment in lookup.get(None, [])],
         profile_image_url='https://blender.chat/avatar/fsiddi',
     )
