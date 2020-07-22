@@ -6,7 +6,7 @@ from common.tests.factories.comments import CommentFactory
 from common.tests.factories.users import UserFactory
 
 
-class TestCommentDeletion(TestCase):
+class TestCommentDeleteEndpoint(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
         cls.user = UserFactory()
@@ -22,16 +22,22 @@ class TestCommentDeletion(TestCase):
 
     def test_user_can_delete_own_comment_without_replies(self):
         comment_pk = self.comment_without_replies.pk
+        self.assertFalse(self.comment_without_replies.is_deleted)
         response = self.client.post(reverse('comment_delete', kwargs={'comment_pk': comment_pk}))
 
         self.assertEqual(response.status_code, 200)
-        self.assertIsNone(Comment.objects.filter(pk=comment_pk).first())
+        # Deleted comments are kept in the database, but marked as deleted.
+        comment = Comment.objects.filter(pk=comment_pk).first()
+        self.assertIsNotNone(comment)
+        self.assertIsNotNone(comment.date_deleted)
+        self.assertTrue(comment.is_deleted)
 
-    def test_comment_with_replies_is_not_deleted(self):
+    def test_user_can_delete_own_comment_with_replies(self):
         comment_pk = self.comment_with_replies.pk
         response = self.client.post(reverse('comment_delete', kwargs={'comment_pk': comment_pk}))
 
         self.assertEqual(response.status_code, 200)
+        # Deleted comments are kept in the database, but marked as deleted.
         comment = Comment.objects.filter(pk=comment_pk).first()
         self.assertIsNotNone(comment)
         self.assertIsNotNone(comment.date_deleted)
