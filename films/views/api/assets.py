@@ -139,7 +139,7 @@ def get_asset_context(
         previous_asset = next_asset = None
 
     comments: List[Comment] = get_annotated_comments(asset, user.pk)
-    user_is_moderator = user.has_perm('asset.moderate_comment')
+    user_is_moderator = user.has_perm('comments.moderate_comment')
 
     context = {
         'asset': asset,

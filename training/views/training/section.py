@@ -62,7 +62,7 @@ def section(
             comments=comments_to_template_type(
                 comments,
                 section.comment_url,
-                user_is_moderator=request.user.has_perm('training.moderate_comment'),
+                user_is_moderator=request.user.has_perm('comments.moderate_comment'),
             ),
             section_progress_reporting_data=SectionProgressReportingData(
                 progress_url=section.progress_url,

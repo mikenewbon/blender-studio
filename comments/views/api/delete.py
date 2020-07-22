@@ -9,7 +9,7 @@ from comments.queries import delete_comment, moderator_delete_comment
 @require_POST
 @login_required
 def comment_delete(request: HttpRequest, *, comment_pk: int) -> JsonResponse:
-    if request.user.has_perm('training.moderate_comment'):
+    if request.user.has_perm('comments.moderate_comment'):
         moderator_delete_comment(comment_pk=comment_pk)
     else:
         delete_comment(comment_pk=comment_pk, user_pk=request.user.id)
