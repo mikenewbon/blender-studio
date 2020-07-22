@@ -14,6 +14,7 @@
         </div>
         <p class="comment-text">{{ comment.message }}</p>
 
+        {% if comment.like_url %}
         <div class="comment-toolbar row">
           <div class="col d-flex align-items-center">
 
@@ -68,6 +69,7 @@
           </div>
 
         </div>
+      {% endif %}
       </div>
     </div>
   </div>

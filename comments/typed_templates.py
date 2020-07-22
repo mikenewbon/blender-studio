@@ -19,7 +19,7 @@ class CommentTree:
     full_name: str
     date: datetime.datetime
     message: str
-    like_url: str
+    like_url: Optional[str]
     liked: bool
     likes: int
     replies: List[CommentTree]

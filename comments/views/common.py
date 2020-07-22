@@ -53,7 +53,7 @@ def comments_to_template_type(
             full_name='[deleted]',
             date=comment.date_created,
             message='[deleted]',
-            like_url=comment.like_url,
+            like_url=None,
             liked=False,
             likes=0,
             replies=[
