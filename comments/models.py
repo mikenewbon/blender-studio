@@ -31,6 +31,8 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
     )
     message = models.TextField(null=True)
     date_deleted = models.DateTimeField(null=True, editable=False)
+    # This flag adds a possibility to mark a comment as 'resolved' or 'outdated'.
+    is_archived = models.BooleanField(default=False)
 
     likes = models.ManyToManyField(User, through='Like', related_name='liked_comments')
 
