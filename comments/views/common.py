@@ -23,7 +23,10 @@ def comments_to_template_type(
             like_url=comment.like_url,
             liked=assert_cast(bool, getattr(comment, 'liked')),
             likes=assert_cast(int, getattr(comment, 'number_of_likes')),
-            replies=[build_tree(reply) for reply in lookup.get(comment.pk, [])],
+            replies=[
+                build_deleted_tree(reply) if reply.is_deleted else build_tree(reply)
+                for reply in lookup.get(comment.pk, [])
+            ],
             profile_image_url='https://blender.chat/avatar/MikeNewbon',
             edit_url=(
                 comment.edit_url
@@ -32,13 +35,7 @@ def comments_to_template_type(
             ),
             delete_url=(
                 comment.delete_url
-                if (
-                    comment.replies.count() == 0
-                    and (
-                        assert_cast(bool, getattr(comment, 'owned_by_current_user'))
-                        or user_is_moderator
-                    )
-                )
+                if assert_cast(bool, getattr(comment, 'owned_by_current_user')) or user_is_moderator
                 else None
             ),
         )
@@ -59,7 +56,10 @@ def comments_to_template_type(
             like_url=comment.like_url,
             liked=False,
             likes=0,
-            replies=[build_tree(reply) for reply in lookup.get(comment.pk, [])],
+            replies=[
+                build_deleted_tree(reply) if reply.is_deleted else build_tree(reply)
+                for reply in lookup.get(comment.pk, [])
+            ],
             profile_image_url='https://blender.chat/avatar/MikeNewbon',
             edit_url=None,
             delete_url=None,
@@ -69,9 +69,7 @@ def comments_to_template_type(
         comment_url=comment_url,
         number_of_comments=len(comments),
         comment_trees=[
-            build_deleted_tree(comment)
-            if comment.is_deleted and comment.replies.exists()
-            else build_tree(comment)
+            build_deleted_tree(comment) if comment.is_deleted else build_tree(comment)
             for comment in lookup.get(None, [])
         ],
         profile_image_url='https://blender.chat/avatar/fsiddi',

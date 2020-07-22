@@ -64,21 +64,16 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
 
     def delete(self, using: Any = None, keep_parents: bool = False) -> Tuple[int, Dict[str, int]]:
         """
-        Delete the comment if it has no replies; otherwise only mark it as deleted.
+        Instead of deleting a comment, only mark it as deleted.
 
         To preserve the integrity of the conversation, completely deleting comments
-        with replies is not allowed. However, we should allow users to remove
-        their comments from the website somehow. To achieve this, for comments with
-        replies, we set the `date_deleted` attribute to mark them as deleted (this
-        can be checked with the `is_deleted` property).
-        Comments without replies are deleted normally.
+        is not allowed. However, we should allow users to remove their comments from
+        the website somehow. To achieve this, we set the `date_deleted` attribute to
+        mark them as deleted (this can be checked with the `is_deleted` property).
         """
-        if self.replies.exists():
-            self.date_deleted = timezone.now()
-            self.save()
-            return 0, {self._meta.label: 0}
-        else:
-            return super().delete(using=None, keep_parents=False)
+        self.date_deleted = timezone.now()
+        self.save()
+        return 0, {self._meta.label: 0}
 
 
 class Like(mixins.CreatedUpdatedMixin, models.Model):

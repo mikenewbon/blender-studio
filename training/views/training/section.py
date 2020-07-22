@@ -52,7 +52,6 @@ def section(
             )
 
         navigation = queries.trainings.navigation(user_pk=request.user.pk, training_pk=training.pk)
-
         return typed_templates.section.section(
             request,
             training=training_model_to_template_type(training, training_favorited),

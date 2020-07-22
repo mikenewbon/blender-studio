@@ -13,6 +13,8 @@ from common.types import assert_cast
 class CommentAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
     list_display = ['__str__', 'comment_under', 'has_replies', 'is_deleted']
     list_filter = ['user', 'date_created', 'date_deleted']
+    search_fields = ['message', 'asset__name', 'section__name']
+    readonly_fields = ['date_created', 'date_updated', 'date_deleted']
 
     def get_queryset(self, request: HttpRequest) -> 'QuerySet[models.Comment]':
         queryset = super().get_queryset(request)
