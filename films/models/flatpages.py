@@ -1,6 +1,7 @@
 from typing import Any
 
 from django.db import models
+from django.urls import reverse
 from django.utils.text import slugify
 
 from common import mixins, markdown
@@ -47,3 +48,8 @@ class FilmFlatPage(mixins.CreatedUpdatedMixin, models.Model):
 
     def __str__(self):
         return f'Flat page "{self.title}" of the film {self.film.title}'
+
+    @property
+    def admin_url(self) -> str:
+        return reverse('admin:films_filmflatpage_change', args=[self.pk])
+    
