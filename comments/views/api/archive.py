@@ -14,4 +14,4 @@ def comment_archive(request: HttpRequest, *, comment_pk: int) -> JsonResponse:
 
         return JsonResponse({'comment_pk': comment_pk, 'is_archived': is_archived})
 
-    return JsonResponse(status=403, reason='User does not have comment moderation permission.')
+    return JsonResponse({}, status=403, reason='User does not have comment moderation permission.')

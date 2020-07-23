@@ -1,6 +1,6 @@
 from typing import List
 
-from django.db.models import Model, Exists, OuterRef, Case, Value, When, Count
+from django.db.models import Model, Exists, OuterRef, Case, Value, When, Count, QuerySet
 from django.db.models.fields import BooleanField
 
 from comments import models
@@ -22,12 +22,10 @@ def get_annotated_comments(obj: Model, user_pk: int) -> List[Comment]:
         - number_of_likes: int; the number of likes associated with a comment;
         - owned_by_current_user: bool.
     """
-    assert hasattr(
-        obj, 'comments'
-    ), f'Object of type {type(obj)} does not have a "comments" attribute.'
+    comments: 'QuerySet[Comment]' = getattr(obj, 'comments')
 
     return list(
-        obj.comments.exclude(date_deleted__isnull=False, replies__isnull=True)
+        comments.exclude(date_deleted__isnull=False, replies__isnull=True)
         .prefetch_related('user', 'reply_to')
         .annotate(
             liked=Exists(Like.objects.filter(comment_id=OuterRef('pk'), user_id=user_pk)),
