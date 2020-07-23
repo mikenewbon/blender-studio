@@ -22,10 +22,10 @@
   <div class="file-body">
     <a href="#" data-toggle="modal" data-target="#file-modal"
       data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
-      <p class="subtitle">{{ asset.static_asset.get_source_type_display }}</p>
+      {% comment %} <p class="subtitle">{{ asset.static_asset.get_source_type_display }}</p> {% endcomment %}
       <h4>{{ asset.name }}</h4>
     </a>
-    <button class="btn btn-secondary btn-ctrl-xs btn-save-media" data-toggle="dropdown">
+    <button class="btn btn-ctrl-xs btn-save-media" data-toggle="dropdown">
       <i class="material-icons btn-material-icons">more_horiz</i>
     </button>
     <div class="dropdown-menu dropdown-menu-right">
