@@ -14,7 +14,7 @@ from common.tests.factories.films import (
     ProductionLogEntryAssetFactory,
 )
 from common.tests.factories.users import UserFactory
-from films.views.api.assets import SiteContexts
+from films.queries import SiteContexts
 
 
 @patch('sorl.thumbnail.base.ThumbnailBackend.get_thumbnail', return_value=None)
@@ -24,8 +24,8 @@ class TestSiteContextResolution(TestCase):
         cls.asset = AssetFactory()
         cls.other_asset = AssetFactory(film=cls.asset.film, collection=cls.asset.collection)
 
-    @patch('films.views.api.assets.get_next_asset_in_gallery', return_value=None)
-    @patch('films.views.api.assets.get_previous_asset_in_gallery', return_value=None)
+    @patch('films.queries.get_next_asset_in_gallery', return_value=None)
+    @patch('films.queries.get_previous_asset_in_gallery', return_value=None)
     def test_gallery_site_context(
         self, get_previous_asset_mock, get_next_asset_mock, get_thumbnail_mock
     ):
@@ -36,8 +36,8 @@ class TestSiteContextResolution(TestCase):
         get_previous_asset_mock.assert_called_once_with(self.asset)
         get_next_asset_mock.assert_called_once_with(self.asset)
 
-    @patch('films.views.api.assets.get_next_asset_in_featured_artwork', return_value=None)
-    @patch('films.views.api.assets.get_previous_asset_in_featured_artwork', return_value=None)
+    @patch('films.queries.get_next_asset_in_featured_artwork', return_value=None)
+    @patch('films.queries.get_previous_asset_in_featured_artwork', return_value=None)
     def test_featured_artwork_site_context(
         self, get_previous_asset_mock, get_next_asset_mock, get_thumbnail_mock
     ):
@@ -48,8 +48,8 @@ class TestSiteContextResolution(TestCase):
         get_previous_asset_mock.assert_called_once_with(self.asset)
         get_next_asset_mock.assert_called_once_with(self.asset)
 
-    @patch('films.views.api.assets.get_next_asset_in_production_logs', return_value=None)
-    @patch('films.views.api.assets.get_previous_asset_in_production_logs', return_value=None)
+    @patch('films.queries.get_next_asset_in_production_logs', return_value=None)
+    @patch('films.queries.get_previous_asset_in_production_logs', return_value=None)
     def test_production_logs_site_context(
         self, get_previous_asset_mock, get_next_asset_mock, get_thumbnail_mock
     ):

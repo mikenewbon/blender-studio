@@ -1,56 +1,12 @@
-from typing import Dict, Any
-
-from django.contrib.auth.models import User
-from django.db.models import QuerySet
-from django.db.models.query import Prefetch
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404, render
+from django.views.decorators.http import require_safe
 
 from films.models import Film, Collection, Asset
+from films.queries import get_gallery_drawer_context
 
 
-def get_gallery_drawer_context(film: Film, user: User) -> Dict[str, Any]:
-    """Retrieves collections for drawer menu in film gallery.
-
-    The collections are ordered and nested, ready to be looped over in templates.
-    Also the fake 'Featured Artwork' collection is created.
-    This function sends TWO database queries (1: fetch film top-level collections,
-    2: fetch their child collections, ordered).
-    Args:
-        film: A Film model instance.
-        user: The currently logged-in user.
-    Returns:
-         A dictionary with the following keys:
-        'collections': a dict of all the collections with their nested collections,
-        'featured_artwork': a queryset of film assets marked as featured,
-        'user_can_edit_collection': a bool specifying whether the current user
-            should be able to edit collection items displayed in the drawer menu.
-    """
-    top_level_collections = (
-        film.collections.filter(parent__isnull=True)
-        .order_by('order', 'name')
-        .prefetch_related(
-            Prefetch(
-                'child_collections',
-                queryset=film.collections.order_by('order', 'name'),
-                to_attr='nested',
-            )
-        )
-    )
-
-    nested_collections: Dict[Collection, QuerySet[Collection]] = dict()
-    for c in top_level_collections:
-        nested_collections[c] = c.nested  # type: ignore[attr-defined]
-
-    return {
-        'collections': nested_collections,
-        'featured_artwork': film.assets.filter(is_featured=True, is_published=True).order_by(
-            'date_created'
-        ),
-        'user_can_edit_collection': (user.is_staff and user.has_perm('films.change_collection')),
-    }
-
-
+@require_safe
 def collection_list(request: HttpRequest, film_slug: str) -> HttpResponse:
     """
     Displays all the film collections as well as the featured artwork in the gallery.
@@ -98,6 +54,7 @@ def collection_list(request: HttpRequest, film_slug: str) -> HttpResponse:
     return render(request, 'films/gallery.html', context)
 
 
+@require_safe
 def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str) -> HttpResponse:
     """
     Displays all the published assets in a :model:`films.Collection`.
@@ -157,6 +114,7 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
     return render(request, 'films/collection_detail.html', context)
 
 
+@require_safe
 def asset_detail(request: HttpRequest, film_slug: str, asset_slug: str) -> HttpResponse:
     film = get_object_or_404(Film, slug=film_slug, is_published=True)
     asset = get_object_or_404(Asset, slug=asset_slug, film_id=film.id, is_published=True)

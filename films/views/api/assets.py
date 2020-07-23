@@ -1,9 +1,7 @@
 import json
-from enum import Enum
-from typing import Dict, Union, cast, Optional, List
+from typing import Optional
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.db import transaction
 from django.http import HttpResponse
 from django.http.request import HttpRequest
@@ -11,146 +9,10 @@ from django.http.response import Http404, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_safe, require_POST
 
-from comments import typed_templates
 from comments.models import Comment
-from comments.queries import get_annotated_comments
-from comments.views.common import comments_to_template_type
 from common.types import assert_cast
-from films.models import Asset, Collection, AssetComment
-
-
-class SiteContexts(Enum):
-    """Defines possible values of the site_context query parameter."""
-
-    PRODUCTION_LOGS = 'production_logs'
-    FEATURED_ARTWORK = 'featured_artwork'
-    GALLERY = 'gallery'
-
-
-def get_previous_asset_in_production_logs(asset: Asset) -> Optional[Asset]:
-    current_log_entry = asset.entry_asset.production_log_entry
-    previous_asset: Optional[Asset]
-    try:
-        previous_asset = asset.get_previous_by_date_created(
-            entry_asset__production_log_entry=current_log_entry, is_published=True,
-        )
-    except Asset.DoesNotExist:
-        previous_asset = None
-    return previous_asset
-
-
-def get_next_asset_in_production_logs(asset: Asset) -> Optional[Asset]:
-    current_log_entry = asset.entry_asset.production_log_entry
-    next_asset: Optional[Asset]
-    try:
-        next_asset = asset.get_next_by_date_created(
-            entry_asset__production_log_entry=current_log_entry, is_published=True,
-        )
-    except Asset.DoesNotExist:
-        next_asset = None
-    return next_asset
-
-
-def get_previous_asset_in_featured_artwork(asset: Asset) -> Optional[Asset]:
-    previous_asset: Optional[Asset]
-    try:
-        previous_asset = asset.get_previous_by_date_created(
-            film=asset.film, is_published=True, is_featured=True
-        )
-    except Asset.DoesNotExist:
-        previous_asset = None
-    return previous_asset
-
-
-def get_next_asset_in_featured_artwork(asset: Asset) -> Optional[Asset]:
-    next_asset: Optional[Asset]
-    try:
-        next_asset = asset.get_next_by_date_created(
-            film=asset.film, is_published=True, is_featured=True
-        )
-    except Asset.DoesNotExist:
-        next_asset = None
-    return next_asset
-
-
-def get_previous_asset_in_gallery(asset: Asset) -> Optional[Asset]:
-    collection = cast(Collection, asset.collection)
-    collection_assets = list(collection.assets.filter(is_published=True).order_by('order', 'name'))
-    asset_index = collection_assets.index(asset)
-    if asset_index == 0:
-        return None
-    return collection_assets[asset_index - 1]
-
-
-def get_next_asset_in_gallery(asset: Asset) -> Optional[Asset]:
-    collection = cast(Collection, asset.collection)
-    collection_assets = list(collection.assets.filter(is_published=True).order_by('order', 'name'))
-    asset_index = collection_assets.index(asset)
-    if asset_index == len(collection_assets) - 1:
-        return None
-    return collection_assets[(asset_index + 1)]
-
-
-def get_asset_context(
-    asset: Asset, site_context: Optional[str], user: User,
-) -> Dict[str, Union[Asset, typed_templates.Comments, str, None, bool]]:
-    """Creates context for the api-asset view: the current, previous and next published assets.
-
-    The request's URL is expected to contain a query string 'site_context=...' with one
-    of the following values (see the SiteContexts enum):
-    - 'production_logs' - for assets inside production log entries in the 'Weeklies' website
-        section; they are sorted by their `date_created`,
-    - 'featured_artwork' - for featured assets in the 'Gallery' section; they are sorted by
-        their `date_created`,
-    - 'gallery' - for assets inside collections in the 'Gallery section; they are sorted by
-        their `order` and `name` (`order` may not define an unambiguous order).
-    If 'site_context' parameter has another value, is not provided, or the current asset
-    is the first one or the last one in the given context, the previous and next
-    assets are set to None.
-
-    The name 'site_context' is to be distinguishable from the '(template) context' variable.
-
-    Args:
-        asset: the asset to be displayed in the modal;
-        site_context: value retrieved from the query string's 'site_context' parameter;
-        user: the currently logged-in user.
-
-    Returns:
-        A dictionary with the following keys:
-        - 'asset' - the asset to display,
-        - 'previous_asset' - the previous asset from the current context,
-        - 'next_asset' - the next asset from the current context,
-        - 'site_context' - a string; it can be reused in HTML components which need to add
-        a query string to the asset modal URL,
-        - 'comments' - a typed_templates.Comments instance with comments,
-        - 'user_can_edit_asset' - a bool specifying whether the current user is able to edit
-        the displayed asset in the admin panel.
-    """
-    if site_context == SiteContexts.PRODUCTION_LOGS.value:
-        previous_asset = get_previous_asset_in_production_logs(asset)
-        next_asset = get_next_asset_in_production_logs(asset)
-    elif site_context == SiteContexts.FEATURED_ARTWORK.value:
-        previous_asset = get_previous_asset_in_featured_artwork(asset)
-        next_asset = get_next_asset_in_featured_artwork(asset)
-    elif site_context == SiteContexts.GALLERY.value:
-        previous_asset = get_previous_asset_in_gallery(asset)
-        next_asset = get_next_asset_in_gallery(asset)
-    else:
-        previous_asset = next_asset = None
-
-    comments: List[Comment] = get_annotated_comments(asset, user.pk)
-    user_is_moderator = user.has_perm('comments.moderate_comment')
-
-    context = {
-        'asset': asset,
-        'previous_asset': previous_asset,
-        'next_asset': next_asset,
-        'site_context': site_context,
-        'comments': comments_to_template_type(comments, asset.comment_url, user_is_moderator),
-        'user_can_edit_asset': user.is_staff and user.has_perm('films.change_asset'),
-    }
-
-    return context
+from films.models import Asset, AssetComment
+from films.queries import get_asset_context
 
 
 @require_safe

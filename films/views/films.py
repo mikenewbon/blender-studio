@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_safe
 
 from films.models import Film, FilmStatus, FilmFlatPage
-from films.views.api.production_logs import get_production_logs_page
+from films.queries import get_production_logs_page
 
 
 @require_safe

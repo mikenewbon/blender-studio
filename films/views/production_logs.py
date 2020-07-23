@@ -3,7 +3,7 @@ from django.http.request import HttpRequest
 from django.shortcuts import get_object_or_404, render
 
 from films.models import Film
-from films.views.api.production_logs import get_production_logs_page
+from films.queries import get_production_logs_page
 
 
 def production_log_list(request: HttpRequest, film_slug: str) -> HttpResponse:
