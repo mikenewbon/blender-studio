@@ -17,8 +17,9 @@ class Comments:
 class CommentTree:
     id: int
     date: datetime.datetime
-    replies: List[Union[CommentTree, DeletedCommentTree]]
+    replies: List[CommentTree]
     profile_image_url: str
+    is_archived: bool
     full_name: str
     message: str
     like_url: Optional[str]

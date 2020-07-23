@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Sequence, Union
+from typing import Dict, List, Optional, Sequence
 
 from comments import typed_templates
 from comments.models import Comment
@@ -14,9 +14,7 @@ def comments_to_template_type(
 
         lookup.setdefault(reply_to_pk, []).append(comment)
 
-    def build_tree(
-        comment: Comment,
-    ) -> Union[typed_templates.CommentTree, typed_templates.DeletedCommentTree]:
+    def build_tree(comment: Comment) -> typed_templates.CommentTree:
         if comment.is_deleted:
             return build_deleted_tree(comment)
 
@@ -41,6 +39,7 @@ def comments_to_template_type(
                 else None
             ),
             edited=(comment.date_updated != comment.date_created),
+            is_archived=comment.is_archived,
         )
 
     def build_deleted_tree(comment: Comment) -> typed_templates.DeletedCommentTree:
@@ -57,6 +56,7 @@ def comments_to_template_type(
             replies=[build_tree(reply) for reply in lookup.get(comment.pk, [])],
             profile_image_url='https://blender.chat/avatar/MikeNewbon',
             # TODO(Natalia): set an empty profile picture in deleted comments
+            is_archived=comment.is_archived,
         )
 
     return typed_templates.Comments(
