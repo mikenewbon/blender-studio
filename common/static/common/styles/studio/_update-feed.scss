@@ -112,8 +112,6 @@
 .update-feed-individual-files {
   @extend .col-md-9;
 
-  margin-bottom: $spacer;
-
   &-show-more {
     margin-bottom: $spacer;
   }
@@ -122,9 +120,12 @@
     display: inline-block;
   }
 
-  &>:last-child {
-    margin-bottom: 0;
+  &.summary {
+    margin-bottom: $spacer;
 
+    :last-child {
+      margin-bottom: 0;
+    }
   }
 }
 

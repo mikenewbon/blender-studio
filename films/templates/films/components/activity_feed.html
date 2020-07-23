@@ -46,11 +46,11 @@
 
         </div>
 
-        <div class="update-feed-individual-files">
+        <div class="update-feed-individual-files summary">
           <h3>This week on {{ film.title }}</h3>
           {{ production_log.summary | safe | linebreaks }}
           {% if production_log.youtube_link != "" %}
-          <a href="{{ production_log.youtube_link }}" class="video-modal-link" data-toggle="modal"
+          <a href="{{ production_log.youtube_link }}" class="video-modal-link mb-0" data-toggle="modal"
             data-target="#videoModal" data-video="{{ production_log.youtube_link }}">Watch the video</a>
           {% endif %}
 

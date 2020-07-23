@@ -34,9 +34,9 @@
       text-decoration: none;
     }
 
-    .file-image+.file-icon {
-      background-color: tint($navigation-gray, 10%);
-    }
+    // .file-image+.file-icon {
+    //   background-color: tint($navigation-gray, 10%);
+    // }
 
     h4 {
       color: $white;
@@ -147,7 +147,7 @@
   width: 100%;
 
   +.file-icon {
-    background-color: $navigation-gray;
+    background-color: $highlight-black-strong;
     border-radius: 50%;
     box-shadow: $box-shadow-sm;
     height: $spacer * 1.5;
