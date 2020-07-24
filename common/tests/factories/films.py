@@ -7,6 +7,7 @@ from common.tests.factories.static_assets import StaticAssetFactory, StorageLoca
 from common.tests.factories.users import UserFactory
 from films.models import (
     Film,
+    FilmCrew,
     Collection,
     Asset,
     ProductionLog,
@@ -90,7 +91,6 @@ class ProductionLogEntryFactory(factory.DjangoModelFactory):
     production_log = factory.SubFactory(ProductionLogFactory)
     description = factory.Faker('text')
     user = factory.SubFactory(UserFactory)
-    author_role = factory.Faker('job')
 
 
 class ProductionLogEntryAssetFactory(factory.DjangoModelFactory):

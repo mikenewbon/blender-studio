@@ -6,7 +6,7 @@ from django.urls.base import reverse
 
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
-from films.models import Asset, Film
+from films.models import Asset, Film, FilmCrew
 from static_assets.models import DynamicStorageFileField, StorageLocation
 
 
@@ -111,7 +111,18 @@ class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
         help_text='The actual author of the assets in the production log entry',
     )
     author.description = 'The actual author of the assets in the production log entry.'
-    author_role = models.CharField(max_length=512)
+
+    @property
+    def author_role(self) -> str:
+        """Find the role for the log entry author."""
+        try:
+            crew_member_role = FilmCrew.objects.values_list('role', flat=True).get(
+                user=self.author, film=self.production_log.film
+            )
+        except FilmCrew.DoesNotExist:
+            crew_member_role = ''
+
+        return crew_member_role
 
     @property
     def author_name(self) -> str:
