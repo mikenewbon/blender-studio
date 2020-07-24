@@ -503,7 +503,7 @@ window.comments = (function comments() {
     }
   };
 
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('activateComments', () => {
     document.getElementsByClassName(Section.className).forEach(Section.getOrWrap);
     document.getElementsByClassName(MainInput.className).forEach(MainInput.getOrWrap);
     document.getElementsByClassName(ReplyInput.className).forEach(ReplyInput.getOrWrap);
