@@ -11,9 +11,11 @@ window.asset = (function asset() {
 
   window.addEventListener('popstate', (event) => {
     const fileElementSelector = document.querySelector('[data-asset-id="'+ event.state + '"]');
+    $('#file-zoom-modal').modal('hide');
     if (event.state == ""){
       $('#file-modal').modal('hide');
     } else{
+      loadingSpinner(document.querySelector('#' + baseModalId));
       getModalHtml(fileElementSelector, baseModalId, event);
     }
   });
