@@ -7,7 +7,15 @@ window.asset = (function asset() {
   document.addEventListener('DOMContentLoaded', () => {
     addFileClickEvent();
     initalizeAssetURL();
+  });
 
+  window.addEventListener('popstate', (event) => {
+    const fileElementSelector = document.querySelector('[data-asset-id="'+ event.state + '"]');
+    if (event.state == ""){
+      $('#file-modal').modal('hide');
+    } else{
+      getModalHtml(fileElementSelector, baseModalId, event);
+    }
   });
 
   // Using Jquery due to BootStrap events only being available here.
@@ -55,7 +63,7 @@ window.asset = (function asset() {
   function addURLParam(param, value) {
     let url = new URL(window.location);
     const title = document.title;
-    const state = '';
+    const state = value;
 
     url.searchParams.set(param, value);
     window.history.pushState(state, title, url);
@@ -74,7 +82,7 @@ window.asset = (function asset() {
     document.querySelectorAll(
       '.file a[data-toggle*="modal"], .grid a[data-toggle*="modal"]'
     ).forEach(element => {
-      element.addEventListener('click', () => getModalHtml(element, baseModalId));
+      element.addEventListener('click', (event) => getModalHtml(element, baseModalId, event));
     });
   }
 
@@ -84,7 +92,7 @@ window.asset = (function asset() {
     element.innerHTML = spinner + close;
   }
 
-  function getModalHtml(element, modalId) {
+  function getModalHtml(element, modalId, event) {
     if (element.classList.contains('modal-navigation')) {
       loadingSpinner(document.querySelector('#' + baseModalId))
     }
@@ -92,7 +100,7 @@ window.asset = (function asset() {
     fetch(element.dataset.url).then(response => {
       return response.text();
     }).then(html => {
-      createModal(html, modalId, element.dataset.assetId);
+      createModal(html, modalId, element.dataset.assetId, event);
     }).then(() => {
       // Create a new video player for the modal
       const player = new Plyr(document.querySelector('.video-player video'));
@@ -107,7 +115,7 @@ window.asset = (function asset() {
     });
   }
 
-  function createModal(html, modalId, assetId) {
+  function createModal(html, modalId, assetId, event) {
     const template = document.createElement('template');
     template.innerHTML = html.trim();
     const modal = document.getElementById(modalId);
@@ -119,7 +127,9 @@ window.asset = (function asset() {
 
     if (modalId === baseModalId) {
       addButtonClickEvent();
-      addURLParam('asset', assetId);
+      if(event.type != "popstate"){
+        addURLParam('asset', assetId);
+      }
     }
   }
 
@@ -128,14 +138,14 @@ window.asset = (function asset() {
       '.modal button.previous, .modal button.next'
     ).forEach(button => {
       button.addEventListener(
-        'click', () => getModalHtml(button, baseModalId)
+        'click', (event) => getModalHtml(button, baseModalId, event)
       );
     });
     document.querySelectorAll(
       '.modal a[data-toggle*="modal"]'
     ).forEach(element => {
       element.addEventListener(
-        'click', () => getModalHtml(element, zoomModalId)
+        'click', (event) => getModalHtml(element, zoomModalId, event)
       );
     });
   }

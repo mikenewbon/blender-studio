@@ -7,7 +7,7 @@
   <div class="modal-dialog" role="document">
     {% if previous_asset %}
     <button class="modal-navigation previous btn btn-ctrl"
-      data-url="{% url 'api-asset' previous_asset.id %}?site_context={{ site_context }}">
+      data-url="{% url 'api-asset' previous_asset.id %}?site_context={{ site_context }}" data-asset-id="{{ previous_asset.id }}">
       <i class="material-icons btn-material-icons">navigate_before</i>
     </button>
     {% endif %}
@@ -101,7 +101,7 @@
     </div>
     {% if next_asset %}
     <button class="modal-navigation next btn btn-ctrl"
-      data-url="{% url 'api-asset' next_asset.id %}?site_context={{ site_context }}">
+      data-url="{% url 'api-asset' next_asset.id %}?site_context={{ site_context }}" data-asset-id="{{ next_asset.id }}">
       <i class="material-icons btn-material-icons">navigate_next</i>
     </button>
     {% endif %}
