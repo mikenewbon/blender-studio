@@ -15,8 +15,10 @@ window.asset = (function asset() {
     const fileElementSelector = document.querySelector('[data-asset-id="'+ event.state + '"]');
     $('#file-zoom-modal').modal('hide');
     if (event.state == ""){
+      //The empty state occurs when the modal is closed, so it hides the modal.
       $('#file-modal').modal('hide');
     } else if(event.state == null){
+      //When pasting a new URL the state is lost which causes an error, which this handles by just using the URL.
       initalizeAssetURL();
       $('#file-modal').modal('show');
     }else{
@@ -73,7 +75,7 @@ window.asset = (function asset() {
     const title = document.title;
     const state = value;
     const newparam = '?' + param + '=' + value;
-
+    //When going back, it checks the state against the url before pushing it - otherwise the pop-stack gets over-ridden and you cant go forward in time.
     if( url.search != newparam ){
       url.searchParams.set(param, value);
       window.history.pushState(state, title, url);
