@@ -17,6 +17,7 @@ window.asset = (function asset() {
     } else{
       loadingSpinner(document.querySelector('#' + baseModalId));
       getModalHtml(fileElementSelector, baseModalId, event);
+      $('#file-modal').modal('show');
     }
   });
 
