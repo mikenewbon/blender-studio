@@ -10,11 +10,16 @@ window.asset = (function asset() {
   });
 
   window.addEventListener('popstate', (event) => {
+    console.log(event);
+
     const fileElementSelector = document.querySelector('[data-asset-id="'+ event.state + '"]');
     $('#file-zoom-modal').modal('hide');
     if (event.state == ""){
       $('#file-modal').modal('hide');
-    } else{
+    } else if(event.state == null){
+      initalizeAssetURL();
+      $('#file-modal').modal('show');
+    }else{
       loadingSpinner(document.querySelector('#' + baseModalId));
       getModalHtml(fileElementSelector, baseModalId, event);
       $('#file-modal').modal('show');
@@ -67,9 +72,12 @@ window.asset = (function asset() {
     let url = new URL(window.location);
     const title = document.title;
     const state = value;
+    const newparam = '?' + param + '=' + value;
 
-    url.searchParams.set(param, value);
-    window.history.pushState(state, title, url);
+    if( url.search != newparam ){
+      url.searchParams.set(param, value);
+      window.history.pushState(state, title, url);
+    }
   }
 
   function removeURLParam(param) {
