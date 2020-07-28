@@ -10,18 +10,19 @@ window.asset = (function asset() {
   });
 
   window.addEventListener('popstate', (event) => {
-    console.log(event);
 
-    const fileElementSelector = document.querySelector('[data-asset-id="'+ event.state + '"]');
+
+    const fileElementSelector = document.querySelector('[data-asset-id="' + event.state + '"]');
+
     $('#file-zoom-modal').modal('hide');
-    if (event.state == ""){
+    if (event.state == "") {
       //The empty state occurs when the modal is closed, so it hides the modal.
       $('#file-modal').modal('hide');
-    } else if(event.state == null){
+    } else if (event.state == null) {
       //When pasting a new URL the state is lost which causes an error, which this handles by just using the URL.
       initalizeAssetURL();
       $('#file-modal').modal('show');
-    }else{
+    } else {
       loadingSpinner(document.querySelector('#' + baseModalId));
       getModalHtml(fileElementSelector, baseModalId, event);
       $('#file-modal').modal('show');
@@ -38,14 +39,19 @@ window.asset = (function asset() {
         if (this.classList.contains('modal-asset')) {
           // Add loading spinner pre-emtively
           loadingSpinner(this);
-          // Remove the asset url parameter
-          removeURLParam('asset');
         }
       });
+
       // Give modal focus on open
       $(this).on('shown.bs.modal', function () {
         $(this).trigger('focus')
       })
+
+      // Events for clicking close or ESC, cant use hiden.bs.modal as this is also triggered by going back in history.
+      $(this).on('keydown.dismiss.bs.modal click.dismiss.bs.modal', () => {
+        removeURLParam('asset');
+      });
+
     })
     // Left-Right keyboard events
     $('#file-modal').keydown(function (event) {
@@ -76,7 +82,7 @@ window.asset = (function asset() {
     const state = value;
     const newparam = '?' + param + '=' + value;
     //When going back, it checks the state against the url before pushing it - otherwise the pop-stack gets over-ridden and you cant go forward in time.
-    if( url.search != newparam ){
+    if (url.search != newparam) {
       url.searchParams.set(param, value);
       window.history.pushState(state, title, url);
     }
@@ -140,13 +146,14 @@ window.asset = (function asset() {
 
     if (modalId === baseModalId) {
       addButtonClickEvent();
-      if(event.type != "popstate"){
+      if (event.type != "popstate") {
         addURLParam('asset', assetId);
       }
     }
   }
 
   function addButtonClickEvent() {
+
     document.querySelectorAll(
       '.modal button.previous, .modal button.next'
     ).forEach(button => {
@@ -154,6 +161,7 @@ window.asset = (function asset() {
         'click', (event) => getModalHtml(button, baseModalId, event)
       );
     });
+
     document.querySelectorAll(
       '.modal a[data-toggle*="modal"]'
     ).forEach(element => {
@@ -161,6 +169,7 @@ window.asset = (function asset() {
         'click', (event) => getModalHtml(element, zoomModalId, event)
       );
     });
+
   }
 
   function activateComments() {
