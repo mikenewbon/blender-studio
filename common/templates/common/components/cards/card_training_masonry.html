@@ -1,0 +1,34 @@
+<div class="grid-item">
+  <div class="card card-dark card-media card-training" data-favorite-url="{{ training.favorite_url }}">
+
+    <div class="card-header" style='background-image: url("{{ training.picture_16_9.url }}")'>
+      <a href="{{ training.url }}" class="card-header-link"></a>
+      <div class="badge badge-difficulty badge-{{ training.difficulty }}">
+        <i class="material-icons btn-material-icons">extension</i>
+        {{ training.get_difficulty_display }}
+      </div>
+      {% if request.user.is_authenticated %}
+      {% include 'training/components/card_button_favorite.html' with class='btn-save-media card-training-favorite' checked=training.favorited %}
+      {% endif %}
+      {% comment %}
+      TODO(Mike): get this working and remove old code
+      {{ card_training_checkbox_favorite(checked=training.favorited, class=['btn-save-media', 'card-training-favorite']) }}
+      {% endcomment %}
+    </div>
+
+    <a class="card-body" href="{{ training.url }}">
+      <p class="card-subtitle">{{ training.get_type_display }}</p>
+      <h3 class="card-title">{{ training.name }}</h3>
+      <p class="card-text">{{ training.description }}</p>
+    </a>
+
+    <div class="card-footer">
+      <div class="pills {% comment %}{{ class|join(' ') }}{% endcomment %}">
+        {% for tag in training.tags.all %}
+        {% include 'common/components/cards/pill.html' with label=tag.name %}
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+</div>

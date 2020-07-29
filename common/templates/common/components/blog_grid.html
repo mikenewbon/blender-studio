@@ -5,7 +5,7 @@
 {#    {% elif record.obj_type == 'production log' %}#}
 {#      TODO(Natalia): Include a production log card here #}
     {% elif record.obj_type == 'training' %}
-      {% include "common/components/cards/card_training.html" with training=record.object %}
+      {% include "common/components/cards/card_training_masonry.html" with training=record.object %}
 {#      TODO(Natalia): Training cards overlap with the blog cards, classes need adjustment#}
     {% endif %}
 
