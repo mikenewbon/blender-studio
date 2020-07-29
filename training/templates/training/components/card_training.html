@@ -1,36 +1,39 @@
 {% comment %} TODO(Mike): Remove this version when Nat redoes the trainign view {% endcomment %}
 <div class="{{ card_sizes|default:"col-12 col-sm-6 col-lg-4" }} card-grid-item">
-	<div class="card card-dark card-media card-training" data-favorite-url="{{ training.favorite_url }}">
+  <div class="card card-dark card-media card-training" data-favorite-url="{{ training.favorite_url }}">
 
-		<div class="card-header" style='background-image: url("{{ training.picture_16_9 }}")'>
-			<a href="{{ training.url }}" class="card-header-link"></a>
-			<div class="badge badge-difficulty badge-{{ training.difficulty }}">
-				<i class="material-icons btn-material-icons">extension</i>
-				{{ training.difficulty.label }}
-			</div>
-			{% if request.user.is_authenticated %}
-			    {% include 'training/components/card_button_favorite.html' with class='btn-save-media card-training-favorite' checked=training.favorited %}
-			{% endif %}
-			{% comment %}
-			TODO(Mike): get this working and remove old code
-			{{ card_training_checkbox_favorite(checked=training.favorited, class=['btn-save-media', 'card-training-favorite']) }}
-			{% endcomment %}
-		</div>
+    <div class="card-header" style='background-image: url("{{ training.picture_16_9 }}")'>
+      <a href="{{ training.url }}" class="card-header-link"></a>
+      {% if request.user.is_authenticated %}
+      {% include 'training/components/card_button_favorite.html' with class='btn-save-media card-training-favorite' checked=training.favorited %}
+      {% endif %}
+      {% comment %}
+      TODO(Mike): get this working and remove old code
+      {{ card_training_checkbox_favorite(checked=training.favorited, class=['btn-save-media', 'card-training-favorite']) }}
+      {% endcomment %}
+    </div>
 
-		<a class="card-body" href="{{ training.url }}">
-			<p class="card-subtitle">{{ training.type.label }}</p>
-			<h3 class="card-title">{{ training.name }}</h3>
-			<p class="card-text">{{ training.description }}</p>
-		</a>
-    {% if training.tags %}
-		<div class="card-footer">
-			<div class="pills {% comment %}{{ class|join(' ') }}{% endcomment %}">
-				{% for tag in training.tags.all %}
-				    {% include 'common/components/cards/pill.html' with label=tag.name %}
-				{% endfor %}
-			</div>
-		</div>
+    <a class="card-body" href="{{ training.url }}">
+      <div class="card-subtitle-group">
+        <p class="card-subtitle">{{ training.type.label }}</p>
+        <p class="card-subtitle">
+          <i class="material-icons icon-inline small">school</i>
+          {{ training.difficulty.label }}
+        </p>
+      </div>
+      <h3 class="card-title">{{ training.name }}</h3>
+      <p class="card-text">{{ training.description }}</p>
+    </a>
+
+    {% if training.tags.all %}
+    <div class="card-footer">
+      <div class="pills {% comment %}{{ class|join(' ') }}{% endcomment %}">
+        {% for tag in training.tags.all %}
+        {% include 'common/components/cards/pill.html' with label=tag.name %}
+        {% endfor %}
+      </div>
+    </div>
     {% endif %}
 
-	</div>
+  </div>
 </div>

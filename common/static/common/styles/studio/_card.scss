@@ -2,6 +2,12 @@
   flex-grow: 1;
   margin-bottom: $spacer;
 
+  &:hover {
+    .btn-save-media {
+      opacity: 1;
+    }
+  }
+
   &.card-dark {
     background-color: $navigation-gray;
 
@@ -19,17 +25,7 @@
     }
   }
 
-  &-small {
-    .card-subtitle {
-      font-size: $small-font-size;
-    }
-
-    .card-text {
-      font-size: $small-font-size;
-    }
-  }
-
-  &-body {
+  .card-body {
     @include hover {
       color: $card-color;
       text-decoration: none;
@@ -40,13 +36,25 @@
     }
   }
 
-  &-header {
+  .card-header {
     background-position: center;
     background-size: cover;
     overflow: hidden;
   }
 
-  &-media {
+  .btn-save-media {
+    @extend .btn-secondary;
+    opacity: 0;
+    right: $spacer / 2;
+    top: $spacer / 2;
+    transition: $transition-base;
+
+    &.checked {
+      @extend .btn-primary;
+    }
+  }
+
+  &.card-media {
     &.card-poster {
       text-align: center;
 
@@ -64,6 +72,7 @@
     }
 
     .card-header {
+      border-radius: $border-radius;
       padding-bottom: 56.25%;
       padding-top: 0;
       position: relative;
@@ -78,15 +87,6 @@
         top: $spacer / 2;
       }
 
-      .btn-save-media {
-        @extend .btn-secondary;
-        right: $spacer / 2;
-        top: $spacer / 2;
-
-        &.checked {
-          @extend .btn-primary;
-        }
-      }
 
       .progress {
         bottom: 0;
@@ -98,8 +98,9 @@
   }
 }
 
-.card-title {
-  margin-bottom: 0;
+.card-subtitle-group {
+  display: flex;
+  justify-content: space-between;
 }
 
 .card-subtitle {
@@ -134,7 +135,7 @@
 //
 
 .card-footer {
-  margin-top: -$spacer / 2;
+
   padding: 0 $card-spacer-x 20px;
 }
 
