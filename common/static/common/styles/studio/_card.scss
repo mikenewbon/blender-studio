@@ -2,24 +2,22 @@
   flex-grow: 1;
   margin-bottom: $spacer;
 
-  &-dark {
+  &.card-dark {
     background-color: $navigation-gray;
 
     .card-body {
 
       @include hover {
         color: $white;
-        text-decoration: none;
-
-        .card-title {
-          text-decoration: underline;
-        }
       }
 
       color: $white;
     }
-  }
 
+    .card-subtitle {
+      color: $highlight-white-xstrong;
+    }
+  }
 
   &-small {
     .card-subtitle {
@@ -98,16 +96,17 @@
       }
     }
   }
+}
 
-  &-subtitle {
-    color: $primary;
-    margin-bottom: 0;
-    margin-top: 0;
-  }
+.card-title {
+  margin-bottom: 0;
+}
 
-  .card-text:last-child {
-    margin-bottom: 0;
-  }
+.card-subtitle {
+  @extend .small;
+  color: $highlight-black-xstrong;
+  margin-bottom: $spacer / 2;
+  margin-top: 0;
 }
 
 .card-header-link {

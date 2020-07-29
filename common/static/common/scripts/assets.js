@@ -11,7 +11,6 @@ window.asset = (function asset() {
 
   window.addEventListener('popstate', (event) => {
 
-
     const fileElementSelector = document.querySelector('[data-asset-id="' + event.state + '"]');
 
     $('#file-zoom-modal').modal('hide');
@@ -19,9 +18,7 @@ window.asset = (function asset() {
       //The empty state occurs when the modal is closed, so it hides the modal.
       $('#file-modal').modal('hide');
     } else if (event.state == null) {
-      //When pasting a new URL the state is lost which causes an error, which this handles by just using the URL.
-      initalizeAssetURL();
-      $('#file-modal').modal('show');
+      //Do nothing - this occurs when you click a anchor link.
     } else {
       loadingSpinner(document.querySelector('#' + baseModalId));
       getModalHtml(fileElementSelector, baseModalId, event);

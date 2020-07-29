@@ -1,6 +1,6 @@
 {% comment %} TODO(Mike): Remove this version when Nat redoes the trainign view {% endcomment %}
 <div class="{{ card_sizes|default:"col-12 col-sm-6 col-lg-4" }} card-grid-item">
-	<div class="card card-media card-training" data-favorite-url="{{ training.favorite_url }}">
+	<div class="card card-dark card-media card-training" data-favorite-url="{{ training.favorite_url }}">
 
 		<div class="card-header" style='background-image: url("{{ training.picture_16_9 }}")'>
 			<a href="{{ training.url }}" class="card-header-link"></a>
@@ -19,10 +19,10 @@
 
 		<a class="card-body" href="{{ training.url }}">
 			<p class="card-subtitle">{{ training.type.label }}</p>
-			<h2 class="card-title">{{ training.name }}</h2>
+			<h3 class="card-title">{{ training.name }}</h3>
 			<p class="card-text">{{ training.description }}</p>
 		</a>
-
+    {% if training.tags %}
 		<div class="card-footer">
 			<div class="pills {% comment %}{{ class|join(' ') }}{% endcomment %}">
 				{% for tag in training.tags.all %}
@@ -30,6 +30,7 @@
 				{% endfor %}
 			</div>
 		</div>
+    {% endif %}
 
 	</div>
 </div>

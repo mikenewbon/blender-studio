@@ -85,6 +85,10 @@ body {
       display: flex;
     }
 
+    .search-button {
+      display: none;
+    }
+
     .searchbar-wrapper {
       display: none;
     }
@@ -182,3 +186,4 @@ body {
     margin: 0;
   }
 }
+

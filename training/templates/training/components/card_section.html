@@ -1,15 +1,15 @@
 {% load static %}
 
 <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
-    <div class="card card-media">
+    <div class="card card-dark card-media">
         <!-- TODO(Mike): Add real thumbnails for videos or inherit from course -->
         <div class="card-header" style='background-image: url("{% static 'training/images/placeholders/card_training.png' %}")'>
             {% include 'training/components/progress_bar.html' with fraction=section.progress_fraction %}
         </div>
         <a class="card-body" href="{{ section.url }}">
-            <p class="card-subtitle">{{ section.training_name }}</p>
+            <p class="card-subtitle small">{{ section.training_name }}</p>
             {% comment %} <p class="card-subtitle">{{ section.chapter_name_with_index }}</p> {% endcomment %}
-            <h2 class="card-title mb-0">{{ section.name_with_index }}</h2>
+            <h3 class="card-title mb-0">{{ section.name_with_index }}</h3>
         </a>
     </div>
 </div>

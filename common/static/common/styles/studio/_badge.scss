@@ -22,6 +22,13 @@
     background: $highlight-black;
     color: $charcoal-gray;
   }
+
+  &.card-dark {
+    .badge-pill {
+      background: $highlight-white;
+      color: $white;
+    }
+  }
 }
 
 .pills {

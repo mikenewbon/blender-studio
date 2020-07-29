@@ -40,21 +40,26 @@
       <a href="/training/" class="list-group-item">
         <span>Training</span>
       </a>
-      <a href="/services/" class="list-group-item">
+      {% comment %} <a href="/services/" class="list-group-item">
         <span>Services</span>
-      </a>
-      <a href="/news/" class="list-group-item">
+      </a> {% endcomment %}
+      {% comment %} <a href="/news/" class="list-group-item">
         <span>News</span>
-      </a>
+      </a> {% endcomment %}
     </div>
     {% if request.user.is_authenticated %}
-    <div class="searchbar-wrapper">
+
+    <a href="#test" class="btn btn-nav search-button">
+      <i class="material-icons">search</i>
+    </a>
+
+    {% comment %} <div class="searchbar-wrapper">
       <div class="searchbar">
         <div class="input-group-prepend"><span class="input-group-text"><i class="material-icons">search</i></span>
         </div>
         <input type="text" placeholder="Search tags and keywords" class="form-control">
       </div>
-    </div>
+    </div> {% endcomment %}
 
     <div data-toggle="dropdown" class="btn btn-nav nav-profile">
       <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');" class="profile"></div>
@@ -129,8 +134,8 @@
             <div class="list-group list-group-flush list-group-horizontal small">
               <a class="list-group-item" href="/films/">Films</a>
               <a class="list-group-item" href="/training/">Training</a>
-              <a class="list-group-item" href="#">Services</a>
-              <a class="list-group-item" href="/news/">News</a>
+              {% comment %} <a class="list-group-item" href="#">Services</a>
+              <a class="list-group-item" href="/news/">News</a> {% endcomment %}
             </div>
           </div>
         </div>
@@ -279,6 +284,10 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div id="test">
+    <h1>Test</h1>
   </div>
 </body>
 

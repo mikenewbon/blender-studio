@@ -37,14 +37,16 @@
 }
 
 .btn-nav {
-  align-items: center;
-  display: flex;
-  position: relative;
   @include button-size($btn-padding-y-nav,
     $btn-padding-x-nav,
     $btn-font-size-nav,
     $btn-line-height-nav,
     0);
+
+  align-items: center;
+  color: $highlight-white-xstrong;
+  display: flex;
+  position: relative;
 
   .material-icons {
     line-height: 1;
@@ -53,6 +55,7 @@
 
   @include hover {
     background: $highlight-white;
+    color: $white;
     text-decoration: none;
   }
 }
