@@ -153,14 +153,14 @@ def get_production_logs_page(
     page_number: Optional[Union[int, str]] = 1,
     per_page: Optional[Union[int, str]] = DEFAULT_LOGS_PAGE_SIZE,
 ) -> paginator.Page:
-    """Retrieve production logs for film production logs context.
+    """Retrieves production logs page for film production logs context.
 
     Altogether, this function sends 5 database queries.
 
     Args:
         film: A Film model instance
-        page_number: (optional) int; production logs page number, used by the paginator.
-            By default, the first page.
+        page_number: (optional) int or str; production logs page number, used by the
+            paginator. By default, the first page.
         per_page: (optional) int or str; the number of logs to display per page, used
             by the paginator. Defaults to DEFAULT_LOGS_PAGE_SIZE.
 

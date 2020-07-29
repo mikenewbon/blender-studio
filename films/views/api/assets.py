@@ -17,8 +17,7 @@ from films.queries import get_asset_context
 
 @require_safe
 def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
-    """
-    Renders a :model:`films.Asset` modal, with the links to the previous and next assets.
+    """Renders a :model:`films.Asset` modal, with the links to the previous and next assets.
 
     **Context**
         ``asset``

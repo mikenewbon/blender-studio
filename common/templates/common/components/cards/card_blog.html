@@ -2,32 +2,30 @@
 <div class="grid-item">
   <div class="blog">
     <div class="blog-header">
-      <a href="#">
-        <img class="blog-image" src="{{ img }}">
-        {% comment %}
-        {% include "common/components/helpers/image_set.html" with alt="alt" classes="file-image" img_source=img xsmall_width="350" small_width="350" medium_width="350" large_width="350" xlarge_width="350" %}
-        {% endcomment %}
+      <a href="{% url 'post-detail' post_slug=post.slug %}">
+        <img class="blog-image" src="{{ post.picture_16_9 }}">
+{#        {% include "common/components/helpers/image_set.html" with alt="alt" classes="file-image" img_source=post.picture_16_9 xsmall_width="350" small_width="350" medium_width="350" large_width="350" xlarge_width="350" %}#}
       </a>
     </div>
-    <a href="#" class="blog-body">
+    <a href="{% url 'post-detail' post_slug=post.slug %}" class="blog-body">
 
-        <h3>{{ title }}</h3>
-        <p>{{ description }}</p>
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.description }}</p>
 
     </a>
-    <a href="#" class="blog-footer">
+    <a href="{% url 'post-detail' post_slug=post.slug %}" class="blog-footer">
       <div class="blog-date">
-        {% if new %}
+        {% if post.is_new %}
         <div class="badge badge-primary">
           New
         </div>
         {% else %}
         <i class="material-icons btn-material-icons">schedule</i>
-        <p>{{ date }}</p>
+        <p>{{ post.date_updated|date:"jS F Y" }}</p>
         {% endif %}
       </div>
       <p class="blog-topic">
-        {{ subtitle }}
+        {{ blog.subtitle }}
       </p>
     </a>
   </div>

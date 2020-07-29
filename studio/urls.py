@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+import blog.urls
 import comments.urls
 import films.urls
 import subscriptions.urls
@@ -23,6 +24,7 @@ urlpatterns = [
     path('comments/', include(comments.urls)),
     path('films/', include(films.urls)),
     path('training/', include(training.urls)),
+    path('blog/', include(blog.urls)),
     path('subscriptions/', include(subscriptions.urls)),
 ]
 

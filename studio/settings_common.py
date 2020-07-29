@@ -8,6 +8,7 @@ ADMIN_SITE_TITLE = 'Blender Studio'
 # Application definition
 
 INSTALLED_APPS = [
+    'blog',
     'comments',
     'common',
     'films',

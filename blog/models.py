@@ -1,45 +1,72 @@
+from typing import Optional, Union, Sequence
+
 from django.contrib.auth.models import User
 from django.db import models
 
 from comments.models import Comment
-from common import mixins
-
-
-class PostStatus(models.TextChoices):
-    published = 'published', 'Published'
-    unpublished = 'unpublished', 'Unpublished'
+from common import mixins, markdown
+from common.upload_paths import get_upload_to_hashed_path
+from films.models import Film
+from static_assets.models import DynamicStorageFileField, StorageLocation
 
 
 class Post(mixins.CreatedUpdatedMixin, models.Model):
+    film = models.ForeignKey(
+        Film, blank=True, null=True, on_delete=models.CASCADE, related_name='posts'
+    )
     # TODO(sem): Maybe add a ForeignKey to a Profile instead? Because authors
     #            might not have an account per se.
-    author = models.ForeignKey(User, on_delete=models.PROTECT)
+    author = models.ForeignKey(User, on_delete=models.PROTECT, related_name='authored_posts')
     slug = models.SlugField()
 
-    status = models.TextField(choices=PostStatus.choices)
+    is_published = models.BooleanField(default=False)
 
     comments = models.ManyToManyField(Comment, through='PostComment', related_name='post')
 
-
-class RevisionStatus(models.TextChoices):
-    published = 'published', 'Published'
-    unpublished = 'unpublished', 'Unpublished'
+    def __str__(self):
+        return f'Post "{self.slug}" by {self.author}'
 
 
 class Revision(mixins.CreatedUpdatedMixin, models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='revisions')
-    status = models.TextField(choices=RevisionStatus.choices)
 
     # We prevent deletion of the editor account to make sure we preserve all
     # accountability for revisions.
-    editor = models.ForeignKey(User, on_delete=models.PROTECT)
+    editor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='edited_posts')
     title = models.CharField(max_length=512)
-    text = models.TextField()
+    subtitle = models.TextField(
+        blank=True, help_text='An optional short description displayed on the blog card.'
+    )
+    content = models.TextField()
+    html_content = models.TextField(blank=True, editable=False)
+    storage_location = models.ForeignKey(
+        StorageLocation, on_delete=models.PROTECT, related_name='revisions'
+    )
+    picture_16_9 = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
+
+    is_published = models.BooleanField(default=False)
+
+    def save(
+        self,
+        force_insert: bool = False,
+        force_update: bool = False,
+        using: Optional[str] = None,
+        update_fields: Optional[Union[Sequence[str], str]] = None,
+    ) -> None:
+        """Generates the html version of the content and saves the object."""
+        self.html_content = markdown.render(self.content)
+        super().save(force_insert, force_update, using, update_fields)
+
+    def __str__(self):
+        return f'Revision "{self.title}" by {self.editor}, {self.date_created:%d %B %Y %H:%M}'
 
 
 class PostComment(models.Model):
-    class Meta:
-        constraints = [models.UniqueConstraint(fields=['comment'], name='unique_post_per_comment')]
+    """An intermediary model between Post and Comment.
+
+    A PostComment should in fact only relate to one Comment, hence the
+    OneToOne comment field.
+    """
 
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    comment = models.OneToOneField(Comment, on_delete=models.CASCADE)

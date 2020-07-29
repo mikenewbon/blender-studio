@@ -52,4 +52,3 @@ class FilmFlatPage(mixins.CreatedUpdatedMixin, models.Model):
     @property
     def admin_url(self) -> str:
         return reverse('admin:films_filmflatpage_change', args=[self.pk])
-    

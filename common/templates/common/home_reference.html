@@ -1,0 +1,46 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-xl py-3">
+  <section>
+
+    <div class="row mb-3">
+      <div class="col">
+        {% include 'common/components/cards/card_jumbotron.html' with img="https://s3-alpha-sig.figma.com/img/7ed7/f5ae/548c075b670dce7c2d09a8223d7a5f6f?Expires=1596412800&Signature=agzlWXxm8zuKzVz~nmYGiZc4i45f0QzpOD0WaRmZjDoXfkBfCyQcch75vWw2KUDJzMS1VykF-qGX1n3WuAhYo8lLQ-dMAKSmIovWnpA2iko8cTglZMW-JdEPxDBQ9wY-kQyaLmg-Qv5TUlfJQgY5CWtPJrc7J4ExsXTi3o2N6cYvWdVnuIGDL6yvcQT6L4tQ2p3f5vWAGhr-NShtXFmuAxL6xvaIXvc0Ej4R6zsDR1qvhzopyJECDYv~OhnsansKS6hTHNYihUW1tO-I8Z-Whbw4PfiJtfW5barmYKwHjzULldmOiVWg-U~nj6Emg8NgYXSMCkahDI8oXWqsCLaQ~w__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA" title="Coffee Run" subtitle="Open Movie" description="Coffee Run was directed by Hjalti Hjalmarsson and produced by the team at Blender Animation Studio.</p><p>Fueled by caffeine, a young woman runs through the bittersweet memories of her past relationship."  %}
+      </div>
+    </div>
+
+    <div class="row blogs grid">
+
+      {% include "common/components/cards/card_blog.html" with img="https://s3-alpha-sig.figma.com/img/012d/fd1f/8c851df5067007aee4eb6db07c89e4da?Expires=1596412800&Signature=DvlCATyMdPAqj5Wg-9QL~iPha0Yo5~ghd16BfWpROwkkNRtq3QTmXMBKsiGrGeORScQcnvR8jf7jSqHsPfzTFI5j~y45OpKi78pp-fi2NMH1MORS1zeDLGQTKNbO8RrHr37junxWwBh66MKoRP3rcGcGw8NScdpQqyovp6QwuvRJh3IP-jC6dhO1mDk~NJkUrXwKKlCBf23RgB1Nx~HlephqAoHrk41G7DUXY-sYSkHZtgW9W41Kpo-M25XTpuvk5kPbK6sVc7LAnZVOe7nqKfJ0NMFCz5S7XkkUyhkYBnnpvIwPVkK133maLu-tW~8mH5ZLGPkxyvVw~OcvcopVWw__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA" title="Rain Rig 2.0 Released" description="Featuring new stretch bones, IK/FK toggle, improved UI and many bug fixes." new="true" date="Yesterday" subtitle="Rig Update" %}
+
+      {% include "common/components/cards/card_blog.html" with img="https://s3-alpha-sig.figma.com/img/a0e5/cd93/db0155ba03c02736bd4ce29575ad62e0?Expires=1596412800&Signature=EAlRJrvEnAESHmPUCzusr5y6GLpp-rGf-9wPZky3Y1r6qc~ByrnumBxlBUobhmVipO8kBwhZ83ZwYHjj1gPR9sw3lRwJEikKP8qsbj~MtFA8HO9Lc4E0YIXGISemoEBvttlypTKq8wp9g0kn3JHHfsp8kbbz1aLhANw7ottQBnWM7MJzPWQ8KHhDLYltDaLHOYxWA~DjW3QHvcyFvz0tmV6Ru9ICE5YxYKgCTmY3dRr2zX6XDyaQa-NN2rlQI6g8TwQ5p9spRUX8EU7nfNcRj7i-3ZQhyvrAzR64dFEHKG~IsR7CX96rRu5dmMP0oXNTwc7-PCIOQDUsLyr1B0PSIQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA" title="Procedural Shading Training" description="Simon Thommes releases the first chapters of his new shading course." new="true" date="Yesterday" subtitle="New Training" %}
+
+      {% include "common/components/cards/card_blog.html" with img="https://s3-alpha-sig.figma.com/img/d9f6/d678/e0d7bb1ad7a0c0dee2cb88395be774f0?Expires=1596412800&Signature=HaBgzfk-hQ8SGvpdJBoWKni2qrEP5zfXTgUtT37JvGgtkEe7KDMRZNRroeTN9U7n0IHe~lk3QEj~08HOedksnlNS6eI0NFnATRNdbzbbw6Gt9ScoskLEUgqHPseJ3pxf-bB5IRCq7ZcqI7EZPwS3ZMlbEwEPj94Tc6hEYlRoWR1jRYLomoZfG2CFW1ELLf5u74VcbmrOlSUw-QPjUJAmz13Rj5OELp7vRA5SRjIq9sonqVUVU8iycQUdo0RalZWl8Vr5ddbN2ufMmu-UIw5fPd7Q8mxiq2FExLGMALdKUyXEwtN~j3tv1mFpdU2RJ5LCPYGlGaJutmwIPxnP9lgAOg__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA" title="Scripting for Artists: Chapter 15 out now" description="Sybren roasts your addons and gives you the harsh feedback you deserve!" date="Last week" subtitle="New Episode" %}
+
+      {% include "common/components/cards/card_blog.html" with img="https://s3-alpha-sig.figma.com/img/d0b0/7e35/7ee7b9aaaed0e3971c84d5c2e5801147?Expires=1596412800&Signature=d2O9XBqwOS6t9EUHJJQb1zYWAPWyo4wIevaj49ws7NhRCYTEgtSn3byy4-iAddK8arLKea1vSKGs56p3dUMEGSLpL2hhoSsiRKqrqS4Iz4iBi7SzS~oLNNchjbA7PMXyFYAdlj4BuDH-f-fHHqlUezvOYalWIMo~eXlgzvtcBqzLebldNU-WjeZo~Scj9WYGYC5vWVZ8ZRSsPYdL3PibA85u8lMJ78W8nugIVWiR7sZ9S-K4fjeOCKAJzSCp~rrOSUM8ksxj75rY8Y6iKJQEAcLlO1BTFCZBSOitVsoOtN56AP7GG~dClSK4jQHZ5pmxr2HmopKf6eYIThxsDOXt2g__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA" title="Settlers: Gabby Concept" description="Viviens concept for the second settler in the group." date="Last week" subtitle="Recent Upload" %}
+
+      {% include "common/components/cards/card_blog.html" with img="https://s3-alpha-sig.figma.com/img/a0a6/faa6/cc6c722224954365e42a88b44862bd39?Expires=1596412800&Signature=BFUR0KW0l-F~KNE7OanOB5YIJDE8PHJ32D0ey4Dc9CtyQ~rFFP-IRlhSTqYkowig2zwQKOA63cduXVGGCC8Tgn2Fh3tllPd3zRcK6mNdXdBQwzZ5aTsMCyyM2vNV5erqwwn3O-~ZyqfwWuPZxiPUX8iWFWmGjzagiNpMzAelgcdXKHGGidOTmcyszFvqOrpp~rSlYJbXcN0KhpQ7KB9fDlYfA-pN9h8z6mYYP2Cuvc0OL3J4gjOVXxIrN3T60pKg9VGo4cRWfu9weNGutAd48MvS88h-zMJnIfMYygwXJdcGxzlBXOT120xrHhyiBpvzhHQTTEK6ApQzFZpd1lVBJA__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA" title="Blender 2.83 Splash Screen Released" description="Ian Hubert created this awesome scene, rendered in Eevee." date="2 weeks ago" subtitle="Splash Screen" %}
+
+      <div class="grid-sizer col-md-4"></div>
+
+    </div>
+
+  </section>
+</div>
+
+<script>
+  var $grid = $('.grid').masonry({
+    itemSelector: '.grid-item',
+    columnWidth: '.grid-sizer',
+    percentPosition: true,
+  });
+
+  $grid.imagesLoaded().progress(function () {
+    $grid.masonry('layout');
+  });
+</script>
+
+{% endblock content %}
