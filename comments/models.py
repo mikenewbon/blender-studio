@@ -72,7 +72,13 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
         is not allowed. However, we should allow users to remove their comments from
         the website somehow. To achieve this, we set the `date_deleted` attribute to
         mark them as deleted (this can be checked with the `is_deleted` property).
+
+        Deleted comments without replies are not displayed. They can be deleted in
+        the admin panel: deleting a comment marked as 'is_deleted' really removes it.
         """
+        if self.is_deleted:
+            return super().delete(using, keep_parents)
+
         self.date_deleted = timezone.now()
         self.save()
         return 0, {self._meta.label: 0}

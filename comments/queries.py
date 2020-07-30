@@ -1,3 +1,4 @@
+import logging
 from typing import List
 
 from django.db.models import Model, Exists, OuterRef, Case, Value, When, Count, QuerySet
@@ -5,6 +6,9 @@ from django.db.models.fields import BooleanField
 
 from comments import models
 from comments.models import Comment, Like
+
+
+log = logging.getLogger(__name__)
 
 
 def get_annotated_comments(obj: Model, user_pk: int) -> List[Comment]:
@@ -66,11 +70,16 @@ def moderator_edit_comment(*, comment_pk: int, message: str) -> models.Comment:
 
 
 def delete_comment(*, comment_pk: int, user_pk: int) -> None:
+    """Regular users can only mark comments as deleted, not delete them completely."""
     comment: models.Comment = models.Comment.objects.get(id=comment_pk, user_id=user_pk)
+    if comment.is_deleted:
+        log.warning(f'User {user_pk} has tried to delete a deleted comment with id={comment_pk}.')
+        return
     comment.delete()
 
 
 def moderator_delete_comment(*, comment_pk: int) -> None:
+    """If comment is already marked as deleted, deleting it again will remove it completely."""
     comment: models.Comment = models.Comment.objects.get(id=comment_pk)
     comment.delete()
 
