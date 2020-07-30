@@ -49,7 +49,7 @@
     </div>
     {% if request.user.is_authenticated %}
 
-    <a href="#test" class="btn btn-nav search-button">
+    <a href="/search" class="btn btn-nav search-button">
       <i class="material-icons">search</i>
     </a>
 
@@ -63,7 +63,8 @@
 
     <div data-toggle="dropdown" class="btn btn-nav nav-profile">
       <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');" class="profile"></div>
-      <div class="dropdown-menu profile-dropdown">
+    </div>
+    <div class="dropdown-menu profile-dropdown">
 
         <a href="/" class="dropdown-item">
           <i class="material-icons">home</i>
@@ -88,7 +89,6 @@
         </a>
 
       </div>
-    </div>
     {% else %}
     <div class="navbar-login-wrapper">
       <a href="/oauth/login" class="btn btn-transparent d-none d-sm-inline-block">Login</a>

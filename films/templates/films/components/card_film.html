@@ -6,16 +6,28 @@
         {% include "common/components/helpers/image_set.html" with alt=film.title classes="img-fluid" img_source=film.poster xsmall_width="250" small_width="300" medium_width="375" large_width="400" xlarge_width="500" %}
 
       </a>
-      {% if film.status != "2_released" %}
-      <div class="badge badge-difficulty badge-primary">
-        <i class="material-icons btn-material-icons">theaters</i>
-        {{ film.get_status_display }}
-      </div>
-      {% endif %}
     </div>
+
     <a class="card-body" href="{{ film.url }}">
-      <h2 class="card-title">{{ film.title }}</h2>
+      <div class="card-subtitle-group">
+        {% comment %} TODO(Mike): Get a new input for this for things like Settlers or Yo Frankie {% endcomment %}
+        <p class="card-subtitle">Film</p>
+
+        {% if film.status == "2_released" %}
+        <p class="card-subtitle">
+          <i class="material-icons icon-inline small">schedule</i>
+          {{ film.release_date }}
+        </p>
+        {% else %}
+        <div class="badge badge-difficulty badge-primary">
+          {{ film.get_status_display }}
+        </div>
+        {% endif %}
+
+      </div>
+      <h3 class="card-title">{{ film.title }}</h3>
       <p class="card-text">{{ film.description }}</p>
     </a>
+
   </div>
 </div>

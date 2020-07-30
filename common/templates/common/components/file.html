@@ -2,25 +2,29 @@
 {% load thumbnail %}
 <div class="file">
   <div class="file-header">
-    <a href="#" data-toggle="modal" data-target="#file-modal"
+    <a href="#" data-toggle="modal" data-target="#file-modal" class="file-modal-link"
       class="{% if asset.static_asset.source_type == 'video' %}video-preview{% endif %}" data-asset-id="{{ asset.id }}"
       data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
 
       {% if asset.static_asset.preview %}
-        {% include "common/components/helpers/image_set.html" with alt=asset.name classes="file-image" img_source=asset.static_asset.preview xsmall_width="350" small_width="350" medium_width="350" large_width="350" xlarge_width="350" %}
+      {% include "common/components/helpers/image_set.html" with alt=asset.name classes="file-image" img_source=asset.static_asset.preview xsmall_width="350" small_width="350" medium_width="350" large_width="350" xlarge_width="350" %}
       {% endif %}
 
       {% if asset.contains_blend_file %}
-        <img class="file-icon" src="{% static "common/images/icons/blend.svg" %}" alt="asset preview">
+      <img class="file-icon" src="{% static "common/images/icons/blend.svg" %}" alt="asset preview">
       {% elif asset.static_asset.source_type == "file" %}
-        <img class="file-icon" src="{% static "common/images/icons/file.svg" %}" alt="asset preview">
+      <img class="file-icon" src="{% static "common/images/icons/file.svg" %}" alt="asset preview">
       {% elif asset.static_asset.source_type == "video" %}
-        <div class="badge badge-video-duration badge-darkhighlight-strong">
-          {{ asset.static_asset.video.duration }}
-        </div>
+      <div class="badge badge-video-duration badge-darkhighlight-strong">
+        {{ asset.static_asset.video.duration }}
+      </div>
       {% endif %}
-
     </a>
+    {% if user_can_edit_asset %}
+    <a href="{{ asset.admin_url }}" target="_blank" class="btn btn-file btn-save-media btn-ctrl-xs">
+      <i class="material-icons btn-material-icons">create</i>
+    </a>
+    {% endif %}
   </div>
   <div class="file-body">
     <a href="#" data-toggle="modal" data-target="#file-modal"
@@ -28,7 +32,7 @@
       {% comment %} <p class="subtitle">{{ asset.static_asset.get_source_type_display }}</p> {% endcomment %}
       <h4>{{ asset.name }}</h4>
     </a>
-    <button class="btn btn-ctrl-xs btn-save-media" data-toggle="dropdown">
+    {% comment %} <button class="btn btn-file" data-toggle="dropdown">
       <i class="material-icons btn-material-icons">more_horiz</i>
     </button>
     <div class="dropdown-menu dropdown-menu-right">
@@ -42,6 +46,6 @@
         <span>Admin Edit</span>
       </a>
       {% endif %}
-    </div>
+    </div> {% endcomment %}
   </div>
 </div>

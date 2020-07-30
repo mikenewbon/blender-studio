@@ -19,6 +19,10 @@ body {
     margin-left: 0;
   }
 
+  .dropdown-menu {
+    border-top: 1px solid $transparent;
+  }
+
   .navdrawertoggle {
     @include media-breakpoint-down(sm) {
       display: flex;
@@ -54,6 +58,7 @@ body {
       align-items: center;
       display: flex;
       height: 100%;
+      transition: $transition-base;
       white-space: nowrap;
 
     }
@@ -157,6 +162,7 @@ body {
       text-decoration: none;
     }
 
+    transition: $transition-base;
     white-space: nowrap;
   }
 }
@@ -186,4 +192,3 @@ body {
     margin: 0;
   }
 }
-
