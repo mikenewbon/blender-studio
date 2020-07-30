@@ -2,6 +2,7 @@ from typing import Optional, Union, Sequence
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 
 from comments.models import Comment
 from common import mixins, markdown
@@ -25,6 +26,17 @@ class Post(mixins.CreatedUpdatedMixin, models.Model):
 
     def __str__(self):
         return f'Post "{self.slug}" by {self.author}'
+
+    def get_absolute_url(self) -> str:
+        return self.url
+
+    @property
+    def url(self) -> str:
+        return reverse('post-detail', kwargs={'post_slug': self.slug})
+
+    @property
+    def admin_url(self) -> str:
+        return reverse('admin:blog_post_change', args=[self.pk])
 
 
 class Revision(mixins.CreatedUpdatedMixin, models.Model):

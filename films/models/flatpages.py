@@ -49,6 +49,13 @@ class FilmFlatPage(mixins.CreatedUpdatedMixin, models.Model):
     def __str__(self):
         return f'Flat page "{self.title}" of the film {self.film.title}'
 
+    def get_absolute_url(self) -> str:
+        return self.url
+
+    @property
+    def url(self) -> str:
+        return reverse('film-flatpage', kwargs={'page_slug': self.slug})
+
     @property
     def admin_url(self) -> str:
         return reverse('admin:films_filmflatpage_change', args=[self.pk])

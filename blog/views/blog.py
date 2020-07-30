@@ -39,14 +39,20 @@ def post_detail(request: HttpRequest, post_slug: str) -> HttpResponse:
             A :model:`blog.Revision` instance. The latest published revision of the post.
             (It is named ``post`` for consistency in the templates - see the
             :view:`blog.views.blog.post_list`.)
+        ``user_can_edit_post``
+            A bool specifying whether the current user should be able to edit
+            :model:`blog.Post`-s displayed in the page.
 
     **Template**
         :template:`blog/post_detail.html`
     """
-    post = (
-        get_object_or_404(Post, slug=post_slug, is_published=True)
-        .revisions.filter(is_published=True)
-        .latest('date_created')
-    )
+    context = {
+        'post': (
+            get_object_or_404(Post, slug=post_slug, is_published=True)
+            .revisions.filter(is_published=True)
+            .latest('date_created')
+        ),
+        'user_can_edit_post': (request.user.is_staff and request.user.has_perm('blog.change_post')),
+    }
 
-    return render(request, 'blog/post_detail.html', {'post': post})
+    return render(request, 'blog/post_detail.html', context)
