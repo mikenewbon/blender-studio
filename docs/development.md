@@ -4,7 +4,7 @@
 
 - Python 3.8.x
 - [poetry](https://python-poetry.org/)
-- [PostgreSQL](https://www.postgresql.org/)
+- [PostgreSQL](https://www.postgresql.org/) (tested on 12.2)
 
 All the Python-specific details are in the `pyproject.toml` file, but this is something
 that poetry takes care of -- there's no need to install anything manually.
@@ -40,11 +40,12 @@ and it must not be committed.
     - Configure your IDE to use the venv by default.
 7. In the project folder, run migrations: `./manage.py migrate`
 8. Create a superuser: `echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'password')" | python manage.py shell`
-9. Run the server: `./manage.py runserver`. The project will be available at `studio.local:8000`.
+9. Run the server: `./manage.py runserver 8001`. The project will be available at
+    `studio.local:8001`.
 10. (Optional) Install pre-commit hooks (see [pre-commit details](docs/development.md#before-commiting)):
 ```pre-commit install```
-11. In the admin panel (http://studio.local:8000/admin), edit the `Site` object's domain.
-    The default domain is `example.com`; change it to `studio.local:8000`. This will make
+11. In the admin panel (http://studio.local:8001/admin), edit the `Site` object's domain.
+    The default domain is `example.com`; change it to `studio.local:8001`. This will make
     it possible to immediately view objects created/edited via admin on site.
 
 
@@ -52,6 +53,28 @@ and it must not be committed.
 You can add objects to the database manually via the Django's Admin panel.
 There are also commands that import data from the Cloud, but running them requires some additional
 arrangements - ask Francesco about it.
+Another way is to upload data fixtures created from the staging database.
+
+
+## Blender ID authentication
+Login to Blender Studio is possible using Blender ID. For development, you can set up a local
+instance of [Blender ID](https://docs.blender.org/id/development_setup/). You'll need
+**MySQL** (or MariaDB) and **npm** installed. It is also possible to use a
+[Docker container](https://hub.docker.com/_/mariadb/) with the database, e.g. like this:
+```
+docker run --rm --name blender-id-db -e MYSQL_USER=blender_id -e \
+MYSQL_PASSWORD=blender_id -e MYSQL_DATABASE=blender_id -e MYSQL_ALLOW_EMPTY_PASSWORD=yes \
+-p 3306:3306 -it -v blender_id:/var/lib/mysql/blender_id mariadb:latest
+```
+
+After configuring and running the Blender ID application, in its admin (http://id.local:8000/admin/)
+create a new OAuth2 application:
+ - Redirect url: `http://studio.local:8001/oauth/blender-id/authorized`
+ - Client type: Confidential
+ - Authorization grant type: Authorization code
+
+Copy the **Cliend id** and **Cliend secret** to the studio's `settings.py` as `"OAUTH_CLIENT"`
+and `"OAUTH_SECRET"` in the `BLENDER_ID` settings.
 
 
 ## Workflow
