@@ -2,9 +2,9 @@ import datetime as dt
 from unittest.mock import patch
 
 from django.test import TestCase
+from django.test.client import RequestFactory
 from django.urls.base import reverse
 
-from common.tests.factories.static_assets import StaticAssetFactory
 from common.tests.factories.films import (
     FilmFactory,
     CollectionFactory,
@@ -13,76 +13,83 @@ from common.tests.factories.films import (
     ProductionLogEntryFactory,
     ProductionLogEntryAssetFactory,
 )
+from common.tests.factories.static_assets import StaticAssetFactory
 from common.tests.factories.users import UserFactory
-from films.queries import SiteContexts
+from films.queries import SiteContexts, get_asset_context
 
 
-@patch('sorl.thumbnail.base.ThumbnailBackend.get_thumbnail', return_value=None)
 class TestSiteContextResolution(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
+        cls.factory = RequestFactory()
+        cls.user = UserFactory()
+
         cls.asset = AssetFactory()
         cls.other_asset = AssetFactory(film=cls.asset.film, collection=cls.asset.collection)
 
     @patch('films.queries.get_next_asset_in_gallery', return_value=None)
     @patch('films.queries.get_previous_asset_in_gallery', return_value=None)
-    def test_gallery_site_context(
-        self, get_previous_asset_mock, get_next_asset_mock, get_thumbnail_mock
-    ):
+    def test_gallery_site_context(self, get_previous_asset_mock, get_next_asset_mock):
         query_string = f'site_context={SiteContexts.GALLERY.value}'
-        response = self.client.get(f'{reverse("api-asset", args=(self.asset.pk,))}?{query_string}')
+        request = self.factory.get(f'{reverse("api-asset", args=(self.asset.pk,))}?{query_string}')
+        request.user = self.user
+        _ = get_asset_context(self.asset, request)
 
-        self.assertEqual(response.status_code, 200)
         get_previous_asset_mock.assert_called_once_with(self.asset)
         get_next_asset_mock.assert_called_once_with(self.asset)
 
     @patch('films.queries.get_next_asset_in_featured_artwork', return_value=None)
     @patch('films.queries.get_previous_asset_in_featured_artwork', return_value=None)
     def test_featured_artwork_site_context(
-        self, get_previous_asset_mock, get_next_asset_mock, get_thumbnail_mock
+        self, get_previous_asset_mock, get_next_asset_mock,
     ):
         query_string = f'site_context={SiteContexts.FEATURED_ARTWORK.value}'
-        response = self.client.get(f'{reverse("api-asset", args=(self.asset.pk,))}?{query_string}')
+        request = self.factory.get(f'{reverse("api-asset", args=(self.asset.pk,))}?{query_string}')
+        request.user = self.user
+        _ = get_asset_context(self.asset, request)
 
-        self.assertEqual(response.status_code, 200)
         get_previous_asset_mock.assert_called_once_with(self.asset)
         get_next_asset_mock.assert_called_once_with(self.asset)
 
     @patch('films.queries.get_next_asset_in_production_logs', return_value=None)
     @patch('films.queries.get_previous_asset_in_production_logs', return_value=None)
     def test_production_logs_site_context(
-        self, get_previous_asset_mock, get_next_asset_mock, get_thumbnail_mock
+        self, get_previous_asset_mock, get_next_asset_mock,
     ):
         query_string = f'site_context={SiteContexts.PRODUCTION_LOGS.value}'
-        response = self.client.get(f'{reverse("api-asset", args=(self.asset.pk,))}?{query_string}')
+        request = self.factory.get(f'{reverse("api-asset", args=(self.asset.pk,))}?{query_string}')
+        request.user = self.user
+        _ = get_asset_context(self.asset, request)
 
-        self.assertEqual(response.status_code, 200)
         get_previous_asset_mock.assert_called_once_with(self.asset)
         get_next_asset_mock.assert_called_once_with(self.asset)
 
-    def test_wrong_site_context(self, get_thumbnail_mock):
+    def test_wrong_site_context(self):
         query_string = 'site_context=definitely-incorrect'
-        response = self.client.get(f'{reverse("api-asset", args=(self.asset.pk,))}?{query_string}')
+        request = self.factory.get(f'{reverse("api-asset", args=(self.asset.pk,))}?{query_string}')
+        request.user = self.user
+        context = get_asset_context(self.asset, request)
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context.get('asset'), self.asset)
-        self.assertEqual(response.context.get('previous_asset'), None)
-        self.assertEqual(response.context.get('next_asset'), None)
+        self.assertEqual(context['asset'], self.asset)
+        self.assertEqual(context['previous_asset'], None)
+        self.assertEqual(context['next_asset'], None)
 
-    def test_no_site_context_in_query_string(self, get_thumbnail_mock):
-        response = self.client.get(reverse("api-asset", args=(self.asset.pk,)))
+    def test_no_site_context_in_query_string(self):
+        request = self.factory.get(reverse("api-asset", args=(self.asset.pk,)))
+        request.user = self.user
+        context = get_asset_context(self.asset, request)
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context.get('asset'), self.asset)
-        self.assertEqual(response.context.get('previous_asset'), None)
-        self.assertEqual(response.context.get('next_asset'), None)
+        self.assertEqual(context['asset'], self.asset)
+        self.assertEqual(context['previous_asset'], None)
+        self.assertEqual(context['next_asset'], None)
 
 
-@patch('sorl.thumbnail.base.ThumbnailBackend.get_thumbnail', return_value=None)
 class TestAssetOrderingInGallery(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
         cls.site_context = SiteContexts.GALLERY.value
+        cls.factory = RequestFactory()
+        cls.user = UserFactory()
 
         film = FilmFactory()
         cls.collection_a = CollectionFactory(film=film)
@@ -106,45 +113,51 @@ class TestAssetOrderingInGallery(TestCase):
         other_asset_0 = AssetFactory(film=other_film, collection=other_collection)
         other_asset_1 = AssetFactory(film=other_film, collection=other_collection, is_featured=True)
 
-    def test_previous_asset_for_first_asset_is_none(self, get_thumbnail_mock):
+    def test_previous_asset_for_first_asset_is_none(self):
         first_asset = self.asset_a_0
-        response = self.client.get(
+        request = self.factory.get(
             f'{reverse("api-asset", args=(first_asset.pk,))}?site_context={self.site_context}'
         )
+        request.user = self.user
+        context = get_asset_context(first_asset, request)
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context.get('asset'), first_asset)
-        self.assertEqual(response.context.get('previous_asset'), None)
+        self.assertEqual(context['asset'], first_asset)
+        self.assertEqual(context['previous_asset'], None)
+        self.assertEqual(context['site_context'], self.site_context)
 
-    def test_next_asset_for_last_asset_is_none(self, get_thumbnail_mock):
+    def test_next_asset_for_last_asset_is_none(self):
         last_asset = self.asset_a_3
-        response = self.client.get(
+        request = self.factory.get(
             f'{reverse("api-asset", args=(last_asset.pk,))}?site_context={self.site_context}'
         )
+        request.user = self.user
+        context = get_asset_context(last_asset, request)
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context.get('asset'), last_asset)
-        self.assertEqual(response.context.get('next_asset'), None)
+        self.assertEqual(context['asset'], last_asset)
+        self.assertEqual(context['next_asset'], None)
+        self.assertEqual(context['site_context'], self.site_context)
 
-    def test_assets_from_collection_sorted_by_order_and_name(self, get_thumbnail_mock):
+    def test_assets_from_collection_sorted_by_order_and_name(self):
         assets = [self.asset_a_0, self.asset_a_1, self.asset_a_2, self.asset_a_3]
 
         for previous_asset, asset, next_asset in zip(assets, assets[1:], assets[2:]):
-            response = self.client.get(
+            request = self.factory.get(
                 f'{reverse("api-asset", args=(asset.pk,))}?site_context={self.site_context}'
             )
+            request.user = self.user
+            context = get_asset_context(asset, request)
 
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.context.get('previous_asset'), previous_asset)
-            self.assertEqual(response.context.get('asset'), asset)
-            self.assertEqual(response.context.get('next_asset'), next_asset)
+            self.assertEqual(context['previous_asset'], previous_asset)
+            self.assertEqual(context['asset'], asset)
+            self.assertEqual(context['next_asset'], next_asset)
 
 
-@patch('sorl.thumbnail.base.ThumbnailBackend.get_thumbnail', return_value=None)
 class TestAssetOrderingInFeaturedArtwork(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
         cls.site_context = SiteContexts.FEATURED_ARTWORK.value
+        cls.factory = RequestFactory()
+        cls.user = UserFactory()
 
         film = FilmFactory()
         collection_a = CollectionFactory(film=film)
@@ -169,27 +182,31 @@ class TestAssetOrderingInFeaturedArtwork(TestCase):
         other_asset_0 = AssetFactory(film=other_film, collection=other_collection)
         other_asset_1 = AssetFactory(film=other_film, collection=other_collection, is_featured=True)
 
-    def test_previous_asset_for_first_asset_is_none(self, get_thumbnail_mock):
+    def test_previous_asset_for_first_asset_is_none(self):
         first_asset = self.featured_asset_0
-        response = self.client.get(
+        request = self.factory.get(
             f'{reverse("api-asset", args=(first_asset.pk,))}?site_context={self.site_context}'
         )
+        request.user = self.user
+        context = get_asset_context(first_asset, request)
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context.get('asset'), first_asset)
-        self.assertEqual(response.context.get('previous_asset'), None)
+        self.assertEqual(context['asset'], first_asset)
+        self.assertEqual(context['previous_asset'], None)
+        self.assertEqual(context['site_context'], self.site_context)
 
-    def test_next_asset_for_last_asset_is_none(self, get_thumbnail_mock):
+    def test_next_asset_for_last_asset_is_none(self):
         last_asset = self.featured_asset_3
-        response = self.client.get(
+        request = self.factory.get(
             f'{reverse("api-asset", args=(last_asset.pk,))}?site_context={self.site_context}'
         )
+        request.user = self.user
+        context = get_asset_context(last_asset, request)
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context.get('asset'), last_asset)
-        self.assertEqual(response.context.get('next_asset'), None)
+        self.assertEqual(context['asset'], last_asset)
+        self.assertEqual(context['next_asset'], None)
+        self.assertEqual(context['site_context'], self.site_context)
 
-    def test_featured_assets_sorted_by_date_created(self, get_thumbnail_mock):
+    def test_featured_assets_sorted_by_date_created(self):
         assets = [
             self.featured_asset_0,
             self.featured_asset_1,
@@ -197,21 +214,23 @@ class TestAssetOrderingInFeaturedArtwork(TestCase):
             self.featured_asset_3,
         ]
         for previous_asset, asset, next_asset in zip(assets, assets[1:], assets[2:]):
-            response = self.client.get(
+            request = self.factory.get(
                 f'{reverse("api-asset", args=(asset.pk,))}?site_context={self.site_context}'
             )
+            request.user = self.user
+            context = get_asset_context(asset, request)
 
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.context.get('previous_asset'), previous_asset)
-            self.assertEqual(response.context.get('asset'), asset)
-            self.assertEqual(response.context.get('next_asset'), next_asset)
+            self.assertEqual(context['previous_asset'], previous_asset)
+            self.assertEqual(context['asset'], asset)
+            self.assertEqual(context['next_asset'], next_asset)
 
 
-@patch('sorl.thumbnail.base.ThumbnailBackend.get_thumbnail', return_value=None)
 class TestAssetOrderingInProductionLogs(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
         cls.site_context = SiteContexts.PRODUCTION_LOGS.value
+        cls.factory = RequestFactory()
+        cls.user = UserFactory()
 
         author_a = UserFactory()
         author_b = UserFactory()
@@ -242,27 +261,31 @@ class TestAssetOrderingInProductionLogs(TestCase):
         entry_b = ProductionLogEntryFactory(production_log=prod_log, author=author_b)
         ProductionLogEntryAssetFactory(production_log_entry=entry_b, asset=asset_b)
 
-    def test_previous_asset_for_first_asset_is_none(self, get_thumbnail_mock):
+    def test_previous_asset_for_first_asset_is_none(self):
         first_asset = self.asset_a_0
-        response = self.client.get(
+        request = self.factory.get(
             f'{reverse("api-asset", args=(first_asset.pk,))}?site_context={self.site_context}'
         )
+        request.user = self.user
+        context = get_asset_context(first_asset, request)
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context.get('asset'), first_asset)
-        self.assertEqual(response.context.get('previous_asset'), None)
+        self.assertEqual(context['asset'], first_asset)
+        self.assertEqual(context['previous_asset'], None)
+        self.assertEqual(context['site_context'], self.site_context)
 
-    def test_next_asset_for_last_asset_is_none(self, get_thumbnail_mock):
+    def test_next_asset_for_last_asset_is_none(self):
         last_asset = self.asset_a_3
-        response = self.client.get(
+        request = self.factory.get(
             f'{reverse("api-asset", args=(last_asset.pk,))}?site_context={self.site_context}'
         )
+        request.user = self.user
+        context = get_asset_context(last_asset, request)
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context.get('asset'), last_asset)
-        self.assertEqual(response.context.get('next_asset'), None)
+        self.assertEqual(context['asset'], last_asset)
+        self.assertEqual(context['next_asset'], None)
+        self.assertEqual(context['site_context'], self.site_context)
 
-    def test_assets_in_production_log_entry_sorted_by_date_created(self, get_thumbnail_mock):
+    def test_assets_in_production_log_entry_sorted_by_date_created(self):
         assets = [
             self.asset_a_0,
             self.asset_a_1,
@@ -270,11 +293,12 @@ class TestAssetOrderingInProductionLogs(TestCase):
             self.asset_a_3,
         ]
         for previous_asset, asset, next_asset in zip(assets, assets[1:], assets[2:]):
-            response = self.client.get(
+            request = self.factory.get(
                 f'{reverse("api-asset", args=(asset.pk,))}?site_context={self.site_context}'
             )
+            request.user = self.user
+            context = get_asset_context(asset, request)
 
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.context.get('previous_asset'), previous_asset)
-            self.assertEqual(response.context.get('asset'), asset)
-            self.assertEqual(response.context.get('next_asset'), next_asset)
+            self.assertEqual(context['previous_asset'], previous_asset)
+            self.assertEqual(context['asset'], asset)
+            self.assertEqual(context['next_asset'], next_asset)

@@ -4,6 +4,7 @@ from typing import Optional, cast, Dict, Union, List, Any
 from django.contrib.auth.models import User
 from django.core import paginator
 from django.db.models.query import Prefetch, QuerySet
+from django.http.request import HttpRequest
 
 from comments import typed_templates
 from comments.models import Comment
@@ -87,7 +88,7 @@ def get_next_asset_in_gallery(asset: Asset) -> Optional[Asset]:
 
 
 def get_asset_context(
-    asset: Asset, site_context: Optional[str], user: User,
+    asset: Asset, request: HttpRequest
 ) -> Dict[str, Union[Asset, typed_templates.Comments, str, None, bool]]:
     """Creates context for the api-asset view: the current, previous and next published assets.
 
@@ -107,8 +108,7 @@ def get_asset_context(
 
     Args:
         asset: the asset to be displayed in the modal;
-        site_context: value retrieved from the query string's 'site_context' parameter;
-        user: the currently logged-in user.
+        request: an HTTP request.
 
     Returns:
         A dictionary with the following keys:
@@ -121,6 +121,8 @@ def get_asset_context(
         - 'user_can_edit_asset' - a bool specifying whether the current user is able to edit
         the displayed asset in the admin panel.
     """
+    site_context = request.GET.get('site_context')
+
     if site_context == SiteContexts.PRODUCTION_LOGS.value:
         previous_asset = get_previous_asset_in_production_logs(asset)
         next_asset = get_next_asset_in_production_logs(asset)
@@ -133,8 +135,8 @@ def get_asset_context(
     else:
         previous_asset = next_asset = None
 
-    comments: List[Comment] = get_annotated_comments(asset, user.pk)
-    user_is_moderator = user.has_perm('comments.moderate_comment')
+    comments: List[Comment] = get_annotated_comments(asset, request.user.pk)
+    user_is_moderator = request.user.has_perm('comments.moderate_comment')
 
     context = {
         'asset': asset,
@@ -142,7 +144,9 @@ def get_asset_context(
         'next_asset': next_asset,
         'site_context': site_context,
         'comments': comments_to_template_type(comments, asset.comment_url, user_is_moderator),
-        'user_can_edit_asset': user.is_staff and user.has_perm('films.change_asset'),
+        'user_can_edit_asset': (
+            request.user.is_staff and request.user.has_perm('films.change_asset')
+        ),
     }
 
     return context

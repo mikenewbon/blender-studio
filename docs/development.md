@@ -69,7 +69,7 @@ MYSQL_PASSWORD=blender_id -e MYSQL_DATABASE=blender_id -e MYSQL_ALLOW_EMPTY_PASS
 
 After configuring and running the Blender ID application, in its admin (http://id.local:8000/admin/)
 create a new OAuth2 application:
- - Redirect url: `http://studio.local:8001/oauth/blender-id/authorized`
+ - Redirect url: `http://studio.local:8001/oauth/authorized`
  - Client type: Confidential
  - Authorization grant type: Authorization code
 

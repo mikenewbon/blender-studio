@@ -55,7 +55,7 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
     except Asset.DoesNotExist:
         raise Http404('No asset matches the given query.')
 
-    context = get_asset_context(asset, request.GET.get('site_context'), request.user)
+    context = get_asset_context(asset, request)
 
     return render(request, 'common/components/modal_asset.html', context)
 
