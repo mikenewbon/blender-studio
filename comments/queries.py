@@ -70,18 +70,21 @@ def moderator_edit_comment(*, comment_pk: int, message: str) -> models.Comment:
 
 
 def delete_comment(*, comment_pk: int, user_pk: int) -> None:
-    """Regular users can only mark comments as deleted, not delete them completely."""
+    """Soft-delete the comment, i.e. mark is as deleted."""
     comment: models.Comment = models.Comment.objects.get(id=comment_pk, user_id=user_pk)
     if comment.is_deleted:
         log.warning(f'User {user_pk} has tried to delete a deleted comment with id={comment_pk}.')
         return
-    comment.delete()
+    comment.soft_delete()
 
 
 def moderator_delete_comment(*, comment_pk: int) -> None:
-    """If comment is already marked as deleted, deleting it again will remove it completely."""
+    """Soft-delete the comment, i.e. mark is as deleted."""
     comment: models.Comment = models.Comment.objects.get(id=comment_pk)
-    comment.delete()
+    if comment.is_deleted:
+        log.warning(f'A moderator has tried to delete a deleted comment with id={comment_pk}.')
+        return
+    comment.soft_delete()
 
 
 def moderator_archive_comment(*, comment_pk: int) -> bool:
@@ -89,3 +92,8 @@ def moderator_archive_comment(*, comment_pk: int) -> bool:
     comment.is_archived = not comment.is_archived
     comment.save()
     return comment.is_archived
+
+
+def delete_comment_tree(*, comment_pk: int) -> None:
+    comment: models.Comment = models.Comment.objects.get(id=comment_pk)
+    comment.soft_delete_tree()
