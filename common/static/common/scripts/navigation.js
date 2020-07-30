@@ -83,6 +83,7 @@ function animateProgress(element) {
   interval = setInterval(function () {
     current_progress += step;
     progress = Math.round(Math.atan(current_progress) / (Math.PI / 2) * 100 * 1000) / 1000;
+    console.log(progress)
     element.style.width = progress + "%";
     element.setAttribute('aria-valuenow', progress);
 
