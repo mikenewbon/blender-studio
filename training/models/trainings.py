@@ -72,7 +72,7 @@ class Training(mixins.CreatedUpdatedMixin, models.Model):
 
     @property
     def favorite_url(self) -> str:
-        return reverse('training_favorite', kwargs={'training_pk': self.pk})
+        return reverse('training-favorite', kwargs={'training_pk': self.pk})
 
     @property
     def admin_url(self) -> str:

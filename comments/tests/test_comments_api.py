@@ -25,7 +25,7 @@ class TestCommentDeleteEndpoint(TestCase):
     def test_user_can_delete_own_comment_without_replies(self):
         comment_pk = self.comment_without_replies.pk
         self.assertFalse(self.comment_without_replies.is_deleted)
-        response = self.client.post(reverse('comment_delete', kwargs={'comment_pk': comment_pk}))
+        response = self.client.post(reverse('comment-delete', kwargs={'comment_pk': comment_pk}))
 
         self.assertEqual(response.status_code, 200)
         # Deleted comments are kept in the database, but marked as deleted.
@@ -36,7 +36,7 @@ class TestCommentDeleteEndpoint(TestCase):
 
     def test_user_can_delete_own_comment_with_replies(self):
         comment_pk = self.comment_with_replies.pk
-        response = self.client.post(reverse('comment_delete', kwargs={'comment_pk': comment_pk}))
+        response = self.client.post(reverse('comment-delete', kwargs={'comment_pk': comment_pk}))
 
         self.assertEqual(response.status_code, 200)
         # Deleted comments are kept in the database, but marked as deleted.
@@ -48,7 +48,7 @@ class TestCommentDeleteEndpoint(TestCase):
     def test_user_cannot_delete_another_user_comment(self):
         comment_pk = self.reply.pk
         with self.assertRaises(Comment.DoesNotExist):
-            self.client.post(reverse('comment_delete', kwargs={'comment_pk': comment_pk}))
+            self.client.post(reverse('comment-delete', kwargs={'comment_pk': comment_pk}))
 
         comment = Comment.objects.filter(pk=comment_pk).first()
         self.assertIsNotNone(comment)
@@ -63,7 +63,7 @@ class TestCommentArchiveEndpoint(TestCase):
 
     def setUp(self) -> None:
         self.comment = CommentFactory(user=self.user)
-        self.archive_url = reverse('comment_archive', kwargs={'comment_pk': self.comment.pk})
+        self.archive_url = reverse('comment-archive', kwargs={'comment_pk': self.comment.pk})
 
     def test_regular_user_cannot_archive_comment(self):
         self.client.force_login(self.user)

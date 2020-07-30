@@ -54,15 +54,15 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
 
     @property
     def like_url(self) -> str:
-        return reverse('comment_like', kwargs={'comment_pk': self.pk})
+        return reverse('comment-like', kwargs={'comment_pk': self.pk})
 
     @property
     def edit_url(self) -> str:
-        return reverse('comment_edit', kwargs={'comment_pk': self.pk})
+        return reverse('comment-edit', kwargs={'comment_pk': self.pk})
 
     @property
     def delete_url(self) -> str:
-        return reverse('comment_delete', kwargs={'comment_pk': self.pk})
+        return reverse('comment-delete', kwargs={'comment_pk': self.pk})
 
     def delete(self, using: Any = None, keep_parents: bool = False) -> Tuple[int, Dict[str, int]]:
         """

@@ -17,8 +17,7 @@ class TestActivityFeedEndpoint(TestCase):
         ProductionLogFactory.create_batch(4)
         TrainingFactory.create_batch(4)
 
-        cls.home_url = '/'
-        # TODO(Natalia): resolve url naming conflict (there's also a 'home' in training)
+        cls.home_url = reverse('home')
 
     def test_homepage_gets_latest_records(self):
         response = self.client.get(self.home_url)

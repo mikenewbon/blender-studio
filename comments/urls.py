@@ -10,10 +10,10 @@ urlpatterns = [
         'api/comments/<int:comment_pk>/',
         include(
             [
-                path('like/', comment_like, name='comment_like'),
-                path('edit/', comment_edit, name='comment_edit'),
-                path('archive/', comment_archive, name='comment_archive'),
-                path('delete/', comment_delete, name='comment_delete'),
+                path('like/', comment_like, name='comment-like'),
+                path('edit/', comment_edit, name='comment-edit'),
+                path('archive/', comment_archive, name='comment-archive'),
+                path('delete/', comment_delete, name='comment-delete'),
             ]
         ),
     )

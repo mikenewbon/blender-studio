@@ -54,11 +54,11 @@ class Section(mixins.CreatedUpdatedMixin, models.Model):
 
     @property
     def comment_url(self) -> str:
-        return reverse('section_comment', kwargs={'section_pk': self.pk},)
+        return reverse('section-comment', kwargs={'section_pk': self.pk},)
 
     @property
     def progress_url(self) -> str:
-        return reverse('section_progress', kwargs={'section_pk': self.pk})
+        return reverse('section-progress', kwargs={'section_pk': self.pk})
 
     @property
     def admin_url(self) -> str:
@@ -88,7 +88,7 @@ class Video(mixins.CreatedUpdatedMixin, models.Model):
 
     @property
     def progress_url(self) -> str:
-        return reverse('video_progress', kwargs={'video_pk': self.pk})
+        return reverse('video-progress', kwargs={'video_pk': self.pk})
 
     def clean(self):
         super().clean()
