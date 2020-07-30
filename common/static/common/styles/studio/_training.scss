@@ -12,6 +12,9 @@
   flex-grow: 1;
   flex-shrink: 0;
   justify-content: flex-end;
+  .btn + .btn{
+    margin-left: $spacer / 2;
+  }
 }
 
 .training-toolbar-details {

@@ -138,6 +138,14 @@
   }
 }
 
+.film-title-date {
+  @extend .subtitle
+}
+
+.badge-production {
+  margin-left: $spacer / 4;
+}
+
 // Optional textual caps
 //
 
