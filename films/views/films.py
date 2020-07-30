@@ -56,6 +56,9 @@ def film_detail(request: HttpRequest, film_slug: str) -> HttpResponse:
     ``user_can_edit_film``
         A bool specifying whether the current user should be able to edit the
         :model:`films.Film` displayed in the page.
+    ``user_can_edit_asset``
+        A bool specifying whether the current user should be able to edit
+        :model:`films.Asset`-s displayed in the page.
 
     **Template:**
 
@@ -69,6 +72,9 @@ def film_detail(request: HttpRequest, film_slug: str) -> HttpResponse:
         'featured_artwork': featured_artwork,
         'user_can_edit_film': (
             request.user.is_staff and request.user.has_perm('films.change_film')
+        ),
+        'user_can_edit_asset': (
+            request.user.is_staff and request.user.has_perm('films.change_asset')
         ),
     }
     if film.status != FilmStatus.released:
