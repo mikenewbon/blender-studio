@@ -9,6 +9,16 @@ large,
   font-weight: $font-weight-normal;
 }
 
+.regular {
+  @include font-size($font-size-base);
+  font-weight: $font-weight-normal;
+}
+
+.medium {
+  @include font-size($font-size-md);
+  font-weight: $font-weight-normal;
+}
+
 small,
 .small {
   @include font-size($small-font-size);

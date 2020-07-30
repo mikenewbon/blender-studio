@@ -25,6 +25,11 @@
   <!-- When the body has a nav-drawer, it should have the class 'has-nav-drawer' and when it's wide, 'has-nav-drawer nav-drawer-wide' -->
   <nav class="navbar">
 
+    <div class="progress">
+      <div class="progress-bar" role="progressbar" style="height: 2px;" aria-valuenow="0" aria-valuemin="0"
+        aria-valuemax="100"></div>
+    </div>
+
     <button class="btn btn-nav navdrawertoggle">
       <i class="material-icons">menu</i>
     </button>
@@ -66,29 +71,29 @@
     </div>
     <div class="dropdown-menu profile-dropdown">
 
-        <a href="/" class="dropdown-item">
-          <i class="material-icons">home</i>
-          <span>My Cloud</span>
-        </a>
+      <a href="/" class="dropdown-item">
+        <i class="material-icons">home</i>
+        <span>My Cloud</span>
+      </a>
 
-        <a href="/settings" class="dropdown-item">
-          <i class="material-icons">settings</i>
-          <span>Settings</span>
-        </a>
+      <a href="/settings" class="dropdown-item">
+        <i class="material-icons">settings</i>
+        <span>Settings</span>
+      </a>
 
-        <a href="/settings/subscription" class="dropdown-item">
-          <i class="material-icons">credit_card</i>
-          <span>Subscription</span>
-        </a>
+      <a href="/settings/subscription" class="dropdown-item">
+        <i class="material-icons">credit_card</i>
+        <span>Subscription</span>
+      </a>
 
-        <div class="dropdown-divider"></div>
+      <div class="dropdown-divider"></div>
 
-        <a href="/oauth/logout" class="dropdown-item">
-          <i class="material-icons">exit_to_app</i>
-          <span>Sign Out</span>
-        </a>
+      <a href="/oauth/logout" class="dropdown-item">
+        <i class="material-icons">exit_to_app</i>
+        <span>Sign Out</span>
+      </a>
 
-      </div>
+    </div>
     {% else %}
     <div class="navbar-login-wrapper">
       <a href="/oauth/login" class="btn btn-transparent d-none d-sm-inline-block">Login</a>
@@ -119,23 +124,26 @@
   <nav class="nav-drawer">
     {% block nav_drawer_spacer %}
     {% endblock nav_drawer_spacer %}
-    <div class="nav-drawer-body">
-      <div class="px-2 py-2 d-block d-md-none">
+     <div class="nav-drawer-body">
+      {% comment %}<div class="px-2 py-2 d-block d-md-none">
         <div class="input-group mb-0">
           <div class="input-group-prepend">
             <span class="input-group-text">
               <i class="material-icons">search</i></span>
           </div><input class="form-control" type="text" placeholder="Search tags and keywords" />
         </div>
-      </div>
+      </div> {% endcomment %}
       <div class="navbar-secondary d-md-none">
         <div class="content-holder">
           <div class="container-xl">
             <div class="list-group list-group-flush list-group-horizontal small">
               <a class="list-group-item" href="/films/">Films</a>
               <a class="list-group-item" href="/training/">Training</a>
-              {% comment %} <a class="list-group-item" href="#">Services</a>
-              <a class="list-group-item" href="/news/">News</a> {% endcomment %}
+              {% comment %} <a class="list-group-item" href="#">Services</a>{% endcomment %}
+              <a class="list-group-item" href="/blog/">Blog</a>
+              <a class="list-group-item search" href="/search/">
+                <i class="material-icons icon-inline x-large">search</i>
+              </a>
             </div>
           </div>
         </div>
@@ -157,7 +165,6 @@
         </div>
       </div>
     </nav> {% endcomment %}
-
 
 
     {% block content %}{% endblock content %}

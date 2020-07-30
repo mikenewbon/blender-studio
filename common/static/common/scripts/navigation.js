@@ -13,11 +13,12 @@
       });
     });
 
-    document.querySelectorAll('a.drawer-nav-dropdown:not([data-toggle]), .drawer-nav-section a').forEach(i => {
-      i.addEventListener('click', () => {
-        document.querySelector('.gallery-load-overlay').classList.add('show');
-      })
-    });
+    // Progress bar replaces this.
+    // document.querySelectorAll('a.drawer-nav-dropdown:not([data-toggle]), .drawer-nav-section a').forEach(i => {
+    //   i.addEventListener('click', () => {
+    //     document.querySelector('.gallery-load-overlay').classList.add('show');
+    //   })
+    // });
   });
 
   // TODO(sem): Why do we wrap this function in `$`? What does that do?
@@ -47,7 +48,7 @@ let isDown = false;
 let startX;
 let scrollLeft;
 
-if(slider){
+if (slider) {
   slider.addEventListener("mousedown", e => {
     isDown = true;
     slider.classList.add("active");
@@ -71,4 +72,24 @@ if(slider){
   });
 }
 
+window.addEventListener("beforeunload", function (event) {
+  animateProgress(document.querySelector('.navbar .progress-bar'));
+});
 
+function animateProgress(element) {
+  let current_progress = 0;
+  let step = 0.5; // the smaller this is the slower the progress bar
+
+  interval = setInterval(function () {
+    current_progress += step;
+    progress = Math.round(Math.atan(current_progress) / (Math.PI / 2) * 100 * 1000) / 1000;
+    element.style.width = progress + "%";
+    element.setAttribute('aria-valuenow', progress);
+
+    if (progress >= 100) {
+      clearInterval(interval);
+    } else if (progress >= 70) {
+      step = 0.1
+    }
+  }, 100);
+}
