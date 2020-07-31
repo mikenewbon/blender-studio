@@ -38,6 +38,10 @@ class Post(mixins.CreatedUpdatedMixin, models.Model):
     def admin_url(self) -> str:
         return reverse('admin:blog_post_change', args=[self.pk])
 
+    @property
+    def latest_revision(self):
+        return self.revisions.filter(is_published=True).latest('date_created')
+
 
 class Revision(mixins.CreatedUpdatedMixin, models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='revisions')

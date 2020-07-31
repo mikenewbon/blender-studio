@@ -3,8 +3,8 @@
   <div class="card card-dark card-media">
     <div class="card-header">
       <a href="{% url 'post-detail' post_slug=post.slug %}">
-        <img class="card-image" src="{{ post.picture_16_9 }}">
-        {#        {% include "common/components/helpers/image_set.html" with alt="alt" classes="file-image" img_source=post.picture_16_9 xsmall_width="350" small_width="350" medium_width="350" large_width="350" xlarge_width="350" %}#}
+{#        <img class="card-image" src="{{ post.latest_revision.picture_16_9.url }}">#}
+        {% include "common/components/helpers/image_set.html" with alt="alt" classes="file-image" img_source=post.latest_revision.picture_16_9 xsmall_width="350" small_width="350" medium_width="350" large_width="350" xlarge_width="350" %}
       </a>
     </div>
     <a href="{% url 'post-detail' post_slug=post.slug %}" class="card-body">
@@ -28,7 +28,7 @@
 
       </div>
       <h3 class="card-title">{{ post.title }}</h3>
-      <p class="card-text">{{ post.description }}</p>
+      <p class="card-text">{{ post.subtitle }}</p>
 
     </a>
   </div>

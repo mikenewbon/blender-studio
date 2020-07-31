@@ -1,7 +1,7 @@
 import datetime as dt
 
 from django.db.models import OuterRef, Subquery, QuerySet
-from django.db.models.expressions import Case, When, Value
+from django.db.models.expressions import Case, When
 from django.db.models.fields import BooleanField
 from django.utils import timezone
 
@@ -18,7 +18,6 @@ def get_posts_with_latest_revision() -> 'QuerySet[Post]':
         .annotate(
             title=Subquery(newest_revision.values_list('title')),
             description=Subquery(newest_revision.values_list('subtitle')),
-            picture_16_9=Subquery(newest_revision.values_list('picture_16_9')),
             html_content=Subquery(newest_revision.values_list('html_content')),
             is_new=Case(
                 When(date_created__gte=timezone.now() - dt.timedelta(days=7), then=True),
@@ -26,4 +25,5 @@ def get_posts_with_latest_revision() -> 'QuerySet[Post]':
                 output_field=BooleanField(),
             ),
         )
+        .prefetch_related('revisions')
     )

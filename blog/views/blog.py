@@ -19,8 +19,8 @@ def post_list(request: HttpRequest) -> HttpResponse:
 
             - ``title`` - str, the latest published revision title,
             - ``subtitle`` - (optional) str, a short description of the revision,
-            - ``picture_16_9`` - the path of the preview image of the revision,
-            - ``html_content`` - the html_content of the latest published revision.
+            - ``html_content`` - the html_content of the latest published revision,
+            - ``is_new`` - a bool, whether the post was created in the last 7 days.
 
 
     **Template**
