@@ -2,7 +2,7 @@
 {% load thumbnail %}
 <div class="file">
   <div class="file-header">
-    <a href="#" data-toggle="modal" data-target="#file-modal" class="file-modal-link"
+    <a href="?asset={{ asset.id }}" class="file-modal-link"
       class="{% if asset.static_asset.source_type == 'video' %}video-preview{% endif %}" data-asset-id="{{ asset.id }}"
       data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
 
@@ -27,7 +27,7 @@
     {% endif %}
   </div>
   <div class="file-body">
-    <a href="#" data-toggle="modal" data-target="#file-modal"
+    <a href="?asset={{ asset.id }}" class="file-modal-link"
       data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
       {% comment %} <p class="subtitle">{{ asset.static_asset.get_source_type_display }}</p> {% endcomment %}
       <h4>{{ asset.name }}</h4>

@@ -1,7 +1,7 @@
 <div class="modal-dialog" role="document">
   <div class="modal-content bg-dark">
     <div class="modal-header p-0">
-      <div class="training-toolbar">
+      <div class="file-toolbar">
         <a class="btn btn-sm btn-dark">
           <i class="material-icons btn-material-icons btn-material-icons-lg">favorite_border</i>
           Like
@@ -10,14 +10,13 @@
         <a href="{{ asset.static_asset.source.url }}" download class="btn btn-sm btn-dark">Download</a>
         <button data-toggle="dropdown" class="btn btn-sm btn-ctrl-sm btn-dark">
           <i class="material-icons btn-material-icons">more_horiz</i>
-
-          <div class="dropdown-menu dropdown-menu-right">
+        </button>
+        <div class="dropdown-menu dropdown-menu-right">
             <a href="#" class="dropdown-item">
               <i class="material-icons">flag</i>
               <span>Report Problem</span>
             </a>
           </div>
-        </button>
         <button data-dismiss="modal" class="btn btn-sm btn-ctrl-sm btn-dark">
           <i class="material-icons btn-material-icons">close</i>
         </button>

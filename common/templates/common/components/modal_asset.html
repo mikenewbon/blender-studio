@@ -7,7 +7,8 @@
   <div class="modal-dialog" role="document">
     {% if previous_asset %}
     <button class="modal-navigation previous btn btn-ctrl"
-      data-url="{% url 'api-asset' previous_asset.id %}?site_context={{ site_context }}" data-asset-id="{{ previous_asset.id }}">
+      data-url="{% url 'api-asset' previous_asset.id %}?site_context={{ site_context }}"
+      data-asset-id="{{ previous_asset.id }}">
       <i class="material-icons btn-material-icons">navigate_before</i>
     </button>
     {% endif %}
@@ -45,9 +46,9 @@
             <div class="text-muted x-small">
               <p class="d-inline mr-2">{{ asset.date_created|date:"jS F Y" }}</p>
               {% if asset.static_asset.license %}
-              <a href="{{ asset.static_asset.license.url }}" target="_blank" class="d-inline mr-2 text-muted" data-toggle="tooltip" data-placement="bottom"
-                  title="{{ asset.static_asset.license.description }}">
-                <i class="material-icons icon-inline x-small" >info</i>
+              <a href="{{ asset.static_asset.license.url }}" target="_blank" class="d-inline mr-2 text-muted"
+                data-toggle="tooltip" data-placement="bottom" title="{{ asset.static_asset.license.description }}">
+                <i class="material-icons icon-inline x-small">info</i>
                 {{ asset.static_asset.license }}
               </a>
               {% endif %}
@@ -59,28 +60,26 @@
               {% endif %}
             </div>
           </div>
-          <div class="training-toolbar">
+          <div class="file-toolbar">
             <a class="btn btn-sm btn-dark"><i
                 class="material-icons btn-material-icons btn-material-icons-lg">favorite_border</i>
               Like</a>
             <a href="{{ asset.static_asset.source.url }}" download class="btn btn-sm btn-dark">Download</a>
-            <div class="dropdrown">
-              <button data-toggle="dropdown" class="btn btn-sm btn-ctrl-sm btn-dark">
+            <button data-toggle="dropdown" class="btn btn-sm btn-ctrl-sm btn-dark">
 
-                <i class="material-icons btn-material-icons">more_horiz</i>
-              </button>
-              <div class="dropdown-menu dropdown-menu-right">
-                <a href="google.com" class="dropdown-item">
-                  <i class="material-icons">flag</i>
-                  <span>Report Problem</span>
-                </a>
-                {% if user_can_edit_asset %}
-                <a href="{{ asset.admin_url }}" target="_blank" class="dropdown-item">
-                  <i class="material-icons">create</i>
-                  <span>Admin Edit</span>
-                </a>
-                {% endif %}
-              </div>
+              <i class="material-icons btn-material-icons">more_horiz</i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a href="google.com" class="dropdown-item">
+                <i class="material-icons">flag</i>
+                <span>Report Problem</span>
+              </a>
+              {% if user_can_edit_asset %}
+              <a href="{{ asset.admin_url }}" target="_blank" class="dropdown-item">
+                <i class="material-icons">create</i>
+                <span>Admin Edit</span>
+              </a>
+              {% endif %}
             </div>
 
           </div>
@@ -101,7 +100,8 @@
     </div>
     {% if next_asset %}
     <button class="modal-navigation next btn btn-ctrl"
-      data-url="{% url 'api-asset' next_asset.id %}?site_context={{ site_context }}" data-asset-id="{{ next_asset.id }}">
+      data-url="{% url 'api-asset' next_asset.id %}?site_context={{ site_context }}"
+      data-asset-id="{{ next_asset.id }}">
       <i class="material-icons btn-material-icons">navigate_next</i>
     </button>
     {% endif %}

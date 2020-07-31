@@ -215,3 +215,12 @@
     height: calc(100% - #{$navbar-height + 43px});
   }
 }
+
+.file-toolbar {
+  @extend .training-toolbar;
+
+  .btn+.btn,
+  .dropdown-menu+.btn {
+    margin-left: $spacer / 2;
+  }
+}

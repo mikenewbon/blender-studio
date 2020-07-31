@@ -1,18 +1,22 @@
 /* global ajax:false */
 
 window.asset = (function asset() {
-  const baseModal = document.querySelector('file-modal');
-  const baseModalId = baseModal.id;
-  const zoomModal = document.querySelector('file-zoom-modal');
-  const zoomModalId = zoomModal.id;
+
+  let baseModal = null;
+  const baseModalId = '#file-modal';
+  let zoomModal = null;
+  const zoomModalId = '#file-zoom-modal';
+  const assetParamName = 'asset';
 
   document.addEventListener('DOMContentLoaded', () => {
+    baseModal = document.querySelector('#file-modal');
+    zoomModal = document.querySelector('#file-zoom-modal');
     addFileClickEvent();
     initalizeAssetURL();
   });
 
   window.addEventListener('popstate', (event) => {
-    
+
     const fileElementSelector = document.querySelector('[data-asset-id="' + event.state + '"]');
 
     $(zoomModalId).modal('hide');
@@ -20,9 +24,7 @@ window.asset = (function asset() {
     if (event.state == "") {
       //The empty state occurs when the modal is closed, so it hides the modal.
       $(baseModalId).modal('hide');
-    } else if (event.state == null) {
-      //Do nothing - this occurs when you click a anchor link.
-    } else {
+    } else if (event.state) {
       loadingSpinner(baseModal);
       getModalHtml(fileElementSelector, baseModal, event);
       $(baseModalId).modal('show');
@@ -32,7 +34,7 @@ window.asset = (function asset() {
   // Using Jquery due to BootStrap events only being available here.
   // TODO(Mike): When Bootstrap 5 is added, switch to regular JS.
   $(document).ready(function () {
-    $(baseModal).each(function (i) {
+    $(baseModalId).each(function (i) {
       // Remove modal content on hide
       $(this).on('hidden.bs.modal', event => {
         $(this).empty();
@@ -47,16 +49,11 @@ window.asset = (function asset() {
         $(this).trigger('focus')
       })
 
-      // Events for clicking close or ESC, cant use hiden.bs.modal as this is also triggered by going back in history.
-      $(this).on('keydown.dismiss.bs.modal click.dismiss.bs.modal', () => {
-        removeURLParam('asset');
-      });
-
     })
     // Left-Right keyboard events
     $(baseModalId).keydown(function (event) {
       const rightArrow = baseModalId + ' .modal-navigation.next';
-      const leftArrow = baseModalId + ' .modal-navigatio.previous';
+      const leftArrow = baseModalId + ' .modal-navigation.previous';
 
       switch (event.key) {
         case "ArrowRight":
@@ -65,13 +62,17 @@ window.asset = (function asset() {
         case "ArrowLeft":
           $(leftArrow).trigger('click');
           break;
+        case "Escape":
+          $(baseModalId).modal('hide');
+          removeURLParam(assetParamName);
+          break;
       }
     });
   });
 
   function initalizeAssetURL() {
     const urlParams = new URLSearchParams(window.location.search);
-    const assetParam = urlParams.get('asset');
+    const assetParam = urlParams.get(assetParamName);
     const assetElem = document.querySelector('[data-asset-id="' + assetParam + '"]')
 
     if (assetParam != null && assetElem != null) {
@@ -101,10 +102,11 @@ window.asset = (function asset() {
   }
 
   function addFileClickEvent() {
-    const files
-    
-    document.querySelectorAll('.file a[data-toggle*="modal"], .grid a[data-toggle*="modal"]').forEach(element => {
-      element.addEventListener('click', (event) => getModalHtml(element, baseModalId, event));
+    document.querySelectorAll('.file-modal-link, .grid a[data-toggle*="modal"]').forEach(element => {
+      element.addEventListener('click', (event) => {
+        event.preventDefault();
+        getModalHtml(element, baseModal, event)
+      });
     });
   }
 
@@ -115,6 +117,8 @@ window.asset = (function asset() {
   }
 
   function getModalHtml(element, modal, event) {
+
+    //TODO(Mike): If left/right arrow - loading spinner
     if (element.classList.contains('modal-navigation')) {
       loadingSpinner(modal)
     }
@@ -125,22 +129,23 @@ window.asset = (function asset() {
       createModal(html, modal, element.dataset.assetId, event);
     }).then(() => {
       // Create a new video player for the modal
-      const player = new Plyr(document.querySelector('.video-player video'));
+      $(baseModalId).modal('show');
+      new Plyr(document.querySelector('.video-player video'));
       modal.focus();
 
       // Trigger activation of comment event listeners
       activateComments();
       $('[data-toggle="tooltip"]').tooltip();
 
-    }).catch(err => {
-      console.warn('Something went wrong.', err);
     });
   }
 
   function createModal(html, modal, assetId, event) {
+
     const template = document.createElement('template');
+
     template.innerHTML = html.trim();
-    
+
     if (modal.childElementCount === 0) {
       modal.appendChild(template.content);
     } else {
@@ -150,33 +155,41 @@ window.asset = (function asset() {
     if (modal === baseModal) {
       addButtonClickEvent();
       if (event.type != "popstate") {
-        addURLParam('asset', assetId);
+        addURLParam(assetParamName, assetId);
       }
     }
   }
 
   function addButtonClickEvent() {
 
-    document.querySelectorAll(
-      '.modal button.previous, .modal button.next'
-    ).forEach(button => {
+    document.querySelectorAll('.modal button.previous, .modal button.next').forEach(button => {
       button.addEventListener(
-        'click', (event) => getModalHtml(button, baseModalId, event)
+        'click', (event) => getModalHtml(button, baseModal, event)
       );
     });
 
-    document.querySelectorAll(
-      '.modal a[data-toggle*="modal"]'
-    ).forEach(element => {
+    document.querySelectorAll('.modal a[data-toggle*="modal"]').forEach(element => {
       element.addEventListener(
-        'click', (event) => getModalHtml(element, zoomModalId, event)
+        'click', (event) => getModalHtml(element, zoomModal, event)
       );
     });
+
+    document.querySelectorAll(baseModalId + ' .modal-close').forEach(element => {
+      element.addEventListener('click', () => {
+        removeURLParam(assetParamName);
+      });
+    });
+
+    baseModal.addEventListener('click', (event) => {
+      if(event.target == baseModal){
+        removeURLParam(assetParamName);
+      }
+    })
 
   }
 
   function activateComments() {
     const event = new CustomEvent('activateComments', { bubbles: true });
-    document.querySelector('.modal').dispatchEvent(event);
+    baseModal.dispatchEvent(event);
   }
 })();

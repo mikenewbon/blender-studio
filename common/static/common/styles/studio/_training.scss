@@ -12,7 +12,9 @@
   flex-grow: 1;
   flex-shrink: 0;
   justify-content: flex-end;
-  .btn + .btn{
+
+  .btn + .btn,
+  .dropdown-menu + .btn  {
     margin-left: $spacer / 2;
   }
 }

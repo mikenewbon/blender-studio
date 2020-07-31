@@ -72,18 +72,20 @@ if (slider) {
   });
 }
 
+
+//Progress Bar
+
 window.addEventListener("beforeunload", function (event) {
-  animateProgress(document.querySelector('.navbar .progress-bar'));
+  animateFakeProgress(document.querySelector('.navbar .progress-bar'));
 });
 
-function animateProgress(element) {
+function animateFakeProgress(element) {
   let current_progress = 0;
   let step = 0.5; // the smaller this is the slower the progress bar
 
   interval = setInterval(function () {
     current_progress += step;
     progress = Math.round(Math.atan(current_progress) / (Math.PI / 2) * 100 * 1000) / 1000;
-    console.log(progress)
     element.style.width = progress + "%";
     element.setAttribute('aria-valuenow', progress);
 

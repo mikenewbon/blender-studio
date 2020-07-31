@@ -141,6 +141,11 @@
       color: $white;
     }
   }
+
+  .btn+.btn,
+  .dropdown-menu+.btn {
+    margin-left: $spacer / 2;
+  }
 }
 
 .comment-dropdown {
