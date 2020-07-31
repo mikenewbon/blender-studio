@@ -1,8 +1,10 @@
 /* global ajax:false */
 
 window.asset = (function asset() {
-  const baseModalId = 'file-modal';
-  const zoomModalId = 'file-zoom-modal';
+  const baseModal = document.querySelector('file-modal');
+  const baseModalId = baseModal.id;
+  const zoomModal = document.querySelector('file-zoom-modal');
+  const zoomModalId = zoomModal.id;
 
   document.addEventListener('DOMContentLoaded', () => {
     addFileClickEvent();
@@ -10,26 +12,27 @@ window.asset = (function asset() {
   });
 
   window.addEventListener('popstate', (event) => {
-
+    
     const fileElementSelector = document.querySelector('[data-asset-id="' + event.state + '"]');
 
-    $('#file-zoom-modal').modal('hide');
+    $(zoomModalId).modal('hide');
+
     if (event.state == "") {
       //The empty state occurs when the modal is closed, so it hides the modal.
-      $('#file-modal').modal('hide');
+      $(baseModalId).modal('hide');
     } else if (event.state == null) {
       //Do nothing - this occurs when you click a anchor link.
     } else {
-      loadingSpinner(document.querySelector('#' + baseModalId));
-      getModalHtml(fileElementSelector, baseModalId, event);
-      $('#file-modal').modal('show');
+      loadingSpinner(baseModal);
+      getModalHtml(fileElementSelector, baseModal, event);
+      $(baseModalId).modal('show');
     }
   });
 
   // Using Jquery due to BootStrap events only being available here.
   // TODO(Mike): When Bootstrap 5 is added, switch to regular JS.
   $(document).ready(function () {
-    $('#file-modal').each(function (i) {
+    $(baseModal).each(function (i) {
       // Remove modal content on hide
       $(this).on('hidden.bs.modal', event => {
         $(this).empty();
@@ -51,13 +54,16 @@ window.asset = (function asset() {
 
     })
     // Left-Right keyboard events
-    $('#file-modal').keydown(function (event) {
+    $(baseModalId).keydown(function (event) {
+      const rightArrow = baseModalId + ' .modal-navigation.next';
+      const leftArrow = baseModalId + ' .modal-navigatio.previous';
+
       switch (event.key) {
         case "ArrowRight":
-          $('#file-modal .modal-navigation.next').trigger('click');
+          $(rightArrow).trigger('click');
           break;
         case "ArrowLeft":
-          $('#file-modal .modal-navigation.previous').trigger('click');
+          $(leftArrow).trigger('click');
           break;
       }
     });
@@ -95,9 +101,9 @@ window.asset = (function asset() {
   }
 
   function addFileClickEvent() {
-    document.querySelectorAll(
-      '.file a[data-toggle*="modal"], .grid a[data-toggle*="modal"]'
-    ).forEach(element => {
+    const files
+    
+    document.querySelectorAll('.file a[data-toggle*="modal"], .grid a[data-toggle*="modal"]').forEach(element => {
       element.addEventListener('click', (event) => getModalHtml(element, baseModalId, event));
     });
   }
@@ -108,19 +114,19 @@ window.asset = (function asset() {
     element.innerHTML = spinner + close;
   }
 
-  function getModalHtml(element, modalId, event) {
+  function getModalHtml(element, modal, event) {
     if (element.classList.contains('modal-navigation')) {
-      loadingSpinner(document.querySelector('#' + baseModalId))
+      loadingSpinner(modal)
     }
 
     fetch(element.dataset.url).then(response => {
       return response.text();
     }).then(html => {
-      createModal(html, modalId, element.dataset.assetId, event);
+      createModal(html, modal, element.dataset.assetId, event);
     }).then(() => {
       // Create a new video player for the modal
       const player = new Plyr(document.querySelector('.video-player video'));
-      document.querySelector('.modal').focus();
+      modal.focus();
 
       // Trigger activation of comment event listeners
       activateComments();
@@ -131,17 +137,17 @@ window.asset = (function asset() {
     });
   }
 
-  function createModal(html, modalId, assetId, event) {
+  function createModal(html, modal, assetId, event) {
     const template = document.createElement('template');
     template.innerHTML = html.trim();
-    const modal = document.getElementById(modalId);
+    
     if (modal.childElementCount === 0) {
       modal.appendChild(template.content);
     } else {
       modal.children[0].replaceWith(template.content);
     }
 
-    if (modalId === baseModalId) {
+    if (modal === baseModal) {
       addButtonClickEvent();
       if (event.type != "popstate") {
         addURLParam('asset', assetId);
