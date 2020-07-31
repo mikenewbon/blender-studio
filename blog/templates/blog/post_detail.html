@@ -1,9 +1,30 @@
 {% extends 'common/base.html' %}
 
 {% block content %}
-  <div>
-    <h2>{{ post.title }}</h2>
-    <p>{{ post.html_content|safe }}</p>
-    <img src="{{ post.picture_16_9.url }}">
+<div class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content jumbotron header" style="height: 400px;">
+  <div class="jumbotron-bg-wrapper">
+    <img class="jumbotron-bg" src="{{ post.picture_16_9.url }}">
+    <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
   </div>
+  <div class="container-xl">
+  </div>
+</div>
+
+<div class="container-fluid pt-4">
+  <section class="flat-page-content mb-4">
+    {% if user_can_edit_flatpage %}
+    <div class="admin-button">
+      <a href="{{ flatpage.admin_url }}" class="btn btn-sm btn-secondary admin-float">Edit Page</a>
+    </div>
+    {% endif %}
+
+    <div class="mb-3">
+      <p class="subtitle">{{ post.topic }}</p>
+      <h1 class="mb-0">{{ post.title }}</h1>
+    </div>
+    <div>{{ post.html_content|safe }}</div>
+  </section>
+</div>
+
+
 {% endblock %}

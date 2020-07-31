@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'looper',
     'pipeline',
     'sorl.thumbnail',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
