@@ -13,6 +13,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='asset',
             name='contains_blend_file',
-            field=models.BooleanField(default=False, help_text='Is the asset a .blend file or a package containing .blend files?'),
+            field=models.BooleanField(
+                default=False,
+                help_text='Is the asset a .blend file or a package containing .blend files?',
+            ),
         ),
     ]

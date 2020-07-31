@@ -14,18 +14,52 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='FilmFlatPage',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name='ID'
+                    ),
+                ),
                 ('date_created', models.DateTimeField(auto_now_add=True)),
                 ('date_updated', models.DateTimeField(auto_now=True)),
-                ('title', models.CharField(help_text='It will be displayed as the section name in the navigation bar.', max_length=50, verbose_name='Page title')),
-                ('slug', models.SlugField(blank=True, help_text='The page slug has to be unique per film. If it is not filled, it will be the slugified page title.', verbose_name='Page slug')),
-                ('content', models.TextField(blank=True, help_text='Format the content in <a href="https://commonmark.org/help/">Markdown</a>.')),
+                (
+                    'title',
+                    models.CharField(
+                        help_text='It will be displayed as the section name in the navigation bar.',
+                        max_length=50,
+                        verbose_name='Page title',
+                    ),
+                ),
+                (
+                    'slug',
+                    models.SlugField(
+                        blank=True,
+                        help_text='The page slug has to be unique per film. If it is not filled, it will be the slugified page title.',
+                        verbose_name='Page slug',
+                    ),
+                ),
+                (
+                    'content',
+                    models.TextField(
+                        blank=True,
+                        help_text='Format the content in <a href="https://commonmark.org/help/">Markdown</a>.',
+                    ),
+                ),
                 ('html_content', models.TextField(blank=True, editable=False)),
-                ('film', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='flatpages', to='films.Film')),
+                (
+                    'film',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='flatpages',
+                        to='films.Film',
+                    ),
+                ),
             ],
         ),
         migrations.AddConstraint(
             model_name='filmflatpage',
-            constraint=models.UniqueConstraint(fields=('slug', 'film'), name='unique_film_flat_page_url'),
+            constraint=models.UniqueConstraint(
+                fields=('slug', 'film'), name='unique_film_flat_page_url'
+            ),
         ),
     ]

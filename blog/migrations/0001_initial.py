@@ -22,53 +22,119 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Post',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name='ID'
+                    ),
+                ),
                 ('date_created', models.DateTimeField(auto_now_add=True)),
                 ('date_updated', models.DateTimeField(auto_now=True)),
                 ('slug', models.SlugField()),
                 ('is_published', models.BooleanField(default=False)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='authored_posts', to=settings.AUTH_USER_MODEL)),
+                (
+                    'author',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='authored_posts',
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
-            options={
-                'abstract': False,
-            },
+            options={'abstract': False,},
         ),
         migrations.CreateModel(
             name='Revision',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name='ID'
+                    ),
+                ),
                 ('date_created', models.DateTimeField(auto_now_add=True)),
                 ('date_updated', models.DateTimeField(auto_now=True)),
                 ('title', models.CharField(max_length=512)),
-                ('subtitle', models.TextField(blank=True, help_text='An optional short description displayed on the blog card.')),
+                (
+                    'subtitle',
+                    models.TextField(
+                        blank=True,
+                        help_text='An optional short description displayed on the blog card.',
+                    ),
+                ),
                 ('content', models.TextField()),
                 ('html_content', models.TextField(blank=True, editable=False)),
-                ('picture_16_9', static_assets.models.static_assets.DynamicStorageFileField(upload_to=common.upload_paths.get_upload_to_hashed_path)),
+                (
+                    'picture_16_9',
+                    static_assets.models.static_assets.DynamicStorageFileField(
+                        upload_to=common.upload_paths.get_upload_to_hashed_path
+                    ),
+                ),
                 ('is_published', models.BooleanField(default=False)),
-                ('editor', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='edited_posts', to=settings.AUTH_USER_MODEL)),
-                ('post', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='revisions', to='blog.Post')),
-                ('storage_location', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='revisions', to='static_assets.StorageLocation')),
+                (
+                    'editor',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='edited_posts',
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    'post',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='revisions',
+                        to='blog.Post',
+                    ),
+                ),
+                (
+                    'storage_location',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='revisions',
+                        to='static_assets.StorageLocation',
+                    ),
+                ),
             ],
-            options={
-                'abstract': False,
-            },
+            options={'abstract': False,},
         ),
         migrations.CreateModel(
             name='PostComment',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('comment', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='comments.Comment')),
-                ('post', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='blog.Post')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name='ID'
+                    ),
+                ),
+                (
+                    'comment',
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE, to='comments.Comment'
+                    ),
+                ),
+                (
+                    'post',
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='blog.Post'),
+                ),
             ],
         ),
         migrations.AddField(
             model_name='post',
             name='comments',
-            field=models.ManyToManyField(related_name='post', through='blog.PostComment', to='comments.Comment'),
+            field=models.ManyToManyField(
+                related_name='post', through='blog.PostComment', to='comments.Comment'
+            ),
         ),
         migrations.AddField(
             model_name='post',
             name='film',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='posts', to='films.Film'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='posts',
+                to='films.Film',
+            ),
         ),
     ]

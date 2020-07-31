@@ -16,8 +16,6 @@ class Migration(migrations.Migration):
             field=models.DateTimeField(editable=False, null=True),
         ),
         migrations.AlterField(
-            model_name='comment',
-            name='message',
-            field=models.TextField(null=True),
+            model_name='comment', name='message', field=models.TextField(null=True),
         ),
     ]
