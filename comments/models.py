@@ -65,7 +65,7 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
         return reverse('comment-delete', kwargs={'comment_pk': self.pk})
 
     def soft_delete(self) -> None:
-        """Instead of deleting a comment, only mark it as deleted.
+        """Instead of removing a comment, only mark it as deleted by setting its `date_deleted`.
 
         To preserve the integrity of the conversation, completely deleting comments
         is not allowed from the front end. However, we should allow users to remove
@@ -73,11 +73,12 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
         `date_deleted` attribute to mark them as deleted (this can be checked with
         the `is_deleted` property).
 
-        Deleted comments without replies are not displayed. They can be deleted in
-        the admin panel.
+        This action is idempotent, as soft-deleting an already soft-deleted comment
+        will not update its deletion date.
         """
-        self.date_deleted = timezone.now()
-        self.save()
+        if not self.is_deleted:
+            self.date_deleted = timezone.now()
+            self.save()
 
     def soft_delete_tree(self) -> None:
         """Soft-delete (i.e. mark as deleted) the comment and all its replies."""

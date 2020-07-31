@@ -1,12 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.http.request import HttpRequest
 from django.http.response import JsonResponse
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_http_methods
 
 from comments.queries import delete_comment, moderator_delete_comment, delete_comment_tree
 
 
-@require_POST
+@require_http_methods(['DELETE'])
 @login_required
 def comment_delete(request: HttpRequest, *, comment_pk: int) -> JsonResponse:
     if request.user.has_perm('comments.moderate_comment'):
@@ -17,7 +17,7 @@ def comment_delete(request: HttpRequest, *, comment_pk: int) -> JsonResponse:
     return JsonResponse({})
 
 
-@require_POST
+@require_http_methods(['DELETE'])
 @login_required
 def comment_delete_tree(request: HttpRequest, *, comment_pk: int) -> JsonResponse:
     if request.user.has_perm('comments.moderate_comment'):

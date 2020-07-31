@@ -50,7 +50,7 @@ class TestCommentDeleteEndpoint(TestCase):
     def test_user_can_soft_delete_own_comment_without_replies(self):
         comment_pk = self.comment_without_replies.pk
         self.assertFalse(self.comment_without_replies.is_deleted)
-        response = self.client.post(reverse('comment-delete', kwargs={'comment_pk': comment_pk}))
+        response = self.client.delete(reverse('comment-delete', kwargs={'comment_pk': comment_pk}))
 
         self.assertEqual(response.status_code, 200)
         # Deleted comments are kept in the database, but marked as deleted.
@@ -61,7 +61,7 @@ class TestCommentDeleteEndpoint(TestCase):
 
     def test_user_can_soft_delete_own_comment_with_replies(self):
         comment_pk = self.comment_with_replies.pk
-        response = self.client.post(reverse('comment-delete', kwargs={'comment_pk': comment_pk}))
+        response = self.client.delete(reverse('comment-delete', kwargs={'comment_pk': comment_pk}))
 
         self.assertEqual(response.status_code, 200)
         # Deleted comments are kept in the database, but marked as deleted.
@@ -73,7 +73,7 @@ class TestCommentDeleteEndpoint(TestCase):
     def test_user_cannot_delete_another_user_comment(self):
         comment_pk = self.reply.pk
         with self.assertRaises(Comment.DoesNotExist):
-            self.client.post(reverse('comment-delete', kwargs={'comment_pk': comment_pk}))
+            self.client.delete(reverse('comment-delete', kwargs={'comment_pk': comment_pk}))
 
         comment = Comment.objects.filter(pk=comment_pk).first()
         self.assertIsNotNone(comment)
@@ -82,7 +82,7 @@ class TestCommentDeleteEndpoint(TestCase):
     def test_admin_can_soft_delete_comment(self):
         self.client.force_login(self.admin)
         comment_pk = self.comment_without_replies.pk
-        response = self.client.post(reverse('comment-delete', kwargs={'comment_pk': comment_pk}))
+        response = self.client.delete(reverse('comment-delete', kwargs={'comment_pk': comment_pk}))
 
         self.assertEqual(response.status_code, 200)
         # Deleted comments are kept in the database, but marked as deleted.
@@ -92,7 +92,7 @@ class TestCommentDeleteEndpoint(TestCase):
 
     def test_admin_can_soft_delete_comments_tree(self):
         self.client.force_login(self.admin)
-        response = self.client.post(
+        response = self.client.delete(
             reverse('comment-delete-tree', kwargs={'comment_pk': self.comment_to_delete.pk})
         )
 
