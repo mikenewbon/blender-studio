@@ -50,7 +50,7 @@ class Revision(mixins.CreatedUpdatedMixin, models.Model):
     # accountability for revisions.
     editor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='edited_posts')
     title = models.CharField(max_length=512)
-    subtitle = models.TextField(
+    description = models.TextField(
         blank=True, help_text='An optional short description displayed on the blog card.'
     )
     content = models.TextField()

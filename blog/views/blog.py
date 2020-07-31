@@ -18,7 +18,7 @@ def post_list(request: HttpRequest) -> HttpResponse:
             Each post is annotated with the following additional attributes:
 
             - ``title`` - str, the latest published revision title,
-            - ``subtitle`` - (optional) str, a short description of the revision,
+            - ``description`` - (optional) str, a short description of the revision,
             - ``html_content`` - the html_content of the latest published revision,
             - ``is_new`` - a bool, whether the post was created in the last 7 days.
 

@@ -15,7 +15,7 @@ class PostAddForm(forms.ModelForm):
 
     # Revision fields
     title = forms.CharField(max_length=512)
-    subtitle = forms.CharField(
+    description = forms.CharField(
         max_length=512,
         required=False,
         help_text='An optional short description displayed on the blog card.',
@@ -36,7 +36,7 @@ class PostAddForm(forms.ModelForm):
             'slug',
             'is_published',
             'title',
-            'subtitle',
+            'description',
             'content',
             'picture_16_9',
             'storage_location',
@@ -80,4 +80,4 @@ class PostChangeForm(forms.ModelForm):
 
     class Meta:
         model = Revision
-        fields = ('title', 'subtitle', 'content', 'picture_16_9', 'is_published')
+        fields = ('title', 'description', 'content', 'picture_16_9', 'is_published')

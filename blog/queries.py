@@ -17,7 +17,7 @@ def get_posts_with_latest_revision() -> 'QuerySet[Post]':
         .order_by('-date_created')
         .annotate(
             title=Subquery(newest_revision.values_list('title')),
-            description=Subquery(newest_revision.values_list('subtitle')),
+            description=Subquery(newest_revision.values_list('description')),
             html_content=Subquery(newest_revision.values_list('html_content')),
             is_new=Case(
                 When(date_created__gte=timezone.now() - dt.timedelta(days=7), then=True),
