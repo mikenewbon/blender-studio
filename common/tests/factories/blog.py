@@ -21,6 +21,7 @@ class RevisionFactory(factory.DjangoModelFactory):
 
     editor = factory.SubFactory(UserFactory)
     title = factory.Faker('text', max_nb_chars=20)
+    topic = factory.Faker('text', max_nb_chars=20)
     description = factory.Faker('text', max_nb_chars=50)
     content = factory.Faker('text')
     picture_16_9 = factory.LazyFunction(generate_image_path)

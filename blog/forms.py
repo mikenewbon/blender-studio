@@ -15,6 +15,11 @@ class PostAddForm(forms.ModelForm):
 
     # Revision fields
     title = forms.CharField(max_length=512)
+    topic = forms.CharField(
+        max_length=128,
+        help_text=f'Category of the announcement in the post; '
+        f'e.g. <cite>New Open Movie Announcement</cite>.',
+    )
     description = forms.CharField(
         max_length=512,
         required=False,
@@ -36,6 +41,7 @@ class PostAddForm(forms.ModelForm):
             'slug',
             'is_published',
             'title',
+            'topic',
             'description',
             'content',
             'picture_16_9',
@@ -80,4 +86,4 @@ class PostChangeForm(forms.ModelForm):
 
     class Meta:
         model = Revision
-        fields = ('title', 'description', 'content', 'picture_16_9', 'is_published')
+        fields = ('title', 'topic', 'description', 'content', 'picture_16_9', 'is_published')
