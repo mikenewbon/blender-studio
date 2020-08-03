@@ -3,6 +3,7 @@ import datetime as dt
 from django.db.models import OuterRef, Subquery, QuerySet
 from django.db.models.expressions import Case, When
 from django.db.models.fields import BooleanField
+from django.db.models.query import Prefetch
 from django.utils import timezone
 
 from blog.models import Revision, Post
@@ -26,5 +27,11 @@ def get_posts_with_latest_revision() -> 'QuerySet[Post]':
                 output_field=BooleanField(),
             ),
         )
-        .prefetch_related('revisions')
+        .prefetch_related(
+            Prefetch(
+                'revisions',
+                queryset=Revision.objects.filter(is_published=True).order_by('-date_created'),
+                to_attr='latest_revisions',
+            )
+        )
     )

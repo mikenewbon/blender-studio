@@ -1,6 +1,7 @@
 from typing import Any, List, Tuple
 
 from django.contrib import admin, messages
+from django.db.models.query import Prefetch, QuerySet
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -10,12 +11,13 @@ from django.utils.text import slugify
 
 from blog.forms import PostChangeForm, PostAddForm
 from blog.models import Post, Revision
+from common.types import assert_cast
 
 
 @admin.register(Revision)
 class RevisionAdmin(admin.ModelAdmin):
     readonly_fields = ['date_created', 'date_updated', 'editor']
-    list_display = ['__str__', 'post', 'editor', 'is_published']
+    list_display = ['__str__', 'post', 'topic', 'editor', 'is_published']
     list_filter = ['is_published', 'editor', 'post']
     search_fields = ['title']
     save_as = True
@@ -29,9 +31,31 @@ class RevisionAdmin(admin.ModelAdmin):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['__str__', 'film', 'author', 'is_published']
+    list_display = [
+        '__str__',
+        'last_revision_title',
+        'film',
+        'author',
+        'is_published',
+        'is_last_revision_published',
+    ]
     list_filter = ['is_published', 'film', 'author']
     search_fields = ['slug']
+
+    def get_queryset(self, request: HttpRequest) -> 'QuerySet[Post]':
+        queryset = super().get_queryset(request)
+        return queryset.select_related('author', 'film').prefetch_related(
+            Prefetch('revisions', queryset=Revision.objects.all(), to_attr='last_revision')
+        )
+
+    def last_revision_title(self, obj: Post) -> str:
+        """Return the title of the latest created revision for the given post."""
+        return assert_cast(str, getattr(obj, 'last_revision')[-1].title)
+
+    def is_last_revision_published(self, obj: Post) -> bool:
+        return assert_cast(bool, getattr(obj, 'last_revision')[-1].is_published)
+
+    is_last_revision_published.boolean = True  # type: ignore[attr-defined]
 
     def get_urls(self) -> List[URLPattern]:
         urls = super().get_urls()

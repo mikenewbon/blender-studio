@@ -1,4 +1,3 @@
-# mypy: ignore-errors
 from typing import Optional, Sequence, Union, Callable, Any, List, Tuple
 
 from django.contrib import admin
@@ -10,7 +9,7 @@ from django.utils.html import format_html
 
 class EditLinkMixin:
     def __init_subclass__(cls, **kwargs: Any):
-        super().__init_subclass__(**kwargs)
+        super().__init_subclass__(**kwargs)  # type: ignore[call-arg]
         assert issubclass(
             cls, admin.options.InlineModelAdmin
         ), f'{cls.__name__} has to be a subclass of InlineModelAdmin to use the EditLinkMixin'
@@ -45,4 +44,4 @@ class EditLinkMixin:
             )
         return 'Save and continue editing to create a link'
 
-    get_edit_link.short_description = 'Edit link'
+    get_edit_link.short_description = 'Edit link'  # type: ignore[attr-defined]

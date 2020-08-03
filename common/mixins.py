@@ -20,7 +20,7 @@ class AdminUserDefaultMixin:
     The field value will be displayed as read-only in the form."""
 
     def __init_subclass__(cls, **kwargs: Any):
-        super().__init_subclass__(**kwargs)
+        super().__init_subclass__(**kwargs)  # type: ignore[call-arg]
         assert issubclass(
             cls, admin.options.BaseModelAdmin
         ), f'{cls.__name__} has to be a subclass of BaseModelAdmin to use the UserDefaultMixin'
