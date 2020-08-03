@@ -18,3 +18,4 @@ node_modules/
 .venv/
 .python-version
 studio/blender-cloud-credentials.json
+data.ms/

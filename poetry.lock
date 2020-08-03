@@ -552,6 +552,17 @@ version = "1.5.4"
 
 [[package]]
 category = "main"
+description = "The python client for MeiliSearch API."
+name = "meilisearch"
+optional = false
+python-versions = ">=3"
+version = "0.11.2"
+
+[package.dependencies]
+requests = "*"
+
+[[package]]
+category = "main"
 description = "The fastest markdown parser in pure Python"
 name = "mistune"
 optional = false
@@ -941,7 +952,7 @@ python-versions = "*"
 version = "0.2.5"
 
 [metadata]
-content-hash = "1491df9c3629b837f5a25cc06a60936b92cafc114e57b97eb5d4f4d8d163a767"
+content-hash = "aabdad8f8b50cc37eef4d542a8b815f4a1d2e146f2b5f372d00d0a30606ab8ff"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -1158,6 +1169,10 @@ markupsafe = [
 ]
 maxminddb = [
     {file = "maxminddb-1.5.4.tar.gz", hash = "sha256:f4d28823d9ca23323d113dc7af8db2087aa4f657fafc64ff8f7a8afda871425b"},
+]
+meilisearch = [
+    {file = "meilisearch-0.11.2-py3-none-any.whl", hash = "sha256:f35e919bc96e6e0821c0761f7d24ca70aa01b0f932c95e774e30a807f42815f5"},
+    {file = "meilisearch-0.11.2.tar.gz", hash = "sha256:42a316d24e8b04df8bcae23a4435407ab5bcee24f25662f90ef25b0402b18952"},
 ]
 mistune = [
     {file = "mistune-0.8.4-py2.py3-none-any.whl", hash = "sha256:88a1051873018da288eee8538d476dffe1262495144b33ecb586c4ab266bb8d4"},
