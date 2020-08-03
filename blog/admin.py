@@ -38,6 +38,8 @@ class PostAdmin(admin.ModelAdmin):
         'author',
         'is_published',
         'is_last_revision_published',
+        'date_created',
+        'date_updated',
     ]
     list_filter = ['is_published', 'film', 'author']
     search_fields = ['slug']

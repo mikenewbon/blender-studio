@@ -22,12 +22,21 @@ def post_list(request: HttpRequest) -> HttpResponse:
             - ``description`` - (optional) str, a short description of the revision,
             - ``html_content`` - the html_content of the latest published revision,
             - ``is_new`` - a bool, whether the post was created in the last 7 days.
-
+            - ``latest_revisions`` - a prefetched list of :model:`blog.Revision`-s,
+              sorted by their ``date_created`` descending (the newest first).
+        ``user_can_edit_post``
+            A bool specifying whether the current user should be able to edit
+            :model:`blog.Post`-s displayed in the page.
 
     **Template**
         :template:`blog/posts.html`
     """
-    return render(request, 'blog/posts.html', {'posts': get_posts_with_latest_revision()})
+    context = {
+        'posts': get_posts_with_latest_revision(),
+        'user_can_edit_post': (request.user.is_staff and request.user.has_perm('blog.change_post')),
+    }
+
+    return render(request, 'blog/posts.html', context)
 
 
 @require_safe
