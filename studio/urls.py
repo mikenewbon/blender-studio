@@ -7,6 +7,7 @@ from django.urls import path, include
 import blog.urls
 import comments.urls
 import films.urls
+import search.urls
 import subscriptions.urls
 import training.urls
 from common.views.home import home as home_view, welcome as welcome_view
@@ -25,6 +26,7 @@ urlpatterns = [
     path('films/', include(films.urls)),
     path('training/', include(training.urls)),
     path('blog/', include(blog.urls)),
+    path('search/', include(search.urls)),
     path('subscriptions/', include(subscriptions.urls)),
 ]
 
