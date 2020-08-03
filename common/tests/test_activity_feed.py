@@ -2,7 +2,7 @@ from django.test.testcases import TestCase
 from django.urls import reverse
 
 from common.queries import DEFAULT_FEED_PAGE_SIZE
-from common.tests.factories.blog import PostFactory
+from common.tests.factories.blog import RevisionFactory, PostFactory
 from common.tests.factories.films import ProductionLogFactory
 from common.tests.factories.training import TrainingFactory
 
@@ -11,11 +11,12 @@ class TestActivityFeedEndpoint(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
         ProductionLogFactory.create_batch(5)
-        PostFactory.create_batch(5)
         TrainingFactory.create_batch(5)
-        PostFactory.create_batch(4)
+        RevisionFactory.create_batch(5)
         ProductionLogFactory.create_batch(4)
         TrainingFactory.create_batch(4)
+        post = PostFactory()
+        RevisionFactory.create_batch(4, post=post)  # only one (the latest) revision counts
 
         cls.home_url = reverse('home')
 

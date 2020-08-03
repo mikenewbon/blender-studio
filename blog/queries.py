@@ -1,37 +1,26 @@
 import datetime as dt
 
-from django.db.models import OuterRef, Subquery, QuerySet
-from django.db.models.expressions import Case, When
+from django.db.models import QuerySet
+from django.db.models.expressions import Case, When, F
 from django.db.models.fields import BooleanField
-from django.db.models.query import Prefetch
 from django.utils import timezone
 
-from blog.models import Revision, Post
+from blog.models import Revision
 
 
-def get_posts_with_latest_revision() -> 'QuerySet[Post]':
-    newest_revision = Revision.objects.filter(is_published=True, post=OuterRef('pk')).order_by(
-        '-date_created'
-    )[:1]
+def get_latest_post_revisions() -> 'QuerySet[Revision]':
+    """Returns the newest published revisions of all published post."""
     return (
-        Post.objects.filter(is_published=True)
-        .order_by('-date_created')
+        Revision.objects.filter(is_published=True, post__is_published=True)
+        .order_by('post_id', '-date_created')
+        .distinct('post_id')
         .annotate(
-            title=Subquery(newest_revision.values_list('title')),
-            topic=Subquery(newest_revision.values_list('topic')),
-            description=Subquery(newest_revision.values_list('description')),
-            html_content=Subquery(newest_revision.values_list('html_content')),
+            slug=F('post__slug'),
             is_new=Case(
-                When(date_created__gte=timezone.now() - dt.timedelta(days=7), then=True),
+                When(post__date_created__gte=timezone.now() - dt.timedelta(days=7), then=True),
                 default=False,
                 output_field=BooleanField(),
             ),
         )
-        .prefetch_related(
-            Prefetch(
-                'revisions',
-                queryset=Revision.objects.filter(is_published=True).order_by('-date_created'),
-                to_attr='latest_revisions',
-            )
-        )
+        .select_related('storage_location')
     )

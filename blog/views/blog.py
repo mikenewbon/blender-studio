@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_safe
 
 from blog.models import Post
-from blog.queries import get_posts_with_latest_revision
+from blog.queries import get_latest_post_revisions
 
 
 @require_safe
@@ -32,7 +32,7 @@ def post_list(request: HttpRequest) -> HttpResponse:
         :template:`blog/posts.html`
     """
     context = {
-        'posts': get_posts_with_latest_revision(),
+        'posts': get_latest_post_revisions(),
         'user_can_edit_post': (request.user.is_staff and request.user.has_perm('blog.change_post')),
     }
 
