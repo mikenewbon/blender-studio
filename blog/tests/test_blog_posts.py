@@ -40,6 +40,7 @@ class TestPostAndRevisionCreation(TestCase):
             post_form_data = {
                 'film': self.film.id,
                 'title': 'New blog post',
+                'topic': 'Announcement',
                 'content': '#Test text',
                 'picture_16_9': img,
             }
@@ -58,7 +59,11 @@ class TestPostAndRevisionCreation(TestCase):
         initial_revision_count = Revision.objects.count()
 
         post_change_url = reverse('admin:blog_post_change', kwargs={'object_id': revision.post.pk})
-        change_data = {'title': revision.title, 'content': 'Updated content with *markdown*'}
+        change_data = {
+            'title': revision.title,
+            'topic': revision.topic,
+            'content': 'Updated content with *markdown*',
+        }
         response = self.client.post(post_change_url, change_data, follow=True)
 
         self.assertEqual(response.status_code, 200)
