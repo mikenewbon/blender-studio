@@ -25,7 +25,9 @@
 
         {% if user_can_edit_production_log %}
 
-        <a href="{{ production_log.admin_url }}" class="btn btn-sm btn-secondary admin-float">Edit Weekly</a>
+        <a href="{{ production_log.admin_url }}" class="btn btn-ctrl-sm btn-sm btn-secondary admin-float">
+          <i class="material-icons btn-material-icons">create</i>
+        </a>
 
         {% endif %}
 
@@ -76,7 +78,9 @@
           <p class="small">{{ entry.description }}</p>
           {% if user_can_edit_production_log_entry %}
           <div class="admin-button">
-            <a href="{{ entry.admin_url }}" class="btn btn-sm btn-secondary">Edit Entry</a>
+            <a href="{{ entry.admin_url }}" class="btn btn-sm btn-ctrl-sm btn-secondary">
+              <i class="material-icons btn-material-icons">create</i>
+            </a>
           </div>
           {% endif %}
         </div>

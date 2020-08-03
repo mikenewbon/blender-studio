@@ -1,14 +1,20 @@
 {% load static %}
-<a href="#" class="jumbotron jumbotron-overlay overlay-wide-content header p-3 p-md-4">
+<a href="#" class="jumbotron jumbotron-overlay overlay-wide-content header p-3  p-md-4">
   <div class="jumbotron-bg-wrapper">
     <!-- TODO(Mike): When homepage is done (backend) - impliment this with image-set -->
     <img class="jumbotron-bg" src="{{ img }}">
-    {% comment %} {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=img xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %} {% endcomment %}
+    {% comment %}
+    {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=img xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
+    {% endcomment %}
   </div>
-  <div class="row">
+  <div class="row jumbotron-content">
     <div class="col-md-7 col-lg-6 col-xl-5">
       <div class="jumbotron-body">
-        <p class="subtitle">{{ subtitle }}</p>
+        <div class="jumbotron-subtitle-group">
+          <!-- TODO(Mike): Needs an IF when implimented on BE -->
+          <div class="badge badge-primary">New</div>
+          <p class="subtitle">{{ subtitle }}</p>
+        </div>
         <h1 class="mb-2">{{ title }}</h1>
         {{ description|linebreaks }}
       </div>
