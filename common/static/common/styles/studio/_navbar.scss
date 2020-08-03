@@ -19,15 +19,6 @@ body {
     margin-left: 0;
   }
 
-  >.progress {
-    z-index: $zindex-fixed;
-    background: none;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-  }
-
   .dropdown-menu {
     border-top: 1px solid $transparent;
   }

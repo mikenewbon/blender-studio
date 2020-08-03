@@ -76,18 +76,22 @@ if (slider) {
 //Progress Bar
 
 window.addEventListener("beforeunload", function (event) {
-  animateFakeProgress(document.querySelector('.navbar .progress-bar'));
+  animateProgress();
 });
 
-function animateFakeProgress(element) {
+function animateProgress() {
+  const globalProgress = document.querySelector('.global-progress');
+  const progressBar = document.querySelector('.global-progress .progress-bar');
   let current_progress = 0;
   let step = 0.5; // the smaller this is the slower the progress bar
+
+  globalProgress.style.opacity = "1";
 
   interval = setInterval(function () {
     current_progress += step;
     progress = Math.round(Math.atan(current_progress) / (Math.PI / 2) * 100 * 1000) / 1000;
-    element.style.width = progress + "%";
-    element.setAttribute('aria-valuenow', progress);
+    progressBar.style.width = progress + "%";
+    progressBar.setAttribute('aria-valuenow', progress);
 
     if (progress >= 100) {
       clearInterval(interval);
@@ -95,4 +99,14 @@ function animateFakeProgress(element) {
       step = 0.1
     }
   }, 100);
+}
+
+function resetProgress() {
+  const globalProgress = document.querySelector('.global-progress');
+  const progressBar = document.querySelector('.global-progress .progress-bar');
+
+  globalProgress.style.opacity = "0";
+  progressBar.style.width = "0%";
+  progressBar.setAttribute('aria-valuenow', 0);
+  clearInterval(interval);
 }

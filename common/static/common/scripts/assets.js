@@ -117,7 +117,7 @@ window.asset = (function asset() {
   }
 
   function getModalHtml(element, modal, event) {
-
+    animateProgress();
     //TODO(Mike): If left/right arrow - loading spinner
     if (element.classList.contains('modal-navigation')) {
       loadingSpinner(modal)
@@ -136,7 +136,7 @@ window.asset = (function asset() {
       // Trigger activation of comment event listeners
       activateComments();
       $('[data-toggle="tooltip"]').tooltip();
-
+      resetProgress();
     });
   }
 
