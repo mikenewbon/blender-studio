@@ -25,8 +25,8 @@
 
         {% if user_can_edit_production_log %}
 
-        <a href="{{ production_log.admin_url }}" class="btn btn-ctrl-sm btn-sm btn-secondary admin-float">
-          <i class="material-icons btn-material-icons">create</i>
+        <a href="{{ production_log.admin_url }}" class="btn btn-ctrl-sm btn-sm btn-icon btn-secondary btn-float">
+          <i class="material-icons">create</i>
         </a>
 
         {% endif %}
@@ -78,8 +78,8 @@
           <p class="small">{{ entry.description }}</p>
           {% if user_can_edit_production_log_entry %}
           <div class="admin-button">
-            <a href="{{ entry.admin_url }}" class="btn btn-sm btn-ctrl-sm btn-secondary">
-              <i class="material-icons btn-material-icons">create</i>
+            <a href="{{ entry.admin_url }}" class="btn btn-sm btn-icon btn-secondary">
+              <i class="material-icons">create</i>
             </a>
           </div>
           {% endif %}

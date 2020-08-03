@@ -11,27 +11,6 @@
     }
   }
 
-  &.card-dark {
-    background-color: $navigation-gray;
-
-    .card-body {
-
-      @include hover {
-        color: $white;
-      }
-
-      color: $white;
-    }
-
-    .card-subtitle {
-      color: $highlight-white-xstrong;
-    }
-
-    @include hover-focus {
-      background-color: tint($navigation-gray, 10%);
-    }
-  }
-
   .card-body {
     @include hover {
       color: $card-color;
@@ -95,6 +74,26 @@
         position: absolute;
         width: 100%;
       }
+    }
+  }
+}
+
+.card-dark {
+  background-color: $navigation-gray;
+
+  .card-body {
+    color: $white;
+  }
+
+  .card-subtitle {
+    color: $highlight-white-xstrong;
+  }
+
+  @include hover-focus {
+    background-color: tint($navigation-gray, 10%);
+
+    .card-body {
+      color: $white;
     }
   }
 }

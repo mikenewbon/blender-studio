@@ -1,25 +1,28 @@
 .btn {
-  @include hover {
-    p {
-      text-decoration: none;
-    }
+  .material-icons {
+    font-size: 1.5em;
+    line-height: 1;
+    margin: calc(-.25em * .667);
+    vertical-align: top;
   }
 
-  &.btn-ctrl {
-    &+.btn.btn-ctrl {
-      margin-left: $spacer;
+  &.btn-icon {
+    padding: $btn-padding-y;
+  }
+
+  &:not(.btn-icon) {
+    .material-icons {
+      margin-right: 0;
     }
   }
 }
 
+
+//This button should have underline on hover
 .btn-transparent {
   &:hover {
     background: $transparent;
     text-decoration: underline;
-  }
-
-  &+.btn {
-    margin-left: $spacer / 2;
   }
 }
 
@@ -28,50 +31,33 @@
 // Button Sizes
 //
 
-.btn-ctrl {
-  @include button-size($btn-padding-y-ctrl,
-    $btn-padding-x-ctrl,
-    $btn-font-size-ctrl,
-    $btn-line-height-ctrl,
-    $border-radius);
-}
+.btn-xs {
+  @include button-size($btn-padding-y-xs, $btn-padding-x-xs, $btn-font-size-xs, $btn-line-height-xs, $btn-border-radius-xs);
 
-.btn-nav {
-  @include button-size($btn-padding-y-nav,
-    $btn-padding-x-nav,
-    $btn-font-size-nav,
-    $btn-line-height-nav,
-    0);
-
-  align-items: center;
-  color: $highlight-white-xstrong;
-  display: flex;
-  position: relative;
-
-  .material-icons {
-    line-height: 1;
-    // display: block;
-  }
-
-  @include hover {
-    background: $highlight-white;
-    color: $white;
-    text-decoration: none;
+  &.btn-icon {
+    padding: $btn-padding-y-xs;
   }
 }
 
-.btn-ctrl-sm {
-  @include button-size($btn-padding-y-ctrl-sm,
-    $btn-padding-x-ctrl-sm,
-    $btn-font-size-ctrl-sm,
-    $btn-line-height-ctrl-sm,
-    $border-radius);
+.btn-sm {
+  @include button-size($btn-padding-y-sm, $btn-padding-x-sm, $btn-font-size-sm, $btn-line-height-sm, $btn-border-radius-sm);
+
+  &.btn-icon {
+    padding: $btn-padding-y-sm;
+  }
 }
 
-.btn-ctrl-xs {
-  @include button-size($btn-padding-y-ctrl-xs,
-    $btn-padding-x-ctrl-xs,
-    $btn-font-size-ctrl-xs,
-    $btn-line-height-ctrl-xs,
-    $border-radius);
+.btn-lg {
+  @include button-size($btn-padding-y-lg, $btn-padding-x-lg, $btn-font-size-lg, $btn-line-height-lg, $btn-border-radius-lg);
+
+  &.btn-icon {
+    padding: $btn-padding-y-lg;
+  }
+}
+
+.btn-float {
+  position: absolute;
+  right: $spacer / 2;
+  top: $spacer / 2;
+  transition: $transition-base;
 }

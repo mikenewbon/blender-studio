@@ -21,31 +21,14 @@
       {% endif %}
     </a>
     {% if user_can_edit_asset %}
-    <a href="{{ asset.admin_url }}" target="_blank" class="btn btn-file btn-save-media btn-ctrl-xs">
+    <a href="{{ asset.admin_url }}" target="_blank" class="btn btn-secondary btn-xs btn-icon btn-float">
       <i class="material-icons btn-material-icons">create</i>
     </a>
     {% endif %}
   </div>
-  <div class="file-body">
-    <a href="?asset={{ asset.id }}" class="file-modal-link"
-      data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
-      {% comment %} <p class="subtitle">{{ asset.static_asset.get_source_type_display }}</p> {% endcomment %}
-      <h4>{{ asset.name }}</h4>
-    </a>
-    {% comment %} <button class="btn btn-file" data-toggle="dropdown">
-      <i class="material-icons btn-material-icons">more_horiz</i>
-    </button>
-    <div class="dropdown-menu dropdown-menu-right">
-      <a href="{{ asset.static_asset.source.url }}" download class="dropdown-item">
-        <i class="material-icons">get_app</i>
-        <span>Download</span>
-      </a>
-      {% if user_can_edit_asset %}
-      <a href="{{ asset.admin_url }}" target="_blank" class="dropdown-item">
-        <i class="material-icons">create</i>
-        <span>Admin Edit</span>
-      </a>
-      {% endif %}
-    </div> {% endcomment %}
-  </div>
+  <a class="file-body" href="?asset={{ asset.id }}"
+    data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
+    <h4>{{ asset.name }}</h4>
+  </a>
+
 </div>

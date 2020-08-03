@@ -26,6 +26,7 @@
     text-decoration: none;
 
     .file-body {
+      color: $white;
       text-decoration: none;
     }
 
@@ -34,12 +35,7 @@
       text-decoration: none;
     }
 
-    // .file-image+.file-icon {
-    //   background-color: tint($navigation-gray, 10%);
-    // }
-
-    h4 {
-      color: $white;
+    a {
       text-decoration: none;
     }
 
@@ -47,10 +43,6 @@
       &::after {
         background: $primary;
       }
-    }
-
-    .btn {
-      opacity: 1;
     }
   }
 
@@ -60,24 +52,6 @@
     transition: $transition-base;
   }
 
-  h4 {
-    color: $highlight-white-xstrong;
-    margin-bottom: 0;
-    transition: $transition-base;
-  }
-
-  .btn-file {
-    @include media-breakpoint-down(sm) {
-      display: none;
-    }
-
-    font-size: $font-size-base;
-    padding: $spacer / 4;
-    position: absolute;
-  }
-
-
-
   &-icon {
     height: 100%;
     width: 50%;
@@ -86,11 +60,13 @@
 }
 
 .file-header {
+  @include button-float;
+
+  border-radius: $border-radius $border-radius 0 0;
+  overflow: hidden;
   padding: 0;
   position: relative;
   width: 100%;
-  border-radius: $border-radius $border-radius 0 0;
-  overflow: hidden;
 
   .file-modal-link {
     align-items: center;
@@ -111,27 +87,18 @@
 }
 
 .file-body {
-
-  @extend .card-body;
+  color: $highlight-white-xstrong;
   display: block;
-  padding: 0;
+  padding: $spacer / 2;
   position: relative;
+  transition: $transition-base;
 
-  >a {
-    @include media-breakpoint-down(sm) {
-      width: 100%;
-    }
+  >* {
+    margin-bottom: 0;
+  }
 
-    align-items: center;
-    color: $white;
-    display: flex;
-    min-height: calc(#{$btn-font-size-ctrl-xs} + #{$spacer});
-    padding: $spacer / 2;
-    width: 100%;
-
-    &:hover {
-      text-decoration: none;
-    }
+  &:hover {
+    text-decoration: none;
   }
 }
 
@@ -215,6 +182,8 @@
     height: calc(100% - #{$navbar-height + 43px});
   }
 }
+
+//Modal Toolbar
 
 .file-toolbar {
   @extend .training-toolbar;

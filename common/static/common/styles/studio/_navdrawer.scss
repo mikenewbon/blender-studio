@@ -258,17 +258,12 @@
 }
 
 .drawer-nav-section {
+  @include button-float;
+
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
   position: relative;
-
-  button {
-    position: absolute;
-    right: $spacer / 2;
-    top: $spacer / 2;
-  }
 
   &.complete {
     +.drawer-nav-section .drawer-nav-section-icon {
@@ -411,6 +406,8 @@ $circle-circumference: $circle-diameter * 3.14;
 }
 
 .drawer-nav-dropdown-wrapper {
+  @include button-float;
+
   display: flex;
   position: relative;
 
@@ -481,7 +478,7 @@ $circle-circumference: $circle-diameter * 3.14;
 
   span {
     // 24px is the size of the material icon
-    margin-left: 24px + ($spacer / 2);
+    // margin-left: 24px + ($spacer / 2);
   }
 
 }

@@ -38,7 +38,7 @@ has-secondary-nav
 {% for collection, child_collections in collections.items %}
 
 <div class="drawer-nav-group">
-  <div class="drawer-nav-dropdown-wrapper ">
+  <div class="drawer-nav-dropdown-wrapper">
 
     <a class="drawer-nav-dropdown h3 {% if current_collection.parent != collection and current_collection != collection %}collapsed{% endif %}"
       href="{{ collection.url }}" {% if child_collections %}data-toggle="collapse"
@@ -51,15 +51,9 @@ has-secondary-nav
       </span>
     </a>
     {% if user_can_edit_collection %}
-    <button class="btn btn-secondary btn-ctrl-xs btn-save-media" data-toggle="dropdown">
-      <i class="material-icons btn-material-icons">more_horiz</i>
-    </button>
-    <div class="dropdown-menu dropdown-menu-right">
-      <a href="{{ collection.admin_url }}" target="_blank" class="dropdown-item">
-        <i class="material-icons">create</i>
-        <span>Admin Edit</span>
-      </a>
-    </div>
+    <a href="{{ collection.admin_url }}" class="btn btn-secondary btn-xs btn-icon btn-float">
+      <i class="material-icons btn-material-icons">create</i>
+    </a>
     {% endif %}
   </div>
 
@@ -81,15 +75,9 @@ has-secondary-nav
 
       </a>
       {% if user_can_edit_collection %}
-      <button class="btn btn-secondary btn-ctrl-xs btn-save-media" data-toggle="dropdown">
-        <i class="material-icons btn-material-icons">more_horiz</i>
-      </button>
-      <div class="dropdown-menu dropdown-menu-right">
-        <a href="{{ child_collection.admin_url }}" target="_blank" class="dropdown-item">
-          <i class="material-icons">create</i>
-          <span>Admin Edit</span>
-        </a>
-      </div>
+      <a href="{{ child_collection.admin_url }}" target="_blank" class="btn btn-secondary btn-xs btn-float btn-icon">
+        <i class="material-icons btn-material-icons">create</i>
+      </a>
       {% endif %}
     </li>
 

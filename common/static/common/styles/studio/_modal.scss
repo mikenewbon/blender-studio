@@ -99,9 +99,9 @@
       display: none;
     }
 
-    right: ($spacer * 1.5);
+    right: 0;
     top: 50%;
-    transform: translate(50%, -50%);
+    transform: translateY(-50%);
   }
 
   &.previous {
@@ -109,9 +109,9 @@
       display: none;
     }
 
-    left: ($spacer * 1.5);
+    left: 0;
     top: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateY(-50%);
   }
 }
 

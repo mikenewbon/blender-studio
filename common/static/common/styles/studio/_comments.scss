@@ -38,19 +38,14 @@
   }
 
   .checkbox-like {
-    align-items: center;
-    display: flex;
-    font-size: $font-size-md;
-    padding: 7px;
 
     span {
-      font-size: $small-font-size;
+      color: $highlight-white-xstrong;
       font-weight: $font-weight-normal;
-      margin-left: $spacer / 4;
     }
 
     .checkbox-like-icon-unchecked {
-      display: initial;
+      display: inline-block;
     }
 
     .checkbox-like-icon-checked {
@@ -63,16 +58,9 @@
       }
 
       .checkbox-like-icon-checked {
-        display: initial;
+        display: inline-block;
       }
 
-      &:hover {
-        text-decoration: initial;
-      }
-    }
-
-    &:hover {
-      text-decoration: initial;
     }
   }
 }
@@ -84,35 +72,29 @@
   margin-top: $spacer / 2;
 }
 
-.comment-likes {
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  margin-left: -$spacer / 2;
-  padding: 0 $spacer / 2;
+// .comment-likes {
+//   align-items: center;
+//   display: flex;
+//   flex-direction: row;
+//   height: 100%;
+//   margin-left: -$spacer / 2;
+//   padding: 0 $spacer / 2;
 
-  .checkbox-like {
-    display: inline;
-    font-size: $large-font-size;
-    vertical-align: middle;
-  }
+//   .checkbox-like {
+//     display: inline;
 
-  .comment-count {
-    color: $text-muted;
-    display: inline;
-    font-size: $x-small-font-size;
-  }
-}
+//     vertical-align: middle;
+//   }
+
+//   .comment-count {
+//     color: $text-muted;
+//     display: inline;
+//     font-size: $x-small-font-size;
+//   }
+// }
 
 .comment-content-inner {
   margin-bottom: $spacer / 2;
-}
-
-.comment-action {
-  display: inline;
-  font-size: $x-small-font-size;
-  padding: $spacer / 2;
 }
 
 .comment-name-date-wrapper {
