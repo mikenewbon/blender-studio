@@ -816,11 +816,11 @@ $nav-drawer-animation-duration: 0.5s;
 $dropdown-min-width: 10rem !default;
 $dropdown-padding-y: 0 !default;
 $dropdown-spacer: 0 !default;
-$dropdown-font-size: $font-size-base !default;
+$dropdown-font-size: $font-size-sm !default;
 $dropdown-color: $body-color !default;
 $dropdown-bg: $navigation-gray !default;
 $dropdown-border-color: null !default;
-$dropdown-border-radius: 0 !default;
+$dropdown-border-radius: $border-radius !default;
 $dropdown-border-width: 0 !default;
 $dropdown-inner-border-radius: subtract($dropdown-border-radius, $dropdown-border-width) !default;
 $dropdown-divider-bg: $highlight-white !default;
@@ -974,7 +974,7 @@ $badge-font-size: $small-font-size !default;
 $badge-font-weight: $font-weight-normal !default;
 $badge-padding-y: 0.25rem !default;
 $badge-padding-x: 0.3125rem !default;
-$badge-border-radius: $border-radius !default;
+$badge-border-radius: $border-radius-sm !default;
 
 $badge-transition: $btn-transition !default;
 $badge-focus-width: $input-btn-focus-width !default;
@@ -982,7 +982,7 @@ $badge-focus-width: $input-btn-focus-width !default;
 $badge-pill-padding-x: 0.625rem !default;
 // Use a higher than normal value to ensure completely rounded edges when
 // customizing padding or font-size on labels.
-$badge-pill-border-radius: 10rem !default;
+$badge-pill-border-radius: $border-radius !default;
 
 // Modals
 
@@ -1066,8 +1066,8 @@ $list-group-item-padding-x: $spacer !default;
 
 $list-group-hover-bg: null !default;
 $list-group-active-color: $white !default;
-$list-group-active-bg: $highlight-white !default;
-$list-group-active-border-color: $list-group-active-bg !default;
+$list-group-active-bg: null !default;
+$list-group-active-border-color: null !default;
 
 $list-group-disabled-color: $gray-600 !default;
 $list-group-disabled-bg: $list-group-bg !default;

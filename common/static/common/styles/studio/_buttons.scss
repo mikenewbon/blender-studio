@@ -19,9 +19,8 @@
 
 //This button should have underline on hover
 .btn-transparent {
-  &:hover {
-    background: $transparent;
-    text-decoration: underline;
+  @include hover-focus {
+    color: $white;
   }
 }
 
@@ -30,8 +29,22 @@
   color: $highlight-white-xstrong;
   font-weight: $font-weight-normal;
 
-  &:hover {
+  @include hover-focus {
     color: $white;
+    background: $highlight-white;
+  }
+
+  &.active {
+    background: $transparent !important;
+    background-color: $transparent !important;
+
+    @include hover-focus {
+      background: $highlight-white !important;
+    }
+  }
+
+  +.btn-nav {
+    margin-left: $spacer / 2;
   }
 }
 
@@ -66,8 +79,6 @@
     padding: $btn-padding-y-lg;
   }
 }
-
-
 
 .btn-float {
   position: absolute;

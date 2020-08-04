@@ -319,9 +319,9 @@
   &.active {
     color: $white;
 
-    &::before {
-      opacity: 1;
-    }
+    // &::before {
+    //   opacity: 1;
+    // }
 
     h4 {
       color: $white;
@@ -451,9 +451,9 @@ $circle-circumference: $circle-diameter * 3.14;
   &.active {
     color: $white;
 
-    &::before {
-      opacity: 1;
-    }
+    // &::before {
+    //   opacity: 1;
+    // }
   }
 
   &:hover {

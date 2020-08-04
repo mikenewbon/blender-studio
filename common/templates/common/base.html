@@ -70,7 +70,7 @@
         </div>
       </div> {% endcomment %}
 
-      <button data-toggle="dropdown" class="btn btn-secondary btn-nav btn-profile">
+      <button data-toggle="dropdown" class="btn btn-secondary btn-nav ml-0 btn-profile">
         <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');" class="profile"></div>
       </button>
       <div class="dropdown-menu profile-dropdown">
@@ -101,7 +101,7 @@
     </div>
     {% else %}
     <div class="navbar-login-wrapper">
-      <a href="/oauth/login" class="btn btn-transparent d-none d-sm-inline-block">Login</a>
+      <a href="/oauth/login" class="btn btn-transparent mr-2 btn-nav d-none d-sm-inline-block">Login</a>
       <a href="#" class="btn btn-primary ">Join <span class="d-none d-lg-inline-block">Blender Studio</span></a>
     </div>
     {% endif %}
@@ -284,10 +284,10 @@
   </div>
 
   <div id="videoModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <button class="modal-navigation modal-close btn btn-ctrl" data-dismiss="modal">
+    <button class="modal-navigation modal-close btn btn-icon btn-lg" data-dismiss="modal">
       <i class="material-icons btn-material-icons">close</i>
     </button>
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content bg-dark">
         <div class="modal-body p-0">
           <div class="embed-responsive embed-responsive-16by9 js-youtube-embed">
