@@ -169,7 +169,7 @@ body {
     }
 
     border-radius: $border-radius !important;
-    padding: $spacer / 2 $spacer;
+    padding: $spacer / 2 $spacer * .75;
     transition: $transition-base;
     white-space: nowrap;
 
@@ -184,9 +184,10 @@ body {
       top: 5px;
       transition: $transition-base;
       width: 100%;
+      z-index: -1;
     }
 
-    &.list-group-item {
+    +.list-group-item {
       margin-left: $spacer / 4 !important;
     }
 
