@@ -122,6 +122,7 @@
   height: 100%;
   max-height: calc(100vh - #{$navbar-height});
   overflow-y: auto;
+  padding-bottom: $spacer / 4;
 }
 
 .nav-drawer-list {
@@ -145,15 +146,6 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-
-      &.active {
-        color: $primary;
-      }
-    }
-
-    .btn-nav {
-      line-height: 1.5;
-      padding: $spacer / 2;
     }
 
     i {
@@ -176,7 +168,7 @@
 
 .drawer-nav-group,
 .drawer-nav-header {
-  border-bottom: 1px solid $highlight-white;
+  // border-bottom: 1px solid $highlight-white;
 
   h1,
   h2,
@@ -191,10 +183,11 @@
 
 .drawer-nav-list {
   background: $highlight-black-strong;
+  border-radius: $border-radius;
   color: $highlight-white-xstrong;
   list-style: none;
-  margin: 0;
-  padding: 0;
+  margin: $spacer / 4 $spacer / 2;
+  padding: $spacer / 4 0;
 
   &.training {
     list-style: none;
@@ -305,10 +298,26 @@
   padding: ($spacer / 4 * 3) $spacer;
   transition: $transition-base;
 
+  &::before {
+    background: $highlight-white;
+    border-radius: $border-radius;
+    content: close-quote;
+    height: calc(100% - #{$spacer / 2});
+    left: $spacer / 2;
+    opacity: 0;
+    position: absolute;
+    top: $spacer / 4;
+    transition: $transition-base;
+    width: calc(100% - #{$spacer});
+  }
+
   &:hover {
-    background-color: $highlight-white;
     color: $white;
     text-decoration: none;
+
+    &::before {
+      opacity: 1;
+    }
   }
 
   >i {
@@ -316,11 +325,10 @@
   }
 
   &.active {
-    background-color: $highlight-white;
     color: $white;
 
-    .subtitle {
-      color: $primary;
+    &::before {
+      opacity: 1;
     }
 
     h4 {
@@ -357,6 +365,8 @@
 
 
 .drawer-nav-header {
+  border-bottom: 1px solid $highlight-white;
+  margin-bottom: $spacer / 4;
   padding: $spacer;
 }
 
@@ -416,26 +426,6 @@ $circle-circumference: $circle-diameter * 3.14;
     right: $spacer / 2;
     top: $spacer / 2;
   }
-
-  .btn-ctrl {
-    line-height: 0;
-    padding: 20px;
-    position: relative;
-
-    i {
-      transition: transform .15s ease-in-out;
-    }
-
-    &:hover {
-      background: $highlight-white;
-    }
-
-    &.collapsed {
-      i {
-        transform: rotate(-90deg);
-      }
-    }
-  }
 }
 
 .drawer-nav-dropdown {
@@ -444,8 +434,21 @@ $circle-circumference: $circle-diameter * 3.14;
   cursor: pointer;
   display: flex;
   flex-grow: 1;
-  padding: $spacer;
+  padding: $spacer * .75 $spacer;
   transition: $transition-base;
+
+  &::before {
+    background: $highlight-white;
+    border-radius: $border-radius;
+    content: close-quote;
+    height: calc(100% - #{$spacer / 2});
+    left: $spacer / 2;
+    opacity: 0;
+    position: absolute;
+    top: $spacer / 4;
+    transition: $transition-base;
+    width: calc(100% - #{$spacer});
+  }
 
   &.collapsed {
     i {
@@ -454,14 +457,20 @@ $circle-circumference: $circle-diameter * 3.14;
   }
 
   &.active {
-    background: $highlight-white;
     color: $white;
+
+    &::before {
+      opacity: 1;
+    }
   }
 
   &:hover {
-    background: $highlight-white;
     color: $white;
     text-decoration: none;
+
+    &::before {
+      opacity: 1;
+    }
   }
 
   i {
@@ -469,16 +478,5 @@ $circle-circumference: $circle-diameter * 3.14;
     margin-right: $spacer / 2;
     transition: transform .35s ease;
     vertical-align: text-top;
-
-    &+span {
-      // if the span is next to an icon, no margin
-      margin-left: 0;
-    }
   }
-
-  span {
-    // 24px is the size of the material icon
-    // margin-left: 24px + ($spacer / 2);
-  }
-
 }
