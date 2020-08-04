@@ -2,8 +2,7 @@
 {% load thumbnail %}
 <div class="file">
   <div class="file-header">
-    <a href="?asset={{ asset.id }}" class="file-modal-link"
-      class="{% if asset.static_asset.source_type == 'video' %}video-preview{% endif %}" data-asset-id="{{ asset.id }}"
+    <a href="?asset={{ asset.id }}" class="file-modal-link" data-asset-id="{{ asset.id }}"
       data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
 
       {% if asset.static_asset.preview %}

@@ -38,12 +38,6 @@
     a {
       text-decoration: none;
     }
-
-    .video-preview {
-      &::after {
-        background: $primary;
-      }
-    }
   }
 
   .subtitle {

@@ -1,0 +1,31 @@
+// This is a play-button overlay for videos
+.video-preview {
+  cursor: pointer;
+  position: relative;
+
+  img {
+    border-radius: $border-radius;
+  }
+
+  &:hover {
+    &::after {
+      background: rgba($primary, 1);
+    }
+  }
+
+  &::after {
+    @extend .material-icons;
+    background: rgba($primary, .8);
+    border-radius: $border-radius;
+    color: $white;
+    content: 'play_arrow';
+    display: block;
+    font-size: $spacer * 1.5;
+    left: 50%;
+    padding: $spacer / 2;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    transition: $transition-base;
+  }
+}

@@ -17,7 +17,6 @@
   }
 }
 
-
 //This button should have underline on hover
 .btn-transparent {
   &:hover {
@@ -26,6 +25,19 @@
   }
 }
 
+//This button has special text colours
+.btn-nav {
+  color: $highlight-white-xstrong;
+  font-weight: $font-weight-normal;
+
+  &:hover {
+    color: $white;
+  }
+}
+
+.btn-profile {
+  padding: .4375rem;
+}
 
 //
 // Button Sizes
@@ -54,6 +66,8 @@
     padding: $btn-padding-y-lg;
   }
 }
+
+
 
 .btn-float {
   position: absolute;

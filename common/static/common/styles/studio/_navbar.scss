@@ -46,6 +46,7 @@ body {
 
     align-items: center;
     color: $highlight-white-xstrong;
+    display: flex;
     flex-grow: 1;
 
     .list-group-item {
@@ -69,15 +70,16 @@ body {
     }
   }
 
-
-  .searchbar {
-    align-items: stretch;
+  .navbar-main-mobile {
+    align-items: center;
     display: flex;
-    margin: 0 auto;
-    max-width: 380px;
-    padding-bottom: $spacer/2;
-    padding-top: $spacer/2;
-    position: relative;
+    padding: 0 $spacer / 2;
+  }
+
+  .navbar-main-nav-toolbar {
+    align-items: center;
+    display: flex;
+    padding: 0 $spacer / 2;
   }
 
   @include media-breakpoint-down(sm) {
@@ -137,7 +139,7 @@ body {
 
     flex-wrap: wrap;
     overflow-x: scroll;
-    padding: 0 $spacer;
+    padding: $spacer / 4 $spacer;
     scrollbar-width: none;
 
     &::-webkit-scrollbar {
@@ -147,8 +149,8 @@ body {
 
   .breadcrumb-item {
     display: flex;
-    padding-bottom: $spacer/2;
-    padding-top: $spacer/2;
+    padding-bottom: $spacer / 2;
+    padding-top: $spacer / 2;
     white-space: nowrap;
 
     &:last-child {
@@ -163,12 +165,22 @@ body {
       text-decoration: none;
     }
 
+    border-radius: $border-radius !important;
+    padding: $spacer / 4 $spacer * .75;
     transition: $transition-base;
     white-space: nowrap;
 
     &.search {
       margin-left: auto;
       padding: $spacer / 8 $spacer / 4;
+    }
+
+    +.list-group-item {
+      margin-left: $spacer / 2;
+
+      &.active {
+        margin-left: $spacer / 2;
+      }
     }
   }
 }

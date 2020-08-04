@@ -28,7 +28,9 @@
   }
 
   .modal-header {
+    border-radius: $border-radius $border-radius 0 0;
     flex-direction: column;
+    overflow: hidden;
     padding: 0;
     position: relative;
     text-align: center;
@@ -44,6 +46,10 @@
       .plyr__video-wrapper {
         background: $navigation-gray;
       }
+
+      video {
+        max-height: 75vh;
+      }
     }
 
     img {
@@ -58,6 +64,10 @@
     left: 50%;
     position: fixed;
     top: 50%;
+  }
+
+  .modal-content {
+    border-radius: $border-radius;
   }
 }
 

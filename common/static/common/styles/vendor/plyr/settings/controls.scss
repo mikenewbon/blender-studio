@@ -5,7 +5,7 @@
 $plyr-control-icon-size: 18px !default;
 $plyr-control-spacing: 10px !default;
 $plyr-control-padding: ($plyr-control-spacing * 0.7) !default;
-$plyr-control-radius: 3px !default;
+$plyr-control-radius: $border-radius-sm !default;
 
 $plyr-video-controls-bg: #000 !default;
 $plyr-video-control-color: #fff !default;

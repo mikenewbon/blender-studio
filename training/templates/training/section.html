@@ -22,7 +22,11 @@
 {% block scripts %}
 {{ block.super }}
 {% comment %} <script id="sectionProgressReportingData" type="application/json">
-  {{ section_progress_reporting_data | json_script }}
+  {
+    {
+      section_progress_reporting_data | json_script
+    }
+  }
 </script> {% endcomment %}
 {{ section_progress_reporting_data|json_script:"sectionProgressReportingData" }}
 {% endblock scripts %}
@@ -60,12 +64,11 @@
         </div>
 
         <div class="training-toolbar">
-          <a class="btn btn-sm btn-dark"><i
-              class="material-icons btn-material-icons btn-material-icons-lg">favorite_border</i> Like</a>
+          <a class="btn btn-sm btn-dark"><i class="material-icons">favorite_border</i> Like</a>
           <a class="btn btn-sm btn-dark">Download</a>
-          <button data-toggle="dropdown" class="btn btn-sm btn-ctrl-sm btn-dark">
+          <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
 
-            <i class="material-icons btn-material-icons">more_horiz</i>
+            <i class="material-icons">more_horiz</i>
 
             <div class="dropdown-menu dropdown-menu-right">
               <a href="#" class="dropdown-item">
@@ -81,7 +84,7 @@
 
       <div class="card card-dark d-md-none">
         <div class="card-body">
-        <!-- TODO(Mike): Get next training -->
+          <!-- TODO(Mike): Get next training -->
           {% if video is not none %}
           <div class="row mb-2 justify-content-between">
             <div class="col-auto">
@@ -99,7 +102,9 @@
           </div>
           {% endif %}
 
-          <img src="{% static 'training/images/placeholders/video.jpg' %}" class="img-fluid">
+          <a href="#" class="video-preview">
+            <img src="{% static 'training/images/placeholders/video.jpg' %}" class="img-fluid">
+          </a>
 
         </div>
       </div>
@@ -126,7 +131,9 @@
             </div>
           </div>
           {% endif %}
-          <img src="{% static 'training/images/placeholders/video.jpg' %}" class="img-fluid">
+          <a href="#" class="video-preview">
+            <img src="{% static 'training/images/placeholders/video.jpg' %}" class="img-fluid">
+          </a>
 
         </div>
       </div>

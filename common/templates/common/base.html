@@ -30,69 +30,74 @@
         aria-valuemax="100"></div>
     </div>
 
-    <button class="btn btn-nav navdrawertoggle">
-      <i class="material-icons">menu</i>
-    </button>
+    <div class="navbar-main-mobile">
+      <button class="btn btn-secondary btn-nav btn-icon navdrawertoggle">
+        <i class="material-icons">menu</i>
+      </button>
+    </div>
 
     <a href="/" class="navbar-brand">
       <img src="{% static 'common/images/blender_cloud_logo.svg' %}" alt="Blender Studio">
     </a>
 
-    <div class="navbar-main-nav list-group list-group-flush list-group-horizontal">
-      <a href="/films/" class="list-group-item">
+    <div class="navbar-main-nav">
+      <a href="/films/" class="btn btn-secondary btn-nav">
         <span>Films</span>
       </a>
-      <a href="/training/" class="list-group-item">
+      <a href="/training/" class="btn btn-secondary btn-nav">
         <span>Training</span>
       </a>
       {% comment %} <a href="/services/" class="list-group-item">
         <span>Services</span>
       </a> {% endcomment %}
-      <a href="/blog/" class="list-group-item">
+      <a href="/blog/" class="btn btn-secondary btn-nav">
         <span>Blog</span>
       </a>
     </div>
     {% if request.user.is_authenticated %}
 
-    <a href="/search" class="btn btn-nav search-button">
-      <i class="material-icons">search</i>
-    </a>
+    <div class="navbar-main-nav-toolbar">
 
-    {% comment %} <div class="searchbar-wrapper">
-      <div class="searchbar">
-        <div class="input-group-prepend"><span class="input-group-text"><i class="material-icons">search</i></span>
+      <a href="/search" class="btn btn-secondary btn-nav btn-icon d-none d-md-block mr-2">
+        <i class="material-icons">search</i>
+      </a>
+
+      {% comment %} <div class="searchbar-wrapper">
+        <div class="searchbar">
+          <div class="input-group-prepend"><span class="input-group-text"><i class="material-icons">search</i></span>
+          </div>
+          <input type="text" placeholder="Search tags and keywords" class="form-control">
         </div>
-        <input type="text" placeholder="Search tags and keywords" class="form-control">
+      </div> {% endcomment %}
+
+      <button data-toggle="dropdown" class="btn btn-secondary btn-nav btn-profile">
+        <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');" class="profile"></div>
+      </button>
+      <div class="dropdown-menu profile-dropdown">
+
+        <a href="/" class="dropdown-item">
+          <i class="material-icons">home</i>
+          <span>My Cloud</span>
+        </a>
+
+        <a href="/settings" class="dropdown-item">
+          <i class="material-icons">settings</i>
+          <span>Settings</span>
+        </a>
+
+        <a href="/settings/subscription" class="dropdown-item">
+          <i class="material-icons">credit_card</i>
+          <span>Subscription</span>
+        </a>
+
+        <div class="dropdown-divider"></div>
+
+        <a href="/oauth/logout" class="dropdown-item">
+          <i class="material-icons">exit_to_app</i>
+          <span>Sign Out</span>
+        </a>
+
       </div>
-    </div> {% endcomment %}
-
-    <div data-toggle="dropdown" class="btn btn-nav nav-profile">
-      <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');" class="profile"></div>
-    </div>
-    <div class="dropdown-menu profile-dropdown">
-
-      <a href="/" class="dropdown-item">
-        <i class="material-icons">home</i>
-        <span>My Cloud</span>
-      </a>
-
-      <a href="/settings" class="dropdown-item">
-        <i class="material-icons">settings</i>
-        <span>Settings</span>
-      </a>
-
-      <a href="/settings/subscription" class="dropdown-item">
-        <i class="material-icons">credit_card</i>
-        <span>Subscription</span>
-      </a>
-
-      <div class="dropdown-divider"></div>
-
-      <a href="/oauth/logout" class="dropdown-item">
-        <i class="material-icons">exit_to_app</i>
-        <span>Sign Out</span>
-      </a>
-
     </div>
     {% else %}
     <div class="navbar-login-wrapper">
@@ -124,7 +129,7 @@
   <nav class="nav-drawer">
     {% block nav_drawer_spacer %}
     {% endblock nav_drawer_spacer %}
-     <div class="nav-drawer-body">
+    <div class="nav-drawer-body">
       {% comment %}<div class="px-2 py-2 d-block d-md-none">
         <div class="input-group mb-0">
           <div class="input-group-prepend">

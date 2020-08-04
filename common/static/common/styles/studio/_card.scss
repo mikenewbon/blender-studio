@@ -1,22 +1,9 @@
 .card {
+  @include button-float;
+
   flex-grow: 1;
   margin-bottom: $spacer;
   transition: $transition-base;
-
-  @include hover-focus {
-    background-color: shade($white, 10%);
-
-    .btn-save-media {
-      opacity: 1;
-    }
-  }
-
-  .card-body {
-    @include hover {
-      color: $card-color;
-      text-decoration: none;
-    }
-  }
 
   .card-header {
     background-position: center;
@@ -36,7 +23,31 @@
     }
   }
 
+  &.card-hover {
+    @include hover-focus {
+      background-color: shade($white, 10%);
+    }
+
+    &.card-dark {
+      @include hover-focus {
+        background-color: tint($navigation-gray, 10%);
+
+        .card-body {
+          color: $white;
+        }
+      }
+    }
+
+    .card-body {
+      @include hover {
+        color: $card-color;
+        text-decoration: none;
+      }
+    }
+  }
+
   &.card-media {
+
     &.card-poster {
 
       .card-header {
@@ -62,12 +73,6 @@
         position: absolute;
       }
 
-      .badge-difficulty {
-        left: $spacer / 2;
-        top: $spacer / 2;
-      }
-
-
       .progress {
         bottom: 0;
         left: 0;
@@ -87,14 +92,6 @@
 
   .card-subtitle {
     color: $highlight-white-xstrong;
-  }
-
-  @include hover-focus {
-    background-color: tint($navigation-gray, 10%);
-
-    .card-body {
-      color: $white;
-    }
   }
 }
 
@@ -247,6 +244,22 @@
         }
       }
     }
+
+
+    @include hover-focus {
+      background-color: shade($white, 10%);
+    }
+
+    &.card-dark {
+      @include hover-focus {
+        background-color: tint($navigation-gray, 10%);
+
+        .card-body {
+          color: $white;
+        }
+      }
+    }
+
   }
 }
 
