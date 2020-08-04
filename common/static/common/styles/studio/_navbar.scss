@@ -24,11 +24,7 @@ body {
   }
 
   .navdrawertoggle {
-    @include media-breakpoint-down(sm) {
-      display: flex;
-    }
-
-    display: none;
+    display: flex;
 
     i {
       font-size: $x-large-font-size;
@@ -71,6 +67,10 @@ body {
   }
 
   .navbar-main-mobile {
+    @include media-breakpoint-up(md) {
+      display: none;
+    }
+
     align-items: center;
     display: flex;
     padding: 0 $spacer / 2;
@@ -171,8 +171,14 @@ body {
     white-space: nowrap;
 
     &.search {
-      margin-left: auto;
+      align-items: center;
+      display: flex;
+      margin-left: auto !important;
       padding: $spacer / 8 $spacer / 4;
+
+      i {
+        line-height: 1;
+      }
     }
 
     +.list-group-item {
