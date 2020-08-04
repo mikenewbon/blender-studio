@@ -47,6 +47,8 @@ and it must not be committed.
 11. In the admin panel (http://studio.local:8001/admin), edit the `Site` object's domain.
     The default domain is `example.com`; change it to `studio.local:8001`. This will make
     it possible to immediately view objects created/edited via admin on site.
+12. Set up the [Blender ID server](#blender-id-authentication) for authentication
+    and [MeiliSerach server](#search) for the search functionality.
 
 
 ## Data import
@@ -64,7 +66,7 @@ instance of [Blender ID](https://docs.blender.org/id/development_setup/). You'll
 ```
 docker run --rm --name blender-id-db -e MYSQL_USER=blender_id -e \
 MYSQL_PASSWORD=blender_id -e MYSQL_DATABASE=blender_id -e MYSQL_ALLOW_EMPTY_PASSWORD=yes \
--p 3306:3306 -it -v blender_id:/var/lib/mysql/blender_id mariadb:latest
+-p 3306:3306 -it -v blender_id:/var/lib/mysql mariadb:latest
 ```
 
 After configuring and running the Blender ID application, in its admin (http://id.local:8000/admin/)
@@ -75,6 +77,18 @@ create a new OAuth2 application:
 
 Copy the **Cliend id** and **Cliend secret** to the studio's `settings.py` as `"OAUTH_CLIENT"`
 and `"OAUTH_SECRET"` in the `BLENDER_ID` settings.
+
+
+## Search
+The search functionality uses [MeiliSearch](https://github.com/meilisearch/MeiliSearch).
+Follow the [installation instructions in the documentation](https://docs.meilisearch.com/guides/advanced_guides/installation.html).
+The server will be listening on port `7700` by default.
+
+In production, the server should be run in the `Production` mode, and with a master key.
+The mode is set either with an environment variable `MEILI_ENV`, or a CLI option `--env`.
+Running the server without a master key is only possible in development, as it makes
+all routes accessible and constitutes a security issue.
+The details are explained in [the authentication guide](https://docs.meilisearch.com/guides/advanced_guides/authentication.html).
 
 
 ## Workflow
