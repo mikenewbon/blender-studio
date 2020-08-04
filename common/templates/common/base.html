@@ -41,16 +41,16 @@
     </a>
 
     <div class="navbar-main-nav">
-      <a href="/films/" class="btn btn-secondary btn-nav">
+      <a href="{% url 'film-list' %}" class="btn btn-secondary btn-nav">
         <span>Films</span>
       </a>
-      <a href="/training/" class="btn btn-secondary btn-nav">
+      <a href="{% url 'training-home' %}" class="btn btn-secondary btn-nav">
         <span>Training</span>
       </a>
       {% comment %} <a href="/services/" class="list-group-item">
         <span>Services</span>
       </a> {% endcomment %}
-      <a href="/blog/" class="btn btn-secondary btn-nav">
+      <a href="{% url 'post-list' %}" class="btn btn-secondary btn-nav">
         <span>Blog</span>
       </a>
     </div>
@@ -58,7 +58,7 @@
 
     <div class="navbar-main-nav-toolbar">
 
-      <a href="/search" class="btn btn-secondary btn-nav btn-icon d-none d-md-block mr-2">
+      <a href="{% url 'search' %}" class="btn btn-secondary btn-nav btn-icon d-none d-md-block mr-2">
         <i class="material-icons">search</i>
       </a>
 
@@ -92,7 +92,7 @@
 
         <div class="dropdown-divider"></div>
 
-        <a href="/oauth/logout" class="dropdown-item">
+        <a href="{% url 'oauth:logout' %}" class="dropdown-item">
           <i class="material-icons">exit_to_app</i>
           <span>Sign Out</span>
         </a>
@@ -101,7 +101,7 @@
     </div>
     {% else %}
     <div class="navbar-login-wrapper">
-      <a href="/oauth/login" class="btn btn-transparent mr-2 btn-nav d-none d-sm-inline-block">Login</a>
+      <a href="{% url 'oauth:login' %}" class="btn btn-transparent mr-2 btn-nav d-none d-sm-inline-block">Login</a>
       <a href="#" class="btn btn-primary ">Join <span class="d-none d-lg-inline-block">Blender Studio</span></a>
     </div>
     {% endif %}
@@ -130,23 +130,23 @@
     {% block nav_drawer_spacer %}
     {% endblock nav_drawer_spacer %}
     <div class="nav-drawer-body">
-      {% comment %}<div class="px-2 py-2 d-block d-md-none">
+      <div class="px-2 py-2 d-block d-md-none">
         <div class="input-group mb-0">
           <div class="input-group-prepend">
             <span class="input-group-text">
               <i class="material-icons">search</i></span>
           </div><input class="form-control" type="text" placeholder="Search tags and keywords" />
         </div>
-      </div> {% endcomment %}
+      </div>
       <div class="navbar-secondary d-md-none">
         <div class="content-holder">
           <div class="container-xl">
             <div class="list-group list-group-flush list-group-horizontal small px-2">
-              <a class="list-group-item" href="/films/">Films</a>
-              <a class="list-group-item" href="/training/">Training</a>
+              <a class="list-group-item" href="{% url 'film-list' %}">Films</a>
+              <a class="list-group-item" href="{% url 'training-home' %}">Training</a>
               {% comment %} <a class="list-group-item" href="#">Services</a>{% endcomment %}
-              <a class="list-group-item" href="/blog/">Blog</a>
-              <a class="list-group-item search" href="/search/">
+              <a class="list-group-item" href="{% url 'post-list' %}">Blog</a>
+              <a class="list-group-item search" href="{% url 'search' %}">
                 <i class="material-icons icon-inline">search</i>
               </a>
             </div>
@@ -200,7 +200,7 @@
           </div>
           <div class="col-md-8 offset-lg-1">
             <div class="row text-white">
-              <div class="col-md-3 col-6"><a href="#" class="h3 text-white">Training</a>
+              <div class="col-md-3 col-6"><a href="{% url 'training-home' %}" class="h3 text-white">Training</a>
                 <ul>
                   <li>
                     <a href="#" class="small text-white">Courses</a>
@@ -211,7 +211,7 @@
                   <li>
                     <a href="#" class="small text-white">Production Lessons</a>
                   </li>
-                </ul><a href="#" class="h3 text-white">Films</a>
+                </ul><a href="{% url 'film-list' %}" class="h3 text-white">Films</a>
               </div>
               <div class="col-md-3 col-6"><a href="#" class="h3 text-white">Libraries</a>
                 <ul>
@@ -253,7 +253,7 @@
                 <a href="#" class="h3 text-white">Cloud</a>
                 <ul>
                   <li>
-                    <a href="#" class="small text-white">Blog</a>
+                    <a href="{% url 'post-list' %}" class="small text-white">Blog</a>
                   </li>
                   <li>
                     <a href="#" class="small text-white">Terms &amp; Conditions</a>
