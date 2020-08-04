@@ -56,13 +56,7 @@ has-secondary-nav
     </a>
     {% endif %}
   </div>
-
-
-
-
-
-
-
+  {% if child_collections %}
   <ol id="collection-{{ collection.id }}"
     class="drawer-nav-list collapse {% if current_collection.parent == collection or current_collection == collection %}show{% endif %}">
 
@@ -84,6 +78,7 @@ has-secondary-nav
     {% endfor %}
 
   </ol>
+  {% endif %}
 </div>
 {% endfor %}
 
