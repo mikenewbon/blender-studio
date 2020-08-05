@@ -105,7 +105,7 @@ class TestCommentDeleteEndpoint(TestCase):
             self.assertTrue(c.is_deleted)
 
 
-class TestCommentArchiveEndpoint(TestCase):
+class TestCommentArchiveTreeEndpoint(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
         cls.user = UserFactory()
@@ -113,7 +113,7 @@ class TestCommentArchiveEndpoint(TestCase):
 
     def setUp(self) -> None:
         self.comment = CommentFactory(user=self.user)
-        self.archive_url = reverse('comment-archive', kwargs={'comment_pk': self.comment.pk})
+        self.archive_url = reverse('comment-archive-tree', kwargs={'comment_pk': self.comment.pk})
 
     def test_regular_user_cannot_archive_comment(self):
         self.client.force_login(self.user)
@@ -139,6 +139,30 @@ class TestCommentArchiveEndpoint(TestCase):
 
         response_1 = self.client.post(self.archive_url)
         self.assertNotEqual(initial_state, json.loads(response_1.content)['is_archived'])
+        self.comment.refresh_from_db()
+        self.assertNotEqual(initial_state, self.comment.is_archived)
 
         response_2 = self.client.post(self.archive_url)
         self.assertEqual(initial_state, json.loads(response_2.content)['is_archived'])
+        self.comment.refresh_from_db()
+        self.assertEqual(initial_state, self.comment.is_archived)
+
+    def test_entire_tree_is_archived(self):
+        comment_0 = CommentFactory()
+        reply_1_0, reply_1_1 = CommentFactory.create_batch(2, reply_to=comment_0)
+        reply_2_0, reply_2_1 = CommentFactory.create_batch(2, reply_to=reply_1_0)
+        reply_3_0 = CommentFactory(reply_to=reply_2_0)
+        other_comment = CommentFactory()
+        comment_tree_to_archive = [comment_0, reply_1_0, reply_1_1, reply_2_0, reply_2_1, reply_3_0]
+        self.client.force_login(self.admin)
+
+        response = self.client.post(
+            reverse('comment-archive-tree', kwargs={'comment_pk': reply_2_0.pk})
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(json.loads(response.content)['is_archived'])
+        for comment in comment_tree_to_archive:
+            comment.refresh_from_db()
+            self.assertTrue(comment.is_archived)
+        self.assertFalse(other_comment.is_archived)

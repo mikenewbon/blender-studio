@@ -86,6 +86,30 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
             reply.soft_delete_tree()
         self.soft_delete()
 
+    def _archive_comment_and_replies(self) -> None:
+        for reply in self.replies.all():
+            reply._archive_comment_and_replies()
+        self.is_archived = not self.is_archived
+        self.save()
+
+    def archive_tree(self) -> bool:
+        """Switch the 'is_archived' status of the comment and the entire comment tree.
+
+        It does not make sense to archive only part of a conversation, so this action
+        also affects the comment's parents and replies - the entire thread.
+        """
+        # Find the root comment of the entire tree:
+        root = self
+        while root.reply_to is not None:
+            root = root.reply_to
+
+        # Switch the is_archived flag for all the comments in the tree:
+        root.is_archived = not self.is_archived
+        root.save()
+        for reply in root.replies.all():
+            reply._archive_comment_and_replies()
+        return root.is_archived
+
 
 class Like(mixins.CreatedUpdatedMixin, models.Model):
     class Meta:

@@ -87,11 +87,10 @@ def moderator_delete_comment(*, comment_pk: int) -> None:
     comment.soft_delete()
 
 
-def moderator_archive_comment(*, comment_pk: int) -> bool:
+def archive_comment(*, comment_pk: int) -> bool:
     comment: models.Comment = models.Comment.objects.get(id=comment_pk)
-    comment.is_archived = not comment.is_archived
-    comment.save()
-    return comment.is_archived
+    is_archived = comment.archive_tree()
+    return is_archived
 
 
 def delete_comment_tree(*, comment_pk: int) -> None:
