@@ -65,6 +65,14 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
     def delete_url(self) -> str:
         return reverse('comment-delete', kwargs={'comment_pk': self.pk})
 
+    @property
+    def delete_tree_url(self) -> str:
+        return reverse('comment-delete-tree', kwargs={'comment_pk': self.pk})
+
+    @property
+    def hard_delete_tree_url(self) -> str:
+        return reverse('comment-hard-delete-tree', kwargs={'comment_pk': self.pk})
+
     def soft_delete(self) -> None:
         """Instead of removing a comment, only marks it as deleted by setting its `date_deleted`.
 

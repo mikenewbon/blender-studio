@@ -30,14 +30,18 @@ def comments_to_template_type(
             profile_image_url='https://blender.chat/avatar/MikeNewbon',
             edit_url=(
                 comment.edit_url
-                if assert_cast(bool, getattr(comment, 'owned_by_current_user')) or user_is_moderator
+                if assert_cast(bool, getattr(comment, 'owned_by_current_user'))
                 else None
             ),
+            admin_edit_url=comment.edit_url if user_is_moderator else None,
             delete_url=(
                 comment.delete_url
-                if assert_cast(bool, getattr(comment, 'owned_by_current_user')) or user_is_moderator
+                if assert_cast(bool, getattr(comment, 'owned_by_current_user'))
                 else None
             ),
+            admin_delete_url=comment.delete_url if user_is_moderator else None,
+            delete_tree_url=comment.delete_tree_url if user_is_moderator else None,
+            hard_delete_tree_url=comment.hard_delete_tree_url if user_is_moderator else None,
             edited=(comment.date_updated != comment.date_created),
             is_archived=comment.is_archived,
             is_top_level=True if comment.reply_to is None else False,
