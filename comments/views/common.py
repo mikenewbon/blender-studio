@@ -40,6 +40,7 @@ def comments_to_template_type(
             ),
             edited=(comment.date_updated != comment.date_created),
             is_archived=comment.is_archived,
+            is_top_level=True if comment.reply_to is None else False,
         )
 
     def build_deleted_tree(comment: Comment) -> typed_templates.DeletedCommentTree:
@@ -57,6 +58,7 @@ def comments_to_template_type(
             profile_image_url='https://blender.chat/avatar/MikeNewbon',
             # TODO(Natalia): set an empty profile picture in deleted comments
             is_archived=comment.is_archived,
+            is_top_level=True if comment.reply_to is None else False,
         )
 
     return typed_templates.Comments(

@@ -20,6 +20,7 @@ class CommentTree:
     replies: List[CommentTree]
     profile_image_url: str
     is_archived: bool
+    is_top_level: bool
     full_name: str
     message: str
     like_url: Optional[str]
