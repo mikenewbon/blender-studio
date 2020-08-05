@@ -1,4 +1,4 @@
-from typing import Any, Tuple, Dict
+from typing import Any, Tuple, Dict, List
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -86,29 +86,37 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
             reply.soft_delete_tree()
         self.soft_delete()
 
-    def _archive_comment_and_replies(self) -> None:
-        for reply in self.replies.all():
-            reply._archive_comment_and_replies()
-        self.is_archived = not self.is_archived
-        self.save()
-
-    def archive_tree(self) -> bool:
-        """Switch the 'is_archived' status of the comment and the entire comment tree.
-
-        It does not make sense to archive only part of a conversation, so this action
-        also affects the comment's parents and replies - the entire thread.
-        """
-        # Find the root comment of the entire tree:
+    def _get_tree_comments_pks(self) -> List[int]:
         root = self
         while root.reply_to is not None:
             root = root.reply_to
 
-        # Switch the is_archived flag for all the comments in the tree:
-        root.is_archived = not self.is_archived
-        root.save()
-        for reply in root.replies.all():
-            reply._archive_comment_and_replies()
-        return root.is_archived
+        tree = [root]
+        replies = list(root.replies.all())
+
+        def add_replies_to_tree_comments(
+            tree: List['Comment'], replies: List['Comment']
+        ) -> List['Comment']:
+            tree.extend(replies)
+            for comment in replies:
+                tree = add_replies_to_tree_comments(tree, list(comment.replies.all()))
+            return tree
+
+        tree = add_replies_to_tree_comments(tree, replies)
+
+        return [comment.pk for comment in tree]
+
+    def archive_tree(self) -> bool:
+        """Switch the 'is_archived' status of the comment and the entire comment tree.
+
+        It does not make sense to archive only a part of a conversation, so this action
+        also affects the comment's parents and replies - the entire tree.
+        """
+        new_archived_status = not self.is_archived
+        tree_pks = self._get_tree_comments_pks()
+        Comment.objects.filter(pk__in=tree_pks).update(is_archived=new_archived_status)
+
+        return new_archived_status
 
 
 class Like(mixins.CreatedUpdatedMixin, models.Model):
