@@ -70,7 +70,7 @@ def moderator_edit_comment(*, comment_pk: int, message: str) -> models.Comment:
 
 
 def delete_comment(*, comment_pk: int, user_pk: int) -> None:
-    """Soft-delete the comment, i.e. mark is as deleted."""
+    """Soft-deletes the comment, i.e. marks is as deleted."""
     comment: models.Comment = models.Comment.objects.get(id=comment_pk, user_id=user_pk)
     if comment.is_deleted:
         log.warning(f'User {user_pk} has tried to delete a deleted comment with id={comment_pk}.')
@@ -79,7 +79,7 @@ def delete_comment(*, comment_pk: int, user_pk: int) -> None:
 
 
 def moderator_delete_comment(*, comment_pk: int) -> None:
-    """Soft-delete the comment, i.e. mark is as deleted."""
+    """Soft-deletes the comment, i.e. marks is as deleted."""
     comment: models.Comment = models.Comment.objects.get(id=comment_pk)
     if comment.is_deleted:
         log.warning(f'A moderator has tried to delete a deleted comment with id={comment_pk}.')
@@ -87,12 +87,30 @@ def moderator_delete_comment(*, comment_pk: int) -> None:
     comment.soft_delete()
 
 
+def delete_comment_tree(*, comment_pk: int) -> None:
+    """Soft-deletes (i.e. mark sas deleted) the comment and all its replies."""
+    comment: models.Comment = models.Comment.objects.get(id=comment_pk)
+    comment.soft_delete_tree()
+
+
+def hard_delete_comment_tree(*, comment_pk: int) -> None:
+    """Completely deletes the comment and all its replies."""
+    comment: models.Comment = models.Comment.objects.get(id=comment_pk)
+    comment.delete()
+
+
 def archive_comment(*, comment_pk: int) -> bool:
+    """Switches the `is_archived` status of all the comments in the tree.
+
+    If the comment tree to which the comment belongs is already archived, this function
+    un-archives it again.
+
+    Args:
+        comment_pk: int, the primary key (id) of a comment in the tree to be archived.
+
+    Returns:
+        is_archived: bool, the new value of the `is_archived` status of the tree's comments.
+    """
     comment: models.Comment = models.Comment.objects.get(id=comment_pk)
     is_archived = comment.archive_tree()
     return is_archived
-
-
-def delete_comment_tree(*, comment_pk: int) -> None:
-    comment: models.Comment = models.Comment.objects.get(id=comment_pk)
-    comment.soft_delete_tree()

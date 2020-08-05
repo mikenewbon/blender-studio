@@ -25,11 +25,66 @@ class TestCommentDeleteEndpoint(TestCase):
         self.comment_without_replies = CommentFactory(
             reply_to=self.comment_with_replies, user=self.user
         )
+        self.client.force_login(self.user)
 
+    def test_user_can_soft_delete_own_comment_without_replies(self):
+        comment_pk = self.comment_without_replies.pk
+        self.assertFalse(self.comment_without_replies.is_deleted)
+        response = self.client.post(reverse('comment-delete', kwargs={'comment_pk': comment_pk}))
+
+        self.assertEqual(response.status_code, 200)
+        # Deleted comments are kept in the database, but marked as deleted.
+        comment = Comment.objects.filter(pk=comment_pk).first()
+        self.assertIsNotNone(comment)
+        self.assertIsNotNone(comment.date_deleted)
+        self.assertTrue(comment.is_deleted)
+
+    def test_user_can_soft_delete_own_comment_with_replies(self):
+        comment_pk = self.comment_with_replies.pk
+        response = self.client.post(reverse('comment-delete', kwargs={'comment_pk': comment_pk}))
+
+        self.assertEqual(response.status_code, 200)
+        # Deleted comments are kept in the database, but marked as deleted.
+        comment = Comment.objects.filter(pk=comment_pk).first()
+        self.assertIsNotNone(comment)
+        self.assertIsNotNone(comment.date_deleted)
+        self.assertTrue(comment.is_deleted)
+
+    def test_user_cannot_delete_another_user_comment(self):
+        comment_pk = self.reply.pk
+        with self.assertRaises(Comment.DoesNotExist):
+            self.client.post(reverse('comment-delete', kwargs={'comment_pk': comment_pk}))
+
+        comment = Comment.objects.filter(pk=comment_pk).first()
+        self.assertIsNotNone(comment)
+        self.assertFalse(comment.is_deleted)
+
+    def test_admin_can_soft_delete_comment(self):
+        self.client.force_login(self.admin)
+        comment_pk = self.comment_without_replies.pk
+        response = self.client.post(reverse('comment-delete', kwargs={'comment_pk': comment_pk}))
+
+        self.assertEqual(response.status_code, 200)
+        # Deleted comments are kept in the database, but marked as deleted.
+        comment = Comment.objects.filter(pk=comment_pk).first()
+        self.assertIsNotNone(comment)
+        self.assertTrue(comment.is_deleted)
+
+
+class TestCommentDeleteTreeEndpoints(TestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.user = UserFactory()
+        cls.admin = UserFactory(is_superuser=True)
+
+        # Do not show warnings while running this test case (to avoid cluttering the test output)
+        logging.disable(logging.ERROR)
+
+    def setUp(self) -> None:
         # Create comment tree
         comment_base = CommentFactory()
         comment_should_stay, self.comment_to_delete = CommentFactory.create_batch(
-            2, reply_to=comment_base
+            2, reply_to=comment_base, user=self.user,
         )
         reply_to_delete_0, reply_to_delete_1 = CommentFactory.create_batch(
             2, reply_to=self.comment_to_delete
@@ -45,56 +100,25 @@ class TestCommentDeleteEndpoint(TestCase):
             reply_to_delete_3,
         ]
 
+        self.soft_delete_url = reverse(
+            'comment-delete-tree', kwargs={'comment_pk': self.comment_to_delete.pk}
+        )
+        self.hard_delete_url = reverse(
+            'comment-hard-delete-tree', kwargs={'comment_pk': self.comment_to_delete.pk}
+        )
+
         self.client.force_login(self.user)
 
-    def test_user_can_soft_delete_own_comment_without_replies(self):
-        comment_pk = self.comment_without_replies.pk
-        self.assertFalse(self.comment_without_replies.is_deleted)
-        response = self.client.delete(reverse('comment-delete', kwargs={'comment_pk': comment_pk}))
+    def test_user_cannot_soft_delete_comments_tree(self):
+        response = self.client.post(self.soft_delete_url)
 
-        self.assertEqual(response.status_code, 200)
-        # Deleted comments are kept in the database, but marked as deleted.
-        comment = Comment.objects.filter(pk=comment_pk).first()
-        self.assertIsNotNone(comment)
-        self.assertIsNotNone(comment.date_deleted)
-        self.assertTrue(comment.is_deleted)
-
-    def test_user_can_soft_delete_own_comment_with_replies(self):
-        comment_pk = self.comment_with_replies.pk
-        response = self.client.delete(reverse('comment-delete', kwargs={'comment_pk': comment_pk}))
-
-        self.assertEqual(response.status_code, 200)
-        # Deleted comments are kept in the database, but marked as deleted.
-        comment = Comment.objects.filter(pk=comment_pk).first()
-        self.assertIsNotNone(comment)
-        self.assertIsNotNone(comment.date_deleted)
-        self.assertTrue(comment.is_deleted)
-
-    def test_user_cannot_delete_another_user_comment(self):
-        comment_pk = self.reply.pk
-        with self.assertRaises(Comment.DoesNotExist):
-            self.client.delete(reverse('comment-delete', kwargs={'comment_pk': comment_pk}))
-
-        comment = Comment.objects.filter(pk=comment_pk).first()
-        self.assertIsNotNone(comment)
-        self.assertFalse(comment.is_deleted)
-
-    def test_admin_can_soft_delete_comment(self):
-        self.client.force_login(self.admin)
-        comment_pk = self.comment_without_replies.pk
-        response = self.client.delete(reverse('comment-delete', kwargs={'comment_pk': comment_pk}))
-
-        self.assertEqual(response.status_code, 200)
-        # Deleted comments are kept in the database, but marked as deleted.
-        comment = Comment.objects.filter(pk=comment_pk).first()
-        self.assertIsNotNone(comment)
-        self.assertTrue(comment.is_deleted)
+        self.assertEqual(response.status_code, 403)
+        self.comment_to_delete.refresh_from_db()
+        self.assertFalse(self.comment_to_delete.is_deleted)
 
     def test_admin_can_soft_delete_comments_tree(self):
         self.client.force_login(self.admin)
-        response = self.client.delete(
-            reverse('comment-delete-tree', kwargs={'comment_pk': self.comment_to_delete.pk})
-        )
+        response = self.client.post(self.soft_delete_url)
 
         self.assertEqual(response.status_code, 200)
         for c in self.tree_comments_should_stay:
@@ -103,6 +127,26 @@ class TestCommentDeleteEndpoint(TestCase):
         for c in self.tree_comments_to_delete:
             c.refresh_from_db()
             self.assertTrue(c.is_deleted)
+
+    def test_user_cannot_hard_delete_comments_tree(self):
+        comment_pk = self.comment_to_delete.pk
+        response = self.client.post(self.hard_delete_url)
+
+        self.assertEqual(response.status_code, 403)
+        self.assertTrue(Comment.objects.filter(pk=comment_pk).exists())
+        self.comment_to_delete.refresh_from_db()
+        self.assertFalse(self.comment_to_delete.is_deleted)
+
+    def test_admin_can_hard_delete_comments_tree(self):
+        self.client.force_login(self.admin)
+        deleted_comments_pks = [c.pk for c in self.tree_comments_to_delete]
+        response = self.client.post(self.hard_delete_url)
+
+        self.assertEqual(response.status_code, 200)
+        for c in self.tree_comments_should_stay:
+            c.refresh_from_db()
+            self.assertFalse(c.is_deleted)
+        self.assertFalse(Comment.objects.filter(pk__in=deleted_comments_pks).exists())
 
 
 class TestCommentArchiveTreeEndpoint(TestCase):

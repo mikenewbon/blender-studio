@@ -19,18 +19,19 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
         User, null=True, blank=False, on_delete=models.SET_NULL, related_name='comments',
     )
 
-    # If a comment has replies we prevent it from being deleted to ensure integrity of the
-    # conversation (see the `delete` method below).
+    # We want to enable moderators to permanently delete e.g. spam comments and their replies.
+    # This should not be possible for regular users; see also the `soft_delete` method below.
     reply_to = models.ForeignKey(
         'Comment',
         null=True,
         blank=True,
         default=None,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name='replies',
     )
     message = models.TextField(null=True)
     date_deleted = models.DateTimeField(null=True, editable=False)
+
     # This flag adds a possibility to mark a comment as 'resolved' or 'outdated'.
     is_archived = models.BooleanField(default=False)
 
@@ -65,7 +66,7 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
         return reverse('comment-delete', kwargs={'comment_pk': self.pk})
 
     def soft_delete(self) -> None:
-        """Instead of removing a comment, only mark it as deleted by setting its `date_deleted`.
+        """Instead of removing a comment, only marks it as deleted by setting its `date_deleted`.
 
         To preserve the integrity of the conversation, completely deleting comments
         is not allowed from the front end. However, we should allow users to remove
@@ -81,12 +82,13 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
             self.save()
 
     def soft_delete_tree(self) -> None:
-        """Soft-delete (i.e. mark as deleted) the comment and all its replies."""
+        """Soft-deletes (i.e. mark as deleted) the comment and all its replies."""
         for reply in self.replies.all():
             reply.soft_delete_tree()
         self.soft_delete()
 
     def _get_tree_comments_pks(self) -> List[int]:
+        """Returns the pks of all the comments in the `self` comment tree."""
         root = self
         while root.reply_to is not None:
             root = root.reply_to
@@ -107,7 +109,7 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
         return [comment.pk for comment in tree]
 
     def archive_tree(self) -> bool:
-        """Switch the 'is_archived' status of the comment and the entire comment tree.
+        """Switches the 'is_archived' status of the comment and the entire comment tree.
 
         It does not make sense to archive only a part of a conversation, so this action
         also affects the comment's parents and replies - the entire tree.
