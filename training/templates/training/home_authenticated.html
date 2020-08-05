@@ -39,6 +39,7 @@
       </div>
       <div class="col-md-3 col-6 mb-3">
         <select class="custom-select">
+          <option value="" selected="selected">All Types</option>
           {% for type in TrainingType %}
           <option value="{{ type.value }}">{{ type.label }}</option>
           {% endfor %}
@@ -46,6 +47,7 @@
       </div>
       <div class="col-md-3 col-6 mb-3">
         <select class="custom-select">
+          <option value="" selected="selected">All Difficulties</option>
           {% for type in TrainingDifficulty %}
           <option value="{{ type.value }}">{{ type.label }}</option>
           {% endfor %}
@@ -55,26 +57,35 @@
   </section>
   {% if recently_watched_sections %}
   <section class="mb-3">
-    <h2>Continue training</h2>
-    <p>Recently watched sections will appear here with your position saved</p>
+    <h2 class="mb-0">Continue training</h2>
+    <p class="mb-3">Recently watched sections will appear here with your position saved</p>
     <div class="row">
-      {% for section in recently_watched_sections %}
+      {% for section in recently_watched_sections|slice:':3' %}
       {% include "training/components/card_section.html" with section=section %}
       {% endfor %}
     </div>
   </section>
   {% endif %}
   <section class="mb-3">
-    <h2>Your saved training</h2>
-    <p>You can add and remove items from this list by clicking the plus or the tick</p>
+    <h2 class="mb-0">Your saved training</h2>
+    <p class="mb-3">You can add and remove items from this list by clicking the plus or the tick</p>
+    {% if favorited_trainings %}
     <div class="row">
       {% for training in favorited_trainings %}
       {% include "training/components/card_training.html" with training=training %}
       {% endfor %}
     </div>
+    {% else %}
+    <div class="row bg-secondary">
+      <div class="col my-4 text-center">
+        <h3 class="mb-0">No saved training</h3>
+        <p>You can favorite a few below!</p>
+      </div>
+    </div>
+    {% endif %}
   </section>
   <section>
-    <h2>All training</h2>
+    <h2 class="mb-3">All training</h2>
     <div class="row">
       {% for training in all_trainings %}
       {% include "training/components/card_training.html" with training=training %}

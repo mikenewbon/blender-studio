@@ -1,6 +1,69 @@
-{% extends "training/base_training.html" %}
+{% extends 'training/base_training.html' %}
+
+{% load static %}
+
+{% block jumbotron %}
+<div class="jumbotron jumbotron-fluid jumbotron-overlay header">
+  <div class="jumbotron-bg-wrapper">
+    <img class="jumbotron-bg" src="{% static "training/images/placeholders/jumbotron.png" %}">
+    <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
+    {% comment %} {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %} {% endcomment %}
+  </div>
+  <div class="container-xl">
+    <div class="row">
+      <div class="col-lg-5 col-xl-4">
+        <div class="jumbotron-body">
+          <h1>Training</h1>
+          <p class="mb-0">
+            Learn from our expert team. Classes, workshops and production lessons with .blend files included.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock jumbotron %}
 
 {% block content %}
-    <h1>Home</h1>
-    <h2>Please login to view content</h2>
+<div class="container-xl pt-3">
+  <section class="">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <div class="input-group">
+          <div class="input-group-prepend"><span class="input-group-text">
+              <i class="material-icons">search</i>
+            </span>
+          </div>
+          <input type="text" placeholder="Search tags and keywords" class="form-control">
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-3">
+        <select class="custom-select">
+          <option value="" selected="selected">All Types</option>
+          {% for type in TrainingType %}
+          <option value="{{ type.value }}">{{ type.label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3 col-6 mb-3">
+        <select class="custom-select">
+          <option value="" selected="selected">All Difficulties</option>
+          {% for type in TrainingDifficulty %}
+          <option value="{{ type.value }}">{{ type.label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </section>
+  <section>
+    <h2 class="mb-3">All training</h2>
+    <div class="row bg-secondary">
+      <div class="col my-4 text-center">
+        <h3 class="mb-0">You need to login to view Training</h3>
+        <p>You can join Blender Studio for €9.90/month and get access to all of our training instantly!</p>
+        <a href="/join" class="btn btn-primary">Join Blender Studio</a>
+      </div>
+    </div>
+  </section>
+</div>
 {% endblock content %}
