@@ -66,6 +66,10 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
         return reverse('comment-delete', kwargs={'comment_pk': self.pk})
 
     @property
+    def archive_tree_url(self) -> str:
+        return reverse('comment-archive-tree', kwargs={'comment_pk': self.pk})
+
+    @property
     def delete_tree_url(self) -> str:
         return reverse('comment-delete-tree', kwargs={'comment_pk': self.pk})
 

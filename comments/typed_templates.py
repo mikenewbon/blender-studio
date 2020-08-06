@@ -28,6 +28,7 @@ class CommentTree:
     likes: int
     edit_url: Optional[str]
     admin_edit_url: Optional[str]
+    archive_tree_url: str
     delete_url: Optional[str]
     admin_delete_url: Optional[str]
     delete_tree_url: Optional[str]
