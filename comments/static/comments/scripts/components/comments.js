@@ -7,6 +7,7 @@ window.comments = (function comments() {
       this.likeUrl = element.dataset.likeUrl;
       this.editUrl = element.dataset.editUrl;
       this.deleteUrl = element.dataset.deleteUrl;
+      this.archiveUrl = element.dataset.archiveUrl;
       this.profileImageUrl = element.dataset.profileImageUrl;
       this.element = element;
       this._setupEventListeners();
@@ -22,6 +23,10 @@ window.comments = (function comments() {
 
     get deleteLink() {
       return this.element.querySelector('.comment-delete');
+    }
+
+    get archiveLink() {
+      return this.element.querySelector('.comment-archive');
     }
 
     get likeButton() {
@@ -67,6 +72,11 @@ window.comments = (function comments() {
       this.deleteLink && this.deleteLink.addEventListener('click', event => {
         event.preventDefault();
         this._postDeleteComment();
+      });
+
+      this.archiveLink && this.archiveLink.addEventListener('click', event => {
+        event.preventDefault();
+        this._postArchiveComment();
       });
 
       this.likeButton && this.likeButton.addEventListener('click', this._postLike.bind(this));
@@ -191,6 +201,30 @@ window.comments = (function comments() {
       });
     }
 
+    _postArchiveComment() {
+      const { archiveUrl, element } = this;
+      const archivedBadge = '<p class="badge badge-secondary archived-badge">Archived</p>';
+      const commentTitleBar = element.querySelector('.comment-name-date-wrapper')
+
+      ajax.jsonRequest('POST', archiveUrl).then(() => {
+
+        if (element.classList.contains('archived')) {
+          element.classList.remove("archived");
+          element.querySelector('.comment-archive .material-icons').textContent = "archive";
+          element.querySelector('.comment-archive-text').textContent = "Archive comment";
+          commentTitleBar.querySelector('.archived-badge').remove();
+          commentTitleBar.querySelector('.comment-expand-archived').remove();
+
+        } else {
+          element.classList.add("archived");
+          element.querySelector('.comment-archive .material-icons').textContent = "unarchive";
+          element.querySelector('.comment-archive-text').textContent = "Un-archive comment";
+          commentTitleBar.innerHTML = commentTitleBar.innerHTML + archivedBadge;
+        }
+
+      });
+    }
+
     get contentElement() {
       return this.element.querySelector('.comment-content');
     }
@@ -217,7 +251,8 @@ window.comments = (function comments() {
     liked,
     likes,
     editUrl,
-    deleteUrl
+    deleteUrl,
+    archiveUrl
   ) {
     // console.log('id: ', id, 'profileImageUrl: ', profileImageUrl, 'msg: ', message)
     const template = document.getElementById('comment-template');
@@ -227,6 +262,7 @@ window.comments = (function comments() {
     element.dataset.likeUrl = likeUrl;
     element.dataset.editUrl = editUrl;
     element.dataset.deleteUrl = deleteUrl;
+    element.dataset.archiveUrl = archiveUrl;
     element.querySelector('.profile').style.backgroundImage = `url('${profileImageUrl}')`;
     element.querySelector('.comment-name').innerText = fullName;
     element.querySelector('.comment-date').innerText = dateString;

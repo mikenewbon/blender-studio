@@ -1,7 +1,6 @@
 {% load static %}
 
 {% comment %} TODO(Mike): Use lomotomized owl selector to fix spacing issue {% endcomment %}
-<h3>URL: {{ comment.archive_tree_url }}</h3>
 <div class="row comment {% if comment.is_archived %}archived{% endif %}"
   data-comment-id="{{ comment.id }}"
   data-profile-image-url="{{ comment.profile_image_url }}" data-like-url="{{ comment.like_url }}"
@@ -18,8 +17,9 @@
           <h4 class="comment-name">{{ comment.full_name }}</h4>
           <p class="comment-date">{{ comment.date|date:"jS F Y - H:i" }}</p>
           {% if comment.is_archived %}
-          <p class="badge badge-secondary">Archived</p>
-          <a data-toggle="collapse" href="#collapse-{{ comment.id }}" role="button" aria-expanded="false" aria-controls="collapseExample">Show comment</a>
+          {% comment %} TODO(Mike): Nat needs to add a check for top-level comments so this stuff only happens there. {% endcomment %}
+          <p class="badge badge-secondary archived-badge">Archived</p>
+          <a class="comment-expand-archived" data-toggle="collapse" href="#collapse-{{ comment.id }}" role="button" aria-expanded="false" aria-controls="collapseExample">Show comment</a>
           {% endif %}
         </div>
         {% if comment.is_archived %}
@@ -65,11 +65,16 @@
                 <span>Report</span>
               </a>
 
-              {% if request.user.is_staff %}
+              {% if comment.archive_tree_url is not None %}
 
-              <a href="" class="dropdown-item">
+              <a href="" class="dropdown-item comment-archive">
+                {% if comment.is_archived %}
+                <i class="material-icons">unarchive</i>
+                <span class="comment-archive-text">Un-archive comment</span>
+                {% else %}
                 <i class="material-icons">archive</i>
-                <span>Archive comment</span>
+                <span class="comment-archive-text">Archive comment</span>
+                {% endif %}
               </a>
               {% endif %}
             </div>
@@ -80,6 +85,9 @@
             <a href="" class="btn btn-dark btn-ctrl-xs comment-action comment-delete">Delete</a> {% endcomment %}
           </div>
 
+        </div>
+        {% endif %}
+        {% if comment.is_archived %}
         </div>
         {% endif %}
       </div>

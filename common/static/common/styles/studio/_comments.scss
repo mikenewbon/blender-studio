@@ -32,7 +32,6 @@
 
   &.archived {
 
-
     .profile {
       opacity: .5;
     }
@@ -46,6 +45,22 @@
     }
 
     .badge {
+      color: $highlight-white-xstrong;
+    }
+
+    .comment-expand-archived {
+      @include hover-focus {
+        color: $white;
+      }
+
+      color: $highlight-white-xstrong;
+      font-size: $font-size-sm;
+      margin-left: $spacer / 2;
+      text-decoration: underline;
+      transition: $transition-base;
+    }
+
+    .comment-text{
       color: $highlight-white-xstrong;
     }
 
