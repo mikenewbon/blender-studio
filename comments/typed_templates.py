@@ -28,7 +28,7 @@ class CommentTree:
     likes: int
     edit_url: Optional[str]
     admin_edit_url: Optional[str]
-    archive_tree_url: str
+    archive_tree_url: Optional[str]
     delete_url: Optional[str]
     admin_delete_url: Optional[str]
     delete_tree_url: Optional[str]
@@ -45,6 +45,7 @@ class DeletedCommentTree(CommentTree):
     likes: Literal[0] = 0
     edit_url: Literal[None] = None
     admin_edit_url: Literal[None] = None
+    archive_tree_url: Literal[None] = None
     delete_url: Literal[None] = None
     admin_delete_url: Literal[None] = None
     delete_tree_url: Literal[None] = None
