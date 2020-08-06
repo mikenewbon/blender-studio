@@ -413,10 +413,10 @@ $circle-circumference: $circle-diameter * 3.14;
   display: flex;
   position: relative;
 
-  button {
-    position: absolute;
-    right: $spacer / 2;
-    top: $spacer / 2;
+  .btn-float {
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
   }
 }
 

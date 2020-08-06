@@ -1,5 +1,7 @@
 {% load static %}
 
+{% comment %} TODO(Mike): Use lomotomized owl selector to fix spacing issue {% endcomment %}
+
 <div class="row comment" data-comment-id="{{ comment.id }}" data-profile-image-url="{{ comment.profile_image_url }}"
   data-like-url="{{ comment.like_url }}" {% if comment.edit_url is not None %}data-edit-url="{{ comment.edit_url }}"
   {% endif %} {% if comment.delete_url is not None %}data-delete-url="{{ comment.delete_url }}" {% endif %}>
@@ -33,15 +35,19 @@
             </button>
             <div class="dropdown-menu">
 
-              <a href="" class="dropdown-item comment-edit">
+              {% if comment.edit_url is not None %}
+              <button class="dropdown-item comment-edit">
                 <i class="material-icons">create</i>
                 <span>Edit</span>
-              </a>
+              </button>
+              {% endif %}
 
+              {% if comment.delete_url is not None %}
               <a href="" class="dropdown-item comment-delete">
                 <i class="material-icons">delete</i>
                 <span>Delete</span>
               </a>
+              {% endif %}
 
               <a href="" class="dropdown-item comment-report">
                 <i class="material-icons">flag</i>
@@ -49,15 +55,10 @@
               </a>
 
               {% if request.user.is_staff %}
-              <!-- TODO(Mike): Make admin controlls work -->
-              <a href="" class="dropdown-item">
-                <i class="material-icons">delete</i>
-                <span>Admin Delete Tree</span>
-              </a>
 
               <a href="" class="dropdown-item">
-                <i class="material-icons">delete</i>
-                <span>Admin Delete Comment</span>
+                <i class="material-icons">archive</i>
+                <span>Archive comment</span>
               </a>
               {% endif %}
             </div>
