@@ -1,0 +1,34 @@
+<div class="grid-item">
+  <div class="card card-dark card-hover card-media">
+    <div class="card-header">
+      <a class="card-header-link" href="{% url 'post-detail' post_slug=post.slug %}">
+        {% block image %}
+        {% include "common/components/helpers/image_set.html" with alt=post.title classes="card-image" img_source=post.picture_16_9 xsmall_width="350" small_width="350" medium_width="350" large_width="350" xlarge_width="350" %}
+        {% endblock image %}
+      </a>
+    </div>
+    <a href="{% url 'post-detail' post_slug=post.slug %}" class="card-body">
+      <div class="card-subtitle-group">
+
+        <p class="card-subtitle">
+          {{ post.topic|title }}
+        </p>
+
+        {% if post.is_new %}
+        <div class="badge badge-primary">
+          New
+        </div>
+        {% else %}
+        <p class="card-subtitle">
+          <i class="material-icons btn-material-icons">schedule</i>
+          {{ post.date_updated|naturalday:"jS F Y" }}
+        </p>
+        {% endif %}
+
+      </div>
+      <h3 class="card-title">{{ post.title }}</h3>
+      <p class="card-text">{{ post.description }}</p>
+
+    </a>
+  </div>
+</div>

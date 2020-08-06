@@ -1,0 +1,27 @@
+.search-filters {
+  .input-group {
+    .input-group-text {
+      background-color: $dark;
+      transition: $transition-base;
+    }
+
+    .custom-select {
+      background-color: $dark;
+      transition: $transition-base;
+
+      &[value=''] {
+        background: red;
+      }
+    }
+
+    @include hover-focus {
+      .input-group-text {
+        background-color: $input-gray;
+      }
+
+      .custom-select {
+        background-color: $input-gray;
+      }
+    }
+  }
+}

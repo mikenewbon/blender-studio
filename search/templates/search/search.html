@@ -1,39 +1,144 @@
 {% extends 'common/base.html' %}
 
 {% block scripts %}
-<script src="https://cdn.jsdelivr.net/npm/@meilisearch/instant-meilisearch/dist/instant-meilisearch.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@meilisearch/instant-meilisearch/dist/instant-meilisearch.umd.min.js">
+</script>
 <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4"></script>
 {% endblock scripts %}
 
 
 {% block content %}
-  <div>
-    <h1>Search Blender Studio</h1>
-    <div>
-      <div id="searchbox"></div>
-      <div id="hits"></div>
+
+<div class="container-xl pt-4">
+
+  <section>
+    <div class="row">
+      <div class="col mb-3">
+        <div class="input-group">
+
+          <div class="input-group-prepend">
+            <span class="input-group-text">
+              <i class="material-icons">search</i>
+            </span>
+          </div>
+
+          <input type="text" placeholder="Search tags and keywords" class="form-control">
+
+          <div class="input-group-append">
+            <button class="btn btn-icon btn-input">
+              <i class="material-icons">close</i>
+            </button>
+          </div>
+
+        </div>
+      </div>
     </div>
-  </div>
+
+    <div class="row search-filters">
+      <div class="col-auto">
+        <a class="btn btn-sm btn-dark" data-toggle="collapse" href="#filters" role="button" aria-expanded="false"
+          aria-controls="collapseExample">
+          <i class="material-icons">filter_list</i>
+          Filters
+        </a>
+      </div>
+
+      <div class="col-auto mb-3 ml-auto">
+        <div class="input-group input-group-sm">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="searchLicence">Sort by:</label>
+          </div>
+          <select class="custom-select" id="searchLicence">
+            <option selected>Relevance</option>
+            <option value="1">Date (New first)</option>
+            <option value="2">Date (Old first)</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row collapse" id="filters">
+
+      <div class="col-md-3 mb-3">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="searchType">Type:</label>
+          </div>
+          <select class="custom-select" id="searchType">
+            <option value="" selected>All</option>
+            <option value="1">Film</option>
+            <option value="2">Training</option>
+            <option value="3">Blog</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-md-3 mb-3">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="searchMedia">Media:</label>
+          </div>
+          <select class="custom-select" id="searchMedia">
+            <option selected>All</option>
+            <option value="1">Image</option>
+            <option value="2">Video</option>
+            <option value="3">File</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-md-3 mb-3">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="searchFree">Is Free:</label>
+          </div>
+          <select class="custom-select" id="searchFree">
+            <option selected>All</option>
+            <option value="1">Is Free</option>
+            <option value="2">Is Not Free</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-md-3 mb-3">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="searchLicence">Licence:</label>
+          </div>
+          <select class="custom-select" id="searchLicence">
+            <option value="" selected>All</option>
+            <option value="1">CC-BY</option>
+            <option value="2">CC-0</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div id="searchbox"></div>
+  <div id="hits"></div>
+</div>
 
 {% verbatim search_script %}
 <script>
+  const search = instantsearch({
+    indexName: "studio",
+    searchClient: instantMeiliSearch(
+      "http://0.0.0.0:7700",
+      //  TODO(Nat): api key goes here
+    )
+  });
 
-const search = instantsearch({
-  indexName: "studio",
-  searchClient: instantMeiliSearch(
-    "http://0.0.0.0:7700",
-    //  TODO(Nat): api key goes here
-  )
-});
-
-search.addWidgets([
-  instantsearch.widgets.searchBox({
-    container: "#searchbox"
-  }),
-  instantsearch.widgets.hits({
-    container: "#hits",
-    templates: {
-      item: `
+  search.addWidgets([
+    instantsearch.widgets.searchBox({
+      container: "#searchbox"
+    }),
+    instantsearch.widgets.hits({
+      container: "#hits",
+      templates: {
+        item: `
         <div>
           <div class="hit-name">
             {{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}
@@ -41,11 +146,11 @@ search.addWidgets([
           </div>
         </div>
       `
-    }
-  })
-]);
+      }
+    })
+  ]);
 
-search.start();
+  search.start();
 </script>
 {% endverbatim search_script %}
 
