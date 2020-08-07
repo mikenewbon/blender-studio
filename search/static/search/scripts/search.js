@@ -65,7 +65,7 @@ const renderHits = (renderOptions, isFirstRender) => {
       .map(
         item =>
           `
-          <div class="grid-item">
+          <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
             <div class="card card-dark card-hover card-media">
               <div class="card-header">
                 <a class="card-header-link" href="">
@@ -75,11 +75,11 @@ const renderHits = (renderOptions, isFirstRender) => {
               <a href="" class="card-body">
                 <div class="card-subtitle-group">
                   <p class="card-subtitle">
-                    Title
+                    Content Type
                   </p>
 
                   <p class="card-subtitle">
-                    <i class="material-icons btn-material-icons">schedule</i>
+                    <i class="material-icons icon-inline x-small">schedule</i>
                     ${instantsearch.highlight({ attribute: 'date_created', hit: item })}
                   </p>
 

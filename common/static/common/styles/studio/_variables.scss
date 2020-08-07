@@ -358,7 +358,7 @@ $blockquote-font-size: $font-size-base * 1.25 !default;
 $hr-border-color: $highlight-white-strong !default;
 $hr-border-width: 1px !default;
 
-$mark-padding: 0.2em !default;
+$mark-padding: 0em !default;
 
 $dt-font-weight: $font-weight-bold !default;
 
@@ -367,7 +367,7 @@ $nested-kbd-font-weight: $font-weight-bold !default;
 
 $list-inline-padding: 0.5rem !default;
 
-$mark-bg: #fcf8e3 !default;
+$mark-bg: none !default;
 
 $hr-margin-y: $spacer !default;
 
