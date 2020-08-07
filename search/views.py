@@ -4,10 +4,10 @@ import meilisearch
 from django.http.request import HttpRequest
 from django.http.response import JsonResponse, HttpResponse
 from django.shortcuts import render
-from django.views.decorators.http import require_POST, require_safe
+from django.views.decorators.http import require_safe
 
 
-@require_POST
+@require_safe
 def api_search(request: HttpRequest) -> JsonResponse:
     client = meilisearch.Client('http://127.0.0.1:7700')
     index = client.get_index('studio')
