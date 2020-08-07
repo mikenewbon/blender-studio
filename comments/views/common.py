@@ -34,7 +34,7 @@ def comments_to_template_type(
                 else None
             ),
             admin_edit_url=comment.edit_url if user_is_moderator else None,
-            archive_tree_url=comment.archive_tree_url,
+            archive_tree_url=comment.archive_tree_url if user_is_moderator else None,
             delete_url=(
                 comment.delete_url
                 if assert_cast(bool, getattr(comment, 'owned_by_current_user'))

@@ -50,7 +50,7 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
 
     @property
     def is_deleted(self) -> bool:
-        """Check if a comment with replies has been deleted."""
+        """Checks if a comment with replies has been deleted."""
         return self.date_deleted is not None
 
     @property
@@ -62,12 +62,12 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
         return reverse('comment-edit', kwargs={'comment_pk': self.pk})
 
     @property
-    def delete_url(self) -> str:
-        return reverse('comment-delete', kwargs={'comment_pk': self.pk})
-
-    @property
     def archive_tree_url(self) -> str:
         return reverse('comment-archive-tree', kwargs={'comment_pk': self.pk})
+
+    @property
+    def delete_url(self) -> str:
+        return reverse('comment-delete', kwargs={'comment_pk': self.pk})
 
     @property
     def delete_tree_url(self) -> str:
