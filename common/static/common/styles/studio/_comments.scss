@@ -1,15 +1,10 @@
 .comment {
+  display: flex;
+  flex-direction: column;
+  margin-top: $spacer / 2;
 
-  &:not([data-edit-url])>.comment-content {
-    .comment-edit {
-      display: none;
-    }
-  }
-
-  &:not([data-delete-url])>.comment-content {
-    .comment-delete {
-      display: none;
-    }
+  >.comment {
+    margin-top: $spacer;
   }
 
   .comment {
@@ -18,7 +13,7 @@
 
     &::before {
 
-      background: $highlight-white;
+      background: $highlight-white-strong;
       content: close-quote;
       display: block;
       height: 100%;
@@ -60,7 +55,7 @@
       transition: $transition-base;
     }
 
-    .comment-text{
+    .comment-text {
       color: $highlight-white-xstrong;
     }
 
@@ -69,9 +64,6 @@
 }
 
 .comment-section {
-  >.comments>.comment {
-    margin-bottom: $spacer / 2;
-  }
 
   .checkbox-like {
 
@@ -108,14 +100,20 @@
   margin-top: $spacer / 2;
 }
 
-.comment-content-inner {
-  margin-bottom: $spacer / 2;
+.more-comments-button {
+  display: none;
+  margin: $spacer / 2 $spacer / 2;
+
+  &.collapsed {
+    display: inline-block;
+  }
 }
 
 .comment-name-date-wrapper {
   align-items: center;
   display: flex;
   margin-bottom: $spacer / 4;
+  margin-top: $spacer / 4;
 
   >* {
     margin-bottom: 0;
@@ -140,6 +138,8 @@
 }
 
 .comment-toolbar {
+
+
   .btn {
     color: $highlight-white-xstrong;
 
@@ -158,13 +158,11 @@
   padding: 4px;
 }
 
-.comment-name {
-  margin-bottom: 0;
-}
+.comment-name {}
 
 .comment-date {
   color: $text-muted;
   font-size: $x-small-font-size;
-  margin-bottom: 0;
+
   margin-left: $spacer / 2;
 }

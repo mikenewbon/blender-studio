@@ -1,108 +1,122 @@
 {% load static %}
 
 {% comment %} TODO(Mike): Use lomotomized owl selector to fix spacing issue {% endcomment %}
-<div class="row comment {% if comment.is_archived %}archived{% endif %}"
-  data-comment-id="{{ comment.id }}"
-  data-profile-image-url="{{ comment.profile_image_url }}" data-like-url="{{ comment.like_url }}"
-  {% if comment.edit_url is not None %}data-edit-url="{{ comment.edit_url }}" {% endif %}
-  {% if comment.delete_url is not None %}data-delete-url="{{ comment.delete_url }}" {% endif %}
+<div class="comment {% if comment.is_archived and comment.is_top_level %}archived{% endif %}"
+  data-comment-id="{{ comment.id }}" data-profile-image-url="{{ comment.profile_image_url }}"
+  data-like-url="{{ comment.like_url }}" {% if comment.edit_url is not None %}data-edit-url="{{ comment.edit_url }}"
+  {% endif %} {% if comment.delete_url is not None %}data-delete-url="{{ comment.delete_url }}" {% endif %}
   {% if comment.archive_tree_url is not None %}data-archive-url="{{ comment.archive_tree_url }}" {% endif %}>
+  <div class="comment-name-date-wrapper">
+    <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');"
+      class="profile col-profile"></div>
+    <h4 class="comment-name">{{ comment.full_name }}</h4>
+    <p class="comment-date">{{ comment.date|date:"jS F Y - H:i" }}</p>
+    {% if comment.is_archived and comment.is_top_level %}
+    <p class="badge badge-secondary archived-badge">Archived</p>
+    <a class="comment-expand-archived" data-toggle="collapse" href="#collapse-{{ comment.id }}" role="button"
+      aria-expanded="false" aria-controls="collapseExample">Show comment</a>
+    {% endif %}
+  </div>
+  {% if comment.is_archived and comment.is_top_level %}
+  <div class="collapse" id="collapse-{{ comment.id }}">
+    {% endif %}
+    <div class="col comment-content">
+      <div class="row comment-content-inner">
+        <div class="comment-body col">
 
-  <div class="col comment-content">
-    <div class="row comment-content-inner">
-      <div class="comment-body col">
-        <div class="comment-name-date-wrapper">
-          <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');"
-            class="profile col-profile"></div>
-          <h4 class="comment-name">{{ comment.full_name }}</h4>
-          <p class="comment-date">{{ comment.date|date:"jS F Y - H:i" }}</p>
-          {% if comment.is_archived %}
-          {% comment %} TODO(Mike): Nat needs to add a check for top-level comments so this stuff only happens there. {% endcomment %}
-          <p class="badge badge-secondary archived-badge">Archived</p>
-          <a class="comment-expand-archived" data-toggle="collapse" href="#collapse-{{ comment.id }}" role="button" aria-expanded="false" aria-controls="collapseExample">Show comment</a>
-          {% endif %}
-        </div>
-        {% if comment.is_archived %}
-        <div class="collapse" id="collapse-{{ comment.id }}">
-        {% endif %}
-        <p class="comment-text">{{ comment.message }}</p>
+          <p class="comment-text">{{ comment.message }}</p>
 
-        {% if not comment.is_deleted %}
-        <div class="comment-toolbar row">
-          <div class="col d-flex align-items-center">
+          {% if not comment.is_deleted %}
+          <div class="comment-toolbar row">
+            <div class="col d-flex align-items-center">
 
-            <button class="btn btn-dark btn-xs comment-material-button checkbox-like"
-              {% if comment.liked %}data-checked="checked" {% endif %}>
-              <i class="material-icons checkbox-like-icon-checked text-primary">favorite</i>
-              <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
-              <span class="comment-likes-count">{{ comment.likes }}</span>
-            </button>
-
-            <button class="btn btn-dark btn-xs comment-action comment-reply">Reply</button>
-
-            <button class="btn btn-dark btn-xs btn-icon comment-material-button comment-dropdown"
-              data-toggle="dropdown">
-              <i class="material-icons">more_horiz</i>
-            </button>
-            <div class="dropdown-menu">
-
-              {% if comment.edit_url is not None %}
-              <button class="dropdown-item comment-edit">
-                <i class="material-icons">create</i>
-                <span>Edit</span>
+              <button class="btn btn-dark btn-xs comment-material-button checkbox-like"
+                {% if comment.liked %}data-checked="checked" {% endif %}>
+                <i class="material-icons checkbox-like-icon-checked text-primary">favorite</i>
+                <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
+                <span class="comment-likes-count">{{ comment.likes }}</span>
               </button>
-              {% endif %}
 
-              {% if comment.delete_url is not None %}
-              <a href="" class="dropdown-item comment-delete">
-                <i class="material-icons">delete</i>
-                <span>Delete</span>
-              </a>
-              {% endif %}
+              <button class="btn btn-dark btn-xs comment-action comment-reply">Reply</button>
 
-              <a href="" class="dropdown-item comment-report">
-                <i class="material-icons">flag</i>
-                <span>Report</span>
-              </a>
+              <button class="btn btn-dark btn-xs btn-icon comment-material-button comment-dropdown"
+                data-toggle="dropdown">
+                <i class="material-icons">more_horiz</i>
+              </button>
+              <div class="dropdown-menu">
 
-              {% if comment.archive_tree_url is not None %}
-
-              <a href="" class="dropdown-item comment-archive">
-                {% if comment.is_archived %}
-                <i class="material-icons">unarchive</i>
-                <span class="comment-archive-text">Un-archive comment</span>
-                {% else %}
-                <i class="material-icons">archive</i>
-                <span class="comment-archive-text">Archive comment</span>
+                {% if comment.edit_url is not None %}
+                <button class="dropdown-item comment-edit">
+                  <i class="material-icons">create</i>
+                  <span>Edit</span>
+                </button>
                 {% endif %}
-              </a>
-              {% endif %}
+
+                {% if comment.delete_url is not None %}
+                <a href="" class="dropdown-item comment-delete">
+                  <i class="material-icons">delete</i>
+                  <span>Delete</span>
+                </a>
+                {% endif %}
+
+                <a href="" class="dropdown-item comment-report">
+                  <i class="material-icons">flag</i>
+                  <span>Report</span>
+                </a>
+
+                {% if comment.archive_tree_url is not None %}
+
+                <a href="" class="dropdown-item comment-archive">
+                  {% if comment.is_archived and comment.is_top_level %}
+                  <i class="material-icons">unarchive</i>
+                  <span class="comment-archive-text">Un-archive comment</span>
+                  {% else %}
+                  <i class="material-icons">archive</i>
+                  <span class="comment-archive-text">Archive comment</span>
+                  {% endif %}
+                </a>
+                {% endif %}
+              </div>
+
+
+
+              {% comment %} <a href="" class="btn btn-dark btn-ctrl-xs comment-action comment-edit">Edit</a>
+              <a href="" class="btn btn-dark btn-ctrl-xs comment-action comment-delete">Delete</a> {% endcomment %}
             </div>
 
-
-
-            {% comment %} <a href="" class="btn btn-dark btn-ctrl-xs comment-action comment-edit">Edit</a>
-            <a href="" class="btn btn-dark btn-ctrl-xs comment-action comment-delete">Delete</a> {% endcomment %}
           </div>
+          {% endif %}
 
+        </div>
+      </div>
+    </div>
+
+    <div class="comment-edit-inputs">
+    </div>
+    <div class="comment-reply-inputs">
+    </div>
+    <div class="replies">
+      <div class="comments">
+        {% if comment.is_top_level %}
+        {% include 'comments/components/comment_tree.html' with comment_trees=c.replies|slice:':1' %}
+        {% if c.replies|length > 1 %}
+
+        <a class="btn btn-secondary btn-sm more-comments-button collapsed" data-toggle="collapse"
+          href="#replies-collapse-{{ comment.id }}" role="button" aria-expanded="false"
+          aria-controls="replies-collapse-{{ comment.id }}">
+          Show more replies
+        </a>
+
+        <div class="collapse" id="replies-collapse-{{ comment.id }}">
+          {% include 'comments/components/comment_tree.html' with comment_trees=c.replies|slice:'1:' %}
         </div>
         {% endif %}
-        {% if comment.is_archived %}
-        </div>
+        {% else %}
+        {% include 'comments/components/comment_tree.html' with comment_trees=c.replies %}
         {% endif %}
       </div>
     </div>
+    {% if comment.is_archived and comment.is_top_level %}
   </div>
-
-  <div class="col-md-12 comment-edit-inputs">
-  </div>
-  <div class="col-md-12 comment-reply-inputs">
-  </div>
-  <div class="col-md-12 replies">
-    <div class="comments">
-      {% if c.replies %}
-      {% include 'comments/components/comment_tree.html' with comment_trees=c.replies %}
-      {% endif %}
-    </div>
-  </div>
+  {% endif %}
 </div>
