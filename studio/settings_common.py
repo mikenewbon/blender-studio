@@ -120,6 +120,13 @@ PIPELINE = {
             'output_filename': 'js/studio.js',
             'extra_context': {'async': False, 'defer': False},
         },
+        'search': {
+            'source_filenames': [
+                'search/scripts/*.js',
+            ],
+            'output_filename': 'js/search.js',
+            'extra_context': {'async': False, 'defer': False},
+        },
         'vendor': {
             'source_filenames': [
                 'common/scripts/vendor/popper.min.js',

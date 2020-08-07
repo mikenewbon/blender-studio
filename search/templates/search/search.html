@@ -1,9 +1,11 @@
 {% extends 'common/base.html' %}
+{% load pipeline %}
 
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/@meilisearch/instant-meilisearch/dist/instant-meilisearch.umd.min.js">
 </script>
 <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4"></script>
+
 {% endblock scripts %}
 
 
@@ -12,7 +14,7 @@
 <div class="container-xl pt-4">
 
   <section>
-    <div class="row">
+    {% comment %} <div class="row">
       <div class="col mb-3">
         <div class="input-group">
 
@@ -28,6 +30,24 @@
             <button class="btn btn-icon btn-input">
               <i class="material-icons">close</i>
             </button>
+          </div>
+
+        </div>
+      </div>
+    </div> {% endcomment %}
+
+    <div class="row">
+      <div class="col mb-3">
+        <div class="input-group" id="search-container">
+
+          <div class="input-group-prepend">
+            <span class="input-group-text">
+              <i class="material-icons">search</i>
+            </span>
+          </div>
+
+          <div class="input-group-append">
+
           </div>
 
         </div>
@@ -117,41 +137,11 @@
     </div>
   </section>
 
-  <div id="searchbox"></div>
-  <div id="hits"></div>
+  <div class="row grid" id="hits"></div>
+
 </div>
 
-{% verbatim search_script %}
-<script>
-  const search = instantsearch({
-    indexName: "studio",
-    searchClient: instantMeiliSearch(
-      "http://0.0.0.0:7700",
-      //  TODO(Nat): api key goes here
-    )
-  });
 
-  search.addWidgets([
-    instantsearch.widgets.searchBox({
-      container: "#searchbox"
-    }),
-    instantsearch.widgets.hits({
-      container: "#hits",
-      templates: {
-        item: `
-        <div>
-          <div class="hit-name">
-            {{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}
-<!---            {{#helpers.highlight}}{ "attribute": "description" }{{/helpers.highlight}}#} --->
-          </div>
-        </div>
-      `
-      }
-    })
-  ]);
-
-  search.start();
-</script>
-{% endverbatim search_script %}
+{% javascript 'search' %}
 
 {% endblock content %}
