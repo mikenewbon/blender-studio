@@ -74,8 +74,8 @@ const renderHits = (renderOptions, isFirstRender) => {
               </div>
               <a href="" class="card-body">
                 <div class="card-subtitle-group">
-                  <p class="card-subtitle">
-                    Content Type
+                  <p class="card-subtitle content-type">
+                  ${instantsearch.highlight({ attribute: 'model', hit: item })}
                   </p>
 
                   <p class="card-subtitle">
