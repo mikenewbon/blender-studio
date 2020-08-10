@@ -38,7 +38,11 @@ class Command(BaseCommand):
             Section: (
                 Section.objects.filter(chapter__training__status=TrainingStatus.published)
                 .select_related('chapter__training')
-                .annotate(project=F('chapter__training__name'), chapter_name=F('chapter__name'),)
+                .annotate(
+                    project=F('chapter__training__name'),
+                    chapter_name=F('chapter__name'),
+                    description=F('text'),
+                )
             ),
             Post: (
                 Revision.objects.filter(is_published=True, post__is_published=True)
@@ -88,20 +92,25 @@ class Command(BaseCommand):
         return json.loads(json.dumps(objects_to_load, cls=DjangoJSONEncoder))
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
-        client_address: str = 'http://127.0.0.1:7700'
+        API_address: str = 'http://127.0.0.1:7700'
         index_name: str = 'studio'
 
-        client = meilisearch.Client(client_address)
+        client = meilisearch.Client(API_address)
         index = client.get_index(index_name)
 
         data_to_load = self.prepare_data()
 
         try:
             index.add_documents(data_to_load)
-        except json.decoder.JSONDecodeError:
+        except meilisearch.errors.MeiliSearchCommunicationError:
             raise CommandError(
-                f'Error accessing the index {index_name} of the client at {client_address}. '
-                f'Make sure that the MeiliSearch server is running and the index exists'
+                f'Failed to establish a new connection with MeiliSearch API at '
+                f'{API_address}. Make sure that the server is running.'
+            )
+        except meilisearch.errors.MeiliSearchApiError:
+            raise CommandError(
+                f'Error accessing the index "{index_name}" of the client at {API_address}. '
+                f'Make sure that the index exists.'
             )
 
-        self.stdout.write(self.style.SUCCESS('Successfully updated the index "%s"' % index_name))
+        self.stdout.write(self.style.SUCCESS(f'Successfully updated the index "{index_name}".'))
