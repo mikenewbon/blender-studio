@@ -6,6 +6,9 @@ const search = instantsearch({
   )
 });
 
+
+// -------- INPUT -------- //
+
 // Create a render function
 const renderSearchBox = (renderOptions, isFirstRender) => {
   const {
@@ -55,10 +58,11 @@ const customSearchBox = instantsearch.connectors.connectSearchBox(
 );
 
 
+// -------- HITS -------- //
+
 // Create the render function
 const renderHits = (renderOptions, isFirstRender) => {
   const { hits, widgetParams } = renderOptions;
-
   widgetParams.container.innerHTML = `
 
       ${hits
@@ -99,10 +103,54 @@ const renderHits = (renderOptions, isFirstRender) => {
 
   `;
 };
+// ${ item.thumbnail }
 
-// Create the custom widget
 const customHits = instantsearch.connectors.connectHits(renderHits);
 
+
+// -------- FILTERS -------- //
+
+// 1. Create a render function
+const renderMenuSelect = (renderOptions, isFirstRender) => {
+  const { items, canRefine, refine, widgetParams } = renderOptions;
+
+  if (isFirstRender) {
+    const select = document.createElement('select');
+
+    select.setAttribute('class', 'custom-select');
+    select.addEventListener('change', event => {
+      refine(event.target.value);
+    });
+
+    widgetParams.container.querySelector('.input-group-prepend').insertAdjacentElement('afterend', select);
+    // widgetParams.container.appendChild(select);
+  }
+
+  const select = widgetParams.container.querySelector('select');
+
+  select.disabled = !canRefine;
+
+  select.innerHTML = `
+    <option value="">See all</option>
+    ${items
+      .map(
+        item =>
+          `<option
+            value="${item.value}"
+            ${item.isRefined ? 'selected' : ''}
+          >
+            ${item.label}
+          </option>`
+      )
+      .join('')}
+  `;
+};
+
+// 2. Create the custom widget
+const customMenuSelect = instantsearch.connectors.connectMenu(renderMenuSelect);
+
+
+// -------- RENDER -------- //
 
 search.addWidgets([
   customSearchBox({
@@ -111,48 +159,15 @@ search.addWidgets([
   customHits({
     container: document.querySelector('#hits'),
   }),
+  // customMenu({
+  //   container: document.querySelector('#filters'),
+  //   attribute: 'categories',
+  //   showMoreLimit: 20,
+  // }),
+  customMenuSelect({
+    container: document.querySelector('#searchType'),
+    attribute: 'model',
+  })
 ]);
 
 search.start();
-
-/* <div class="grid-item">
-  <div class="card card-dark card-hover card-media">
-    <div class="card-header">
-      <a class="card-header-link" href="">
-        <img src="" class="card-image">
-      </a>
-      </div>
-      <a href="" class="card-body">
-        <div class="card-subtitle-group">
-
-          <p class="card-subtitle">
-            {{ post.topic | title }}
-          </p>
-
-          <p class="card-subtitle">
-            <i class="material-icons btn-material-icons">schedule</i>
-            {"attribute": "date_created" }
-
-        </p>
-
-        </div>
-        <h3 class="card-title">
-          {{ #helpers.highlight }}{"attribute": "name" }{{/ helpers.highlight}}
-        </h3>
-        <p class="card-text">
-          {{ #helpers.highlight }}{"attribute": "description" }{{/ helpers.highlight}}
-        </p>
-
-      </a>
-    </div>
-  </div> */
-
-
-// <div>
-//   <div class="hit-name">
-//     {{ #helpers.highlight }}{"attribute": "name" }{{/ helpers.highlight}}
-// <!-- {{ #helpers.highlight }}{"attribute": "description" }{{/ helpers.highlight}}#} --->
-//         </div>
-// </div>
-
-
