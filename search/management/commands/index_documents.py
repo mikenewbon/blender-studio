@@ -32,9 +32,7 @@ class Command(BaseCommand):
                 project=F('title'), name=F('title'),
             ),
             Asset: (
-                Asset.objects.filter(is_published=True, film__is_published=True)
-                .select_related('static_asset')
-                .annotate(
+                Asset.objects.filter(is_published=True, film__is_published=True).annotate(
                     project=F('film__title'),
                     collection_name=F('collection__name'),
                     license=F('static_asset__license__name'),
@@ -45,9 +43,7 @@ class Command(BaseCommand):
                 project=F('name'),
             ),
             Section: (
-                Section.objects.filter(chapter__training__status=TrainingStatus.published)
-                .select_related('chapter__training')
-                .annotate(
+                Section.objects.filter(chapter__training__status=TrainingStatus.published).annotate(
                     project=F('chapter__training__name'),
                     chapter_name=F('chapter__name'),
                     description=F('text'),
