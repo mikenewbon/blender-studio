@@ -12,6 +12,7 @@ from django.db.models.functions.text import Concat
 
 from blog.models import Post, Revision
 from films.models import Film, Asset
+from search.management.commands.create_search_index import SEARCHABLE_ATTRIBUTES
 from training.models import Training, Section, TrainingStatus
 
 
@@ -21,8 +22,10 @@ class Command(BaseCommand):
         'Indexes the following models: Film, Asset, Training, Section, Post. '
         'If an object already exists in the index, it is updated.'
     )
+    API_address: str = 'http://127.0.0.1:7700'
+    index_name: str = 'studio'
 
-    def prepare_data(self):
+    def prepare_data(self) -> Any:
         models_and_querysets = {
             Film: Film.objects.filter(is_published=True).annotate(
                 project=F('title'), name=F('title'),
@@ -67,22 +70,19 @@ class Command(BaseCommand):
             )
             qs_values = queryset.values()
 
-            if model == Film:
-                for film, film_dict in zip(queryset, qs_values):
-                    film_dict['thumbnail_url'] = (
-                        film.picture_16_9.url if film.picture_16_9 else film.picture_header.url
+            for obj, obj_dict in zip(queryset, qs_values):
+                if model == Film:
+                    obj_dict['thumbnail_url'] = (
+                        obj.picture_16_9.url if obj.picture_16_9 else obj.picture_header.url
                     )
-            elif model == Asset:
-                for asset, asset_dict in zip(queryset, qs_values):
-                    asset_dict['thumbnail_url'] = (
-                        asset.static_asset.preview.url if asset.static_asset.preview else ''
+                elif model == Asset:
+                    obj_dict['thumbnail_url'] = (
+                        obj.static_asset.preview.url if obj.static_asset.preview else ''
                     )
-            elif model in [Training, Post]:
-                for obj, obj_dict in zip(queryset, qs_values):
+                elif model in [Training, Post]:
                     obj_dict['thumbnail_url'] = obj.picture_16_9.url
-            elif model == Section:
-                for section, section_dict in zip(queryset, qs_values):
-                    section_dict['thumbnail_url'] = section.chapter.training.picture_16_9.url
+                elif model == Section:
+                    obj_dict['thumbnail_url'] = obj.chapter.training.picture_16_9.url
 
             objects_to_load.extend(qs_values)
 
@@ -92,11 +92,8 @@ class Command(BaseCommand):
         return json.loads(json.dumps(objects_to_load, cls=DjangoJSONEncoder))
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
-        API_address: str = 'http://127.0.0.1:7700'
-        index_name: str = 'studio'
-
-        client = meilisearch.Client(API_address)
-        index = client.get_index(index_name)
+        client = meilisearch.Client(self.API_address)
+        index = client.get_index(self.index_name)
 
         data_to_load = self.prepare_data()
 
@@ -105,12 +102,20 @@ class Command(BaseCommand):
         except meilisearch.errors.MeiliSearchCommunicationError:
             raise CommandError(
                 f'Failed to establish a new connection with MeiliSearch API at '
-                f'{API_address}. Make sure that the server is running.'
+                f'{self.API_address}. Make sure that the server is running.'
             )
         except meilisearch.errors.MeiliSearchApiError:
             raise CommandError(
-                f'Error accessing the index "{index_name}" of the client at {API_address}. '
+                f'Error accessing the index "{self.index_name}" of the client at {self.API_address}. '
                 f'Make sure that the index exists.'
             )
 
-        self.stdout.write(self.style.SUCCESS(f'Successfully updated the index "{index_name}".'))
+        # There seems to be no way in MeiliSearch v0.13 to disable adding new document
+        # fields automatically to searchable attrs, so we update the settings to set them:
+        index.update_settings({'searchableAttributes': SEARCHABLE_ATTRIBUTES})
+
+        self.stdout.write(
+            self.style.SUCCESS(f'Successfully updated the index "{self.index_name}".')
+        )
+
+        return None
