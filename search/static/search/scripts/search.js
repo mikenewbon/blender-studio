@@ -73,7 +73,7 @@ const renderHits = (renderOptions, isFirstRender) => {
             <div class="card card-dark card-hover card-media">
               <div class="card-header">
                 <a class="card-header-link" href="">
-                  <img src="${ item.thumbnail_url }" class="card-image">
+                  <img src="${ item.thumbnail_url }" class="card-image" loading=lazy>
                 </a>
               </div>
               <a href="" class="card-body">
