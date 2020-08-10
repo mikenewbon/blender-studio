@@ -3,6 +3,7 @@ from typing import List
 from typing import Optional, Any
 
 import meilisearch
+from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models.base import Model
@@ -18,12 +19,10 @@ from training.models import Training, Section, TrainingStatus
 
 class Command(BaseCommand):
     help = (
-        'Add database objects to the search index "studio". '
-        'Indexes the following models: Film, Asset, Training, Section, Post. '
-        'If an object already exists in the index, it is updated.'
+        f'Add database objects to the search index "{settings.MEILISEARCH_INDEX_NAME}". '
+        f'Indexes the following models: Film, Asset, Training, Section, Post. '
+        f'If an object already exists in the index, it is updated.'
     )
-    API_address: str = 'http://127.0.0.1:7700'
-    index_name: str = 'studio'
 
     def prepare_data(self) -> Any:
         self.stdout.write('Preparing the data, it may take a while...')
@@ -99,8 +98,8 @@ class Command(BaseCommand):
         return json.loads(json.dumps(objects_to_load, cls=DjangoJSONEncoder))
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
-        client = meilisearch.Client(self.API_address)
-        index = client.get_index(self.index_name)
+        client = meilisearch.Client(settings.MEILISEARCH_API_ADDRESS)
+        index = client.get_index(settings.MEILISEARCH_INDEX_NAME)
 
         data_to_load = self.prepare_data()
 
@@ -109,12 +108,12 @@ class Command(BaseCommand):
         except meilisearch.errors.MeiliSearchCommunicationError:
             raise CommandError(
                 f'Failed to establish a new connection with MeiliSearch API at '
-                f'{self.API_address}. Make sure that the server is running.'
+                f'{settings.MEILISEARCH_API_ADDRESS}. Make sure that the server is running.'
             )
         except meilisearch.errors.MeiliSearchApiError:
             raise CommandError(
-                f'Error accessing the index "{self.index_name}" of the client at {self.API_address}. '
-                f'Make sure that the index exists.'
+                f'Error accessing the index "{settings.MEILISEARCH_INDEX_NAME}" of the client '
+                f'at {self.MEILISEARCH_API_ADDRESS}. Make sure that the index exists.'
             )
 
         # There seems to be no way in MeiliSearch v0.13 to disable adding new document
@@ -122,7 +121,9 @@ class Command(BaseCommand):
         index.update_settings({'searchableAttributes': SEARCHABLE_ATTRIBUTES})
 
         self.stdout.write(
-            self.style.SUCCESS(f'Successfully updated the index "{self.index_name}".')
+            self.style.SUCCESS(
+                f'Successfully updated the index "{settings.MEILISEARCH_INDEX_NAME}".'
+            )
         )
 
         return None
