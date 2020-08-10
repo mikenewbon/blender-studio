@@ -9,9 +9,8 @@
       background-color: $dark;
       transition: $transition-base;
 
-      &[value=''] {
-        background: red;
-      }
+
+
     }
 
     @include hover-focus {
@@ -37,6 +36,12 @@
   }
 
   .content-type {
+    text-transform: capitalize;
+  }
+}
+
+#filters {
+  select {
     text-transform: capitalize;
   }
 }
