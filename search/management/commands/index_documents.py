@@ -9,11 +9,9 @@ from django.db.models.base import Model
 from django.db.models.expressions import Value, F, Case, When
 from django.db.models.fields import CharField
 from django.db.models.functions.text import Concat
-from django.db.models.query_utils import Q
 
 from blog.models import Post, Revision
 from films.models import Film, Asset
-from static_assets.models import StaticAssetFileTypeChoices
 from training.models import Training, Section, TrainingStatus
 
 
@@ -27,42 +25,20 @@ class Command(BaseCommand):
     def prepare_data(self):
         models_and_querysets = {
             Film: Film.objects.filter(is_published=True).annotate(
-                project=F('title'),
-                name=F('title'),
-                thumbnail=Case(
-                    When(~Q(picture_16_9=''), then=F('picture_16_9')), default=F('picture_header')
-                ),
+                project=F('title'), name=F('title'),
             ),
             Asset: (
                 Asset.objects.filter(is_published=True, film__is_published=True)
                 .select_related('static_asset')
-                .annotate(
-                    project=F('film__title'),
-                    collection_name=F('collection__name'),
-                    thumbnail=Case(
-                        When(
-                            ~Q(static_asset__source_preview=''),
-                            then=F('static_asset__source_preview'),
-                        ),
-                        When(
-                            Q(static_asset__source_type=StaticAssetFileTypeChoices.image),
-                            then=F('static_asset__source'),
-                        ),
-                        default=Value(''),
-                    ),
-                )
+                .annotate(project=F('film__title'), collection_name=F('collection__name'),)
             ),
             Training: Training.objects.filter(status=TrainingStatus.published).annotate(
-                project=F('name'), thumbnail=F('picture_16_9')
+                project=F('name'),
             ),
             Section: (
                 Section.objects.filter(chapter__training__status=TrainingStatus.published)
                 .select_related('chapter__training')
-                .annotate(
-                    project=F('chapter__training__name'),
-                    chapter_name=F('chapter__name'),
-                    thumbnail=F('chapter__training__picture_16_9'),
-                )
+                .annotate(project=F('chapter__training__name'), chapter_name=F('chapter__name'),)
             ),
             Post: (
                 Revision.objects.filter(is_published=True, post__is_published=True)
@@ -75,21 +51,37 @@ class Command(BaseCommand):
                         output_field=CharField(),
                     ),
                     name=F('title'),
-                    thumbnail=F('picture_16_9'),
                 )
             ),
         }
 
         objects_to_load: List[Model] = []
         for model, queryset in models_and_querysets.items():
-            objects_to_load.extend(
-                list(
-                    queryset.annotate(
-                        model=Value(model._meta.model_name, output_field=CharField()),
-                        search_id=Concat('model', Value('_'), 'id', output_field=CharField()),
-                    ).values()
-                )
+            queryset = queryset.annotate(
+                model=Value(model._meta.model_name, output_field=CharField()),
+                search_id=Concat('model', Value('_'), 'id', output_field=CharField()),
             )
+            qs_values = queryset.values()
+
+            if model == Film:
+                for film, film_dict in zip(queryset, qs_values):
+                    film_dict['thumbnail_url'] = (
+                        film.picture_16_9.url if film.picture_16_9 else film.picture_header.url
+                    )
+            elif model == Asset:
+                for asset, asset_dict in zip(queryset, qs_values):
+                    asset_dict['thumbnail_url'] = (
+                        asset.static_asset.preview.url if asset.static_asset.preview else ''
+                    )
+            elif model in [Training, Post]:
+                for obj, obj_dict in zip(queryset, qs_values):
+                    obj_dict['thumbnail_url'] = obj.picture_16_9.url
+            elif model == Section:
+                for section, section_dict in zip(queryset, qs_values):
+                    section_dict['thumbnail_url'] = section.chapter.training.picture_16_9.url
+
+            objects_to_load.extend(qs_values)
+
         self.stdout.write(f'{len(objects_to_load)} objects to load')
 
         # TODO(Natalia): Any better way to serialize datetime objects?
