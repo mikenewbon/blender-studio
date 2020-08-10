@@ -26,6 +26,8 @@ class Command(BaseCommand):
     index_name: str = 'studio'
 
     def prepare_data(self) -> Any:
+        self.stdout.write('Preparing the data, it may take a while...')
+
         models_and_querysets = {
             Film: Film.objects.filter(is_published=True).annotate(
                 project=F('title'), name=F('title'),
@@ -33,7 +35,12 @@ class Command(BaseCommand):
             Asset: (
                 Asset.objects.filter(is_published=True, film__is_published=True)
                 .select_related('static_asset')
-                .annotate(project=F('film__title'), collection_name=F('collection__name'),)
+                .annotate(
+                    project=F('film__title'),
+                    collection_name=F('collection__name'),
+                    license=F('static_asset__license__name'),
+                    media_type=F('static_asset__source_type'),
+                )
             ),
             Training: Training.objects.filter(status=TrainingStatus.published).annotate(
                 project=F('name'),

@@ -22,7 +22,7 @@ SEARCHABLE_ATTRIBUTES = [
     'summary',
     'content',
 ]
-FACETING_ATTRIBUTES = ['model', 'project']
+FACETING_ATTRIBUTES = ['model', 'project', 'license', 'media_type']
 
 
 class Command(BaseCommand):
