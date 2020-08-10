@@ -73,7 +73,7 @@ const renderHits = (renderOptions, isFirstRender) => {
             <div class="card card-dark card-hover card-media">
               <div class="card-header">
                 <a class="card-header-link" href="">
-                  <img src="" class="card-image">
+                  <img src="${ item.thumbnail_url }" class="card-image">
                 </a>
               </div>
               <a href="" class="card-body">
@@ -103,7 +103,7 @@ const renderHits = (renderOptions, isFirstRender) => {
 
   `;
 };
-// ${ item.thumbnail }
+
 
 const customHits = instantsearch.connectors.connectHits(renderHits);
 
