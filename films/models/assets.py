@@ -57,9 +57,13 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
 
     @property
     def url(self) -> str:
-        return reverse(
-            'asset-detail', kwargs={'film_slug': self.film.slug, 'asset_slug': self.slug}
-        )
+        if self.collection:
+            collection_url = reverse(
+                'collection-detail',
+                kwargs={'film_slug': self.film.slug, 'collection_slug': self.collection.slug},
+            )
+            return f'{collection_url}?asset={self.pk}'
+        return ''
 
     @property
     def comment_url(self) -> str:

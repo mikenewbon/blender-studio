@@ -73,6 +73,13 @@ class Revision(mixins.CreatedUpdatedMixin, models.Model):
     def __str__(self):
         return f'Revision "{self.title}" by {self.editor}, {self.date_created:%d %B %Y %H:%M}'
 
+    def get_absolute_url(self) -> str:
+        return self.url
+
+    @property
+    def url(self) -> str:
+        return self.post.url
+
 
 class PostComment(models.Model):
     """An intermediary model between Post and Comment.

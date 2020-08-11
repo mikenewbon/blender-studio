@@ -17,7 +17,7 @@ from search.queries import (
     get_searchable_trainings,
     get_searchable_sections,
     get_searchable_posts,
-    set_thumbnail_url,
+    set_thumbnail_and_url,
     add_common_annotations,
 )
 from training.models import Training, Section
@@ -56,7 +56,7 @@ class Command(BaseCommand):
             qs_values = queryset.values()
 
             for instance_dict, instance in zip(qs_values, queryset):
-                set_thumbnail_url(instance_dict, instance)
+                set_thumbnail_and_url(instance_dict, instance)
 
             objects_to_load.extend(qs_values)
 

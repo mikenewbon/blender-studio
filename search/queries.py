@@ -103,7 +103,9 @@ def get_searchable_posts(**filter_params: Any) -> 'QuerySet[Revision]':
     )
 
 
-def set_thumbnail_url(instance_dict: Dict[Any, Any], instance: SearchableModels) -> Dict[Any, Any]:
+def set_thumbnail_and_url(
+    instance_dict: Dict[Any, Any], instance: SearchableModels
+) -> Dict[Any, Any]:
     if isinstance(instance, Film):
         instance_dict['thumbnail_url'] = (
             instance.picture_16_9.url if instance.picture_16_9 else instance.picture_header.url
@@ -123,4 +125,12 @@ def set_thumbnail_url(instance_dict: Dict[Any, Any], instance: SearchableModels)
             f'Inappropriate `instance` class. It has to be an instance of Film, Asset, '
             f'Training, Section, or Revision; got {type(instance)} instead.'
         )
+
+    instance_dict['url'] = instance.url
+    instance_dict['date_created_ts'] = (
+        instance.post.date_created.timestamp()
+        if isinstance(instance, Revision)
+        else instance.date_created.timestamp()
+    )
+
     return instance_dict
