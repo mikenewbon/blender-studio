@@ -7,7 +7,6 @@ from common.tests.factories.static_assets import StaticAssetFactory, StorageLoca
 from common.tests.factories.users import UserFactory
 from films.models import (
     Film,
-    FilmCrew,
     Collection,
     Asset,
     ProductionLog,
@@ -17,12 +16,14 @@ from films.models import (
     AssetCategory,
     FilmFlatPage,
 )
+from search import signals as search_signals
 
 
 def generate_image_path() -> str:
     return f'tests/images/{uuid.uuid4()}.jpg'
 
 
+@factory.django.mute_signals(search_signals.post_save)
 class FilmFactory(factory.DjangoModelFactory):
     class Meta:
         model = Film
@@ -56,6 +57,7 @@ class CollectionFactory(factory.DjangoModelFactory):
     storage_location = factory.SelfAttribute('film.storage_location')
 
 
+@factory.django.mute_signals(search_signals.post_save)
 class AssetFactory(factory.DjangoModelFactory):
     class Meta:
         model = Asset

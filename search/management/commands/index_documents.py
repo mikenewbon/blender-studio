@@ -66,14 +66,14 @@ class Command(BaseCommand):
         return json.loads(json.dumps(objects_to_load, cls=DjangoJSONEncoder))
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
-        index_name = options['index']
+        index_uid = options['index']
         client = meilisearch.Client(settings.MEILISEARCH_API_ADDRESS)
-        index = client.get_index(index_name)
+        index = client.get_index(index_uid)
 
         data_to_load = self._prepare_data()
 
         try:
-            index.add_documents(data_to_load)
+            response = index.add_documents(data_to_load)
         except meilisearch.errors.MeiliSearchCommunicationError:
             raise CommandError(
                 f'Failed to establish a new connection with MeiliSearch API at '
@@ -81,7 +81,7 @@ class Command(BaseCommand):
             )
         except meilisearch.errors.MeiliSearchApiError:
             raise CommandError(
-                f'Error accessing the index "{index_name}" of the client '
+                f'Error accessing the index "{index_uid}" of the client '
                 f'at {self.MEILISEARCH_API_ADDRESS}. Make sure that the index exists.'
             )
 
@@ -89,6 +89,11 @@ class Command(BaseCommand):
         # fields automatically to searchable attrs, so we update the settings to set them:
         index.update_settings({'searchableAttributes': SEARCHABLE_ATTRIBUTES})
 
-        self.stdout.write(self.style.SUCCESS(f'Successfully updated the index "{index_name}".'))
+        self.stdout.write(
+            self.style.SUCCESS(
+                f'Successfully updated the index "{index_uid}". '
+                f'Update ID is {response["updateId"]}.'
+            )
+        )
 
-        return None
+        return str(response["updateId"])

@@ -16,7 +16,7 @@ class TestCommentDeleteEndpoint(TestCase):
         cls.other_user = UserFactory()
         cls.admin = UserFactory(is_superuser=True)
 
-        # Do not show warnings while running this test case (to avoid cluttering the test output)
+        # Do not show logs while running this test case (to avoid cluttering the test output)
         logging.disable(logging.ERROR)
 
     def setUp(self) -> None:

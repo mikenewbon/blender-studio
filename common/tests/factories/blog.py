@@ -3,6 +3,7 @@ import factory
 from blog.models import Post, Revision
 from common.tests.factories.films import FilmFactory, generate_image_path
 from common.tests.factories.users import UserFactory
+from search import signals as search_signals
 
 
 class PostFactory(factory.DjangoModelFactory):
@@ -15,6 +16,7 @@ class PostFactory(factory.DjangoModelFactory):
     is_published = True
 
 
+@factory.django.mute_signals(search_signals.post_save)
 class RevisionFactory(factory.DjangoModelFactory):
     class Meta:
         model = Revision
