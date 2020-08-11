@@ -7,14 +7,20 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models.base import Model
-from django.db.models.expressions import Value, F, Case, When
-from django.db.models.fields import CharField
-from django.db.models.functions.text import Concat
 
-from blog.models import Post, Revision
+from blog.models import Post
 from films.models import Film, Asset
 from search.management.commands.create_search_index import SEARCHABLE_ATTRIBUTES
-from training.models import Training, Section, TrainingStatus
+from search.queries import (
+    get_searchable_films,
+    get_searchable_assets,
+    get_searchable_trainings,
+    get_searchable_sections,
+    get_searchable_posts,
+    set_thumbnail_url,
+    add_common_annotations,
+)
+from training.models import Training, Section
 
 
 class Command(BaseCommand):
@@ -28,63 +34,20 @@ class Command(BaseCommand):
         self.stdout.write('Preparing the data, it may take a while...')
 
         models_and_querysets = {
-            Film: Film.objects.filter(is_published=True).annotate(
-                project=F('title'), name=F('title'),
-            ),
-            Asset: (
-                Asset.objects.filter(is_published=True, film__is_published=True).annotate(
-                    project=F('film__title'),
-                    collection_name=F('collection__name'),
-                    license=F('static_asset__license__name'),
-                    media_type=F('static_asset__source_type'),
-                )
-            ),
-            Training: Training.objects.filter(status=TrainingStatus.published).annotate(
-                project=F('name'),
-            ),
-            Section: (
-                Section.objects.filter(chapter__training__status=TrainingStatus.published).annotate(
-                    project=F('chapter__training__name'),
-                    chapter_name=F('chapter__name'),
-                    description=F('text'),
-                )
-            ),
-            Post: (
-                Revision.objects.filter(is_published=True, post__is_published=True)
-                .order_by('post_id', '-date_created')
-                .distinct('post_id')
-                .annotate(
-                    project=Case(
-                        When(post__film__isnull=False, then=F('post__film__title')),
-                        default=Value(''),
-                        output_field=CharField(),
-                    ),
-                    name=F('title'),
-                )
-            ),
+            Film: get_searchable_films(),
+            Asset: get_searchable_assets(),
+            Training: get_searchable_trainings(),
+            Section: get_searchable_sections(),
+            Post: get_searchable_posts(),
         }
 
         objects_to_load: List[Model] = []
         for model, queryset in models_and_querysets.items():
-            queryset = queryset.annotate(
-                model=Value(model._meta.model_name, output_field=CharField()),
-                search_id=Concat('model', Value('_'), 'id', output_field=CharField()),
-            )
+            queryset = add_common_annotations(queryset)
             qs_values = queryset.values()
 
-            for obj, obj_dict in zip(queryset, qs_values):
-                if model == Film:
-                    obj_dict['thumbnail_url'] = (
-                        obj.picture_16_9.url if obj.picture_16_9 else obj.picture_header.url
-                    )
-                elif model == Asset:
-                    obj_dict['thumbnail_url'] = (
-                        obj.static_asset.preview.url if obj.static_asset.preview else ''
-                    )
-                elif model in [Training, Post]:
-                    obj_dict['thumbnail_url'] = obj.picture_16_9.url
-                elif model == Section:
-                    obj_dict['thumbnail_url'] = obj.chapter.training.picture_16_9.url
+            for obj_dict, obj in zip(qs_values, queryset):
+                set_thumbnail_url(obj_dict, obj)
 
             objects_to_load.extend(qs_values)
 

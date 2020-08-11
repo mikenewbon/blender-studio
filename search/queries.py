@@ -1,4 +1,4 @@
-from typing import Any, Type, Union, Callable
+from typing import Any, Type, Union, Callable, Dict
 
 from django.db.models.expressions import F, Value, Case, When
 from django.db.models.fields import CharField
@@ -15,26 +15,31 @@ SearchableModels = Union[Film, Asset, Training, Section, Revision]
 def get_searchable_queryset(
     model: Type[SearchableModels], **filter_params: Any
 ) -> 'QuerySet[SearchableModels]':
-    function: Callable[..., 'QuerySet[SearchableModels]']
+    get_queryset: Callable[..., 'QuerySet[SearchableModels]']
     if model == Film:
-        function = get_searchable_films
+        get_queryset = get_searchable_films
     elif model == Asset:
-        function = get_searchable_assets
+        get_queryset = get_searchable_assets
     elif model == Training:
-        function = get_searchable_trainings
+        get_queryset = get_searchable_trainings
     elif model == Section:
-        function = get_searchable_sections
+        get_queryset = get_searchable_sections
     elif model == Revision:
-        function = get_searchable_posts
+        get_queryset = get_searchable_posts
     else:
         raise TypeError(
             f'Inappropriate model class. `model` has to be one of Film, Asset, Training, '
             f'Section, Revision; got {type(model)} instead.'
         )
 
-    return function(**filter_params).annotate(
-        model=Value('film', output_field=CharField()),
-        search_id=Concat('model', Value('_'), 'id', output_field=CharField()),
+    return add_common_annotations(get_queryset(**filter_params))
+
+
+def add_common_annotations(queryset: 'QuerySet[SearchableModels]') -> 'QuerySet[SearchableModels]':
+    model = queryset.model._meta.model_name
+    return queryset.annotate(
+        model=Value(model, output_field=CharField()),
+        search_id=Concat(Value(f'{model}_'), 'id', output_field=CharField()),
     )
 
 
@@ -93,3 +98,26 @@ def get_searchable_posts(**filter_params: Any) -> 'QuerySet[Revision]':
             name=F('title'),
         )
     )
+
+
+def set_thumbnail_url(instance_dict: Dict[Any, Any], instance: SearchableModels) -> Dict[Any, Any]:
+    if isinstance(instance, Film):
+        instance_dict['thumbnail_url'] = (
+            instance.picture_16_9.url if instance.picture_16_9 else instance.picture_header.url
+        )
+    elif isinstance(instance, Asset):
+        instance_dict['thumbnail_url'] = (
+            instance.static_asset.preview.url if instance.static_asset.preview else ''
+        )
+    elif isinstance(instance, Training):
+        instance_dict['thumbnail_url'] = instance.picture_16_9.url
+    elif isinstance(instance, Section):
+        instance_dict['thumbnail_url'] = instance.chapter.training.picture_16_9.url
+    elif isinstance(instance, Revision):
+        instance_dict['thumbnail_url'] = instance.picture_16_9.url
+    else:
+        raise TypeError(
+            f'Inappropriate `instance` class. It has to be an instance of Film, Asset, '
+            f'Training, Section, or Revision; got {type(instance)} instead.'
+        )
+    return instance_dict

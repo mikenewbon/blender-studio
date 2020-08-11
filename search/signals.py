@@ -11,10 +11,7 @@ from django.dispatch import receiver
 from blog.models import Revision
 from films.models import Film, Asset
 from search.management.commands.create_search_index import SEARCHABLE_ATTRIBUTES
-from search.queries import (
-    SearchableModels,
-    get_searchable_queryset,
-)
+from search.queries import SearchableModels, get_searchable_queryset, set_thumbnail_url
 from training.models import Training, Section
 
 log = logging.getLogger(__name__)
@@ -28,32 +25,17 @@ log = logging.getLogger(__name__)
 def update_search_index(
     sender: Type[SearchableModels], instance: SearchableModels, **kwargs: Any
 ) -> None:
-    instance_qs = get_searchable_queryset(sender)
+    instance_qs = get_searchable_queryset(sender, id=instance.id)
     if instance_qs:
         instance_dict = instance_qs.values().get()
-
-        if isinstance(instance, Film):
-            instance_dict['thumbnail_url'] = (
-                instance.picture_16_9.url if instance.picture_16_9 else instance.picture_header.url
-            )
-        elif isinstance(instance, Asset):
-            instance_dict['thumbnail_url'] = (
-                instance.static_asset.preview.url if instance.static_asset.preview else ''
-            )
-        elif isinstance(instance, Training):
-            instance_dict['thumbnail_url'] = instance.picture_16_9.url
-        elif isinstance(instance, Section):
-            instance_dict['thumbnail_url'] = instance.chapter.training.picture_16_9.url
-        elif isinstance(instance, Revision):
-            instance_dict['thumbnail_url'] = instance.picture_16_9.url
-
-        instance_dict['model'] = sender._meta.model_name
-        instance_dict['search_id'] = f'{sender._meta.model_name}_{instance.id}'
+        instance_dict = set_thumbnail_url(instance_dict, instance)
 
         data_to_load = json.loads(json.dumps(instance_dict, cls=DjangoJSONEncoder))
 
         client = meilisearch.Client(settings.MEILISEARCH_API_ADDRESS)
         index = client.get_index(settings.MEILISEARCH_INDEX_NAME)
+
+        # TODO(Natalia): handle and log server errors
         index.add_documents(data_to_load)
 
         # There seems to be no way in MeiliSearch v0.13 to disable adding new document
