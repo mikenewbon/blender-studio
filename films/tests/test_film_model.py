@@ -1,12 +1,16 @@
 from django.test import TestCase
 
 from common.tests.factories.films import FilmFactory
-from films.models import Film
-
 from common.tests.factories.users import UserFactory
+from films.models import Film
+from search import signals as search_signals
+from search.signals import update_search_index
 
 
 class TestFilmModel(TestCase):
+    def setUp(self) -> None:
+        search_signals.post_save.disconnect(update_search_index, Film)
+
     def test_film_create_with_crew_member(self):
         """Tests for the FilmCrew model.
 

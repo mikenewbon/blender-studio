@@ -1,6 +1,7 @@
 import time
 from io import StringIO
 from typing import Optional
+from unittest.case import skipIf
 
 import meilisearch
 from django.conf import settings
@@ -12,28 +13,33 @@ from common.tests.factories.films import FilmFactory, AssetFactory
 from common.tests.factories.training import TrainingFactory, SectionFactory
 from training.models import TrainingStatus
 
+TEST_INDEX_UID = 'test-studio'
 
+
+def meilisearch_available():
+    client: meilisearch.client.Client = meilisearch.Client(settings.MEILISEARCH_API_ADDRESS)
+    try:
+        client.health()
+    except meilisearch.errors.MeiliSearchCommunicationError:
+        return False
+    return True
+
+
+@skipIf(not meilisearch_available(), 'MeiliSearch server does not seem to be running')
 class BaseSearchTestCase(TestCase):
     TEST_INDEX_UID = 'test-studio'
     index: Optional[meilisearch.index.Index]
 
     @classmethod
     def setUpClass(cls) -> None:
-        client: meilisearch.client.Client = meilisearch.Client(settings.MEILISEARCH_API_ADDRESS)
-        cls.index = client.get_or_create_index(cls.TEST_INDEX_UID, {'primaryKey': 'search_id'})
         super().setUpClass()
+        client: meilisearch.client.Client = meilisearch.Client(settings.MEILISEARCH_API_ADDRESS)
+        cls.index = client.get_or_create_index(TEST_INDEX_UID, {'primaryKey': 'search_id'})
 
     @classmethod
     def tearDownClass(cls) -> None:
         cls.index.delete()
         super().tearDownClass()
-
-    def meilisearch_available(self):
-        try:
-            self.index.info()
-        except meilisearch.errors.MeiliSearchCommunicationError:
-            return False
-        return True
 
     def wait_for_update_execution(self, update_id: int) -> str:
         """If the update is enqueued, wait for its status to change.
@@ -59,7 +65,7 @@ class BaseSearchTestCase(TestCase):
 class TestIndexDocumentsCommand(BaseSearchTestCase):
     @classmethod
     def setUpTestData(cls) -> None:
-        # The signals for these factories are muted. Create 15 object to be indexed:
+        # The signals for these factories are muted. Create 15 objects to be indexed:
         film = FilmFactory()
         AssetFactory.create_batch(2, film=film)
         training_1, *_ = TrainingFactory.create_batch(3, status=TrainingStatus.published.name)
@@ -76,11 +82,9 @@ class TestIndexDocumentsCommand(BaseSearchTestCase):
         RevisionFactory(is_published=False, post__film=film)
 
     def test_index_documents_command(self):
-        if not self.meilisearch_available():
-            self.skipTest('MeiliSearch server does not seem to be running')
         initial_docs_count = self.index.get_stats()['numberOfDocuments']
         out = StringIO()
-        update_id = call_command('index_documents', index=self.TEST_INDEX_UID, stdout=out)
+        update_id = call_command('index_documents', index=TEST_INDEX_UID, stdout=out)
 
         self.assertIn('Successfully', out.getvalue())
         self.assertIn('15 objects to load', out.getvalue())

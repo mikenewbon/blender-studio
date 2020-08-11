@@ -15,12 +15,18 @@ from common.tests.factories.films import (
 )
 from common.tests.factories.static_assets import StaticAssetFactory
 from common.tests.factories.users import UserFactory
+from films.models import Film, Asset
 from films.queries import SiteContexts, get_asset_context
+from search import signals as search_signals
+from search.signals import update_search_index
 
 
 class TestSiteContextResolution(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
+        search_signals.post_save.disconnect(update_search_index, Film)
+        search_signals.post_save.disconnect(update_search_index, Asset)
+
         cls.factory = RequestFactory()
         cls.user = UserFactory()
 
@@ -87,6 +93,9 @@ class TestSiteContextResolution(TestCase):
 class TestAssetOrderingInGallery(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
+        search_signals.post_save.disconnect(update_search_index, Film)
+        search_signals.post_save.disconnect(update_search_index, Asset)
+
         cls.site_context = SiteContexts.GALLERY.value
         cls.factory = RequestFactory()
         cls.user = UserFactory()
@@ -155,6 +164,9 @@ class TestAssetOrderingInGallery(TestCase):
 class TestAssetOrderingInFeaturedArtwork(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
+        search_signals.post_save.disconnect(update_search_index, Film)
+        search_signals.post_save.disconnect(update_search_index, Asset)
+
         cls.site_context = SiteContexts.FEATURED_ARTWORK.value
         cls.factory = RequestFactory()
         cls.user = UserFactory()
@@ -228,6 +240,9 @@ class TestAssetOrderingInFeaturedArtwork(TestCase):
 class TestAssetOrderingInProductionLogs(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
+        search_signals.post_save.disconnect(update_search_index, Film)
+        search_signals.post_save.disconnect(update_search_index, Asset)
+
         cls.site_context = SiteContexts.PRODUCTION_LOGS.value
         cls.factory = RequestFactory()
         cls.user = UserFactory()

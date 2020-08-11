@@ -1,14 +1,21 @@
 from django.test.testcases import TestCase
 
+from blog.models import Revision
 from common.queries import DEFAULT_FEED_PAGE_SIZE, get_activity_feed_page
 from common.tests.factories.blog import RevisionFactory, PostFactory
 from common.tests.factories.films import ProductionLogFactory
 from common.tests.factories.training import TrainingFactory
+from search import signals as search_signals
+from search.signals import update_search_index
+from training.models import Training
 
 
 class TestActivityFeedEndpoint(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
+        search_signals.post_save.disconnect(update_search_index, Revision)
+        search_signals.post_save.disconnect(update_search_index, Training)
+
         ProductionLogFactory.create_batch(5)
         TrainingFactory.create_batch(5)
         RevisionFactory.create_batch(5)

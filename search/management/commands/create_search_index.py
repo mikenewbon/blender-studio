@@ -32,7 +32,7 @@ class Command(BaseCommand):
         parser.add_argument(
             'index',
             nargs='?',
-            default=settings.MEILISEARCH_INDEX_NAME,
+            default=settings.MEILISEARCH_INDEX_UID,
             help='The uid (name) of the index to create.',
         )
 

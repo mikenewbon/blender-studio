@@ -1,4 +1,5 @@
 import os
+import sys
 from typing import List
 
 # Enable to use OAuth without https during local development
@@ -86,4 +87,8 @@ GOOGLE_RECAPTCHA_SECRET_KEY = 'CHANGE_ME'
 
 # MeiliSearch-related settings
 MEILISEARCH_API_ADDRESS = 'http://127.0.0.1:7700'
-MEILISEARCH_INDEX_NAME = 'studio'
+if 'test' in sys.argv:
+    MEILISEARCH_INDEX_UID = 'test-studio'
+else:
+    MEILISEARCH_INDEX_UID = 'studio'
+

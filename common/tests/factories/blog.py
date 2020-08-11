@@ -6,6 +6,7 @@ from common.tests.factories.users import UserFactory
 from search import signals as search_signals
 
 
+@factory.django.mute_signals(search_signals.post_save)
 class PostFactory(factory.DjangoModelFactory):
     class Meta:
         model = Post

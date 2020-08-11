@@ -11,7 +11,7 @@ from django.views.decorators.http import require_safe
 @require_safe
 def api_search(request: HttpRequest) -> JsonResponse:
     client = meilisearch.Client(settings.MEILISEARCH_API_ADDRESS)
-    index = client.get_index(settings.MEILISEARCH_INDEX_NAME)
+    index = client.get_index(settings.MEILISEARCH_INDEX_UID)
     query = request.GET.get('q', '')
 
     opt_params = {k: v for k, v in request.GET.items() if k != 'q'}

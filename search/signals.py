@@ -34,7 +34,7 @@ def update_search_index(
         data_to_load = [json.loads(json.dumps(instance_dict, cls=DjangoJSONEncoder))]
 
         client = meilisearch.Client(settings.MEILISEARCH_API_ADDRESS)
-        index = client.get_index(settings.MEILISEARCH_INDEX_NAME)
+        index = client.get_index(settings.MEILISEARCH_INDEX_UID)
 
         # TODO(Natalia): handle and log server errors
         index.add_documents(data_to_load)

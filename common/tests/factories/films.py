@@ -45,6 +45,7 @@ class FilmFactory(factory.DjangoModelFactory):
     )
 
 
+@factory.django.mute_signals(search_signals.post_save)
 class CollectionFactory(factory.DjangoModelFactory):
     class Meta:
         model = Collection
@@ -75,6 +76,7 @@ class AssetFactory(factory.DjangoModelFactory):
     is_published = True
 
 
+@factory.django.mute_signals(search_signals.post_save)
 class ProductionLogFactory(factory.DjangoModelFactory):
     class Meta:
         model = ProductionLog

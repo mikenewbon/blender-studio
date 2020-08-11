@@ -26,7 +26,7 @@ from training.models import Training, Section
 class Command(BaseCommand):
     help = (
         f'Add database objects to the specified search index '
-        f'("{settings.MEILISEARCH_INDEX_NAME}" by default). '
+        f'("{settings.MEILISEARCH_INDEX_UID}" by default). '
         f'Indexes the following models: Film, Asset, Training, Section, Post. '
         f'If an object already exists in the index, it is updated.'
     )
@@ -34,7 +34,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser: CommandParser) -> None:
         parser.add_argument(
             '--index',
-            default=settings.MEILISEARCH_INDEX_NAME,
+            default=settings.MEILISEARCH_INDEX_UID,
             help='The uid of the index to which to add the documents. '
             'The index has to exist already.',
         )
