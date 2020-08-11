@@ -161,7 +161,7 @@ STATICFILES_FINDERS = (
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
+    'disable_existing_loggers': False,
     'formatters': {
         'default': {'format': '%(asctime)-15s %(levelname)8s %(name)s %(message)s'},
         'verbose': {
@@ -174,6 +174,13 @@ LOGGING = {
             'formatter': 'default',  # Set to 'verbose' in production
             'stream': 'ext://sys.stderr',
         },
+    },
+    'loggers': {
+        'asyncio': {'level': 'WARNING'},
+        'django': {'level': 'WARNING'},
+        'urllib3': {'level': 'WARNING'},
+
+        'search': {'level': 'DEBUG'},
     },
     'root': {'level': 'WARNING', 'handlers': ['console']},
 }
