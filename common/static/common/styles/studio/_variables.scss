@@ -457,25 +457,10 @@ $btn-padding-x-lg: $input-btn-padding-x-lg !default;
 $btn-font-size-lg: $input-btn-font-size-lg !default;
 $btn-line-height-lg: $input-btn-line-height-lg !default;
 
-$btn-padding-y-ctrl: 0.75rem !default;
-$btn-padding-x-ctrl: 0.75rem !default;
-$btn-font-size-ctrl: $font-size-base * 2.25 !default;
-$btn-line-height-ctrl: 1 !default;
-
 $btn-padding-y-nav: 0 !default;
 $btn-padding-x-nav: 1.25rem !default;
 $btn-font-size-nav: $font-size-base !default;
 $btn-line-height-nav: 1 !default;
-
-$btn-padding-y-ctrl-sm: 0.3125rem !default;
-$btn-padding-x-ctrl-sm: 0.3125rem !default;
-$btn-font-size-ctrl-sm: $font-size-base * 1.5 !default;
-$btn-line-height-ctrl-sm: 1 !default;
-
-$btn-padding-y-ctrl-xs: 0rem !default;
-$btn-padding-x-ctrl-xs: 0rem !default;
-$btn-font-size-ctrl-xs: $font-size-base * 1.375 !default;
-$btn-line-height-ctrl-xs: 1 !default;
 
 $btn-border-width: $input-btn-border-width !default;
 
@@ -513,10 +498,10 @@ $input-font-size: $font-size-base !default;
 $input-font-weight: $font-weight-base !default;
 $input-line-height: $line-height-base !default;
 
-$input-padding-y-sm: 0.625rem !default;
+$input-padding-y-sm: 0.40625rem !default;
 $input-padding-x-sm: 0.625rem !default;
 $input-font-size-sm: $input-btn-font-size-sm !default;
-$input-line-height-sm: 1 !default;
+$input-line-height-sm: 1.5 !default;
 
 $input-padding-y-lg: $input-btn-padding-y-lg !default;
 $input-padding-x-lg: $input-btn-padding-x-lg !default;

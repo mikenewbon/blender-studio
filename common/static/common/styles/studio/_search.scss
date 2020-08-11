@@ -8,9 +8,6 @@
     .custom-select {
       background-color: $dark;
       transition: $transition-base;
-
-
-
     }
 
     @include hover-focus {
@@ -43,6 +40,9 @@
 #filters {
   select {
     text-transform: capitalize;
+  }
+  @include media-breakpoint-up(md) {
+    display: flex;
   }
 }
 

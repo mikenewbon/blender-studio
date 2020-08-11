@@ -5,36 +5,14 @@
 <script src="https://cdn.jsdelivr.net/npm/@meilisearch/instant-meilisearch/dist/instant-meilisearch.umd.min.js">
 </script>
 <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4"></script>
-
 {% endblock scripts %}
 
 
 {% block content %}
 
-<div class="container-xl pt-4">
+<div class="container-xl pt-3 pt-md-4">
 
   <section>
-    {% comment %} <div class="row">
-      <div class="col mb-3">
-        <div class="input-group">
-
-          <div class="input-group-prepend">
-            <span class="input-group-text">
-              <i class="material-icons">search</i>
-            </span>
-          </div>
-
-          <input type="text" placeholder="Search tags and keywords" class="form-control">
-
-          <div class="input-group-append">
-            <button class="btn btn-icon btn-input">
-              <i class="material-icons">close</i>
-            </button>
-          </div>
-
-        </div>
-      </div>
-    </div> {% endcomment %}
 
     <div class="row">
       <div class="col mb-3">
@@ -54,7 +32,8 @@
       </div>
     </div>
 
-    <div class="row search-filters">
+    <div class="row search-filters mb-3 d-md-none">
+
       <div class="col-auto">
         <a class="btn btn-sm btn-dark" data-toggle="collapse" href="#filters" role="button" aria-expanded="false"
           aria-controls="collapseExample">
@@ -63,7 +42,7 @@
         </a>
       </div>
 
-      <div class="col-auto mb-3 ml-auto">
+      <div class="col-auto ml-auto">
         <div class="input-group input-group-sm">
           <div class="input-group-prepend">
             <label class="input-group-text" for="searchLicence">Sort by:</label>
@@ -78,10 +57,10 @@
 
     </div>
 
-    <div class="row collapse" id="filters">
+    <div class="row search-filters collapse" id="filters">
 
-      <div class="col-md-3 mb-3">
-        <div class="input-group" id="searchType">
+      <div class="col-md-auto mb-3">
+        <div class="input-group input-group-sm" id="searchType">
           <div class="input-group-prepend">
             <label class="input-group-text">Type:</label>
           </div>
@@ -89,8 +68,8 @@
         </div>
       </div>
 
-      <div class="col-md-3 mb-3">
-        <div class="input-group" id="searchMedia">
+      <div class="col-md-auto mb-3">
+        <div class="input-group input-group-sm" id="searchMedia">
           <div class="input-group-prepend">
             <label class="input-group-text">Media:</label>
           </div>
@@ -98,21 +77,38 @@
         </div>
       </div>
 
-      <div class="col-md-3 mb-3">
-        <div class="input-group" id="searchFree">
+      {% comment %} <div class="col-md-auto mb-3">
+        <div class="input-group input-group-sm" id="searchFree">
           <div class="input-group-prepend">
             <label class="input-group-text">Is Free:</label>
           </div>
 
         </div>
-      </div>
+      </div> {% endcomment %}
 
-      <div class="col-md-3 mb-3">
-        <div class="input-group" id="searchLicence">
+      <div class="col-md-auto mb-3">
+        <div class="input-group input-group-sm" id="searchLicence">
           <div class="input-group-prepend">
             <label class="input-group-text">Licence:</label>
           </div>
 
+        </div>
+      </div>
+
+      <div class="col-md-auto mb-3">
+        <button class="btn btn-primary btn-sm">Hello</button>
+      </div>
+
+      <div class="col-auto mb-3 ml-auto d-none d-md-block">
+        <div class="input-group input-group-sm">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="searchLicence">Sort by:</label>
+          </div>
+          <select class="custom-select" id="sortBy">
+            <option selected>Relevance</option>
+            <option value="1">Date (New first)</option>
+            <option value="2">Date (Old first)</option>
+          </select>
         </div>
       </div>
 

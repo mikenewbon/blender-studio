@@ -6,6 +6,45 @@ const search = instantsearch({
   )
 });
 
+function timeDifference(datetime) {
+
+  //TODO(Mike): When Natka adds new date-time formatting, fix processing.
+  // console.log(datetime);
+
+  let now = new Date();
+
+  const msPerMinute = 60 * 1000;
+  const msPerHour = msPerMinute * 60;
+  const msPerDay = msPerHour * 24;
+  const msPerMonth = msPerDay * 30;
+  const msPerYear = msPerDay * 365;
+
+  let elapsed = now - datetime;
+
+  if (elapsed < msPerMinute) {
+       return Math.round(elapsed/1000) + ' seconds ago';
+  }
+
+  else if (elapsed < msPerHour) {
+       return Math.round(elapsed/msPerMinute) + ' minutes ago';
+  }
+
+  else if (elapsed < msPerDay ) {
+       return Math.round(elapsed/msPerHour ) + ' hours ago';
+  }
+
+  else if (elapsed < msPerMonth) {
+      return  Math.round(elapsed/msPerDay) + ' days ago';
+  }
+
+  else if (elapsed < msPerYear) {
+      return  Math.round(elapsed/msPerMonth) + ' months ago';
+  }
+
+  else {
+      return Math.round(elapsed/msPerYear ) + ' years ago';
+  }
+}
 
 // -------- INPUT -------- //
 
@@ -72,19 +111,19 @@ const renderHits = (renderOptions, isFirstRender) => {
           <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
             <div class="card card-dark card-hover card-media">
               <div class="card-header">
-                <a class="card-header-link" href="">
+                <a class="card-header-link" href="/${ item.url }">
                   <img src="${ item.thumbnail_url }" class="card-image" loading=lazy>
                 </a>
               </div>
-              <a href="" class="card-body">
+              <a href="/${ item.url }" class="card-body">
                 <div class="card-subtitle-group">
                   <p class="card-subtitle content-type">
-                  ${instantsearch.highlight({ attribute: 'model', hit: item })}
+                  ${ item.model }
                   </p>
 
                   <p class="card-subtitle">
-                    <i class="material-icons icon-inline x-small">schedule</i>
-                    ${instantsearch.highlight({ attribute: 'date_created', hit: item })}
+                    <i class="material-icons icon-inline small">schedule</i>
+                    ${ timeDifference(item.date_created) }
                   </p>
 
                 </div>
@@ -131,7 +170,7 @@ const renderMenuSelect = (renderOptions, isFirstRender) => {
   select.disabled = !canRefine;
 
   select.innerHTML = `
-    <option value="">See all</option>
+    <option value="">All</option>
     ${items
       .map(
         item =>
