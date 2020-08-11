@@ -19,3 +19,4 @@ node_modules/
 .python-version
 studio/blender-cloud-credentials.json
 data.ms/
+.vscode
