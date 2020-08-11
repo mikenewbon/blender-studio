@@ -4,7 +4,7 @@ from typing import Optional, Any
 
 import meilisearch
 from django.conf import settings
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand, CommandError, CommandParser
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models.base import Model
 
@@ -25,12 +25,21 @@ from training.models import Training, Section
 
 class Command(BaseCommand):
     help = (
-        f'Add database objects to the search index "{settings.MEILISEARCH_INDEX_NAME}". '
+        f'Add database objects to the specified search index '
+        f'("{settings.MEILISEARCH_INDEX_NAME}" by default). '
         f'Indexes the following models: Film, Asset, Training, Section, Post. '
         f'If an object already exists in the index, it is updated.'
     )
 
-    def prepare_data(self) -> Any:
+    def add_arguments(self, parser: CommandParser) -> None:
+        parser.add_argument(
+            '--index',
+            default=settings.MEILISEARCH_INDEX_NAME,
+            help='The uid of the index to which to add the documents. '
+            'The index has to exist already.',
+        )
+
+    def _prepare_data(self) -> Any:
         self.stdout.write('Preparing the data, it may take a while...')
 
         models_and_querysets = {
@@ -57,10 +66,11 @@ class Command(BaseCommand):
         return json.loads(json.dumps(objects_to_load, cls=DjangoJSONEncoder))
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
+        index_name = options['index']
         client = meilisearch.Client(settings.MEILISEARCH_API_ADDRESS)
-        index = client.get_index(settings.MEILISEARCH_INDEX_NAME)
+        index = client.get_index(index_name)
 
-        data_to_load = self.prepare_data()
+        data_to_load = self._prepare_data()
 
         try:
             index.add_documents(data_to_load)
@@ -71,7 +81,7 @@ class Command(BaseCommand):
             )
         except meilisearch.errors.MeiliSearchApiError:
             raise CommandError(
-                f'Error accessing the index "{settings.MEILISEARCH_INDEX_NAME}" of the client '
+                f'Error accessing the index "{index_name}" of the client '
                 f'at {self.MEILISEARCH_API_ADDRESS}. Make sure that the index exists.'
             )
 
@@ -79,10 +89,6 @@ class Command(BaseCommand):
         # fields automatically to searchable attrs, so we update the settings to set them:
         index.update_settings({'searchableAttributes': SEARCHABLE_ATTRIBUTES})
 
-        self.stdout.write(
-            self.style.SUCCESS(
-                f'Successfully updated the index "{settings.MEILISEARCH_INDEX_NAME}".'
-            )
-        )
+        self.stdout.write(self.style.SUCCESS(f'Successfully updated the index "{index_name}".'))
 
         return None
