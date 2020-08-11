@@ -68,7 +68,7 @@
           <div class="input-group-prepend">
             <label class="input-group-text" for="searchLicence">Sort by:</label>
           </div>
-          <select class="custom-select" id="searchLicence">
+          <select class="custom-select" id="sortBy">
             <option selected>Relevance</option>
             <option value="1">Date (New first)</option>
             <option value="2">Date (Old first)</option>
@@ -85,52 +85,34 @@
           <div class="input-group-prepend">
             <label class="input-group-text">Type:</label>
           </div>
-          {% comment %} <select class="custom-select" id="searchType">
-            <option value="" selected>All</option>
-            <option value="1">Film</option>
-            <option value="2">Training</option>
-            <option value="3">Blog</option>
-          </select> {% endcomment %}
+
         </div>
       </div>
 
       <div class="col-md-3 mb-3">
-        <div class="input-group">
+        <div class="input-group" id="searchMedia">
           <div class="input-group-prepend">
-            <label class="input-group-text" for="searchMedia">Media:</label>
+            <label class="input-group-text">Media:</label>
           </div>
-          <select class="custom-select" id="searchMedia">
-            <option selected>All</option>
-            <option value="1">Image</option>
-            <option value="2">Video</option>
-            <option value="3">File</option>
-          </select>
+
         </div>
       </div>
 
       <div class="col-md-3 mb-3">
-        <div class="input-group">
+        <div class="input-group" id="searchFree">
           <div class="input-group-prepend">
-            <label class="input-group-text" for="searchFree">Is Free:</label>
+            <label class="input-group-text">Is Free:</label>
           </div>
-          <select class="custom-select" id="searchFree">
-            <option selected>All</option>
-            <option value="1">Is Free</option>
-            <option value="2">Is Not Free</option>
-          </select>
+
         </div>
       </div>
 
       <div class="col-md-3 mb-3">
-        <div class="input-group">
+        <div class="input-group" id="searchLicence">
           <div class="input-group-prepend">
-            <label class="input-group-text" for="searchLicence">Licence:</label>
+            <label class="input-group-text">Licence:</label>
           </div>
-          <select class="custom-select" id="searchLicence">
-            <option value="" selected>All</option>
-            <option value="1">CC-BY</option>
-            <option value="2">CC-0</option>
-          </select>
+
         </div>
       </div>
 
@@ -140,7 +122,6 @@
   <div class="row" id="hits"></div>
 
 </div>
-
 
 {% javascript 'search' %}
 

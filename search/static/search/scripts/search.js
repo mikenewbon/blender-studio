@@ -167,7 +167,15 @@ search.addWidgets([
   customMenuSelect({
     container: document.querySelector('#searchType'),
     attribute: 'model',
-  })
+  }),
+  customMenuSelect({
+    container: document.querySelector('#searchLicence'),
+    attribute: 'license',
+  }),
+  customMenuSelect({
+    container: document.querySelector('#searchMedia'),
+    attribute: 'media_type',
+  }),
 ]);
 
 search.start();
