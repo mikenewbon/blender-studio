@@ -37,6 +37,9 @@ def get_searchable_queryset(
 
 def add_common_annotations(queryset: 'QuerySet[SearchableModels]') -> 'QuerySet[SearchableModels]':
     model = queryset.model._meta.model_name
+    if model == 'revision':
+        # 'Revision' is the actual model for internal use, but the user searches for posts
+        model = 'post'
     return queryset.annotate(
         model=Value(model, output_field=CharField()),
         search_id=Concat(Value(f'{model}_'), 'id', output_field=CharField()),

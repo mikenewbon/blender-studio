@@ -46,8 +46,8 @@ class Command(BaseCommand):
             queryset = add_common_annotations(queryset)
             qs_values = queryset.values()
 
-            for obj_dict, obj in zip(qs_values, queryset):
-                set_thumbnail_url(obj_dict, obj)
+            for instance_dict, instance in zip(qs_values, queryset):
+                set_thumbnail_url(instance_dict, instance)
 
             objects_to_load.extend(qs_values)
 

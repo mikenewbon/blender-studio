@@ -30,7 +30,8 @@ def update_search_index(
         instance_dict = instance_qs.values().get()
         instance_dict = set_thumbnail_url(instance_dict, instance)
 
-        data_to_load = json.loads(json.dumps(instance_dict, cls=DjangoJSONEncoder))
+        # Data has to be a list of documents.
+        data_to_load = [json.loads(json.dumps(instance_dict, cls=DjangoJSONEncoder))]
 
         client = meilisearch.Client(settings.MEILISEARCH_API_ADDRESS)
         index = client.get_index(settings.MEILISEARCH_INDEX_NAME)
