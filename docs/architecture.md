@@ -5,6 +5,7 @@ Apps:
  - [comments](#comments)
  - [common](#common)
  - [films](#films)
+ - [search](#search)
  - [static_assets](#static-assets)
  - [subscriptions](#subscriptions)
  - [training](#training)
@@ -191,8 +192,53 @@ treated as a normal model therefore.
 Could be extracted to a separate app. Has to be added to films, too.
 
 
-## Static Assets
+## Search
+The search functionality uses [MeiliSearch](https://github.com/meilisearch/MeiliSearch).
+It is a service separate from the back end.
 
+All the indexed documents are stored under one index, `studio`. This name (the uid of the
+index) is defined in settings.py, in the `MEILISEARCH_INDEX_UID` variable.
+
+The models that are 'searchable', i.e. added to the index, are:
+ - films.Film - the published ones,
+ - films.Asset - the published ones that belong to a published film,
+ - training.Training - the published ones,
+ - training.Section - belonging to a published training,
+ - blog.Revision - only the latest published revision of each published post.
+
+Each document in the index needs to have a unique ID field. The field is called `search_id`
+and is generated based on the model and the object `pk`, e.g. `film_1` for the film with
+`pk=1`. For revisions, the model name is `post` and the post's `pk` is used (for the reasons
+described [below](#indexing-blog-posts)).
+
+Django signals take care of indexing new objects in the database or updating the existing
+ones on change: a `post_save` signal is attached to each of the above mentioned models.
+When an object is updated in the database, it is 'added' to the index with the same
+`search_id`, which means that no new document is created, only the existing one is updated.
+
+On object delete, the related document will be deleted from the index thanks to a `post_delete`
+signal.
+
+It is also possible to update the index with all the documents in the database using a Django
+management command:
+```
+./manage.py index_documents
+```
+For more details, see the command's `--help` or the
+[search setup instructions](development.md#adding-documents-to-the-search-index).
+
+#### Indexing blog posts
+It is possible to search for blog posts. However, the model which is actually indexed is
+**Revision** - it contains almost all search- and display-relevant data about a blog post.
+
+Only the latest published revision for each published post should be indexed for search.
+When a new post revision is created for an already existing post, it is added to the index
+with the same `search_id` as the previous post revision, which means the old revision
+is updated and its contents are overwritten. Therefore the `search_id` of a revision is
+`post_{post.id}`.
+
+
+## Static Assets
 **Static Assets** represent the files uploaded in the cloud.
 
 Static assets can be of three types (`source_type` attribute): image, video, or (a generic) file.

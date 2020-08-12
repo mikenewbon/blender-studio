@@ -16,7 +16,6 @@ templates with regular ones in the future.
 
 
 ### Media files
-
 Media files (e.g. static assets, preview images of collections, training section videos, etc. - all the
 other files that can be uploaded with model instances, in the entire project) are uploaded to nested
 directories inside `MEDIA_ROOT`. Their filenames are hashed to avoid name collisions.
@@ -31,7 +30,6 @@ resolution video variants, auto-generated thumbnails, etc.) can be saved in the 
 
 
 ### URLs
-
 It would be nice to have the urls matching the ones in the "old" cloud.
 
 ##### Films
@@ -47,7 +45,6 @@ Training app routing has to be documented yet.
 
 
 ### Asset modals
-
 Film assets are displayed in a couple of places: in Weeklies, in Gallery (in real collections and
 in the featured assets 'collection'), in the film detail ('About') page of unreleased films.
 They are not loaded on separate pages but in [modal
