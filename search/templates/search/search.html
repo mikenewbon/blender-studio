@@ -7,15 +7,16 @@
 <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4"></script>
 {% endblock scripts %}
 
+{% block bodyclasses %}search{% endblock bodyclasses %}
 
 {% block content %}
 
-<div class="container-xl pt-3 pt-md-4">
+<div class="container-xl">
 
   <section>
 
     <div class="row">
-      <div class="col mb-3">
+      <div class="col search-bar-wrapper">
         <div class="input-group" id="search-container">
 
           <div class="input-group-prepend">
