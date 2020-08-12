@@ -24,7 +24,7 @@
 <body class="{% block bodyclasses %}{% endblock bodyclasses %}">
   <!-- When the body has a nav-drawer, it should have the class 'has-nav-drawer' and when it's wide, 'has-nav-drawer nav-drawer-wide' -->
   <nav class="navbar">
-    <div class="content-holder">
+    <div class="navdrawer-offset">
       <div class="container-xl">
         <div class="progress global-progress">
           <div class="progress-bar" role="progressbar" style="width: 0%; height: 2px;" aria-valuenow="0"
@@ -105,7 +105,7 @@
         </div>
         {% else %}
         <div class="navbar-login-wrapper">
-          <a href="{% url 'oauth:login' %}" class="btn btn-transparent mr-2 btn-nav d-none d-sm-inline-block">Login</a>
+          <a href="{% url 'oauth:login' %}" class="btn btn-transparent btn-nav login-button">Login</a>
           <a href="#" class="btn btn-primary ">Join <span class="d-none d-lg-inline-block">Blender Studio</span></a>
         </div>
         {% endif %}
@@ -143,7 +143,7 @@
         </div>
       </div>
       <div class="navbar-secondary d-md-none">
-        <div class="content-holder">
+        <div class="navdrawer-offset">
           <div class="container-xl">
             <div class="list-group list-group-flush list-group-horizontal small px-2">
               <a class="list-group-item" href="{% url 'film-list' %}">Films</a>
@@ -165,7 +165,7 @@
 
   {% endblock nav_drawer %}
 
-  <div class="content-holder content">
+  <div class="content-holder navdrawer-offset">
     {% block breadcrumbs %}{% endblock breadcrumbs %}
     {% comment %} <nav class="navbar-secondary" aria-label="breadcrumbs">
       <div class="content-holder">
@@ -175,12 +175,11 @@
       </div>
     </nav> {% endcomment %}
 
-
     {% block content %}{% endblock content %}
   </div>
   {% block footer %}
   <footer class="bg-navigation py-4">
-    <div class="content-holder">
+    <div class="navdrawer-offset">
       <div class="container-xl">
         <div class="row">
           <div class="col-lg-3 col-md-4 mb-4 mb-md-0">

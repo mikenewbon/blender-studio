@@ -1,5 +1,5 @@
 .has-nav-drawer {
-  .content-holder {
+  .navdrawer-offset {
     @include media-breakpoint-up(md) {
       margin-left: $nav-drawer-width;
     }
@@ -14,7 +14,7 @@
   }
 
   &.nav-drawer-open {
-    .content-holder {
+    .navdrawer-offset {
       @include media-breakpoint-up(md) {
         margin-left: $nav-drawer-width;
       }
@@ -153,7 +153,7 @@
   padding-left: 54px;
 }
 
-.content-holder {
+.navdrawer-offset {
   transition: margin-left $nav-drawer-animation-duration;
 }
 
