@@ -98,9 +98,9 @@ class TestIndexDocumentsCommand(BaseSearchTestCase):
         self.assertIn('15 objects to load', out.getvalue())
         update_data = self.index.get_update_status(update_id)
         self.assertEqual(update_data['type']['number'], 15)
-        if update_data['status'] == 'enqueued':
+        update_status = update_data['status']
+        if update_status == 'enqueued':
             update_status = self.wait_for_update_execution(update_id)
-
         self.assertEqual(update_status, 'processed')
         self.assertEqual(self.index.get_stats()['numberOfDocuments'], initial_docs_count + 15)
 

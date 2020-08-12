@@ -1,4 +1,7 @@
 import pathlib
+import sys
+
+import meilisearch
 
 BASE_DIR = pathlib.Path(__file__).absolute().parent.parent
 
@@ -189,3 +192,50 @@ SITE_ID = 1
 
 # Required by Django Debug Toolbar
 INTERNAL_IPS = ['127.0.0.1']
+
+
+# MeiliSearch-related settings
+MEILISEARCH_API_ADDRESS = 'http://127.0.0.1:7700'
+if 'test' in sys.argv:
+    MEILISEARCH_INDEX_UID = 'test-studio'
+else:
+    MEILISEARCH_INDEX_UID = 'studio'
+
+SEARCH_CLIENT = meilisearch.Client(MEILISEARCH_API_ADDRESS)
+MAIN_SEARCH_INDEX = SEARCH_CLIENT.get_index(MEILISEARCH_INDEX_UID)
+
+DEFAULT_RANKING_RULES = (
+    'typo',
+    'words',
+    'proximity',
+    'attribute',
+    'wordsPosition',
+    'exactness',
+)
+DATE_DESC_RANKING_RULES = ('desc(date_created_ts)', *DEFAULT_RANKING_RULES)
+DATE_ASC_RANKING_RULES = ('asc(date_created_ts)', *DEFAULT_RANKING_RULES)
+SEARCH_RESULT_SORTING = {
+    (MEILISEARCH_INDEX_UID, DEFAULT_RANKING_RULES),
+    (f'{MEILISEARCH_INDEX_UID}_date_desc', DATE_DESC_RANKING_RULES),
+    (f'{MEILISEARCH_INDEX_UID}_date_asc', DATE_ASC_RANKING_RULES),
+}
+
+SEARCHABLE_ATTRIBUTES = (
+    # Model fields/annotations that are searchable:
+    #     Film: ['model', 'name', 'project', 'description', 'summary'],
+    #     Asset: ['model', 'name', 'project', 'collection_name', 'description'],
+    #     Training: ['model', 'name', 'project', 'description', 'summary'],
+    #     Section: ['model', 'name', 'project', 'chapter_name', 'description'],
+    #     Post: ['model', 'name', 'project', 'topic', 'description', 'content']
+    # In the order of relevance:
+    'model',
+    'name',
+    'project',
+    'topic',
+    'collection_name',
+    'chapter_name',
+    'description',
+    'summary',
+    'content',
+)
+FACETING_ATTRIBUTES = ('model', 'project', 'license', 'media_type')

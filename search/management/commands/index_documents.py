@@ -10,7 +10,6 @@ from django.db.models.base import Model
 
 from blog.models import Post
 from films.models import Film, Asset
-from search.management.commands.create_search_index import SEARCHABLE_ATTRIBUTES
 from search.queries import (
     get_searchable_films,
     get_searchable_assets,
@@ -26,7 +25,8 @@ from training.models import Training, Section
 class Command(BaseCommand):
     help = (
         f'Add database objects to the specified search index '
-        f'("{settings.MEILISEARCH_INDEX_UID}" by default). '
+        f'("{settings.MEILISEARCH_INDEX_UID}" by default). Also create replica'
+        f'indexes for different search results ordering.'
         f'Indexes the following models: Film, Asset, Training, Section, Post. '
         f'If an object already exists in the index, it is updated.'
     )
@@ -68,7 +68,7 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         index_uid = options['index']
         client = meilisearch.Client(settings.MEILISEARCH_API_ADDRESS)
-        index = client.get_index(index_uid)
+        index = settings.SEARCH_CLIENT.get_index(index_uid)
 
         data_to_load = self._prepare_data()
 
@@ -87,7 +87,7 @@ class Command(BaseCommand):
 
         # There seems to be no way in MeiliSearch v0.13 to disable adding new document
         # fields automatically to searchable attrs, so we update the settings to set them:
-        index.update_settings({'searchableAttributes': SEARCHABLE_ATTRIBUTES})
+        index.update_searchable_attributes(settings.SEARCHABLE_ATTRIBUTES)
 
         self.stdout.write(
             self.style.SUCCESS(
@@ -95,5 +95,20 @@ class Command(BaseCommand):
                 f'Update ID is {response["updateId"]}.'
             )
         )
+
+        # Restore default ranking rules
+        index.update_ranking_rules(settings.DEFAULT_RANKING_RULES)
+
+        # Create or update replica indexes (for sorting)
+        for replica_uid, ranking_rules in settings.SEARCH_RESULT_SORTING:
+            replica_index = settings.SEARCH_CLIENT.get_or_create_index(replica_uid)
+            replica_index.add_documents(data_to_load)
+            replica_index.update_ranking_rules(ranking_rules)
+            replica_index.update_searchable_attributes(settings.SEARCHABLE_ATTRIBUTES)
+            replica_index.update_attributes_for_faceting(settings.FACETING_ATTRIBUTES)
+
+            self.stdout.write(
+                self.style.SUCCESS(f'Successfully updated the replica index "{replica_uid}". ')
+            )
 
         return str(response["updateId"])

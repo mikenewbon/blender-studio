@@ -4,26 +4,6 @@ import meilisearch
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError, CommandParser
 
-SEARCHABLE_ATTRIBUTES = [
-    # Model fields/annotations that are searchable:
-    #     Film: ['model', 'name', 'project', 'description', 'summary'],
-    #     Asset: ['model', 'name', 'project', 'collection_name', 'description'],
-    #     Training: ['model', 'name', 'project', 'description', 'summary'],
-    #     Section: ['model', 'name', 'project', 'chapter_name', 'description'],
-    #     Post: ['model', 'name', 'project', 'topic', 'description', 'content']
-    # In the order of relevance:
-    'model',
-    'name',
-    'project',
-    'topic',
-    'collection_name',
-    'chapter_name',
-    'description',
-    'summary',
-    'content',
-]
-FACETING_ATTRIBUTES = ['model', 'project', 'license', 'media_type']
-
 
 class Command(BaseCommand):
     help = 'Create a search index, or update its settings if it already exists.'
@@ -54,8 +34,8 @@ class Command(BaseCommand):
         else:
             self.stdout.write(f'Successfully created the index "{index_uid}".')
 
-        index.update_settings({'searchableAttributes': SEARCHABLE_ATTRIBUTES})
-        index.update_attributes_for_faceting(FACETING_ATTRIBUTES)
+        index.update_settings({'searchableAttributes': settings.SEARCHABLE_ATTRIBUTES})
+        index.update_attributes_for_faceting(settings.FACETING_ATTRIBUTES)
 
         self.stdout.write(self.style.SUCCESS(f'Successfully updated the index "{index_uid}".'))
 

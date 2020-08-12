@@ -1,5 +1,4 @@
 import os
-import sys
 from typing import List
 
 # Enable to use OAuth without https during local development
@@ -84,11 +83,3 @@ GEOIP2_DB = 'CHANGE-ME/GeoLite2-Country.mmdb'
 
 GOOGLE_RECAPTCHA_SITE_KEY = 'CHANGE_ME'
 GOOGLE_RECAPTCHA_SECRET_KEY = 'CHANGE_ME'
-
-# MeiliSearch-related settings
-MEILISEARCH_API_ADDRESS = 'http://127.0.0.1:7700'
-if 'test' in sys.argv:
-    MEILISEARCH_INDEX_UID = 'test-studio'
-else:
-    MEILISEARCH_INDEX_UID = 'studio'
-

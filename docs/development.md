@@ -85,7 +85,7 @@ For more details, see the [search application description](architecture.md#searc
 The search functionality uses [MeiliSearch](https://github.com/meilisearch/MeiliSearch).
 Follow the [installation instructions in the documentation](https://docs.meilisearch.com/guides/advanced_guides/installation.html).
 The server will be listening on port `7700` by default.
-If you change it, adjust the `MEILISEARCH_API_ADDRESS` in settings.py as necessary.
+If you change it, adjust the `MEILISEARCH_API_ADDRESS` in settings_common.py as necessary.
 
 #### Adding documents to the search index
 Two management commands are available:
