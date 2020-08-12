@@ -9,7 +9,6 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
 from blog.models import Revision
-from common.types import assert_cast
 from films.models import Film, Asset
 from search.management.commands.create_search_index import SEARCHABLE_ATTRIBUTES
 from search.queries import SearchableModels, get_searchable_queryset, set_thumbnail_and_url
