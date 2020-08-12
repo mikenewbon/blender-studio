@@ -255,8 +255,8 @@ search.addWidgets([
     container: document.querySelector('#sorting'),
     items: [
       { label: 'Relevance', value: 'studio' },
-      { label: 'Date (new first)', value: 'studio_date_asc' },
-      { label: 'Date (old first)', value: 'studio_date_desc' },
+      { label: 'Date (new first)', value: 'studio_date_desc' },
+      { label: 'Date (old first)', value: 'studio_date_asc' },
     ],
   }),
   customSortBy({
