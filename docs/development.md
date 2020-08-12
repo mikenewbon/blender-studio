@@ -89,11 +89,11 @@ If you change it, adjust the `MEILISEARCH_API_ADDRESS` in settings_common.py as 
 
 #### Adding documents to the search index
 Two management commands are available:
- - `create_search_index` - creates a new index, with the uid defaulting to
- `MEILISEARCH_INDEX_UID` (defined in settings.py). If the index already exists, the command
+ - `create_search_index` - creates a new index, with the uid  `MEILISEARCH_INDEX_UID` (defined in settings.py). If the index already exists, the command
  only updates the index settings to the values they are expected to have.
- - `index_documents` - adds documents from the database to the index. If a document with
- a given `search_id` is already present in the index, it will be updated. Objects of the
+ - `index_documents` - adds documents from the database to the index. Also creates or updates
+ replica indexes used for sorting of search results. If a document with a given `search_id`
+ is already present in the index, it will be updated. Objects of the
  following models are indexed: films.Film, films.Asset, training.Training, training.Section,
  blog.Revision (only the latest revision of each post).
 

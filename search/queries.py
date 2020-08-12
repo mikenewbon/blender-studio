@@ -9,13 +9,13 @@ from blog.models import Revision
 from films.models import Film, Asset
 from training.models import Training, Section, TrainingStatus
 
-SearchableModels = Union[Film, Asset, Training, Section, Revision]
+SearchableModel = Union[Film, Asset, Training, Section, Revision]
 
 
 def get_searchable_queryset(
-    model: Type[SearchableModels], **filter_params: Any
-) -> 'QuerySet[SearchableModels]':
-    get_queryset: Callable[..., 'QuerySet[SearchableModels]']
+    model: Type[SearchableModel], **filter_params: Any
+) -> 'QuerySet[SearchableModel]':
+    get_queryset: Callable[..., 'QuerySet[SearchableModel]']
     if model == Film:
         get_queryset = get_searchable_films
     elif model == Asset:
@@ -35,7 +35,7 @@ def get_searchable_queryset(
     return add_common_annotations(get_queryset(**filter_params))
 
 
-def add_common_annotations(queryset: 'QuerySet[SearchableModels]') -> 'QuerySet[SearchableModels]':
+def add_common_annotations(queryset: 'QuerySet[SearchableModel]') -> 'QuerySet[SearchableModel]':
     model = queryset.model._meta.model_name
     if model == 'revision':
         # 'Revision' is the actual model for internal use, but the user searches for posts.
@@ -109,7 +109,7 @@ def get_searchable_posts(**filter_params: Any) -> 'QuerySet[Revision]':
 
 
 def set_thumbnail_and_url(
-    instance_dict: Dict[Any, Any], instance: SearchableModels
+    instance_dict: Dict[Any, Any], instance: SearchableModel
 ) -> Dict[Any, Any]:
     if isinstance(instance, Film):
         instance_dict['thumbnail_url'] = (

@@ -205,22 +205,23 @@ else:
 SEARCH_CLIENT = meilisearch.Client(MEILISEARCH_API_ADDRESS)
 MAIN_SEARCH_INDEX = SEARCH_CLIENT.get_index(MEILISEARCH_INDEX_UID)
 
-DEFAULT_RANKING_RULES = (
+DEFAULT_RANKING_RULES = [
     'typo',
     'words',
     'proximity',
     'attribute',
     'wordsPosition',
     'exactness',
-)
-DATE_DESC_RANKING_RULES = ('desc(date_created_ts)', *DEFAULT_RANKING_RULES)
-DATE_ASC_RANKING_RULES = ('asc(date_created_ts)', *DEFAULT_RANKING_RULES)
-REPLICA_INDEXES_FOR_SORTING = {
+]
+DATE_DESC_RANKING_RULES = ['desc(date_created_ts)', *DEFAULT_RANKING_RULES]
+DATE_ASC_RANKING_RULES = ['asc(date_created_ts)', *DEFAULT_RANKING_RULES]
+INDEXES_FOR_SORTING = [
+    (MEILISEARCH_INDEX_UID, DEFAULT_RANKING_RULES),
     (f'{MEILISEARCH_INDEX_UID}_date_desc', DATE_DESC_RANKING_RULES),
     (f'{MEILISEARCH_INDEX_UID}_date_asc', DATE_ASC_RANKING_RULES),
-}
+]
 
-SEARCHABLE_ATTRIBUTES = (
+SEARCHABLE_ATTRIBUTES = [
     # Model fields/annotations that are searchable:
     #     Film: ['model', 'name', 'project', 'description', 'summary'],
     #     Asset: ['model', 'name', 'project', 'collection_name', 'description'],
@@ -237,5 +238,5 @@ SEARCHABLE_ATTRIBUTES = (
     'description',
     'summary',
     'content',
-)
-FACETING_ATTRIBUTES = ('model', 'project', 'license', 'media_type')
+]
+FACETING_ATTRIBUTES = ['model', 'project', 'license', 'media_type']

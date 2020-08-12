@@ -10,7 +10,7 @@ from django.dispatch import receiver
 
 from blog.models import Revision
 from films.models import Film, Asset
-from search.queries import SearchableModels, get_searchable_queryset, set_thumbnail_and_url
+from search.queries import SearchableModel, get_searchable_queryset, set_thumbnail_and_url
 from training.models import Training, Section
 
 log = logging.getLogger(__name__)
@@ -35,7 +35,7 @@ def add_documents(data_to_load: List[Any]) -> None:
 @receiver(post_save, sender=Section)
 @receiver(post_save, sender=Revision)
 def update_search_index(
-    sender: Type[SearchableModels], instance: SearchableModels, **kwargs: Any
+    sender: Type[SearchableModel], instance: SearchableModel, **kwargs: Any
 ) -> None:
     """Adds new objects to the search index and updates the updated ones."""
     instance_qs = get_searchable_queryset(sender, id=instance.id)
@@ -56,7 +56,7 @@ def update_search_index(
 @receiver(post_delete, sender=Section)
 @receiver(post_delete, sender=Revision)
 def delete_from_index(
-    sender: Type[SearchableModels], instance: SearchableModels, **kwargs: Any
+    sender: Type[SearchableModel], instance: SearchableModel, **kwargs: Any
 ) -> None:
     pass
     # TODO(Natalia): add post_delete signal to remove deleted objects from the search index

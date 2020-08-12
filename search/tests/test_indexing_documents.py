@@ -92,7 +92,7 @@ class TestIndexDocumentsCommand(BaseSearchTestCase):
     def test_index_documents_command(self):
         initial_docs_count = self.index.get_stats()['numberOfDocuments']
         out = StringIO()
-        update_id = call_command('index_documents', index=TEST_INDEX_UID, stdout=out)
+        update_id = call_command('index_documents', stdout=out)
 
         self.assertIn('Successfully', out.getvalue())
         self.assertIn('15 objects to load', out.getvalue())
