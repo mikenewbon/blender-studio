@@ -60,12 +60,13 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  max-height: calc(100vh - #{$navbar-height});
+  max-height: 100vh;
   position: fixed;
+  top: 0;
   transform: translateX(-$nav-drawer-width);
   transition: transform $nav-drawer-animation-duration;
   width: $nav-drawer-width;
-  z-index: 1020;
+  z-index: $zindex-modal-backdrop;
 
   @include media-breakpoint-down(sm) {
     border-right: 0;
@@ -113,7 +114,7 @@
   }
 
   height: 100%;
-  max-height: calc(100vh - #{$navbar-height});
+  max-height: 100vh;
   overflow-y: auto;
 }
 
@@ -250,6 +251,12 @@
   justify-content: space-between;
   position: relative;
 
+  .btn-float {
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
   &.complete {
     +.drawer-nav-section .drawer-nav-section-icon {
       &::after {
@@ -289,6 +296,8 @@
   flex-grow: 1;
   padding: ($spacer / 4 * 3) $spacer;
   transition: $transition-base;
+
+
 
   &::before {
     background: $highlight-white;

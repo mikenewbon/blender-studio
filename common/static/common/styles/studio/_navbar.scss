@@ -66,7 +66,7 @@ body {
     }
   }
 
-  .content-holder{
+  .content-holder {
     width: 100%;
   }
 
@@ -84,9 +84,11 @@ body {
     @include media-breakpoint-down(sm) {
       padding: 0 $spacer / 2;
     }
+
     align-items: center;
     display: flex;
     padding: 0 0 0 $spacer / 2;
+    position: relative;
   }
 
   @include media-breakpoint-down(sm) {
@@ -113,6 +115,7 @@ body {
     @include media-breakpoint-down(sm) {
       padding: 0;
     }
+
     height: 100%;
   }
 
