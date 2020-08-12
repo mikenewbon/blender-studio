@@ -80,10 +80,25 @@ and `"OAUTH_SECRET"` in the `BLENDER_ID` settings.
 
 
 ## Search
+For more details, see the [search application description](architecture.md#search).
+
 The search functionality uses [MeiliSearch](https://github.com/meilisearch/MeiliSearch).
 Follow the [installation instructions in the documentation](https://docs.meilisearch.com/guides/advanced_guides/installation.html).
 The server will be listening on port `7700` by default.
+If you change it, adjust the `MEILISEARCH_API_ADDRESS` in settings.py as necessary.
 
+#### Adding documents to the search index
+Two management commands are available:
+ - `create_search_index` - creates a new index, with the uid defaulting to
+ `MEILISEARCH_INDEX_UID` (defined in settings.py). If the index already exists, the command
+ only updates the index settings to the values they are expected to have.
+ - `index_documents` - adds documents from the database to the index. If a document with
+ a given `search_id` is already present in the index, it will be updated. Objects of the
+ following models are indexed: films.Film, films.Asset, training.Training, training.Section,
+ blog.Revision (only the latest revision of each post).
+
+
+#### Production environment
 In production, the server should be run in the `Production` mode, and with a master key.
 The mode is set either with an environment variable `MEILI_ENV`, or a CLI option `--env`.
 Running the server without a master key is only possible in development, as it makes
