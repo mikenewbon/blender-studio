@@ -2,21 +2,15 @@ import time
 from io import StringIO
 from typing import Optional
 from unittest.case import skipIf
-from unittest.mock import patch
 
 import meilisearch
 from django.conf import settings
 from django.core.management import call_command
-from django.db.models.signals import post_save
 from django.test.testcases import TestCase
 
-from blog.models import Post, Revision
 from common.tests.factories.blog import RevisionFactory, PostFactory
 from common.tests.factories.films import FilmFactory, AssetFactory
-from common.tests.factories.helpers import catch_signal, generate_file_path
-from common.tests.factories.static_assets import StorageLocationFactory
 from common.tests.factories.training import TrainingFactory, SectionFactory
-from common.tests.factories.users import UserFactory
 from training.models import TrainingStatus
 
 TEST_INDEX_UID = 'test-studio'
@@ -101,77 +95,3 @@ class TestIndexDocumentsCommand(BaseSearchTestCase):
         self.assertEqual(update_data['status'], 'processed')
         self.assertEqual(update_data['type']['number'], 15)
         self.assertEqual(self.index.get_stats()['numberOfDocuments'], initial_docs_count + 15)
-
-
-class TestBlogPostIndexing(TestCase):
-    @classmethod
-    def setUpTestData(cls) -> None:
-        cls.user = UserFactory()
-        cls.storage = StorageLocationFactory()
-        cls.published_post = PostFactory(film=None)
-        cls.unpublished_post = PostFactory(is_published=False, film=None)
-        cls.revision_data = {
-            'editor': cls.user,
-            'title': 'Strawberry Fields Forever',
-            'topic': 'Announcement',
-            'content': '# Hot news',
-            'storage_location': cls.storage,
-            'picture_16_9': generate_file_path(),
-        }
-
-    def test_blog_post_without_revision_does_not_trigger_post_save_signal(self):
-        with catch_signal(post_save, sender=Revision) as handler:
-            post = Post.objects.create(author=self.user, slug='empty-post')
-            handler.assert_not_called()
-
-            post.is_published = True
-            post.save()
-            handler.assert_not_called()
-
-    @patch('search.signals.add_documents')
-    def test_unpublished_revisions_are_not_indexed(self, add_documents_mock):
-        Revision.objects.create(
-            **self.revision_data, post=self.published_post, is_published=False,
-        )
-        add_documents_mock.assert_not_called()
-
-        Revision.objects.create(
-            **self.revision_data, post=self.unpublished_post, is_published=True,
-        )
-        add_documents_mock.assert_not_called()
-
-    @patch('search.signals.add_documents')
-    def test_new_published_revision_triggers_signal(self, add_documents_mock):
-        revision = Revision.objects.create(
-            **self.revision_data, post=self.published_post, is_published=True,
-        )
-        add_documents_mock.assert_called_once()
-
-    @patch('search.signals.add_documents')
-    def test_new_published_revision_overwrites_previous_revision(self, add_documents_mock):
-        """A document is updated in the index if it has the same search_id."""
-        revision = Revision.objects.create(
-            **self.revision_data, post=self.published_post, is_published=True,
-        )
-
-        add_documents_mock.assert_called_once()
-
-        search_id_1 = add_documents_mock.call_args_list[0].args[0][0]['search_id']
-        mock_arg_name = add_documents_mock.call_args_list[0].args[0][0]['name']
-        initial_title = self.revision_data['title']
-
-        self.assertEqual(mock_arg_name, initial_title)
-
-        new_title = 'I am the Walrus'
-        new_revision_data = {**self.revision_data, 'title': new_title}
-        new_revision = Revision.objects.create(
-            **new_revision_data, post=self.published_post, is_published=True,
-        )
-
-        self.assertEqual(add_documents_mock.call_count, 2)
-
-        search_id_2 = add_documents_mock.call_args_list[1].args[0][0]['search_id']
-        mock_arg_name = add_documents_mock.call_args_list[1].args[0][0]['name']
-
-        self.assertEqual(mock_arg_name, new_title)
-        self.assertEqual(search_id_1, search_id_2)

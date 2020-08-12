@@ -9,7 +9,7 @@ from django.dispatch import receiver
 
 from blog.models import Revision
 from films.models import Film, Asset
-from search.health_check import check_meilisearch
+from search.health_check import check_meilisearch, MeiliSearchServiceError
 from search.queries import SearchableModel, get_searchable_queryset, set_thumbnail_and_url
 from training.models import Training, Section
 
@@ -18,8 +18,14 @@ log = logging.getLogger(__name__)
 
 def add_documents(data_to_load: List[Any]) -> None:
     """Add document to the main index and to replica indexes."""
-    check_meilisearch(check_indexes=True)
-    settings.MAIN_SEARCH_INDEX.add_documents(data_to_load)
+    try:
+        check_meilisearch(check_indexes=True)
+    except MeiliSearchServiceError as err:
+        log.error('Did not update search index post_save.', exc_info=err)
+        return
+
+    for index_uid, _ in settings.INDEXES_FOR_SORTING:
+        settings.SEARCH_CLIENT.get_index(index_uid).add_documents(data_to_load)
 
     # There seems to be no way in MeiliSearch v0.13 to disable adding new document
     # fields automatically to searchable attrs, so we update the settings to set them:
@@ -55,5 +61,17 @@ def update_search_index(
 def delete_from_index(
     sender: Type[SearchableModel], instance: SearchableModel, **kwargs: Any
 ) -> None:
-    pass
-    # TODO(Natalia): add post_delete signal to remove deleted objects from the search index
+    try:
+        check_meilisearch(check_indexes=True)
+    except MeiliSearchServiceError as err:
+        log.error(f'Did not update search index post_delete: {err}')
+        return
+
+    search_id = (
+        f'post_{instance.post.id}'
+        if isinstance(instance, Revision)
+        else f'{sender._meta.model_name}_{instance.id}'
+    )
+
+    for index_uid, _ in settings.INDEXES_FOR_SORTING:
+        settings.SEARCH_CLIENT.get_index(index_uid).delete_document(search_id)
