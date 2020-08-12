@@ -1,24 +1,13 @@
-from io import BytesIO
-
-import PIL.Image
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
 from blog.models import Post, Revision
 from common.tests.factories.blog import RevisionFactory, PostFactory
+from common.tests.factories.helpers import create_test_image
 from common.tests.factories.films import FilmFactory
 from search import signals as search_signals
 from search.signals import update_search_index
-
-
-def create_test_image():
-    img = PIL.Image.new('RGB', (200, 200), (73, 109, 137))
-    test_image = BytesIO()
-    img.save(test_image, 'png')
-    test_image.seek(0)
-    test_image.name = 'valid_name.png'
-    return test_image
 
 
 class TestPostAndRevisionCreation(TestCase):

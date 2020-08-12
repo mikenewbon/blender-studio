@@ -1,16 +1,9 @@
-import random
-import uuid
-
 import factory
 from factory import fuzzy
 
+from common.tests.factories.helpers import generate_file_path
 from common.tests.factories.users import UserFactory
 from static_assets.models import StaticAsset, StaticAssetFileTypeChoices, StorageLocation, License
-
-
-def generate_file_path() -> str:
-    extensions = ['jpg', 'png', 'blend', 'mp4', 'mov']
-    return f'tests/assets/{uuid.uuid4()}.{random.choice(extensions)}'
 
 
 class StorageLocationFactory(factory.DjangoModelFactory):

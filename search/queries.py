@@ -38,8 +38,13 @@ def get_searchable_queryset(
 def add_common_annotations(queryset: 'QuerySet[SearchableModels]') -> 'QuerySet[SearchableModels]':
     model = queryset.model._meta.model_name
     if model == 'revision':
-        # 'Revision' is the actual model for internal use, but the user searches for posts
-        model = 'post'
+        # 'Revision' is the actual model for internal use, but the user searches for posts.
+        # Also: the search_id is set to post's id so that a new revision always overwrites
+        # the previous one, which should not be searchable any more.
+        return queryset.annotate(
+            model=Value('post', output_field=CharField()),
+            search_id=Concat(Value('post_'), 'post__id', output_field=CharField()),
+        )
     return queryset.annotate(
         model=Value(model, output_field=CharField()),
         search_id=Concat(Value(f'{model}_'), 'id', output_field=CharField()),
