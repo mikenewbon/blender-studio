@@ -2,8 +2,7 @@
 {% load pipeline %}
 
 {% block scripts %}
-<script src="https://cdn.jsdelivr.net/npm/@meilisearch/instant-meilisearch/dist/instant-meilisearch.umd.min.js">
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@meilisearch/instant-meilisearch/dist/instant-meilisearch.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4"></script>
 {% endblock scripts %}
 
@@ -44,15 +43,15 @@
       </div>
 
       <div class="col-auto ml-auto">
-        <div class="input-group input-group-sm">
+        <div class="input-group input-group-sm" id="sorting-mobile">
           <div class="input-group-prepend">
             <label class="input-group-text" for="searchLicence">Sort by:</label>
           </div>
-          <select class="custom-select" id="sortBy">
+          {% comment %} <select class="custom-select" >
             <option selected>Relevance</option>
             <option value="1">Date (New first)</option>
             <option value="2">Date (Old first)</option>
-          </select>
+          </select> {% endcomment %}
         </div>
       </div>
 
@@ -97,15 +96,15 @@
       </div>
 
       <div class="col-auto mb-3 ml-auto d-none d-md-block">
-        <div class="input-group input-group-sm">
+        <div class="input-group input-group-sm" id="sorting">
           <div class="input-group-prepend">
             <label class="input-group-text" for="searchLicence">Sort by:</label>
           </div>
-          <select class="custom-select" id="sortBy">
+          {% comment %} <select class="custom-select">
             <option selected>Relevance</option>
             <option value="1">Date (New first)</option>
             <option value="2">Date (Old first)</option>
-          </select>
+          </select> {% endcomment %}
         </div>
       </div>
 

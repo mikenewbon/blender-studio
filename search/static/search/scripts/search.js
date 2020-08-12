@@ -56,6 +56,51 @@ const customSearchBox = instantsearch.connectors.connectSearchBox(
   renderSearchBox
 );
 
+// -------- SORTING -------- //
+
+// Create the render function
+const renderSortBy = (renderOptions, isFirstRender) => {
+  const {
+    options,
+    currentRefinement,
+    hasNoResults,
+    refine,
+    widgetParams,
+  } = renderOptions;
+
+  if (isFirstRender) {
+    const select = document.createElement('select');
+    select.setAttribute('class', 'custom-select');
+
+    select.addEventListener('change', event => {
+      refine(event.target.value);
+    });
+
+    widgetParams.container.querySelector('.input-group-prepend').insertAdjacentElement('afterend', select);
+  }
+
+  const select = widgetParams.container.querySelector('select');
+
+  select.disabled = hasNoResults;
+
+  select.innerHTML = `
+    ${options
+      .map(
+        option => `
+          <option
+            value="${option.value}"
+            ${option.value === currentRefinement ? 'selected' : ''}
+          >
+            ${option.label}
+          </option>
+        `
+      )
+      .join('')}
+  `;
+};
+
+// Create the custom widget
+const customSortBy = instantsearch.connectors.connectSortBy(renderSortBy);
 
 // -------- HITS -------- //
 
@@ -175,6 +220,22 @@ search.addWidgets([
     container: document.querySelector('#searchMedia'),
     attribute: 'media_type',
   }),
+  customSortBy({
+    container: document.querySelector('#sorting'),
+    items: [
+      { label: 'Relevance', value: 'studio' },
+      { label: 'Date (new first)', value: 'studio_date_asc' },
+      { label: 'Date (old first)', value: 'studio_date_desc' },
+    ],
+  }),
+  customSortBy({
+    container: document.querySelector('#sorting-mobile'),
+    items: [
+      { label: 'Relevance', value: 'studio' },
+      { label: 'Date (new first)', value: 'studio_date_asc' },
+      { label: 'Date (old first)', value: 'studio_date_desc' },
+    ],
+  })
 ]);
 
 search.start();
