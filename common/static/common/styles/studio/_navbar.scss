@@ -19,6 +19,10 @@ body {
     margin-left: 0;
   }
 
+  .progress-bar {
+    height: 2px;
+  }
+
   .dropdown-menu {
     border-top: 1px solid $transparent;
   }
@@ -83,6 +87,19 @@ body {
   .navbar-main-nav-toolbar {
     @include media-breakpoint-down(sm) {
       padding: 0 $spacer / 2;
+    }
+
+    .search-button {
+      @include media-breakpoint-up(md) {
+        display: block;
+      }
+
+      display: none;
+      margin-right: $spacer / 2;
+    }
+
+    .btn-profile {
+      margin-left: 0;
     }
 
     align-items: center;
@@ -251,6 +268,7 @@ body {
     @include media-breakpoint-up(sm) {
       display: block;
     }
+
     margin-right: $spacer / 2;
     display: none;
   }

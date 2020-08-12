@@ -276,3 +276,5 @@ search.addWidgets([
 ]);
 
 search.start();
+
+// -------- CHOICES.js -------- //
