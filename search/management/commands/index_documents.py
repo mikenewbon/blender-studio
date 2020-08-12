@@ -67,7 +67,6 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         index_uid = options['index']
-        client = meilisearch.Client(settings.MEILISEARCH_API_ADDRESS)
         index = settings.SEARCH_CLIENT.get_index(index_uid)
 
         data_to_load = self._prepare_data()
@@ -82,7 +81,7 @@ class Command(BaseCommand):
         except meilisearch.errors.MeiliSearchApiError:
             raise CommandError(
                 f'Error accessing the index "{index_uid}" of the client '
-                f'at {self.MEILISEARCH_API_ADDRESS}. Make sure that the index exists.'
+                f'at {settings.MEILISEARCH_API_ADDRESS}. Make sure that the index exists.'
             )
 
         # There seems to be no way in MeiliSearch v0.13 to disable adding new document
@@ -100,7 +99,7 @@ class Command(BaseCommand):
         index.update_ranking_rules(settings.DEFAULT_RANKING_RULES)
 
         # Create or update replica indexes (for sorting)
-        for replica_uid, ranking_rules in settings.SEARCH_RESULT_SORTING:
+        for replica_uid, ranking_rules in settings.REPLICA_INDEXES_FOR_SORTING:
             replica_index = settings.SEARCH_CLIENT.get_or_create_index(replica_uid)
             replica_index.add_documents(data_to_load)
             replica_index.update_ranking_rules(ranking_rules)
