@@ -4,6 +4,8 @@ import meilisearch
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
+from search.health_check import MeiliSearchServiceError, check_meilisearch
+
 
 class Command(BaseCommand):
     help = (
@@ -12,21 +14,19 @@ class Command(BaseCommand):
     )
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
-        client = settings.SEARCH_CLIENT
+        try:
+            check_meilisearch()
+        except MeiliSearchServiceError as err:
+            raise CommandError(err)
 
         # Create or update the main index and the replica indexes
         for index_uid, ranking_rules in settings.INDEXES_FOR_SORTING:
             try:
-                index = client.create_index(index_uid, {'primaryKey': 'search_id'})
-            except meilisearch.errors.MeiliSearchCommunicationError:
-                raise CommandError(
-                    f'Failed to establish a new connection with MeiliSearch API at '
-                    f'{settings.MEILISEARCH_API_ADDRESS}. Make sure that the server is running.'
-                )
+                index = settings.SEARCH_CLIENT.create_index(index_uid, {'primaryKey': 'search_id'})
             except meilisearch.errors.MeiliSearchApiError as err:
                 if err.error_code != 'index_already_exists':
                     raise CommandError(err)
-                index = client.get_index(index_uid)
+                index = settings.SEARCH_CLIENT.get_index(index_uid)
                 self.stdout.write(f'The index "{index_uid}" already exists. Skipping creation...')
             else:
                 self.stdout.write(

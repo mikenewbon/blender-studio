@@ -23,9 +23,8 @@ TEST_INDEX_UID = 'test-studio'
 
 
 def meilisearch_available():
-    client: meilisearch.client.Client = meilisearch.Client(settings.MEILISEARCH_API_ADDRESS)
     try:
-        client.health()
+        settings.SEARCH_CLIENT.health()
     except meilisearch.errors.MeiliSearchCommunicationError:
         return False
     return True
@@ -33,18 +32,20 @@ def meilisearch_available():
 
 @skipIf(not meilisearch_available(), 'MeiliSearch server does not seem to be running')
 class BaseSearchTestCase(TestCase):
-    TEST_INDEX_UID = 'test-studio'
     index: Optional[meilisearch.index.Index]
 
     @classmethod
     def setUpClass(cls) -> None:
         super().setUpClass()
-        client: meilisearch.client.Client = meilisearch.Client(settings.MEILISEARCH_API_ADDRESS)
-        cls.index = client.get_or_create_index(TEST_INDEX_UID, {'primaryKey': 'search_id'})
+        for index_uid, _ in settings.INDEXES_FOR_SORTING:
+            settings.SEARCH_CLIENT.get_or_create_index(index_uid, {'primaryKey': 'search_id'})
+        cls.index = settings.MAIN_SEARCH_INDEX
+        assert cls.index.uid == TEST_INDEX_UID
 
     @classmethod
     def tearDownClass(cls) -> None:
-        cls.index.delete()
+        for index_uid, _ in settings.INDEXES_FOR_SORTING:
+            settings.SEARCH_CLIENT.get_index(index_uid).delete()
         super().tearDownClass()
 
     def wait_for_update_execution(self, update_id: int) -> str:
@@ -96,16 +97,13 @@ class TestIndexDocumentsCommand(BaseSearchTestCase):
 
         self.assertIn('Successfully', out.getvalue())
         self.assertIn('15 objects to load', out.getvalue())
-        update_data = self.index.get_update_status(update_id)
+        update_data = self.index.wait_for_pending_update(update_id)
+        self.assertEqual(update_data['status'], 'processed')
         self.assertEqual(update_data['type']['number'], 15)
-        update_status = update_data['status']
-        if update_status == 'enqueued':
-            update_status = self.wait_for_update_execution(update_id)
-        self.assertEqual(update_status, 'processed')
         self.assertEqual(self.index.get_stats()['numberOfDocuments'], initial_docs_count + 15)
 
 
-class TestBlogPostIndexing(BaseSearchTestCase):
+class TestBlogPostIndexing(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
         cls.user = UserFactory()
@@ -149,23 +147,31 @@ class TestBlogPostIndexing(BaseSearchTestCase):
         )
         add_documents_mock.assert_called_once()
 
-    def test_new_published_revision_overwrites_previous_revision(self):
+    @patch('search.signals.add_documents')
+    def test_new_published_revision_overwrites_previous_revision(self, add_documents_mock):
+        """A document is updated in the index if it has the same search_id."""
         revision = Revision.objects.create(
             **self.revision_data, post=self.published_post, is_published=True,
         )
-        time.sleep(0.5)
-        search_id = f'post_{revision.post.id}'
-        response = self.index.get_document(search_id)
-        self.assertEqual(response['title'], 'Strawberry Fields Forever')
 
-        new_revision_data = {
-            **self.revision_data,
-            'title': 'I am the Walrus',
-        }
+        add_documents_mock.assert_called_once()
 
+        search_id_1 = add_documents_mock.call_args_list[0].args[0][0]['search_id']
+        mock_arg_name = add_documents_mock.call_args_list[0].args[0][0]['name']
+        initial_title = self.revision_data['title']
+
+        self.assertEqual(mock_arg_name, initial_title)
+
+        new_title = 'I am the Walrus'
+        new_revision_data = {**self.revision_data, 'title': new_title}
         new_revision = Revision.objects.create(
             **new_revision_data, post=self.published_post, is_published=True,
         )
-        time.sleep(0.5)
-        response = self.index.get_document(search_id)
-        self.assertEqual(response['title'], 'I am the Walrus')
+
+        self.assertEqual(add_documents_mock.call_count, 2)
+
+        search_id_2 = add_documents_mock.call_args_list[1].args[0][0]['search_id']
+        mock_arg_name = add_documents_mock.call_args_list[1].args[0][0]['name']
+
+        self.assertEqual(mock_arg_name, new_title)
+        self.assertEqual(search_id_1, search_id_2)

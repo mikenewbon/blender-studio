@@ -2,7 +2,6 @@ import json
 import logging
 from typing import Type, Any, List
 
-import meilisearch
 from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models.signals import post_save, post_delete
@@ -10,6 +9,7 @@ from django.dispatch import receiver
 
 from blog.models import Revision
 from films.models import Film, Asset
+from search.health_check import check_meilisearch
 from search.queries import SearchableModel, get_searchable_queryset, set_thumbnail_and_url
 from training.models import Training, Section
 
@@ -18,15 +18,12 @@ log = logging.getLogger(__name__)
 
 def add_documents(data_to_load: List[Any]) -> None:
     """Add document to the main index and to replica indexes."""
-    client = meilisearch.Client(settings.MEILISEARCH_API_ADDRESS)
-    index = client.get_index(settings.MEILISEARCH_INDEX_UID)
-
-    # TODO(Natalia): handle and log server errors
-    index.add_documents(data_to_load)
+    check_meilisearch(check_indexes=True)
+    settings.MAIN_SEARCH_INDEX.add_documents(data_to_load)
 
     # There seems to be no way in MeiliSearch v0.13 to disable adding new document
     # fields automatically to searchable attrs, so we update the settings to set them:
-    index.update_settings({'searchableAttributes': settings.SEARCHABLE_ATTRIBUTES})
+    settings.MAIN_SEARCH_INDEX.update_searchable_attributes(settings.SEARCHABLE_ATTRIBUTES)
 
 
 @receiver(post_save, sender=Film)
