@@ -215,6 +215,16 @@ const renderMenuSelect = (renderOptions, isFirstRender) => {
 const customMenuSelect = instantsearch.connectors.connectMenu(renderMenuSelect);
 
 
+// -------- CONFIGURE -------- //
+
+const renderConfigure = (renderOptions, isFirstRender) => {};
+
+const customConfigure = instantsearch.connectors.connectConfigure(
+  renderConfigure,
+  () => {}
+);
+
+
 // -------- RENDER -------- //
 
 search.addWidgets([
@@ -256,6 +266,12 @@ search.addWidgets([
       { label: 'Date (new first)', value: 'studio_date_asc' },
       { label: 'Date (old first)', value: 'studio_date_desc' },
     ],
+  }),
+  customConfigure({
+    container: document.querySelector('#hits'),
+    searchParameters: {
+      hitsPerPage: 9,
+    },
   })
 ]);
 
