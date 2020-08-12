@@ -1,4 +1,14 @@
+function EpochToDate(epoch) {
+  if (epoch < 10000000000)
+      epoch *= 1000; // convert to milliseconds (Epoch is usually expressed in seconds, but Javascript uses Milliseconds)
+  var epoch = epoch + (new Date().getTimezoneOffset() * -1); //for timeZone
+  return new Date(epoch);
+}
+
 function timeDifference(datetime) {
+
+  //Timestamps are provided in the search as EPOCH timestamps - so need to be converted.
+  datetime = EpochToDate(datetime);
 
   let now = new Date();
 
