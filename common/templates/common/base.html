@@ -24,87 +24,92 @@
 <body class="{% block bodyclasses %}{% endblock bodyclasses %}">
   <!-- When the body has a nav-drawer, it should have the class 'has-nav-drawer' and when it's wide, 'has-nav-drawer nav-drawer-wide' -->
   <nav class="navbar">
-
-    <div class="progress global-progress">
-      <div class="progress-bar" role="progressbar" style="width: 0%; height: 2px;" aria-valuenow="0" aria-valuemin="0"
-        aria-valuemax="100"></div>
-    </div>
-
-    <div class="navbar-main-mobile">
-      <button class="btn btn-secondary btn-nav btn-icon navdrawertoggle">
-        <i class="material-icons">menu</i>
-      </button>
-    </div>
-
-    <a href="/" class="navbar-brand">
-      <img src="{% static 'common/images/blender_cloud_logo.svg' %}" alt="Blender Studio">
-    </a>
-
-    <div class="navbar-main-nav">
-      <a href="{% url 'film-list' %}" class="btn btn-secondary btn-nav">
-        <span>Films</span>
-      </a>
-      <a href="{% url 'training-home' %}" class="btn btn-secondary btn-nav">
-        <span>Training</span>
-      </a>
-      {% comment %} <a href="/services/" class="list-group-item">
-        <span>Services</span>
-      </a> {% endcomment %}
-      <a href="{% url 'post-list' %}" class="btn btn-secondary btn-nav">
-        <span>Blog</span>
-      </a>
-    </div>
-    {% if request.user.is_authenticated %}
-
-    <div class="navbar-main-nav-toolbar">
-
-      <a href="{% url 'search' %}" class="btn btn-secondary btn-nav btn-icon d-none d-md-block mr-2">
-        <i class="material-icons">search</i>
-      </a>
-
-      {% comment %} <div class="searchbar-wrapper">
-        <div class="searchbar">
-          <div class="input-group-prepend"><span class="input-group-text"><i class="material-icons">search</i></span>
-          </div>
-          <input type="text" placeholder="Search tags and keywords" class="form-control">
+    <div class="content-holder">
+      <div class="container-xl">
+        <div class="progress global-progress">
+          <div class="progress-bar" role="progressbar" style="width: 0%; height: 2px;" aria-valuenow="0"
+            aria-valuemin="0" aria-valuemax="100"></div>
         </div>
-      </div> {% endcomment %}
 
-      <button data-toggle="dropdown" class="btn btn-secondary btn-nav ml-0 btn-profile">
-        <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');" class="profile"></div>
-      </button>
-      <div class="dropdown-menu profile-dropdown">
+        <div class="navbar-main-mobile">
+          <button class="btn btn-secondary btn-nav btn-icon navdrawertoggle">
+            <i class="material-icons">menu</i>
+          </button>
+        </div>
 
-        <a href="/" class="dropdown-item">
-          <i class="material-icons">home</i>
-          <span>My Cloud</span>
+        <a href="/" class="navbar-brand">
+          <img src="{% static 'common/images/blender_cloud_logo.svg' %}" alt="Blender Studio">
         </a>
 
-        <a href="/settings" class="dropdown-item">
-          <i class="material-icons">settings</i>
-          <span>Settings</span>
-        </a>
+        <div class="navbar-main-nav">
+          <a href="{% url 'film-list' %}" class="btn btn-secondary btn-nav">
+            <span>Films</span>
+          </a>
+          <a href="{% url 'training-home' %}" class="btn btn-secondary btn-nav">
+            <span>Training</span>
+          </a>
+          {% comment %} <a href="/services/" class="list-group-item">
+            <span>Services</span>
+          </a> {% endcomment %}
+          <a href="{% url 'post-list' %}" class="btn btn-secondary btn-nav">
+            <span>Blog</span>
+          </a>
+        </div>
+        {% if request.user.is_authenticated %}
 
-        <a href="/settings/subscription" class="dropdown-item">
-          <i class="material-icons">credit_card</i>
-          <span>Subscription</span>
-        </a>
+        <div class="navbar-main-nav-toolbar">
 
-        <div class="dropdown-divider"></div>
+          <a href="{% url 'search' %}" class="btn btn-secondary btn-nav btn-icon d-none d-md-block mr-2">
+            <i class="material-icons">search</i>
+          </a>
 
-        <a href="{% url 'oauth:logout' %}" class="dropdown-item">
-          <i class="material-icons">exit_to_app</i>
-          <span>Sign Out</span>
-        </a>
+          {% comment %} <div class="searchbar-wrapper">
+            <div class="searchbar">
+              <div class="input-group-prepend"><span class="input-group-text"><i
+                    class="material-icons">search</i></span>
+              </div>
+              <input type="text" placeholder="Search tags and keywords" class="form-control">
+            </div>
+          </div> {% endcomment %}
 
+          <button data-toggle="dropdown" class="btn btn-secondary btn-nav ml-0 btn-profile">
+            <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');" class="profile">
+            </div>
+          </button>
+          <div class="dropdown-menu profile-dropdown">
+
+            <a href="/" class="dropdown-item">
+              <i class="material-icons">home</i>
+              <span>My Cloud</span>
+            </a>
+
+            <a href="/settings" class="dropdown-item">
+              <i class="material-icons">settings</i>
+              <span>Settings</span>
+            </a>
+
+            <a href="/settings/subscription" class="dropdown-item">
+              <i class="material-icons">credit_card</i>
+              <span>Subscription</span>
+            </a>
+
+            <div class="dropdown-divider"></div>
+
+            <a href="{% url 'oauth:logout' %}" class="dropdown-item">
+              <i class="material-icons">exit_to_app</i>
+              <span>Sign Out</span>
+            </a>
+
+          </div>
+        </div>
+        {% else %}
+        <div class="navbar-login-wrapper">
+          <a href="{% url 'oauth:login' %}" class="btn btn-transparent mr-2 btn-nav d-none d-sm-inline-block">Login</a>
+          <a href="#" class="btn btn-primary ">Join <span class="d-none d-lg-inline-block">Blender Studio</span></a>
+        </div>
+        {% endif %}
       </div>
     </div>
-    {% else %}
-    <div class="navbar-login-wrapper">
-      <a href="{% url 'oauth:login' %}" class="btn btn-transparent mr-2 btn-nav d-none d-sm-inline-block">Login</a>
-      <a href="#" class="btn btn-primary ">Join <span class="d-none d-lg-inline-block">Blender Studio</span></a>
-    </div>
-    {% endif %}
   </nav>
 
 
@@ -161,7 +166,7 @@
 
   {% endblock nav_drawer %}
 
-  <div class="content-holder">
+  <div class="content-holder content">
     {% block breadcrumbs %}{% endblock breadcrumbs %}
     {% comment %} <nav class="navbar-secondary" aria-label="breadcrumbs">
       <div class="content-holder">
