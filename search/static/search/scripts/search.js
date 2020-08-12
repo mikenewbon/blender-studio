@@ -104,11 +104,13 @@ const customSortBy = instantsearch.connectors.connectSortBy(renderSortBy);
 
 // -------- HITS -------- //
 
+let lastRenderArgs;
+
 // Create the render function
 const renderHits = (renderOptions, isFirstRender) => {
-  const { hits, widgetParams } = renderOptions;
-  widgetParams.container.innerHTML = `
+  const { hits, showMore, widgetParams } = renderOptions;
 
+  widgetParams.container.innerHTML = `
       ${hits
       .map(
         item =>
@@ -116,19 +118,19 @@ const renderHits = (renderOptions, isFirstRender) => {
           <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
             <div class="card card-dark card-hover card-media">
               <div class="card-header">
-                <a class="card-header-link" href="${ item.url }">
-                  <img src="${ item.thumbnail_url }" class="card-image" loading=lazy>
+                <a class="card-header-link" href="${ item.url}">
+                  <img src="${ item.thumbnail_url}" class="card-image" loading=lazy>
                 </a>
               </div>
-              <a href="${ item.url }" class="card-body">
+              <a href="${ item.url}" class="card-body">
                 <div class="card-subtitle-group">
                   <p class="card-subtitle content-type">
-                  ${ item.model }
+                  ${ item.model}
                   </p>
 
                   <p class="card-subtitle">
                     <i class="material-icons icon-inline small">schedule</i>
-                    ${ timeDifference(item.date_created_ts) }
+                    ${ timeDifference(item.date_created_ts)}
                   </p>
 
                 </div>
@@ -144,12 +146,31 @@ const renderHits = (renderOptions, isFirstRender) => {
             `
       )
       .join('')}
-
   `;
+
+  lastRenderArgs = renderOptions;
+
+  if (isFirstRender) {
+    const sentinel = document.createElement('div');
+    widgetParams.container.insertAdjacentElement('afterend', sentinel);
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !lastRenderArgs.isLastPage) {
+          showMore();
+        }
+      });
+    });
+
+    observer.observe(sentinel);
+
+    return;
+  }
+
 };
 
 
-const customHits = instantsearch.connectors.connectHits(renderHits);
+const customHits = instantsearch.connectors.connectInfiniteHits(renderHits);
 
 
 // -------- FILTERS -------- //
