@@ -621,7 +621,7 @@ $custom-select-line-height: $input-line-height !default;
 $custom-select-color: $input-color !default;
 $custom-select-disabled-color: $gray-600 !default;
 $custom-select-bg: $input-bg !default;
-$custom-select-disabled-bg: $gray-200 !default;
+$custom-select-disabled-bg: rgba($input-bg, .5) !default;
 $custom-select-bg-size: 1.5rem !default; // In pixels because image dimensions
 $custom-select-indicator-color: $body-color !default;
 $custom-select-indicator: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path fill='#{$custom-select-indicator-color}' d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>") !default;
