@@ -4,7 +4,7 @@ from typing import Type, Any, List
 
 from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
 from blog.models import Revision
@@ -53,25 +53,34 @@ def update_search_index(
         log.info(f'Added {instance} to the search index.')
 
 
-@receiver(post_delete, sender=Film)
-@receiver(post_delete, sender=Asset)
-@receiver(post_delete, sender=Training)
-@receiver(post_delete, sender=Section)
-@receiver(post_delete, sender=Revision)
+@receiver(pre_delete, sender=Film)
+@receiver(pre_delete, sender=Asset)
+@receiver(pre_delete, sender=Training)
+@receiver(pre_delete, sender=Section)
+@receiver(pre_delete, sender=Revision)
 def delete_from_index(
     sender: Type[SearchableModel], instance: SearchableModel, **kwargs: Any
 ) -> None:
     try:
         check_meilisearch(check_indexes=True)
     except MeiliSearchServiceError as err:
-        log.error(f'Did not update search index post_delete: {err}')
+        log.error(f'Did not update search index pre_delete: {err}')
         return
 
-    search_id = (
-        f'post_{instance.post.id}'
-        if isinstance(instance, Revision)
-        else f'{sender._meta.model_name}_{instance.id}'
-    )
+    if isinstance(instance, Revision):
+        # Only send the signal if the deleted revision is the latest one of a post.
+        # Normally revisions should only be deleted when the related blog post is deleted.
+        # TODO(Nat): Manually deleting a revision won't revert the indexed post version to the previous one.
+        if (
+            instance.post.is_published
+            and instance.post.revisions.filter(is_published=True).latest('date_created').pk
+            == instance.pk
+        ):
+            search_id = f'post_{instance.post.id}'
+        else:
+            return
+    else:
+        search_id = f'{sender._meta.model_name}_{instance.id}'
 
     for index_uid, _ in settings.INDEXES_FOR_SORTING:
         settings.SEARCH_CLIENT.get_index(index_uid).delete_document(search_id)

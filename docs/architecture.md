@@ -216,7 +216,7 @@ ones on change: a `post_save` signal is attached to each of the above mentioned 
 When an object is updated in the database, it is 'added' to the index with the same
 `search_id`, which means that no new document is created, only the existing one is updated.
 
-On object delete, the related document will be deleted from the index thanks to a `post_delete`
+On object delete, the related document will be deleted from the index thanks to a `pre_delete`
 signal.
 
 It is also possible to update the index with all the documents in the database using a Django

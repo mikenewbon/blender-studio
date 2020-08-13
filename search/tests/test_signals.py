@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save, pre_delete
 from django.test.testcases import TestCase
 
 from blog.models import Revision, Post
@@ -108,7 +108,7 @@ class TestPostDeleteSignal(TestCase):
         self.film_not_indexed = FilmFactory()
 
     def test_deleting_not_indexed_film_triggers_signal(self):
-        with catch_signal(post_delete, sender=Film) as handler:
+        with catch_signal(pre_delete, sender=Film) as handler:
             self.film_not_indexed.delete()
             handler.assert_called()
 
@@ -117,6 +117,6 @@ class TestPostDeleteSignal(TestCase):
         film = Film.objects.create(**self.film_data)
         add_documents_mock.assert_called_once()
 
-        with catch_signal(post_delete, sender=Film) as handler:
+        with catch_signal(pre_delete, sender=Film) as handler:
             film.delete()
             handler.assert_called()
