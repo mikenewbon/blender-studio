@@ -10,7 +10,7 @@ from django.db.models.base import Model
 from blog.models import Revision
 from films.models import Film, Asset
 from search.health_check import MeiliSearchServiceError, check_meilisearch
-from search.queries import set_thumbnail_and_url, get_searchable_queryset, SearchableModel
+from search.queries import set_individual_fields, get_searchable_queryset, SearchableModel
 from training.models import Training, Section
 
 
@@ -33,7 +33,7 @@ class Command(BaseCommand):
             qs_values = queryset.values()
 
             for instance_dict, instance in zip(qs_values, queryset):
-                set_thumbnail_and_url(instance_dict, instance)
+                set_individual_fields(instance_dict, instance)
 
             objects_to_load.extend(qs_values)
             self.stdout.write(f'Done ({len(qs_values)} objects).')

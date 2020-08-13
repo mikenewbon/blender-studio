@@ -1,3 +1,4 @@
+import datetime as dt
 from typing import Any, Type, Union, Callable, Dict
 
 from django.db.models.expressions import F, Value, Case, When
@@ -108,13 +109,24 @@ def get_searchable_posts(**filter_params: Any) -> 'QuerySet[Revision]':
     )
 
 
-def set_thumbnail_and_url(
+def set_individual_fields(
     instance_dict: Dict[Any, Any], instance: SearchableModel
 ) -> Dict[Any, Any]:
+    """Set instance_dict fields that cannot be added in `annotate`: url, trumbnail_url, timestamp."""
+    instance_dict['url'] = instance.url
+    instance_dict['timestamp'] = instance.date_created.timestamp()
+
+    # TODO(Nat): Rename image fields to 'thumbnail' and refactor this function
     if isinstance(instance, Film):
         instance_dict['thumbnail_url'] = (
             instance.picture_16_9.url if instance.picture_16_9 else instance.picture_header.url
         )
+        if instance.release_date:
+            instance_dict['timestamp'] = dt.datetime(
+                year=instance.release_date.year,
+                month=instance.release_date.month,
+                day=instance.release_date.day,
+            ).timestamp()
     elif isinstance(instance, Asset):
         instance_dict['thumbnail_url'] = (
             instance.static_asset.preview.url if instance.static_asset.preview else ''
@@ -125,17 +137,11 @@ def set_thumbnail_and_url(
         instance_dict['thumbnail_url'] = instance.chapter.training.picture_16_9.url
     elif isinstance(instance, Revision):
         instance_dict['thumbnail_url'] = instance.picture_16_9.url
+        instance_dict['timestamp'] = instance.post.date_created.timestamp()
     else:
         raise TypeError(
             f'Inappropriate `instance` class. It has to be an instance of Film, Asset, '
             f'Training, Section, or Revision; got {type(instance)} instead.'
         )
-
-    instance_dict['url'] = instance.url
-    instance_dict['date_created_ts'] = (
-        instance.post.date_created.timestamp()
-        if isinstance(instance, Revision)
-        else instance.date_created.timestamp()
-    )
 
     return instance_dict

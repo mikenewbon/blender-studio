@@ -130,7 +130,7 @@ const renderHits = (renderOptions, isFirstRender) => {
 
                   <p class="card-subtitle">
                     <i class="material-icons icon-inline small">schedule</i>
-                    ${ timeDifference(item.date_created_ts)}
+                    ${ timeDifference(item.timestamp)}
                   </p>
 
                 </div>

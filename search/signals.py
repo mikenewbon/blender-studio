@@ -10,7 +10,7 @@ from django.dispatch import receiver
 from blog.models import Revision
 from films.models import Film, Asset
 from search.health_check import check_meilisearch, MeiliSearchServiceError
-from search.queries import SearchableModel, get_searchable_queryset, set_thumbnail_and_url
+from search.queries import SearchableModel, get_searchable_queryset, set_individual_fields
 from training.models import Training, Section
 
 log = logging.getLogger(__name__)
@@ -44,7 +44,7 @@ def update_search_index(
     instance_qs = get_searchable_queryset(sender, id=instance.id)
     if instance_qs:
         instance_dict = instance_qs.values().get()
-        instance_dict = set_thumbnail_and_url(instance_dict, instance)
+        instance_dict = set_individual_fields(instance_dict, instance)
 
         # Data has to be a list of documents.
         data_to_load = [json.loads(json.dumps(instance_dict, cls=DjangoJSONEncoder))]
