@@ -1,7 +1,6 @@
 # Development
 
 ## Requirements
-
 - Python 3.8.x
 - [poetry](https://python-poetry.org/)
 - [PostgreSQL](https://www.postgresql.org/) (tested on 12.2)
@@ -11,7 +10,6 @@ that poetry takes care of -- there's no need to install anything manually.
 
 
 ## Set up instructions
-
 1. Clone the repo.
 2. Checkout the develop branch (master may be considerably outdated).
 2. Run `poetry install`
@@ -88,15 +86,21 @@ The server will be listening on port `7700` by default.
 If you change it, adjust the `MEILISEARCH_API_ADDRESS` in settings_common.py as necessary.
 
 #### Adding documents to the search index
-Two management commands are available:
- - `create_search_index` - creates a new index, with the uid  `MEILISEARCH_INDEX_UID` (defined in settings.py). If the index already exists, the command
- only updates the index settings to the values they are expected to have.
- - `index_documents` - adds documents from the database to the index. Also creates or updates
- replica indexes used for sorting of search results. If a document with a given `search_id`
- is already present in the index, it will be updated. Objects of the
- following models are indexed: films.Film, films.Asset, training.Training, training.Section,
- blog.Revision (only the latest revision of each post).
-
+Two Django management commands are available:
+ - `create_search_index` - creates a new index, with the uid  `MEILISEARCH_INDEX_UID` 
+ (defined in settings.py), and two replica indexes used for alternative search results ordering.
+ If the indexes already exists, the command only updates their settings to the values they
+ are expected to have.
+ - `index_documents` - adds documents from the database to the index. Also updates the
+ replica indexes. If a document with a given `search_id` is already present in an index,
+ it will be updated. Objects of the following models are indexed: films.Film, films.Asset,
+ training.Training, training.Section, blog.Revision (only the latest revision of each post).
+ 
+The commands can be run from the Bash console with the project's venv activated:
+```
+./manage.py create_search_index
+./manage.py index_documents
+```
 
 #### Production environment
 In production, the server should be run in the `Production` mode, and with a master key.
@@ -105,11 +109,53 @@ Running the server without a master key is only possible in development, as it m
 all routes accessible and constitutes a security issue.
 The details are explained in [the authentication guide](https://docs.meilisearch.com/guides/advanced_guides/authentication.html).
 
+#### Troubleshooting
+If the search does not work as expected, it may be due to some index settings being out of
+date or the documents in the index being out of date.
+
+##### Updating index settings
+To update the indexes **settings** - such as fields used for faceting, searchable fields,
+ranking rules etc. - run the `create_search_index` command. If the indexes exist, it does
+not create new ones, only resets their settings to the desired values.
+```
+./manage.py create_search_index
+```
+
+##### Recreating an index
+Some settings (the index name, the index primary key field name) cannot be updated.
+If you need to change them, you have to delete the old index and create it again.
+Note that this will also delete all the indexed documents. 
+An index can be [recreated in a few ways](https://docs.meilisearch.com/references/indexes.html), e.g.:
+ 1. In Bash console:
+     ```
+    curl -X DELETE 'http://localhost:7700/indexes/studio'
+    curl \
+      -X POST 'http://localhost:7700/indexes' \
+      --data '{
+        "uid": "studio",
+        "primaryKey": "search_id"
+      }'
+     ```
+ 2. In Django shell (`./manage.py shell`):
+     ```
+    import meilisearch
+    meilisearch.Client('http://localhost:7700').get_index('studio').delete()
+    meilisearch.Client('http://localhost:7700').create_index('studio', {'primary_key': 'search_id'})
+     ```
+Also note that usually you'll have to recreate all the replica indexes as well.
+
+##### Update indexed documents
+If the data in the database or the documents' structure changes, run the `index_documents`
+command. It updates the existing documents (based on a matching `search_id`), so no duplicate 
+documents should be added to the index.  
+```
+./manage.py index_documents
+```
+
 
 ## Workflow
 
 #### Before committing
-
 The following assumes that the virtual environment is activated: `poetry shell`.
 
 [Pre-commit hooks](https://pre-commit.com) are responsible for automatically running black, mypy,
@@ -126,7 +172,6 @@ entire project (so it's slower and more likely to error out).
 
 
 #### Git workflow
-
 1. Rebase, don't merge.
 2. `develop` is the working branch. In order to work on a task, create a new branch off `develop`.
 It is technically possible to `git push --force` to `develop`, however please consider at least warning
