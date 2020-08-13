@@ -14,10 +14,6 @@ def home(request: HttpRequest) -> HttpResponse:
     Renders the home page of Blender Studio.
 
     **Context**:
-        ``featured_films``
-            A queryset of films marked as featured.
-        ``featured_trainings``
-            A queryset of trainings marked as featured.
         ``records``
             A paginator Page object with dictionaries representing recently created objects:
             instances of :model:`blog.Post`, :model:`ProductionLog`, or
@@ -31,11 +27,7 @@ def home(request: HttpRequest) -> HttpResponse:
     **Template**
         :template:`common/home.html`
     """
-    context = {
-        'featured_films': Film.objects.filter(is_featured=True),
-        'featured_trainings': Training.objects.filter(is_featured=True),
-        'records': get_activity_feed_page(),
-    }
+    context = {'records': get_activity_feed_page()}
 
     return render(request, 'common/home.html', context)
 

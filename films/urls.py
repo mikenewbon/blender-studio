@@ -18,7 +18,6 @@ urlpatterns = [
         name='film-production-logs',
     ),
     path('<slug:film_slug>/pages/<slug:page_slug>', films.flatpage, name='film-flatpage'),
-    path('<slug:film_slug>/assets/<slug:asset_slug>', gallery.asset_detail, name='asset-detail'),
     path(
         '<slug:film_slug>/<slug:collection_slug>',
         gallery.collection_detail,

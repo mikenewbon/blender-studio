@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_safe
 
-from films.models import Film, Collection, Asset
+from films.models import Film, Collection
 from films.queries import get_gallery_drawer_context
 
 
@@ -112,11 +112,3 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
     }
 
     return render(request, 'films/collection_detail.html', context)
-
-
-@require_safe
-def asset_detail(request: HttpRequest, film_slug: str, asset_slug: str) -> HttpResponse:
-    film = get_object_or_404(Film, slug=film_slug, is_published=True)
-    asset = get_object_or_404(Asset, slug=asset_slug, film_id=film.id, is_published=True)
-
-    return render(request, 'films/asset_detail.html', {'film': film, 'asset': asset})
