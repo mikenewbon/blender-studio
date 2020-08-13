@@ -47,8 +47,14 @@
         background: $navigation-gray;
       }
 
-      video {
-        max-height: 75vh;
+      .plyr:not(:fullscreen) {
+        .plyr__video-wrapper {
+          max-height: 75vh;
+
+          video {
+            max-height: 75vh;
+          }
+        }
       }
     }
 
