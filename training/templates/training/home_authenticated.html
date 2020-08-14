@@ -7,7 +7,9 @@
   <div class="jumbotron-bg-wrapper">
     <img class="jumbotron-bg" src="{% static "training/images/placeholders/jumbotron.png" %}">
     <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
-    {% comment %} {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %} {% endcomment %}
+    {% comment %}
+    {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
+    {% endcomment %}
   </div>
   <div class="container-xl">
     <div class="row">
@@ -76,10 +78,12 @@
       {% endfor %}
     </div>
     {% else %}
-    <div class="row bg-secondary">
-      <div class="col my-4 text-center">
-        <h3 class="mb-0">No saved training</h3>
-        <p>You can favorite a few below!</p>
+    <div class="row">
+      <div class="col text-center">
+        <div class="bg-secondary py-4 rounded">
+          <h3 class="mb-0">No saved training</h3>
+          <p class="mb-0">You can favorite a few below!</p>
+        </div>
       </div>
     </div>
     {% endif %}

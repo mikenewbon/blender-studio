@@ -20,47 +20,61 @@
     </div>
 
     <div id="activity-feed">
+      {% if production_logs_page %}
       {% include "films/components/activity_feed.html" %}
+      {% else %}
     </div>
-
+    <div class="row mb-3">
+      <div class="col text-center">
+        <div class="bg-secondary py-4 rounded">
+          <h3 class="mb-0">No Weeklies to show</h3>
+        </div>
+      </div>
+    </div>
+    {% endif %}
     <div class="row">
       <div class="col text-center">
         <p class="mb-0">Want to see more updates from {{ film.title }}?
           <a href="{% url 'film-production-logs' film.slug %}">See all weeklies</a></p>
       </div>
     </div>
-    {% else %}
+</div>
 
-    <div class="row justify-content-center mb-3">
-      <div class="col-md-6 text-center">
-        <h2 class="mb-0">Featured Gallery</h2>
-        <p class="mb-0">Want to see more?
-          <a href="{% url 'film-gallery' film.slug %}">Explore the Gallery</a></p>
-      </div>
+
+{% else %}
+
+<div class="row justify-content-center mb-3">
+  <div class="col-md-6 text-center">
+    <h2 class="mb-0">Featured Gallery</h2>
+    <p class="mb-0">Want to see more?
+      <a href="{% url 'film-gallery' film.slug %}">Explore the Gallery</a></p>
+  </div>
+</div>
+
+{% if featured_artwork %}
+
+<div class="files">
+  <div class="card-columns card-columns-2">
+
+    {% for asset in featured_artwork %}
+    {% include "common/components/file.html" with asset=asset site_context="featured_artwork" %}
+    {% endfor %}
+
+  </div>
+</div>
+{% else %}
+<div class="row">
+  <div class="col text-center">
+    <div class="bg-secondary py-4 rounded">
+      <h3 class="mb-0">No Featured Artwork to display</h3>
     </div>
+  </div>
+</div>
 
-    {% if featured_artwork %}
+{% endif %}
 
-    <div class="files">
-      <div class="card-columns card-columns-2">
-
-        {% for asset in featured_artwork %}
-        {% include "common/components/file.html" with asset=asset site_context="featured_artwork" %}
-        {% endfor %}
-
-      </div>
-    </div>
-    {% else %}
-    <div class="row bg-secondary">
-      <div class="col my-4 text-center">
-        <h3 class="mb-0">No Featured Artwork to display</h3>
-      </div>
-    </div>
-
-    {% endif %}
-
-    {% endif %}
-  </section>
+{% endif %}
+</section>
 </div>
 
 <!-- TODO(Mike): Add blog posts -->
