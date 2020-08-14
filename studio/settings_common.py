@@ -195,7 +195,7 @@ SITE_ID = 1
 INTERNAL_IPS = ['127.0.0.1']
 
 
-# MeiliSearch-related settings
+# MeiliSearch-related settings. See also settings.py
 MEILISEARCH_API_ADDRESS = 'http://127.0.0.1:7700'
 if 'test' in sys.argv:
     MEILISEARCH_INDEX_UID = 'test-studio'

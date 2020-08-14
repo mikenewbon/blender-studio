@@ -1,9 +1,9 @@
+const searchClientConfig = JSON.parse(
+  document.getElementById('search-client-config').textContent
+);
 const search = instantsearch({
   indexName: "studio",
-  searchClient: instantMeiliSearch(
-    "http://0.0.0.0:7700",
-    //  TODO(Nat): api key goes here
-  )
+  searchClient: instantMeiliSearch(searchClientConfig.hostUrl, searchClientConfig.apiKey)
 });
 
 // -------- INPUT -------- //

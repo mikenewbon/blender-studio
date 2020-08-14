@@ -26,5 +26,9 @@ def api_search(request: HttpRequest) -> JsonResponse:
 
 @require_safe
 def search(request: HttpRequest) -> HttpResponse:
+    search_client_config = {
+        'hostUrl': settings.MEILISEARCH_API_ADDRESS,
+        'apiKey': settings.MEILISEARCH_PUBLIC_KEY,
+    }
 
-    return render(request, 'search/search.html', {})
+    return render(request, 'search/search.html', {'search_client_config': search_client_config})
