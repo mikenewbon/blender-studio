@@ -21,7 +21,9 @@
         {% else %}
         <p class="card-subtitle">
           <i class="material-icons icon-inline small">schedule</i>
-          {{ post.date_updated }}
+          <span class="date">
+          {{ post.date_updated|date:"U" }}
+          </span>
         </p>
         {% endif %}
 
