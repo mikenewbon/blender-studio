@@ -37,6 +37,7 @@ window.asset = (function asset() {
     $(baseModalId).each(function (i) {
       // Remove modal content on hide
       $(this).on('hidden.bs.modal', event => {
+        $(this).modal('handleUpdate');
         $(this).empty();
         if (this.classList.contains('modal-asset')) {
           // Add loading spinner pre-emtively
@@ -50,6 +51,11 @@ window.asset = (function asset() {
       })
 
     })
+
+    $(zoomModalId).on('hidden.bs.modal', event => {
+      $(this).modal('handleUpdate');
+    });
+
     // Left-Right keyboard events
     $(baseModalId).keydown(function (event) {
       const rightArrow = baseModalId + ' .modal-navigation.next';
@@ -69,6 +75,12 @@ window.asset = (function asset() {
       }
     });
   });
+
+  // This fixes the issue of broken scrolling after opening the zoom modal by readding the modal-open class to the body, which gets removed on modal close.
+  $(document).on('hidden.bs.modal', '.modal', function () {
+    $('.modal:visible').length && $(document.body).addClass('modal-open');
+  });
+
 
   function initalizeAssetURL() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -181,7 +193,7 @@ window.asset = (function asset() {
     });
 
     baseModal.addEventListener('click', (event) => {
-      if(event.target == baseModal){
+      if (event.target == baseModal) {
         removeURLParam(assetParamName);
       }
     })
@@ -193,3 +205,4 @@ window.asset = (function asset() {
     baseModal.dispatchEvent(event);
   }
 })();
+
