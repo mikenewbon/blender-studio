@@ -4,5 +4,9 @@
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: $zindex-fixed;
+  z-index: $zindex-popover;
+
+  .progress-bar {
+    height: 2px;
+  }
 }
