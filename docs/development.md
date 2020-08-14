@@ -56,7 +56,7 @@ arrangements - ask Francesco about it.
 Another way is to upload data fixtures created from the staging database.
 
 
-## Blender ID authentication
+## Blender ID authentication setup
 Login to Blender Studio is possible using Blender ID. For development, you can set up a local
 instance of [Blender ID](https://docs.blender.org/id/development_setup/). You'll need
 **MySQL** (or MariaDB) and **npm** installed. It is also possible to use a
@@ -77,80 +77,34 @@ Copy the **Cliend id** and **Cliend secret** to the studio's `settings.py` as `"
 and `"OAUTH_SECRET"` in the `BLENDER_ID` settings.
 
 
-## Search
-For more details, see the [search application description](architecture.md#search).
+## Search setup
+For a complete description of the search feature, see the [search documentation](search.md).
+It also includes [production setup](search.md#deployment-to-production) and
+[troubleshooting](search.md#troubleshooting) instructions.
 
-The search functionality uses [MeiliSearch](https://github.com/meilisearch/MeiliSearch).
-Follow the [installation instructions in the documentation](https://docs.meilisearch.com/guides/advanced_guides/installation.html).
-The server will be listening on port `7700` by default.
+1. [Install](https://docs.meilisearch.com/guides/advanced_guides/installation.html) and launch
+MeiliSearch:
+    ```
+    curl -L https://install.meilisearch.com | sh
+    ./meilisearch --master-key myMasterKey
+    ```
+    The master key should be unique, random, and kept secret, as it allows you to do everything
+    on the server.
+2. Use the master key to retrieve the public and the private key:
+    ```
+    curl -H "X-Meili-API-Key: myMasterKey" -X GET 'http://localhost:7700/keys'
+    ```
+3. Update the `MEILISEARCH_PUBLIC_KEY` and `MEILISEARCH_PRIVATE_KEY` in `settings.py`.
+The master key is not necessary there.
+4. With the project's venv activated, create indexes and fill them with data:
+    ```
+    ./manage.py create_search_index
+    ./manage.py index_documents
+    ```
+
+The server will be available on port `7700` by default.
 If you change it, adjust the `MEILISEARCH_API_ADDRESS` in settings_common.py as necessary.
 
-#### Adding documents to the search index
-Two Django management commands are available:
- - `create_search_index` - creates a new index, with the uid  `MEILISEARCH_INDEX_UID` 
- (defined in settings.py), and two replica indexes used for alternative search results ordering.
- If the indexes already exists, the command only updates their settings to the values they
- are expected to have.
- - `index_documents` - adds documents from the database to the index. Also updates the
- replica indexes. If a document with a given `search_id` is already present in an index,
- it will be updated. Objects of the following models are indexed: films.Film, films.Asset,
- training.Training, training.Section, blog.Revision (only the latest revision of each post).
- 
-The commands can be run from the Bash console with the project's venv activated:
-```
-./manage.py create_search_index
-./manage.py index_documents
-```
-
-#### Production environment
-In production, the server should be run in the `Production` mode, and with a master key.
-The mode is set either with an environment variable `MEILI_ENV`, or a CLI option `--env`.
-Running the server without a master key is only possible in development, as it makes
-all routes accessible and constitutes a security issue.
-The details are explained in [the authentication guide](https://docs.meilisearch.com/guides/advanced_guides/authentication.html).
-
-#### Troubleshooting
-If the search does not work as expected, it may be due to some index settings being out of
-date or the documents in the index being out of date.
-
-##### Updating index settings
-To update the indexes **settings** - such as fields used for faceting, searchable fields,
-ranking rules etc. - run the `create_search_index` command. If the indexes exist, it does
-not create new ones, only resets their settings to the desired values.
-```
-./manage.py create_search_index
-```
-
-##### Recreating an index
-Some settings (the index name, the index primary key field name) cannot be updated.
-If you need to change them, you have to delete the old index and create it again.
-Note that this will also delete all the indexed documents. 
-An index can be [recreated in a few ways](https://docs.meilisearch.com/references/indexes.html), e.g.:
- 1. In Bash console:
-     ```
-    curl -X DELETE 'http://localhost:7700/indexes/studio'
-    curl \
-      -X POST 'http://localhost:7700/indexes' \
-      --data '{
-        "uid": "studio",
-        "primaryKey": "search_id"
-      }'
-     ```
- 2. In Django shell (`./manage.py shell`):
-     ```
-    import meilisearch
-    meilisearch.Client('http://localhost:7700').get_index('studio').delete()
-    meilisearch.Client('http://localhost:7700').create_index('studio', {'primary_key': 'search_id'})
-     ```
-Also note that usually you'll have to recreate all the replica indexes as well.
-
-##### Update indexed documents
-If the data in the database or the documents' structure changes, run the `index_documents`
-command. It updates the existing documents (based on a matching `search_id`), so no duplicate 
-documents should be added to the index.  
-```
-./manage.py index_documents
-```
 
 
 ## Workflow
