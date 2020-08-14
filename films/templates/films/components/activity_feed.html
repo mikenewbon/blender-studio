@@ -67,13 +67,13 @@
       <div class="update-feed-individual">
         <div class="update-feed-individual-summary">
 
-          <div class="update-feed-individual-summary-profile">
+          <div class="update-feed-individual-summary-profile row">
             <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');"
               class="profile-image profile ml-2">
             </div>
             <div class="col-auto">
-              <h4 class="comment-name">{{ entry.author_name }}</h4>
-              <p class="subtitle text-white-50 x-small">{{ entry.author_role }}</p>
+              <h4 class="profile-name">{{ entry.author_name }}</h4>
+              <p class="profile-title subtitle text-white-50 x-small">{{ entry.author_role }}</p>
             </div>
           </div>
 

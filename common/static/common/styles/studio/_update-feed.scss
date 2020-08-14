@@ -109,6 +109,13 @@
 }
 
 .update-feed-individual-summary-profile {
-  @extend .row;
   margin-bottom: $spacer / 2;
+
+  .profile-image {
+    align-self: flex-start;
+  }
+
+  .profile-name {
+    margin-bottom: 0;
+  }
 }
