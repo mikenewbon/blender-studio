@@ -45,6 +45,8 @@ def post_detail(request: HttpRequest, post_slug: str) -> HttpResponse:
             A :model:`blog.Revision` instance. The latest published revision of the post.
             (It is named ``post`` for consistency in the templates - see the
             :view:`blog.views.blog.post_list`.)
+        ``post_author``
+            A str, author's full name (may be empty if the user has no first and last name set!).
         ``user_can_edit_post``
             A bool specifying whether the current user has permission to edit :model:`blog.Post`.
 
@@ -55,10 +57,10 @@ def post_detail(request: HttpRequest, post_slug: str) -> HttpResponse:
         'post': (
             get_object_or_404(Post, slug=post_slug, is_published=True)
             .revisions.filter(is_published=True)
-            .annotate(author=F('post__author'))
             .latest('date_created')
         ),
         'user_can_edit_post': (request.user.is_staff and request.user.has_perm('blog.change_post')),
     }
+    context['post_author'] = context['post'].post.author.get_full_name()
 
     return render(request, 'blog/post_detail.html', context)
