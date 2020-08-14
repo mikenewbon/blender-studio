@@ -1,3 +1,4 @@
+from django.db.models.expressions import F
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 from django.shortcuts import render, get_object_or_404
@@ -54,6 +55,7 @@ def post_detail(request: HttpRequest, post_slug: str) -> HttpResponse:
         'post': (
             get_object_or_404(Post, slug=post_slug, is_published=True)
             .revisions.filter(is_published=True)
+            .annotate(author=F('post__author'))
             .latest('date_created')
         ),
         'user_can_edit_post': (request.user.is_staff and request.user.has_perm('blog.change_post')),
