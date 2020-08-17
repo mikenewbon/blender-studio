@@ -1,30 +1,43 @@
 {% extends 'common/base.html' %}
+{% load static %}
 
 {% block content %}
-<div class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content jumbotron header" style="height: 400px;">
+<div class="jumbotron jumbotron-fluid jumbotron-blog jumbotron-overlay overlay-blog">
   <div class="jumbotron-bg-wrapper">
     <img class="jumbotron-bg" src="{{ post.picture_16_9.url }}">
     <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
   </div>
-  <div class="container-xl">
+  <div class="container-blog">
+
+    <p class="subtitle">{{ post.topic }}</p>
+    <h1 class="">{{ post.title }}</h1>
+    <p class="subtitle">{{ post.date_updated|date:"jS M Y" }}</p>
   </div>
 </div>
 
-<div class="container-fluid pt-4">
-  <section class="flat-page-content mb-4">
-    {% if user_can_edit_flatpage %}
-    <div class="admin-button">
-      <a href="{{ flatpage.admin_url }}" class="btn btn-sm btn-secondary admin-float">Edit Page</a>
-    </div>
-    {% endif %}
 
-    <div class="mb-3">
-      <p class="subtitle">{{ post.topic }}</p>
-      <h1 class="mb-0">{{ post.title }}</h1>
+<section class="container-blog mt-3 mb-4">
+  <div class="row">
+    <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');"
+      class="profile-image profile ml-2">
     </div>
-    <div>{{ post.html_content|safe }}</div>
-  </section>
-</div>
+    <div class="col-auto">
+      <h4 class="profile-name mb-0">{{ post_author }}</h4>
+      <p class="profile-title subtitle text-white-50 x-small">Author</p>
+    </div>
+  </div>
+  {% if user_can_edit_flatpage %}
+  <div class="admin-button">
+    <a href="{{ flatpage.admin_url }}" class="btn btn-sm btn-secondary admin-float">Edit Page</a>
+  </div>
+  {% endif %}
+
+  <div class="mb-3">
+
+  </div>
+  <div>{{ post.html_content|safe }}</div>
+</section>
+
 
 
 {% endblock %}

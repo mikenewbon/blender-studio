@@ -8,3 +8,33 @@
     }
   }
 }
+
+.container-blog {
+  @extend .container;
+
+  max-width: 780px;
+  position: relative;
+}
+
+.jumbotron {
+  &.jumbotron-blog {
+    display: flex;
+    min-height: 400px;
+    padding-bottom: $spacer;
+
+    .container-blog {
+      margin-top: auto;
+    }
+
+  }
+
+  &.jumbotron-overlay {
+    &.overlay-blog {
+      .jumbotron-bg-wrapper {
+        &::before {
+          background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 0.01%, rgba(0, 0, 0, 0.75) 72.4%);
+        }
+      }
+    }
+  }
+}
