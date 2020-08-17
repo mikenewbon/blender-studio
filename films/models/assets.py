@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls.base import reverse
 from django.utils.text import slugify
+from taggit.managers import TaggableManager
 
 from comments.models import Comment
 from common import mixins
@@ -43,6 +44,7 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
     )
 
     comments = models.ManyToManyField(Comment, through='AssetComment', related_name='asset')
+    tags = TaggableManager()
 
     def clean(self) -> None:
         super().clean()

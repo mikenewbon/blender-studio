@@ -5,6 +5,7 @@ from django.db.models.expressions import F, Value, Case, When
 from django.db.models.fields import CharField
 from django.db.models.functions.text import Concat
 from django.db.models.query import QuerySet
+from taggit.models import Tag
 
 from blog.models import Revision
 from films.models import Film, Asset
@@ -136,11 +137,21 @@ def set_individual_fields(
         instance_dict['thumbnail_url'] = (
             instance.static_asset.preview.url if instance.static_asset.preview else ''
         )
+        instance_dict['tags'] = [tag.name for tag in instance.tags.all()]
     elif isinstance(instance, Training):
         instance_dict['thumbnail_url'] = instance.picture_16_9.url
         instance_dict['tags'] = [tag.name for tag in instance.tags.all()]
+        instance_dict['additional_tags'] = [
+            tag.name
+            for tag in Tag.objects.filter(section__chapter__training__pk=instance.pk).distinct()
+        ]
+
     elif isinstance(instance, Section):
         instance_dict['thumbnail_url'] = instance.chapter.training.picture_16_9.url
+        instance_dict['tags'] = [tag.name for tag in instance.tags.all()]
+        instance_dict['additional_tags'] = [
+            tag.name for tag in instance.chapter.training.tags.all()
+        ]
     elif isinstance(instance, Revision):
         instance_dict['thumbnail_url'] = instance.picture_16_9.url
         instance_dict['timestamp'] = instance.post.date_created.timestamp()
