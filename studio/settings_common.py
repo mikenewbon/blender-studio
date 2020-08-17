@@ -23,8 +23,9 @@ INSTALLED_APPS = [
     'django.contrib.admindocs',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
+    'django.contrib.humanize',
     'django.contrib.messages',
+    'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.staticfiles',
     'blender_id_oauth_client',
@@ -32,7 +33,7 @@ INSTALLED_APPS = [
     'looper',
     'pipeline',
     'sorl.thumbnail',
-    'django.contrib.humanize',
+    'taggit',
 ]
 
 MIDDLEWARE = [
@@ -237,3 +238,6 @@ SEARCHABLE_ATTRIBUTES = [
     'content',
 ]
 FACETING_ATTRIBUTES = ['model', 'project', 'license', 'media_type']
+
+
+TAGGIT_CASE_INSENSITIVE = True

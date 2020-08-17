@@ -3,7 +3,7 @@ from typing import Callable, TypeVar
 from django.contrib import admin
 from django.utils.html import format_html
 
-from training.models import chapters, sections, tags, trainings
+from training.models import chapters, sections, trainings
 
 T = TypeVar('T', bound=Callable[..., object])
 
@@ -20,8 +20,8 @@ class ChapterInline(admin.TabularInline):
     ordering = ('index',)
 
 
-class TagInline(admin.TabularInline):
-    model = trainings.TrainingTag
+# class TagInline(admin.TabularInline):
+#     model = trainings.TrainingTag
 
 
 @admin.register(trainings.Training)
@@ -31,7 +31,7 @@ class TrainingAdmin(admin.ModelAdmin):
         '__str__',
         with_name('url', lambda obj: format_html('<a href="{url}">{url}</a>', url=obj.url)),
     ]
-    inlines = [ChapterInline, TagInline]
+    inlines = [ChapterInline]
 
 
 class SectionInline(admin.TabularInline):
@@ -76,4 +76,3 @@ class SectionAdmin(admin.ModelAdmin):
 
 admin.site.register(sections.Video)
 admin.site.register(sections.Asset)
-admin.site.register(tags.Tag)

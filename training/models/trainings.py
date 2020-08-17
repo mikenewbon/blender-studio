@@ -2,11 +2,11 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.urls.base import reverse
 from django.utils.text import slugify
+from taggit.managers import TaggableManager
 
-from static_assets.models import StorageLocation, DynamicStorageFileField
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
-from training.models import tags
+from static_assets.models import StorageLocation, DynamicStorageFileField
 
 
 class TrainingStatus(models.TextChoices):
@@ -45,7 +45,8 @@ class Training(mixins.CreatedUpdatedMixin, models.Model):
     status = models.TextField(choices=TrainingStatus.choices)
     is_featured = models.BooleanField(default=False)
 
-    tags = models.ManyToManyField(tags.Tag, through='TrainingTag', related_name='trainings')
+    tags = TaggableManager()
+
     type = models.TextField(choices=TrainingType.choices)
     difficulty = models.TextField(choices=TrainingDifficulty.choices)
     picture_header = DynamicStorageFileField(
@@ -77,16 +78,6 @@ class Training(mixins.CreatedUpdatedMixin, models.Model):
     @property
     def admin_url(self) -> str:
         return reverse('admin:training_training_change', args=[self.pk])
-
-
-class TrainingTag(models.Model):
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['training', 'tag'], name='unique_tags_per_training')
-        ]
-
-    training = models.ForeignKey(Training, on_delete=models.CASCADE)
-    tag = models.ForeignKey(tags.Tag, on_delete=models.CASCADE)
 
 
 class Favorite(mixins.CreatedUpdatedMixin, models.Model):
