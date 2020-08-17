@@ -84,6 +84,10 @@ class Revision(mixins.CreatedUpdatedMixin, models.Model):
     def url(self) -> str:
         return self.post.url
 
+    @property
+    def admin_url(self) -> str:
+        return reverse('admin:blog_post_change', args=[self.post.pk])
+
 
 class PostComment(models.Model):
     """An intermediary model between Post and Comment.

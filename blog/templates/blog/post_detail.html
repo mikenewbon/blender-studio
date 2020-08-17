@@ -11,7 +11,7 @@
 
     <p class="subtitle">{{ post.topic }}</p>
     <h1 class="">{{ post.title }}</h1>
-    <p class="subtitle">{{ post.date_updated|date:"jS M Y" }}</p>
+    <p class="subtitle">{{ post_date_created|date:"jS M Y" }}</p>
   </div>
 </div>
 
@@ -26,9 +26,9 @@
       <p class="profile-title subtitle text-white-50 x-small">Author</p>
     </div>
   </div>
-  {% if user_can_edit_flatpage %}
+  {% if user_can_edit_post %}
   <div class="admin-button">
-    <a href="{{ flatpage.admin_url }}" class="btn btn-sm btn-secondary admin-float">Edit Page</a>
+    <a href="{{ post.admin_url }}" class="btn btn-sm btn-secondary admin-float">Edit Page</a>
   </div>
   {% endif %}
 

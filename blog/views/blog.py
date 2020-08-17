@@ -50,9 +50,13 @@ def post_detail(request: HttpRequest, post_slug: str) -> HttpResponse:
             (It is named ``post`` for consistency in the templates - see the
             :view:`blog.views.blog.post_list`.)
         ``post_author``
-            A str, author's full name (may be empty if the user has no first and last name set!).
+            A str, author's full name (may be empty if the user has no first and last name set).
+        ``post_date_created``
+            A datetime, creation date of the entire post (not the latest revision).
         ``user_can_edit_post``
             A bool specifying whether the current user has permission to edit :model:`blog.Post`.
+        ``comments``
+            A ``typed_templates.Comments`` instance with post comments.
 
     **Template**
         :template:`blog/post_detail.html`
@@ -68,9 +72,10 @@ def post_detail(request: HttpRequest, post_slug: str) -> HttpResponse:
 
     context = {
         'post': latest_revision,
+        'post_author': post.author.get_full_name(),
+        'post_date_created': post.date_created,
         'user_can_edit_post': (request.user.is_staff and request.user.has_perm('blog.change_post')),
         'comments': comments_to_template_type(comments, post.comment_url, user_is_moderator),
-        'post_author': post.author.get_full_name(),
     }
 
     return render(request, 'blog/post_detail.html', context)
