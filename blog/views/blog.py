@@ -1,11 +1,16 @@
-from django.db.models.expressions import F
+from typing import List
+
 from django.http.request import HttpRequest
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_safe
 
-from blog.models import Post
+from blog.models import Post, Revision
 from blog.queries import get_latest_post_revisions
+from comments.models import Comment
+from comments.queries import get_annotated_comments
+from comments.views.common import comments_to_template_type
+from common.types import assert_cast
 
 
 @require_safe
@@ -53,14 +58,20 @@ def post_detail(request: HttpRequest, post_slug: str) -> HttpResponse:
     **Template**
         :template:`blog/post_detail.html`
     """
+    post = get_object_or_404(Post, slug=post_slug, is_published=True)
+    try:
+        latest_revision: Revision = post.revisions.filter(is_published=True).latest('date_created')
+    except Revision.DoesNotExist:
+        raise Http404('No revision matches the given query.')
+
+    comments: List[Comment] = get_annotated_comments(post, request.user.pk)
+    user_is_moderator = request.user.has_perm('comments.moderate_comment')
+
     context = {
-        'post': (
-            get_object_or_404(Post, slug=post_slug, is_published=True)
-            .revisions.filter(is_published=True)
-            .latest('date_created')
-        ),
+        'post': latest_revision,
         'user_can_edit_post': (request.user.is_staff and request.user.has_perm('blog.change_post')),
+        'comments': comments_to_template_type(comments, post.comment_url, user_is_moderator),
+        'post_author': post.author.get_full_name(),
     }
-    context['post_author'] = context['post'].post.author.get_full_name()
 
     return render(request, 'blog/post_detail.html', context)

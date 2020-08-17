@@ -35,6 +35,10 @@ class Post(mixins.CreatedUpdatedMixin, models.Model):
         return reverse('post-detail', kwargs={'post_slug': self.slug})
 
     @property
+    def comment_url(self) -> str:
+        return reverse('api-post-comment', kwargs={'post_pk': self.pk},)
+
+    @property
     def admin_url(self) -> str:
         return reverse('admin:blog_post_change', args=[self.pk])
 
