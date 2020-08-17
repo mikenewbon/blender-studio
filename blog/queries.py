@@ -1,6 +1,6 @@
 import datetime as dt
 
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Subquery
 from django.db.models.expressions import Case, When, F
 from django.db.models.fields import BooleanField
 from django.utils import timezone
@@ -9,11 +9,17 @@ from blog.models import Revision
 
 
 def get_latest_post_revisions() -> 'QuerySet[Revision]':
-    """Returns the newest published revisions of all published post."""
+    """Returns the newest published revisions of all published posts, sorted (newest posts first)."""
     return (
-        Revision.objects.filter(is_published=True, post__is_published=True)
-        .order_by('post_id', '-date_created')
-        .distinct('post_id')
+        Revision.objects.filter(
+            pk__in=Subquery(
+                Revision.objects.filter(is_published=True, post__is_published=True)
+                # Include only the latest revision for each post:
+                .order_by('post_id', '-post__date_created')
+                .distinct('post_id')
+                .values('pk')
+            )
+        )
         .annotate(
             slug=F('post__slug'),
             is_new=Case(
@@ -22,5 +28,6 @@ def get_latest_post_revisions() -> 'QuerySet[Revision]':
                 output_field=BooleanField(),
             ),
         )
+        .order_by('-post__date_created')
         .select_related('storage_location')
     )

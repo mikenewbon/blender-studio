@@ -10,7 +10,6 @@ from blog.queries import get_latest_post_revisions
 from comments.models import Comment
 from comments.queries import get_annotated_comments
 from comments.views.common import comments_to_template_type
-from common.types import assert_cast
 
 
 @require_safe
