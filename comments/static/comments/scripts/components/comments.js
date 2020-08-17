@@ -539,6 +539,13 @@ window.comments = (function comments() {
     }
   };
 
+  // Comment actions are activated on 'activateComments' event. This allows to activate
+  // comments manually if needed. Normally the event is dispatched after DOM loads.
+  document.addEventListener('DOMContentLoaded', () => {
+    const event = new CustomEvent('activateComments', { bubbles: true });
+    document.dispatchEvent(event);
+  });
+
   document.addEventListener('activateComments', () => {
     document.getElementsByClassName(Section.className).forEach(Section.getOrWrap);
     document.getElementsByClassName(MainInput.className).forEach(MainInput.getOrWrap);

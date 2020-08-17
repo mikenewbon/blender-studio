@@ -9,8 +9,8 @@ window.asset = (function asset() {
   const assetParamName = 'asset';
 
   document.addEventListener('DOMContentLoaded', () => {
-    baseModal = document.querySelector('#file-modal');
-    zoomModal = document.querySelector('#file-zoom-modal');
+    baseModal = document.querySelector(baseModalId);
+    zoomModal = document.querySelector(zoomModalId);
     addFileClickEvent();
     initalizeAssetURL();
   });
@@ -205,4 +205,3 @@ window.asset = (function asset() {
     baseModal.dispatchEvent(event);
   }
 })();
-

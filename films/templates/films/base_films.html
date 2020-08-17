@@ -1,20 +1,4 @@
 {% extends 'common/base.html' %}
-{% load comment_extras %}
-
-{% block html_templates %}
-<template id="comment-template">
-  {% include 'comments/components/comment.html' %}
-</template>
-
-<template id="comment-reply-input-template">
-  {% comment_input profile_image_url='' button_label='Reply' div_class='comment-reply-input' %}
-</template>
-
-<template id="comment-edit-input-template">
-  {% comment_input profile_image_url='' button_label='Save' div_class='comment-edit-input' %}
-</template>
-
-{% endblock html_templates %}
 
 {% block bodyclasses %}
 has-secondary-nav
