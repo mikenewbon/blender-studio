@@ -90,6 +90,11 @@ def get_searchable_sections(**filter_params: Any) -> 'QuerySet[Section]':
         project=F('chapter__training__name'),
         chapter_name=F('chapter__name'),
         description=F('text'),
+        media_type=Case(
+            When(video__isnull=False, then=Value('video')),
+            When(assets__isnull=False, then=Value('file')),
+            output_field=CharField(),
+        ),
     )
 
 
@@ -133,6 +138,7 @@ def set_individual_fields(
         )
     elif isinstance(instance, Training):
         instance_dict['thumbnail_url'] = instance.picture_16_9.url
+        instance_dict['tags'] = [tag.name for tag in instance.tags.all()]
     elif isinstance(instance, Section):
         instance_dict['thumbnail_url'] = instance.chapter.training.picture_16_9.url
     elif isinstance(instance, Revision):

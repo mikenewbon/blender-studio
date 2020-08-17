@@ -221,13 +221,14 @@ SEARCHABLE_ATTRIBUTES = [
     # Model fields/annotations that are searchable:
     #     Film: ['model', 'name', 'project', 'description', 'summary'],
     #     Asset: ['model', 'name', 'project', 'collection_name', 'description'],
-    #     Training: ['model', 'name', 'project', 'description', 'summary'],
+    #     Training: ['model', 'name', 'project', 'tags', 'description', 'summary'],
     #     Section: ['model', 'name', 'project', 'chapter_name', 'description'],
     #     Post: ['model', 'name', 'project', 'topic', 'description', 'content']
     # In the order of relevance:
     'model',
     'name',
     'project',
+    'tags',
     'topic',
     'collection_name',
     'chapter_name',
