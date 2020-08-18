@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls.base import reverse
 from django.utils.text import slugify
@@ -50,6 +51,8 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
         super().clean()
         if not self.slug:
             self.slug = slugify(self.name)
+        if self.collection and self.collection.film != self.film:
+            raise ValidationError(f'Collection\'s film does not match the asset\'s film.')
 
     def __str__(self) -> str:
         return self.name
