@@ -184,7 +184,6 @@ LOGGING = {
         'asyncio': {'level': 'WARNING'},
         'django': {'level': 'WARNING'},
         'urllib3': {'level': 'WARNING'},
-
         'search': {'level': 'DEBUG'},
     },
     'root': {'level': 'WARNING', 'handlers': ['console']},
@@ -201,6 +200,7 @@ if 'test' in sys.argv:
     MEILISEARCH_INDEX_UID = 'test-studio'
 else:
     MEILISEARCH_INDEX_UID = 'studio'
+TRAINING_INDEX_UID = 'training'
 
 DEFAULT_RANKING_RULES = [
     'typo',
@@ -216,13 +216,13 @@ INDEXES_FOR_SORTING = [
     (MEILISEARCH_INDEX_UID, DEFAULT_RANKING_RULES),
     (f'{MEILISEARCH_INDEX_UID}_date_desc', DATE_DESC_RANKING_RULES),
     (f'{MEILISEARCH_INDEX_UID}_date_asc', DATE_ASC_RANKING_RULES),
+    (TRAINING_INDEX_UID, DEFAULT_RANKING_RULES),
 ]
-TRAINING_INDEX_UID = 'training'
 
 SEARCHABLE_ATTRIBUTES = [
     # Model fields/annotations that are searchable:
     #     Film: ['model', 'name', 'project', 'description', 'summary'],
-    #     Asset: ['model', 'name', 'project', 'collection_name', 'description'],
+    #     Asset: ['model', 'name', 'project', 'tags', 'collection_name', 'description'],
     #     Training: ['model', 'name', 'project', 'tags', 'additional_tags',
     #                'description', 'summary'],
     #     Section: ['model', 'name', 'project', 'tags', 'additional_tags',
@@ -241,7 +241,18 @@ SEARCHABLE_ATTRIBUTES = [
     'summary',
     'content',
 ]
+TRAINING_SEARCHABLE_ATTRIBUTES = [
+    'model',
+    'name',
+    'project',
+    'tags',
+    'additional_tags',
+    'chapter_name',
+    'description',
+    'summary',
+]
 FACETING_ATTRIBUTES = ['model', 'project', 'license', 'media_type']
+TRAINING_FACETING_ATTRIBUTES = ['type', 'difficulty']
 
 
 TAGGIT_CASE_INSENSITIVE = True

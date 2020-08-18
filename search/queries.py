@@ -12,6 +12,7 @@ from films.models import Film, Asset
 from training.models import Training, Section, TrainingStatus
 
 SearchableModel = Union[Film, Asset, Training, Section, Revision]
+SearchableTrainingModel = Union[Training, Section, Asset]
 
 
 def get_searchable_queryset(

@@ -34,33 +34,13 @@ class Command(BaseCommand):
                 )
 
             index.update_ranking_rules(ranking_rules)
-            index.update_searchable_attributes(settings.SEARCHABLE_ATTRIBUTES)
-            index.update_attributes_for_faceting(settings.FACETING_ATTRIBUTES)
+            if index_uid == settings.TRAINING_INDEX_UID:
+                index.update_searchable_attributes(settings.TRAINING_SEARCHABLE_ATTRIBUTES)
+                index.update_attributes_for_faceting(settings.TRAINING_FACETING_ATTRIBUTES)
+            else:
+                index.update_searchable_attributes(settings.SEARCHABLE_ATTRIBUTES)
+                index.update_attributes_for_faceting(settings.FACETING_ATTRIBUTES)
 
             self.stdout.write(self.style.SUCCESS(f'Successfully updated the index "{index_uid}".'))
-
-        index_uid = settings.TRAINING_INDEX_UID
-        try:
-            index = settings.SEARCH_CLIENT.create_index(index_uid, {'primaryKey': 'search_id'})
-        except meilisearch.errors.MeiliSearchApiError as err:
-            if err.error_code != 'index_already_exists':
-                raise CommandError(err)
-            index = settings.SEARCH_CLIENT.get_index(index_uid)
-            self.stdout.write(f'The index "{index_uid}" already exists. Skipping creation...')
-        else:
-            self.stdout.write(self.style.SUCCESS(f'Successfully created the index "{index_uid}".'))
-        training_searchable_attributes = [
-            'model',
-            'name',
-            'project',
-            'tags',
-            'additional_tags',
-            'chapter_name',
-            'description',
-            'summary',
-        ]
-        training_faceting_attributes = ['type', 'difficulty']
-        index.update_searchable_attributes(training_searchable_attributes)
-        index.update_attributes_for_faceting(training_faceting_attributes)
 
         return None

@@ -28,7 +28,7 @@ def prepare_data(instance: SearchableModel, instance_qs: 'QuerySet[SearchableMod
 def add_documents(data_to_load: List[Any], training: Optional[bool] = False) -> None:
     """Add document to the main index and its replica indexes, and optionally to training index."""
     try:
-        check_meilisearch(check_indexes=True, check_training=training)
+        check_meilisearch(check_indexes=True)
     except MeiliSearchServiceError as err:
         log.error('Did not update search index post_save.', exc_info=err)
         return
