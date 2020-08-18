@@ -31,14 +31,14 @@ class BaseSearchTestCase(TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         super().setUpClass()
-        for index_uid, _ in settings.INDEXES_FOR_SORTING:
+        for index_uid in settings.INDEXES_FOR_SORTING.keys():
             settings.SEARCH_CLIENT.get_or_create_index(index_uid, {'primaryKey': 'search_id'})
         cls.index = settings.MAIN_SEARCH_INDEX
         assert cls.index.uid == TEST_INDEX_UID
 
     @classmethod
     def tearDownClass(cls) -> None:
-        for index_uid, _ in settings.INDEXES_FOR_SORTING:
+        for index_uid in settings.INDEXES_FOR_SORTING.keys():
             settings.SEARCH_CLIENT.get_index(index_uid).delete()
         super().tearDownClass()
 

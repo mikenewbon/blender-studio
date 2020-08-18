@@ -5,21 +5,16 @@ from typing import Optional, Any
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.core.serializers.json import DjangoJSONEncoder
-from django.db.models.base import Model
-from django.db.models.expressions import F, Value
-from django.db.models.fields import CharField
-from django.db.models.functions.text import Concat
-from taggit.models import Tag
 
 from blog.models import Revision
-from films.models import Film, Asset, AssetCategory
+from films.models import Film, Asset
 from search.health_check import MeiliSearchServiceError, check_meilisearch
 from search.queries import set_individual_fields, get_searchable_queryset, SearchableModel
 from search.queries_training import (
     get_searchable_queryset_for_training,
     set_individual_fields_for_training,
 )
-from training.models import Training, Section, TrainingStatus, TrainingDifficulty
+from training.models import Training, Section
 
 TrainingSearchableModel = Union[Training, Section, Asset]
 
@@ -83,11 +78,8 @@ class Command(BaseCommand):
         training_data_to_load = self._prepare_training_data()
 
         # Update the main index, the replica indexes, and the training index
-        indexes_with_ranking_rules = [
-            *settings.INDEXES_FOR_SORTING,
-            (settings.TRAINING_INDEX_UID, settings.DEFAULT_RANKING_RULES),
-        ]
-        for index_uid, ranking_rules in indexes_with_ranking_rules:
+        indexes_to_update = [*settings.INDEXES_FOR_SORTING.keys(), settings.TRAINING_INDEX_UID]
+        for index_uid in indexes_to_update:
             index = settings.SEARCH_CLIENT.get_index(index_uid)
             if index_uid == settings.TRAINING_INDEX_UID:
                 response = index.add_documents(training_data_to_load)

@@ -46,8 +46,7 @@ def prepare_data_for_training(
 
 def add_documents(data_to_load: List[Any]) -> None:
     """Add documents to the main index and its replica indexes."""
-    indexes_to_update = [i[0] for i in settings.INDEXES_FOR_SORTING]
-    for index_uid in indexes_to_update:
+    for index_uid in settings.INDEXES_FOR_SORTING.keys():
         index = settings.SEARCH_CLIENT.get_index(index_uid)
         index.add_documents(data_to_load)
 
@@ -98,6 +97,12 @@ def update_training_search_index(sender, instance, **kwargs):
     """
     instance_qs = get_searchable_queryset_for_training(sender, id=instance.id)
     if instance_qs:
+        try:
+            check_meilisearch(check_indexes=True)
+        except MeiliSearchServiceError as err:
+            log.error('Did not update search index post_save.', exc_info=err)
+            return
+
         data_to_load = prepare_data_for_training(instance, instance_qs)
         add_documents_for_training(data_to_load)
         log.info(f'Added {instance} to the training search index.')
@@ -111,6 +116,10 @@ def update_training_search_index(sender, instance, **kwargs):
 def delete_from_index(
     sender: Type[SearchableModel], instance: SearchableModel, **kwargs: Any
 ) -> None:
+    """On object deletion, send a request to remove the related document from all indexes.
+
+    If there is no related document in an index, nothing happens.
+    """
     try:
         check_meilisearch(check_indexes=True)
     except MeiliSearchServiceError as err:
@@ -132,5 +141,5 @@ def delete_from_index(
     else:
         search_id = f'{sender._meta.model_name}_{instance.id}'
 
-    for index_uid, _ in settings.INDEXES_FOR_SORTING:
+    for index_uid in settings.ALL_INDEXES_UIDS:
         settings.SEARCH_CLIENT.get_index(index_uid).delete_document(search_id)
