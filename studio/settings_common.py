@@ -217,6 +217,7 @@ INDEXES_FOR_SORTING = [
     (f'{MEILISEARCH_INDEX_UID}_date_desc', DATE_DESC_RANKING_RULES),
     (f'{MEILISEARCH_INDEX_UID}_date_asc', DATE_ASC_RANKING_RULES),
 ]
+TRAINING_INDEX_UID = 'training'
 
 SEARCHABLE_ATTRIBUTES = [
     # Model fields/annotations that are searchable:
