@@ -26,7 +26,7 @@ def check_meilisearch(check_indexes: Optional[bool] = False) -> None:
         )
     if check_indexes:
         index_uids = [i['name'] for i in indexes]
-        missing_uids = [i[0] for i in settings.INDEXES_FOR_SORTING if i[0] not in index_uids]
+        missing_uids = [i for i in settings.ALL_INDEXES_UIDS if i not in index_uids]
         if missing_uids:
             raise MeiliSearchServiceError(
                 f'Some of the expected indexes do not exist: {missing_uids}. Run the '

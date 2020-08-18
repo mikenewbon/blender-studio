@@ -19,8 +19,12 @@ class Command(BaseCommand):
         except MeiliSearchServiceError as err:
             raise CommandError(err)
 
-        # Create or update the main index and the replica indexes
-        for index_uid, ranking_rules in settings.INDEXES_FOR_SORTING:
+        # Create or update the main index, the replica indexes, and the training index
+        indexes_with_ranking_rules = [
+            *settings.INDEXES_FOR_SORTING,
+            (settings.TRAINING_INDEX_UID, settings.DEFAULT_RANKING_RULES),
+        ]
+        for index_uid, ranking_rules in indexes_with_ranking_rules:
             try:
                 index = settings.SEARCH_CLIENT.create_index(index_uid, {'primaryKey': 'search_id'})
             except meilisearch.errors.MeiliSearchApiError as err:

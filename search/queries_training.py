@@ -1,70 +1,68 @@
-import datetime as dt
 from typing import Any, Type, Union, Callable, Dict
 
-from django.db.models.expressions import F, Value, Case, When
+from django.db.models.expressions import F, Value
 from django.db.models.fields import CharField
 from django.db.models.functions.text import Concat
 from django.db.models.query import QuerySet
 from taggit.models import Tag
 
-from blog.models import Revision
-from films.models import Film, Asset, AssetCategory
-from search.queries import add_common_annotations
+from films.models import Asset, AssetCategory
 from training.models import Training, Section, TrainingStatus, TrainingDifficulty
 
 SearchableTrainingModel = Union[Training, Section, Asset]
 
 
-def get_searchable_training_queryset(
+def get_searchable_queryset_for_training(
     model: Type[SearchableTrainingModel], **filter_params: Any
 ) -> 'QuerySet[SearchableTrainingModel]':
+    get_queryset: Callable[..., 'QuerySet[SearchableTrainingModel]']
     if model == Training:
-        queryset = Training.objects.filter(
-            status=TrainingStatus.published, **filter_params
-        ).annotate(
-            # project=F('name'),
-            model=Value('training', output_field=CharField()),
-            search_id=Concat(Value('training_'), 'id', output_field=CharField()),
-        )
+        get_queryset = get_searchable_trainings_for_training
     elif model == Section:
-        queryset = Section.objects.filter(
-            chapter__training__status=TrainingStatus.published, **filter_params
-        ).annotate(
-            project=F('chapter__training__name'),
-            chapter_name=F('chapter__name'),
-            description=F('text'),
-            difficulty=F('chapter__training__difficulty'),
-            model=Value('section', output_field=CharField()),
-            search_id=Concat(Value('section_'), 'id', output_field=CharField()),
-        )
+        get_queryset = get_searchable_sections_for_training
     elif model == Asset:
-        queryset = Asset.objects.filter(
-            is_published=True,
-            film__is_published=True,
-            category=AssetCategory.production_lesson,
-            **filter_params,
-        ).annotate(
-            project=F('film__title'),
-            type=Value(AssetCategory.production_lesson, output_field=CharField()),
-            difficulty=Value(TrainingDifficulty.intermediate, output_field=CharField()),
-            model=Value('asset', output_field=CharField()),
-            search_id=Concat(Value('asset_'), 'id', output_field=CharField()),
-        )
+        get_queryset = get_searchable_assets_for_training
     else:
         raise TypeError(
             f'Inappropriate model class. `model` has to be one of Training, '
             f'Section, Asset; got {type(model)} instead.'
         )
 
-    queryset = queryset.annotate(
+    return get_queryset(**filter_params).annotate(
         model=Value(model, output_field=CharField()),
         search_id=Concat(Value(f'{model}_'), 'id', output_field=CharField()),
     )
 
-    return queryset
+
+def get_searchable_trainings_for_training(**filter_params: Any) -> 'QuerySet[Training]':
+    return Training.objects.filter(status=TrainingStatus.published, **filter_params)
 
 
-def set_individual_training_fields(
+def get_searchable_sections_for_training(**filter_params: Any) -> 'QuerySet[Section]':
+    return Section.objects.filter(
+        chapter__training__status=TrainingStatus.published, **filter_params
+    ).annotate(
+        project=F('chapter__training__name'),
+        chapter_name=F('chapter__name'),
+        description=F('text'),
+        difficulty=F('chapter__training__difficulty'),
+    )
+
+
+def get_searchable_assets_for_training(**filter_params: Any) -> 'QuerySet[Asset]':
+    return Asset.objects.filter(
+        is_published=True,
+        film__is_published=True,
+        category=AssetCategory.production_lesson,
+        **filter_params,
+    ).annotate(
+        project=F('film__title'),
+        type=Value(AssetCategory.production_lesson, output_field=CharField()),
+        difficulty=Value(TrainingDifficulty.intermediate, output_field=CharField()),
+    )
+
+
+def set_individual_fields_for_training(
     instance_dict: Dict[Any, Any], instance: SearchableTrainingModel
 ) -> Dict[Any, Any]:
     instance_dict['url'] = instance.url

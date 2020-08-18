@@ -15,7 +15,10 @@ from blog.models import Revision
 from films.models import Film, Asset, AssetCategory
 from search.health_check import MeiliSearchServiceError, check_meilisearch
 from search.queries import set_individual_fields, get_searchable_queryset, SearchableModel
-from search.queries_training import get_searchable_training_queryset, set_individual_training_fields
+from search.queries_training import (
+    get_searchable_queryset_for_training,
+    set_individual_fields_for_training,
+)
 from training.models import Training, Section, TrainingStatus, TrainingDifficulty
 
 TrainingSearchableModel = Union[Training, Section, Asset]
@@ -57,11 +60,11 @@ class Command(BaseCommand):
         objects_to_load: List[TrainingSearchableModel] = []
 
         for model in models_to_index:
-            queryset = get_searchable_training_queryset(model)
+            queryset = get_searchable_queryset_for_training(model)
             self.stdout.write(f'Preparing {len(queryset)} "{model._meta.label}" objects...')
             qs_values = queryset.values()
             for instance_dict, instance in zip(qs_values, queryset):
-                set_individual_training_fields(instance_dict, instance)
+                set_individual_fields_for_training(instance_dict, instance)
 
             objects_to_load.extend(qs_values)
             self.stdout.write(f'Done ({len(qs_values)} objects).')
@@ -79,8 +82,12 @@ class Command(BaseCommand):
         data_to_load = self._prepare_data()
         training_data_to_load = self._prepare_training_data()
 
-        # Update the main index and the replica indexes
-        for index_uid, ranking_rules in settings.INDEXES_FOR_SORTING:
+        # Update the main index, the replica indexes, and the training index
+        indexes_with_ranking_rules = [
+            *settings.INDEXES_FOR_SORTING,
+            (settings.TRAINING_INDEX_UID, settings.DEFAULT_RANKING_RULES),
+        ]
+        for index_uid, ranking_rules in indexes_with_ranking_rules:
             index = settings.SEARCH_CLIENT.get_index(index_uid)
             if index_uid == settings.TRAINING_INDEX_UID:
                 response = index.add_documents(training_data_to_load)
