@@ -70,7 +70,7 @@ def get_searchable_films(**filter_params: Any) -> 'QuerySet[Film]':
 
 def get_searchable_assets(**filter_params: Any) -> 'QuerySet[Asset]':
     return Asset.objects.filter(
-        is_published=True, film__is_published=True, **filter_params
+        is_published=True, film__is_published=True, collection__isnull=False, **filter_params
     ).annotate(
         project=F('film__title'),
         collection_name=F('collection__name'),
