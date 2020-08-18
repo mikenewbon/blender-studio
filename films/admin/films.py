@@ -27,7 +27,7 @@ class AssetAdmin(admin.ModelAdmin):
         'static_asset__author__first_name',
         'static_asset__author__last_name',
     ]
-    autocomplete_fields = ['static_asset']
+    autocomplete_fields = ['static_asset', 'collection']
 
 
 class AssetInline(admin.StackedInline):
