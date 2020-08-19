@@ -1,4 +1,3 @@
-from django.contrib.auth.decorators import login_required
 from django.http.request import HttpRequest
 from django.views.decorators.http import require_safe
 
@@ -20,7 +19,6 @@ from training.views.common import (
 
 
 @require_safe
-@login_required
 # @subscription_required
 def section(
     request: HttpRequest,

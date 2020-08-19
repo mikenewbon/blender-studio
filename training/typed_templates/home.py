@@ -5,7 +5,7 @@ from django.http.request import HttpRequest
 from django.template.response import TemplateResponse
 
 from common.typed_templates.types import TypeSafeTemplateResponse
-from training.typed_templates.types import Section, Training
+from training.typed_templates.types import Training
 
 
 @dc.dataclass

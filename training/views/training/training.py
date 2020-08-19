@@ -1,4 +1,3 @@
-from django.contrib.auth.decorators import login_required
 from django.http.request import HttpRequest
 from django.views.decorators.http import require_safe
 
@@ -11,7 +10,6 @@ from training.views.common import navigation_to_template_type, training_model_to
 
 
 @require_safe
-@login_required
 # @subscription_required
 def training(request: HttpRequest, *, training_slug: str) -> TypeSafeTemplateResponse:
     result = queries.trainings.from_slug(user_pk=request.user.pk, training_slug=training_slug)
