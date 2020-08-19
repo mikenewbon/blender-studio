@@ -52,7 +52,6 @@ def get_searchable_assets_for_training(**filter_params: Any) -> 'QuerySet[Asset]
     return Asset.objects.filter(
         is_published=True,
         film__is_published=True,
-        collection__isnull=False,
         category=AssetCategory.production_lesson,
         **filter_params,
     ).annotate(

@@ -21,9 +21,6 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
     An asset can be of one of the three types: image, video, or file.
     """
 
-    # class Meta:
-    #     constraints = []  # TODO(Natalia): only one related file (img, video, file)
-
     film = models.ForeignKey('Film', on_delete=models.CASCADE, related_name='assets')
     static_asset = models.ForeignKey(
         'static_assets.StaticAsset', on_delete=models.CASCADE, related_name='assets'
@@ -62,12 +59,22 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
 
     @property
     def url(self) -> str:
+        """Returns link to asset in collection or in Featured Gallery.
+
+        The primary place where assets are displayed is collections in film gallery.
+        Some assets (e.g. films) do not belong to collections, but are displayed as featured.
+        If none of the above conditions applies, the asset is probably not available anywhere
+        on the website, and the url property returns an empty string.
+        """
         if self.collection:
             collection_url = reverse(
                 'collection-detail',
                 kwargs={'film_slug': self.film.slug, 'collection_slug': self.collection.slug},
             )
             return f'{collection_url}?asset={self.pk}'
+        if self.is_featured:
+            film_url = reverse('film-detail', kwargs={'film_slug': self.film.slug})
+            return f'{film_url}?asset={self.pk}'
         return ''
 
     @property
