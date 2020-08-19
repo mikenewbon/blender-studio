@@ -45,7 +45,6 @@ def get_searchable_sections_for_training(**filter_params: Any) -> 'QuerySet[Sect
         project=F('chapter__training__name'),
         chapter_name=F('chapter__name'),
         description=F('text'),
-        difficulty=F('chapter__training__difficulty'),
     )
 
 
@@ -59,7 +58,6 @@ def get_searchable_assets_for_training(**filter_params: Any) -> 'QuerySet[Asset]
     ).annotate(
         project=F('film__title'),
         type=Value(AssetCategory.production_lesson, output_field=CharField()),
-        difficulty=Value(TrainingDifficulty.intermediate, output_field=CharField()),
     )
 
 

@@ -5,6 +5,7 @@ from django.db.models.expressions import F, Value, Case, When
 from django.db.models.fields import CharField
 from django.db.models.functions.text import Concat
 from django.db.models.query import QuerySet
+from django.db.models.query_utils import Q
 from taggit.models import Tag
 
 from blog.models import Revision
@@ -93,6 +94,7 @@ def get_searchable_sections(**filter_params: Any) -> 'QuerySet[Section]':
         chapter_name=F('chapter__name'),
         description=F('text'),
         media_type=Case(
+            When(Q(video__isnull=False, assets__isnull=False), then=Value('video file')),
             When(video__isnull=False, then=Value('video')),
             When(assets__isnull=False, then=Value('file')),
             output_field=CharField(),
@@ -153,6 +155,10 @@ def set_individual_fields(
         instance_dict['additional_tags'] = [
             tag.name for tag in instance.chapter.training.tags.all()
         ]
+        instance_dict['media_type'] = (
+            instance_dict['media_type'].split() if instance_dict['media_type'] else []
+        )
+
     elif isinstance(instance, Revision):
         instance_dict['thumbnail_url'] = instance.picture_16_9.url
         instance_dict['timestamp'] = instance.post.date_created.timestamp()
