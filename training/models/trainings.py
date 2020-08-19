@@ -44,7 +44,7 @@ class Training(mixins.CreatedUpdatedMixin, models.Model):
     status = models.TextField(choices=TrainingStatus.choices)
     is_featured = models.BooleanField(default=False)
 
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
 
     type = models.TextField(choices=TrainingType.choices)
     difficulty = models.TextField(choices=TrainingDifficulty.choices)

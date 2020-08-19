@@ -25,7 +25,7 @@ class Section(mixins.CreatedUpdatedMixin, models.Model):
     text = models.TextField()
 
     comments = models.ManyToManyField(Comment, through='SectionComment', related_name='section')
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
 
     def clean(self) -> None:
         super().clean()

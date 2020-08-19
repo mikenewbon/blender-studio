@@ -45,7 +45,7 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
     )
 
     comments = models.ManyToManyField(Comment, through='AssetComment', related_name='asset')
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
 
     def clean(self) -> None:
         super().clean()
