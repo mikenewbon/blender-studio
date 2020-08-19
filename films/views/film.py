@@ -65,7 +65,9 @@ def film_detail(request: HttpRequest, film_slug: str) -> HttpResponse:
     :template:`films/film_detail.html`
     """
     film = get_object_or_404(Film, slug=film_slug, is_published=True)
-    featured_artwork = film.assets.filter(is_published=True, is_featured=True)
+    featured_artwork = film.assets.filter(is_published=True, is_featured=True).order_by(
+        'date_created'
+    )
 
     context = {
         'film': film,
