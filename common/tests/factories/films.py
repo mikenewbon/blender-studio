@@ -2,6 +2,7 @@ import uuid
 
 import factory
 from factory import fuzzy
+from factory.django import DjangoModelFactory
 
 from common.tests.factories.static_assets import StaticAssetFactory, StorageLocationFactory
 from common.tests.factories.users import UserFactory
@@ -24,7 +25,7 @@ def generate_image_path() -> str:
 
 
 @factory.django.mute_signals(search_signals.post_save)
-class FilmFactory(factory.DjangoModelFactory):
+class FilmFactory(DjangoModelFactory):
     class Meta:
         model = Film
 
@@ -46,7 +47,7 @@ class FilmFactory(factory.DjangoModelFactory):
 
 
 @factory.django.mute_signals(search_signals.post_save)
-class CollectionFactory(factory.DjangoModelFactory):
+class CollectionFactory(DjangoModelFactory):
     class Meta:
         model = Collection
 
@@ -59,7 +60,7 @@ class CollectionFactory(factory.DjangoModelFactory):
 
 
 @factory.django.mute_signals(search_signals.post_save)
-class AssetFactory(factory.DjangoModelFactory):
+class AssetFactory(DjangoModelFactory):
     class Meta:
         model = Asset
 
@@ -77,7 +78,7 @@ class AssetFactory(factory.DjangoModelFactory):
 
 
 @factory.django.mute_signals(search_signals.post_save)
-class ProductionLogFactory(factory.DjangoModelFactory):
+class ProductionLogFactory(DjangoModelFactory):
     class Meta:
         model = ProductionLog
 
@@ -88,7 +89,7 @@ class ProductionLogFactory(factory.DjangoModelFactory):
     picture_16_9 = factory.LazyFunction(generate_image_path)
 
 
-class ProductionLogEntryFactory(factory.DjangoModelFactory):
+class ProductionLogEntryFactory(DjangoModelFactory):
     class Meta:
         model = ProductionLogEntry
 
@@ -97,7 +98,7 @@ class ProductionLogEntryFactory(factory.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
 
 
-class ProductionLogEntryAssetFactory(factory.DjangoModelFactory):
+class ProductionLogEntryAssetFactory(DjangoModelFactory):
     class Meta:
         model = ProductionLogEntryAsset
 
@@ -105,7 +106,7 @@ class ProductionLogEntryAssetFactory(factory.DjangoModelFactory):
     production_log_entry = factory.SubFactory(ProductionLogEntryFactory)
 
 
-class FilmFlatPageFactory(factory.DjangoModelFactory):
+class FilmFlatPageFactory(DjangoModelFactory):
     class Meta:
         model = FilmFlatPage
 

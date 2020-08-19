@@ -1,12 +1,13 @@
 import factory
 from factory import fuzzy
+from factory.django import DjangoModelFactory
 
 from common.tests.factories.helpers import generate_file_path
 from common.tests.factories.users import UserFactory
 from static_assets.models import StaticAsset, StaticAssetFileTypeChoices, StorageLocation, License
 
 
-class StorageLocationFactory(factory.DjangoModelFactory):
+class StorageLocationFactory(DjangoModelFactory):
     class Meta:
         model = StorageLocation
         django_get_or_create = ('name',)
@@ -14,7 +15,7 @@ class StorageLocationFactory(factory.DjangoModelFactory):
     name = factory.Faker('text', max_nb_chars=30)
 
 
-class LicenseFactory(factory.DjangoModelFactory):
+class LicenseFactory(DjangoModelFactory):
     class Meta:
         model = License
 
@@ -24,7 +25,7 @@ class LicenseFactory(factory.DjangoModelFactory):
     url = factory.Faker('url')
 
 
-class StaticAssetFactory(factory.DjangoModelFactory):
+class StaticAssetFactory(DjangoModelFactory):
     class Meta:
         model = StaticAsset
 

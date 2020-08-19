@@ -1,10 +1,11 @@
 import factory
+from factory.django import DjangoModelFactory
 
 from comments.models import Comment
 from common.tests.factories.users import UserFactory
 
 
-class CommentFactory(factory.DjangoModelFactory):
+class CommentFactory(DjangoModelFactory):
     class Meta:
         model = Comment
 

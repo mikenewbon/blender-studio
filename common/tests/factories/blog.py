@@ -1,4 +1,5 @@
 import factory
+from factory.django import DjangoModelFactory
 
 from blog.models import Post, Revision
 from common.tests.factories.films import FilmFactory, generate_image_path
@@ -7,7 +8,7 @@ from search import signals as search_signals
 
 
 @factory.django.mute_signals(search_signals.post_save)
-class PostFactory(factory.DjangoModelFactory):
+class PostFactory(DjangoModelFactory):
     class Meta:
         model = Post
 
@@ -18,7 +19,7 @@ class PostFactory(factory.DjangoModelFactory):
 
 
 @factory.django.mute_signals(search_signals.post_save)
-class RevisionFactory(factory.DjangoModelFactory):
+class RevisionFactory(DjangoModelFactory):
     class Meta:
         model = Revision
 

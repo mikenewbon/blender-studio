@@ -1,5 +1,6 @@
 import factory
 from factory import fuzzy
+from factory.django import DjangoModelFactory
 
 from common.tests.factories.films import generate_image_path
 from common.tests.factories.static_assets import StorageLocationFactory
@@ -15,7 +16,7 @@ from training.models import (
 
 
 @factory.django.mute_signals(search_signals.post_save)
-class TrainingFactory(factory.DjangoModelFactory):
+class TrainingFactory(DjangoModelFactory):
     class Meta:
         model = Training
 
@@ -33,7 +34,7 @@ class TrainingFactory(factory.DjangoModelFactory):
     )
 
 
-class ChapterFactory(factory.DjangoModelFactory):
+class ChapterFactory(DjangoModelFactory):
     class Meta:
         model = Chapter
 
@@ -44,7 +45,7 @@ class ChapterFactory(factory.DjangoModelFactory):
 
 
 @factory.django.mute_signals(search_signals.post_save)
-class SectionFactory(factory.DjangoModelFactory):
+class SectionFactory(DjangoModelFactory):
     class Meta:
         model = Section
 
