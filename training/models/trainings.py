@@ -17,7 +17,6 @@ class TrainingStatus(models.TextChoices):
 class TrainingType(models.TextChoices):
     workshop = 'workshop', 'Workshop'
     course = 'course', 'Course'
-    production_lesson = 'production_lesson', 'Production Lesson'
 
 
 class TrainingDifficulty(models.TextChoices):
