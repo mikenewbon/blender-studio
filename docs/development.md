@@ -98,7 +98,7 @@ MeiliSearch:
 The master key is not necessary there.
 4. With the project's venv activated, create indexes and fill them with data:
     ```
-    ./manage.py create_search_index
+    ./manage.py create_search_indexes
     ./manage.py index_documents
     ```
 

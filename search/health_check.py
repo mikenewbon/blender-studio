@@ -30,5 +30,5 @@ def check_meilisearch(check_indexes: Optional[bool] = False) -> None:
         if missing_uids:
             raise MeiliSearchServiceError(
                 f'Some of the expected indexes do not exist: {missing_uids}. Run the '
-                f'`create_search_index` command to create them first.'
+                f'`create_search_indexes` command to create them first.'
             )
