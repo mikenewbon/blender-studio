@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.db.models.query import QuerySet
+from django.http.request import HttpRequest
 
 from films.models import assets, collections, films
 
@@ -10,7 +12,6 @@ class AssetAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'order', 'film', 'collection']
     list_filter = [
         'film',
-        'collection',
         'category',
         'is_published',
         'is_featured',
@@ -28,6 +29,9 @@ class AssetAdmin(admin.ModelAdmin):
         'static_asset__author__last_name',
     ]
     autocomplete_fields = ['static_asset', 'collection']
+
+    def get_queryset(self, request: HttpRequest) -> 'QuerySet[assets.Asset]':
+        return super().get_queryset(request).select_related('film', 'collection__film')
 
 
 class AssetInline(admin.StackedInline):

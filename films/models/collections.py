@@ -38,9 +38,8 @@ class Collection(mixins.CreatedUpdatedMixin, models.Model):
             self.storage_location = self.film.storage_location
 
     def __str__(self):
-        if self.order:
-            return f'({self.order}) {self.name}'
-        return f'(-) {self.name}'
+        order = self.order or '-'
+        return f'{self.film.title}: ({order}) {self.name}'
 
     def get_absolute_url(self) -> str:
         return self.url
