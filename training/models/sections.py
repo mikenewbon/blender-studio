@@ -23,6 +23,7 @@ class Section(mixins.CreatedUpdatedMixin, models.Model):
     name = models.CharField(max_length=512)
     slug = models.SlugField(blank=True)
     text = models.TextField()
+    is_free = models.BooleanField(default=False)
 
     comments = models.ManyToManyField(Comment, through='SectionComment', related_name='section')
     tags = TaggableManager(blank=True)
