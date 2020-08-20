@@ -37,7 +37,7 @@ class TestBlogPostIndexing(TestCase):
             post.save()
             handler.assert_not_called()
 
-    @patch('search.signals.add_documents')
+    @patch('search.signals.add_documents_to_indexes')
     def test_unpublished_revisions_are_not_indexed(self, add_documents_mock):
         Revision.objects.create(
             **self.revision_data, post=self.published_post, is_published=False,
@@ -49,14 +49,14 @@ class TestBlogPostIndexing(TestCase):
         )
         add_documents_mock.assert_not_called()
 
-    @patch('search.signals.add_documents')
+    @patch('search.signals.add_documents_to_indexes')
     def test_new_published_revision_triggers_signal(self, add_documents_mock):
         revision = Revision.objects.create(
             **self.revision_data, post=self.published_post, is_published=True,
         )
         add_documents_mock.assert_called_once()
 
-    @patch('search.signals.add_documents')
+    @patch('search.signals.add_documents_to_indexes')
     def test_new_published_revision_overwrites_previous_revision(self, add_documents_mock):
         """A document is updated in the index if it has the same search_id."""
         revision = Revision.objects.create(
@@ -112,7 +112,7 @@ class TestPostDeleteSignal(TestCase):
             self.film_not_indexed.delete()
             handler.assert_called()
 
-    @patch('search.signals.add_documents')
+    @patch('search.signals.add_documents_to_indexes')
     def test_deleting_indexed_film(self, add_documents_mock):
         film = Film.objects.create(**self.film_data)
         add_documents_mock.assert_called_once()

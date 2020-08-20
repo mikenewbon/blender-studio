@@ -1,22 +1,12 @@
-import json
-from typing import List, Type, Union
+from typing import List, Dict
 from typing import Optional, Any
 
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
-from django.core.serializers.json import DjangoJSONEncoder
 
-from blog.models import Revision
-from films.models import Film, Asset
 from search.health_check import MeiliSearchServiceError, check_meilisearch
-from search.queries import set_individual_fields, get_searchable_queryset, SearchableModel
-from search.queries_training import (
-    get_searchable_queryset_for_training,
-    set_individual_fields_for_training,
-)
-from training.models import Training, Section
-
-TrainingSearchableModel = Union[Training, Section, Asset]
+from search.queries import MainSearchParser
+from search.queries_training import TrainingSearchParser, BaseSearchParser
 
 
 class Command(BaseCommand):
@@ -27,45 +17,20 @@ class Command(BaseCommand):
         f'Objects already present in the indexes are updated.'
     )
 
-    def _prepare_data(self) -> Any:
-        self.stdout.write('Preparing the data, it may take a while...')
+    def _prepare_data(self, parser: BaseSearchParser) -> Any:
+        objects_to_load: List[Dict[str, Any]] = []
 
-        models_to_index: List[Type[SearchableModel]] = [Film, Asset, Training, Section, Revision]
-        objects_to_load: List[SearchableModel] = []
-        for model in models_to_index:
-            queryset = get_searchable_queryset(model)
+        for model in parser.models_to_index:
+            queryset = parser.get_searchable_queryset(model)
             self.stdout.write(f'Preparing {len(queryset)} "{model._meta.label}" objects...')
-            qs_values = queryset.values()
 
-            for instance_dict, instance in zip(qs_values, queryset):
-                set_individual_fields(instance_dict, instance)
-
+            qs_values = parser.prepare_data_for_indexing(queryset)
             objects_to_load.extend(qs_values)
             self.stdout.write(f'Done ({len(qs_values)} objects).')
 
         self.stdout.write(f'{len(objects_to_load)} objects to load')
 
-        # TODO(Natalia): Any better way to serialize datetime objects?
-        return json.loads(json.dumps(objects_to_load, cls=DjangoJSONEncoder))
-
-    def _prepare_training_data(self) -> Any:
-        self.stdout.write('Preparing the training data, it may take a while...')
-
-        models_to_index: List[Type[TrainingSearchableModel]] = [Training, Section, Asset]
-        objects_to_load: List[TrainingSearchableModel] = []
-
-        for model in models_to_index:
-            queryset = get_searchable_queryset_for_training(model)
-            self.stdout.write(f'Preparing {len(queryset)} "{model._meta.label}" objects...')
-            qs_values = queryset.values()
-            for instance_dict, instance in zip(qs_values, queryset):
-                set_individual_fields_for_training(instance_dict, instance)
-
-            objects_to_load.extend(qs_values)
-            self.stdout.write(f'Done ({len(qs_values)} objects).')
-
-        # TODO: do we need datetime fields? Don't add them and get rid of JSON encoder?
-        return json.loads(json.dumps(objects_to_load, cls=DjangoJSONEncoder))
+        return objects_to_load
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         try:
@@ -74,8 +39,10 @@ class Command(BaseCommand):
         except MeiliSearchServiceError as err:
             raise CommandError(err)
 
-        data_to_load = self._prepare_data()
-        training_data_to_load = self._prepare_training_data()
+        self.stdout.write('Preparing the data, it may take a while...')
+        data_to_load = self._prepare_data(parser=MainSearchParser())
+        self.stdout.write('Preparing the training data, it may take a while...')
+        training_data_to_load = self._prepare_data(parser=TrainingSearchParser())
 
         # Update the main index, the replica indexes, and the training index
         indexes_to_update = [*settings.INDEXES_FOR_SORTING.keys(), settings.TRAINING_INDEX_UID]

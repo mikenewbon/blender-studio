@@ -4,7 +4,6 @@ from typing import Type, Any, List
 
 from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
-from django.db.models.query import QuerySet
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
@@ -13,38 +12,15 @@ from films.models import Film, Asset
 from search.health_check import check_meilisearch, MeiliSearchServiceError
 from search.queries import (
     SearchableModel,
-    get_searchable_queryset,
-    set_individual_fields,
-    SearchableTrainingModel,
+    MainSearchParser,
 )
-from search.queries_training import (
-    get_searchable_queryset_for_training,
-    set_individual_fields_for_training,
-)
+from search.queries_training import TrainingSearchParser
 from training.models import Training, Section
 
 log = logging.getLogger(__name__)
 
 
-def prepare_data(instance: SearchableModel, instance_qs: 'QuerySet[SearchableModel]') -> List[Any]:
-    """Serializes the instance and adds search-relevant data."""
-    instance_dict = instance_qs.values().get()
-    instance_dict = set_individual_fields(instance_dict, instance)
-    # Data has to be a list of documents.
-    return [json.loads(json.dumps(instance_dict, cls=DjangoJSONEncoder))]
-
-
-def prepare_data_for_training(
-    instance: SearchableTrainingModel, instance_qs: 'QuerySet[SearchableTrainingModel]'
-) -> List[Any]:
-    """Serializes the instance and adds training-search-relevant data."""
-    instance_dict = instance_qs.values().get()
-    instance_dict = set_individual_fields_for_training(instance_dict, instance)
-    # Data has to be a list of documents.
-    return [json.loads(json.dumps(instance_dict, cls=DjangoJSONEncoder))]
-
-
-def add_documents(data_to_load: List[Any]) -> None:
+def add_documents_to_indexes(data_to_load: List[Any]) -> None:
     """Add documents to the main index and its replica indexes."""
     for index_uid in settings.INDEXES_FOR_SORTING.keys():
         index = settings.SEARCH_CLIENT.get_index(index_uid)
@@ -55,7 +31,7 @@ def add_documents(data_to_load: List[Any]) -> None:
         index.update_searchable_attributes(settings.SEARCHABLE_ATTRIBUTES)
 
 
-def add_documents_for_training(data_to_load: List[Any]) -> None:
+def add_documents_to_training_index(data_to_load: List[Any]) -> None:
     """Add documents to the training search index."""
     index = settings.SEARCH_CLIENT.get_index(settings.TRAINING_INDEX_UID)
     index.add_documents(data_to_load)
@@ -74,7 +50,8 @@ def update_search_index(
     sender: Type[SearchableModel], instance: SearchableModel, **kwargs: Any
 ) -> None:
     """Adds new objects to the search indexes and updates the updated ones."""
-    instance_qs = get_searchable_queryset(sender, id=instance.id)
+    parser = MainSearchParser()
+    instance_qs = parser.get_searchable_queryset(sender, id=instance.id)
     if instance_qs:
         try:
             check_meilisearch(check_indexes=True)
@@ -82,8 +59,9 @@ def update_search_index(
             log.error('Did not update search index post_save.', exc_info=err)
             return
 
-        data_to_load = prepare_data(instance, instance_qs)
-        add_documents(data_to_load)
+        # TODO: refactor this; `extend` changes QS to dict, json.dumps&loads deals with datetimes
+        data_to_load = parser.prepare_data_for_indexing(instance_qs)
+        add_documents_to_indexes(data_to_load)
         log.info(f'Added {instance} to the search index.')
 
 
@@ -95,7 +73,8 @@ def update_training_search_index(sender, instance, **kwargs):
 
     Trainings, sections and production lessons (an Asset category) are indexed.
     """
-    instance_qs = get_searchable_queryset_for_training(sender, id=instance.id)
+    parser = TrainingSearchParser()
+    instance_qs = parser.get_searchable_queryset(sender, id=instance.id)
     if instance_qs:
         try:
             check_meilisearch(check_indexes=True)
@@ -103,8 +82,8 @@ def update_training_search_index(sender, instance, **kwargs):
             log.error('Did not update search index post_save.', exc_info=err)
             return
 
-        data_to_load = prepare_data_for_training(instance, instance_qs)
-        add_documents_for_training(data_to_load)
+        data_to_load = parser.prepare_data_for_indexing(instance_qs)
+        add_documents_to_training_index(data_to_load)
         log.info(f'Added {instance} to the training search index.')
 
 
