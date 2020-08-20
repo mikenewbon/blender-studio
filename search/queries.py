@@ -77,6 +77,10 @@ def get_searchable_assets(**filter_params: Any) -> 'QuerySet[Asset]':
         collection_name=F('collection__name'),
         license=F('static_asset__license__name'),
         media_type=F('static_asset__source_type'),
+        # Attributes for faceting have to be string type, not bool:
+        free=Case(
+            When(is_free=True, then=Value('true')), default=Value('false'), output_field=CharField()
+        ),
     )
 
 
@@ -98,6 +102,10 @@ def get_searchable_sections(**filter_params: Any) -> 'QuerySet[Section]':
             When(video__isnull=False, then=Value('video')),
             When(assets__isnull=False, then=Value('file')),
             output_field=CharField(),
+        ),
+        # Attributes for faceting have to be string type, not boolean:
+        free=Case(
+            When(is_free=True, then=Value('true')), default=Value('false'), output_field=CharField()
         ),
     )
 

@@ -7,7 +7,7 @@ from django.db.models.query import QuerySet
 from taggit.models import Tag
 
 from films.models import Asset, AssetCategory
-from training.models import Training, Section, TrainingStatus, TrainingDifficulty
+from training.models import Training, Section, TrainingStatus
 
 SearchableTrainingModel = Union[Training, Section, Asset]
 

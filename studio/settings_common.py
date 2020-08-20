@@ -256,7 +256,7 @@ TRAINING_SEARCHABLE_ATTRIBUTES = [
     'description',
     'summary',
 ]
-FACETING_ATTRIBUTES = ['model', 'project', 'license', 'media_type']
+FACETING_ATTRIBUTES = ['model', 'project', 'license', 'media_type', 'free']
 TRAINING_FACETING_ATTRIBUTES = ['type', 'difficulty']
 
 
