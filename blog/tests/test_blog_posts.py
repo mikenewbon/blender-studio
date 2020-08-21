@@ -4,10 +4,8 @@ from django.urls import reverse
 
 from blog.models import Post, Revision
 from common.tests.factories.blog import RevisionFactory, PostFactory
-from common.tests.factories.helpers import create_test_image
 from common.tests.factories.films import FilmFactory
-from search import signals as search_signals
-from search.signals import update_search_index
+from common.tests.factories.helpers import create_test_image
 
 
 class TestPostAndRevisionCreation(TestCase):
@@ -21,8 +19,6 @@ class TestPostAndRevisionCreation(TestCase):
         cls.post_add_url = reverse('admin:blog_post_add')
 
     def setUp(self) -> None:
-        search_signals.post_save.disconnect(update_search_index, Revision)
-
         self.client.login(username='superuser', password='Blender123!')
 
     def test_post_creation(self):

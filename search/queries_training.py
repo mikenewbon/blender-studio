@@ -1,19 +1,22 @@
 import json
-from typing import Any, Type, Union, Dict, List, TypedDict, Callable
+from typing import Any, Type, Union, Dict, List, TypedDict, Callable, TYPE_CHECKING
 
 from django.core.serializers.json import DjangoJSONEncoder
-from django.db.models.base import Model
 from django.db.models.expressions import F, Value
 from django.db.models.fields import CharField
 from django.db.models.functions.text import Concat
 from django.db.models.query import QuerySet
+
+if TYPE_CHECKING:
+    from django.db.models.query import ValuesQuerySet
 from taggit.models import Tag
 
-from common.types import assert_cast
-from films.models import Asset, AssetCategory
+from blog.models import Revision
+from films.models import Asset, AssetCategory, Film
 from training.models import Training, Section, TrainingStatus
 
-SearchableTrainingModel = Union[Training, Section, Asset]
+
+SearchableModel = Union[Film, Asset, Training, Section, Revision]
 
 
 class SearchModelSetup(TypedDict):
@@ -22,7 +25,7 @@ class SearchModelSetup(TypedDict):
     additional_fields: Dict[str, Callable[[Any], Any]]
 
 
-TRAINING_SEARCH_SETUP: Dict[Type[SearchableTrainingModel], SearchModelSetup] = {
+TRAINING_SEARCH_SETUP: Dict[Type[SearchableModel], SearchModelSetup] = {
     Training: {
         'filter_params': {'status': TrainingStatus.published},
         'annotations': {},
@@ -76,18 +79,18 @@ TRAINING_SEARCH_SETUP: Dict[Type[SearchableTrainingModel], SearchModelSetup] = {
 
 
 class BaseSearchParser:
-    models_to_index: List[Type[Model]] = [Training, Section, Asset]
-    setup: Dict[Type[SearchableTrainingModel], SearchModelSetup] = TRAINING_SEARCH_SETUP
+    models_to_index: List[Type[SearchableModel]] = [Training, Section, Asset]
+    setup: Dict[Type[SearchableModel], SearchModelSetup] = TRAINING_SEARCH_SETUP
 
     def get_searchable_queryset(
-        self, model: Type[SearchableTrainingModel], **filter_params: Any
-    ) -> 'QuerySet[SearchableTrainingModel]':
+        self, model: Type[SearchableModel], **filter_params: Any
+    ) -> 'QuerySet[SearchableModel]':
         filters = self.setup[model]['filter_params']
         filters.update(**filter_params)
         return model.objects.filter(**filters)
 
     def prepare_data_for_indexing(
-        self, queryset: 'QuerySet[SearchableTrainingModel]',
+        self, queryset: 'QuerySet[SearchableModel]',
     ) -> List[Dict[str, Any]]:
         model = queryset.model
         annotations = self.setup[model]['annotations']
@@ -104,8 +107,8 @@ class BaseSearchParser:
         return self.serialize_data(qs_values)
 
     def add_common_annotations(
-        self, queryset: 'QuerySet[SearchableTrainingModel]',
-    ) -> 'QuerySet[SearchableTrainingModel]':
+        self, queryset: 'QuerySet[SearchableModel]',
+    ) -> 'QuerySet[SearchableModel]':
         model = queryset.model._meta.model_name
 
         return queryset.annotate(
@@ -115,23 +118,23 @@ class BaseSearchParser:
 
     @staticmethod
     def set_common_additional_fields(
-        instance_dict: Dict[Any, Any], instance: SearchableTrainingModel
+        instance_dict: Dict[Any, Any], instance: SearchableModel
     ) -> Dict[Any, Any]:
         instance_dict['url'] = instance.url
 
         return instance_dict
 
     @staticmethod
-    def serialize_data(qs_values: 'QuerySet[SearchableTrainingModel]') -> List[Dict[str, Any]]:
+    def serialize_data(qs_values: 'ValuesQuerySet[SearchableModel, Any]') -> List[Dict[str, Any]]:
         """Turns values queryset into a list of objects that can be added to a search index.
 
         The Index.add_documents method expects a list of objects, not a single object.
         Datetime values have to be serialized with DjangoJSONEncoder.
         """
-        data_to_load = list(qs_values)
-        return assert_cast(
-            List[Dict[str, Any]], json.loads(json.dumps(data_to_load, cls=DjangoJSONEncoder))
+        serialized_data: List[Dict[str, Any]] = json.loads(
+            json.dumps(list(qs_values), cls=DjangoJSONEncoder)
         )
+        return serialized_data
 
 
 class TrainingSearchParser(BaseSearchParser):

@@ -3,16 +3,12 @@ from django.test.testcases import TestCase
 from django.urls import reverse
 
 from common.tests.factories.films import FilmFactory, FilmFlatPageFactory
-from films.models import FilmFlatPage, Film
-from search import signals as search_signals
-from search.signals import update_search_index
+from films.models import FilmFlatPage
 
 
 class TestFilmFlatPageModel(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
-        search_signals.post_save.disconnect(update_search_index, Film)
-
         cls.film_1 = FilmFactory()
         cls.film_2 = FilmFactory()
         cls.flatpage_data = {'film': cls.film_1, 'title': 'About', 'content': '# hello world'}
@@ -62,7 +58,6 @@ class TestFilmFlatPageModel(TestCase):
 
 class TestFilmFlatPage(TestCase):
     def setUp(self) -> None:
-        search_signals.post_save.disconnect(update_search_index, Film)
         self.film_slug = 'coffee-run'
         self.page_slug = 'about'
         self.content = '## A very specific flat page'

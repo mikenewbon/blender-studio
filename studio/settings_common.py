@@ -197,10 +197,11 @@ INTERNAL_IPS = ['127.0.0.1']
 
 # MeiliSearch-related settings. See also settings.py.
 if 'test' in sys.argv:
-    MEILISEARCH_INDEX_UID = 'test-studio'
+    MEILISEARCH_INDEX_UID = 'test_studio'
+    TRAINING_INDEX_UID = 'test_training'
 else:
     MEILISEARCH_INDEX_UID = 'studio'
-TRAINING_INDEX_UID = 'training'
+    TRAINING_INDEX_UID = 'training'
 
 DEFAULT_RANKING_RULES = [
     'typo',

@@ -1,20 +1,15 @@
-import json
 import logging
 from typing import Type, Any, List
 
 from django.conf import settings
-from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
 from blog.models import Revision
 from films.models import Film, Asset
 from search.health_check import check_meilisearch, MeiliSearchServiceError
-from search.queries import (
-    SearchableModel,
-    MainSearchParser,
-)
-from search.queries_training import TrainingSearchParser
+from search.queries import MainSearchParser
+from search.queries_training import TrainingSearchParser, SearchableModel
 from training.models import Training, Section
 
 log = logging.getLogger(__name__)
@@ -22,6 +17,12 @@ log = logging.getLogger(__name__)
 
 def add_documents_to_indexes(data_to_load: List[Any]) -> None:
     """Add documents to the main index and its replica indexes."""
+    try:
+        check_meilisearch(check_indexes=True)
+    except MeiliSearchServiceError as err:
+        log.error(f'Did not update search index post_save: {err}')
+        return
+
     for index_uid in settings.INDEXES_FOR_SORTING.keys():
         index = settings.SEARCH_CLIENT.get_index(index_uid)
         index.add_documents(data_to_load)
@@ -33,6 +34,12 @@ def add_documents_to_indexes(data_to_load: List[Any]) -> None:
 
 def add_documents_to_training_index(data_to_load: List[Any]) -> None:
     """Add documents to the training search index."""
+    try:
+        check_meilisearch(check_indexes=True)
+    except MeiliSearchServiceError as err:
+        log.error(f'Did not update search index post_save: {err}')
+        return
+
     index = settings.SEARCH_CLIENT.get_index(settings.TRAINING_INDEX_UID)
     index.add_documents(data_to_load)
 
@@ -53,13 +60,6 @@ def update_search_index(
     parser = MainSearchParser()
     instance_qs = parser.get_searchable_queryset(sender, id=instance.id)
     if instance_qs:
-        try:
-            check_meilisearch(check_indexes=True)
-        except MeiliSearchServiceError as err:
-            log.error('Did not update search index post_save.', exc_info=err)
-            return
-
-        # TODO: refactor this; `extend` changes QS to dict, json.dumps&loads deals with datetimes
         data_to_load = parser.prepare_data_for_indexing(instance_qs)
         add_documents_to_indexes(data_to_load)
         log.info(f'Added {instance} to the search index.')
@@ -76,12 +76,6 @@ def update_training_search_index(sender, instance, **kwargs):
     parser = TrainingSearchParser()
     instance_qs = parser.get_searchable_queryset(sender, id=instance.id)
     if instance_qs:
-        try:
-            check_meilisearch(check_indexes=True)
-        except MeiliSearchServiceError as err:
-            log.error('Did not update search index post_save.', exc_info=err)
-            return
-
         data_to_load = parser.prepare_data_for_indexing(instance_qs)
         add_documents_to_training_index(data_to_load)
         log.info(f'Added {instance} to the training search index.')

@@ -1,4 +1,3 @@
-import time
 from io import StringIO
 from typing import Optional
 from unittest.case import skipIf
@@ -13,7 +12,7 @@ from common.tests.factories.films import FilmFactory, AssetFactory
 from common.tests.factories.training import TrainingFactory, SectionFactory
 from training.models import TrainingStatus
 
-TEST_INDEX_UID = 'test-studio'
+TEST_INDEX_UID = 'test_studio'
 
 
 def meilisearch_available():
@@ -31,7 +30,7 @@ class BaseSearchTestCase(TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         super().setUpClass()
-        for index_uid in settings.INDEXES_FOR_SORTING.keys():
+        for index_uid in [*settings.INDEXES_FOR_SORTING.keys(), settings.TRAINING_INDEX_UID]:
             settings.SEARCH_CLIENT.get_or_create_index(index_uid, {'primaryKey': 'search_id'})
         cls.index = settings.MAIN_SEARCH_INDEX
         assert cls.index.uid == TEST_INDEX_UID
@@ -41,26 +40,6 @@ class BaseSearchTestCase(TestCase):
         for index_uid in settings.INDEXES_FOR_SORTING.keys():
             settings.SEARCH_CLIENT.get_index(index_uid).delete()
         super().tearDownClass()
-
-    def wait_for_update_execution(self, update_id: int) -> str:
-        """If the update is enqueued, wait for its status to change.
-
-        On index update, the update is enqueued, but not always processed quickly enough.
-        This method fails the test after a timeout of ca. 5 seconds.
-        """
-        timeout_in_seconds = 5
-        update_data = self.index.get_update_status(update_id)
-        while update_data['status'] == 'enqueued':
-            time.sleep(0.5)
-            timeout_in_seconds -= 0.5
-            if timeout_in_seconds <= 0:
-                self.fail(
-                    f'Timeout: update id={update_id} enqueued, but not processed. '
-                    f'Update status: \'{update_data["status"]}\''
-                )
-            update_data = self.index.get_update_status(update_id)
-
-        return update_data["status"]
 
 
 class TestIndexDocumentsCommand(BaseSearchTestCase):

@@ -1,5 +1,5 @@
 import datetime as dt
-from typing import Any, Type, Union, Dict
+from typing import Any, Type, Dict
 
 from django.db.models.expressions import F, Value, Case, When
 from django.db.models.fields import CharField
@@ -9,11 +9,13 @@ from django.db.models.query_utils import Q
 
 from blog.models import Revision
 from films.models import Film, Asset
-from search.queries_training import BaseSearchParser, TRAINING_SEARCH_SETUP, SearchModelSetup
+from search.queries_training import (
+    BaseSearchParser,
+    TRAINING_SEARCH_SETUP,
+    SearchModelSetup,
+    SearchableModel,
+)
 from training.models import Training, Section
-
-SearchableModel = Union[Film, Asset, Training, Section, Revision]
-SearchableTrainingModel = Union[Training, Section, Asset]
 
 SEARCH_SETUP: Dict[Type[SearchableModel], SearchModelSetup] = {
     Film: {
