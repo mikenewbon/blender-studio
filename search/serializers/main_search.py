@@ -6,37 +6,28 @@ from django.db.models.fields import CharField
 from django.db.models.functions.text import Concat
 from django.db.models.query import QuerySet
 from django.db.models.query_utils import Q
+from taggit.models import Tag
 
 from blog.models import Revision
 from films.models import Film, Asset
-from search.serializers.base import SearchableModel, SearchModelSetup, BaseSearchSerializer
-from search.serializers.training_search import TRAINING_SEARCH_SETUP
-from training.models import Training, Section
+from search.serializers.base import SearchableModel, BaseSearchSerializer
+from training.models import Training, Section, TrainingStatus
 
-SEARCH_SETUP: Dict[Type[SearchableModel], SearchModelSetup] = {
-    Film: {
-        'filter_params': {'is_published': True},
-        'annotations': {'project': F('title'), 'name': F('title')},
-        'additional_fields': {
-            'thumbnail_url': (
-                lambda instance: instance.picture_16_9.url
-                if instance.picture_16_9
-                else instance.picture_header.url
-            ),
-            'timestamp': (
-                lambda instance: dt.datetime(
-                    year=instance.release_date.year,
-                    month=instance.release_date.month,
-                    day=instance.release_date.day,
-                ).timestamp()
-                if instance.release_date
-                else instance.date_created.timestamp()
-            ),
-        },
-    },
-    Asset: {
-        'filter_params': {'is_published': True, 'film__is_published': True},
-        'annotations': {
+
+class MainSearchSerializer(BaseSearchSerializer):
+    """Prepare database objects to be indexed in the main search index."""
+
+    models_to_index = [Film, Asset, Training, Section, Revision]
+    filter_params = {
+        Film: {'is_published': True},
+        Asset: {'is_published': True, 'film__is_published': True},
+        Training: {'status': TrainingStatus.published},
+        Section: {'chapter__training__status': TrainingStatus.published},
+        Revision: {'is_published': True, 'post__is_published': True},
+    }
+    annotations = {
+        Film: {'project': F('title'), 'name': F('title')},
+        Asset: {
             'project': F('film__title'),
             'collection_name': F('collection__name'),
             'license': F('static_asset__license__name'),
@@ -48,16 +39,8 @@ SEARCH_SETUP: Dict[Type[SearchableModel], SearchModelSetup] = {
                 output_field=CharField(),
             ),
         },
-        'additional_fields': TRAINING_SEARCH_SETUP[Asset]['additional_fields'],
-    },
-    Training: {
-        'filter_params': TRAINING_SEARCH_SETUP[Training]['filter_params'],
-        'annotations': {'project': F('name')},
-        'additional_fields': TRAINING_SEARCH_SETUP[Training]['additional_fields'],
-    },
-    Section: {
-        'filter_params': TRAINING_SEARCH_SETUP[Section]['filter_params'],
-        'annotations': {
+        Training: {'project': F('name')},
+        Section: {
             'project': F('chapter__training__name'),
             'chapter_name': F('chapter__name'),
             'description': F('text'),
@@ -74,21 +57,7 @@ SEARCH_SETUP: Dict[Type[SearchableModel], SearchModelSetup] = {
                 output_field=CharField(),
             ),
         },
-        'additional_fields': {
-            'thumbnail_url': lambda instance: instance.chapter.training.picture_16_9.url,
-            'timestamp': lambda instance: instance.date_created.timestamp(),
-            'tags': lambda instance: [tag.name for tag in instance.tags.all()],
-            'additional_tags': (
-                lambda instance: [tag.name for tag in instance.chapter.training.tags.all()]
-            ),
-            'media_type': (
-                lambda instance: instance.media_type.split() if instance.media_type else []
-            ),
-        },
-    },
-    Revision: {
-        'filter_params': {'is_published': True, 'post__is_published': True},
-        'annotations': {
+        Revision: {
             'project': Case(
                 When(post__film__isnull=False, then=F('post__film__title')),
                 default=Value(''),
@@ -96,19 +65,28 @@ SEARCH_SETUP: Dict[Type[SearchableModel], SearchModelSetup] = {
             ),
             'name': F('title'),
         },
-        'additional_fields': {
-            'thumbnail_url': lambda instance: instance.picture_16_9.url,
-            'timestamp': lambda instance: instance.post.date_created.timestamp(),
+    }
+    additional_fields = {
+        Film: {},
+        Asset: {'tags': lambda instance: [tag.name for tag in instance.tags.all()]},
+        Training: {
+            'tags': lambda instance: [tag.name for tag in instance.tags.all()],
+            'secondary_tags': lambda instance: [
+                tag.name
+                for tag in Tag.objects.filter(section__chapter__training__pk=instance.pk).distinct()
+            ],
         },
-    },
-}
-
-
-class MainSearchSerializer(BaseSearchSerializer):
-    """Prepare database objects to be indexed"""
-
-    models_to_index = [Film, Asset, Training, Section, Revision]
-    setup = SEARCH_SETUP
+        Section: {
+            'tags': lambda instance: [tag.name for tag in instance.tags.all()],
+            'secondary_tags': (
+                lambda instance: [tag.name for tag in instance.chapter.training.tags.all()]
+            ),
+            'media_type': (
+                lambda instance: instance.media_type.split() if instance.media_type else []
+            ),
+        },
+        Revision: {},
+    }
 
     def get_searchable_queryset(
         self, model: Type[SearchableModel], **filter_params: Any
@@ -116,20 +94,37 @@ class MainSearchSerializer(BaseSearchSerializer):
         queryset = super().get_searchable_queryset(model, **filter_params)
 
         if model == Revision:
+            # Only the latest revision of a post should be available in search
             queryset = queryset.order_by('post_id', '-date_created').distinct('post_id')
 
         return queryset
 
-    def add_common_annotations(
+    def _add_common_annotations(
         self, queryset: 'QuerySet[SearchableModel]',
     ) -> 'QuerySet[SearchableModel]':
         model = queryset.model._meta.model_name
         if model == 'revision':
             # 'Revision' is the actual model for internal use, but the user searches for posts.
-            # Also: the search_id is set to post's id so that a new revision always overwrites
-            # the previous one, which should not be searchable any more.
+            # Also: the search_id is set to post's id, so that in the search index a new revision
+            # always overwrites the previous one, which should not be searchable any more.
             return queryset.annotate(
                 model=Value('post', output_field=CharField()),
                 search_id=Concat(Value('post_'), 'post__id', output_field=CharField()),
             )
-        return super().add_common_annotations(queryset)
+        return super()._add_common_annotations(queryset)
+
+    def _set_common_additional_fields(
+        self, instance_dict: Dict[Any, Any], instance: SearchableModel
+    ) -> Dict[Any, Any]:
+        instance_dict = super()._set_common_additional_fields(instance_dict, instance)
+
+        if isinstance(instance, Revision):
+            instance_dict['timestamp'] = instance.post.date_created.timestamp()
+        elif isinstance(instance, Film) and instance.release_date is not None:
+            instance_dict['timestamp'] = dt.datetime(
+                year=instance.release_date.year,
+                month=instance.release_date.month,
+                day=instance.release_date.day,
+            ).timestamp()
+
+        return instance_dict

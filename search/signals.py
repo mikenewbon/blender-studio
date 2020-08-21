@@ -1,4 +1,5 @@
 import logging
+from abc import ABC
 from typing import Type, Any, List
 
 from django.conf import settings
@@ -8,45 +9,64 @@ from django.dispatch import receiver
 from blog.models import Revision
 from films.models import Film, Asset
 from search.health_check import check_meilisearch, MeiliSearchServiceError
+from search.serializers.base import SearchableModel, BaseSearchSerializer
 from search.serializers.main_search import MainSearchSerializer
 from search.serializers.training_search import TrainingSearchSerializer
-from search.serializers.base import SearchableModel
 from training.models import Training, Section
 
 log = logging.getLogger(__name__)
 
 
-def add_documents_to_indexes(data_to_load: List[Any]) -> None:
-    """Add documents to the main index and its replica indexes."""
-    try:
-        check_meilisearch(check_indexes=True)
-    except MeiliSearchServiceError as err:
-        log.error(f'Did not update main search index post_save: {err}')
-        return
+class BasePostSaveSearchIndexer(ABC):
+    """A base class for post_save signal handlers.
 
-    for index_uid in settings.INDEXES_FOR_SORTING.keys():
-        index = settings.SEARCH_CLIENT.get_index(index_uid)
-        index.add_documents(data_to_load)
+    Attributes:
+        index_uids: A list of index uids to which a document should be added.
+        serializer: A BaseSearchSerializer instance, used to prepare the object to be
+            added to the indexes from the index_uids list.
+    """
 
-        # There seems to be no way in MeiliSearch v0.13 to disable adding new document
-        # fields automatically to searchable attrs, so we update the settings to set them:
-        index.update_searchable_attributes(settings.SEARCHABLE_ATTRIBUTES)
+    index_uids: List[str]
+    serializer: BaseSearchSerializer
+
+    def _add_documents_to_index(self, data_to_load: List[Any]) -> None:
+        try:
+            check_meilisearch(check_indexes=True)
+        except MeiliSearchServiceError as err:
+            log.error(f'Did not update the {self.index_uids} search indexes post_save: {err}')
+            return
+
+        for index_uid in self.index_uids:
+            index = settings.SEARCH_CLIENT.get_index(index_uid)
+            index.add_documents(data_to_load)
+
+            # There seems to be no way in MeiliSearch v0.13.0 to disable adding new document
+            # fields automatically to searchable attrs, so we update the settings to set them:
+            index.update_searchable_attributes(settings.SEARCHABLE_ATTRIBUTES)
+
+    def handle(self, sender: Type[SearchableModel], instance: SearchableModel) -> None:
+        """Indexes the objects that should be available in search."""
+        instance_qs = self.serializer.get_searchable_queryset(sender, id=instance.id)
+        if instance_qs:
+            data_to_load = self.serializer.prepare_data_for_indexing(instance_qs)
+            self._add_documents_to_index(data_to_load)
+            log.info(f'Added {instance} to the {self.index_uids} search indexes.')
 
 
-def add_documents_to_training_index(data_to_load: List[Any]) -> None:
-    """Add documents to the training search index."""
-    try:
-        check_meilisearch(check_indexes=True)
-    except MeiliSearchServiceError as err:
-        log.error(f'Did not update training search index post_save: {err}')
-        return
+class MainPostSaveSearchIndexer(BasePostSaveSearchIndexer):
+    """Post_save signal handler, adds documents to the main index and its replicas.
 
-    index = settings.SEARCH_CLIENT.get_index(settings.TRAINING_INDEX_UID)
-    index.add_documents(data_to_load)
+    """
 
-    # There seems to be no way in MeiliSearch v0.13 to disable adding new document
-    # fields automatically to searchable attrs, so we update the settings to set them:
-    index.update_searchable_attributes(settings.TRAINING_SEARCHABLE_ATTRIBUTES)
+    index_uids = list(settings.INDEXES_FOR_SORTING.keys())
+    serializer = MainSearchSerializer()
+
+
+class TrainingPostSaveSearchIndexer(BasePostSaveSearchIndexer):
+    """Post_save signal handler, adds documents to the training index."""
+
+    index_uids = [settings.TRAINING_INDEX_UID]
+    serializer = TrainingSearchSerializer()
 
 
 @receiver(post_save, sender=Film)
@@ -54,32 +74,27 @@ def add_documents_to_training_index(data_to_load: List[Any]) -> None:
 @receiver(post_save, sender=Training)
 @receiver(post_save, sender=Section)
 @receiver(post_save, sender=Revision)
-def update_search_index(
+def update_main_search_indexes(
     sender: Type[SearchableModel], instance: SearchableModel, **kwargs: Any
 ) -> None:
-    """Adds new objects to the search indexes and updates the updated ones."""
-    serializer = MainSearchSerializer()
-    instance_qs = serializer.get_searchable_queryset(sender, id=instance.id)
-    if instance_qs:
-        data_to_load = serializer.prepare_data_for_indexing(instance_qs)
-        add_documents_to_indexes(data_to_load)
-        log.info(f'Added {instance} to the main search index.')
+    """Adds new objects to the main search indexes and updates the updated ones."""
+    indexer = MainPostSaveSearchIndexer()
+    indexer.handle(sender=sender, instance=instance)
 
 
 @receiver(post_save, sender=Training)
 @receiver(post_save, sender=Section)
 @receiver(post_save, sender=Asset)
-def update_training_search_index(sender, instance, **kwargs):
+def update_training_search_index(
+    sender: Type[SearchableModel], instance: SearchableModel, **kwargs: Any
+) -> None:
     """Adds new objects to the training search index and updates the updated ones.
 
-    Trainings, sections and production lessons (an Asset category) are indexed.
+    For the training search, Trainings, Sections and production lessons (an Asset
+    category) are indexed.
     """
-    serializer = TrainingSearchSerializer()
-    instance_qs = serializer.get_searchable_queryset(sender, id=instance.id)
-    if instance_qs:
-        data_to_load = serializer.prepare_data_for_indexing(instance_qs)
-        add_documents_to_training_index(data_to_load)
-        log.info(f'Added {instance} to the training search index.')
+    indexer = TrainingPostSaveSearchIndexer()
+    indexer.handle(sender=sender, instance=instance)
 
 
 @receiver(pre_delete, sender=Film)

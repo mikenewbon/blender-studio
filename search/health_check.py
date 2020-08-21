@@ -15,7 +15,7 @@ def check_meilisearch(check_indexes: Optional[bool] = False) -> None:
         check_indexes: bool specifying whether to also check for the default indexes existence,
 
     Raises:
-        MeiliSearchError if server communication fails or if some indexes don't exist.
+        MeiliSearchServiceError if server communication fails or if some indexes don't exist.
     """
     try:
         indexes = settings.SEARCH_CLIENT.get_indexes()

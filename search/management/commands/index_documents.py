@@ -46,8 +46,7 @@ class Command(BaseCommand):
         training_data_to_load = self._prepare_data(serializer=TrainingSearchSerializer())
 
         # Update the main index, the replica indexes, and the training index
-        indexes_to_update = [*settings.INDEXES_FOR_SORTING.keys(), settings.TRAINING_INDEX_UID]
-        for index_uid in indexes_to_update:
+        for index_uid in settings.ALL_INDEXES_UIDS:
             index = settings.SEARCH_CLIENT.get_index(index_uid)
             if index_uid == settings.TRAINING_INDEX_UID:
                 response = index.add_documents(training_data_to_load)

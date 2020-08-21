@@ -9,8 +9,9 @@ from search.health_check import MeiliSearchServiceError, check_meilisearch
 
 class Command(BaseCommand):
     help = (
-        f'Create the main search index "{settings.MEILISEARCH_INDEX_UID}" and replica indexes, '
-        f'or update their settings if they already exist.'
+        f'Create the main search index "{settings.MEILISEARCH_INDEX_UID}", its replica'
+        f'indexes, and the training search index; or only update their settings if the'
+        f'indexes already exist.'
     )
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
@@ -20,8 +21,7 @@ class Command(BaseCommand):
             raise CommandError(err)
 
         # Create or update the main index, the replica indexes, and the training index
-        indexes_to_create = [*settings.INDEXES_FOR_SORTING.keys(), settings.TRAINING_INDEX_UID]
-        for index_uid in indexes_to_create:
+        for index_uid in settings.ALL_INDEXES_UIDS:
             try:
                 index = settings.SEARCH_CLIENT.create_index(index_uid, {'primaryKey': 'search_id'})
             except meilisearch.errors.MeiliSearchApiError as err:
