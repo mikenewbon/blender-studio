@@ -4,6 +4,7 @@ from typing import List
 # Enable to use OAuth without https during local development
 import braintree
 from dateutil.relativedelta import relativedelta
+from google.oauth2 import service_account
 
 from studio.settings_common import *
 
@@ -20,6 +21,10 @@ BLENDER_ID = {
     "OAUTH_CLIENT": "CHANGE_ME",
     "OAUTH_SECRET": "CHANGE_ME",
 }
+
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    pathlib.Path(__file__).parent / "blender-cloud-credentials.json"
+)
 
 DATABASES = {
     'default': {
