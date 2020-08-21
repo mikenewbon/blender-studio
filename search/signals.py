@@ -8,8 +8,9 @@ from django.dispatch import receiver
 from blog.models import Revision
 from films.models import Film, Asset
 from search.health_check import check_meilisearch, MeiliSearchServiceError
-from search.queries import MainSearchParser
-from search.queries_training import TrainingSearchParser, SearchableModel
+from search.serializers.main_search import MainSearchSerializer
+from search.serializers.training_search import TrainingSearchSerializer
+from search.serializers.base import SearchableModel
 from training.models import Training, Section
 
 log = logging.getLogger(__name__)
@@ -20,7 +21,7 @@ def add_documents_to_indexes(data_to_load: List[Any]) -> None:
     try:
         check_meilisearch(check_indexes=True)
     except MeiliSearchServiceError as err:
-        log.error(f'Did not update search index post_save: {err}')
+        log.error(f'Did not update main search index post_save: {err}')
         return
 
     for index_uid in settings.INDEXES_FOR_SORTING.keys():
@@ -37,7 +38,7 @@ def add_documents_to_training_index(data_to_load: List[Any]) -> None:
     try:
         check_meilisearch(check_indexes=True)
     except MeiliSearchServiceError as err:
-        log.error(f'Did not update search index post_save: {err}')
+        log.error(f'Did not update training search index post_save: {err}')
         return
 
     index = settings.SEARCH_CLIENT.get_index(settings.TRAINING_INDEX_UID)
@@ -57,12 +58,12 @@ def update_search_index(
     sender: Type[SearchableModel], instance: SearchableModel, **kwargs: Any
 ) -> None:
     """Adds new objects to the search indexes and updates the updated ones."""
-    parser = MainSearchParser()
-    instance_qs = parser.get_searchable_queryset(sender, id=instance.id)
+    serializer = MainSearchSerializer()
+    instance_qs = serializer.get_searchable_queryset(sender, id=instance.id)
     if instance_qs:
-        data_to_load = parser.prepare_data_for_indexing(instance_qs)
+        data_to_load = serializer.prepare_data_for_indexing(instance_qs)
         add_documents_to_indexes(data_to_load)
-        log.info(f'Added {instance} to the search index.')
+        log.info(f'Added {instance} to the main search index.')
 
 
 @receiver(post_save, sender=Training)
@@ -73,10 +74,10 @@ def update_training_search_index(sender, instance, **kwargs):
 
     Trainings, sections and production lessons (an Asset category) are indexed.
     """
-    parser = TrainingSearchParser()
-    instance_qs = parser.get_searchable_queryset(sender, id=instance.id)
+    serializer = TrainingSearchSerializer()
+    instance_qs = serializer.get_searchable_queryset(sender, id=instance.id)
     if instance_qs:
-        data_to_load = parser.prepare_data_for_indexing(instance_qs)
+        data_to_load = serializer.prepare_data_for_indexing(instance_qs)
         add_documents_to_training_index(data_to_load)
         log.info(f'Added {instance} to the training search index.')
 
@@ -96,7 +97,7 @@ def delete_from_index(
     try:
         check_meilisearch(check_indexes=True)
     except MeiliSearchServiceError as err:
-        log.error(f'Did not update search index pre_delete: {err}')
+        log.error(f'Did not update search indexes pre_delete: {err}')
         return
 
     if isinstance(instance, Revision):

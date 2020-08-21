@@ -5,8 +5,9 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
 from search.health_check import MeiliSearchServiceError, check_meilisearch
-from search.queries import MainSearchParser
-from search.queries_training import TrainingSearchParser, BaseSearchParser
+from search.serializers.main_search import MainSearchSerializer
+from search.serializers.training_search import TrainingSearchSerializer
+from search.serializers.base import BaseSearchSerializer
 
 
 class Command(BaseCommand):
@@ -17,14 +18,14 @@ class Command(BaseCommand):
         f'Objects already present in the indexes are updated.'
     )
 
-    def _prepare_data(self, parser: BaseSearchParser) -> Any:
+    def _prepare_data(self, serializer: BaseSearchSerializer) -> Any:
         objects_to_load: List[Dict[str, Any]] = []
 
-        for model in parser.models_to_index:
-            queryset = parser.get_searchable_queryset(model)
+        for model in serializer.models_to_index:
+            queryset = serializer.get_searchable_queryset(model)
             self.stdout.write(f'Preparing {len(queryset)} "{model._meta.label}" objects...')
 
-            qs_values = parser.prepare_data_for_indexing(queryset)
+            qs_values = serializer.prepare_data_for_indexing(queryset)
             objects_to_load.extend(qs_values)
             self.stdout.write(f'Done ({len(qs_values)} objects).')
 
@@ -40,9 +41,9 @@ class Command(BaseCommand):
             raise CommandError(err)
 
         self.stdout.write('Preparing the data, it may take a while...')
-        data_to_load = self._prepare_data(parser=MainSearchParser())
+        data_to_load = self._prepare_data(serializer=MainSearchSerializer())
         self.stdout.write('Preparing the training data, it may take a while...')
-        training_data_to_load = self._prepare_data(parser=TrainingSearchParser())
+        training_data_to_load = self._prepare_data(serializer=TrainingSearchSerializer())
 
         # Update the main index, the replica indexes, and the training index
         indexes_to_update = [*settings.INDEXES_FOR_SORTING.keys(), settings.TRAINING_INDEX_UID]

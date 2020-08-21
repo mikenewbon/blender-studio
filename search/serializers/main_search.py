@@ -9,12 +9,8 @@ from django.db.models.query_utils import Q
 
 from blog.models import Revision
 from films.models import Film, Asset
-from search.queries_training import (
-    BaseSearchParser,
-    TRAINING_SEARCH_SETUP,
-    SearchModelSetup,
-    SearchableModel,
-)
+from search.serializers.base import SearchableModel, SearchModelSetup, BaseSearchSerializer
+from search.serializers.training_search import TRAINING_SEARCH_SETUP
 from training.models import Training, Section
 
 SEARCH_SETUP: Dict[Type[SearchableModel], SearchModelSetup] = {
@@ -108,7 +104,9 @@ SEARCH_SETUP: Dict[Type[SearchableModel], SearchModelSetup] = {
 }
 
 
-class MainSearchParser(BaseSearchParser):
+class MainSearchSerializer(BaseSearchSerializer):
+    """Prepare database objects to be indexed"""
+
     models_to_index = [Film, Asset, Training, Section, Revision]
     setup = SEARCH_SETUP
 
