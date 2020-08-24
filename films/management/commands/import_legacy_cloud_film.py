@@ -188,7 +188,7 @@ class Command(BaseCommand):
                 if 'picture' in node_doc and node_doc['picture']:
                     file_doc = self.get_file_object(film_doc_path, str(node_doc['picture']))
 
-                    static_asset.source_preview = f"_/{file_doc['file_path']}"
+                    static_asset.thumbnail = f"_/{file_doc['file_path']}"
                     static_asset.save()
 
                 if node_doc['properties']['content_type'] == 'video':

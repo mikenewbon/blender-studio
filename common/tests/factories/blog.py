@@ -2,7 +2,8 @@ import factory
 from factory.django import DjangoModelFactory
 
 from blog.models import Post, Revision
-from common.tests.factories.films import FilmFactory, generate_image_path
+from common.tests.factories.films import FilmFactory
+from common.tests.factories.helpers import generate_image_path
 from common.tests.factories.users import UserFactory
 from search import signals as search_signals
 
@@ -28,7 +29,7 @@ class RevisionFactory(DjangoModelFactory):
     topic = factory.Faker('text', max_nb_chars=20)
     description = factory.Faker('text', max_nb_chars=50)
     content = factory.Faker('text')
-    picture_16_9 = factory.LazyFunction(generate_image_path)
+    thumbnail = factory.LazyFunction(generate_image_path)
     is_published = True
     post = factory.SubFactory(PostFactory)
     storage_location = factory.SelfAttribute('post.film.storage_location')

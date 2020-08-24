@@ -2,7 +2,7 @@ import factory
 from factory import fuzzy
 from factory.django import DjangoModelFactory
 
-from common.tests.factories.films import generate_image_path
+from common.tests.factories.helpers import generate_image_path
 from common.tests.factories.static_assets import StorageLocationFactory
 from search import signals as search_signals
 from training.models import (
@@ -28,7 +28,7 @@ class TrainingFactory(DjangoModelFactory):
     type = fuzzy.FuzzyChoice(TrainingType.choices, getter=lambda c: c[0])
     difficulty = fuzzy.FuzzyChoice(TrainingDifficulty.choices, getter=lambda c: c[0])
     picture_header = factory.LazyFunction(generate_image_path)
-    picture_16_9 = factory.LazyFunction(generate_image_path)
+    thumbnail = factory.LazyFunction(generate_image_path)
     storage_location = factory.SubFactory(
         StorageLocationFactory, name=factory.SelfAttribute('..name')
     )

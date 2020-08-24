@@ -133,10 +133,10 @@ class PostAdmin(admin.ModelAdmin):
             if form.is_valid():
                 revision = form.save(commit=False)
                 post, revision = self._set_post_and_revision_fields(post, revision, request=request)
-                if not revision.picture_16_9:
+                if not revision.thumbnail:
                     # It is not possible to set an initial value in a FileField, so we use
                     # the previous picture so as not to force the user to set it each time.
-                    revision.picture_16_9 = previous_revision.picture_16_9
+                    revision.thumbnail = previous_revision.thumbnail
                 revision.storage_location = previous_revision.storage_location
 
                 post.save()

@@ -1,9 +1,8 @@
-import uuid
-
 import factory
 from factory import fuzzy
 from factory.django import DjangoModelFactory
 
+from common.tests.factories.helpers import generate_image_path
 from common.tests.factories.static_assets import StaticAssetFactory, StorageLocationFactory
 from common.tests.factories.users import UserFactory
 from films.models import (
@@ -18,10 +17,6 @@ from films.models import (
     FilmFlatPage,
 )
 from search import signals as search_signals
-
-
-def generate_image_path() -> str:
-    return f'tests/images/{uuid.uuid4()}.jpg'
 
 
 @factory.django.mute_signals(search_signals.post_save)
@@ -40,6 +35,7 @@ class FilmFactory(DjangoModelFactory):
     logo = factory.LazyFunction(generate_image_path)
     poster = factory.LazyFunction(generate_image_path)
     picture_header = factory.LazyFunction(generate_image_path)
+    thumbnail = factory.LazyFunction(generate_image_path)
 
     storage_location = factory.SubFactory(
         StorageLocationFactory, name=factory.SelfAttribute('..title')
@@ -86,7 +82,7 @@ class ProductionLogFactory(DjangoModelFactory):
     summary = factory.Faker('text')
     user = factory.SubFactory(UserFactory)
     storage_location = factory.SelfAttribute('film.storage_location')
-    picture_16_9 = factory.LazyFunction(generate_image_path)
+    thumbnail = factory.LazyFunction(generate_image_path)
 
 
 class ProductionLogEntryFactory(DjangoModelFactory):

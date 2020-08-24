@@ -85,19 +85,14 @@ class BaseSearchSerializer(ABC):
         instance_dict['url'] = instance.url
         instance_dict['timestamp'] = instance.date_created.timestamp()
 
-        # TODO(Natalia): Add 'thumbnail' field, refactor this code
-        if isinstance(instance, Film):
-            instance_dict['thumbnail_url'] = (
-                instance.picture_16_9.url if instance.picture_16_9 else instance.picture_header.url
-            )
-        elif isinstance(instance, (Training, Revision)):
-            instance_dict['thumbnail_url'] = instance.picture_16_9.url
-        elif isinstance(instance, Asset):
+        if isinstance(instance, Asset):
             instance_dict['thumbnail_url'] = (
                 instance.static_asset.preview.url if instance.static_asset.preview else ''
             )
         elif isinstance(instance, Section):
-            instance_dict['thumbnail_url'] = instance.chapter.training.picture_16_9.url
+            instance_dict['thumbnail_url'] = instance.chapter.training.thumbnail.url
+        else:
+            instance_dict['thumbnail_url'] = instance.thumbnail.url
 
         return instance_dict
 

@@ -48,7 +48,7 @@ class Command(BaseCommand):
 
         def add_images_to_training(training):
             # Add images for the project
-            training_pictures = {'picture_16_9', 'picture_header'}
+            training_pictures = {'thumbnail', 'picture_header'}
             for picture in training_pictures:
                 self.stdout.write(self.style.NOTICE('Adding pictures for training %s' % training))
                 file_doc_path = (

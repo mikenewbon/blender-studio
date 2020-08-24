@@ -65,5 +65,5 @@ class ProductionLogAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
     readonly_fields = ['date_created']
     fieldsets = (
         (None, {'fields': ['film', 'name', 'start_date', 'user']}),
-        ('Summary', {'fields': ['picture_16_9', 'youtube_link', 'author', 'summary']}),
+        ('Summary', {'fields': ['thumbnail', 'youtube_link', 'author', 'summary']}),
     )

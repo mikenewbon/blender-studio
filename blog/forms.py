@@ -26,7 +26,7 @@ class PostAddForm(forms.ModelForm):
         help_text='An optional short description displayed on the blog card.',
     )
     content = forms.TextInput()
-    picture_16_9 = forms.ImageField()
+    thumbnail = forms.ImageField()
     storage_location = forms.ModelChoiceField(
         queryset=StorageLocation.objects.all(),
         required=False,
@@ -44,7 +44,7 @@ class PostAddForm(forms.ModelForm):
             'topic',
             'description',
             'content',
-            'picture_16_9',
+            'thumbnail',
             'storage_location',
         )
 
@@ -76,14 +76,14 @@ class PostAddForm(forms.ModelForm):
 
 class PostChangeForm(forms.ModelForm):
     """
-    Used to create a new post revision; the picture_16_9 field is made optional.
+    Used to create a new post revision; the thumbnail field is made optional.
 
     It is not possible to set an initial value in a FileField, but we don't want to force
-    the user to have to manually upload the picture_16_9 if it does not change.
+    the user to have to manually upload the thumbnail if it does not change.
     """
 
-    picture_16_9 = forms.ImageField(required=False)
+    thumbnail = forms.ImageField(required=False)
 
     class Meta:
         model = Revision
-        fields = ('title', 'topic', 'description', 'content', 'picture_16_9', 'is_published')
+        fields = ('title', 'topic', 'description', 'content', 'thumbnail', 'is_published')

@@ -18,6 +18,10 @@ def create_test_image():
     return test_image
 
 
+def generate_image_path() -> str:
+    return f'tests/images/{uuid.uuid4()}.jpg'
+
+
 def generate_file_path() -> str:
     extensions = ['jpg', 'png', 'blend', 'mp4', 'mov']
     return f'tests/assets/{uuid.uuid4()}.{random.choice(extensions)}'

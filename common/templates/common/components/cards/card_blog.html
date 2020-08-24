@@ -3,7 +3,7 @@
     <div class="card-header">
       <a class="card-header-link" href="{% url 'post-detail' post_slug=post.slug %}">
         {% block image %}
-        {% include "common/components/helpers/image_set.html" with alt=post.title classes="card-image" img_source=post.picture_16_9 xsmall_width="350" small_width="350" medium_width="350" large_width="350" xlarge_width="350" %}
+        {% include "common/components/helpers/image_set.html" with alt=post.title classes="card-image" img_source=post.thumbnail xsmall_width="350" small_width="350" medium_width="350" large_width="350" xlarge_width="350" %}
         {% endblock image %}
       </a>
     </div>

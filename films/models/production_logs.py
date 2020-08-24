@@ -48,7 +48,7 @@ class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
     storage_location = models.ForeignKey(
         StorageLocation, on_delete=models.PROTECT, related_name='production_logs', editable=False,
     )
-    picture_16_9 = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
+    thumbnail = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
 
     @property
     def author_name(self) -> str:

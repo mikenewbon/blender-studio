@@ -45,7 +45,7 @@
     <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
         <div class="card card-media card-training" data-favorite-url="{{ training.favorite_url }}">
 
-			<div class="card-header" style='background-image: url("{{ training.picture_16_9 }}")'>
+			<div class="card-header" style='background-image: url("{{ training.thumbnail }}")'>
 				<a href="{{ training.url }}" class="card-header-link"></a>
                 {{ badge_difficulty(label=training.difficulty.label, color=difficulty_color) }}
 				{{ card_training_checkbox_favorite(checked=training.favorited, class=['btn-save-media', 'card-training-favorite']) }}

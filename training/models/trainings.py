@@ -48,12 +48,8 @@ class Training(mixins.CreatedUpdatedMixin, models.Model):
 
     type = models.TextField(choices=TrainingType.choices)
     difficulty = models.TextField(choices=TrainingDifficulty.choices)
-    picture_header = DynamicStorageFileField(
-        upload_to=get_upload_to_hashed_path, blank=True, null=True
-    )
-    picture_16_9 = DynamicStorageFileField(
-        upload_to=get_upload_to_hashed_path, blank=True, null=True
-    )
+    picture_header = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
+    thumbnail = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
 
     def clean(self) -> None:
         super().clean()

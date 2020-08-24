@@ -54,9 +54,7 @@ class BasePostSaveSearchIndexer(ABC):
 
 
 class MainPostSaveSearchIndexer(BasePostSaveSearchIndexer):
-    """Post_save signal handler, adds documents to the main index and its replicas.
-
-    """
+    """Post_save signal handler, adds documents to the main index and its replicas."""
 
     index_uids = list(settings.INDEXES_FOR_SORTING.keys())
     serializer = MainSearchSerializer()

@@ -15,7 +15,7 @@ class TestPostAndRevisionCreation(TestCase):
             username='superuser', password='Blender123!', email='admin@example.com'
         )
         cls.film = FilmFactory()
-        cls.picture_16_9 = create_test_image()
+        cls.thumbnail = create_test_image()
         cls.post_add_url = reverse('admin:blog_post_add')
 
     def setUp(self) -> None:
@@ -25,13 +25,13 @@ class TestPostAndRevisionCreation(TestCase):
         initial_post_count = Post.objects.count()
         initial_revision_count = Revision.objects.count()
 
-        with self.picture_16_9 as img:
+        with self.thumbnail as img:
             post_form_data = {
                 'film': self.film.id,
                 'title': 'New blog post',
                 'topic': 'Announcement',
                 'content': '#Test text',
-                'picture_16_9': img,
+                'thumbnail': img,
             }
             response = self.client.post(self.post_add_url, post_form_data, follow=True)
             self.assertEqual(response.status_code, 200)

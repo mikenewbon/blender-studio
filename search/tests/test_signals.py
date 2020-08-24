@@ -25,7 +25,7 @@ class TestBlogPostIndexing(TestCase):
             'topic': 'Announcement',
             'content': '# Hot news',
             'storage_location': cls.storage,
-            'picture_16_9': generate_file_path(),
+            'thumbnail': generate_file_path(),
         }
 
     def test_blog_post_without_revision_does_not_trigger_post_save_signal(self):
@@ -102,6 +102,7 @@ class TestPostDeleteSignal(TestCase):
             'logo': generate_file_path(),
             'poster': generate_file_path(),
             'picture_header': generate_file_path(),
+            'thumbnail': generate_file_path(),
         }
 
     def setUp(self) -> None:

@@ -59,7 +59,7 @@ class Revision(mixins.CreatedUpdatedMixin, models.Model):
     storage_location = models.ForeignKey(
         StorageLocation, on_delete=models.PROTECT, related_name='revisions'
     )
-    picture_16_9 = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
+    thumbnail = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
 
     is_published = models.BooleanField(default=False)
 

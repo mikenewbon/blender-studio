@@ -34,9 +34,7 @@ class Film(mixins.CreatedUpdatedMixin, models.Model):
     logo = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
     poster = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
     picture_header = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
-    picture_16_9 = DynamicStorageFileField(
-        upload_to=get_upload_to_hashed_path, blank=True, null=True
-    )
+    thumbnail = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
     youtube_link = models.URLField(blank=True)
     crew = models.ManyToManyField(User, through='FilmCrew')
 

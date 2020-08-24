@@ -35,3 +35,4 @@ class StaticAssetFactory(DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     license = factory.SubFactory(LicenseFactory)
     storage_location = factory.SubFactory(StorageLocationFactory)
+    thumbnail = factory.LazyFunction(generate_file_path)

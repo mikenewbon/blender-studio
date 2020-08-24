@@ -26,9 +26,7 @@ class Collection(mixins.CreatedUpdatedMixin, models.Model):
 
     storage_location = models.ForeignKey(StorageLocation, on_delete=models.PROTECT, editable=False)
     preview = DynamicStorageFileField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
-    picture_16_9 = DynamicStorageFileField(
-        upload_to=get_upload_to_hashed_path, blank=True, null=True
-    )
+    thumbnail = DynamicStorageFileField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
 
     def clean(self) -> None:
         super().clean()

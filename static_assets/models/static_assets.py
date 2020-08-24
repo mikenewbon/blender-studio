@@ -84,19 +84,19 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
         StorageLocation, on_delete=models.PROTECT, related_name='static_assets'
     )
 
-    source_preview = DynamicStorageFileField(upload_to=get_upload_to_hashed_path, blank=True)
-    source_preview.description = (
-        "Asset preview is auto-generated for images and videos. Required for other files."
+    thumbnail = DynamicStorageFileField(upload_to=get_upload_to_hashed_path, blank=True)
+    thumbnail.description = (
+        "Asset thumbnail is auto-generated for images and videos. Required for other files."
     )
 
-    # TODO(Natalia): generate preview if source_preview not uploaded.
+    # TODO(Natalia): generate preview if thumbnail not uploaded.
     @property
     def preview(self):
-        if self.source_preview:
-            return self.source_preview
+        if self.thumbnail:
+            return self.thumbnail
         if self.source_type == StaticAssetFileTypeChoices.image:
             return self.source
-        # TODO(Natalia): Update this once we have auto-generated previews.
+        # TODO(Natalia): Update this once we have auto-generated thumbnails.
 
     @property
     def author_name(self) -> str:
@@ -117,7 +117,7 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
             # The `if` prevents an unhandled exception if one tries to save without a source
             self.size_bytes = self.source.size
 
-        if self.source_type == StaticAssetFileTypeChoices.file and not self.source_preview:
+        if self.source_type == StaticAssetFileTypeChoices.file and not self.thumbnail:
             raise ValidationError(
                 f'Source preview has to be provided for `{StaticAssetFileTypeChoices.file}` source type.'
             )
