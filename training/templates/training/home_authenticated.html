@@ -1,9 +1,15 @@
 {% extends 'training/base_training.html' %}
 
 {% load static %}
+{% load pipeline %}
+
+{% javascript 'training' %}
+
 
 {% block scripts %}
-{{ search_client_config|json_script:"search-client-config" }}
+<script src="https://cdn.jsdelivr.net/npm/@meilisearch/instant-meilisearch/dist/instant-meilisearch.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4"></script>
+{{ search_client_config|json_script:"training-search-client-config" }}
 {% endblock scripts %}
 
 
@@ -62,8 +68,34 @@
       </div>
     </div>
   </section>
+
+  <section id="search">
+    <div class="row">
+
+      <div class="col-md-6 mb-3">
+        <div id="search_input" class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">
+              <i class="material-icons">search</i>
+            </span>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="search_type" class="col-md-3 col-6 mb-3">
+
+      </div>
+
+      <div id="search_difficulty" class="col-md-3 col-6 mb-3">
+
+      </div>
+    </div>
+  </section>
+
+  {% comment %}
   {% if recently_watched_sections %}
-  <section class="mb-3">
+  <section class="continue-training mb-3">
     <h2 class="mb-0">Continue training</h2>
     <p class="mb-3">Recently watched sections will appear here with your position saved</p>
     <div class="row">
@@ -73,7 +105,7 @@
     </div>
   </section>
   {% endif %}
-  <section class="mb-3">
+  <section class="saved-training mb-3">
     <h2 class="mb-0">Your saved training</h2>
     <p class="mb-3">You can add and remove items from this list by clicking the plus or the tick</p>
     {% if favorited_trainings %}
@@ -93,13 +125,18 @@
     </div>
     {% endif %}
   </section>
+  {% endcomment %}
+
   <section>
     <h2 class="mb-3">All training</h2>
-    <div class="row">
-      {% for training in all_trainings %}
+    <div class="row" id="hits">
+      {% comment %} {% for training in all_trainings %}
       {% include "training/components/card_training.html" with training=training %}
-      {% endfor %}
+      {% endfor %} {% endcomment %}
     </div>
   </section>
 </div>
+
+{% javascript 'training_search' %}
+
 {% endblock content %}

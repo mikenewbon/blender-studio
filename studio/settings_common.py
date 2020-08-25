@@ -114,8 +114,6 @@ PIPELINE = {
     'JAVASCRIPT': {
         'studio': {
             'source_filenames': [
-                'training/scripts/*.js',
-                'training/scripts/components/*.js',
                 'comments/scripts/*.js',
                 'comments/scripts/components/*.js',
                 'common/scripts/*.js',
@@ -123,9 +121,24 @@ PIPELINE = {
             'output_filename': 'js/studio.js',
             'extra_context': {'async': False, 'defer': False},
         },
+        'training': {
+            'source_filenames': [
+                'training/scripts/section.js',
+                'training/scripts/components/*.js',
+            ],
+            'output_filename': 'js/training.js',
+            'extra_context': {'async': False, 'defer': False},
+        },
         'search': {
             'source_filenames': ['search/scripts/*.js',],
             'output_filename': 'js/search.js',
+            'extra_context': {'async': False, 'defer': False},
+        },
+        'training_search': {
+            'source_filenames': [
+                'training/scripts/training_search.js',
+            ],
+            'output_filename': 'js/training_search.js',
             'extra_context': {'async': False, 'defer': False},
         },
         'vendor': {
