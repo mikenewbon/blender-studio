@@ -16,7 +16,6 @@ class TestBlogPostIndexing(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
         cls.user = UserFactory()
-        cls.storage = StorageLocationFactory()
         cls.published_post = PostFactory(film=None)
         cls.unpublished_post = PostFactory(is_published=False, film=None)
         cls.revision_data = {
@@ -24,7 +23,7 @@ class TestBlogPostIndexing(TestCase):
             'title': 'Strawberry Fields Forever',
             'topic': 'Announcement',
             'content': '# Hot news',
-            'storage_location': cls.storage,
+            'storage_location': StorageLocationFactory(),
             'thumbnail': generate_file_path(),
         }
 
@@ -38,19 +37,22 @@ class TestBlogPostIndexing(TestCase):
             handler.assert_not_called()
 
     @patch('search.signals.MainPostSaveSearchIndexer._add_documents_to_index')
-    def test_unpublished_revisions_are_not_indexed(self, add_documents_mock):
-        Revision.objects.create(
-            **self.revision_data, post=self.published_post, is_published=False,
-        )
-        add_documents_mock.assert_not_called()
+    def test_unpublished_revisions_trigger_signal_but_are_not_indexed(self, add_documents_mock):
+        with catch_signal(post_save, sender=Revision) as handler:
+            Revision.objects.create(
+                **self.revision_data, post=self.published_post, is_published=False,
+            )
+            handler.assert_called()
+            add_documents_mock.assert_not_called()
 
-        Revision.objects.create(
-            **self.revision_data, post=self.unpublished_post, is_published=True,
-        )
-        add_documents_mock.assert_not_called()
+            Revision.objects.create(
+                **self.revision_data, post=self.unpublished_post, is_published=True,
+            )
+            handler.assert_called()
+            add_documents_mock.assert_not_called()
 
     @patch('search.signals.MainPostSaveSearchIndexer._add_documents_to_index')
-    def test_new_published_revision_triggers_signal(self, add_documents_mock):
+    def test_new_published_revision_are_indexed(self, add_documents_mock):
         revision = Revision.objects.create(
             **self.revision_data, post=self.published_post, is_published=True,
         )
@@ -90,9 +92,8 @@ class TestPostDeleteSignal(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
         cls.user = UserFactory()
-        cls.storage = StorageLocationFactory()
         cls.film_data = {
-            'storage_location': cls.storage,
+            'storage_location': StorageLocationFactory(),
             'title': 'Strawberry Fields Forever',
             'slug': 'strawberry-fields-forever',
             'description': 'Living is easy with eyes closed',
@@ -113,7 +114,7 @@ class TestPostDeleteSignal(TestCase):
             self.film_not_indexed.delete()
             handler.assert_called()
 
-    def test_deleting_indexed_film(self):
+    def test_deleting_indexed_film_triggers_signal(self):
         film = Film.objects.create(**self.film_data)
 
         with catch_signal(pre_delete, sender=Film) as handler:

@@ -46,5 +46,5 @@ class TrainingSearchSerializer(BaseSearchSerializer):
                 lambda instance: [tag.name for tag in instance.chapter.training.tags.all()]
             ),
         },
-        Asset: {'tags': lambda instance: [tag.name for tag in instance.tags.all()],},
+        Asset: {'tags': lambda instance: [tag.name for tag in instance.tags.all()]},
     }

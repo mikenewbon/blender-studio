@@ -33,7 +33,7 @@ class Command(BaseCommand):
 
         return objects_to_load
 
-    def handle(self, *args: Any, **options: Any) -> Optional[str]:
+    def handle(self, *args: Any, **options: Any) -> None:
         try:
             # Check the server and indexes first, before performing lengthy computations
             check_meilisearch(check_indexes=True)
@@ -63,5 +63,3 @@ class Command(BaseCommand):
                     f'Update ID: {response["updateId"]}.'
                 )
             )
-
-        return str(response["updateId"])
