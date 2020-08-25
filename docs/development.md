@@ -10,18 +10,18 @@ that poetry takes care of -- there's no need to install anything manually.
 
 
 ## Set up instructions
-1. Clone the repo.
-2. Checkout the develop branch (master may be considerably outdated).
+1. Clone the repo: `git clone git@git.blender.org:blender-studio.git`
+2. Checkout the develop branch (master may be considerably outdated):
+    `git checkout develop`
 2. Run `poetry install`
    - if the installation of psycopg2 fails, make sure that you have the required
    apt packages installed ([more details](https://www.psycopg.org/docs/install.html#build-prerequisites)).
-
 3. Create a PostgreSQL user named `studio`:
     ```sudo -u postgres createuser -d -l -P studio```
 4. Create a database named `studio`:
     ```sudo -u postgres createdb -O studio studio```
 5. Add `studio.local` to `/etc/hosts` as an alias of 127.0.0.1:
-    ```
+   ```
    127.0.0.1    localhost studio.local  # studio.local can be added on the same line as localhost
     ...
    ```
@@ -29,10 +29,12 @@ that poetry takes care of -- there's no need to install anything manually.
 and it must not be committed.
     - Change the `'PASSWORD'` variable in the `DATABASE` settings.
     - All the settings in settings.py that ultimately have to be changed are set to 'CHANGE-ME'.
-    You can look for this phrase to make sure that everything that needs to be adjusted, has been
-    adjusted. However, for local development at this stage only the database password actually has
-    to be set for the project to run.
+    You can look for this phrase to make sure that everything that needs to be adjusted
+    has been adjusted. However, for local development at this stage only the database
+    password actually has to be set for the project to run.
     - Optionally: configure your IDE database connection.
+6. Add a Google Storage Credentials file `blender-cloud-credentials.json` in the
+`studio/` folder.
 6. In the command line, activate the virtual environment created by poetry:
     ```poetry shell```
     - Configure your IDE to use the venv by default.
@@ -54,6 +56,44 @@ You can add objects to the database manually via the Django's Admin panel.
 There are also commands that import data from the Cloud, but running them requires some additional
 arrangements - ask Francesco about it.
 Another way is to upload data fixtures created from the staging database.
+
+### Fixtures
+Your public key has to be added to the known hosts in the staging server.
+1. Copy the fixtures directory from staging to your machine:
+    ```
+    scp -rp root@37.139.8.152:/var/www/blender-studio/fixtures/ .
+    ```
+2. Run:
+    ```
+    ./manage.py loaddata --exclude auth.permission ./fixtures/fixture_users.json
+    ./manage.py loaddata ./fixtures/fixture_static_assets.json
+    ./manage.py loaddata ./fixtures/fixture_comments.json
+    ./manage.py loaddata ./fixtures/fixture_training.json
+    ./manage.py loaddata ./fixtures/fixture_films.json
+    ./manage.py loaddata ./fixtures/fixture_blog.json
+    ```
+   The order may be changed, but some of the fixtures have to be loaded before certain
+   other ones that depend on them.
+
+In case of some of the models, adding objects to the database will trigger post-save
+signals which update the search index.
+
+#### Troubleshooting
+If the `loaddata` command hangs, disable the post-save signals: in the `search/app.py`
+file comment out the `ready()` function definition (specifically, the import statement
+in its body).
+
+The staging database has different content type ids than the databases created recently
+(after the 'static_assets' app was renamed). This may cause problems with loading
+fixtures. The most probable case is that some users have permissions assigned, and these
+permissions relate to nonexistent content types.
+
+To fix this, open the `fixture_users.json` file, find the occurrences of the string
+`"user_permissions": [` (including the inverted commas).
+If any user has any numbers listed there, delete all those numbers, and leave an
+empty array, like this: `user_permissions": []`.
+
+You can then manually reassign user permissions in the admin panel.
 
 
 ## Blender ID authentication setup
