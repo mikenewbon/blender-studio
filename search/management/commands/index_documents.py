@@ -1,13 +1,13 @@
+from typing import Any
 from typing import List, Dict
-from typing import Optional, Any
 
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
 from search.health_check import MeiliSearchServiceError, check_meilisearch
+from search.serializers.base import BaseSearchSerializer
 from search.serializers.main_search import MainSearchSerializer
 from search.serializers.training_search import TrainingSearchSerializer
-from search.serializers.base import BaseSearchSerializer
 
 
 class Command(BaseCommand):

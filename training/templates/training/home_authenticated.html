@@ -2,6 +2,11 @@
 
 {% load static %}
 
+{% block scripts %}
+{{ search_client_config|json_script:"search-client-config" }}
+{% endblock scripts %}
+
+
 {% block jumbotron %}
 <div class="jumbotron jumbotron-fluid jumbotron-overlay header">
   <div class="jumbotron-bg-wrapper">
