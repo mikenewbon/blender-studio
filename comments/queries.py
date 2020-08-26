@@ -20,7 +20,8 @@ def get_annotated_comments(obj: Model, user_pk: int) -> List[Comment]:
 
     Returns:
         A queryset of comments associated with the `obj`.
-        Comments without replies which have been marked as deleted are excluded.
+        Comments which have been marked as deleted and don't have replies or only have
+        deleted replies are excluded from the queryset.
         Annotations are used in the objects passed to the template:
         - liked: bool; whether the current user (given by user_pk argument) likes a comment;
         - number_of_likes: int; the number of likes associated with a comment;
@@ -30,6 +31,7 @@ def get_annotated_comments(obj: Model, user_pk: int) -> List[Comment]:
 
     return list(
         comments.exclude(date_deleted__isnull=False, replies__isnull=True)
+        .exclude(date_deleted__isnull=False, replies__date_deleted__isnull=False)
         .prefetch_related('user', 'reply_to')
         .annotate(
             liked=Exists(Like.objects.filter(comment_id=OuterRef('pk'), user_id=user_pk)),
