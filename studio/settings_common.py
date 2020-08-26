@@ -214,52 +214,45 @@ DEFAULT_RANKING_RULES = [
 ]
 DATE_DESC_RANKING_RULES = ['desc(timestamp)', *DEFAULT_RANKING_RULES]
 DATE_ASC_RANKING_RULES = ['asc(timestamp)', *DEFAULT_RANKING_RULES]
-ALL_INDEXES_UIDS = [
-    MEILISEARCH_INDEX_UID,
-    f'{MEILISEARCH_INDEX_UID}_date_desc',
-    f'{MEILISEARCH_INDEX_UID}_date_asc',
-    TRAINING_INDEX_UID,
-]
-INDEXES_FOR_SORTING = {
-    MEILISEARCH_INDEX_UID: DEFAULT_RANKING_RULES,
-    f'{MEILISEARCH_INDEX_UID}_date_desc': DATE_DESC_RANKING_RULES,
-    f'{MEILISEARCH_INDEX_UID}_date_asc': DATE_ASC_RANKING_RULES,
+MAIN_SEARCH = {
+    'SEARCHABLE_ATTRIBUTES': [
+        'model',
+        'name',
+        'project',
+        'tags',
+        'secondary_tags',
+        'topic',
+        'collection_name',
+        'chapter_name',
+        'description',
+        'summary',
+        'content',
+    ],
+    'FACETING_ATTRIBUTES': ['model', 'project', 'license', 'media_type', 'free'],
+    'RANKING_RULES': {
+        MEILISEARCH_INDEX_UID: DEFAULT_RANKING_RULES,
+        f'{MEILISEARCH_INDEX_UID}_date_desc': DATE_DESC_RANKING_RULES,
+        f'{MEILISEARCH_INDEX_UID}_date_asc': DATE_ASC_RANKING_RULES,
+    }
 }
-
-SEARCHABLE_ATTRIBUTES = [
-    # Model fields/annotations that are searchable:
-    #     Film: ['model', 'name', 'project', 'description', 'summary'],
-    #     Asset: ['model', 'name', 'project', 'tags', 'collection_name', 'description'],
-    #     Training: ['model', 'name', 'project', 'tags', 'secondary_tags',
-    #                'description', 'summary'],
-    #     Section: ['model', 'name', 'project', 'tags', 'secondary_tags',
-    #               'chapter_name', 'description'],
-    #     Post: ['model', 'name', 'project', 'topic', 'description', 'content']
-    # In the order of relevance:
-    'model',
-    'name',
-    'project',
-    'tags',
-    'secondary_tags',
-    'topic',
-    'collection_name',
-    'chapter_name',
-    'description',
-    'summary',
-    'content',
-]
-TRAINING_SEARCHABLE_ATTRIBUTES = [
-    'model',
-    'name',
-    'project',
-    'tags',
-    'secondary_tags',
-    'chapter_name',
-    'description',
-    'summary',
-]
-FACETING_ATTRIBUTES = ['model', 'project', 'license', 'media_type', 'free']
-TRAINING_FACETING_ATTRIBUTES = ['type', 'difficulty']
+TRAINING_SEARCH = {
+    'SEARCHABLE_ATTRIBUTES': [
+        'model',
+        'name',
+        'project',
+        'tags',
+        'secondary_tags',
+        'chapter_name',
+        'description',
+        'summary',
+    ],
+    'FACETING_ATTRIBUTES': ['type', 'difficulty'],
+    'RANKING_RULES': {
+        TRAINING_INDEX_UID: DEFAULT_RANKING_RULES,
+        f'{TRAINING_INDEX_UID}_date_desc': DATE_DESC_RANKING_RULES,
+        f'{TRAINING_INDEX_UID}_date_asc': DATE_ASC_RANKING_RULES,
+    }
+}
 
 
 TAGGIT_CASE_INSENSITIVE = True

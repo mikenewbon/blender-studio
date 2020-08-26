@@ -4,6 +4,7 @@ from typing import List, Dict
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
+from search import TRAINING_INDEX_UIDS, ALL_INDEX_UIDS
 from search.health_check import MeiliSearchServiceError, check_meilisearch
 from search.serializers.base import BaseSearchSerializer
 from search.serializers.main_search import MainSearchSerializer
@@ -45,17 +46,19 @@ class Command(BaseCommand):
         self.stdout.write('Preparing the training data, it may take a while...')
         training_data_to_load = self._prepare_data(serializer=TrainingSearchSerializer())
 
-        # Update the main index, the replica indexes, and the training index
-        for index_uid in settings.ALL_INDEXES_UIDS:
+        # Update the main index and its replicas, and the training index and its replicas
+        for index_uid in ALL_INDEX_UIDS:
             index = settings.SEARCH_CLIENT.get_index(index_uid)
-            if index_uid == settings.TRAINING_INDEX_UID:
+            if index_uid in TRAINING_INDEX_UIDS:
                 response = index.add_documents(training_data_to_load)
-                index.update_searchable_attributes(settings.TRAINING_SEARCHABLE_ATTRIBUTES)
+                index.update_searchable_attributes(
+                    settings.TRAINING_SEARCH['SEARCHABLE_ATTRIBUTES']
+                )
             else:
                 response = index.add_documents(data_to_load)
                 # There seems to be no way in MeiliSearch v0.13 to disable adding new document
                 # fields automatically to searchable attrs, so we update the settings to set them:
-                index.update_searchable_attributes(settings.SEARCHABLE_ATTRIBUTES)
+                index.update_searchable_attributes(settings.MAIN_SEARCH['SEARCHABLE_ATTRIBUTES'])
 
             self.stdout.write(
                 self.style.SUCCESS(

@@ -36,7 +36,7 @@ class TestBlogPostIndexing(TestCase):
             post.save()
             handler.assert_not_called()
 
-    @patch('search.signals.MainPostSaveSearchIndexer._add_documents_to_index')
+    @patch('search.signals.MainPostSaveSearchIndexer._add_document_to_index')
     def test_unpublished_revisions_trigger_signal_but_are_not_indexed(self, add_documents_mock):
         with catch_signal(post_save, sender=Revision) as handler:
             Revision.objects.create(
@@ -51,14 +51,14 @@ class TestBlogPostIndexing(TestCase):
             handler.assert_called()
             add_documents_mock.assert_not_called()
 
-    @patch('search.signals.MainPostSaveSearchIndexer._add_documents_to_index')
+    @patch('search.signals.MainPostSaveSearchIndexer._add_document_to_index')
     def test_new_published_revision_are_indexed(self, add_documents_mock):
         revision = Revision.objects.create(
             **self.revision_data, post=self.published_post, is_published=True,
         )
         add_documents_mock.assert_called_once()
 
-    @patch('search.signals.MainPostSaveSearchIndexer._add_documents_to_index')
+    @patch('search.signals.MainPostSaveSearchIndexer._add_document_to_index')
     def test_new_published_revision_overwrites_previous_revision(self, add_documents_mock):
         """A document is updated in the index if it has the same search_id."""
         revision = Revision.objects.create(

@@ -7,7 +7,9 @@ from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
 from blog.models import Revision
+from common.types import assert_cast
 from films.models import Film, Asset
+from search import MAIN_INDEX_UIDS, TRAINING_INDEX_UIDS, ALL_INDEX_UIDS
 from search.health_check import check_meilisearch, MeiliSearchServiceError
 from search.serializers.base import SearchableModel, BaseSearchSerializer
 from search.serializers.main_search import MainSearchSerializer
@@ -27,9 +29,11 @@ class BasePostSaveSearchIndexer(ABC):
     """
 
     index_uids: List[str]
+    searchable_attributes: List[str]
     serializer: BaseSearchSerializer
 
-    def _add_documents_to_index(self, data_to_load: List[Any]) -> None:
+    def _add_document_to_index(self, data_to_load: List[Any]) -> None:
+        """Adds document to the appropriate search index and its replicas."""
         try:
             check_meilisearch(check_indexes=True)
         except MeiliSearchServiceError as err:
@@ -42,28 +46,30 @@ class BasePostSaveSearchIndexer(ABC):
 
             # There seems to be no way in MeiliSearch v0.13.0 to disable adding new document
             # fields automatically to searchable attrs, so we update the settings to set them:
-            index.update_searchable_attributes(settings.SEARCHABLE_ATTRIBUTES)
+            index.update_searchable_attributes(self.searchable_attributes)
 
     def handle(self, sender: Type[SearchableModel], instance: SearchableModel) -> None:
         """Indexes the objects that should be available in search."""
         instance_qs = self.serializer.get_searchable_queryset(sender, id=instance.id)
         if instance_qs:
             data_to_load = self.serializer.prepare_data_for_indexing(instance_qs)
-            self._add_documents_to_index(data_to_load)
+            self._add_document_to_index(data_to_load)
             log.info(f'Added {instance} to the {self.index_uids} search indexes.')
 
 
 class MainPostSaveSearchIndexer(BasePostSaveSearchIndexer):
     """Post_save signal handler, adds documents to the main index and its replicas."""
 
-    index_uids = list(settings.INDEXES_FOR_SORTING.keys())
+    index_uids = MAIN_INDEX_UIDS
+    searchable_attributes = assert_cast(list, settings.MAIN_SEARCH['SEARCHABLE_ATTRIBUTES'])
     serializer = MainSearchSerializer()
 
 
 class TrainingPostSaveSearchIndexer(BasePostSaveSearchIndexer):
-    """Post_save signal handler, adds documents to the training index."""
+    """Post_save signal handler, adds documents to the training index and its replicas."""
 
-    index_uids = [settings.TRAINING_INDEX_UID]
+    index_uids = TRAINING_INDEX_UIDS
+    searchable_attributes = assert_cast(list, settings.TRAINING_SEARCH['SEARCHABLE_ATTRIBUTES'])
     serializer = TrainingSearchSerializer()
 
 
@@ -128,5 +134,5 @@ def delete_from_index(
     else:
         search_id = f'{sender._meta.model_name}_{instance.id}'
 
-    for index_uid in settings.ALL_INDEXES_UIDS:
+    for index_uid in ALL_INDEX_UIDS:
         settings.SEARCH_CLIENT.get_index(index_uid).delete_document(search_id)
