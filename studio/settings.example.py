@@ -5,6 +5,7 @@ from typing import List
 import braintree
 from dateutil.relativedelta import relativedelta
 from google.oauth2 import service_account
+import meilisearch
 
 from studio.settings_common import *
 

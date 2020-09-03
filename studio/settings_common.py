@@ -1,8 +1,6 @@
 import pathlib
 import sys
 
-import meilisearch
-
 BASE_DIR = pathlib.Path(__file__).absolute().parent.parent
 
 ADMIN_SITE_HEADER = 'Blender Studio Admin'
