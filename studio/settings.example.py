@@ -3,12 +3,11 @@ from typing import List
 
 # Enable to use OAuth without https during local development
 import braintree
+import meilisearch
 from dateutil.relativedelta import relativedelta
 from google.oauth2 import service_account
-import meilisearch
 
 from studio.settings_common import *
-
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
