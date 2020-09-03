@@ -126,17 +126,9 @@ It also includes [production setup](search.md#deployment-to-production) and
 MeiliSearch:
     ```
     curl -L https://install.meilisearch.com | sh
-    ./meilisearch --master-key myMasterKey
+    ./meilisearch
     ```
-    The master key should be unique, random, and kept secret, as it allows you to do everything
-    on the server.
-2. Use the master key to retrieve the public and the private key:
-    ```
-    curl -H "X-Meili-API-Key: myMasterKey" -X GET 'http://localhost:7700/keys'
-    ```
-3. Update the `MEILISEARCH_PUBLIC_KEY` and `MEILISEARCH_PRIVATE_KEY` in `settings.py`.
-The master key is not necessary there.
-4. With the project's venv activated, create indexes and fill them with data:
+2. With the project's venv activated, create indexes and fill them with data:
     ```
     ./manage.py create_search_indexes
     ./manage.py index_documents
@@ -144,7 +136,6 @@ The master key is not necessary there.
 
 The server will be available on port `7700` by default.
 If you change it, adjust the `MEILISEARCH_API_ADDRESS` in settings_common.py as necessary.
-
 
 
 ## Workflow
