@@ -126,7 +126,7 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
         return f'{self.source_type} {self.original_filename}'
 
 
-class Video(mixins.CreatedUpdatedMixin, models.Model):
+class Video(models.Model):
     static_asset = models.OneToOneField(StaticAsset, on_delete=models.CASCADE)
     resolution = models.CharField(max_length=32, blank=True)
     resolution_text = models.CharField(max_length=32, blank=True)
@@ -138,7 +138,7 @@ class Video(mixins.CreatedUpdatedMixin, models.Model):
         return f'{self._meta.model_name} {self.static_asset.original_filename}'
 
 
-class Image(mixins.CreatedUpdatedMixin, models.Model):
+class Image(models.Model):
     static_asset = models.OneToOneField(StaticAsset, on_delete=models.CASCADE)
     resolution = models.CharField(max_length=32, blank=True)
     resolution_text = models.CharField(max_length=32, blank=True)
