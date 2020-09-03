@@ -21,18 +21,20 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RunPython(set_default_picture_16_9, reverse_code=migrations.RunPython.noop),
         migrations.RenameField(
-            model_name='training',
-            old_name='picture_16_9',
-            new_name='thumbnail',
+            model_name='training', old_name='picture_16_9', new_name='thumbnail',
         ),
         migrations.AlterField(
             model_name='training',
             name='picture_header',
-            field=static_assets.models.static_assets.DynamicStorageFileField(upload_to=common.upload_paths.get_upload_to_hashed_path),
+            field=static_assets.models.static_assets.DynamicStorageFileField(
+                upload_to=common.upload_paths.get_upload_to_hashed_path
+            ),
         ),
         migrations.AlterField(
             model_name='training',
             name='thumbnail',
-            field=static_assets.models.static_assets.DynamicStorageFileField(upload_to=common.upload_paths.get_upload_to_hashed_path),
+            field=static_assets.models.static_assets.DynamicStorageFileField(
+                upload_to=common.upload_paths.get_upload_to_hashed_path
+            ),
         ),
     ]

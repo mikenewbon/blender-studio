@@ -12,28 +12,28 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='trainingtag',
-            name='tag',
-        ),
-        migrations.RemoveField(
-            model_name='trainingtag',
-            name='training',
-        ),
+        migrations.RemoveField(model_name='trainingtag', name='tag',),
+        migrations.RemoveField(model_name='trainingtag', name='training',),
         migrations.AddField(
             model_name='section',
             name='tags',
-            field=taggit.managers.TaggableManager(help_text='A comma-separated list of tags.', through='taggit.TaggedItem', to='taggit.Tag', verbose_name='Tags'),
+            field=taggit.managers.TaggableManager(
+                help_text='A comma-separated list of tags.',
+                through='taggit.TaggedItem',
+                to='taggit.Tag',
+                verbose_name='Tags',
+            ),
         ),
         migrations.AlterField(
             model_name='training',
             name='tags',
-            field=taggit.managers.TaggableManager(help_text='A comma-separated list of tags.', through='taggit.TaggedItem', to='taggit.Tag', verbose_name='Tags'),
+            field=taggit.managers.TaggableManager(
+                help_text='A comma-separated list of tags.',
+                through='taggit.TaggedItem',
+                to='taggit.Tag',
+                verbose_name='Tags',
+            ),
         ),
-        migrations.DeleteModel(
-            name='Tag',
-        ),
-        migrations.DeleteModel(
-            name='TrainingTag',
-        ),
+        migrations.DeleteModel(name='Tag',),
+        migrations.DeleteModel(name='TrainingTag',),
     ]

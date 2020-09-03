@@ -11,8 +11,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RenameField(
-            model_name='staticasset',
-            old_name='source_preview',
-            new_name='thumbnail',
+            model_name='staticasset', old_name='source_preview', new_name='thumbnail',
         ),
     ]

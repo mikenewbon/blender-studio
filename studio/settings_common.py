@@ -126,9 +126,7 @@ PIPELINE = {
             'extra_context': {'async': False, 'defer': False},
         },
         'search': {
-            'source_filenames': [
-                'search/scripts/*.js',
-            ],
+            'source_filenames': ['search/scripts/*.js',],
             'output_filename': 'js/search.js',
             'extra_context': {'async': False, 'defer': False},
         },
@@ -233,7 +231,7 @@ MAIN_SEARCH = {
         MEILISEARCH_INDEX_UID: DEFAULT_RANKING_RULES,
         f'{MEILISEARCH_INDEX_UID}_date_desc': DATE_DESC_RANKING_RULES,
         f'{MEILISEARCH_INDEX_UID}_date_asc': DATE_ASC_RANKING_RULES,
-    }
+    },
 }
 TRAINING_SEARCH = {
     'SEARCHABLE_ATTRIBUTES': [
@@ -251,7 +249,7 @@ TRAINING_SEARCH = {
         TRAINING_INDEX_UID: DEFAULT_RANKING_RULES,
         f'{TRAINING_INDEX_UID}_date_desc': DATE_DESC_RANKING_RULES,
         f'{TRAINING_INDEX_UID}_date_asc': DATE_ASC_RANKING_RULES,
-    }
+    },
 }
 
 

@@ -20,24 +20,18 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RenameField(
-            model_name='collection',
-            old_name='picture_16_9',
-            new_name='thumbnail',
+            model_name='collection', old_name='picture_16_9', new_name='thumbnail',
         ),
         migrations.RenameField(
-            model_name='productionlog',
-            old_name='picture_16_9',
-            new_name='thumbnail',
+            model_name='productionlog', old_name='picture_16_9', new_name='thumbnail',
         ),
         migrations.RunPython(set_default_picture_16_9, reverse_code=migrations.RunPython.noop),
         migrations.AlterField(
             model_name='film',
             name='picture_16_9',
-            field=static_assets.models.static_assets.DynamicStorageFileField(upload_to=common.upload_paths.get_upload_to_hashed_path),
+            field=static_assets.models.static_assets.DynamicStorageFileField(
+                upload_to=common.upload_paths.get_upload_to_hashed_path
+            ),
         ),
-        migrations.RenameField(
-            model_name='film',
-            old_name='picture_16_9',
-            new_name='thumbnail',
-        ),
+        migrations.RenameField(model_name='film', old_name='picture_16_9', new_name='thumbnail',),
     ]
