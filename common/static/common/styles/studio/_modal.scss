@@ -96,9 +96,18 @@
 }
 
 .modal-navigation {
+  @include media-breakpoint-down(md) {
+    padding: 1rem!important;
+  }
+
   pointer-events: auto;
-  position: fixed;
+  position: absolute;
   z-index: 1000;
+
+
+  &:hover {
+    background: $highlight-white;
+  }
 
   &.modal-close {
     @include media-breakpoint-down(md) {
@@ -106,26 +115,34 @@
       top: 0;
     }
 
-    right: $spacer;
+    right: calc(50vw - #{$modal-lg/2} - 60px - #{$spacer});
     top: $spacer;
   }
 
   &.next {
+    @include media-breakpoint-down(md) {
+      right: 0;
+    }
+
     @include media-breakpoint-down(sm) {
       display: none;
     }
 
-    right: 0;
+    right: calc(50vw - #{$modal-lg/2} - 60px - #{$spacer});
     top: 50%;
     transform: translateY(-50%);
   }
 
   &.previous {
+    @include media-breakpoint-down(md) {
+      left: 0;
+    }
+
     @include media-breakpoint-down(sm) {
       display: none;
     }
 
-    left: 0;
+    left: calc(50vw - #{$modal-lg/2} - 60px - #{$spacer});
     top: 50%;
     transform: translateY(-50%);
   }

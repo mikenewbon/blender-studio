@@ -93,3 +93,11 @@
 @import '../vendor/masonry/masonry';
 
 @import '../vendor/choices/choices';
+
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $highlight-white;
+}

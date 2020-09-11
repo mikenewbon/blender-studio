@@ -1,17 +1,27 @@
 {% load static %}
 
+{% if next_asset %}
+<button class="modal-navigation next btn btn-lg btn-icon"
+  data-url="{% url 'api-asset' next_asset.id %}?site_context={{ site_context }}" data-asset-id="{{ next_asset.id }}">
+  <i class="material-icons btn-material-icons">navigate_next</i>
+</button>
+{% endif %}
+{% if previous_asset %}
+<button class="modal-navigation previous btn btn-lg btn-icon"
+  data-url="{% url 'api-asset' previous_asset.id %}?site_context={{ site_context }}"
+  data-asset-id="{{ previous_asset.id }}">
+  <i class="material-icons btn-material-icons">navigate_before</i>
+</button>
+{% endif %}
+<button class="modal-navigation modal-close btn btn-lg btn-icon d-none d-md-block" data-dismiss="modal">
+  <i class="material-icons btn-material-icons">close</i>
+</button>
+
+
 <div id="asset-{{ asset.id }}" data-asset-id="{{ asset.id }}" class="modal-inner-wrapper">
-  <button class="modal-navigation modal-close btn btn-lg btn-icon d-none d-md-block" data-dismiss="modal">
-    <i class="material-icons btn-material-icons">close</i>
-  </button>
+
   <div class="modal-dialog" role="document">
-    {% if previous_asset %}
-    <button class="modal-navigation previous btn btn-lg btn-icon"
-      data-url="{% url 'api-asset' previous_asset.id %}?site_context={{ site_context }}"
-      data-asset-id="{{ previous_asset.id }}">
-      <i class="material-icons btn-material-icons">navigate_before</i>
-    </button>
-    {% endif %}
+
     <div class="modal-content bg-dark">
 
       <div class="modal-header p-0 bg-secondary">
@@ -103,12 +113,6 @@
 
       </div>
     </div>
-    {% if next_asset %}
-    <button class="modal-navigation next btn btn-lg btn-icon"
-      data-url="{% url 'api-asset' next_asset.id %}?site_context={{ site_context }}"
-      data-asset-id="{{ next_asset.id }}">
-      <i class="material-icons btn-material-icons">navigate_next</i>
-    </button>
-    {% endif %}
+
   </div>
 </div>
