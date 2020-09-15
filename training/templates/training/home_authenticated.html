@@ -7,7 +7,8 @@
 
 
 {% block scripts %}
-<script src="https://cdn.jsdelivr.net/npm/@meilisearch/instant-meilisearch/dist/instant-meilisearch.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@meilisearch/instant-meilisearch/dist/instant-meilisearch.umd.min.js">
+</script>
 <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4"></script>
 {{ search_client_config|json_script:"training-search-client-config" }}
 {% endblock scripts %}
@@ -39,35 +40,6 @@
 
 {% block content %}
 <div class="container-xl pt-3">
-  <section class="">
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <div class="input-group">
-          <div class="input-group-prepend"><span class="input-group-text">
-              <i class="material-icons">search</i>
-            </span>
-          </div>
-          <input type="text" placeholder="Search tags and keywords" class="form-control">
-        </div>
-      </div>
-      <div class="col-md-3 col-6 mb-3">
-        <select class="custom-select">
-          <option value="" selected="selected">All Types</option>
-          {% for type in TrainingType %}
-          <option value="{{ type.value }}">{{ type.label }}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="col-md-3 col-6 mb-3">
-        <select class="custom-select">
-          <option value="" selected="selected">All Difficulties</option>
-          {% for type in TrainingDifficulty %}
-          <option value="{{ type.value }}">{{ type.label }}</option>
-          {% endfor %}
-        </select>
-      </div>
-    </div>
-  </section>
 
   <section id="search">
     <div class="row">
@@ -128,7 +100,25 @@
   {% endcomment %}
 
   <section>
-    <h2 class="mb-3">All training</h2>
+    <div class="row">
+      <div class="col mb-3">
+        <h2 class="mb-0">All Training</h2>
+      </div>
+      <div class="col-auto mb-3">
+
+        <div class="input-group input-group-sm" id="sorting">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="searchLicence">Sort by:</label>
+          </div>
+          {% comment %} <select class="custom-select">
+            <option selected>Relevance</option>
+            <option value="1">Date (New first)</option>
+            <option value="2">Date (Old first)</option>
+          </select> {% endcomment %}
+        </div>
+
+      </div>
+    </div>
     <div class="row" id="hits">
       {% comment %} {% for training in all_trainings %}
       {% include "training/components/card_training.html" with training=training %}

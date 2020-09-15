@@ -122,19 +122,19 @@ const renderHits = (renderOptions, isFirstRender) => {
               <div class="card-header" style='background-image: url("${ item.thumbnail_url }")'>
                 <a href="${ item.url }" class="card-header-link"></a>
               </div>
-        
+
               <a class="card-body" href="${ item.url }">
                 <div class="card-subtitle-group">
-                  <p class="card-subtitle">${ item.type }</p>
+                  <p class="card-subtitle">${ titleCase(item.type) }</p>
                   <p class="card-subtitle">
                     <i class="material-icons icon-inline small">school</i>
-                    ${ item.difficulty }
+                    ${ titleCase(item.difficulty) }
                   </p>
                 </div>
                 <h3 class="card-title">${instantsearch.highlight({ attribute: 'name', hit: item })}</h3>
                 <p class="card-text">${instantsearch.highlight({ attribute: 'name', hit: item })}</p>
               </a>
-      
+
               <div class="card-footer">
                 <div class="pills">
                 </div>
@@ -186,7 +186,7 @@ const renderMenuSelect = (renderOptions, isFirstRender) => {
       refine(event.target.value);
     });
 
-    widgetParams.container.querySelector('.input-group-prepend').insertAdjacentElement('afterend', select);
+    widgetParams.container.insertAdjacentElement('beforeend', select);
     // widgetParams.container.appendChild(select);
   }
 
@@ -195,7 +195,7 @@ const renderMenuSelect = (renderOptions, isFirstRender) => {
   select.disabled = !canRefine;
 
   select.innerHTML = `
-    <option value="">All</option>
+    <option value="">${widgetParams.placeholder}</option>
     ${items
       .map(
         item =>
@@ -203,7 +203,7 @@ const renderMenuSelect = (renderOptions, isFirstRender) => {
             value="${item.value}"
             ${item.isRefined ? 'selected' : ''}
           >
-            ${item.label}
+            ${titleCase(item.label)}
           </option>`
       )
       .join('')}
@@ -233,30 +233,24 @@ search.addWidgets([
   customHits({
     container: document.querySelector('#hits'),
   }),
-  // customMenuSelect({
-  //   container: document.querySelector('#searchType'),
-  //   attribute: 'model',
-  // }),
-  // customMenuSelect({
-  //   container: document.querySelector('#searchLicence'),
-  //   attribute: 'license',
-  // }),
-  // customMenuSelect({
-  //   container: document.querySelector('#searchMedia'),
-  //   attribute: 'media_type',
-  // }),
-  // customMenuSelect({
-  //   container: document.querySelector('#searchFree'),
-  //   attribute: 'free',
-  // }),
-  // customSortBy({
-  //   container: document.querySelector('#sorting'),
-  //   items: [
-  //     { label: 'Relevance', value: 'studio' },
-  //     { label: 'Date (new first)', value: 'studio_date_desc' },
-  //     { label: 'Date (old first)', value: 'studio_date_asc' },
-  //   ],
-  // }),
+  customMenuSelect({
+    container: document.querySelector('#search_type'),
+    attribute: 'type',
+    placeholder: 'All Types',
+  }),
+  customMenuSelect({
+    container: document.querySelector('#search_difficulty'),
+    attribute: 'difficulty',
+    placeholder: 'All Difficulties',
+  }),
+  customSortBy({
+    container: document.querySelector('#sorting'),
+    items: [
+      { label: 'Relevance', value: 'studio' },
+      { label: 'Date (new first)', value: 'training_date_desc' },
+      { label: 'Date (old first)', value: 'training_date_asc' },
+    ],
+  }),
   // customSortBy({
   //   container: document.querySelector('#sorting-mobile'),
   //   items: [
