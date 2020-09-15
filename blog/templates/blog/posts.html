@@ -17,7 +17,7 @@
 <script>
   // Humanizes dates
   document.querySelectorAll('.date').forEach( i => {
-    i.textContent = timeDifference(i.textContent);
+    i.textContent = timeDifference(epochToDate(i.textContent));
   });
 </script>
 

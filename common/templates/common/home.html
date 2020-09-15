@@ -27,6 +27,13 @@
   $grid.imagesLoaded().progress(function () {
     $grid.masonry('layout');
   });
+
+
+  // Humanizes dates
+  document.querySelectorAll('.date').forEach( i => {
+    i.textContent = timeDifference(epochToDate(i.textContent));
+  });
+
 </script>
 
 {% endblock content %}
