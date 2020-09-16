@@ -246,7 +246,7 @@ search.addWidgets([
   customSortBy({
     container: document.querySelector('#sorting'),
     items: [
-      { label: 'Relevance', value: 'studio' },
+      { label: 'Relevance', value: 'training' },
       { label: 'Date (new first)', value: 'training_date_desc' },
       { label: 'Date (old first)', value: 'training_date_asc' },
     ],
