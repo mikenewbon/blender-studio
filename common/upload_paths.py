@@ -25,9 +25,8 @@ ModelWithFile = typing.Union[
 ]
 
 
-# TODO(Natalia): write tests
 def get_upload_to_hashed_path(_: ModelWithFile, filename: str) -> Path:
-    """ Generate a unique, hashed upload path for a source file.
+    """Generate a unique, hashed upload path for a source file.
 
     Files will be uploaded to nested directories, e.g.:
     MEDIA_ROOT/bd/bd2b5b1cd81333ed2d8db03971f91200/bd2b5b1cd81333ed2d8db03971f91200.mp4,
