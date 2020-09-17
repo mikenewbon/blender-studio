@@ -26,27 +26,26 @@ const renderSearchBox = (renderOptions, isFirstRender) => {
     input.setAttribute('type', 'text')
     input.setAttribute('placeholder', 'Search tags and keywords')
 
-    //const loadingIndicator = document.createElement('span');
-    //loadingIndicator.textContent = 'Loading...';
-
-    // const button = document.createElement('button');
-    // button.setAttribute('class', 'btn btn-icon btn-input');
-    // const buttonIcon = document.createElement('i');
-    // buttonIcon.setAttribute('class', 'material-icons');
-    // buttonIcon.textContent = 'close';
-    // button.appendChild(buttonIcon);
+    const append = document.createElement('div');
+    append.setAttribute('class', 'input-group-append');
+    const button = document.createElement('button');
+    button.setAttribute('class', 'btn btn-icon btn-input');
+    append.appendChild(button);
+    const buttonIcon = document.createElement('i');
+    buttonIcon.setAttribute('class', 'material-icons');
+    buttonIcon.textContent = 'close';
+    button.appendChild(buttonIcon);
 
     input.addEventListener('input', event => {
       refine(event.target.value);
     });
 
-    // button.addEventListener('click', () => {
-    //   clear();
-    // });
+    button.addEventListener('click', () => {
+      clear();
+    });
 
     widgetParams.container.querySelector('.input-group-prepend').insertAdjacentElement('afterend', input);
-    //widgetParams.container.appendChild(loadingIndicator);
-    // widgetParams.container.querySelector('.input-group-append').appendChild(button);
+    input.insertAdjacentElement('afterend', append);
   }
 
   widgetParams.container.querySelector('input').value = query;
@@ -132,7 +131,7 @@ const renderHits = (renderOptions, isFirstRender) => {
                   </p>
                 </div>
                 <h3 class="card-title">${instantsearch.highlight({ attribute: 'name', hit: item })}</h3>
-                <p class="card-text">${instantsearch.highlight({ attribute: 'name', hit: item })}</p>
+                <p class="card-text">${instantsearch.highlight({ attribute: 'description', hit: item })}</p>
               </a>
 
               <div class="card-footer">
@@ -251,19 +250,7 @@ search.addWidgets([
       { label: 'Date (old first)', value: 'training_date_asc' },
     ],
   }),
-  // customSortBy({
-  //   container: document.querySelector('#sorting-mobile'),
-  //   items: [
-  //     { label: 'Relevance', value: 'studio' },
-  //     { label: 'Date (new first)', value: 'studio_date_asc' },
-  //     { label: 'Date (old first)', value: 'studio_date_desc' },
-  //   ],
-  // }),
+
 ]);
 
 search.start();
-
-// -------- CHOICES.js -------- //
-
-// const selects = document.querySelectorAll('.search select');
-// const choices = new choices(selects);

@@ -130,7 +130,7 @@ const renderHits = (renderOptions, isFirstRender) => {
 
                   <p class="card-subtitle">
                     <i class="material-icons icon-inline small">schedule</i>
-                    ${ timeDifference(item.timestamp)}
+                    ${ timeDifference(epochToDate(item.timestamp))}
                   </p>
 
                 </div>
