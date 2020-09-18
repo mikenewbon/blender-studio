@@ -17,20 +17,56 @@
 
 
 <section class="container-blog mt-3 mb-4">
-  <div class="row">
-    <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');"
-      class="profile-image profile ml-2">
+  <div class="training-toolbar-container mb-4">
+    <div class="training-toolbar-details row">
+      <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');"
+        class="profile-image profile ml-2">
+      </div>
+      <div class="col-auto">
+        <h4 class="profile-name mb-0">{{ post_author }}</h4>
+        <p class="profile-title subtitle text-white-50 x-small">Author</p>
+      </div>
     </div>
-    <div class="col-auto">
-      <h4 class="profile-name mb-0">{{ post_author }}</h4>
-      <p class="profile-title subtitle text-white-50 x-small">Author</p>
+
+    <div class="file-toolbar">
+
+      <a class="btn btn-sm btn-dark">
+        <i class="material-icons">favorite_border</i>
+        <span class="comment-likes-count">1</span>
+      </a>
+
+      {% comment %} TODO(Mike): Add working share buttons {% endcomment %}
+      <a href="http://www.facebook.com/share.php?u=studiobeta.blender.org/blog/{{ post.post.slug }}"
+        class="btn btn-sm btn-icon btn-dark">
+        <i class="material-icons">facebook</i>
+      </a>
+
+      <a href="#" class="btn btn-sm btn-icon btn-dark">
+        <i class="material-icons">share</i>
+      </a>
+
+      {% if user_can_edit_post %}
+      <a href="{{ post.admin_url }}" class="btn btn-sm btn-icon btn-dark">
+        <i class="material-icons">edit</i>
+      </a>
+      {% endif %}
+
+      <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
+        <i class="material-icons">more_horiz</i>
+      </button>
+
+      <div class="dropdown-menu dropdown-menu-right">
+        <a href="google.com" class="dropdown-item">
+          <i class="material-icons">flag</i>
+          <span>Report Problem</span>
+        </a>
+
+      </div>
+
     </div>
+
   </div>
-  {% if user_can_edit_post %}
-  <div class="admin-button">
-    <a href="{{ post.admin_url }}" class="btn btn-sm btn-secondary admin-float">Edit Page</a>
-  </div>
-  {% endif %}
+
 
   <div class="mb-3">
 
