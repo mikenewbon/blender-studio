@@ -114,6 +114,10 @@
   margin-top: 0;
 }
 
+.card-title{
+  margin-bottom: $spacer / 4;
+}
+
 .card-header-link {
   height: 100%;
   left: 0;
@@ -153,7 +157,7 @@
 //
 
 .card-footer {
-
+  margin-top: -$spacer / 2;
   padding: 0 $card-spacer-x 20px;
 }
 

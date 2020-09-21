@@ -13,13 +13,14 @@ window.cardTraining = (function cardTraining() {
     }
 
     _setupEventListeners() {
+
       this.favoriteElement.addEventListener('click', this._postFavorite.bind(this));
     }
-    // TODO(Mike): Ask Nat to look at this - clicking favorite
     _postFavorite() {
       const { favoriteElement } = this;
       ajax
         .jsonRequest('POST', favoriteElement.dataset.favoriteUrl, {
+
           favorite: !favoriteElement.dataset.checked
         })
         .then(data => {
@@ -43,7 +44,7 @@ window.cardTraining = (function cardTraining() {
     }
   };
 
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('trainingResults', () => {
     document.getElementsByClassName(CardTraining.className).forEach(CardTraining.getOrWrap);
   });
 

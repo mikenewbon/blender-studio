@@ -125,7 +125,7 @@ const renderHits = (renderOptions, isFirstRender) => {
               <a href="${ item.url}" class="card-body">
                 <div class="card-subtitle-group">
                   <p class="card-subtitle content-type">
-                  ${ item.model}
+                  ${ item.model == "section" ? item.project : item.model }
                   </p>
 
                   <p class="card-subtitle">

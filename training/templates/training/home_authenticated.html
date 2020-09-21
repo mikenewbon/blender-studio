@@ -3,10 +3,8 @@
 {% load static %}
 {% load pipeline %}
 
-{% javascript 'training' %}
-
-
 {% block scripts %}
+{% javascript 'training' %}
 <script src="https://cdn.jsdelivr.net/npm/@meilisearch/instant-meilisearch/dist/instant-meilisearch.umd.min.js">
 </script>
 <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4"></script>
@@ -42,31 +40,6 @@
 {% block content %}
 <div class="container-xl pt-3">
 
-  <section id="search">
-    <div class="row">
-
-      <div class="col-md-6 mb-3">
-        <div id="search_input" class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">
-              <i class="material-icons">search</i>
-            </span>
-          </div>
-
-        </div>
-      </div>
-
-      <div id="search_type" class="col-md-3 col-6 mb-3">
-
-      </div>
-
-      <div id="search_difficulty" class="col-md-3 col-6 mb-3">
-
-      </div>
-    </div>
-  </section>
-
-  {% comment %}
   {% if recently_watched_sections %}
   <section class="continue-training mb-3">
     <h2 class="mb-0">Continue training</h2>
@@ -78,7 +51,7 @@
     </div>
   </section>
   {% endif %}
-  <section class="saved-training mb-3">
+  <section class="saved-training mb-4">
     <h2 class="mb-0">Your saved training</h2>
     <p class="mb-3">You can add and remove items from this list by clicking the plus or the tick</p>
     {% if favorited_trainings %}
@@ -98,36 +71,57 @@
     </div>
     {% endif %}
   </section>
-  {% endcomment %}
+
 
   <section>
+
     <div class="row">
+
       <div class="col mb-3">
         <h2 class="mb-0">All Training</h2>
       </div>
-      <div class="col-auto mb-3">
 
+      <div class="col-auto mb-3">
         <div class="input-group input-group-sm" id="sorting">
           <div class="input-group-prepend">
             <label class="input-group-text" for="searchLicence">Sort by:</label>
           </div>
-          {% comment %} <select class="custom-select">
-            <option selected>Relevance</option>
-            <option value="1">Date (New first)</option>
-            <option value="2">Date (Old first)</option>
-          </select> {% endcomment %}
         </div>
-
       </div>
+
     </div>
-    <div class="row" id="hits">
-      {% comment %} {% for training in all_trainings %}
-      {% include "training/components/card_training.html" with training=training %}
-      {% endfor %} {% endcomment %}
+
+    <div id="search" class="row">
+
+      <div class="col-md-6 mb-3">
+        <div id="search_input" class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">
+              <i class="material-icons">search</i>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div id="search_type" class="col-md-3 col-6 mb-3"></div>
+
+      <div id="search_difficulty" class="col-md-3 col-6 mb-3"></div>
+
     </div>
+
+    <div class="row" id="hits"></div>
+
   </section>
 </div>
 
+<script>
+
+document.addEventListener('trainingResults', () => {
+  console.log('trainingSearchEvent');
+});
+</script>
+
 {% javascript 'training_search' %}
+
 
 {% endblock content %}

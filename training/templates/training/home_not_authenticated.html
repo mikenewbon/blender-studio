@@ -1,6 +1,16 @@
 {% extends 'training/base_training.html' %}
 
 {% load static %}
+{% load pipeline %}
+
+{% javascript 'training' %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/@meilisearch/instant-meilisearch/dist/instant-meilisearch.umd.min.js">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4"></script>
+{{ search_client_config|json_script:"training-search-client-config" }}
+{% endblock scripts %}
 
 {% block jumbotron %}
 <div class="jumbotron jumbotron-fluid jumbotron-overlay header">
@@ -28,7 +38,8 @@
 
 {% block content %}
 <div class="container-xl pt-3">
-  <section>
+
+  {% comment %} <section>
     <div class="row">
       <div class="col text-center">
         <div class="bg-secondary py-4 rounded">
@@ -38,6 +49,54 @@
         </div>
       </div>
     </div>
+  </section> {% endcomment %}
+
+  <section>
+    <div class="row">
+      <div class="col mb-3">
+        <h2 class="mb-0">All Training</h2>
+      </div>
+      <div class="col-auto mb-3">
+
+        <div class="input-group input-group-sm" id="sorting">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="searchLicence">Sort by:</label>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="search" class="row">
+
+      <div class="col-md-6 mb-3">
+        <div id="search_input" class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">
+              <i class="material-icons">search</i>
+            </span>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="search_type" class="col-md-3 col-6 mb-3">
+
+      </div>
+
+      <div id="search_difficulty" class="col-md-3 col-6 mb-3">
+
+      </div>
+    </div>
+
+    <div class="row" id="hits">
+      {% comment %} {% for training in all_trainings %}
+      {% include "training/components/card_training.html" with training=training %}
+      {% endfor %} {% endcomment %}
+    </div>
   </section>
 </div>
+
+{% javascript 'training_search' %}
+
 {% endblock content %}

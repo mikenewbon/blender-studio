@@ -120,9 +120,12 @@ const renderHits = (renderOptions, isFirstRender) => {
         item =>
         `
           <div class="col-12 col-sm-6 col-lg-4 card-grid-item" data-favorited="${favoritedTrainingIDs.filter(i => i == item.id).length > 0}">
-            <div class="card card-dark card-media card-hover" data-favorite-url="${ item.url }">
+            <div class="card card-dark card-media card-hover" data-favorite-url="${ item.favorite_url }">
               <div class="card-header" style='background-image: url("${ item.thumbnail_url }")'>
                 <a href="${ item.url }" class="card-header-link"></a>
+                <button class="btn btn-xs btn-icon btn-float checkbox-favorite btn-save-media card-training-favorite " data-toggle="tooltip" data-placement="left" title="Save for later" data-original-title="Save for later">
+                  <i class="material-icons checkbox-favorite-icon-unchecked">add</i>
+                </button>
               </div>
 
               <a class="card-body" href="${ item.url }">
@@ -139,8 +142,10 @@ const renderHits = (renderOptions, isFirstRender) => {
 
               <div class="card-footer">
                 <div class="pills">
+                  ${item.tags.map( tag => `
+                  <p class="badge badge-pill">${titleCase(tag)}</p>
+                  `).join('')}
                 </div>
-
               </div>
             </div>
           </div>
@@ -167,6 +172,10 @@ const renderHits = (renderOptions, isFirstRender) => {
 
     return;
   }
+
+  // On search is dispatches this event to setup the training cards (event listeners etc)
+  const renderedTrainingResults = new Event('trainingResults');
+  document.dispatchEvent(renderedTrainingResults);
 
 };
 
@@ -257,3 +266,4 @@ search.addWidgets([
 ]);
 
 search.start();
+
