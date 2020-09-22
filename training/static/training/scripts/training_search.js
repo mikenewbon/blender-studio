@@ -2,6 +2,9 @@
 const searchClientConfig = JSON.parse(
   document.getElementById('training-search-client-config').textContent
 );
+var favoritedTrainingIDs = JSON.parse(
+  document.getElementById('training-favorited-ids').textContent
+);
 const search = instantsearch({
   indexName: "training",
   searchClient: instantMeiliSearch(searchClientConfig.hostUrl, searchClientConfig.apiKey)
@@ -116,7 +119,7 @@ const renderHits = (renderOptions, isFirstRender) => {
       .map(
         item =>
         `
-          <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
+          <div class="col-12 col-sm-6 col-lg-4 card-grid-item" data-favorited="${favoritedTrainingIDs.filter(i => i == item.id).length > 0}">
             <div class="card card-dark card-media card-hover" data-favorite-url="${ item.url }">
               <div class="card-header" style='background-image: url("${ item.thumbnail_url }")'>
                 <a href="${ item.url }" class="card-header-link"></a>
