@@ -17,17 +17,24 @@ window.cardTraining = (function cardTraining() {
       this.favoriteElement.addEventListener('click', this._postFavorite.bind(this));
     }
     _postFavorite() {
-      const { favoriteElement } = this;
+      const card = this.element;
+      const favoriteButton = this.element.querySelector('.card-training-favorite');
       ajax
-        .jsonRequest('POST', favoriteElement.dataset.favoriteUrl, {
+        .jsonRequest('POST', card.dataset.favoriteUrl, {
 
-          favorite: !favoriteElement.dataset.checked
+          favorite: !card.dataset.checked
         })
         .then(data => {
           if (data.favorite) {
-            favoriteElement.dataset.checked = 'checked';
+            card.dataset.checked = 'checked';
+            favoriteButton.classList.add('checked', 'primary');
+            favoriteButton.firstElementChild.innerText = 'check';
+            favoriteButton.dataset.originalTitle = "Remove from saved training"
           } else {
-            delete favoriteElement.dataset.checked;
+            delete card.dataset.checked;
+            favoriteButton.classList.remove('checked', 'primary');
+            favoriteButton.firstElementChild.innerText = 'add';
+            favoriteButton.dataset.originalTitle = "Save for later"
           }
         });
     }

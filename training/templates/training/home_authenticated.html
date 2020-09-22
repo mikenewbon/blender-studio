@@ -51,6 +51,7 @@
     </div>
   </section>
   {% endif %}
+
   <section class="saved-training mb-4">
     <h2 class="mb-0">Your saved training</h2>
     <p class="mb-3">You can add and remove items from this list by clicking the plus or the tick</p>
@@ -113,13 +114,6 @@
 
   </section>
 </div>
-
-<script>
-
-document.addEventListener('trainingResults', () => {
-  console.log('trainingSearchEvent');
-});
-</script>
 
 {% javascript 'training_search' %}
 

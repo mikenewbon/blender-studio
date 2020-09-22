@@ -114,6 +114,7 @@ let lastRenderArgs;
 const renderHits = (renderOptions, isFirstRender) => {
   const { hits, showMore, widgetParams } = renderOptions;
 
+  //TODO(Mike): When favorite status is added to the index, add favorite button status
   widgetParams.container.innerHTML = `
       ${hits
       .map(
@@ -123,7 +124,7 @@ const renderHits = (renderOptions, isFirstRender) => {
             <div class="card card-dark card-media card-hover" data-favorite-url="${ item.favorite_url }">
               <div class="card-header" style='background-image: url("${ item.thumbnail_url }")'>
                 <a href="${ item.url }" class="card-header-link"></a>
-                <button class="btn btn-xs btn-icon btn-float checkbox-favorite btn-save-media card-training-favorite " data-toggle="tooltip" data-placement="left" title="Save for later" data-original-title="Save for later">
+                <button class="btn btn-xs btn-icon btn-float checkbox-favorite btn-save-media card-training-favorite" data-toggle="tooltip" data-placement="left" title="Save for later">
                   <i class="material-icons checkbox-favorite-icon-unchecked">add</i>
                 </button>
               </div>
