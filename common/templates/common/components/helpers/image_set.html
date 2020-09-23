@@ -1,4 +1,7 @@
+{% load cache %}
 {% load thumbnail %}
+
+{% cache 500 thumbnails img_source classes small_width xsmall_width medium_width large_width xsmall_width %}
 
 <img
   src="{% thumbnail img_source small_width as im %}{{ im.url }}{% endthumbnail %}"
@@ -17,3 +20,4 @@
   class="{{ classes }} {% if img_source|is_portrait %}portrait{% endif %}"
   alt="{{ alt }}"
 >
+{% endcache %}
