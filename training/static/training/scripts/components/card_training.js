@@ -20,6 +20,7 @@ window.cardTraining = (function cardTraining() {
       const favoriteButton = this.element.querySelector('.card-training-favorite');
       const favoriteSection = document.querySelector('#savedTraining');
 
+
       ajax
         .jsonRequest('POST', card.dataset.favoriteUrl, {
 
@@ -34,6 +35,7 @@ window.cardTraining = (function cardTraining() {
             //Add the current training to the favorited array.
             favoritedTrainingIDs.push(Number(card.dataset.trainingId));
             favoriteSection.insertAdjacentElement('afterbegin', card.parentElement.cloneNode(true));
+            document.dispatchEvent(new Event('trainingResults'));
           } else {
             delete card.dataset.checked;
             favoriteButton.classList.remove('checked', 'primary');
@@ -42,6 +44,7 @@ window.cardTraining = (function cardTraining() {
             //Remove the current training from the favorited array.
             favoritedTrainingIDs = favoritedTrainingIDs.filter(function (ele) { return ele != Number(card.dataset.trainingId); });
             favoriteSection.querySelector('[data-training-id="'+ card.dataset.trainingId + '"').parentElement.remove();
+            // TODO(Mike): If removing favorite from the saved area, it should reflect in all training
           }
         });
     }

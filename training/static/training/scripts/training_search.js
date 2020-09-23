@@ -176,9 +176,7 @@ const renderHits = (renderOptions, isFirstRender) => {
   }
 
   // On search is dispatches this event to setup the training cards (event listeners etc)
-  const renderedTrainingResults = new Event('trainingResults');
-  document.dispatchEvent(renderedTrainingResults);
-
+  document.dispatchEvent(new Event('trainingResults'));
 };
 
 
