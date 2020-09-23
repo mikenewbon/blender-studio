@@ -14,6 +14,7 @@ def training_model_to_template_type(
     training: trainings.Training, favorited: bool
 ) -> typed_templates.types.Training:
     return typed_templates.types.Training(
+        id=training.pk,
         name=training.name,
         description=training.description,
         summary=markdown.render(training.summary),

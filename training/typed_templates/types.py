@@ -11,6 +11,7 @@ from training.models import trainings
 
 @dc.dataclass
 class Training:
+    id: int
     name: str
     description: str
     summary: Markup
