@@ -183,31 +183,6 @@
   padding: $spacer / 4 0;
 
   &.training {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-
-    .drawer-nav-section-icon {
-
-      &::before,
-      &::after {
-        background: $input-gray;
-        content: close-quote;
-        height: 500%;
-        left: 50%;
-        position: absolute;
-        width: 2px;
-        z-index: -1;
-      }
-
-      &::before {
-        transform: translate(-50%, 50%);
-      }
-
-      &::after {
-        transform: translate(-50%, -50%);
-      }
-    }
 
     .drawer-nav-section {
       display: flex;
@@ -219,25 +194,7 @@
       }
 
       &.complete {
-        +.drawer-nav-section .drawer-nav-section-icon:after {
-          background-color: $primary;
-        }
 
-        .drawer-nav-section-icon:before {
-          background-color: $primary;
-        }
-      }
-
-      &:first-of-type {
-        .drawer-nav-section-icon:after {
-          content: none;
-        }
-      }
-
-      &:last-of-type {
-        .drawer-nav-section-icon:before {
-          content: none;
-        }
       }
     }
   }
@@ -378,7 +335,6 @@ $circle-circumference: $circle-diameter * 3.14;
 .drawer-nav-section-icon {
   align-items: center;
   align-self: flex-start;
-  background-color: $input-gray;
   border-radius: 50%;
   display: flex;
   flex-shrink: 0;
@@ -410,8 +366,8 @@ $circle-circumference: $circle-diameter * 3.14;
       stroke: $primary;
       stroke-dasharray: $circle-circumference;
       stroke-dashoffset: calc((1 - var(--progress-fraction, 0)) * #{$circle-circumference}px);
-      stroke-linecap: square;
-      stroke-width: 2px;
+      stroke-linecap: round;
+      stroke-width: 3px;
     }
   }
 }
