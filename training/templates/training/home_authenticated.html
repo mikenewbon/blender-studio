@@ -56,13 +56,13 @@
     <h2 class="mb-0">Your saved training</h2>
     <p class="mb-3">You can add and remove items from this list by clicking the plus or the tick</p>
     {% if favorited_trainings %}
-    <div class="row">
+    <div class="row" id="savedTraining">
       {% for training in favorited_trainings %}
       {% include "training/components/card_training.html" with training=training %}
       {% endfor %}
     </div>
     {% else %}
-    <div class="row">
+    <div class="row" id="savedTraining">
       <div class="col text-center">
         <div class="bg-secondary py-4 rounded">
           <h3 class="mb-0">No saved training</h3>
