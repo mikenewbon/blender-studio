@@ -57,7 +57,7 @@ class DynamicStorageFileField(models.FileField):
 
 
 class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
-    source = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
+    source = models.FileField(upload_to=get_upload_to_hashed_path)
     source_type = models.CharField(choices=StaticAssetFileTypeChoices.choices, max_length=5)
     # TODO(Natalia): source type validation
     original_filename = models.CharField(max_length=128, editable=False)
@@ -84,7 +84,7 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
         StorageLocation, on_delete=models.PROTECT, related_name='static_assets'
     )
 
-    thumbnail = DynamicStorageFileField(upload_to=get_upload_to_hashed_path, blank=True)
+    thumbnail = models.FileField(upload_to=get_upload_to_hashed_path, blank=True)
     thumbnail.description = (
         "Asset thumbnail is auto-generated for images and videos. Required for other files."
     )

@@ -55,14 +55,13 @@ class StaticAssetAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
             },
         ),
     )
-    list_filter = ['source_type', 'user', 'author', 'storage_location__film__title']
+    list_filter = ['source_type', 'user', 'author']
     search_fields = [
         'original_filename',
         'user__first_name',
         'user__last_name',
         'author__first_name',
         'author__last_name',
-        'storage_location__film__title',
         'source_type',
     ]
     readonly_fields = ['original_filename', 'size_bytes', 'date_created']

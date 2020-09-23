@@ -22,10 +22,6 @@ BLENDER_ID = {
     "OAUTH_SECRET": "CHANGE_ME",
 }
 
-GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-    pathlib.Path(__file__).parent / "blender-cloud-credentials.json"
-)
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -95,3 +91,8 @@ MEILISEARCH_PRIVATE_KEY = 'CHANGE_ME'
 MEILISEARCH_API_ADDRESS = 'http://127.0.0.1:7700/'
 SEARCH_CLIENT = meilisearch.Client(MEILISEARCH_API_ADDRESS, apiKey=MEILISEARCH_PRIVATE_KEY)
 MAIN_SEARCH_INDEX = SEARCH_CLIENT.get_index(MEILISEARCH_INDEX_UID)
+
+AWS_ACCESS_KEY_ID = 'CHANGE_ME'
+AWS_SECRET_ACCESS_KEY = 'CHANGE_ME'
+AWS_CLOUDFRONT_KEY_ID = os.environ.get('AWS_CLOUDFRONT_KEY_ID')
+AWS_CLOUDFRONT_KEY = os.environ.get('AWS_CLOUDFRONT_KEY').encode('ascii')

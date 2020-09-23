@@ -33,8 +33,11 @@ and it must not be committed.
     has been adjusted. However, for local development at this stage only the database
     password actually has to be set for the project to run.
     - Optionally: configure your IDE database connection.
-6. Add a Google Storage Credentials file `blender-cloud-credentials.json` in the
-`studio/` folder.
+6. Fill in AWS S3 and CloudFront credentials:
+    - Replace "CHANGE_ME" with your access keys in `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`);
+    - Set the CloudFront environment variables, e.g.:
+    ```export AWS_CLOUDFRONT_KEY_ID='APK***'```
+    ```export AWS_CLOUDFRONT_KEY=`cat pk-APK***.pem` ```
 6. In the command line, activate the virtual environment created by poetry:
     ```poetry shell```
     - Configure your IDE to use the venv by default.

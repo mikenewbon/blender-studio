@@ -7,7 +7,7 @@ from django.urls.base import reverse
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
 from films.models import Asset, Film, FilmCrew
-from static_assets.models import DynamicStorageFileField, StorageLocation
+from static_assets.models import StorageLocation
 
 
 class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
@@ -48,7 +48,7 @@ class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
     storage_location = models.ForeignKey(
         StorageLocation, on_delete=models.PROTECT, related_name='production_logs', editable=False,
     )
-    thumbnail = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
+    thumbnail = models.FileField(upload_to=get_upload_to_hashed_path)
 
     @property
     def author_name(self) -> str:
@@ -67,7 +67,6 @@ class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
     def clean(self):
         super().clean()
         if self.film_id:
-            self.storage_location = self.film.storage_location
             if not self.name:
                 self.name = f'This week on {self.film.title}'
 

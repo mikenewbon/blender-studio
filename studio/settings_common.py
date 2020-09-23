@@ -1,3 +1,4 @@
+import os
 import pathlib
 import sys
 
@@ -265,3 +266,14 @@ TRAINING_SEARCH = {
 
 
 TAGGIT_CASE_INSENSITIVE = True
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+PUBLIC_FILE_STORAGE = 'common.storage.S3PublicStorage'
+# Do not set "public-read" ACL on bucket items
+AWS_DEFAULT_ACL = None
+AWS_S3_FILE_OVERWRITE = False
+AWS_S3_REGION_NAME = 'eu-central-1'
+AWS_STORAGE_BUCKET_NAME = 'blender-studio'
+AWS_S3_CUSTOM_DOMAIN = 'ddz4ak4pa3d19.cloudfront.net'
+
+THUMBNAIL_STORAGE = PUBLIC_FILE_STORAGE

@@ -6,7 +6,7 @@ from taggit.managers import TaggableManager
 from comments.models import Comment
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
-from static_assets.models import DynamicStorageFileField, StorageLocation
+from static_assets.models import StorageLocation
 from training.models import chapters
 
 
@@ -81,7 +81,7 @@ class SectionComment(models.Model):
 class Video(mixins.CreatedUpdatedMixin, models.Model):
     storage_location = models.ForeignKey(StorageLocation, on_delete=models.PROTECT, editable=False)
     section = models.OneToOneField(Section, on_delete=models.CASCADE, related_name='video')
-    file = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
+    file = models.FileField(upload_to=get_upload_to_hashed_path)
     size_bytes = models.BigIntegerField(editable=False)
     duration = models.DurationField(help_text='[DD] [[HH:]MM:]ss[.uuuuuu]')
     duration.description = 'Video duration in the format [DD] [[HH:]MM:]ss[.uuuuuu]'
@@ -104,7 +104,7 @@ class Video(mixins.CreatedUpdatedMixin, models.Model):
 class Asset(mixins.CreatedUpdatedMixin, models.Model):
     storage_location = models.ForeignKey(StorageLocation, on_delete=models.PROTECT, editable=False)
     section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='assets')
-    file = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
+    file = models.FileField(upload_to=get_upload_to_hashed_path)
     size_bytes = models.IntegerField(editable=False)
 
     def __str__(self) -> str:

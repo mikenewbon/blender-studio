@@ -3,7 +3,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 
-from static_assets.models import StorageLocation, DynamicStorageFileField
+from static_assets.models import StorageLocation
 
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
@@ -31,10 +31,10 @@ class Film(mixins.CreatedUpdatedMixin, models.Model):
     is_published = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)
 
-    logo = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
-    poster = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
-    picture_header = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
-    thumbnail = DynamicStorageFileField(upload_to=get_upload_to_hashed_path)
+    logo = models.FileField(upload_to=get_upload_to_hashed_path)
+    poster = models.FileField(upload_to=get_upload_to_hashed_path)
+    picture_header = models.FileField(upload_to=get_upload_to_hashed_path)
+    thumbnail = models.FileField(upload_to=get_upload_to_hashed_path)
     youtube_link = models.URLField(blank=True)
     crew = models.ManyToManyField(User, through='FilmCrew')
 
