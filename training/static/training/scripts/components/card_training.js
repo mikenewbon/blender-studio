@@ -43,8 +43,16 @@ window.cardTraining = (function cardTraining() {
             favoriteButton.dataset.originalTitle = "Save for later";
             //Remove the current training from the favorited array.
             favoritedTrainingIDs = favoritedTrainingIDs.filter(function (ele) { return ele != Number(card.dataset.trainingId); });
-            favoriteSection.querySelector('[data-training-id="'+ card.dataset.trainingId + '"').parentElement.remove();
-            // TODO(Mike): If removing favorite from the saved area, it should reflect in all training
+            favoriteSection.querySelector('[data-training-id="'+ card.dataset.trainingId + '"]').parentElement.remove();
+
+            const similarCards = document.querySelectorAll('[data-training-id="' + card.dataset.trainingId + '"]');
+
+            similarCards.forEach(element => {
+              const similarCardsFavorite = element.querySelector('.card-training-favorite');
+              similarCardsFavorite.classList.remove('checked', 'primary');
+              similarCardsFavorite.firstElementChild.innerText = 'add';
+              similarCardsFavorite.dataset.originalTitle = "Save for later";
+            })
           }
         });
     }

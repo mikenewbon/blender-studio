@@ -142,13 +142,14 @@ const renderHits = (renderOptions, isFirstRender) => {
                 <p class="card-text">${instantsearch.highlight({ attribute: 'description', hit: item })}</p>
               </a>
 
-              <div class="card-footer">
+              ${ item.tags != '' ? `<div class="card-footer">
                 <div class="pills">
                   ${item.tags.map( tag => `
                   <p class="badge badge-pill">${titleCase(tag)}</p>
                   `).join('')}
                 </div>
-              </div>
+              </div>` : ''}
+
             </div>
           </div>
         `
