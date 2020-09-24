@@ -91,7 +91,7 @@ function titleCase(str) {
 }
 
 function authCheck() {
-  if (document.querySelector('body.auth')){
+  if (document.querySelector('body[data-authenticated="true"]')){
     return true;
   } else{
     return false;
