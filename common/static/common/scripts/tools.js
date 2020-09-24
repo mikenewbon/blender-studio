@@ -89,3 +89,11 @@ function titleCase(str) {
     return splitStr.join(' ');
   }
 }
+
+function authCheck() {
+  if (document.querySelector('body.auth')){
+    return true;
+  } else{
+    return false;
+  }
+}

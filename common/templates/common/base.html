@@ -35,7 +35,7 @@
   {% block scripts %}{% endblock scripts %}
 </head>
 
-<body class="{% block bodyclasses %}{% endblock bodyclasses %}">
+<body class="{% block bodyclasses %}{% endblock bodyclasses %} {% if request.user.is_authenticated %}auth{% endif %}">
   <!-- When the body has a nav-drawer, it should have the class 'has-nav-drawer' and when it's wide, 'has-nav-drawer nav-drawer-wide' -->
   <div class="progress global-progress">
     <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
