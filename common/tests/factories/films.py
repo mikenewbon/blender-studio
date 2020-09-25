@@ -54,7 +54,6 @@ class CollectionFactory(DjangoModelFactory):
 
     storage_location = factory.SelfAttribute('film.storage_location')
 
-    preview = factory.LazyFunction(generate_image_path)
     thumbnail = factory.LazyFunction(generate_image_path)
 
 
