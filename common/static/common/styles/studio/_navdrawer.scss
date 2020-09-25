@@ -293,6 +293,12 @@
 
     .drawer-nav-section-icon {
       color: $white;
+
+      &-progress {
+        .progress {
+          stroke: $primary;
+        }
+      }
     }
   }
 
@@ -370,30 +376,29 @@ $circle-circumference: $circle-diameter * 3.14;
   i {
     font-size: $font-size-base * 1.125;
   }
+}
 
-  &-progress {
+.drawer-nav-section-icon-progress {
 
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(-90deg);
 
-    left: 50%;
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%) rotate(-90deg);
+  .progress {
+    fill: none;
+    stroke: $highlight-white-strong;
+    stroke-dasharray: $circle-circumference;
+    stroke-dashoffset: calc((1 - var(--progress-fraction, 0)) * #{$circle-circumference}px);
+    stroke-linecap: round;
+    stroke-width: 3px;
+  }
 
-    .progress {
-      fill: none;
-      stroke: $primary;
-      stroke-dasharray: $circle-circumference;
-      stroke-dashoffset: calc((1 - var(--progress-fraction, 0)) * #{$circle-circumference}px);
-      stroke-linecap: round;
-      stroke-width: 3px;
-    }
-
-    .background {
-      fill: none;
-      stroke: $secondary;
-      stroke-linecap: round;
-      stroke-width: 3px;
-    }
+  .background {
+    fill: none;
+    stroke: $secondary;
+    stroke-linecap: round;
+    stroke-width: 3px;
   }
 }
 
