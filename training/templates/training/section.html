@@ -32,6 +32,9 @@
   <div class="row mb-3">
     <div class="col training-video">
       {% include 'common/components/video_player.html' with url=video.url progress_url=video.progress_url start_position=video.start_position %}
+      <script>
+        new Plyr(document.querySelector('.video-player video'));
+      </script>
     </div>
   </div>
   {% endif %}

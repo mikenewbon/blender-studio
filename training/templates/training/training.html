@@ -6,7 +6,7 @@
 
   <div class="container-xl">
     <ol class="breadcrumb">
-      {% include 'common/components/navigation/breadcrumb.html' with label='Home' url='/' %}
+      {% include 'common/components/navigation/breadcrumb.html' with label='Training' url='/training/' %}
       {% include 'common/components/navigation/breadcrumb.html' with label=training.name %}
     </ol>
   </div>
@@ -18,7 +18,7 @@
 {% block content %}
 <div class="container-xl pt-3">
   <section>
-    <img src="{{ training.picture_header }}" class="img-fluid img-width-100 mb-3" alt="">
+    <img src="{{ training.picture_header }}" class="img-fluid img-width-100 rounded mb-3" alt="{{ training.name }}">
     <div class="row">
       <div class="col-md-8">
         <p class="subtitle">{{ training.type.label }}</p>

@@ -1,7 +1,16 @@
 <li class="drawer-nav-section {% if finished %}complete{% endif %}">
   <a href="{{ href }}" class="drawer-nav-section-link {% if active %}active{% endif %}">
+    <div class="nav-drawer-section-progress-wrapper">
+      {% comment %} <i class="material-icons">play_arrow</i> {% endcomment %}
+      <h5>{{ nth }}</h5>
 
-    <i class="material-icons">play_arrow</i>
+      {% comment %} TODO(Anna): Fix fraction calculation {% endcomment %}
+      <svg width="30" height="30" class="drawer-nav-section-icon-progress"
+        style="--progress-fraction: {% if finished %} 1.0 {% else %} {{ progress_fraction }} {% endif %}">
+        <circle class="background" cx="15" cy="15" r="12" />
+        <circle class="progress" cx="15" cy="15" r="12" />
+      </svg>
+    </div>
     <h4>{{ title }}</h4>
 
   </a>
