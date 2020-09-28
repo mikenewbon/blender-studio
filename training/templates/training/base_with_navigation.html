@@ -1,16 +1,19 @@
 {% extends 'training/base_training.html' %}
 
 {% block bodyclasses %}
-has-nav-drawer
-nav-drawer-wide
+{% comment %} has-nav-drawer
+nav-drawer-wide {% endcomment %}
 {% endblock bodyclasses %}
 
-{% block nav_drawer_inner %}
+{% block nested_nav_drawer_inner %}
 
-<div class="drawer-nav-header">
+{% comment %} <div class="drawer-nav-header">
   <p class="subtitle">{{ training.type.label }}</p>
   <h2>{{ training.name }}</h2>
-</div>
+</div> {% endcomment %}
+
+{% block nested_nav_drawer_header %}
+{% endblock nested_nav_drawer_header %}
 
 <div class="drawer-nav-group">
   <div class="drawer-nav-dropdown-wrapper">
@@ -41,6 +44,5 @@ nav-drawer-wide
 
   </ol>
 </div>
-
 {% endfor %}
-{% endblock nav_drawer_inner %}
+{% endblock nested_nav_drawer_inner %}

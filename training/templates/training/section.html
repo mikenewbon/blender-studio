@@ -4,13 +4,13 @@
 
 {% block scripts %}
 {{ block.super }}
-{% comment %} <script id="sectionProgressReportingData" type="application/json">
+<script id="sectionProgressReportingData" type="application/json">
   {
     {
       section_progress_reporting_data | json_script
     }
   }
-</script> {% endcomment %}
+</script>
 {{ section_progress_reporting_data|json_script:"sectionProgressReportingData" }}
 {% endblock scripts %}
 
@@ -26,104 +26,124 @@
 </nav>
 {% endblock breadcrumbs %}
 
-{% block content %}
-<div class="container-xl pt-3">
-  {% if video is not none %}
-  <div class="row mb-3">
-    <div class="col training-video">
-      {% include 'common/components/video_player.html' with url=video.url progress_url=video.progress_url start_position=video.start_position %}
-      <script>
-        new Plyr(document.querySelector('.video-player video'));
-      </script>
-    </div>
-  </div>
-  {% endif %}
+{% comment %} {% block nested_nav_drawer_header %}
+<div class="drawer-nav-header">
   <div class="row">
-    <div class="col-md-8">
-      <p class="subtitle small">{{ chapter.name_with_index }}</p>
-      <h2 class="">{{ section.name_with_index }}</h2>
-      <div class="training-toolbar-container">
-        <div class="training-toolbar-details">
-          <div class="text-muted x-small">
-            <p class="d-inline mr-3">{{ training.date_updated|date:"jS F Y" }}</p>
-          </div>
-        </div>
-
-        <div class="training-toolbar">
-          <a class="btn btn-sm btn-dark"><i class="material-icons">favorite_border</i> Like</a>
-          <a class="btn btn-sm btn-dark">Download</a>
-          <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
-
-            <i class="material-icons">more_horiz</i>
-
-            <div class="dropdown-menu dropdown-menu-right">
-              <a href="#" class="dropdown-item">
-                <i class="material-icons">flag</i>
-                <span>Report Problem</span>
-              </a>
-            </div>
-          </button>
-        </div>
-      </div>
-
-      <section class="mb-3">{{ section.text }}</section>
-
-      <div class="card card-dark d-md-none">
-        <div class="card-body">
-          <!-- TODO(Mike): Get next training -->
-          {% if video is not none %}
-          <div class="row mb-2 justify-content-between">
-            <div class="col-auto">
-              <p class="subtitle small">Autoplay Next Section</p>
-              <h3 class="mb-0">02. Point Tracking - Part 2</h3>
-            </div>
-            {% include 'common/components/checkbox_toggle.html' with checked=False %}
-          </div>
-          {% else %}
-          <div class="row mb-2 justify-content-between">
-            <div class="col-md-auto">
-              <p class="subtitle small">Next Section</p>
-              <h3 class="mb-0">02. Point Tracking - Part 2</h3>
-            </div>
-          </div>
-          {% endif %}
-
-          <a href="#" class="video-preview">
-            <img src="{% static 'training/images/placeholders/video.jpg' %}" class="img-fluid">
-          </a>
-
-        </div>
-      </div>
-
-      <section class="mb-3">{% include 'comments/components/comment_section.html' %}</section>
-
+    <div class="col">
+      <p class="subtitle small">Autoplay Next Section</p>
     </div>
-    <div class="col-md-4">
-      <div class="card card-dark d-none d-md-block">
-        <div class="card-body">
-          {% if video is not none %}
-          <div class="row mb-2 justify-content-between">
-            <div class="col-md-auto">
-              <p class="subtitle small">Autoplay Next Section</p>
-              <h3 class="mb-0">02. Point Tracking - Part 2</h3>
-            </div>
-            {% include 'common/components/checkbox_toggle.html' with checked=False %}
-          </div>
-          {% else %}
-          <div class="row mb-2 justify-content-between">
-            <div class="col-md-auto">
-              <p class="subtitle small">Next Section</p>
-              <h3 class="mb-0">02. Point Tracking - Part 2</h3>
-            </div>
-          </div>
-          {% endif %}
-          <a href="#" class="video-preview">
-            <img src="{% static 'training/images/placeholders/video.jpg' %}" class="img-fluid">
-          </a>
-
-        </div>
-      </div>
+    {% include 'common/components/checkbox_toggle.html' with checked=False %}
+  </div>
+  <div class="row">
+    <div class="col-md-5">
+      <a href="#" class="">
+        <img src="{% static 'training/images/placeholders/video.jpg' %}" class="img-fluid rounded">
+      </a>
+    </div>
+    <div class="col-md-7">
+      <h4 class="mb-0">02. Point Tracking - Part 2</h4>
     </div>
   </div>
 </div>
-{% endblock content %}
+{% endblock nested_nav_drawer_header %} {% endcomment %}
+
+{% block nexted_content %}
+{% if video is not none %}
+<div class="row mb-3">
+  <div class="col training-video">
+    {% include 'common/components/video_player.html' with url=video.url progress_url=video.progress_url start_position=video.start_position %}
+    <script>
+      new Plyr(document.querySelector('.video-player video'));
+    </script>
+  </div>
+</div>
+{% endif %}
+<div class="row">
+  <div class="col">
+    <p class="subtitle small">{{ chapter.name_with_index }}</p>
+    <h2 class="">{{ section.name_with_index }}</h2>
+    <div class="training-toolbar-container">
+      <div class="training-toolbar-details">
+        <div class="text-muted x-small">
+          <p class="d-inline mr-3">{{ training.date_updated|date:"jS F Y" }}</p>
+        </div>
+      </div>
+
+      <div class="training-toolbar">
+        <a class="btn btn-sm btn-dark"><i class="material-icons">favorite_border</i> Like</a>
+        <a class="btn btn-sm btn-dark">Download</a>
+        <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
+
+          <i class="material-icons">more_horiz</i>
+
+          <div class="dropdown-menu dropdown-menu-right">
+            <a href="#" class="dropdown-item">
+              <i class="material-icons">flag</i>
+              <span>Report Problem</span>
+            </a>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <section class="mb-3">{{ section.text }}</section>
+
+    <div class="card card-dark d-md-none">
+      <div class="card-body">
+        <!-- TODO(Mike): Get next training -->
+        {% if video is not none %}
+        <div class="row mb-2 justify-content-between">
+          <div class="col-auto">
+            <p class="subtitle small">Autoplay Next Section</p>
+            <h3 class="mb-0">02. Point Tracking - Part 2</h3>
+          </div>
+          {% include 'common/components/checkbox_toggle.html' with checked=False %}
+        </div>
+        {% else %}
+        <div class="row mb-2 justify-content-between">
+          <div class="col-md-auto">
+            <p class="subtitle small">Next Section</p>
+            <h3 class="mb-0">02. Point Tracking - Part 2</h3>
+          </div>
+        </div>
+        {% endif %}
+
+        <a href="#" class="video-preview">
+          <img src="{% static 'training/images/placeholders/video.jpg' %}" class="img-fluid">
+        </a>
+
+      </div>
+    </div>
+
+    <section class="mb-3">{% include 'comments/components/comment_section.html' %}</section>
+
+  </div>
+  {% comment %} <div class="col-md-4">
+    <div class="card card-dark d-none d-md-block">
+      <div class="card-body">
+        {% if video is not none %}
+        <div class="row mb-2 justify-content-between">
+          <div class="col-md-auto">
+            <p class="subtitle small">Autoplay Next Section</p>
+            <h3 class="mb-0">02. Point Tracking - Part 2</h3>
+          </div>
+          {% include 'common/components/checkbox_toggle.html' with checked=False %}
+        </div>
+        {% else %}
+        <div class="row mb-2 justify-content-between">
+          <div class="col-md-auto">
+            <p class="subtitle small">Next Section</p>
+            <h3 class="mb-0">02. Point Tracking - Part 2</h3>
+          </div>
+        </div>
+        {% endif %}
+        <a href="#" class="video-preview">
+          <img src="{% static 'training/images/placeholders/video.jpg' %}" class="img-fluid">
+        </a>
+
+      </div>
+    </div>
+  </div> {% endcomment %}
+</div>
+
+{% endblock nexted_content %}
