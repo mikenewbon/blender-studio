@@ -1,25 +1,12 @@
 {% extends 'training/base_training.html' %}
 
-{% block bodyclasses %}
-{% comment %} has-nav-drawer
-nav-drawer-wide {% endcomment %}
-{% endblock bodyclasses %}
-
 {% block nested_nav_drawer_inner %}
-
-{% comment %} <div class="drawer-nav-header">
-  <p class="subtitle">{{ training.type.label }}</p>
-  <h2>{{ training.name }}</h2>
-</div> {% endcomment %}
 
 {% block nested_nav_drawer_header %}
 {% endblock nested_nav_drawer_header %}
 
 <div class="drawer-nav-group">
   <div class="drawer-nav-dropdown-wrapper">
-    {% comment %}
-    {% include 'common/components/navigation/nav_drawer_section.html' with title='About this training' subtitle='Overview' href=navigation.overview_url active=navigation.overview_active admin_change_href=navigation.training_admin_url %}
-    {% endcomment %}
     <a class="drawer-nav-dropdown h3" href="{{ navigation.overview_url }}">
       <i class="material-icons mr-2">insert_drive_file</i>
       {{ training.type.label }} Overview

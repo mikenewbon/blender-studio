@@ -25,7 +25,7 @@
 
 .training-video {
   .video-player {
-    @include media-breakpoint-down(md) {
+    @include media-breakpoint-down(sm) {
       margin: -20px -20px 0;
     }
     border-radius: $border-radius;

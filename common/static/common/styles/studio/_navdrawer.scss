@@ -1,61 +1,7 @@
-.has-nav-drawer {
-  .navdrawer-offset {
-    @include media-breakpoint-up(md) {
-      margin-left: $nav-drawer-width;
-    }
-  }
-
-  .nav-drawer {
-    @include media-breakpoint-down(sm) {
-      transform: translateY(-100%);
-    }
-
-    transform: translateX(0);
-  }
-
-  &.nav-drawer-open {
-    .navdrawer-offset {
-      @include media-breakpoint-up(md) {
-        margin-left: $nav-drawer-width;
-      }
-    }
-
-    .nav-drawer {
-      @include media-breakpoint-down(sm) {
-        transform: translateY(0%);
-      }
-
-      transform: translateX(0);
-
-    }
-  }
-}
-
 .nav-drawer-open {
   .nav-drawer {
-    @include media-breakpoint-down(sm) {
-      transform: translateY(0%);
-    }
+    transform: translateY(0%);
   }
-}
-
-.global-navigation {
-  @include media-breakpoint-down(sm) {
-    display: flex;
-    padding: $spacer / 2 0;
-
-    .nav-drawer-sub-list {
-      display: none;
-    }
-  }
-
-  border-bottom: 1px solid $highlight-white;
-  display: none;
-  margin: 0;
-}
-
-.nested-navigation {
-  // display: flex;
 }
 
 .nav-drawer {
@@ -65,12 +11,12 @@
   flex-direction: column;
   height: 100%;
   max-height: 100vh;
-  position: sticky;
-  top: calc(64px + 42px + 20px); //TODO(Mike): Math
+  position: fixed;
+  top: 0;
   // transform: translateX(-$nav-drawer-width);
   transition: transform $nav-drawer-animation-duration;
   width: $nav-drawer-width;
-  z-index: $zindex-modal-backdrop;
+  z-index: $zindex-fixed;
 
   @include media-breakpoint-down(sm) {
     border-right: 0;
@@ -84,12 +30,13 @@
   &.nested {
     border-radius: $border-radius;
     border-right: 0;
+    height: auto;
     max-height: none;
     overflow: auto;
     padding: $spacer / 4 0;
+    position: sticky;
     width: auto;
     z-index: auto;
-    height: auto;
 
     .nav-drawer-body {
       height: auto;
@@ -98,19 +45,7 @@
   }
 }
 
-.nav-drawer-spacer {
-  @include media-breakpoint-down(sm) {
-    display: none;
-  }
-
-  align-items: stretch;
-  display: flex;
-  height: 0;
-  width: 100%;
-}
-
 .has-secondary-nav {
-
   .nav-drawer-spacer {
     height: auto;
   }

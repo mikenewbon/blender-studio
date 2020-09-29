@@ -167,6 +167,10 @@ body {
       flex-wrap: nowrap;
     }
 
+    @include media-breakpoint-down(md) {
+      margin: 0;
+    }
+
     flex-wrap: wrap;
     overflow-x: scroll;
     padding: 0 $spacer;
