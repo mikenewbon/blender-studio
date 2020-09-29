@@ -18,9 +18,8 @@ nav-drawer-wide {% endcomment %}
 <div class="drawer-nav-group">
   <div class="drawer-nav-dropdown-wrapper">
     {% comment %} {% include 'common/components/navigation/nav_drawer_section.html' with title='About this training' subtitle='Overview' href=navigation.overview_url active=navigation.overview_active admin_change_href=navigation.training_admin_url %} {% endcomment %}
-    <a class="drawer-nav-dropdown h3" data-toggle="collapse"
-      href="{{ navigation.overview_url }}">
-      <i class="material-icons">insert_drive_file</i>
+    <a class="drawer-nav-dropdown h3" href="{{ navigation.overview_url }}">
+      <i class="material-icons mr-2">insert_drive_file</i>
       {{ training.type.label }} Overview
     </a>
   </div>
@@ -31,8 +30,8 @@ nav-drawer-wide {% endcomment %}
   <div class="drawer-nav-dropdown-wrapper ">
     <a class="drawer-nav-dropdown h3 {% if chapter_navigation.current %} active {% else %}collapsed{% endif %}" data-toggle="collapse"
       data-target="#nav-{{ chapter_navigation.slug }}">
+      <span class="drawer-nav-dropdown-text">{{ chapter_navigation.name }}</span>
       <i class="material-icons">keyboard_arrow_down</i>
-      {{ chapter_navigation.name }}
     </a>
   </div>
   <ol id="nav-{{ chapter_navigation.slug }}"

@@ -272,7 +272,10 @@
   padding: ($spacer / 4 * 3) $spacer;
   transition: $transition-base;
 
-
+  h4 {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
 
   &::before {
     background: $highlight-white;
@@ -285,6 +288,7 @@
     top: $spacer / 4;
     transition: $transition-base;
     width: calc(100% - #{$spacer});
+    pointer-events: none;
   }
 
   &:hover {
@@ -455,6 +459,7 @@ $circle-circumference: $circle-diameter * 3.14;
     top: $spacer / 4;
     transition: $transition-base;
     width: calc(100% - #{$spacer});
+    pointer-events: none;
   }
 
   &.collapsed {
@@ -482,8 +487,12 @@ $circle-circumference: $circle-diameter * 3.14;
 
   i {
     align-self: flex-start;
-    margin-right: $spacer / 2;
+
     transition: transform .35s ease;
     vertical-align: text-top;
   }
+}
+
+.drawer-nav-dropdown-text{
+  margin-right: auto;
 }

@@ -48,8 +48,10 @@ has-secondary-nav
 
             <div class="drawer-nav-dropdown-wrapper">
 
-              <a class="drawer-nav-dropdown h3 " href="{% url 'film-gallery' film_slug=film.slug %}"><i
-                  class="material-icons">grade</i>Featured Artwork</a>
+              <a class="drawer-nav-dropdown h3 " href="{% url 'film-gallery' film_slug=film.slug %}">
+                <i class="material-icons mr-2">grade</i>
+                Featured Artwork
+              </a>
 
               {% if admin_change_href is not none %}
               <a href="{{ admin_change_href }}">edit</a>
@@ -65,12 +67,13 @@ has-secondary-nav
               <a class="drawer-nav-dropdown h3 {% if current_collection.parent != collection and current_collection != collection %}collapsed{% endif %}"
                 href="{{ collection.url }}" {% if child_collections %}data-toggle="collapse"
                 data-target="#collection-{{ collection.id }}" {% endif %}>
+                <span class="drawer-nav-dropdown-text">
+                  {{ collection.name }}
+                </span>
                 {% if child_collections %}
                 <i class="material-icons">keyboard_arrow_down</i>
                 {% endif %}
-                <span>
-                  {{ collection.name }}
-                </span>
+
               </a>
               {% if user_can_edit_collection %}
               <a href="{{ collection.admin_url }}" class="btn btn-secondary btn-xs btn-icon btn-float">
