@@ -212,8 +212,6 @@
       &-link {
         flex-grow: 1;
       }
-
-      &.complete {}
     }
   }
 }
@@ -493,6 +491,6 @@ $circle-circumference: $circle-diameter * 3.14;
   }
 }
 
-.drawer-nav-dropdown-text{
+.drawer-nav-dropdown-text {
   margin-right: auto;
 }
