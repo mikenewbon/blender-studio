@@ -35,7 +35,8 @@
   {% block scripts %}{% endblock scripts %}
 </head>
 
-<body class="{% block bodyclasses %}{% endblock bodyclasses %}" data-authenticated="{% if request.user.is_authenticated %}true{% else%}false{% endif %}">
+<body class="{% block bodyclasses %}{% endblock bodyclasses %}"
+  data-authenticated="{% if request.user.is_authenticated %}true{% else%}false{% endif %}">
   <!-- When the body has a nav-drawer, it should have the class 'has-nav-drawer' and when it's wide, 'has-nav-drawer nav-drawer-wide' -->
   <div class="progress global-progress">
     <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
@@ -148,14 +149,14 @@
 
   <nav class="nav-drawer">
     <div class="nav-drawer-body">
-      <div class="px-2 py-2 d-block d-md-none">
+      {% comment %} <div class="px-2 py-2 d-block d-md-none">
         <div class="input-group mb-0">
           <div class="input-group-prepend">
             <span class="input-group-text">
               <i class="material-icons">search</i></span>
           </div><input class="form-control" type="text" placeholder="Search tags and keywords" />
         </div>
-      </div>
+      </div> {% endcomment %}
       <div class="navbar-secondary d-md-none">
         <div class="navdrawer-offset">
           <div class="container-xl">

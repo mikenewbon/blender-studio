@@ -1,5 +1,40 @@
 {% extends 'training/base_training.html' %}
 
+{% block nav_drawer_inner %}
+<div class="nav-drawer-inner">
+  <div class="drawer-nav-group">
+    <div class="drawer-nav-dropdown-wrapper">
+      <a class="drawer-nav-dropdown h3" href="{{ navigation.overview_url }}">
+        <i class="material-icons mr-2">insert_drive_file</i>
+        {{ training.type.label }} Overview
+      </a>
+    </div>
+  </div>
+
+  {% for chapter_navigation in navigation.chapters %}
+  <div class="drawer-nav-group">
+    <div class="drawer-nav-dropdown-wrapper ">
+      <a class="drawer-nav-dropdown h3 {% if chapter_navigation.current %} active {% else %}collapsed{% endif %}"
+        data-toggle="collapse" data-target="#nav-{{ chapter_navigation.slug }}">
+        <span class="drawer-nav-dropdown-text">{{ chapter_navigation.name }}</span>
+        <i class="material-icons">keyboard_arrow_down</i>
+      </a>
+    </div>
+    <div id="nav-{{ chapter_navigation.slug }}"
+      class="drawer-nav-list-wrapper collapse {% if chapter_navigation.current %}show{% endif %}">
+      <ol class="drawer-nav-list training">
+
+        {% for section_navigation in chapter_navigation.sections %}
+        {% include 'common/components/navigation/nav_drawer_section_progress.html' with title=section_navigation.name subtitle='Video' href=section_navigation.url active=section_navigation.current started=section_navigation.started finished=section_navigation.finished progress_fraction=section_navigation.progress_fraction admin_change_href=section_navigation.admin_url nth=forloop.counter|stringformat:"02d" %}
+        {% endfor %}
+
+      </ol>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock nav_drawer_inner %}
+
 {% block nested_nav_drawer_inner %}
 
 {% block nested_nav_drawer_header %}
@@ -23,12 +58,13 @@
       <i class="material-icons">keyboard_arrow_down</i>
     </a>
   </div>
-  <div id="nav-{{ chapter_navigation.slug }}" class="drawer-nav-list-wrapper collapse {% if chapter_navigation.current %}show{% endif %}">
+  <div id="nav-{{ chapter_navigation.slug }}"
+    class="drawer-nav-list-wrapper collapse {% if chapter_navigation.current %}show{% endif %}">
     <ol class="drawer-nav-list training">
 
-        {% for section_navigation in chapter_navigation.sections %}
-        {% include 'common/components/navigation/nav_drawer_section_progress.html' with title=section_navigation.name subtitle='Video' href=section_navigation.url active=section_navigation.current started=section_navigation.started finished=section_navigation.finished progress_fraction=section_navigation.progress_fraction admin_change_href=section_navigation.admin_url nth=forloop.counter|stringformat:"02d" %}
-        {% endfor %}
+      {% for section_navigation in chapter_navigation.sections %}
+      {% include 'common/components/navigation/nav_drawer_section_progress.html' with title=section_navigation.name subtitle='Video' href=section_navigation.url active=section_navigation.current started=section_navigation.started finished=section_navigation.finished progress_fraction=section_navigation.progress_fraction admin_change_href=section_navigation.admin_url nth=forloop.counter|stringformat:"02d" %}
+      {% endfor %}
 
     </ol>
   </div>

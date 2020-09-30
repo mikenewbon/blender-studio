@@ -7,29 +7,6 @@
     <div class="col-md-4 col-lg-3 mb-3 d-none d-md-block">
       <nav class="nav-drawer nested">
         <div class="nav-drawer-body">
-          <div class="px-2 py-2 d-block d-md-none">
-            <div class="input-group mb-0">
-              <div class="input-group-prepend">
-                <span class="input-group-text">
-                  <i class="material-icons">search</i></span>
-              </div>
-              <input class="form-control" type="text" placeholder="Search tags and keywords" />
-            </div>
-          </div>
-          <div class="navbar-secondary d-md-none">
-            <div class="navdrawer-offset">
-              <div class="container-xl">
-                <div class="list-group list-group-flush list-group-horizontal small px-2">
-                  <a class="list-group-item" href="{% url 'film-list' %}">Films</a>
-                  <a class="list-group-item" href="{% url 'training-home' %}">Training</a>
-                  <a class="list-group-item" href="{% url 'post-list' %}">Blog</a>
-                  <a class="list-group-item search" href="{% url 'search' %}">
-                    <i class="material-icons icon-inline">search</i>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
           {% block nested_nav_drawer_inner %}
           {% endblock nested_nav_drawer_inner %}
         </div>

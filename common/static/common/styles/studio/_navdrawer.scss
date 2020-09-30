@@ -1,4 +1,6 @@
 .nav-drawer-open {
+  overflow: hidden;
+
   .nav-drawer {
     transform: translateY(0%);
   }
@@ -7,12 +9,12 @@
 .nav-drawer {
   background: $navigation-gray;
   border-right: 1px solid $highlight-white;
-  display: flex;
+  display: none;
   flex-direction: column;
   height: 100%;
-  max-height: 100vh;
+  max-height: calc(100vh - #{$navbar-height});
   position: fixed;
-  top: 0;
+  top: $navbar-height;
   // transform: translateX(-$nav-drawer-width);
   transition: transform $nav-drawer-animation-duration;
   width: $nav-drawer-width;
@@ -28,6 +30,7 @@
   }
 
   &.nested {
+    display: block;
     border-radius: $border-radius;
     border-right: 0;
     height: auto;
@@ -43,6 +46,10 @@
       max-height: none;
     }
   }
+}
+
+.nav-drawer-inner {
+  padding: $spacer / 2 0;
 }
 
 .has-secondary-nav {
@@ -69,7 +76,7 @@
   }
 
   height: 100%;
-  max-height: 100vh;
+  max-height: calc(100vh - #{$navbar-height});
   overflow-y: auto;
 }
 
