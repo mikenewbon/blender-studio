@@ -212,6 +212,11 @@
   padding: ($spacer / 4 * 3) $spacer;
   transition: $transition-base;
 
+  .drawer-nav-section-icon-progress .progress {
+    transition: $transition-base;
+
+  }
+
   h4 {
     overflow-wrap: break-word;
     word-break: break-word;
@@ -234,6 +239,10 @@
   &:hover {
     color: $white;
     text-decoration: none;
+
+    .drawer-nav-section-icon-progress .progress {
+      stroke: $primary;
+    }
 
     &::before {
       opacity: 1;
@@ -351,6 +360,7 @@ $circle-circumference: $circle-diameter * 3.14;
 
   .progress {
     fill: none;
+    //not using the $progress-bg here as it's too strong, meant for overlaying images
     stroke: $highlight-white-strong;
     stroke-dasharray: $circle-circumference;
     stroke-dashoffset: calc((1 - var(--progress-fraction, 0)) * #{$circle-circumference}px);
@@ -360,7 +370,7 @@ $circle-circumference: $circle-diameter * 3.14;
 
   .background {
     fill: none;
-    stroke: $secondary;
+    stroke: $highlight-white;
     stroke-linecap: round;
     stroke-width: 3px;
   }
