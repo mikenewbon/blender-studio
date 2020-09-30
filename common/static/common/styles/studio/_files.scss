@@ -56,7 +56,7 @@
 .file-header {
   @include button-float;
 
-  border-radius: $border-radius $border-radius 0 0;
+  border-radius: $border-radius;
   overflow: hidden;
   padding: 0;
   position: relative;

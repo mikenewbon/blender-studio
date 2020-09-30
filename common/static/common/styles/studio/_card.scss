@@ -9,6 +9,7 @@
     background-position: center;
     background-size: cover;
     overflow: hidden;
+    border-radius: $border-radius;
   }
 
   .btn-save-media {
@@ -75,10 +76,11 @@
       }
 
       .progress {
-        bottom: 0;
-        left: 0;
+        bottom: $spacer / 2;
+        left:  $spacer / 2;
         position: absolute;
-        width: 100%;
+        width: calc(100% - #{$spacer});
+        border-radius: $border-radius;
       }
     }
   }
