@@ -74,10 +74,10 @@ a.plyr__control {
 
 // Large play button (video only)
 .plyr__control--overlaid {
-    background: rgba($plyr-video-control-bg-hover, 0.8);
+    background: rgba($plyr-video-control-play-bg-hover, 0.8);
     border: 0;
     border-radius: $border-radius;
-    color: $plyr-video-control-color;
+    color: $plyr-video-control-play-color;
     display: none;
     left: 50%;
     padding: ceil($plyr-control-spacing * 1.5);
@@ -94,7 +94,7 @@ a.plyr__control {
 
     &:hover,
     &:focus {
-        background: $plyr-video-control-bg-hover;
+        background: $plyr-video-control-play-bg-hover!important;
     }
 }
 
