@@ -44,7 +44,7 @@
   </div>
   <nav class="navbar">
     <div class="navdrawer-offset">
-      <div class="container-xl">
+      <div class="container-xl flex-nowrap">
 
         <div class="navbar-main-mobile">
           <button class="btn btn-secondary btn-nav btn-icon navdrawertoggle">
@@ -68,6 +68,10 @@
           </a> {% endcomment %}
           <a href="{% url 'post-list' %}" class="btn btn-secondary btn-nav">
             <span>Blog</span>
+          </a>
+
+          <a href="/services" class="btn btn-secondary btn-nav">
+            <span>Services</span>
           </a>
         </div>
         {% if request.user.is_authenticated %}
@@ -165,6 +169,8 @@
               <a class="list-group-item" href="{% url 'training-home' %}">Training</a>
               {% comment %} <a class="list-group-item" href="#">Services</a>{% endcomment %}
               <a class="list-group-item" href="{% url 'post-list' %}">Blog</a>
+              <a class="list-group-item" href="/services">Services</a>
+              <a class="list-group-item" href="/admin">Login</a>
               <a class="list-group-item search" href="{% url 'search' %}">
                 <i class="material-icons icon-inline">search</i>
               </a>
