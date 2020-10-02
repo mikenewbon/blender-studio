@@ -17,7 +17,7 @@
   (max-width: 991px) {{ medium_width }}px,
   (max-width: 1199px) {{ large_width }}px,
   {{ xlarge_width }}px"
-  class="{{ classes }} {% if img_source|is_portrait %}portrait{% endif %}"
+  class="{{ classes }} {% if img_source and img_source|is_portrait %}portrait{% endif %}"
   alt="{{ alt }}"
 >
 {% endcache %}
