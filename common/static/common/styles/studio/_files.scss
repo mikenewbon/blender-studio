@@ -21,6 +21,8 @@
   transition: $transition-base;
   width: 100%;
 
+  background: none;
+
   &:hover {
     background-color: tint($navigation-gray, 10%);
     text-decoration: none;

@@ -4,6 +4,12 @@
   .update-feed-week:last-of-type .update-feed-individual:last-of-type {
     margin-bottom: 0;
   }
+
+  .files {
+    background: $highlight-black;
+    border-radius: $border-radius;
+    padding: $spacer $spacer 0 $spacer;
+  }
 }
 
 .update-feed-week {
@@ -13,7 +19,11 @@
 
   display: flex;
   flex-direction: row;
-  overflow: hidden;
+  background: $navigation-gray;
+  border-radius: $border-radius;
+  padding: $spacer;
+  margin-bottom: $spacer;
+  border: 1px solid $highlight-white;
 }
 
 .update-feed-week-header {
@@ -40,34 +50,12 @@
   }
 }
 
-.update-feed-week-column {
-  &.column-left {
-    flex-shrink: 1;
-    position: relative;
-
-    &::before {
-      background: $input-gray;
-      content: close-quote;
-      display: block;
-      height: 100%;
-      left: 50%;
-      position: absolute;
-      top: 0;
-      transform: translateX(-50%);
-      width: 2px;
-      z-index: -1;
-    }
-  }
-
-  &.column-right {
-    flex-grow: 1;
-    margin-left: $spacer/2;
-  }
+.update-feed-header-summary {
+  @extend .row;
 }
 
 .update-feed-individual {
   @extend .row;
-  border-bottom: 2px solid $input-gray;
   margin-bottom: $spacer;
 
   &-summary {
@@ -90,10 +78,6 @@
 
 .update-feed-individual-files {
   @extend .col-md-9;
-
-  &-show-more {
-    margin-bottom: $spacer;
-  }
 
   >a {
     display: inline-block;

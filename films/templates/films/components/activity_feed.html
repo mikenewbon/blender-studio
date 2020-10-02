@@ -7,18 +7,12 @@
 
   <div class="update-feed-week">
 
-    <div class="update-feed-week-column column-left">
-      <div class="update-feed-week-icon">
-        <i class="material-icons">calendar_today</i>
-      </div>
-    </div>
-
     <div class="update-feed-week-column column-right">
 
       <div class="update-feed-week-header">
 
         {% if production_log.start_date.month == production_log.end_date.month %}
-        <p>{{ production_log.start_date|date:'jS' }} - {{ production_log.end_date|date:'jS M' }} </p>
+        <p><i class="material-icons icon-inline small">calendar_today</i>  {{ production_log.start_date|date:'jS' }} - {{ production_log.end_date|date:'jS M' }} </p>
         {% else %}
 
         <p>{{ production_log.start_date|date:'jS M' }} - {{ production_log.end_date|date:'jS M' }} </p>
@@ -33,10 +27,8 @@
 
         {% endif %}
 
-      </div>
-
-      {% if production_log.summary %}
-      <div class="update-feed-individual">
+        {% if production_log.summary %}
+      <div class="update-feed-header-summary">
         <div class="update-feed-individual-summary">
 
           {% if production_log.youtube_link != "" %}
@@ -62,6 +54,36 @@
 
       </div>
       {% endif %}
+
+      </div>
+
+      {% comment %} {% if production_log.summary %}
+      <div class="update-feed-individual">
+        <div class="update-feed-individual-summary">
+
+          {% if production_log.youtube_link != "" %}
+          <a class="video-modal-link video-preview" data-toggle="modal" data-target="#videoModal"
+            data-video="{{ production_log.youtube_link }}">
+            <img src="{{ production_log.thumbnail.url }}" alt="Video Preview">
+          </a>
+          {% else %}
+          <img src="{{ production_log.thumbnail.url }}" alt="production log preview">
+          {% endif %}
+
+        </div>
+
+        <div class="update-feed-individual-files summary">
+          <h3>This week on {{ film.title }}</h3>
+          {{ production_log.summary | safe | linebreaks }}
+          {% if production_log.youtube_link != "" %}
+          <a href="{{ production_log.youtube_link }}" class="video-modal-link mb-0" data-toggle="modal"
+            data-target="#videoModal" data-video="{{ production_log.youtube_link }}">Watch the video</a>
+          {% endif %}
+
+        </div>
+
+      </div>
+      {% endif %} {% endcomment %}
 
       {% for entry in production_log.log_entries.all %}
       <div class="update-feed-individual">
@@ -96,6 +118,7 @@
               </div>
               {% endfor %}
             </div>
+
             {% if entry.assets|length > 4 %}
             <div class="collapse" id="entry-{{ entry.id }}">
               <div class="row row-cols-1 row-cols-md-3  row-cols-2">
@@ -106,17 +129,16 @@
                 {% endfor %}
               </div>
             </div>
-            {% endif %}
-          </div>
-          {% if entry.assets|length > 4 %}
-          <div class="row update-feed-individual-files-show-more">
-            <div class="col text-center">
-              <a data-toggle="collapse" data-objects-type="files" href="#entry-{{ entry.id }}" role="button"
-                aria-expanded="false" aria-controls="entry-{{ entry.id }}"
-                class="btn btn-sm btn-secondary collapsed show-more-less">Show </a>
+            <div class="row update-feed-individual-files-show-more">
+              <div class="col text-center">
+                <a data-toggle="collapse" data-objects-type="files" href="#entry-{{ entry.id }}" role="button"
+                  aria-expanded="false" aria-controls="entry-{{ entry.id }}"
+                  class="btn btn-sm btn-secondary collapsed show-more-less">Show </a>
+              </div>
             </div>
+            {% endif %}
+
           </div>
-          {% endif %}
         </div>
       </div>
 
