@@ -7,15 +7,15 @@
 
   <div class="update-feed-week">
 
-    <div class="update-feed-week-column column-right">
+    <div class="update-feed-week-column">
 
       <div class="update-feed-week-header">
 
         {% if production_log.start_date.month == production_log.end_date.month %}
-        <p><i class="material-icons icon-inline small">calendar_today</i>  {{ production_log.start_date|date:'jS' }} - {{ production_log.end_date|date:'jS M' }} </p>
+        <p class="subtitle small"><i class="material-icons icon-inline small">calendar_today</i>  {{ production_log.start_date|date:'jS' }} - {{ production_log.end_date|date:'jS M' }} </p>
         {% else %}
 
-        <p>{{ production_log.start_date|date:'jS M' }} - {{ production_log.end_date|date:'jS M' }} </p>
+        <p class="subtitle small"><i class="material-icons icon-inline small">calendar_today</i>  {{ production_log.start_date|date:'jS M' }} - {{ production_log.end_date|date:'jS M' }} </p>
         {% endif %}
         <h2>{{ production_log.name }}</h2>
 
@@ -29,7 +29,7 @@
 
         {% if production_log.summary %}
       <div class="update-feed-header-summary">
-        <div class="update-feed-individual-summary">
+        <div class="update-feed-header-summary-image">
 
           {% if production_log.youtube_link != "" %}
           <a class="video-modal-link video-preview" data-toggle="modal" data-target="#videoModal"
@@ -42,7 +42,7 @@
 
         </div>
 
-        <div class="update-feed-individual-files summary">
+        <div class="update-feed-header-summary-text">
           <h3>This week on {{ film.title }}</h3>
           {{ production_log.summary | safe | linebreaks }}
           {% if production_log.youtube_link != "" %}

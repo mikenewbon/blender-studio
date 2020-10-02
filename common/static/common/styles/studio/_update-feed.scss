@@ -26,12 +26,17 @@
   border: 1px solid $highlight-white;
 }
 
+.update-feed-week-column {
+  >*:last-child {
+    margin-bottom: 0;
+  }
+}
+
 .update-feed-week-header {
   position: relative;
 
-  p {
-    @extend .subtitle;
-    @extend .small;
+  h2 {
+    margin-bottom: $spacer;
   }
 }
 
@@ -82,17 +87,32 @@
   >a {
     display: inline-block;
   }
+}
 
-  &.summary {
+.update-feed-header-summary-text {
+  @extend .col-md-9;
+  margin-bottom: $spacer;
+}
+
+.update-feed-header-summary-image {
+  @extend .col-md-3;
+
+  >*:last-child {
     margin-bottom: $spacer;
+  }
 
-    :last-child {
-      margin-bottom: 0;
-    }
+  img {
+    @extend .img-fluid;
+    border-radius: $border-radius;
+  }
+
+  >a {
+    display: inline-block;
   }
 }
 
 .update-feed-individual-summary-profile {
+  padding-top: $spacer;
   margin-bottom: $spacer / 2;
 
   .profile-image {
