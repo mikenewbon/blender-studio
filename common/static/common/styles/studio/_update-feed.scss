@@ -13,17 +13,13 @@
 }
 
 .update-feed-week {
-  @include media-breakpoint-down(sm) {
-    margin-left: -$spacer * .75;
-  }
-
-  display: flex;
-  flex-direction: row;
   background: $navigation-gray;
   border-radius: $border-radius;
-  padding: $spacer;
+  border: 1px solid $input-gray;
+  display: flex;
+  flex-direction: row;
   margin-bottom: $spacer;
-  // border: 1px solid $highlight-white;
+  padding: $spacer;
 }
 
 .update-feed-week-column {

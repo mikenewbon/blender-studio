@@ -6,7 +6,7 @@ body {
   @include fixed-top;
   align-items: stretch;
   background: $navigation-gray;
-  border-bottom: 1px solid $highlight-white;
+  border-bottom: 1px solid $input-gray;
   flex-wrap: nowrap; // allow us to do the line break for collapsing content
   min-height: $navbar-height;
   padding: $navbar-padding-y $navbar-padding-x;
@@ -20,7 +20,7 @@ body {
   }
 
   .dropdown-menu {
-    border-top: 1px solid $transparent;
+    border: 1px solid $input-gray;
   }
 
   .navdrawertoggle {
@@ -145,8 +145,7 @@ body {
   }
 
   background: $navigation-gray;
-  border-bottom: 1px solid $highlight-white;
-  // border-top: 1px solid $highlight-white;
+  border-bottom: 1px solid $input-gray;
   position: sticky;
   top: $navbar-height;
   z-index: 1030;

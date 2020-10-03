@@ -12,7 +12,7 @@
 
 .nav-drawer {
   background: $navigation-gray;
-  border-right: 1px solid $highlight-white;
+  border-right: 1px solid $input-gray;
   display: none;
   flex-direction: column;
   height: 100%;
@@ -44,6 +44,7 @@
     position: sticky;
     width: auto;
     z-index: auto;
+    border: 1px solid $input-gray;
 
     .nav-drawer-body {
       height: auto;
@@ -142,8 +143,6 @@
 
 .drawer-nav-group,
 .drawer-nav-header {
-  // border-bottom: 1px solid $highlight-white;
-
   h1,
   h2,
   h3,
@@ -319,7 +318,7 @@
 
 
 .drawer-nav-header {
-  border-bottom: 1px solid $highlight-white;
+  border-bottom: 1px solid $input-gray;
   margin-bottom: $spacer / 4;
   padding: $spacer;
 }

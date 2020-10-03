@@ -9,7 +9,6 @@
     background-position: center;
     background-size: cover;
     overflow: hidden;
-    border-radius: $border-radius;
   }
 
   .btn-save-media {
@@ -56,6 +55,7 @@
   }
 
   &.card-media {
+    border: 1px solid $input-gray;
 
     &.card-poster {
 
@@ -229,7 +229,7 @@
     margin-bottom: 0;
 
     &:not(:last-of-type) {
-      border-bottom: 1px solid $highlight-white;
+      border-bottom: 1px solid $input-gray;
     }
 
     .card-body {
