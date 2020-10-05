@@ -42,6 +42,7 @@ class Section:
     name: str
     text: Markup
     url: str
+    is_free: bool
 
     @property
     def name_with_index(self) -> str:

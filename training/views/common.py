@@ -30,7 +30,9 @@ def training_model_to_template_type(
     )
 
 
-def chapter_model_to_template_type(chapter: chapters.Chapter,) -> typed_templates.types.Chapter:
+def chapter_model_to_template_type(
+    chapter: chapters.Chapter,
+) -> typed_templates.types.Chapter:
     return typed_templates.types.Chapter(index=chapter.index, name=chapter.name)
 
 
@@ -38,7 +40,11 @@ def section_model_to_template_type(
     section: sections_models.Section,
 ) -> typed_templates.types.Section:
     return typed_templates.types.Section(
-        index=section.index, name=section.name, text=markdown.render(section.text), url=section.url
+        index=section.index,
+        name=section.name,
+        text=markdown.render(section.text),
+        url=section.url,
+        is_free=section.is_free,
     )
 
 
