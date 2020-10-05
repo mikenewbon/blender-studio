@@ -1,0 +1,14 @@
+{% load static %}
+<div class="video-player-locked video-player" {% if progress_url is not none %}data-progress-url="{{ progress_url }}" {% endif %}
+  {% if start_position is not none %}data-start-position="{{ start_position }}" {% endif %}>
+
+  <img class="img-fluid" src="{% static 'training/images/placeholders/card_training.png' %}">
+
+  <div class="video-player-locked-text">
+    <h3>You need to login to view this content</h3>
+    <p class="mb-3">You can join Blender Studio for €9.90/month and get access to all of our training & film content
+      instantly!</p>
+    <a href="/join" class="btn btn-primary">Join Blender Studio</a>
+  </div>
+
+</div>

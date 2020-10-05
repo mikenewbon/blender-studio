@@ -18,10 +18,15 @@
 {% if video is not none %}
 <div class="row mb-3">
   <div class="col training-video">
+  {% comment %} <h1>Is free: {{ section.is_free }}</h1> {% endcomment %}
+    {% if request.user.is_authenticated or section.is_free == true %}
     {% include 'common/components/video_player.html' with url=video.url progress_url=video.progress_url start_position=video.start_position %}
     <script>
       new Plyr(document.querySelector('.video-player video'));
     </script>
+    {% else %}
+    {% include 'common/components/video_player_locked.html' with url=video.url progress_url=video.progress_url start_position=video.start_position %}
+    {% endif %}
   </div>
 </div>
 {% endif %}
@@ -55,7 +60,7 @@
 
     <section class="mb-3">{{ section.text }}</section>
 
-    <div class="card card-dark d-md-none">
+    {% comment %} <div class="card card-dark d-md-none">
       <div class="card-body">
         <!-- TODO(Mike): Get next training -->
         {% if video is not none %}
@@ -80,7 +85,7 @@
         </a>
 
       </div>
-    </div>
+    </div> {% endcomment %}
 
     <section class="mb-3">{% include 'comments/components/comment_section.html' %}</section>
 

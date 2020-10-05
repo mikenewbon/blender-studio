@@ -13,8 +13,8 @@
   flex-shrink: 0;
   justify-content: flex-end;
 
-  .btn + .btn,
-  .dropdown-menu + .btn  {
+  .btn+.btn,
+  .dropdown-menu+.btn {
     margin-left: $spacer / 2;
   }
 }
@@ -29,7 +29,34 @@
       margin: -20px -20px 0;
       border-radius: 0;
     }
+
     border-radius: $border-radius;
     overflow: hidden;
+  }
+}
+
+.video-player-locked {
+  position: relative;
+
+  &::after {
+    background: $highlight-black-xstrong;
+    content: close-quote;
+    display: block;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  &-text {
+    left: 50%;
+    max-width: 500px;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    z-index: 1;
   }
 }
