@@ -17,3 +17,9 @@ repos:
     rev: v7.2.0
     hooks:
     -   id: eslint
+
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: 3.8.3
+    hooks:
+    - id: flake8
+      additional_dependencies: ['flake8-docstrings==1.5.0']
