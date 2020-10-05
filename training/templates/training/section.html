@@ -14,39 +14,6 @@
 {{ section_progress_reporting_data|json_script:"sectionProgressReportingData" }}
 {% endblock scripts %}
 
-{% block breadcrumbs %}
-<nav class="navbar-secondary" aria-label="breadcrumbs">
-  <div class="container-xl">
-    <ol class="breadcrumb">
-      {% include 'common/components/navigation/breadcrumb.html' with label=training.name url=training.url %}
-      {% include 'common/components/navigation/breadcrumb.html' with label=chapter.name_with_index %}
-      {% include 'common/components/navigation/breadcrumb.html' with label=section.name_with_index %}
-    </ol>
-  </div>
-</nav>
-{% endblock breadcrumbs %}
-
-{% comment %} {% block nested_nav_drawer_header %}
-<div class="drawer-nav-header">
-  <div class="row">
-    <div class="col">
-      <p class="subtitle small">Autoplay Next Section</p>
-    </div>
-    {% include 'common/components/checkbox_toggle.html' with checked=False %}
-  </div>
-  <div class="row">
-    <div class="col-md-5">
-      <a href="#" class="">
-        <img src="{% static 'training/images/placeholders/video.jpg' %}" class="img-fluid rounded">
-      </a>
-    </div>
-    <div class="col-md-7">
-      <h4 class="mb-0">02. Point Tracking - Part 2</h4>
-    </div>
-  </div>
-</div>
-{% endblock nested_nav_drawer_header %} {% endcomment %}
-
 {% block nexted_content %}
 {% if video is not none %}
 <div class="row mb-3">
@@ -63,11 +30,11 @@
     <p class="subtitle small">{{ chapter.name_with_index }}</p>
     <h2 class="">{{ section.name_with_index }}</h2>
     <div class="training-toolbar-container">
-      <div class="training-toolbar-details">
+      {% comment %} <div class="training-toolbar-details">
         <div class="text-muted x-small">
           <p class="d-inline mr-3">{{ training.date_updated|date:"jS F Y" }}</p>
         </div>
-      </div>
+      </div> {% endcomment %}
 
       <div class="training-toolbar">
         <a class="btn btn-sm btn-dark"><i class="material-icons">favorite_border</i> Like</a>

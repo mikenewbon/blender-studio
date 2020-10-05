@@ -371,6 +371,9 @@ $mark-bg: none !default;
 
 $hr-margin-y: $spacer !default;
 
+$profile-size: 34px; // Same height as inputs
+$profile-nav-padding: .3125rem;
+
 // Tables
 //
 // Customizes the `.table` component with basic values, each used across all table variations.
