@@ -18,8 +18,7 @@
 {% if video is not none %}
 <div class="row mb-3">
   <div class="col training-video">
-  {% comment %} <h1>Is free: {{ section.is_free }}</h1> {% endcomment %}
-    {% if request.user.is_authenticated or section.is_free == true %}
+    {% if request.user.is_authenticated or section.is_free %}
     {% include 'common/components/video_player.html' with url=video.url progress_url=video.progress_url start_position=video.start_position %}
     <script>
       new Plyr(document.querySelector('.video-player video'));
