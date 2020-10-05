@@ -5,9 +5,8 @@
 
 {% block scripts %}
 {% javascript 'training' %}
-<script src="https://cdn.jsdelivr.net/npm/@meilisearch/instant-meilisearch/dist/instant-meilisearch.umd.min.js">
-</script>
-<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/@meilisearch/instant-meilisearch@v0.2.1/dist/instant-meilisearch.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.7.2"></script>
 {{ favorited_training_ids|json_script:"training-favorited-ids" }}
 {{ search_client_config|json_script:"training-search-client-config" }}
 {% endblock scripts %}
