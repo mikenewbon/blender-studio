@@ -27,6 +27,10 @@ class TestCommentDeleteEndpoint(TestCase):
         )
         self.client.force_login(self.user)
 
+    def tearDown(self):
+        # Restore logging configuration
+        logging.disable(logging.NOTSET)
+
     def test_user_can_soft_delete_own_comment_without_replies(self):
         comment_pk = self.comment_without_replies.pk
         self.assertFalse(self.comment_without_replies.is_deleted)
@@ -108,6 +112,10 @@ class TestCommentDeleteTreeEndpoints(TestCase):
         )
 
         self.client.force_login(self.user)
+
+    def tearDown(self):
+        # Restore logging configuration
+        logging.disable(logging.NOTSET)
 
     def test_user_cannot_soft_delete_comments_tree(self):
         response = self.client.post(self.soft_delete_url)

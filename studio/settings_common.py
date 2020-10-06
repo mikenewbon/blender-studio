@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'static_assets',
     'subscriptions',
     'training',
+    'profiles',
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.auth',

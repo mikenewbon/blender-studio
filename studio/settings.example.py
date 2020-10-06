@@ -20,6 +20,7 @@ BLENDER_ID = {
     "BASE_URL": "http://id.local:8000/",
     "OAUTH_CLIENT": "CHANGE_ME",
     "OAUTH_SECRET": "CHANGE_ME",
+    "WEBHOOK_USER_MODIFIED_SECRET": b"CHANGE_ME",
 }
 
 DATABASES = {

@@ -10,6 +10,7 @@ import films.urls
 import search.urls
 import subscriptions.urls
 import training.urls
+import profiles.urls
 from common.views.home import home as home_view, welcome as welcome_view
 
 admin.site.site_header = settings.ADMIN_SITE_HEADER
@@ -28,6 +29,7 @@ urlpatterns = [
     path('blog/', include(blog.urls)),
     path('search/', include(search.urls)),
     path('subscriptions/', include(subscriptions.urls)),
+    path('', include(profiles.urls)),
 ]
 
 if settings.DEBUG:

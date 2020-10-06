@@ -92,7 +92,11 @@
           </div> {% endcomment %}
 
           <button data-toggle="dropdown" class="btn btn-secondary btn-nav btn-profile">
+            {% if request.user.is_authenticated and request.user.profile.avatar.name %}
+            <div style="background-image:url('{{ request.user.profile.avatar.url }}');" class="profile">
+            {% else %}
             <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');" class="profile">
+            {% endif %}
             </div>
           </button>
           <div class="dropdown-menu dropdown-menu-right">
