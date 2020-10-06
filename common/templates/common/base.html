@@ -118,6 +118,13 @@
 
             <div class="dropdown-divider"></div>
 
+            {% if user.is_superuser %}
+            <a href="/admin" class="dropdown-item">
+              <i class="material-icons">security</i>
+              <span>Admin</span>
+            </a>
+            {% endif %}
+
             <a href="{% url 'oauth:logout' %}" class="dropdown-item">
               <i class="material-icons">exit_to_app</i>
               <span>Sign Out</span>
