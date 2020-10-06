@@ -221,7 +221,7 @@ class WebhooksTest(TestCase):
             **self.webhook_payload,
             'id': '999',
         }
-        with self.assertLogs('', level='ERROR') as logs:
+        with self.assertLogs('profiles.views.webhooks', level='ERROR') as logs:
             response = self.client.post(
                 self.url, body, content_type='application/json', **prepare_hmac_header(body)
             )
@@ -239,7 +239,7 @@ class WebhooksTest(TestCase):
             responses.GET, f'{BLENDER_ID_BASE_URL}api/me', status=403, body='Unauthorized'
         )
 
-        with self.assertLogs('', level='ERROR') as logs:
+        with self.assertLogs('profiles.views.webhooks', level='ERROR') as logs:
             response = self.client.post(
                 self.url, body, content_type='application/json', **prepare_hmac_header(body)
             )
@@ -261,7 +261,7 @@ class WebhooksTest(TestCase):
             body='Houston, we have a problem',
         )
 
-        with self.assertLogs('', level='ERROR') as logs:
+        with self.assertLogs('profiles.models', level='ERROR') as logs:
             response = self.client.post(
                 self.url, body, content_type='application/json', **prepare_hmac_header(body)
             )
