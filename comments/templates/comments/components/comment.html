@@ -1,7 +1,6 @@
 {% load static %}
 
-{% comment %} TODO(Mike): Use lomotomized owl selector to fix spacing issue {% endcomment %}
-<div class="comment {% if comment.is_archived and comment.is_top_level %}archived{% endif %}"
+<div class="comment {% if comment.is_archived and comment.is_top_level %}archived{% endif %} {% if comment.is_top_level %}top-level-comment{% endif %}"
   data-comment-id="{{ comment.id }}" data-profile-image-url="{{ comment.profile_image_url }}"
   data-like-url="{{ comment.like_url }}" {% if comment.edit_url is not None %}data-edit-url="{{ comment.edit_url }}"
   {% endif %} {% if comment.delete_url is not None %}data-delete-url="{{ comment.delete_url }}" {% endif %}
@@ -14,7 +13,8 @@
     {% if comment.is_archived and comment.is_top_level %}
     <p class="badge badge-secondary archived-badge">Archived</p>
     <a class="comment-expand-archived" data-toggle="collapse" href="#collapse-{{ comment.id }}" role="button"
-      aria-expanded="false" aria-controls="collapseExample">Show comment</a>
+      aria-expanded="false" aria-controls="collapseExample">Show
+      comment{% if comment.replies|length >= 1 %}s{% endif %}</a>
     {% endif %}
   </div>
   {% if comment.is_archived and comment.is_top_level %}
@@ -22,7 +22,7 @@
     {% endif %}
     <div class="col comment-content">
       <div class="row comment-content-inner">
-        <div class="comment-body col">
+        <div class="comment-body">
 
           <p class="comment-text">{{ comment.message }}</p>
 
@@ -59,10 +59,10 @@
                 </a>
                 {% endif %}
 
-                <a href="" class="dropdown-item comment-report">
+                {% comment %} <a href="" class="dropdown-item comment-report">
                   <i class="material-icons">flag</i>
                   <span>Report</span>
-                </a>
+                </a> {% endcomment %}
 
                 {% if comment.archive_tree_url is not None %}
 
@@ -95,6 +95,7 @@
     </div>
     <div class="comment-reply-inputs">
     </div>
+    {% if comment.is_top_level %}
     <div class="replies">
       <div class="comments">
         {% if comment.is_top_level %}
@@ -116,7 +117,11 @@
         {% endif %}
       </div>
     </div>
+    {% endif %}
     {% if comment.is_archived and comment.is_top_level %}
   </div>
   {% endif %}
 </div>
+{% if comment.is_top_level is not True %}
+{% include 'comments/components/comment_tree.html' with comment_trees=c.replies %}
+{% endif %}

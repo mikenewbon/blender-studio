@@ -5,7 +5,7 @@
 
 // Color system
 
-$white: #fff !default;
+$white: #ffffff !default;
 $gray-100: #f8f9fa !default;
 $gray-200: #e9ecef !default;
 $gray-300: #dee2e6 !default;
@@ -529,7 +529,7 @@ $input-focus-color: $input-color !default;
 $input-focus-width: $input-btn-focus-width !default;
 $input-focus-box-shadow: 0 !default;
 
-$input-placeholder-color: rbga($body-color, 0.5) !default;
+$input-placeholder-color: $highlight-white-xstrong !default;
 $input-plaintext-color: $body-color !default;
 
 $input-height-border: $input-border-width * 2 !default;
@@ -995,7 +995,7 @@ $modal-content-box-shadow-xs: 0 0.25rem 0.5rem rgba($black, 0.5) !default;
 $modal-content-box-shadow-sm-up: 0 0.5rem 1rem rgba($black, 0.5) !default;
 
 $modal-backdrop-bg: $black !default;
-$modal-backdrop-opacity: 0.5 !default;
+$modal-backdrop-opacity: 0.75 !default;
 $modal-header-border-color: $border-color !default;
 $modal-footer-border-color: $modal-header-border-color !default;
 $modal-header-border-width: $modal-content-border-width !default;

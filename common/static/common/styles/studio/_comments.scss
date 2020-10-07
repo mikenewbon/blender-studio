@@ -17,7 +17,7 @@
       content: close-quote;
       display: block;
       height: 100%;
-      left: $spacer / 2;
+      left: 0;
       position: absolute;
       top: 0;
       width: 2px;
@@ -49,7 +49,7 @@
       }
 
       color: $highlight-white-xstrong;
-      font-size: $font-size-sm;
+      font-size: $x-small-font-size;
       margin-left: $spacer / 2;
       text-decoration: underline;
       transition: $transition-base;
@@ -113,7 +113,7 @@
   align-items: center;
   display: flex;
   margin-bottom: $spacer / 4;
-  margin-top: $spacer / 4;
+  // margin-top: $spacer / 4;
 
   >* {
     margin-bottom: 0;
@@ -165,4 +165,26 @@
   font-size: $x-small-font-size;
 
   margin-left: $spacer / 2;
+}
+
+.comment-input-div {
+  @include border-radius($input-border-radius-sm);
+  @include font-size($input-font-size-sm);
+  height: auto;
+  line-height: $input-line-height-sm;
+  min-height: $input-height-sm;
+  padding: $input-padding-y-sm $input-padding-x-sm;
+  position: relative;
+
+  &:empty {
+
+    &::before {
+      color: $input-placeholder-color;
+      content: 'Comment publicly...';
+      left: $spacer / 2;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
 }

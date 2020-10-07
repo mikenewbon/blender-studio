@@ -62,6 +62,13 @@ window.comments = (function comments() {
       this.replyLink && this.replyLink.addEventListener('click', event => {
         event.preventDefault();
         this._showReplyInput();
+        // console.log(this.element);
+      });
+
+      this.replyLink && this.replyLink.addEventListener('focus',function(){
+        // console.log(this)
+        var that = this;
+        setTimeout(function(){ that.selectionStart = that.selectionEnd = 10000; }, 0);
       });
 
       this.editLink && this.editLink.addEventListener('click', event => {
@@ -77,7 +84,14 @@ window.comments = (function comments() {
       this.archiveLink && this.archiveLink.addEventListener('click', event => {
         event.preventDefault();
         this._postArchiveComment();
+        // console.log(this.element.parentElement.parentElement);
       });
+
+      // console.log(this.element.parentElement.parentElement)
+
+      // if (this.archiveLink && this.element.elementParent.parentElement.classList.contains('comment-section')) {
+      //   console.log(this.archiveLink)
+      // };
 
       this.likeButton && this.likeButton.addEventListener('click', this._postLike.bind(this));
     }
@@ -110,9 +124,11 @@ window.comments = (function comments() {
       const { commentSection, replyInput, replyInputsElement } = this;
       if (replyInput == null) {
         const replyInput = ReplyInput.create(commentSection.profileImageUrl);
+        replyInput.element.querySelector('.comment-input-div').innerText = '@' + this.element.querySelector('.comment-name').innerText + ' ';
         replyInputsElement.append(replyInput.element);
         return replyInput;
       } else {
+        replyInput.element.querySelector('.comment-input-div').innerText = '@' + this.element.querySelector('.comment-name').innerText + ' ';
         return replyInput;
       }
     }
@@ -204,25 +220,25 @@ window.comments = (function comments() {
     _postArchiveComment() {
       const { archiveUrl, element } = this;
       const archivedBadge = '<p class="badge badge-secondary archived-badge">Archived</p>';
-      const commentTitleBar = element.querySelector('.comment-name-date-wrapper')
+      const commentTitleBar = element.querySelector('.comment-name-date-wrapper');
 
-      ajax.jsonRequest('POST', archiveUrl).then(() => {
+        ajax.jsonRequest('POST', archiveUrl).then(() => {
 
-        if (element.classList.contains('archived')) {
-          element.classList.remove("archived");
-          element.querySelector('.comment-archive .material-icons').textContent = "archive";
-          element.querySelector('.comment-archive-text').textContent = "Archive comment";
-          commentTitleBar.querySelector('.archived-badge').remove();
-          commentTitleBar.querySelector('.comment-expand-archived').remove();
+          if (element.classList.contains('archived')) {
+            element.classList.remove("archived");
+            element.querySelectorAll('.comment-archive .material-icons').textContent = "archive";
+            element.querySelectorAll('.comment-archive-text').forEach(e => e.textContent = "Archive comment");
+            commentTitleBar.querySelector('.archived-badge').remove();
+            commentTitleBar.querySelector('.comment-expand-archived').remove();
 
-        } else {
-          element.classList.add("archived");
-          element.querySelector('.comment-archive .material-icons').textContent = "unarchive";
-          element.querySelector('.comment-archive-text').textContent = "Un-archive comment";
-          commentTitleBar.innerHTML = commentTitleBar.innerHTML + archivedBadge;
-        }
+          } else {
+            element.classList.add("archived");
+            element.querySelector('.comment-archive .material-icons').textContent = "unarchive";
+            element.querySelector('.comment-archive-text').textContent = "Un-archive comment";
+            commentTitleBar.innerHTML = commentTitleBar.innerHTML + archivedBadge;
+          }
 
-      });
+        });
     }
 
     get contentElement() {
@@ -254,7 +270,6 @@ window.comments = (function comments() {
     deleteUrl,
     archiveUrl
   ) {
-    // console.log('id: ', id, 'profileImageUrl: ', profileImageUrl, 'msg: ', message)
     const template = document.getElementById('comment-template');
     const element = template.content.cloneNode(true).querySelector(`.${Comment.className}`);
     element.dataset.commentId = id;
@@ -290,12 +305,12 @@ window.comments = (function comments() {
       this.element = element;
     }
 
-    get formElement() {
-      return this.element.querySelector('form');
+    get sendButton() {
+      return this.element.querySelector('.comment-send .btn-input');
     }
 
     get inputElement() {
-      return this.element.querySelector('input');
+      return this.element.querySelector('.comment-input-div');
     }
 
     get commentSection() {
@@ -328,20 +343,27 @@ window.comments = (function comments() {
     }
 
     _setupEventListeners() {
-      this.formElement.addEventListener('submit', event => {
+      this.sendButton.addEventListener('click', event => {
         event.preventDefault();
         this._postComment();
+      });
+
+      this.inputElement.addEventListener('keydown', event => {
+        if (event.key == 'Enter') {
+          event.preventDefault();
+          this.sendButton.click();
+        }
       });
     }
 
     _postComment() {
       const { commentSection, inputElement } = this;
-      const message = inputElement.value;
+      const message = inputElement.innerText;
       if (message === '') {
         return
       }
 
-      inputElement.value = '';
+      inputElement.innerText = '';
 
       ajax
         .jsonRequest('POST', commentSection.commentUrl, {
@@ -390,23 +412,30 @@ window.comments = (function comments() {
     }
 
     _setupEventListeners() {
-      this.formElement.addEventListener('submit', event => {
+      this.sendButton.addEventListener('click', event => {
         event.preventDefault();
         this.hide();
         this._postReply();
       });
 
-      this.element.addEventListener('focusout', event => {
-        if (!this.element.contains(event.relatedTarget)) {
-          this.hide();
+      // this.element.addEventListener('focusout', event => {
+      //   if (!this.element.contains(event.relatedTarget)) {
+      //     this.hide();
+      //   }
+      // });
+
+      this.inputElement.addEventListener('keydown', event => {
+        if (event.key == 'Enter') {
+          event.preventDefault();
+          this.sendButton.click();
         }
       });
     }
 
     _postReply() {
       const { commentSection, inputElement, replyTo } = this;
-      const message = inputElement.value;
-      inputElement.value = '';
+      const message = inputElement.innerText;
+      inputElement.innerText = '';
 
       ajax
         .jsonRequest('POST', commentSection.commentUrl, {
@@ -462,29 +491,36 @@ window.comments = (function comments() {
     }
 
     prepopulateMessage() {
-      this.inputElement.value = this.comment.message;
+      this.inputElement.innerText = this.comment.message;
     }
 
     _setupEventListeners() {
-      this.formElement.addEventListener('submit', event => {
+      this.sendButton.addEventListener('click', event => {
         event.preventDefault();
         this.comment.showContent();
         this.hide();
         this._postEdit();
       });
 
-      this.element.addEventListener('focusout', event => {
-        if (!this.element.contains(event.relatedTarget)) {
-          this.comment.showContent();
-          this.hide();
+      // this.element.addEventListener('focusout', event => {
+      //   if (!this.element.contains(event.relatedTarget)) {
+      //     this.comment.showContent();
+      //     this.hide();
+      //   }
+      // });
+
+      this.inputElement.addEventListener('keydown', event => {
+        if (event.key == 'Enter'){
+          event.preventDefault();
+          this.sendButton.click();
         }
       });
     }
 
     _postEdit() {
       const { comment, inputElement } = this;
-      const message = inputElement.value;
-      inputElement.value = '';
+      const message = inputElement.innerText;
+      inputElement.innerText = '';
 
       ajax
         .jsonRequest('POST', comment.editUrl, {
