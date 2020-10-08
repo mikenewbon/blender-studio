@@ -101,7 +101,7 @@
     width: calc(100% - #{$spacer});
     height: 100%;
     left: $spacer / 2;
-    background: $highlight-black;
+    background: $highlight-black-strong;
 
     @include media-breakpoint-down(sm) {
       width: calc(100% + #{$spacer});
