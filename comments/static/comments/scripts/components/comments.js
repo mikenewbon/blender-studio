@@ -7,6 +7,8 @@ window.comments = (function comments() {
       this.likeUrl = element.dataset.likeUrl;
       this.editUrl = element.dataset.editUrl;
       this.deleteUrl = element.dataset.deleteUrl;
+      this.deleteTreeUrl = element.dataset.deleteTreeUrl;
+      this.hardDeleteTreeUrl = element.dataset.hardDeleteTreeUrl;
       this.archiveUrl = element.dataset.archiveUrl;
       this.profileImageUrl = element.dataset.profileImageUrl;
       this.element = element;
@@ -23,6 +25,14 @@ window.comments = (function comments() {
 
     get deleteLink() {
       return this.element.querySelector('.comment-delete');
+    }
+
+    get deleteTreeLink() {
+      return this.element.querySelector('.comment-delete-tree');
+    }
+
+    get hardDeleteTreeLink() {
+      return this.element.querySelector('.comment-hard-delete-tree');
     }
 
     get archiveLink() {
@@ -73,6 +83,16 @@ window.comments = (function comments() {
       this.deleteLink && this.deleteLink.addEventListener('click', event => {
         event.preventDefault();
         this._postDeleteComment();
+      });
+
+      this.deleteTreeLink && this.deleteTreeLink.addEventListener('click', event => {
+        event.preventDefault();
+        this._postDeleteTreeComment();
+      });
+
+      this.hardDeleteTreeLink && this.hardDeleteTreeLink.addEventListener('click', event => {
+        event.preventDefault();
+        this._postHardDeleteTreeComment();
       });
 
       this.archiveLink && this.archiveLink.addEventListener('click', event => {
@@ -211,6 +231,33 @@ window.comments = (function comments() {
 
         const commentToolbar = element.querySelector('.comment-toolbar');
         commentToolbar && commentToolbar.remove();
+      });
+    }
+
+    _postDeleteTreeComment() {
+      const { deleteTreeUrl, element } = this;
+
+      ajax.jsonRequest('POST', deleteTreeUrl).then(() => {
+        if (element.classList.contains('.top-level-comment')) {
+          element.querySelectorAll('.comment-text').forEach(e => e.textContent = "[deleted]");
+          element.querySelectorAll('.comment-name').forEach(e => e.textContent = "[deleted]");
+          element.querySelector('.comment-toolbar') && element.querySelectorAll('.comment-toolbar').forEach(e => e.remove());
+        } else {
+          element.closest('.top-level-comment').querySelectorAll('.comment-text').forEach(e => e.textContent = "[deleted]");
+          element.closest('.top-level-comment').querySelectorAll('.comment-name').forEach(e => e.textContent = "[deleted]");
+        }
+      });
+    }
+
+    _postHardDeleteTreeComment() {
+      const { hardDeleteTreeUrl, element } = this;
+
+      ajax.jsonRequest('POST', hardDeleteTreeUrl).then(() => {
+        if (element.classList.contains('.top-level-comment')) {
+          element.remove();
+        } else {
+          element.closest('.top-level-comment').remove();
+        }
       });
     }
 

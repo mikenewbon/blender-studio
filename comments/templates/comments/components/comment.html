@@ -2,10 +2,25 @@
 
 <div
   class="comment {% if comment.is_archived and comment.is_top_level %}archived{% endif %} {% if comment.is_top_level %}top-level-comment{% endif %}"
-  data-comment-id="{{ comment.id }}" data-profile-image-url="{{ comment.profile_image_url }}"
-  data-like-url="{{ comment.like_url }}" {% if comment.edit_url is not None %}data-edit-url="{{ comment.edit_url }}"
-  {% endif %} {% if comment.delete_url is not None %}data-delete-url="{{ comment.delete_url }}" {% endif %}
-  {% if comment.archive_tree_url is not None %}data-archive-url="{{ comment.archive_tree_url }}" {% endif %}>
+  data-comment-id="{{ comment.id }}"
+  data-profile-image-url="{{ comment.profile_image_url }}"
+  data-like-url="{{ comment.like_url }}"
+  {% if comment.delete_tree_url is not None %}
+    data-delete-tree-url="{{ comment.delete_tree_url }}"
+  {% endif %}
+  {% if comment.hard_delete_tree_url is not None %}
+    data-hard-delete-tree-url="{{ comment.hard_delete_tree_url }}"
+  {% endif %}
+  {% if comment.edit_url is not None %}
+    data-edit-url="{{ comment.edit_url }}"
+  {% endif %}
+  {% if comment.delete_url is not None %}
+    data-delete-url="{{ comment.delete_url }}"
+  {% endif %}
+  {% if comment.archive_tree_url is not None %}
+    data-archive-url="{{ comment.archive_tree_url }}"
+  {% endif %}
+  >
   <div class="comment-name-date-wrapper">
     <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');"
       class="profile col-profile"></div>
@@ -66,6 +81,20 @@
                   <i class="material-icons">flag</i>
                   <span>Report</span>
                 </a> {% endcomment %}
+
+                {% if comment.delete_tree_url is not None %}
+                <a href="" class="dropdown-item comment-delete-tree">
+                  <i class="material-icons">account_tree</i>
+                  <span>Delete Tree</span>
+                </a>
+                {% endif %}
+
+                {% if comment.hard_delete_tree_url is not None %}
+                <a href="" class="dropdown-item comment-hard-delete-tree">
+                  <i class="material-icons">delete_forever</i>
+                  <span>Hard Delete Tree</span>
+                </a>
+                {% endif %}
 
                 {% if comment.archive_tree_url is not None %}
 
