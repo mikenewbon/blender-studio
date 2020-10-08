@@ -65,12 +65,6 @@ window.comments = (function comments() {
         // console.log(this.element);
       });
 
-      this.replyLink && this.replyLink.addEventListener('focus',function(){
-        // console.log(this)
-        var that = this;
-        setTimeout(function(){ that.selectionStart = that.selectionEnd = 10000; }, 0);
-      });
-
       this.editLink && this.editLink.addEventListener('click', event => {
         event.preventDefault();
         this._showEditInput();
@@ -84,14 +78,7 @@ window.comments = (function comments() {
       this.archiveLink && this.archiveLink.addEventListener('click', event => {
         event.preventDefault();
         this._postArchiveComment();
-        // console.log(this.element.parentElement.parentElement);
       });
-
-      // console.log(this.element.parentElement.parentElement)
-
-      // if (this.archiveLink && this.element.elementParent.parentElement.classList.contains('comment-section')) {
-      //   console.log(this.archiveLink)
-      // };
 
       this.likeButton && this.likeButton.addEventListener('click', this._postLike.bind(this));
     }
@@ -124,19 +111,29 @@ window.comments = (function comments() {
       const { commentSection, replyInput, replyInputsElement } = this;
       if (replyInput == null) {
         const replyInput = ReplyInput.create(commentSection.profileImageUrl);
-        replyInput.element.querySelector('.comment-input-div').innerText = '@' + this.element.querySelector('.comment-name').innerText + ' ';
+        let inputText = '@' + this.element.querySelector('.comment-name').innerText;
+        replyInput.element.querySelector('.comment-input-div').innerText = inputText;
         replyInputsElement.append(replyInput.element);
         return replyInput;
       } else {
-        replyInput.element.querySelector('.comment-input-div').innerText = '@' + this.element.querySelector('.comment-name').innerText + ' ';
+        let inputText = '@' + this.element.querySelector('.comment-name').innerText;
+        replyInput.element.querySelector('.comment-input-div').innerText = inputText;
         return replyInput;
       }
     }
 
     _showReplyInput() {
       const replyInput = this._getOrCreateReplyInput();
+      const replyInputElement = replyInput.element.querySelector('.comment-input-div');
       replyInput.show();
-      replyInput.focus();
+      replyInputElement.focus();
+      //Set caret to the end.
+      var range = document.createRange();
+      var sel = window.getSelection();
+      range.setStart(replyInputElement.firstChild, replyInputElement.innerText.length)
+      range.collapse(true)
+      sel.removeAllRanges()
+      sel.addRange(range)
     }
 
     prependReply(comment) {
@@ -220,25 +217,52 @@ window.comments = (function comments() {
     _postArchiveComment() {
       const { archiveUrl, element } = this;
       const archivedBadge = '<p class="badge badge-secondary archived-badge">Archived</p>';
-      const commentTitleBar = element.querySelector('.comment-name-date-wrapper');
+      const commentTitleBar = element.querySelectorAll('.comment-name-date-wrapper');
 
-        ajax.jsonRequest('POST', archiveUrl).then(() => {
+      ajax.jsonRequest('POST', archiveUrl).then(() => {
+        console.log(element)
 
-          if (element.classList.contains('archived')) {
+        if (element.classList.contains('archived')) {
+
+          function unarchive(element) {
             element.classList.remove("archived");
-            element.querySelectorAll('.comment-archive .material-icons').textContent = "archive";
+            element.querySelectorAll('.comment').forEach(e => e.classList.remove("archived"));
+            element.querySelectorAll('.comment-archive .material-icons').forEach(e => e.textContent = "archive");
             element.querySelectorAll('.comment-archive-text').forEach(e => e.textContent = "Archive comment");
-            commentTitleBar.querySelector('.archived-badge').remove();
-            commentTitleBar.querySelector('.comment-expand-archived').remove();
-
-          } else {
-            element.classList.add("archived");
-            element.querySelector('.comment-archive .material-icons').textContent = "unarchive";
-            element.querySelector('.comment-archive-text').textContent = "Un-archive comment";
-            commentTitleBar.innerHTML = commentTitleBar.innerHTML + archivedBadge;
+            element.querySelectorAll('.archived-badge').forEach(e => e.remove());
+            element.querySelector('.comment-expand-archived') && element.querySelectorAll('.comment-expand-archived').forEach(e => e.remove());
           }
 
-        });
+          if (element.classList.contains('top-level-comment')) {
+            unarchive(element);
+          } else {
+            unarchive(element.closest('.top-level-comment'));
+          }
+
+          // element.classList.remove("archived");
+          // element.querySelectorAll('.comment-archive .material-icons').textContent = "archive";
+          // element.querySelectorAll('.comment-archive-text').forEach(e => e.textContent = "Archive comment");
+          // commentTitleBar.querySelector('.archived-badge').remove();
+          // commentTitleBar.querySelector('.comment-expand-archived').remove();
+        } else {
+
+          function archive(element) {
+            element.classList.add("archived");
+            element.querySelectorAll('.comment').forEach(e => e.classList.add("archived"));
+            element.querySelectorAll('.comment-archive .material-icons').forEach(e => e.textContent = "unarchive");
+            element.querySelectorAll('.comment-archive-text').forEach(e => e.textContent = "Un-archive comment");
+            element.querySelectorAll('.comment-name-date-wrapper').forEach(e => e.innerHTML = e.innerHTML + archivedBadge);
+          }
+
+          if (element.classList.contains('top-level-comment')) {
+            archive(element);
+
+          } else {
+            archive(element.closest('.top-level-comment'));
+          }
+        }
+
+      });
     }
 
     get contentElement() {
@@ -510,7 +534,7 @@ window.comments = (function comments() {
       // });
 
       this.inputElement.addEventListener('keydown', event => {
-        if (event.key == 'Enter'){
+        if (event.key == 'Enter') {
           event.preventDefault();
           this.sendButton.click();
         }

@@ -1,6 +1,7 @@
 {% load static %}
 
-<div class="comment {% if comment.is_archived and comment.is_top_level %}archived{% endif %} {% if comment.is_top_level %}top-level-comment{% endif %}"
+<div
+  class="comment {% if comment.is_archived and comment.is_top_level %}archived{% endif %} {% if comment.is_top_level %}top-level-comment{% endif %}"
   data-comment-id="{{ comment.id }}" data-profile-image-url="{{ comment.profile_image_url }}"
   data-like-url="{{ comment.like_url }}" {% if comment.edit_url is not None %}data-edit-url="{{ comment.edit_url }}"
   {% endif %} {% if comment.delete_url is not None %}data-delete-url="{{ comment.delete_url }}" {% endif %}
@@ -10,11 +11,13 @@
       class="profile col-profile"></div>
     <h4 class="comment-name">{{ comment.full_name }}</h4>
     <p class="comment-date">{{ comment.date|date:"jS F Y - H:i" }}</p>
-    {% if comment.is_archived and comment.is_top_level %}
+    {% if comment.is_archived %}
     <p class="badge badge-secondary archived-badge">Archived</p>
+    {% if comment.is_top_level %}
     <a class="comment-expand-archived" data-toggle="collapse" href="#collapse-{{ comment.id }}" role="button"
       aria-expanded="false" aria-controls="collapseExample">Show
       comment{% if comment.replies|length >= 1 %}s{% endif %}</a>
+    {% endif %}
     {% endif %}
   </div>
   {% if comment.is_archived and comment.is_top_level %}
