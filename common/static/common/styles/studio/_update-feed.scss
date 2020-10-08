@@ -4,12 +4,6 @@
   .update-feed-week:last-of-type .update-feed-individual:last-of-type {
     margin-bottom: 0;
   }
-
-  .files {
-    background: $highlight-black;
-    border-radius: $border-radius;
-    padding: $spacer $spacer 0 $spacer;
-  }
 }
 
 .update-feed-week {
@@ -20,6 +14,9 @@
   flex-direction: row;
   margin-bottom: $spacer;
   padding: $spacer;
+  @include media-breakpoint-down(sm) {
+    padding-bottom: 0;
+  }
 }
 
 .update-feed-week-column {
@@ -58,9 +55,15 @@
 .update-feed-individual {
   @extend .row;
   margin-bottom: $spacer;
+  position: relative;
 
   &-summary {
     @extend .col-md-3;
+
+    @include media-breakpoint-up(md) {
+      padding-left: calc(#{$spacer} * 1.5);
+      padding-right: 0;
+    }
 
     >*:last-child {
       margin-bottom: $spacer;
@@ -73,6 +76,37 @@
 
     >a {
       display: inline-block;
+    }
+  }
+
+  &-files {
+    @include media-breakpoint-up(md) {
+      padding-left: 0;
+    }
+
+    .files {
+      @include media-breakpoint-up(md) {
+        padding: $spacer $spacer 0 $spacer;
+      }
+
+      padding: 0;
+    }
+  }
+
+  &::before {
+    border-radius: $border-radius;
+    content: close-quote;
+    top: 0;
+    position: absolute;
+    width: calc(100% - #{$spacer});
+    height: 100%;
+    left: $spacer / 2;
+    background: $highlight-black;
+
+    @include media-breakpoint-down(sm) {
+      width: calc(100% + #{$spacer});
+      left: - $spacer / 2;
+      border-radius: 0;
     }
   }
 }
