@@ -72,7 +72,6 @@ window.comments = (function comments() {
       this.replyLink && this.replyLink.addEventListener('click', event => {
         event.preventDefault();
         this._showReplyInput();
-        // console.log(this.element);
       });
 
       this.editLink && this.editLink.addEventListener('click', event => {
@@ -267,7 +266,6 @@ window.comments = (function comments() {
       const commentTitleBar = element.querySelectorAll('.comment-name-date-wrapper');
 
       ajax.jsonRequest('POST', archiveUrl).then(() => {
-        console.log(element)
 
         if (element.classList.contains('archived')) {
 
@@ -286,11 +284,6 @@ window.comments = (function comments() {
             unarchive(element.closest('.top-level-comment'));
           }
 
-          // element.classList.remove("archived");
-          // element.querySelectorAll('.comment-archive .material-icons').textContent = "archive";
-          // element.querySelectorAll('.comment-archive-text').forEach(e => e.textContent = "Archive comment");
-          // commentTitleBar.querySelector('.archived-badge').remove();
-          // commentTitleBar.querySelector('.comment-expand-archived').remove();
         } else {
 
           function archive(element) {
