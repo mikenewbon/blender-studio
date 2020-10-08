@@ -2,22 +2,19 @@
 {% load static %}
 
 {% block content %}
-<div class="jumbotron jumbotron-fluid jumbotron-blog jumbotron-overlay overlay-blog">
+<div class="jumbotron jumbotron-fluid jumbotron-blog">
   <div class="jumbotron-bg-wrapper">
     <img class="jumbotron-bg" src="{{ post.thumbnail.url }}">
     <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
-  </div>
-  <div class="container-blog">
-
-    <p class="subtitle">{{ post.topic }}</p>
-    <h1 class="">{{ post.title }}</h1>
-    <p class="subtitle">{{ post_date_created|date:"jS M Y" }}</p>
   </div>
 </div>
 
 
 <section class="container-blog mt-3 mb-4">
-  <div class="training-toolbar-container mb-4">
+  <p class="subtitle">{{ post.topic }}</p>
+  <h1 class="">{{ post.title }}</h1>
+  <p class="subtitle small mb-3">{{ post_date_created|date:"jS M Y" }}</p>
+  <div class="training-toolbar-container mb-3">
     <div class="training-toolbar-details row">
       <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');"
         class="profile-image profile ml-2">
