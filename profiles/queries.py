@@ -7,8 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 def set_groups(user: User, group_names: Union[List[str], Set[str]]) -> None:
-    """
-    Set user groups to match the given list of `group_names`.
+    """Set user groups to match the given list of `group_names`.
 
     If a group with a particular name doesn't exist, create one.
     """

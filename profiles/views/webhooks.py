@@ -26,8 +26,7 @@ WEBHOOK_MAX_BODY_SIZE = 1024 * 10  # 10 kB is large enough
 @csrf_exempt
 @require_POST
 def user_modified_webhook(request: HttpRequest) -> HttpResponse:
-    """
-    Handle user modified request sent by Blender ID.
+    """Handle user modified request sent by Blender ID.
 
     Payload is expected to have the following format:
         {

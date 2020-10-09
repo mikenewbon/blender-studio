@@ -36,8 +36,7 @@ class BIDSession:
 
     @property
     def session(self):
-        """
-        Return a reusable "anonymous" OAuth2Session for fetching avatars from Blender ID.
+        """Return a reusable "anonymous" OAuth2Session for fetching avatars from Blender ID.
 
         Create it the first time this property is accessed.
         """
@@ -47,8 +46,7 @@ class BIDSession:
 
     @classmethod
     def get_oauth_user_info(cls, oauth_user_id: str) -> OAuthUserInfo:
-        """
-        Return OAuthUserInfo record for a given Blender ID.
+        """Return OAuthUserInfo record for a given Blender ID.
 
         Used primarily to look up our own user ID associated with an external Blender ID,
         for example in the user modified webhook.
@@ -65,8 +63,7 @@ class BIDSession:
         return OAuthToken.objects.filter(oauth_user_id=oauth_user_id).last()
 
     def get_user_info(self, oauth_user_id: str) -> Dict[str, Any]:
-        """
-        Retrieve user info from Blender ID service using a user-specific OAuth2 session.
+        """Retrieve user info from Blender ID service using a user-specific OAuth2 session.
 
         User info is returned in the following format:
         {
@@ -86,8 +83,7 @@ class BIDSession:
         return payload
 
     def get_avatar(self, oauth_user_id: str) -> Tuple[str, io.BytesIO]:
-        """
-        Retrieve an avatar from Blender ID service using an OAuth2 session.
+        """Retrieve an avatar from Blender ID service using an OAuth2 session.
 
         Return file name and content of an avatar for the given 'oauth_user_id'.
         """

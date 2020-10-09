@@ -32,8 +32,7 @@ class Profile(mixins.CreatedUpdatedMixin, models.Model):
         return f'Profile {self.user}'
 
     def copy_avatar_from_blender_id(self):
-        """
-        Attempt to retrieve an avatar from Blender ID and save it into our storage.
+        """Attempt to retrieve an avatar from Blender ID and save it into our storage.
 
         If either OAuth info or Blender ID service isn't available, log an error and return.
         """

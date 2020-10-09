@@ -16,8 +16,7 @@ logger = logging.getLogger(__name__)
 def fill_profile(
     sender: object, instance: User, oauth_info: Dict[str, str], **kwargs: object
 ) -> None:
-    """
-    Update a Profile when a new OAuth user is created.
+    """Update a Profile when a new OAuth user is created.
 
     Copy 'full_name' from the received 'oauth_info' and attempt to copy avatar from Blender ID.
     """
