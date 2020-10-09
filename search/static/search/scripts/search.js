@@ -280,8 +280,3 @@ search.addWidgets([
 ]);
 
 search.start();
-
-// -------- CHOICES.js -------- //
-
-// const selects = document.querySelectorAll('.search select');
-// const choices = new choices(selects);

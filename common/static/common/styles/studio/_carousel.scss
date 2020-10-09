@@ -1,1 +1,178 @@
+@media (max-width: 768px) {
+  .carousel-inner .carousel-item>div {
+    display: none;
+  }
 
+  .carousel-inner .carousel-item>div:first-child {
+    display: block;
+  }
+}
+
+.carousel-inner .carousel-item.active,
+.carousel-inner .carousel-item-next,
+.carousel-inner .carousel-item-prev {
+  display: flex;
+  justify-content: center;
+}
+
+.carousel-inner .carousel-item-right.active,
+.carousel-inner .carousel-item-next {
+  transform: translateX(100%);
+}
+
+.carousel-inner .carousel-item-left.active,
+.carousel-inner .carousel-item-prev {
+  transform: translateX(-100%);
+}
+
+.carousel-card-4 .carousel-inner .carousel-item-right.active,
+.carousel-card-4 .carousel-inner .carousel-item-next {
+  transform: translateX(100%);
+}
+
+.carousel-card-4 .carousel-inner .carousel-item-left.active,
+.carousel-card-4 .carousel-inner .carousel-item-prev {
+  transform: translateX(-100%);
+}
+
+@media (min-width: 768px) {
+
+  .carousel-inner .carousel-item-right.active,
+  .carousel-inner .carousel-item-next {
+    transform: translateX(33.33%);
+  }
+
+  .carousel-inner .carousel-item-left.active,
+   .carousel-inner .carousel-item-prev {
+    transform: translateX(-33.33%);
+  }
+
+
+  .carousel-card-4 .carousel-inner .carousel-item-right.active,
+  .carousel-card-4 .carousel-inner .carousel-item-next {
+    transform: translateX(25%);
+  }
+
+  .carousel-card-4 .carousel-inner .carousel-item-left.active,
+  .carousel-card-4 .carousel-inner .carousel-item-prev {
+    transform: translateX(-25%);
+  }
+}
+
+.carousel-inner .carousel-item-right,
+.carousel-inner .carousel-item-left {
+  transform: translateX(0);
+}
+
+.carousel-card-4 .carousel-inner .carousel-item-right,
+.carousel-card-4 .carousel-inner .carousel-item-left {
+  transform: translateX(0);
+}
+
+// A smarter man than me will clean this up one day
+//////////////////////////////////////////////////////
+
+// .carousel-inner {
+//   .carousel-item {
+//     &>div {
+//       @include media-breakpoint-down(md) {
+//         display: none;
+//       }
+
+//       &:first-child {
+//         @include media-breakpoint-down(md) {
+//           display: block;
+//         }
+//       }
+//     }
+
+//     &.active,
+//     &-next,
+//     &-prev {
+//       display: flex;
+//       justify-content: center;
+//     }
+
+//     &-right.active,
+//     &-next {
+//       transform: translateX(100%);
+
+//       @include media-breakpoint-up(lg) {
+//         transform: translateX(33.33%);
+//       }
+//     }
+
+//     &-left.active,
+//     &-previous {
+//       transform: translateX(-100%);
+
+//       @include media-breakpoint-up(lg) {
+//         transform: translateX(-33.33%);
+//       }
+//     }
+
+//     &-right,
+//     &-left {
+//       transform: translateX(0);
+//     }
+//   }
+// }
+
+// .carousel-card-3 {
+//   .carousel-inner {
+//     .carousel-item {
+
+//       &-right.active,
+//       &-next {
+//         @include media-breakpoint-up(lg) {
+//           transform: translateX(33.33%);
+//         }
+//       }
+
+//       &-left.active,
+//       &-previous {
+//         @include media-breakpoint-up(lg) {
+//           transform: translateX(-33.33%);
+//         }
+//       }
+//     }
+//   }
+// }
+
+// .carousel-card-4 {
+//   .carousel-inner {
+//     .carousel-item {
+
+//       &-right.active,
+//       &-next {
+//         @include media-breakpoint-up(lg) {
+//           transform: translateX(25%);
+//         }
+//       }
+
+//       &-left.active,
+//       &-previous {
+//         @include media-breakpoint-up(lg) {
+//           transform: translateX(-25%);
+//         }
+//       }
+//     }
+//   }
+// }
+
+.lessThanThree,
+.lessThanFour {
+  @include media-breakpoint-up(md) {
+    opacity: .5;
+    pointer-events: none;
+  }
+}
+
+.carousel {
+  .card {
+    margin-bottom: 0;
+  }
+  @include media-breakpoint-up(md) {
+    color: red;
+  }
+}

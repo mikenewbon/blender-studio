@@ -35,7 +35,7 @@
 @import '../vendor/bootstrap/modal';
 @import '../vendor/bootstrap/tooltip';
 // @import '../vendor/bootstrap/popover';
-// @import '../vendor/bootstrap/carousel';
+@import '../vendor/bootstrap/carousel';
 @import '../vendor/bootstrap/spinners';
 @import '../vendor/bootstrap/utilities';
 // @import '../vendor/bootstrap/print';
@@ -78,7 +78,7 @@
 @import 'modal';
 @import 'tooltip';
 // @import 'popover';
-// @import 'carousel';
+@import 'carousel';
 // @import 'spinners';
 @import 'utilities';
 // @import 'print';
@@ -91,13 +91,3 @@
 
 @import '../vendor/plyr/plyr';
 @import '../vendor/masonry/masonry';
-
-@import '../vendor/choices/choices';
-
-::-webkit-scrollbar-track {
-  background: none;
-}
-
-::-webkit-scrollbar-thumb {
-  background: $highlight-white;
-}

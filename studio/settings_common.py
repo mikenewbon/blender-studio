@@ -155,7 +155,6 @@ PIPELINE = {
                 'common/scripts/vendor/js.cookie.js',
                 'common/scripts/vendor/masonry.pkgd.js',
                 'common/scripts/vendor/imagesloaded.pkgd.js',
-                'common/scripts/vendor/choices.js',
             ],
             'output_filename': 'js/vendor.js',
             'extra_context': {'async': False, 'defer': False},
