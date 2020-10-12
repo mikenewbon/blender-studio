@@ -39,7 +39,6 @@ class StaticAssetAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
                     'user',
                     'author',
                     'license',
-                    'storage_location',
                     'thumbnail',
                     'date_created',
                 ],

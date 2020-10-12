@@ -8,7 +8,6 @@ from comments.models import Comment
 from common import mixins, markdown
 from common.upload_paths import get_upload_to_hashed_path
 from films.models import Film
-from static_assets.models import StorageLocation
 
 
 class Post(mixins.CreatedUpdatedMixin, models.Model):
@@ -56,9 +55,6 @@ class Revision(mixins.CreatedUpdatedMixin, models.Model):
     )
     content = models.TextField()
     html_content = models.TextField(blank=True, editable=False)
-    storage_location = models.ForeignKey(
-        StorageLocation, on_delete=models.PROTECT, related_name='revisions'
-    )
     thumbnail = models.FileField(upload_to=get_upload_to_hashed_path)
 
     is_published = models.BooleanField(default=False)

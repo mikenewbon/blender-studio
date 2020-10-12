@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(blank=True, max_length=512)),
                 ('picture_16_9', static_assets.models.static_assets.DynamicStorageFileField(default='', upload_to=common.upload_paths.get_upload_to_hashed_path)),
                 ('youtube_link', models.URLField(blank=True)),
-                ('storage_backend', models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='production_logs', to='static_assets.StorageBackend')),
+                ('storage_backend', models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='production_logs', to='static_assets.StorageBackend', null=True)),
             ],
             options={
                 'abstract': False,

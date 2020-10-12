@@ -25,6 +25,7 @@ class Migration(migrations.Migration):
             model_name='productionlog',
             name='storage_location',
             field=models.ForeignKey(
+                null=True,
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name='production_logs',
                 to='static_assets.StorageLocation',

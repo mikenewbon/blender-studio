@@ -16,6 +16,7 @@ class Migration(migrations.Migration):
             model_name='film',
             name='storage',
             field=models.OneToOneField(
+                null=True,
                 default=1,
                 on_delete=django.db.models.deletion.PROTECT,
                 to='static_assets.StorageBackend',

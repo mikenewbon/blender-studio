@@ -93,6 +93,7 @@ class Migration(migrations.Migration):
                         on_delete=django.db.models.deletion.PROTECT,
                         related_name='revisions',
                         to='static_assets.StorageLocation',
+                        null=True,
                     ),
                 ),
             ],

@@ -10,7 +10,7 @@ from storages.backends.gcloud import GoogleCloudStorage
 
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
-from static_assets.models import License, StorageLocation, StorageLocationCategoryChoices
+from static_assets.models import License, StorageLocationCategoryChoices
 
 
 class StaticAssetFileTypeChoices(models.TextChoices):
@@ -79,9 +79,6 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
     author.description = 'The actual author of the artwork/learning materials.'
     license = models.ForeignKey(
         License, null=True, on_delete=models.SET_NULL, related_name='static_assets'
-    )
-    storage_location = models.ForeignKey(
-        StorageLocation, on_delete=models.PROTECT, related_name='static_assets'
     )
 
     thumbnail = models.FileField(upload_to=get_upload_to_hashed_path, blank=True)

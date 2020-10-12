@@ -3,7 +3,6 @@ from factory import fuzzy
 from factory.django import DjangoModelFactory
 
 from common.tests.factories.helpers import generate_image_path, generate_file_path
-from common.tests.factories.static_assets import StorageLocationFactory
 from search import signals as search_signals
 from training.models import (
     Training,
@@ -31,9 +30,6 @@ class TrainingFactory(DjangoModelFactory):
     difficulty = fuzzy.FuzzyChoice(TrainingDifficulty.choices, getter=lambda c: c[0])
     picture_header = factory.LazyFunction(generate_image_path)
     thumbnail = factory.LazyFunction(generate_image_path)
-    storage_location = factory.SubFactory(
-        StorageLocationFactory, name=factory.SelfAttribute('..name')
-    )
 
 
 class ChapterFactory(DjangoModelFactory):
@@ -65,7 +61,6 @@ class AssetFactory(DjangoModelFactory):
     section = factory.SubFactory(SectionFactory)
     file = factory.LazyFunction(generate_file_path)
     size_bytes = 0
-    storage_location = factory.SubFactory(StorageLocationFactory)
 
 
 class VideoFactory(DjangoModelFactory):
@@ -76,4 +71,3 @@ class VideoFactory(DjangoModelFactory):
     file = factory.LazyFunction(generate_file_path)
     size_bytes = 0
     duration = '00:05:00'
-    storage_location = factory.SubFactory(StorageLocationFactory)

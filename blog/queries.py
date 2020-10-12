@@ -29,5 +29,4 @@ def get_latest_post_revisions() -> 'QuerySet[Revision]':
             ),
         )
         .order_by('-post__date_created')
-        .select_related('storage_location')
     )

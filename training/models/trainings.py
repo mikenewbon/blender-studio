@@ -6,7 +6,6 @@ from taggit.managers import TaggableManager
 
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
-from static_assets.models import StorageLocation, DynamicStorageFileField
 
 
 class TrainingStatus(models.TextChoices):
@@ -31,8 +30,6 @@ class Training(mixins.CreatedUpdatedMixin, models.Model):
             models.Index(fields=['status', 'type', 'difficulty']),
             models.Index(fields=['status', 'difficulty', 'type']),
         ]
-
-    storage_location = models.OneToOneField(StorageLocation, on_delete=models.PROTECT)
 
     name = models.CharField(unique=True, max_length=512)
     slug = models.SlugField(unique=True, blank=True)

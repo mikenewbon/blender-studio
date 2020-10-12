@@ -7,7 +7,6 @@ from django.urls.base import reverse
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
 from films.models import Asset, Film, FilmCrew
-from static_assets.models import StorageLocation
 
 
 class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
@@ -45,9 +44,6 @@ class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
     )
     author.description = 'The actual author of the summary in the weekly production log.'
     youtube_link = models.URLField(blank=True)
-    storage_location = models.ForeignKey(
-        StorageLocation, on_delete=models.PROTECT, related_name='production_logs', editable=False,
-    )
     thumbnail = models.FileField(upload_to=get_upload_to_hashed_path)
 
     @property

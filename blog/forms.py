@@ -2,7 +2,6 @@ from django import forms
 
 from blog.models import Revision, Post
 from films.models import Film
-from static_assets.models import StorageLocation
 
 
 class PostAddForm(forms.ModelForm):
@@ -27,11 +26,6 @@ class PostAddForm(forms.ModelForm):
     )
     content = forms.TextInput()
     thumbnail = forms.ImageField()
-    storage_location = forms.ModelChoiceField(
-        queryset=StorageLocation.objects.all(),
-        required=False,
-        help_text='If `Film` is set, it will be set automatically to the film\'s storage location.',
-    )
     is_published = forms.BooleanField(required=False)
 
     class Meta:
@@ -45,7 +39,6 @@ class PostAddForm(forms.ModelForm):
             'description',
             'content',
             'thumbnail',
-            'storage_location',
         )
 
     def create_post(self) -> Post:
@@ -62,16 +55,7 @@ class PostAddForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        storage_location = cleaned_data.get('storage_location')
         film = cleaned_data.get('film')
-
-        if storage_location is None:
-            # For film-related posts, use the film's storage location.
-            if film is not None:
-                cleaned_data['storage_location'] = film.storage_location
-            else:
-                msg = 'Storage location has to be set if the post is not related to a film.'
-                self.add_error('storage_location', forms.ValidationError(msg))
 
 
 class PostChangeForm(forms.ModelForm):

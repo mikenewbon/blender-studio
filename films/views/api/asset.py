@@ -40,7 +40,6 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
                 'static_asset__license',
                 'static_asset__author',
                 'static_asset__user',
-                'static_asset__storage_location',
                 'entry_asset__production_log_entry',
             )
             .get()
@@ -58,7 +57,6 @@ def asset_zoom(request: HttpRequest, asset_pk: int) -> HttpResponse:
     try:
         asset = (
             Asset.objects.filter(pk=asset_pk, is_published=True)
-            .select_related('static_asset__storage_location')
             .get()
         )
     except Asset.DoesNotExist:

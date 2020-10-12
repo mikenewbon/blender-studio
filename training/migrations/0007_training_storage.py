@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='training',
             name='storage',
-            field=models.OneToOneField(default=2, on_delete=django.db.models.deletion.PROTECT, to='static_assets.StorageBackend'),
+            field=models.OneToOneField(null=True, default=2, on_delete=django.db.models.deletion.PROTECT, to='static_assets.StorageBackend'),
             preserve_default=False,
         ),
     ]

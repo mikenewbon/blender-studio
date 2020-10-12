@@ -6,7 +6,6 @@ from taggit.managers import TaggableManager
 from comments.models import Comment
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
-from static_assets.models import StorageLocation
 from training.models import chapters
 
 
@@ -79,7 +78,6 @@ class SectionComment(models.Model):
 
 
 class Video(mixins.CreatedUpdatedMixin, models.Model):
-    storage_location = models.ForeignKey(StorageLocation, on_delete=models.PROTECT, editable=False)
     section = models.OneToOneField(Section, on_delete=models.CASCADE, related_name='video')
     file = models.FileField(upload_to=get_upload_to_hashed_path)
     size_bytes = models.BigIntegerField(editable=False)
@@ -97,12 +95,9 @@ class Video(mixins.CreatedUpdatedMixin, models.Model):
         super().clean()
         if self.file:
             self.size_bytes = self.file.size
-        if self.section:
-            self.storage_location = self.section.chapter.training.storage_location
 
 
 class Asset(mixins.CreatedUpdatedMixin, models.Model):
-    storage_location = models.ForeignKey(StorageLocation, on_delete=models.PROTECT, editable=False)
     section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='assets')
     file = models.FileField(upload_to=get_upload_to_hashed_path)
     size_bytes = models.IntegerField(editable=False)
@@ -114,5 +109,3 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
         super().clean()
         if self.file:
             self.size_bytes = self.file.size
-        if self.section:
-            self.storage_location = self.section.chapter.training.storage_location

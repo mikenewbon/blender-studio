@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
             model_name='collection',
             name='storage_backend',
             field=models.ForeignKey(
-                null=False,
+                null=True,
                 on_delete=django.db.models.deletion.CASCADE,
                 to='static_assets.StorageBackend',
             ),

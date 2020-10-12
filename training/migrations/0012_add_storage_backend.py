@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='asset',
             name='storage_backend',
-            field=models.ForeignKey(null=False, on_delete=django.db.models.deletion.CASCADE, to='static_assets.StorageBackend'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='static_assets.StorageBackend'),
         ),
         migrations.AddField(
             model_name='video',
@@ -52,6 +52,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='video',
             name='storage_backend',
-            field=models.ForeignKey(null=False, on_delete=django.db.models.deletion.CASCADE, to='static_assets.StorageBackend'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='static_assets.StorageBackend'),
         ),
     ]

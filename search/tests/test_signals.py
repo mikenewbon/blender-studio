@@ -7,7 +7,6 @@ from blog.models import Revision, Post
 from common.tests.factories.blog import PostFactory
 from common.tests.factories.films import FilmFactory
 from common.tests.factories.helpers import generate_file_path, catch_signal
-from common.tests.factories.static_assets import StorageLocationFactory
 from common.tests.factories.users import UserFactory
 from films.models import Film, FilmStatus
 
@@ -23,7 +22,6 @@ class TestBlogPostIndexing(TestCase):
             'title': 'Strawberry Fields Forever',
             'topic': 'Announcement',
             'content': '# Hot news',
-            'storage_location': StorageLocationFactory(),
             'thumbnail': generate_file_path(),
         }
 
@@ -93,7 +91,6 @@ class TestPostDeleteSignal(TestCase):
     def setUpTestData(cls) -> None:
         cls.user = UserFactory()
         cls.film_data = {
-            'storage_location': StorageLocationFactory(),
             'title': 'Strawberry Fields Forever',
             'slug': 'strawberry-fields-forever',
             'description': 'Living is easy with eyes closed',

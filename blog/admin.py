@@ -137,7 +137,6 @@ class PostAdmin(admin.ModelAdmin):
                     # It is not possible to set an initial value in a FileField, so we use
                     # the previous picture so as not to force the user to set it each time.
                     revision.thumbnail = previous_revision.thumbnail
-                revision.storage_location = previous_revision.storage_location
 
                 post.save()
                 revision.save(force_insert=True)

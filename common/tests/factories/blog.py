@@ -32,4 +32,3 @@ class RevisionFactory(DjangoModelFactory):
     thumbnail = factory.LazyFunction(generate_image_path)
     is_published = True
     post = factory.SubFactory(PostFactory)
-    storage_location = factory.SelfAttribute('post.film.storage_location')

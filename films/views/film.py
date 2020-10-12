@@ -27,7 +27,6 @@ def film_list(request: HttpRequest) -> HttpResponse:
     context = {
         'films': (
             Film.objects.filter(is_published=True)
-            .select_related('storage_location')
             .order_by('status', '-release_date')
         ),
         'user_can_edit_film': (

@@ -65,7 +65,7 @@ def get_activity_feed_page(
     obj_type_to_queryset: Dict[str, 'QuerySet[Model]'] = {
         'post': get_latest_post_revisions().select_related('post__author'),
         'production log': ProductionLog.objects.select_related('film'),
-        'training': Training.objects.select_related('storage_location'),
+        'training': Training.objects,
     }
 
     # Collect the pks we need to load for each obj_type:

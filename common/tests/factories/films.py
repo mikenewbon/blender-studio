@@ -3,7 +3,7 @@ from factory import fuzzy
 from factory.django import DjangoModelFactory
 
 from common.tests.factories.helpers import generate_image_path
-from common.tests.factories.static_assets import StaticAssetFactory, StorageLocationFactory
+from common.tests.factories.static_assets import StaticAssetFactory
 from common.tests.factories.users import UserFactory
 from films.models import (
     Film,
@@ -37,10 +37,6 @@ class FilmFactory(DjangoModelFactory):
     picture_header = factory.LazyFunction(generate_image_path)
     thumbnail = factory.LazyFunction(generate_image_path)
 
-    storage_location = factory.SubFactory(
-        StorageLocationFactory, name=factory.SelfAttribute('..title')
-    )
-
 
 @factory.django.mute_signals(search_signals.post_save)
 class CollectionFactory(DjangoModelFactory):
@@ -52,8 +48,6 @@ class CollectionFactory(DjangoModelFactory):
     slug = factory.Faker('slug')
     text = factory.Faker('paragraph')
 
-    storage_location = factory.SelfAttribute('film.storage_location')
-
     thumbnail = factory.LazyFunction(generate_image_path)
 
 
@@ -64,9 +58,7 @@ class AssetFactory(DjangoModelFactory):
 
     film = factory.SubFactory(FilmFactory)
     collection = factory.SubFactory(CollectionFactory, film=factory.SelfAttribute('..film'))
-    static_asset = factory.SubFactory(
-        StaticAssetFactory, storage_location=factory.SelfAttribute('..film.storage_location')
-    )
+    static_asset = factory.SubFactory(StaticAssetFactory)
 
     name = factory.Faker('text', max_nb_chars=30)
     slug = factory.Faker('slug')
@@ -83,7 +75,6 @@ class ProductionLogFactory(DjangoModelFactory):
     film = factory.SubFactory(FilmFactory)
     summary = factory.Faker('text')
     user = factory.SubFactory(UserFactory)
-    storage_location = factory.SelfAttribute('film.storage_location')
     thumbnail = factory.LazyFunction(generate_image_path)
 
 
