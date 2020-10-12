@@ -25,7 +25,7 @@
   border: 0;
 
   &:hover {
-    background-color: tint($navigation-gray, 10%);
+    background-color: none;
     text-decoration: none;
 
     .file-body {
@@ -86,7 +86,7 @@
 .file-body {
   color: $highlight-white-xstrong;
   display: block;
-  padding: $spacer / 2;
+  padding: $spacer / 2 $spacer / 2 0;
   position: relative;
   transition: $transition-base;
 

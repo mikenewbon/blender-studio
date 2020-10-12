@@ -62,7 +62,6 @@
 
     @include media-breakpoint-up(md) {
       padding-left: calc(#{$spacer} * 1.5);
-      padding-right: 0;
     }
 
     >*:last-child {
@@ -86,7 +85,7 @@
 
     .files {
       @include media-breakpoint-up(md) {
-        padding: $spacer $spacer 0 $spacer;
+        padding: $spacer $spacer 0 $spacer / 2;
       }
 
       padding: 0;
