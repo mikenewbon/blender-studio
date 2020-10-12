@@ -3,7 +3,22 @@
 <div class="comment-section" data-comment-url="{{ comments.comment_url }}"
   data-profile-image-url="{{ comments.profile_image_url }}">
   <h3>{{ comments.number_of_comments }} Comments</h3>
+  {% if user.is_authenticated %}
   {% comment_input profile_image_url=comments.profile_image_url button_label='Comment' div_class='comment-main-input'%}
+  {% else %}
+  <div class="comment-input row" onkeydown="event.stopPropagation()">
+    <div class="col">
+      <div class="comment-input-div disabled form-control" contenteditable="false">
+      <p class="mb-0"><a class="mb-0" href="#">Login</a> to comment publicly.</p>
+      </div>
+    </div>
+    <div class="comment-send col-auto pl-0">
+      <button class="btn-input btn-sm btn btn-sm btn-icon disabled">
+        <i class="material-icons">send</i>
+      </button>
+    </div>
+  </div>
+  {% endif %}
 
   <div class="comments">
     {% include 'comments/components/comment_tree.html' with comment_trees=comments.comment_trees %}

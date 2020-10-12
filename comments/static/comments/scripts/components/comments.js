@@ -44,7 +44,7 @@ window.comments = (function comments() {
     }
 
     get commentLikesCountElement() {
-      return this.element.querySelector('.comment-likes-count');
+      return this.element.querySelector('.likes-count');
     }
 
     get commentSection() {
