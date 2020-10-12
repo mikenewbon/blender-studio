@@ -100,7 +100,6 @@ function authCheck() {
 
 function cardCarousel(element, slides) {
   var totalCards = element.parentElement.childElementCount;
-  var minPerSlide = 1;
   var next = $(element).next();
   if (!next.length) {
     next = $(element).siblings(':first');
