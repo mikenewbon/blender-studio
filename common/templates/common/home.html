@@ -38,8 +38,8 @@
         <h2 class="mb-0">Latest Training</h2>
         <p class="mb-0">Want to see more? <a href="/training">Explore all training</a></p>
       </div>
-      <div class="col-auto">
-        <a class="btn btn-lg btn-transparent btn-icon {% if featured_trainings|length <= 3 %} lessThanThree {% endif %}"
+      <div class="col-auto carousel-card-toolbar">
+        <a class="btn btn-lg btn-transparent btn-icon {% if featured_trainings|length <= 1 %}onlyOne{% elif featured_trainings|length <= 3 %} lessThanThree {% endif %}"
           href="#latestTraining" role="button" data-slide="prev">
           <i class="material-icons">arrow_back</i>
         </a>
@@ -77,7 +77,7 @@
         <h2 class="mb-0">Latest Training</h2>
         <p class="mb-0">Want to see more? <a href="/training">Explore all training</a></p>
       </div>
-      <div class="col-auto">
+      <div class="col-auto carousel-card-toolbar">
         <a class="btn btn-lg btn-transparent btn-icon {% if featured_trainings|length <= 3 %} lessThanThree {% endif %}"
           href="#continueLearning" role="button" data-slide="prev">
           <i class="material-icons">arrow_back</i>
@@ -91,7 +91,7 @@
     <div class="row">
 
 
-      <div id="continueLearning" class="carousel carousel-card-4 slide w-100" data-ride="carousel" data-interval="0">
+      <div id="continueLearning" class="carousel carousel-card-4 slide w-100" data-touch="true" data-ride="carousel" data-interval="0">
         <div class="carousel-inner w-100" role="listbox">
           <div class="carousel-item active">
             {% for training in featured_trainings|slice:':1' %}
@@ -235,39 +235,11 @@
 
 <script>
   $('.carousel-card-3 .carousel-item').each(function () {
-    var minPerSlide = 3;
-    var next = $(this).next();
-    if (!next.length) {
-      next = $(this).siblings(':first');
-    }
-    next.children(':first-child').clone().appendTo($(this));
-
-    for (var i = 0; i < minPerSlide; i++) {
-      next = next.next();
-      if (!next.length) {
-        next = $(this).siblings(':first');
-      }
-
-      next.children(':first-child').clone().appendTo($(this));
-    }
+    cardCarousel(this, 3);
   });
 
   $('.carousel-card-4 .carousel-item').each(function () {
-    var minPerSlide = 4;
-    var next = $(this).next();
-    if (!next.length) {
-      next = $(this).siblings(':first');
-    }
-    next.children(':first-child').clone().appendTo($(this));
-
-    for (var i = 0; i < minPerSlide; i++) {
-      next = next.next();
-      if (!next.length) {
-        next = $(this).siblings(':first');
-      }
-
-      next.children(':first-child').clone().appendTo($(this));
-    }
+    cardCarousel(this, 4);
   });
 </script>
 

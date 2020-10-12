@@ -97,3 +97,22 @@ function authCheck() {
     return false;
   }
 }
+
+function cardCarousel(element, slides) {
+  var totalCards = element.parentElement.childElementCount;
+  var minPerSlide = 1;
+  var next = $(element).next();
+  if (!next.length) {
+    next = $(element).siblings(':first');
+  }
+  next.children(':first-child').clone().appendTo($(element));
+
+  for (var i = 2; i < totalCards; i++) {
+    next = next.next();
+    if (!next.length) {
+      next = $(element).siblings(':first');
+    }
+
+    next.children(':first-child').clone().appendTo($(element));
+  }
+}

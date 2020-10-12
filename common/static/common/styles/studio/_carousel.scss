@@ -12,7 +12,7 @@
 .carousel-inner .carousel-item-next,
 .carousel-inner .carousel-item-prev {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .carousel-inner .carousel-item-right.active,
@@ -43,7 +43,7 @@
   }
 
   .carousel-inner .carousel-item-left.active,
-   .carousel-inner .carousel-item-prev {
+  .carousel-inner .carousel-item-prev {
     transform: translateX(-33.33%);
   }
 
@@ -161,7 +161,8 @@
 // }
 
 .lessThanThree,
-.lessThanFour {
+.lessThanFour,
+.onlyOne {
   @include media-breakpoint-up(md) {
     opacity: .5;
     pointer-events: none;
@@ -172,7 +173,13 @@
   .card {
     margin-bottom: 0;
   }
-  @include media-breakpoint-up(md) {
-    color: red;
+}
+
+.carousel-card-toolbar {
+  align-items: flex-start;
+  display: flex;
+
+  a:first-of-type {
+    margin-right: $spacer / 2;
   }
 }
