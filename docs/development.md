@@ -110,6 +110,8 @@ MYSQL_PASSWORD=blender_id -e MYSQL_DATABASE=blender_id -e MYSQL_ALLOW_EMPTY_PASS
 -p 3306:3306 -it -v blender_id:/var/lib/mysql mariadb:latest
 ```
 
+### Configure an OAuth application
+
 After configuring and running the Blender ID application, in its admin (http://id.local:8000/admin/)
 create a new OAuth2 application:
  - Redirect url: `http://studio.local:8001/oauth/authorized`
@@ -118,6 +120,42 @@ create a new OAuth2 application:
 
 Copy the **Cliend id** and **Cliend secret** to the studio's `settings.py` as `"OAUTH_CLIENT"`
 and `"OAUTH_SECRET"` in the `BLENDER_ID` settings.
+
+### Configure a webhook
+
+In order to receive changes made to Blender ID profile, Blender Studio needs a webhook to be called by Blender ID.
+Again, in Blender ID [admin](http://id.local:8000/admin/), add a new webhook:
+ - Hook type: select `User modified`
+ - URL: `http://studio.local:8001/api/webhooks/user-modified`
+ - Enabled: make sure this is checked.
+
+Copy webhook's **Secret** into Blender Studio's `settings.py` as `"WEBHOOK_USER_MODIFIED_SECRET"` in the `BLENDER_ID`
+as follows:
+
+```
+BLENDER_ID = {
+    # MUST end in a slash:
+    "BASE_URL": "http://id.local:8000/",
+    "OAUTH_CLIENT": "XXX",
+    "OAUTH_SECRET": "XXX",
+    "WEBHOOK_USER_MODIFIED_SECRET": b"SECRET",  # keep the 'b' prefix
+}
+```
+
+### Allow HTTP in Blender ID
+
+In **Blender ID** settings (`blenderid/settings.py`), make sure the following lines exist:
+```
+OAUTH2_PROVIDER['ALLOWED_REDIRECT_URI_SCHEMES'] = ['http', 'https']
+PREFERRED_SCHEME = 'http'
+```
+
+In **Blender Studio** settings (`studio/settings.py`), check the following line exists:
+```
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+```
+If you are getting `SSLError`s and changes to your Blender ID profile don't appear in Blender Studio,
+most likely these settings are missing.
 
 
 ## Search setup
