@@ -32,6 +32,7 @@
   </template>
   {% endblock %}
 
+  {{ user_dict|json_script:"current-user" }}
   {% block scripts %}{% endblock scripts %}
 </head>
 

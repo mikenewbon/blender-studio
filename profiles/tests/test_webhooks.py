@@ -6,7 +6,7 @@ import json
 import responses
 
 from django.contrib.auth.models import User, Group
-from django.test import RequestFactory, TestCase, override_settings
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from common.tests.factories.users import UserFactory
@@ -43,7 +43,6 @@ class WebhooksTest(TestCase):
     }
 
     def setUp(self):
-        self.factory = RequestFactory()
         self.url = reverse('webhook-user-modified')
         # Mock Blender ID responses
         responses.add(

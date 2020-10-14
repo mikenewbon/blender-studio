@@ -75,6 +75,7 @@ TEMPLATES = [
                 'training.context_processors.enums',
                 # TODO(anna) when Profile model is added, this should become a prop on it instead.
                 'training.context_processors.favorited',
+                'profiles.context_processors.user_dict',
             ]
         },
     },
