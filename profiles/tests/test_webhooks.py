@@ -11,6 +11,7 @@ from django.urls import reverse
 
 from common.tests.factories.users import UserFactory
 from profiles.models import Profile
+import profiles.tests.util as util
 
 BLENDER_ID_BASE_URL = 'http://id.local:8000/'
 
@@ -44,34 +45,7 @@ class WebhooksTest(TestCase):
 
     def setUp(self):
         self.url = reverse('webhook-user-modified')
-        # Mock Blender ID responses
-        responses.add(
-            responses.GET,
-            f'{BLENDER_ID_BASE_URL}api/user/2/avatar',
-            status=302,
-            headers={
-                'Location': f'{BLENDER_ID_BASE_URL}media/cache/1c/da/1cda54d605799b1f4b0dc080.jpg',
-            },
-        )
-        responses.add(
-            responses.GET,
-            f'{BLENDER_ID_BASE_URL}api/me',
-            json={
-                'id': 2,
-                'full_name': 'Jane Doe',
-                'email': 'jane@example.com',
-                'nickname': 'ⅉanedoe',
-                # N.B.: roles format here differs from one in user-modified webhook payload.
-                'roles': {'dev_core': True},
-            },
-        )
-        with open('common/static/common/images/blank-profile-pic.jpg', 'rb') as out:
-            responses.add(
-                responses.GET,
-                'http://id.local:8000/media/cache/1c/da/1cda54d605799b1f4b0dc080.jpg',
-                body=out,
-                stream=True,
-            )
+        util.mock_blender_id_responses()
 
         # Prepare a user
         self.user = UserFactory(
@@ -172,7 +146,7 @@ class WebhooksTest(TestCase):
         user = User.objects.get(pk=self.user.pk)
         self.assertEquals(
             sorted([g.name for g in user.groups.all()]),
-            ['cloud_has_subscription', 'cloud_subscriber'],
+            ['has_subscription', 'subscriber'],
         )
 
         # One role removed
@@ -189,11 +163,11 @@ class WebhooksTest(TestCase):
         self.assertEquals(
             sorted([g.name for g in user.groups.all()]),
             [
-                'cloud_has_subscription',
+                'has_subscription',
             ],
         )
         # Check that the group itself still exists
-        self.assertEquals(Group.objects.filter(name='cloud_subscriber').count(), 1)
+        self.assertEquals(Group.objects.filter(name='subscriber').count(), 1)
 
         # Two roles added, one already exists
         body = {
@@ -209,9 +183,9 @@ class WebhooksTest(TestCase):
         self.assertEquals(
             sorted([g.name for g in user.groups.all()]),
             [
-                'cloud_has_subscription',
-                'cloud_subscriber',
                 'dev_core',
+                'has_subscription',
+                'subscriber',
             ],
         )
 

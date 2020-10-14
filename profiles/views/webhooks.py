@@ -4,7 +4,6 @@ import hashlib
 import hmac
 import json
 import logging
-import requests
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
@@ -94,7 +93,7 @@ def handle_user_modified(payload: Dict[Any, Any]) -> None:
             # TODO(anna) handle duplicate usernames
             user.username = user_info['nickname']
             user.save()
-    except requests.HTTPError:
+    except Exception:
         logger.exception(f'Unable to update username for {profile}')
 
     if payload['email'] != user.email:

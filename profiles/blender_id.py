@@ -21,15 +21,13 @@ class BIDSession:
         """Initialise Blender ID client settings."""
         self.settings = blender_id_oauth_settings()
 
-    def _make_session(self, oauth_user_id: str = None) -> OAuth2Session:
-        """Return a new OAuth2 session, optionally authenticated with a user token."""
-        if oauth_user_id:
-            token = self.get_oauth_token(oauth_user_id)
+    def _make_session(self, access_token: str = None) -> OAuth2Session:
+        """Return a new OAuth2 session, optionally authenticated with an access token."""
+        if access_token:
             return OAuth2Session(
                 self.settings.client,
                 token={
-                    'access_token': token.access_token,
-                    'refresh_token': token.refresh_token,
+                    'access_token': access_token,
                 },
             )
         return OAuth2Session(self.settings.client)
@@ -74,7 +72,10 @@ class BIDSession:
             "roles": {"dev_core": True},
         }
         """
-        session = self._make_session(oauth_user_id)
+        token = self.get_oauth_token(oauth_user_id)
+        if not token:
+            raise Exception(f'No access token found for {oauth_user_id}')
+        session = self._make_session(access_token=token.access_token)
         resp = session.get(self.settings.url_userinfo)
         resp.raise_for_status()
         payload = resp.json()

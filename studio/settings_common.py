@@ -1,4 +1,6 @@
-import os
+# noqa: D100
+from datetime import timedelta
+import os  # noqa: F401
 import pathlib
 import sys
 
@@ -29,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.staticfiles',
     'blender_id_oauth_client',
+    'blendercloud',
     'debug_toolbar',
     'looper',
     'pipeline',
@@ -45,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'blendercloud.middleware.SessionMiddleware',
 ]
 
 ROOT_URLCONF = 'studio.urls'
@@ -136,7 +140,7 @@ PIPELINE = {
             'extra_context': {'async': False, 'defer': False},
         },
         'search': {
-            'source_filenames': ['search/scripts/*.js',],
+            'source_filenames': ['search/scripts/*.js', ],
             'output_filename': 'js/search.js',
             'extra_context': {'async': False, 'defer': False},
         },
@@ -200,6 +204,7 @@ LOGGING = {
         'django': {'level': 'WARNING'},
         'urllib3': {'level': 'WARNING'},
         'search': {'level': 'DEBUG'},
+        'blendercloud': {'level': 'DEBUG'},
     },
     'root': {'level': 'WARNING', 'handlers': ['console']},
 }
@@ -281,3 +286,14 @@ AWS_STORAGE_BUCKET_NAME = 'blender-studio'
 AWS_S3_CUSTOM_DOMAIN = 'ddz4ak4pa3d19.cloudfront.net'
 
 THUMBNAIL_STORAGE = PUBLIC_FILE_STORAGE
+
+BLENDER_CLOUD_SESSION_COOKIE_NAME = 'session'
+# Caveat emptor:
+# BLENDER_CLOUD_SESSION_LIFETIME should be **at least as long** as Blender Cloud's session lifetime,
+# otherwise Blender Studio will consider a session invalid **before** Blender Cloud does,
+# meaning that people will appear to be logged out on Blender Studio pages,
+# even if they are logged in in Blender Cloud.
+# Assumes a default Flask's value for the session lifetime.
+# See https://flask.palletsprojects.com/en/1.0.x/config/#PERMANENT_SESSION_LIFETIME
+BLENDER_CLOUD_SESSION_LIFETIME = timedelta(days=31)
+BLENDER_CLOUD_AUTH_ENABLED = False

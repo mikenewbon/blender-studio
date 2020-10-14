@@ -8,6 +8,7 @@ from django.dispatch import receiver
 from blender_id_oauth_client import signals as bid_signals
 
 from profiles.models import Profile
+from profiles.queries import set_groups
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +27,9 @@ def fill_profile(
 
     instance.profile.full_name = oauth_info.get('full_name') or ''
     instance.profile.save()
+
+    group_names = oauth_info.get('roles') or []
+    set_groups(instance, group_names=group_names)
 
     instance.profile.copy_avatar_from_blender_id()
 

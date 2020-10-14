@@ -8,12 +8,14 @@ from blender_id_oauth_client.models import OAuthUserInfo, OAuthToken
 class OAuthUserInfoFactory(DjangoModelFactory):
     class Meta:
         model = OAuthUserInfo
+
     user = factory.SubFactory('common.tests.factories.users.UserFactory')
 
 
 class OAuthUserTokenFactory(DjangoModelFactory):
     class Meta:
         model = OAuthToken
+
     user = factory.SubFactory('common.tests.factories.users.UserFactory')
 
 
