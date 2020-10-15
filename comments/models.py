@@ -46,7 +46,9 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
 
     @property
     def full_name(self) -> str:
-        return '<deleted>' if self.user is None else self.user.get_full_name()
+        if not self.user or not getattr(self.user, 'profile', None):
+            return '<deleted>'
+        return self.user.profile.full_name
 
     @property
     def profile_image_url(self) -> Optional[str]:
