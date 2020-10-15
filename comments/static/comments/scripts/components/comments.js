@@ -346,7 +346,7 @@ window.comments = (function comments() {
     element.querySelector('.comment-name').innerText = fullName;
     element.querySelector('.comment-date').innerText = dateString;
     element.querySelector('.comment-text').innerText = message;
-    element.querySelector('.comment-likes-count').innerText = likes;
+    element.querySelector('.likes-count').innerText = likes;
     if (liked) {
       element.querySelector('.checkbox-like').dataset.checked = 'checked';
     } else {
