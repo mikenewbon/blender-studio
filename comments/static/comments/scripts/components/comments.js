@@ -129,7 +129,7 @@ window.comments = (function comments() {
     _getOrCreateReplyInput() {
       const { commentSection, replyInput, replyInputsElement } = this;
       if (replyInput == null) {
-        const replyInput = ReplyInput.create(currentUser.profile.avatar_url);
+        const replyInput = ReplyInput.create(currentUser.profile.image_url);
         let inputText = '@' + this.element.querySelector('.comment-name').innerText;
         replyInput.element.querySelector('.comment-input-div').innerText = inputText;
         replyInputsElement.append(replyInput.element);
@@ -187,7 +187,7 @@ window.comments = (function comments() {
     _getOrCreateEditInput() {
       const { profileImageUrl, editInput, editInputsElement } = this;
       if (editInput == null) {
-        const editInput = EditInput.create(currentUser.profile.avatar_url);
+        const editInput = EditInput.create(currentUser.profile.image_url);
         editInputsElement.append(editInput.element);
         return editInput;
       } else {
