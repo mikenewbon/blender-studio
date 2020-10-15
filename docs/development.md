@@ -126,7 +126,7 @@ and `"OAUTH_SECRET"` in the `BLENDER_ID` settings.
 In order to receive changes made to Blender ID profile, Blender Studio needs a webhook to be called by Blender ID.
 Again, in Blender ID [admin](http://id.local:8000/admin/), add a new webhook:
  - Hook type: select `User modified`
- - URL: `http://studio.local:8001/api/webhooks/user-modified`
+ - URL: `http://studio.local:8001/webhooks/user-modified`
  - Enabled: make sure this is checked.
 
 Copy webhook's **Secret** into Blender Studio's `settings.py` as `"WEBHOOK_USER_MODIFIED_SECRET"` in the `BLENDER_ID`
