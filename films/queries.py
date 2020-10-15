@@ -136,14 +136,13 @@ def get_asset_context(
         previous_asset = next_asset = None
 
     comments: List[Comment] = get_annotated_comments(asset, request.user.pk)
-    user_is_moderator = request.user.has_perm('comments.moderate_comment')
 
     context = {
         'asset': asset,
         'previous_asset': previous_asset,
         'next_asset': next_asset,
         'site_context': site_context,
-        'comments': comments_to_template_type(comments, asset.comment_url, user_is_moderator),
+        'comments': comments_to_template_type(comments, asset.comment_url, request.user),
         'user_can_edit_asset': (
             request.user.is_staff and request.user.has_perm('films.change_asset')
         ),

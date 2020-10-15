@@ -36,7 +36,7 @@ def comment(request: HttpRequest, *, asset_pk: int) -> JsonResponse:
         {
             'id': comment.pk,
             'full_name': comment.full_name,
-            'profile_image_url': 'https://blender.chat/avatar/fsiddi',
+            'profile_image_url': comment.profile_image_url,
             'date_string': comment.date_created.strftime('%d %B %Y - %H:%M'),
             'message': comment.message,
             'like_url': comment.like_url,

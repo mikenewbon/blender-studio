@@ -20,13 +20,15 @@ def user_dict(request: HttpRequest) -> Dict[str, User]:
             is_superuser=user.is_superuser,
             last_login=user.last_login,
             date_joined=user.date_joined,
-            groups=[Group(
-                name=group.name,
-            ) for group in user.groups.all()],
+            groups=[
+                Group(
+                    name=group.name,
+                )
+                for group in user.groups.all()
+            ],
             profile=Profile(
                 full_name=user.profile.full_name if getattr(user, 'profile', None) else None,
-                avatar_url=user.profile.avatar.url
-                if getattr(user, 'profile', None) and user.profile.avatar.name else None,
+                image_url=user.profile.image_url if getattr(user, 'profile', None) else None,
             ),
         )
     else:

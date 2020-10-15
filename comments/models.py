@@ -1,4 +1,4 @@
-from typing import Any, Tuple, Dict, List
+from typing import Optional, List
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -47,6 +47,12 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
     @property
     def full_name(self) -> str:
         return '<deleted>' if self.user is None else self.user.get_full_name()
+
+    @property
+    def profile_image_url(self) -> Optional[str]:
+        if not self.user or not getattr(self.user, 'profile', None):
+            return None
+        return self.user.profile.image_url
 
     @property
     def is_deleted(self) -> bool:

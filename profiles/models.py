@@ -1,3 +1,4 @@
+from typing import Optional
 import logging
 
 import botocore.exceptions
@@ -50,3 +51,11 @@ class Profile(mixins.CreatedUpdatedMixin, models.Model):
             logger.exception(f'Failed to store an avatar for {self}')
         except Exception:
             logger.exception(f'Failed to copy avatar for {self}')
+
+    @property
+    def image_url(self) -> Optional[str]:
+        """Return a URL of the Profile image."""
+        # TODO: just link Blender ID's avatar URL instead of copying the image
+        if self.avatar.name:
+            return self.avatar.url
+        return None

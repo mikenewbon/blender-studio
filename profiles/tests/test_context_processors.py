@@ -25,7 +25,6 @@ class ContextProcessorsTest(TestCase):
             {
                 'is_anonymous': True,
                 'is_authenticated': False,
-
                 'date_joined': None,
                 'groups': None,
                 'is_active': None,
@@ -34,7 +33,7 @@ class ContextProcessorsTest(TestCase):
                 'last_login': None,
                 'profile': None,
                 'username': None,
-            }
+            },
         )
 
     def test_user_dict_authenticated_user(self):
@@ -57,7 +56,6 @@ class ContextProcessorsTest(TestCase):
             {
                 'is_anonymous': False,
                 'is_authenticated': True,
-
                 'date_joined': ANY,
                 'last_login': ANY,
                 'groups': [
@@ -68,11 +66,11 @@ class ContextProcessorsTest(TestCase):
                 'is_staff': False,
                 'is_superuser': False,
                 'profile': {
-                    'avatar_url': ANY,
+                    'image_url': ANY,
                     'full_name': 'ⅉane Doe',
                 },
                 'username': 'ⅉanedoe',
-            }
+            },
         )
 
     def test_user_dict_authenticated_user_no_avatar(self):
@@ -89,7 +87,6 @@ class ContextProcessorsTest(TestCase):
             {
                 'is_anonymous': False,
                 'is_authenticated': True,
-
                 'date_joined': ANY,
                 'last_login': None,
                 'groups': [],
@@ -97,9 +94,9 @@ class ContextProcessorsTest(TestCase):
                 'is_staff': False,
                 'is_superuser': False,
                 'profile': {
-                    'avatar_url': None,
+                    'image_url': None,
                     'full_name': '',
                 },
                 'username': 'ⅉanedoe',
-            }
+            },
         )

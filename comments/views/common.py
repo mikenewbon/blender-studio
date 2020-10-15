@@ -1,13 +1,16 @@
 from typing import Dict, List, Optional, Sequence
 
+from django.contrib.auth.models import User
+
 from comments import typed_templates
 from comments.models import Comment
 from common.types import assert_cast
 
 
 def comments_to_template_type(
-    comments: Sequence[Comment], comment_url: str, user_is_moderator: bool
+    comments: Sequence[Comment], comment_url: str, user: User
 ) -> typed_templates.Comments:
+    user_is_moderator = user.has_perm('comments.moderate_comment')
     lookup: Dict[Optional[int], List[Comment]] = {}
     for comment in sorted(comments, key=lambda c: c.date_created, reverse=True):
         reply_to_pk = None if comment.reply_to is None else comment.reply_to.pk
@@ -27,7 +30,7 @@ def comments_to_template_type(
             liked=assert_cast(bool, getattr(comment, 'liked')),
             likes=assert_cast(int, getattr(comment, 'number_of_likes')),
             replies=[build_tree(reply) for reply in lookup.get(comment.pk, [])],
-            profile_image_url='https://blender.chat/avatar/MikeNewbon',
+            profile_image_url=comment.profile_image_url,
             edit_url=(
                 comment.edit_url
                 if assert_cast(bool, getattr(comment, 'owned_by_current_user'))
@@ -60,8 +63,6 @@ def comments_to_template_type(
             id=comment.pk,
             date=comment.date_created,
             replies=[build_tree(reply) for reply in lookup.get(comment.pk, [])],
-            profile_image_url='https://blender.chat/avatar/MikeNewbon',
-            # TODO(Natalia): set an empty profile picture in deleted comments
             is_archived=comment.is_archived,
             is_top_level=True if comment.reply_to is None else False,
         )
@@ -70,5 +71,5 @@ def comments_to_template_type(
         comment_url=comment_url,
         number_of_comments=len(comments),
         comment_trees=[build_tree(comment) for comment in lookup.get(None, [])],
-        profile_image_url='https://blender.chat/avatar/fsiddi',
+        profile_image_url=user.profile.image_url if getattr(user, 'profile', None) else None,
     )

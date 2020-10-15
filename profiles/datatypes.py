@@ -36,4 +36,4 @@ class Profile:
     """Describe Profile type."""
 
     full_name: str
-    avatar_url: str
+    image_url: str

@@ -4,7 +4,7 @@ from django.views.decorators.http import require_safe
 from comments.views.common import comments_to_template_type
 from common.typed_templates.errors import not_found
 from common.typed_templates.types import TypeSafeTemplateResponse
-from subscriptions.decorators import subscription_required
+# from subscriptions.decorators import subscription_required
 from training import queries, typed_templates
 from training.models.progress import UserSectionProgress
 from training.typed_templates.types import SectionProgressReportingData
@@ -60,7 +60,7 @@ def section(
             comments=comments_to_template_type(
                 comments,
                 section.comment_url,
-                user_is_moderator=request.user.has_perm('comments.moderate_comment'),
+                user=request.user,
             ),
             section_progress_reporting_data=SectionProgressReportingData(
                 progress_url=section.progress_url,
