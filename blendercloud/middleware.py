@@ -29,9 +29,7 @@ class SessionMiddleware:
         This middleware can be enabled with a `settings.BLENDER_CLOUD_AUTH_ENABLED` flag.
         """
         if settings.BLENDER_CLOUD_AUTH_ENABLED:
-            # Allow logging in as an admin via the admin panel to simplify development
-            if not (settings.DEBUG and request.user.is_authenticated and request.user.is_superuser):
-                self._modify_session(request)
+            self._modify_session(request)
 
         response = self.get_response(request)
         # This middleware doesn't do anything with the response
