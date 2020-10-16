@@ -4,14 +4,9 @@
 {% load pipeline %}
 
 {% block scripts %}
-<<<<<<< HEAD
+{{ block.super }}
 {{ section_progress_reporting_data|json_script:"sectionProgressReportingData" }}
 {% javascript 'training' %}
-=======
-  {{ block.super }}
-  {% javascript 'training' %}
-  {{ section_progress_reporting_data|json_script:"sectionProgressReportingData" }}
->>>>>>> Add card carusel to saved training
 {% endblock scripts %}
 
 {% block nexted_content %}
