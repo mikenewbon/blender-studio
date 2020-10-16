@@ -62,7 +62,10 @@ window.cardTraining = (function cardTraining() {
                           <h3 class="mb-0">No saved training</h3>
                           <p class="mb-0">You can favorite a few below!</p>
                         </div>
-                      </div>`
+                      </div>`;
+                    favoriteSection.closest('section').querySelectorAll('.carousel-card-toolbar .btn').forEach( e => {
+                      e.classList.add('disabled');
+                    });
                   }
                 } else {
                   e.parentElement.parentElement.remove();
@@ -71,7 +74,19 @@ window.cardTraining = (function cardTraining() {
                 e.parentElement.remove();
               }
 
-              // IM WORKING HERE ----------------------------------------------------------
+              if (favoriteSection.classList.contains('carousel-card-3')) {
+                if (favoriteSection.firstElementChild.childElementCount <= 3){
+                  favoriteSection.closest('section').querySelectorAll('.carousel-card-toolbar .btn').forEach( e => {
+                    e.classList.add('disabled');
+                  });
+                }
+              } else if (favoriteSection.classList.contains('carousel-card-4')) {
+                if (favoriteSection.firstElementChild.childElementCount <= 4){
+                  favoriteSection.closest('section').querySelectorAll('.carousel-card-toolbar .btn').forEach( e => {
+                    e.classList.add('disabled');
+                  });
+                }
+              }
 
             })
             if (favoriteSection.childElementCount == 0) {
