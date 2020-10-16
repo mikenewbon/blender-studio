@@ -1,11 +1,13 @@
 from typing import Optional
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.db.models import FileField
 from django.db.models.fields.files import FieldFile
+from sorl.thumbnail import get_thumbnail
 from storages.backends.gcloud import GoogleCloudStorage
 
 from common import mixins
@@ -56,7 +58,7 @@ class DynamicStorageFileField(models.FileField):
         return file
 
 
-class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
+class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Model):
     source = models.FileField(upload_to=get_upload_to_hashed_path)
     source_type = models.CharField(choices=StaticAssetFileTypeChoices.choices, max_length=5)
     # TODO(Natalia): source type validation
@@ -94,6 +96,28 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
         if self.source_type == StaticAssetFileTypeChoices.image:
             return self.source
         # TODO(Natalia): Update this once we have auto-generated thumbnails.
+
+    @property
+    def thumbnail_m_url(self) -> str:
+        """Return a static URL to a medium-sizes thumbnail."""
+        # TODO(anna): use StaticThumbnailURLMixin once thumbnails are generated
+        preview = self.preview
+        if not preview:
+            return ''
+        return get_thumbnail(
+            preview, settings.THUMBNAIL_SIZE_M, crop=settings.THUMBNAIL_CROP_MODE
+        ).url
+
+    @property
+    def thumbnail_s_url(self) -> str:
+        """Return a static URL to a small thumbnail."""
+        # TODO(anna): use StaticThumbnailURLMixin once thumbnails are generated
+        preview = self.preview
+        if not preview:
+            return ''
+        return get_thumbnail(
+            preview, settings.THUMBNAIL_SIZE_S, crop=settings.THUMBNAIL_CROP_MODE
+        ).url
 
     @property
     def author_name(self) -> str:

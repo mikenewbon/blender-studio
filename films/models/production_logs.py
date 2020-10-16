@@ -9,7 +9,7 @@ from common.upload_paths import get_upload_to_hashed_path
 from films.models import Asset, Film, FilmCrew
 
 
-class ProductionLog(mixins.CreatedUpdatedMixin, models.Model):
+class ProductionLog(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Model):
     """A log (collection) of all authors' production log entries in one week."""
 
     class Meta:
