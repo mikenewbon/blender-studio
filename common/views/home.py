@@ -27,9 +27,7 @@ def home(request: HttpRequest) -> HttpResponse:
     **Template**
         :template:`common/home.html`
     """
-    context = {
-        'featured_trainings': Training.objects.filter()
-    }
+    context = {'featured_trainings': Training.objects.filter()}
 
     return render(request, 'common/home.html', context)
 

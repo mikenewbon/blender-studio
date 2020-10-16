@@ -12,10 +12,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='asset',
-            name='size',
-        ),
+        migrations.RemoveField(model_name='asset', name='size',),
         migrations.AddField(
             model_name='asset',
             name='size_bytes',
@@ -25,11 +22,21 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='asset',
             name='storage_location',
-            field=models.ForeignKey(null=True, editable=False, on_delete=django.db.models.deletion.PROTECT, to='static_assets.StorageLocation'),
+            field=models.ForeignKey(
+                null=True,
+                editable=False,
+                on_delete=django.db.models.deletion.PROTECT,
+                to='static_assets.StorageLocation',
+            ),
         ),
         migrations.AlterField(
             model_name='video',
             name='storage_location',
-            field=models.ForeignKey(null=True, editable=False, on_delete=django.db.models.deletion.PROTECT, to='static_assets.StorageLocation'),
+            field=models.ForeignKey(
+                null=True,
+                editable=False,
+                on_delete=django.db.models.deletion.PROTECT,
+                to='static_assets.StorageLocation',
+            ),
         ),
     ]

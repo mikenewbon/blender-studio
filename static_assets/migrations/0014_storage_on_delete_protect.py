@@ -14,6 +14,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='staticasset',
             name='storage_location',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, related_name='static_assets', to='static_assets.StorageLocation'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='static_assets',
+                to='static_assets.StorageLocation',
+            ),
         ),
     ]

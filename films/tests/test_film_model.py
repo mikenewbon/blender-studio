@@ -34,9 +34,11 @@ class TestFilmModel(TestCase):
         self.assertEqual(film.picture_header.url, 's3://file')
         self.assertEqual(film.thumbnail.url, 's3://file')
 
-        mock_storage_url.assert_has_calls((
-            call(film.logo.name,),
-            call(film.poster.name,),
-            call(film.picture_header.name,),
-            call(film.thumbnail.name,),
-        ))
+        mock_storage_url.assert_has_calls(
+            (
+                call(film.logo.name,),
+                call(film.poster.name,),
+                call(film.picture_header.name,),
+                call(film.thumbnail.name,),
+            )
+        )

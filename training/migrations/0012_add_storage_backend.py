@@ -33,25 +33,41 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='asset',
             name='storage_backend',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='static_assets.StorageBackend'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to='static_assets.StorageBackend',
+            ),
             preserve_default=False,
         ),
         migrations.RunPython(set_backend_asset, reverse_func),
         migrations.AlterField(
             model_name='asset',
             name='storage_backend',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='static_assets.StorageBackend'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to='static_assets.StorageBackend',
+            ),
         ),
         migrations.AddField(
             model_name='video',
             name='storage_backend',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='static_assets.StorageBackend'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to='static_assets.StorageBackend',
+            ),
             preserve_default=False,
         ),
         migrations.RunPython(set_backend_video, reverse_func),
         migrations.AlterField(
             model_name='video',
             name='storage_backend',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='static_assets.StorageBackend'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to='static_assets.StorageBackend',
+            ),
         ),
     ]

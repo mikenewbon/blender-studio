@@ -24,12 +24,7 @@ class BIDSession:
     def _make_session(self, access_token: str = None) -> OAuth2Session:
         """Return a new OAuth2 session, optionally authenticated with an access token."""
         if access_token:
-            return OAuth2Session(
-                self.settings.client,
-                token={
-                    'access_token': access_token,
-                },
-            )
+            return OAuth2Session(self.settings.client, token={'access_token': access_token,},)
         return OAuth2Session(self.settings.client)
 
     @property

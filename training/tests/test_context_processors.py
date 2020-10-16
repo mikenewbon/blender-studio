@@ -24,8 +24,7 @@ class ContextProcessorsTest(TestCase):
 
     def test_favorited_authenticated_user(self):
         request = self.factory.get('/')
-        user = User.objects.create_user(
-            username='john', email='john@…', password='top_secret')
+        user = User.objects.create_user(username='john', email='john@…', password='top_secret')
         request.user = user
 
         # Create 3 published trainings, 2 of them favorited by John
@@ -37,4 +36,6 @@ class ContextProcessorsTest(TestCase):
 
         context = context_processors.favorited(request)
 
-        self.assertCountEqual(context['favorited_training_ids'], [training_fav1.pk, training_fav2.pk])
+        self.assertCountEqual(
+            context['favorited_training_ids'], [training_fav1.pk, training_fav2.pk]
+        )

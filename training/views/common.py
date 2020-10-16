@@ -30,9 +30,7 @@ def training_model_to_template_type(
     )
 
 
-def chapter_model_to_template_type(
-    chapter: chapters.Chapter,
-) -> typed_templates.types.Chapter:
+def chapter_model_to_template_type(chapter: chapters.Chapter,) -> typed_templates.types.Chapter:
     return typed_templates.types.Chapter(index=chapter.index, name=chapter.name)
 
 

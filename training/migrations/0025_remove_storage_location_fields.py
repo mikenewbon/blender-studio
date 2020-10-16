@@ -10,16 +10,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='asset',
-            name='storage_location',
-        ),
-        migrations.RemoveField(
-            model_name='training',
-            name='storage_location',
-        ),
-        migrations.RemoveField(
-            model_name='video',
-            name='storage_location',
-        ),
+        migrations.RemoveField(model_name='asset', name='storage_location',),
+        migrations.RemoveField(model_name='training', name='storage_location',),
+        migrations.RemoveField(model_name='video', name='storage_location',),
     ]

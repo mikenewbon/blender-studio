@@ -20,12 +20,24 @@ class Migration(migrations.Migration):
             fields=[
                 ('date_created', models.DateTimeField(auto_now_add=True)),
                 ('date_updated', models.DateTimeField(auto_now=True)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, related_name='profile', serialize=False, to=settings.AUTH_USER_MODEL)),
+                (
+                    'user',
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        primary_key=True,
+                        related_name='profile',
+                        serialize=False,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
                 ('full_name', models.CharField(blank=True, default='', max_length=255)),
-                ('avatar', models.ImageField(blank=True, upload_to=common.upload_paths.get_upload_to_hashed_path)),
+                (
+                    'avatar',
+                    models.ImageField(
+                        blank=True, upload_to=common.upload_paths.get_upload_to_hashed_path
+                    ),
+                ),
             ],
-            options={
-                'abstract': False,
-            },
+            options={'abstract': False,},
         ),
     ]

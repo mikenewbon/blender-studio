@@ -10,29 +10,39 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunSQL(r'''
+        migrations.RunSQL(
+            r'''
         update training_asset
         set file = regexp_replace(file, '[_/]*(\w{2})(\w+).(\w+)', '\1/\1\2/\1\2.\3')
         where file like '_/%.%'
-        '''),
-        migrations.RunSQL(r'''
+        '''
+        ),
+        migrations.RunSQL(
+            r'''
         update training_video
         set file = regexp_replace(file, '[_/]*(\w{2})([0-9a-z]+)([0-9a-z-]*)\.(\w+)', '\1/\1\2/\1\2\3.\4')
         where file like '_/%'
-        '''),  # _/7923ce30edc04ad496a45a4ae08b4e9f-1080p.mp4 or _/d04734b40312cc78eb6ed41b725efd92e250d6be.mp4
-        migrations.RunSQL(r'''
+        '''
+        ),  # _/7923ce30edc04ad496a45a4ae08b4e9f-1080p.mp4 or _/d04734b40312cc78eb6ed41b725efd92e250d6be.mp4
+        migrations.RunSQL(
+            r'''
         update training_training
         set thumbnail = regexp_replace(thumbnail, '[_/]*(\w{2})(\w+).(\w+)', '\1/\1\2/\1\2.\3')
         where thumbnail like '_/%'
-        '''),
-        migrations.RunSQL(r'''
+        '''
+        ),
+        migrations.RunSQL(
+            r'''
         update training_training
         set picture_header = regexp_replace(picture_header, '[_/]*\w{2}/(\w{2})(\w+).(\w+)', '\1/\1\2/\1\2.\3')
         where picture_header like '_/%/%.%'
-        '''),  # _/48/4835e54b1bf9197dbd13fd10ea4a9db3.jpg
-        migrations.RunSQL(r'''
+        '''
+        ),  # _/48/4835e54b1bf9197dbd13fd10ea4a9db3.jpg
+        migrations.RunSQL(
+            r'''
         update training_training
         set picture_header = regexp_replace(picture_header, '[_/]*(\w{2})(\w+).(\w+)', '\1/\1\2/\1\2.\3')
         where picture_header like '_/%' and picture_header not like '_/%/%.%';
-        ''')
+        '''
+        ),
     ]

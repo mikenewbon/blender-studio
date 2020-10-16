@@ -1,4 +1,3 @@
-
 from django.test import TestCase
 from unittest.mock import patch, call
 
@@ -18,7 +17,4 @@ class TestStaticAssetModel(TestCase):
         self.assertEqual(asset.source.url, 's3://file')
         self.assertEqual(asset.thumbnail.url, 's3://file')
 
-        mock_storage_url.assert_has_calls((
-            call(asset.source.name,),
-            call(asset.thumbnail.name,),
-        ))
+        mock_storage_url.assert_has_calls((call(asset.source.name,), call(asset.thumbnail.name,),))

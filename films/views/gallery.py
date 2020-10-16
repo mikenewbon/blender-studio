@@ -99,10 +99,7 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
     context = {
         'film': film,
         'current_collection': collection,
-        'current_assets': (
-            collection.assets.filter(is_published=True)
-            .order_by('order', 'name')
-        ),
+        'current_assets': (collection.assets.filter(is_published=True).order_by('order', 'name')),
         'child_collections': child_collections,
         'user_can_edit_asset': (
             request.user.is_staff and request.user.has_perm('films.change_asset')

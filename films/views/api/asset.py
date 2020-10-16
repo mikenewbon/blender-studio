@@ -55,10 +55,7 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
 @require_safe
 def asset_zoom(request: HttpRequest, asset_pk: int) -> HttpResponse:
     try:
-        asset = (
-            Asset.objects.filter(pk=asset_pk, is_published=True)
-            .get()
-        )
+        asset = Asset.objects.filter(pk=asset_pk, is_published=True).get()
     except Asset.DoesNotExist:
         raise Http404('No asset matches the given query.')
 

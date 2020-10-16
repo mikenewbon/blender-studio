@@ -14,7 +14,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='collection',
             name='thumbnail',
-            field=models.FileField(blank=True, null=True, upload_to=common.upload_paths.get_upload_to_hashed_path),
+            field=models.FileField(
+                blank=True, null=True, upload_to=common.upload_paths.get_upload_to_hashed_path
+            ),
         ),
         migrations.AlterField(
             model_name='film',

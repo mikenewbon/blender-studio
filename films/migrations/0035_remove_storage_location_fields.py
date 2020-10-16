@@ -10,16 +10,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='collection',
-            name='storage_location',
-        ),
-        migrations.RemoveField(
-            model_name='film',
-            name='storage_location',
-        ),
-        migrations.RemoveField(
-            model_name='productionlog',
-            name='storage_location',
-        ),
+        migrations.RemoveField(model_name='collection', name='storage_location',),
+        migrations.RemoveField(model_name='film', name='storage_location',),
+        migrations.RemoveField(model_name='productionlog', name='storage_location',),
     ]

@@ -16,8 +16,7 @@ session_cookie_value = '.eJyNj7FOAzEQRP_FNYXtXdu7-YOIDkgkqpO9u9Yhogvc5USB-HesFNS
 
 
 @override_settings(
-    BLENDER_CLOUD_SECRET_KEY='supersecret',
-    BLENDER_CLOUD_AUTH_ENABLED=True,
+    BLENDER_CLOUD_SECRET_KEY='supersecret', BLENDER_CLOUD_AUTH_ENABLED=True,
 )
 class TestSession(TestCase):
     maxDiff = None
@@ -84,19 +83,12 @@ class TestSession(TestCase):
         self.assertTrue(user.profile.avatar.name.endswith('.jpg'))
         self.assertEquals(
             sorted([g.name for g in user.groups.all()]),
-            [
-                'dev_core',
-                'has_subscription',
-                'subscriber',
-            ],
+            ['dev_core', 'has_subscription', 'subscriber',],
         )
 
     @responses.activate
     def test_get_or_create_current_user_existing_user(self):
-        existing_user = UserFactory(
-            email='somemail@example.com',
-            oauth_info__oauth_user_id='2',
-        )
+        existing_user = UserFactory(email='somemail@example.com', oauth_info__oauth_user_id='2',)
         request = self.factory.get('/')
         request.COOKIES[settings.BLENDER_CLOUD_SESSION_COOKIE_NAME] = session_cookie_value
 
@@ -110,13 +102,8 @@ class TestSession(TestCase):
 
     @responses.activate
     def test_get_or_create_current_user_allows_duplicate_email(self):
-        UserFactory(
-            email='jane@example.com',
-        )
-        existing_user = UserFactory(
-            email='somemail@example.com',
-            oauth_info__oauth_user_id='2',
-        )
+        UserFactory(email='jane@example.com',)
+        existing_user = UserFactory(email='somemail@example.com', oauth_info__oauth_user_id='2',)
         request = self.factory.get('/')
         request.COOKIES[settings.BLENDER_CLOUD_SESSION_COOKIE_NAME] = session_cookie_value
 
@@ -155,8 +142,7 @@ class TestSession(TestCase):
 
 
 @override_settings(
-    BLENDER_CLOUD_SECRET_KEY='supersecret',
-    BLENDER_CLOUD_AUTH_ENABLED=True,
+    BLENDER_CLOUD_SECRET_KEY='supersecret', BLENDER_CLOUD_AUTH_ENABLED=True,
 )
 class TestIntegrityErrors(TransactionTestCase):
     """Check that get_or_create_current_user handles cases that trigger `IntegrityError`s.
@@ -174,22 +160,15 @@ class TestIntegrityErrors(TransactionTestCase):
 
     @responses.activate
     def test_get_or_create_current_user_handles_duplicate_username(self):
-        UserFactory(
-            username='ⅉanedoe',
-        )
-        existing_user = UserFactory(
-            email='somemail@example.com',
-            oauth_info__oauth_user_id='2',
-        )
+        UserFactory(username='ⅉanedoe',)
+        existing_user = UserFactory(email='somemail@example.com', oauth_info__oauth_user_id='2',)
         request = self.factory.get('/')
         request.COOKIES[settings.BLENDER_CLOUD_SESSION_COOKIE_NAME] = session_cookie_value
 
         with self.assertLogs('blendercloud.session', level='ERROR') as logs:
             user = get_or_create_current_user(request)
 
-        self.assertRegex(
-            logs.output[0], r'Unable to update user pk=\d+: duplicate username'
-        )
+        self.assertRegex(logs.output[0], r'Unable to update user pk=\d+: duplicate username')
         assert user is not None
         self.assertEquals(user.oauth_info.oauth_user_id, '2')
         self.assertEquals(user.pk, existing_user.pk)

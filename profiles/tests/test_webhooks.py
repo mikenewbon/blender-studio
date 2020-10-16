@@ -145,8 +145,7 @@ class WebhooksTest(TestCase):
         self.assertEquals(response.content, b'')
         user = User.objects.get(pk=self.user.pk)
         self.assertEquals(
-            sorted([g.name for g in user.groups.all()]),
-            ['has_subscription', 'subscriber'],
+            sorted([g.name for g in user.groups.all()]), ['has_subscription', 'subscriber'],
         )
 
         # One role removed
@@ -161,10 +160,7 @@ class WebhooksTest(TestCase):
         self.assertEquals(response.status_code, 204)
         user = User.objects.get(pk=self.user.pk)
         self.assertEquals(
-            sorted([g.name for g in user.groups.all()]),
-            [
-                'has_subscription',
-            ],
+            sorted([g.name for g in user.groups.all()]), ['has_subscription',],
         )
         # Check that the group itself still exists
         self.assertEquals(Group.objects.filter(name='subscriber').count(), 1)
@@ -182,11 +178,7 @@ class WebhooksTest(TestCase):
         user = User.objects.get(pk=self.user.pk)
         self.assertEquals(
             sorted([g.name for g in user.groups.all()]),
-            [
-                'dev_core',
-                'has_subscription',
-                'subscriber',
-            ],
+            ['dev_core', 'has_subscription', 'subscriber',],
         )
 
     def test_user_modified_missing_oauth_info(self):

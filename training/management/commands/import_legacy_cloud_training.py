@@ -138,10 +138,7 @@ class Command(BaseCommand):
                     video = section.video
                 except models_training.sections.Video.DoesNotExist:
                     video = models_training.sections.Video.objects.create(
-                        section=section,
-                        size=25000,
-                        duration='10:00',
-                        file='stand/in/path.mp4',
+                        section=section, size=25000, duration='10:00', file='stand/in/path.mp4',
                     )
                 models_training.sections.Video.objects.filter(pk=video.pk).update(
                     date_created=date_created, date_updated=date_updated
@@ -155,9 +152,7 @@ class Command(BaseCommand):
                     asset = section.assets.first()
                 else:
                     asset = models_training.sections.Asset.objects.create(
-                        section=section,
-                        size=25000,
-                        file='stand/in/path.mp4',
+                        section=section, size=25000, file='stand/in/path.mp4',
                     )
                 add_static_asset_path(asset, 'file', file_doc['file_path'])
                 models_training.sections.Asset.objects.filter(pk=asset.pk).update(

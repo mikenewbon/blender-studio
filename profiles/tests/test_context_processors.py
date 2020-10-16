@@ -37,10 +37,7 @@ class ContextProcessorsTest(TestCase):
         )
 
     def test_user_dict_authenticated_user(self):
-        user = UserFactory(
-            email='mail@example.com',
-            username='ⅉanedoe',
-        )
+        user = UserFactory(email='mail@example.com', username='ⅉanedoe',)
         user.profile.full_name = 'ⅉane Doe'
         user.profile.avatar.name = 'cache/path/to/avatar.jpg'
         for group_name in ('has_subscription', 'subscriber'):
@@ -58,26 +55,17 @@ class ContextProcessorsTest(TestCase):
                 'is_authenticated': True,
                 'date_joined': ANY,
                 'last_login': ANY,
-                'groups': [
-                    {'name': 'has_subscription'},
-                    {'name': 'subscriber'},
-                ],
+                'groups': [{'name': 'has_subscription'}, {'name': 'subscriber'},],
                 'is_active': True,
                 'is_staff': False,
                 'is_superuser': False,
-                'profile': {
-                    'image_url': ANY,
-                    'full_name': 'ⅉane Doe',
-                },
+                'profile': {'image_url': ANY, 'full_name': 'ⅉane Doe',},
                 'username': 'ⅉanedoe',
             },
         )
 
     def test_user_dict_authenticated_user_no_avatar(self):
-        user = UserFactory(
-            email='mail@example.com',
-            username='ⅉanedoe',
-        )
+        user = UserFactory(email='mail@example.com', username='ⅉanedoe',)
         self.request.user = user
 
         context = user_dict(self.request)
@@ -93,10 +81,7 @@ class ContextProcessorsTest(TestCase):
                 'is_active': True,
                 'is_staff': False,
                 'is_superuser': False,
-                'profile': {
-                    'image_url': None,
-                    'full_name': '',
-                },
+                'profile': {'image_url': None, 'full_name': '',},
                 'username': 'ⅉanedoe',
             },
         )

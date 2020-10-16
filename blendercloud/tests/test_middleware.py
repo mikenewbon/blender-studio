@@ -12,8 +12,7 @@ session_cookie_value = '.eJyNj7FOAzEQRP_FNYXtXdu7-YOIDkgkqpO9u9Yhogvc5USB-HesFNS
 
 
 @override_settings(
-    BLENDER_CLOUD_SECRET_KEY='supersecret',
-    BLENDER_CLOUD_AUTH_ENABLED=True,
+    BLENDER_CLOUD_SECRET_KEY='supersecret', BLENDER_CLOUD_AUTH_ENABLED=True,
 )
 class TestSessionMiddleware(TestCase):
     maxDiff = None
@@ -46,10 +45,7 @@ class TestSessionMiddleware(TestCase):
 
     @responses.activate
     def test_middleware_signs_in_an_already_authenticated_already_existing_user(self):
-        existing_user = UserFactory(
-            email='somemail@example.com',
-            oauth_info__oauth_user_id='2',
-        )
+        existing_user = UserFactory(email='somemail@example.com', oauth_info__oauth_user_id='2',)
         self.client.cookies.load({settings.BLENDER_CLOUD_SESSION_COOKIE_NAME: session_cookie_value})
 
         response = self.client.get('/')

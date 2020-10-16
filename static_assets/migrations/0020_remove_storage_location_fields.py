@@ -10,8 +10,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='staticasset',
-            name='storage_location',
-        ),
+        migrations.RemoveField(model_name='staticasset', name='storage_location',),
     ]

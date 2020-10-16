@@ -10,24 +10,32 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunSQL(r'''
+        migrations.RunSQL(
+            r'''
         update static_assets_staticasset
         set thumbnail = regexp_replace(thumbnail, '[_/]*(\w{2})/(\w+)\.(\w+)', '\1/\2/\2.\3')
         where thumbnail like '_/%/%.%'
-        '''),
-        migrations.RunSQL(r'''
+        '''
+        ),
+        migrations.RunSQL(
+            r'''
         update static_assets_staticasset
         set thumbnail = regexp_replace(thumbnail, '[_/]*(\w{2})(\w+)\.(\w+)', '\1/\1\2/\1\2.\3')
         where thumbnail like '_/%.%'
-        '''),
-        migrations.RunSQL(r'''
+        '''
+        ),
+        migrations.RunSQL(
+            r'''
         update static_assets_staticasset
         set source = regexp_replace(source, '[_/]*(\w{2})/(\w+)([0-9a-z-]*)\.(\w+)', '\1/\2/\2\3.\4')
         where source like '_/%/%.%'
-        '''),
-        migrations.RunSQL(r'''
+        '''
+        ),
+        migrations.RunSQL(
+            r'''
         update static_assets_staticasset
         set source = regexp_replace(source, '[_/]*(\w{2})(\w+)([0-9a-z-]*)\.(\w+)', '\1/\1\2/\1\2\3.\4')
         where source not like '_/%/%.%' and source like '_/%'
-        '''),
+        '''
+        ),
     ]

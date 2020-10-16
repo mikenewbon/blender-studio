@@ -10,35 +10,46 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunSQL(r'''
+        migrations.RunSQL(
+            r'''
         update films_film
         set logo = regexp_replace(logo, '[_/]*(\w{2})(\w+)\.(\w+)', '\1/\1\2/\1\2.\3')
         where logo like '_/%.%'
-        '''),
-        migrations.RunSQL(r'''
+        '''
+        ),
+        migrations.RunSQL(
+            r'''
         update films_film
         set thumbnail = regexp_replace(thumbnail, '[_/]*(\w{2})(\w+)\.(\w+)', '\1/\1\2/\1\2.\3')
         where thumbnail like '_/%.%'
-        '''),
-        migrations.RunSQL(r'''
+        '''
+        ),
+        migrations.RunSQL(
+            r'''
         update films_film
         set picture_header = regexp_replace(picture_header, '[_/]*(\w{2})(\w+)\.(\w+)', '\1/\1\2/\1\2.\3')
         where picture_header like '_/%.%'
-        '''),
-        migrations.RunSQL(r'''
+        '''
+        ),
+        migrations.RunSQL(
+            r'''
         update films_film
         set poster = regexp_replace(poster, '[_/]*(\w{2})(\w+)\.(\w+)', '\1/\1\2/\1\2.\3')
         where poster like '_/%.%'
-        '''),
-
-        migrations.RunSQL(r'''
+        '''
+        ),
+        migrations.RunSQL(
+            r'''
         update films_collection
         set preview = regexp_replace(preview, '[_/]*(\w{2})/(\w+)\.(\w+)', '\1/\2/\2.\3')
         where preview like '_/%/%.%'
-        '''),
-        migrations.RunSQL(r'''
+        '''
+        ),
+        migrations.RunSQL(
+            r'''
         update films_collection
         set preview = regexp_replace(preview, '[_/]*(\w{2})(\w+)\.(\w+)', '\1/\1\2/\1\2.\3')
         where preview like '_/%.%'
-        '''),
+        '''
+        ),
     ]

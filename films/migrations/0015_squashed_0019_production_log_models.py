@@ -20,45 +20,116 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ProductionLog',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name='ID'
+                    ),
+                ),
                 ('date_created', models.DateTimeField(auto_now_add=True)),
                 ('date_updated', models.DateTimeField(auto_now=True)),
                 ('description', models.TextField()),
                 ('start_date', models.DateField(default=datetime.date.today)),
-                ('film', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='production_logs', to='films.Film')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='production_logs', to=settings.AUTH_USER_MODEL)),
+                (
+                    'film',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='production_logs',
+                        to='films.Film',
+                    ),
+                ),
+                (
+                    'user',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='production_logs',
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
                 ('name', models.CharField(blank=True, max_length=512)),
-                ('picture_16_9', static_assets.models.static_assets.DynamicStorageFileField(default='', upload_to=common.upload_paths.get_upload_to_hashed_path)),
+                (
+                    'picture_16_9',
+                    static_assets.models.static_assets.DynamicStorageFileField(
+                        default='', upload_to=common.upload_paths.get_upload_to_hashed_path
+                    ),
+                ),
                 ('youtube_link', models.URLField(blank=True)),
-                ('storage_backend', models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='production_logs', to='static_assets.StorageBackend', null=True)),
+                (
+                    'storage_backend',
+                    models.ForeignKey(
+                        default=1,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='production_logs',
+                        to='static_assets.StorageBackend',
+                        null=True,
+                    ),
+                ),
             ],
-            options={
-                'abstract': False,
-            },
+            options={'abstract': False,},
         ),
         migrations.CreateModel(
             name='ProductionLogEntry',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name='ID'
+                    ),
+                ),
                 ('date_created', models.DateTimeField(auto_now_add=True)),
                 ('date_updated', models.DateTimeField(auto_now=True)),
                 ('description', models.TextField()),
                 ('author_role', models.CharField(max_length=512)),
-                ('author', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='authored_log_entries', to=settings.AUTH_USER_MODEL)),
-                ('production_log', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='log_entries', to='films.ProductionLog')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='uploaded_log_entries', to=settings.AUTH_USER_MODEL)),
+                (
+                    'author',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='authored_log_entries',
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    'production_log',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='log_entries',
+                        to='films.ProductionLog',
+                    ),
+                ),
+                (
+                    'user',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='uploaded_log_entries',
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
-            options={
-                'abstract': False,
-                'verbose_name_plural': 'production log entries',
-            },
+            options={'abstract': False, 'verbose_name_plural': 'production log entries',},
         ),
         migrations.CreateModel(
             name='ProductionLogEntryAsset',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('asset', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='films.Asset')),
-                ('production_log_entry', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='films.ProductionLogEntry')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name='ID'
+                    ),
+                ),
+                (
+                    'asset',
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE, to='films.Asset'
+                    ),
+                ),
+                (
+                    'production_log_entry',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to='films.ProductionLogEntry'
+                    ),
+                ),
             ],
         ),
     ]

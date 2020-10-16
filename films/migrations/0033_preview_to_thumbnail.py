@@ -18,8 +18,5 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(copy_preview_to_thumbnail, reverse_code=migrations.RunPython.noop),
-        migrations.RemoveField(
-            model_name='collection',
-            name='preview',
-        ),
+        migrations.RemoveField(model_name='collection', name='preview',),
     ]

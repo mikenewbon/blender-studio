@@ -22,24 +22,14 @@ logger = logging.getLogger(__name__)
 # The attributes were chosen based on what Flask 1.0.3's `SecureCookieSessionInterface.open_session`
 # requires to work.
 FlaskApp = namedtuple(
-    'FlaskApp',
-    [
-        'session_cookie_name',
-        'permanent_session_lifetime',
-        'secret_key',
-    ],
+    'FlaskApp', ['session_cookie_name', 'permanent_session_lifetime', 'secret_key',],
 )
 app = FlaskApp(
     session_cookie_name=settings.BLENDER_CLOUD_SESSION_COOKIE_NAME,
     permanent_session_lifetime=settings.BLENDER_CLOUD_SESSION_LIFETIME,
     secret_key=settings.BLENDER_CLOUD_SECRET_KEY,
 )
-FlaskRequest = namedtuple(
-    'FlaskRequest',
-    [
-        'cookies',
-    ],
-)
+FlaskRequest = namedtuple('FlaskRequest', ['cookies',],)
 session_interface = SecureCookieSessionInterface()
 
 
@@ -73,8 +63,7 @@ def _get_or_create_user(user_oauth: Dict[str, Any]) -> User:
             },
         )
         models.OAuthUserInfo.objects.get_or_create(
-            user=user,
-            oauth_user_id=str(oauth_user_id),
+            user=user, oauth_user_id=str(oauth_user_id),
         )
         if created:
             logger.debug('User also not found by email address, created new one.')
@@ -151,8 +140,6 @@ def get_or_create_current_user(request: HttpRequest) -> Optional[User]:
     # There is no refresh token or expiration available from Blender Cloud session,
     # hence only the access token is stored
     models.OAuthToken.objects.create(
-        user=user,
-        oauth_user_id=oauth_user_id,
-        access_token=access_token,
+        user=user, oauth_user_id=oauth_user_id, access_token=access_token,
     )
     return user

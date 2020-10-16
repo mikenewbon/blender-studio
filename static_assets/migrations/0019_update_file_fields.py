@@ -19,6 +19,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='staticasset',
             name='thumbnail',
-            field=models.FileField(blank=True, upload_to=common.upload_paths.get_upload_to_hashed_path),
+            field=models.FileField(
+                blank=True, upload_to=common.upload_paths.get_upload_to_hashed_path
+            ),
         ),
     ]

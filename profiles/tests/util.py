@@ -9,9 +9,7 @@ def mock_blender_id_responses() -> None:
         responses.GET,
         f'{base_url}api/user/2/avatar',
         status=302,
-        headers={
-            'Location': f'{base_url}media/cache/1c/da/1cda54d605799b1f4b0dc080.jpg',
-        },
+        headers={'Location': f'{base_url}media/cache/1c/da/1cda54d605799b1f4b0dc080.jpg',},
     )
     responses.add(
         responses.GET,
@@ -22,11 +20,7 @@ def mock_blender_id_responses() -> None:
             'email': 'jane@example.com',
             'nickname': 'ⅉanedoe',
             # N.B.: roles format here differs from one in user-modified webhook payload.
-            'roles': {
-                'dev_core': True,
-                'cloud_has_subscription': True,
-                'cloud_subscriber': True,
-            },
+            'roles': {'dev_core': True, 'cloud_has_subscription': True, 'cloud_subscriber': True,},
         },
     )
     with open('common/static/common/images/blank-profile-pic.jpg', 'rb') as out:
