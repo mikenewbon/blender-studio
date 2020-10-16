@@ -299,3 +299,5 @@ BLENDER_CLOUD_SESSION_COOKIE_NAME = 'session'
 BLENDER_CLOUD_SESSION_LIFETIME = timedelta(days=31)
 BLENDER_CLOUD_AUTH_ENABLED = False
 BLENDER_CLOUD_SECRET_KEY = 'CHANGE_ME'
+# If set, only use Blender Cloud session cookie for this specific domain
+BLENDER_CLOUD_DOMAIN = None
