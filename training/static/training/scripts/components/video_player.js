@@ -19,8 +19,12 @@ window.videoPlayer = (function videoPlayer() {
     }
 
     _setupEventListeners() {
-      this.plyr.on('ready', () => {
-        this.plyr.currentTime = this.startPosition;
+      this.plyr.on('loadeddata', () => {
+        // Setting a start position doesn't appear to work on "ready", only on "loaddata"
+        // See https://github.com/sampotts/plyr/issues/208#issuecomment-400539990
+        if (this.startPosition <= this.plyr.duration) {
+          this.plyr.currentTime = this.startPosition;
+        }
       });
 
       this.plyr.on('timeupdate', () => {
