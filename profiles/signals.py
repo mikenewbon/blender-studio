@@ -41,5 +41,5 @@ def create_profile(sender: object, instance: User, created: bool, **kwargs: obje
         return
 
     if not getattr(instance, 'profile', None):
-        logger.info('Creating new Profile for user pk={instance.pk}')
+        logger.info(f'Creating new Profile for user pk={instance.pk}')
         Profile.objects.create(user=instance)

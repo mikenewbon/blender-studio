@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'subscriptions',
     'training',
     'profiles',
+    'cloud_import',
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.auth',
