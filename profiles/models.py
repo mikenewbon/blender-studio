@@ -24,6 +24,7 @@ class Profile(mixins.CreatedUpdatedMixin, models.Model):
     )
     full_name = models.CharField(max_length=255, blank=True, default='')
     avatar = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True)
+    is_subscribed_to_newsletter = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         """Return absolute URL of a Profile."""

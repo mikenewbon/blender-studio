@@ -8,7 +8,7 @@ import pathlib
 
 overwrite = False
 
-DATABASE_NAME = "cloud_prod"
+DATABASE_NAME = "cloud-production-3"
 
 dirname = os.path.dirname(__file__)
 dirname_abspath = pathlib.Path(os.path.abspath(dirname)).parent

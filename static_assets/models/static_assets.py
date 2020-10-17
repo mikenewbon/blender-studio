@@ -101,8 +101,8 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
 
         Usually the author of the asset will be the same as the user who uploads the asset."""
         if self.author:
-            return self.author.get_full_name()
-        return self.user.get_full_name()
+            return self.author.profile.full_name
+        return self.user.profile.full_name
 
     def clean(self):
         super().clean()
