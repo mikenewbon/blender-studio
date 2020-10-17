@@ -10,9 +10,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='comment',
-            name='slug',
-            field=models.SlugField(blank=True),
-        ),
+        migrations.AddField(model_name='comment', name='slug', field=models.SlugField(blank=True),),
     ]

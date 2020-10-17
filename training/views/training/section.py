@@ -22,19 +22,10 @@ from training.views.common import (
 @require_safe
 # @subscription_required
 def section(
-    request: HttpRequest,
-    *,
-    training_slug: str,
-    chapter_index: int,
-    chapter_slug: str,
-    section_index: int,
-    section_slug: str,
+    request: HttpRequest, *, training_slug: str, section_slug: str,
 ) -> TypeSafeTemplateResponse:
     result = queries.sections.from_slug(
-        user_pk=request.user.pk,
-        training_slug=training_slug,
-        chapter_slug=chapter_slug,
-        section_slug=section_slug,
+        user_pk=request.user.pk, training_slug=training_slug, section_slug=section_slug,
     )
 
     if result is None:

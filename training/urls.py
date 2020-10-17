@@ -28,15 +28,11 @@ urlpatterns = [
         ),
     ),
     path(
-        'trainings/<slug:training_slug>/',
+        '<slug:training_slug>/',
         include(
             [
                 path('', training, name='training'),
-                path(
-                    'chapters/<int:chapter_index>-<slug:chapter_slug>/sections/<int:section_index>-<slug:section_slug>/',
-                    section,
-                    name='section',
-                ),
+                path('<slug:section_slug>', section, name='section',),
             ]
         ),
     ),

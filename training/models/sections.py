@@ -45,13 +45,7 @@ class Section(mixins.CreatedUpdatedMixin, models.Model):
     def url(self) -> str:
         return reverse(
             'section',
-            kwargs={
-                'training_slug': self.chapter.training.slug,
-                'chapter_index': self.chapter.index,
-                'chapter_slug': self.chapter.slug,
-                'section_index': self.index,
-                'section_slug': self.slug,
-            },
+            kwargs={'training_slug': self.chapter.training.slug, 'section_slug': self.slug,},
         )
 
     @property
