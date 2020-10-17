@@ -62,14 +62,15 @@ class SectionAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     list_display = [
         '__str__',
-        with_name('url', lambda obj: format_html('<a href="{url}">{url}</a>', url=obj.url)),
+        with_name(
+            'url', lambda obj: format_html('<a href="{url}" target="_blank">View</a>', url=obj.url)
+        ),
     ]
     inlines = [VideoInline, AssetInline]
     list_filter = [
         'chapter__training__type',
         'chapter__training__difficulty',
         'chapter__training',
-        'chapter',
     ]
     search_fields = ['name', 'chapter__name', 'chapter__training__name']
 
