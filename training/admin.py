@@ -75,5 +75,11 @@ class SectionAdmin(admin.ModelAdmin):
     search_fields = ['name', 'chapter__name', 'chapter__training__name']
 
 
-admin.site.register(sections.Video)
-admin.site.register(sections.Asset)
+@admin.register(sections.Video)
+class VideoAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['section']
+
+
+@admin.register(sections.Asset)
+class AssetAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['section']
