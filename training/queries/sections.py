@@ -6,7 +6,8 @@ from django.db.models import Exists, OuterRef, QuerySet
 from comments import models
 from comments.queries import get_annotated_comments
 from training.models import chapters, sections, trainings
-from training.models.progress import UserVideoProgress
+from static_assets.models.progress import UserVideoProgress
+import static_assets.models as models_static_assets
 
 
 def _published() -> 'QuerySet[sections.Section]':
@@ -16,6 +17,7 @@ def _published() -> 'QuerySet[sections.Section]':
 
 
 def recently_watched(*, user_pk: int) -> List[sections.Section]:
+    # TODO(fsiddi) this is hardcoded to WHERE usp.user_id = 1, should probably use user_pk
     return list(
         sections.Section.objects.raw(
             '''
@@ -32,8 +34,9 @@ def recently_watched(*, user_pk: int) -> List[sections.Section]:
                            LEFT JOIN training_section s ON usp.section_id = s.id
                            LEFT JOIN training_chapter c ON s.chapter_id = c.id
                            LEFT JOIN training_training t ON c.training_id = t.id
-                           LEFT JOIN training_video v ON s.id = v.section_id
-                           LEFT JOIN training_uservideoprogress uvp ON v.id = uvp.video_id AND usp.user_id = uvp.user_id
+                           LEFT JOIN static_assets_staticasset sa ON s.static_asset_id = sa.id
+                           LEFT JOIN static_assets_video v ON sa.id = v.static_asset_id
+                           LEFT JOIN static_assets_uservideoprogress uvp ON v.id = uvp.video_id AND usp.user_id = uvp.user_id
                   WHERE usp.user_id = 1
                     AND usp.started
                     AND NOT usp.finished
@@ -52,8 +55,7 @@ def from_slug(
         bool,
         chapters.Chapter,
         sections.Section,
-        Optional[Tuple[sections.Video, Optional[datetime.timedelta]]],
-        List[sections.Asset],
+        Optional[Tuple[models_static_assets.Video, Optional[datetime.timedelta]]],
         List[models.Comment],
     ]
 ]:
@@ -68,28 +70,27 @@ def from_slug(
                 )
             )
             .select_related('chapter__training', 'chapter')
-            .prefetch_related('video', 'assets', 'comments', 'comments__user')
+            .prefetch_related('static_asset', 'comments', 'comments__user')
             .get(chapter__training__slug=training_slug, slug=section_slug)
         )
     except sections.Section.DoesNotExist:
         return None
 
-    video: Optional[Tuple[sections.Video, Optional[datetime.timedelta]]]
+    video: Optional[Tuple[models_static_assets.Video, Optional[datetime.timedelta]]]
     try:
         try:
-            progress = section.video.progress.get(user_id=user_pk)
+            progress = section.static_asset.video.progress.get(user_id=user_pk)
         except UserVideoProgress.DoesNotExist:
             progress = None
-        video = (section.video, None if progress is None else progress.position)
-    except sections.Video.DoesNotExist:
+        video = (section.static_asset.video, None if progress is None else progress.position)
+    except models_static_assets.Video.DoesNotExist:
         video = None
 
-    assets = list(section.assets.all())
     chapter = section.chapter
     training = chapter.training
     training_favorited = cast(bool, getattr(section, 'training_favorited'))
     comments = get_annotated_comments(section, user_pk)
-    return training, training_favorited, chapter, section, video, assets, comments
+    return training, training_favorited, chapter, section, video, comments
 
 
 def comment(
@@ -100,7 +101,3 @@ def comment(
     )
     sections.SectionComment.objects.create(comment_id=comment.id, section_id=section_pk)
     return comment
-
-
-def video_from_pk(*, video_pk: int) -> sections.Video:
-    return sections.Video.objects.get(pk=video_pk)

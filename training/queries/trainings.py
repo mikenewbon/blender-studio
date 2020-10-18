@@ -3,6 +3,7 @@ from typing import List, Optional, Tuple, cast
 from django.db.models import Exists, OuterRef, QuerySet, Subquery
 
 from training.models import chapters, progress, sections, trainings
+import static_assets.models as models_static_assets
 
 
 def _published() -> 'QuerySet[trainings.Training]':
@@ -79,12 +80,14 @@ def navigation(
                     )
                 ),
                 video_position=Subquery(
-                    progress.UserVideoProgress.objects.filter(
-                        user_id=user_pk, video__section_id=OuterRef('pk')
+                    models_static_assets.UserVideoProgress.objects.filter(
+                        user_id=user_pk, video__static_asset__section=OuterRef('pk')
                     ).values('position')
                 ),
                 video_duration=Subquery(
-                    sections.Video.objects.filter(section_id=OuterRef('pk')).values('duration')
+                    models_static_assets.Video.objects.filter(
+                        static_asset__section=OuterRef('pk')
+                    ).values('duration')
                 ),
             )
             .filter(chapter__training_id=training_pk)

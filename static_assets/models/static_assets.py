@@ -1,4 +1,5 @@
 from typing import Optional
+import logging
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
@@ -6,11 +7,15 @@ from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.db.models import FileField
 from django.db.models.fields.files import FieldFile
+from django.urls.base import reverse
 from storages.backends.gcloud import GoogleCloudStorage
 
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
 from static_assets.models import License, StorageLocationCategoryChoices
+
+
+log = logging.getLogger(__name__)
 
 
 class StaticAssetFileTypeChoices(models.TextChoices):
@@ -104,6 +109,19 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
             return self.author.profile.full_name
         return self.user.profile.full_name
 
+    @property
+    def video(self) -> Optional['Video']:
+        try:
+            return Video.objects.get(static_asset=self)
+        except Video.DoesNotExist:
+            log.debug(
+                'Attempting to access non existing attribute for %s asset %i'
+                % (self.source_type, self.pk)
+            )
+            return None
+        finally:
+            return None
+
     def clean(self):
         super().clean()
         if not self.pk and self.source:
@@ -130,6 +148,10 @@ class Video(models.Model):
     duration = models.DurationField(help_text='[DD] [[HH:]MM:]ss[.uuuuuu]')
     duration.description = 'Video duration in the format [DD] [[HH:]MM:]ss[.uuuuuu]'
     play_count = models.PositiveIntegerField(default=0, editable=False)
+
+    @property
+    def progress_url(self) -> str:
+        return reverse('video-progress', kwargs={'video_pk': self.pk})
 
     def __str__(self) -> str:
         return f'{self._meta.model_name} {self.static_asset.original_filename}'

@@ -6,7 +6,7 @@ from django.template.response import TemplateResponse
 from comments.typed_templates import Comments
 from common.typed_templates.types import TypeSafeTemplateResponse
 from training.typed_templates.types import (
-    Asset,
+    StaticAsset,
     Chapter,
     Navigation,
     Section,
@@ -23,7 +23,6 @@ def section(
     chapter: Chapter,
     section: Section,
     video: Optional[Video],
-    assets: List[Asset],
     comments: Comments,
     section_progress_reporting_data: SectionProgressReportingData,
     navigation: Navigation,
@@ -37,7 +36,6 @@ def section(
                 'chapter': chapter,
                 'section': section,
                 'video': video,
-                'assets': assets,
                 'comments': comments,
                 'section_progress_reporting_data': section_progress_reporting_data,
                 'navigation': navigation,

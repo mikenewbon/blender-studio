@@ -58,6 +58,7 @@ class Command(BaseCommand):
                 response = index.add_documents(data_to_load)
                 # There seems to be no way in MeiliSearch v0.13 to disable adding new document
                 # fields automatically to searchable attrs, so we update the settings to set them:
+                # TODO(fsiddi) Investigate if this is still the case with v0.15
                 index.update_searchable_attributes(settings.MAIN_SEARCH['SEARCHABLE_ATTRIBUTES'])
 
             self.stdout.write(

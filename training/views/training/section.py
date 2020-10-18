@@ -31,7 +31,7 @@ def section(
     if result is None:
         return not_found(request)
     else:
-        training, training_favorited, chapter, section, maybe_video, assets, comments = result
+        training, training_favorited, chapter, section, maybe_video, comments = result
 
         if maybe_video is None:
             video = None
@@ -48,7 +48,6 @@ def section(
             chapter=chapter_model_to_template_type(chapter),
             section=section_model_to_template_type(section),
             video=video,
-            assets=[asset_model_to_template_type(asset) for asset in assets],
             comments=comments_to_template_type(comments, section.comment_url, user=request.user,),
             section_progress_reporting_data=SectionProgressReportingData(
                 progress_url=section.progress_url,

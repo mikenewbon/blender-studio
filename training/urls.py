@@ -2,7 +2,7 @@ from django.urls import include, path
 
 from training.views.api.comment import comment
 from training.views.api.favorite import favorite
-from training.views.api.progress import section_progress, video_progress
+from training.views.api.progress import section_progress  # video_progress tracked in static_asset
 from training.views.home import home
 from training.views.training.section import section
 from training.views.training.training import training
@@ -23,7 +23,6 @@ urlpatterns = [
                         ]
                     ),
                 ),
-                path('videos/<int:video_pk>/progress/', video_progress, name='video-progress'),
             ]
         ),
     ),

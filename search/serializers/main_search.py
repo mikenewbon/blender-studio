@@ -45,9 +45,7 @@ class MainSearchSerializer(BaseSearchSerializer):
             'chapter_name': F('chapter__name'),
             'description': F('text'),
             'media_type': Case(
-                When(Q(video__isnull=False, assets__isnull=False), then=Value('video file')),
-                When(video__isnull=False, then=Value('video')),
-                When(assets__isnull=False, then=Value('file')),
+                When(static_asset__isnull=False, then=Value('static_asset')),
                 output_field=CharField(),
             ),
             # Attributes for faceting have to be string type, not boolean:

@@ -4,13 +4,6 @@
 
 {% block scripts %}
 {{ block.super }}
-<script id="sectionProgressReportingData" type="application/json">
-  {
-    {
-      section_progress_reporting_data | json_script
-    }
-  }
-</script>
 {{ section_progress_reporting_data|json_script:"sectionProgressReportingData" }}
 {% endblock scripts %}
 

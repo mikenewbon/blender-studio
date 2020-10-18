@@ -57,7 +57,7 @@ class Video:
 
 
 @dc.dataclass
-class Asset:
+class StaticAsset:
     name: str
     url: str
 

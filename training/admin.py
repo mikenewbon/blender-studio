@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 
 from training.models import chapters, sections, trainings
+import static_assets.models as models_static_assets
 
 T = TypeVar('T', bound=Callable[..., object])
 
@@ -39,22 +40,19 @@ class SectionInline(admin.TabularInline):
     model = sections.Section
     prepopulated_fields = {'slug': ('name',)}
     ordering = ('index',)
+    autocomplete_fields = ['static_asset']
 
 
 @admin.register(chapters.Chapter)
 class ChapterAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     inlines = [SectionInline]
+    search_fields = ['name']
 
 
-class VideoInline(admin.TabularInline):
+class StaticAssetInline(admin.TabularInline):
     show_change_link = True
-    model = sections.Video
-
-
-class AssetInline(admin.TabularInline):
-    show_change_link = True
-    model = sections.Asset
+    model = models_static_assets.StaticAsset
 
 
 @admin.register(sections.Section)
@@ -66,20 +64,14 @@ class SectionAdmin(admin.ModelAdmin):
             'url', lambda obj: format_html('<a href="{url}" target="_blank">View</a>', url=obj.url)
         ),
     ]
-    inlines = [VideoInline, AssetInline]
+    # inlines = [
+    #     StaticAssetInline,
+    # ]
     list_filter = [
         'chapter__training__type',
         'chapter__training__difficulty',
         'chapter__training',
     ]
+    list_per_page = 20
     search_fields = ['name', 'chapter__name', 'chapter__training__name']
-
-
-@admin.register(sections.Video)
-class VideoAdmin(admin.ModelAdmin):
-    autocomplete_fields = ['section']
-
-
-@admin.register(sections.Asset)
-class AssetAdmin(admin.ModelAdmin):
-    autocomplete_fields = ['section']
+    autocomplete_fields = ['chapter', 'static_asset']
