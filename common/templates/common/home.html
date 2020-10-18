@@ -33,12 +33,13 @@
 <div class="container-xl">
 
   <section class="mb-4">
+
     <div class="row justify-content-center mb-2 mb-md-3">
       <div class="col-md">
         <h2 class="mb-0">Latest Training</h2>
         <p class="mb-0">Want to see more? <a href="/training">Explore all training</a></p>
       </div>
-      <div class="col-md-auto carousel-card-toolbar">
+      <div class="col-md-auto d-none d-md-block carousel-card-toolbar">
         <a class="btn btn-lg btn-transparent btn-icon {% if featured_trainings|length <= 1 %}onlyOne{% elif featured_trainings|length <= 3 %} lessThanThree {% endif %}"
           href="#latestTraining" role="button" data-slide="prev">
           <i class="material-icons">arrow_back</i>
@@ -49,9 +50,8 @@
         </a>
       </div>
     </div>
+
     <div class="row">
-
-
       <div id="latestTraining" class="carousel carousel-card-3 slide w-100" data-ride="carousel" data-interval="0">
         <div class="carousel-inner w-100" role="listbox">
           <div class="carousel-item active">
@@ -66,18 +66,30 @@
           {% endfor %}
         </div>
       </div>
+    </div>
 
-
+    <div class="row d-block d-md-none">
+      <div class="col-md-auto carousel-card-toolbar">
+        <a class="btn btn-lg btn-transparent btn-icon {% if featured_trainings|length <= 1 %}onlyOne{% elif featured_trainings|length <= 3 %} lessThanThree {% endif %}"
+          href="#latestTraining" role="button" data-slide="prev">
+          <i class="material-icons">arrow_back</i>
+        </a>
+        <a class="btn btn-lg btn-transparent btn-icon {% if featured_trainings|length <= 1 %}onlyOne{% elif featured_trainings|length <= 3 %} lessThanThree {% endif %}"
+          href="#latestTraining" role="button" data-slide="next">
+          <i class="material-icons">arrow_forward</i>
+        </a>
+      </div>
     </div>
   </section>
 
   <section class="mb-4">
+
     <div class="row justify-content-center mb-2 mb-md-3">
       <div class="col-md">
         <h2 class="mb-0">Latest Training</h2>
         <p class="mb-0">Want to see more? <a href="/training">Explore all training</a></p>
       </div>
-      <div class="col-md-auto carousel-card-toolbar">
+      <div class="col-md-auto d-none d-md-block carousel-card-toolbar">
         <a class="btn btn-lg btn-transparent btn-icon {% if featured_trainings|length <= 1 %}onlyOne{% elif featured_trainings|length <= 4 %} lessThanFour {% endif %}"
           href="#continueLearning" role="button" data-slide="prev">
           <i class="material-icons">arrow_back</i>
@@ -88,10 +100,10 @@
         </a>
       </div>
     </div>
+
     <div class="row">
-
-
-      <div id="continueLearning" class="carousel carousel-card-4 slide w-100" data-touch="true" data-ride="carousel" data-interval="0">
+      <div id="continueLearning" class="carousel carousel-card-4 slide w-100" data-touch="true" data-ride="carousel"
+        data-interval="0">
         <div class="carousel-inner w-100" role="listbox">
           <div class="carousel-item active">
             {% for training in featured_trainings|slice:':1' %}
@@ -105,10 +117,7 @@
           {% endfor %}
         </div>
       </div>
-
-
     </div>
-  </section>
 
   <section class="mb-4">
     <div class="row justify-content-center mb-3">
@@ -143,122 +152,6 @@
       </div>
     </div>
   </section>
-
-  {% comment %}
-  <div id="myCarousel" class="carousel slide w-100" data-ride="carousel">
-    <div class="carousel-inner w-100" role="listbox">
-      <div class="carousel-item active">
-        <div class="col-lg-2">
-          <img class="img-fluid" src="http://placehold.it/350x180?text=1">
-        </div>
-      </div>
-      <div class="carousel-item">
-        <div class="col-lg-2">
-          <img class="img-fluid" src="http://placehold.it/350x180?text=2">
-        </div>
-      </div>
-      <div class="carousel-item">
-        <div class="col-lg-2">
-          <img class="img-fluid" src="http://placehold.it/350x180?text=3">
-        </div>
-      </div>
-      <div class="carousel-item">
-        <div class="col-lg-2">
-          <img class="img-fluid" src="http://placehold.it/350x180?text=4">
-        </div>
-      </div>
-      <div class="carousel-item">
-        <div class="col-lg-2">
-          <img class="img-fluid" src="http://placehold.it/350x180?text=5">
-        </div>
-      </div>
-      <div class="carousel-item">
-        <div class="col-lg-2">
-          <img class="img-fluid" src="http://placehold.it/350x180?text=6">
-        </div>
-      </div>
-      <div class="carousel-item">
-        <div class="col-lg-2">
-          <img class="img-fluid" src="http://placehold.it/350x180?text=7">
-        </div>
-      </div>
-      <div class="carousel-item">
-        <div class="col-lg-2">
-          <img class="img-fluid" src="http://placehold.it/350x180?text=8">
-        </div>
-      </div>
-    </div>
-    <a class="carousel-control-prev bg-dark w-auto" href="#myCarousel" role="button" data-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next bg-dark w-auto" href="#myCarousel" role="button" data-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-    </a>
-  </div>
-
-  <section class="mb-4">
-    <div class="row justify-content-center mb-3">
-      <div class="col">
-        <h2 class="mb-0">Continue Learning</h2>
-        <p class="mb-0">Recently viewed training sections will appear here.</p>
-      </div>
-      <div class="col-auto">
-        <a class="btn btn-lg btn-transparent btn-icon {% if featured_trainings|length <= 3 %} disabled {% endif %}"
-          href="#continueLearning" role="button" data-slide="prev">
-          <i class="material-icons">arrow_back</i>
-        </a>
-        <a class="btn btn-lg btn-transparent btn-icon {% if featured_trainings|length <= 3 %} disabled {% endif %}"
-          href="#continueLearning" role="button" data-slide="next">
-          <i class="material-icons">arrow_forward</i>
-        </a>
-      </div>
-    </div>
-    <div class="row">
-      <div id="continueLearning" class="carousel slide w-100" data-ride="carousel">
-        <div class="carousel-inner w-100" role="listbox">
-          <div class="carousel-item active">
-            {% for training in featured_trainings|slice:':1' %}
-            {% include "common/components/cards/card_training.html" with training=training %}
-            {% endfor %}
-          </div>
-          {% for training in featured_trainings|slice:'1:6' %}
-          <div class="carousel-item">
-            {% include "common/components/cards/card_training.html" with training=training %}
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="mb-4">
-    <div class="row justify-content-center mb-3">
-      <div class="col-md-6 text-center">
-        <h2 class="mb-0">Latest Film Updates</h2>
-        <p class="mb-0">Want to see more updates from Settlers? <a href="/films/settlers/production-logs">See all
-            weeklies</a></p>
-      </div>
-    </div>
-    <div class="row">
-      <div id="continueLearning" class="carousel slide w-100" data-ride="carousel">
-        <div class="carousel-inner w-100" role="listbox">
-          <div class="carousel-item active">
-            {% for training in featured_trainings|slice:'1:' %}
-            {% include "common/components/cards/card_training.html" with training=training card_sizes="col-md-4" %}
-            {% endfor %}
-          </div>
-          {% for training in featured_trainings|slice:'1:6' %}
-          <div class="carousel-item">
-            {% include "common/components/cards/card_training.html" with training=training %}
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-  </section>
-  {% endcomment %}
 
 </div>
 
