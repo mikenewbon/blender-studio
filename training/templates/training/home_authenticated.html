@@ -43,12 +43,12 @@
   <!-- Recently watched -->
   {% if recently_watched_sections %}
   <section class="mb-4">
-    <div class="row justify-content-center mb-3">
-      <div class="col">
+    <div class="row justify-content-center mb-2 mb-md-3">
+      <div class="col-md">
         <h2 class="mb-0">Continue training</h2>
         <p class="mb-0">Recently watched sections will appear here with your position saved</p>
       </div>
-      <div class="col-auto carousel-card-toolbar">
+      <div class="col-md-auto carousel-card-toolbar">
         <a class="btn btn-lg btn-transparent btn-icon {% if recently_watched_sections|length <= 1 %}onlyOne{% elif recently_watched_sections|length <= 4 %} lessThanFour {% endif %}"
           href="#continueTraining" role="button" data-slide="prev">
           <i class="material-icons">arrow_back</i>
@@ -101,12 +101,12 @@
   </section> {% endcomment %}
 
   <section class="mb-4">
-    <div class="row justify-content-center mb-3">
-      <div class="col">
+    <div class="row justify-content-center mb-2 mb-md-3">
+      <div class="col-md">
         <h2 class="mb-0">Your saved training</h2>
         <p class="mb-0">You can add and remove items from this list by clicking the plus or the tick.</p>
       </div>
-      <div class="col-auto carousel-card-toolbar">
+      <div class="col-md-auto carousel-card-toolbar">
         <a class="btn btn-lg btn-transparent btn-icon {% if favorited_trainings|length <= 1 %}onlyOne{% elif favorited_trainings|length <= 3 %} lessThanThree {% endif %}"
           href="#savedTraining" role="button" data-slide="prev">
           <i class="material-icons">arrow_back</i>

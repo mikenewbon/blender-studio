@@ -75,15 +75,23 @@ window.cardTraining = (function cardTraining() {
               }
 
               if (favoriteSection.classList.contains('carousel-card-3')) {
-                if (favoriteSection.firstElementChild.childElementCount <= 3){
+                if (favoriteSection.firstElementChild.childElementCount <= 1){
                   favoriteSection.closest('section').querySelectorAll('.carousel-card-toolbar .btn').forEach( e => {
-                    e.classList.add('disabled');
+                    e.classList.add('onlyOne');
+                  });
+                } else if (favoriteSection.firstElementChild.childElementCount <= 3){
+                  favoriteSection.closest('section').querySelectorAll('.carousel-card-toolbar .btn').forEach( e => {
+                    e.classList.add('lessThanThree');
                   });
                 }
               } else if (favoriteSection.classList.contains('carousel-card-4')) {
-                if (favoriteSection.firstElementChild.childElementCount <= 4){
+                if (favoriteSection.firstElementChild.childElementCount <= 1){
                   favoriteSection.closest('section').querySelectorAll('.carousel-card-toolbar .btn').forEach( e => {
-                    e.classList.add('disabled');
+                    e.classList.add('onlyOne');
+                  });
+                } else if (favoriteSection.firstElementChild.childElementCount <= 4){
+                  favoriteSection.closest('section').querySelectorAll('.carousel-card-toolbar .btn').forEach( e => {
+                    e.classList.add('lessThanFour');
                   });
                 }
               }
