@@ -33,6 +33,7 @@ $grays: map-merge(("100": $gray-100,
 
 //brand colours
 $blender-orange: #e87d0d !default;
+$cloud-blue: #009eff;
 $charcoal-gray: #1f1f1f !default;
 $navigation-gray: #282828 !default;
 $input-gray: #353535 !default;
@@ -74,7 +75,7 @@ $colors: map-merge(("blue": $blue,
   ),
   $colors);
 
-$primary: $blender-orange !default;
+$primary: $cloud-blue !default;
 $secondary: $navigation-gray !default;
 $success: $green !default;
 $info: $teal !default;
@@ -280,8 +281,7 @@ $embed-responsive-aspect-ratios: join(((21 9), (16 9), (4 3), (1 1)), $embed-res
 // Font, line-height, and color for body text, headings, and more.
 
 // stylelint-disable value-keyword-case
-$font-family-sans-serif: "Open Sans",
-BlinkMacSystemFont,
+$font-family-sans-serif: BlinkMacSystemFont,
 "Segoe UI",
 Roboto,
 "Helvetica Neue",
