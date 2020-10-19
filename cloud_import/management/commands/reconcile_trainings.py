@@ -87,6 +87,7 @@ class Command(ImportCommand):
             }
         )
         for asset in assets_top:
+            self.console_log(f"Fetched top level asset {asset['name']}")
             yield asset
 
     def get_or_create_section(self, section_doc, chapter):
@@ -107,7 +108,7 @@ class Command(ImportCommand):
 
         if 'order' in section_doc['properties']:
             section.index = section_doc['properties']['order']
-
+        section.chapter = chapter
         section.date_created = pytz.utc.localize(section_doc['_created'])
         section.date_updated = pytz.utc.localize(section_doc['_updated'])
         section.user = self.get_or_create_user(section_doc['user'])
@@ -116,7 +117,10 @@ class Command(ImportCommand):
         file_doc = mongo.files_collection.find_one(
             {'_id': ObjectId(section_doc['properties']['file'])}
         )
-        section.static_asset = self.get_or_create_static_asset(file_doc)
+        thumbnail_file_doc = mongo.files_collection.find_one(
+            {'_id': ObjectId(section_doc['picture'])}
+        )
+        section.static_asset = self.get_or_create_static_asset(file_doc, thumbnail_file_doc)
         section.save()
 
         # Reconcile comments

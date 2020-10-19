@@ -80,8 +80,12 @@ class ImportCommand(BaseCommand):
         # Force reconcile dates and content
         comment.date_created = pytz.utc.localize(comment_doc['_created'])
         comment.date_updated = pytz.utc.localize(comment_doc['_updated'])
+        # Legacy comments were converted under content_html
         if 'content_html' in comment_doc['properties']:
             comment.message_html = comment_doc['properties']['content_html']
+        # Newer comments are available under _content_html
+        if '_content_html' in comment_doc['properties']:
+            comment.message_html = comment_doc['properties']['_content_html']
         comment.save()
 
         if parent_comment_doc:
@@ -165,7 +169,9 @@ class ImportCommand(BaseCommand):
             image.width = file_doc['width']
         image.save()
 
-    def reconcile_static_asset(self, file_doc, static_asset: models_static_assets.StaticAsset):
+    def reconcile_static_asset(
+        self, file_doc, static_asset: models_static_assets.StaticAsset, thumbnail_file_doc
+    ):
         self.console_log(f"Reconciling file {file_doc['_id']}")
         # Update properties
         static_asset.slug = str(file_doc['_id'])
@@ -182,6 +188,8 @@ class ImportCommand(BaseCommand):
         static_asset.save()
 
         self.reconcile_file_field(file_doc['_id'], static_asset, 'source')
+        if thumbnail_file_doc:
+            self.reconcile_file_field(thumbnail_file_doc['_id'], static_asset, 'thumbnail')
 
         if static_asset.source_type == 'video':
             self.reconcile_static_asset_video(file_doc, static_asset)
@@ -189,7 +197,7 @@ class ImportCommand(BaseCommand):
         if static_asset.source_type == 'image':
             self.reconcile_static_asset_image(file_doc, static_asset)
 
-    def get_or_create_static_asset(self, file_doc):
+    def get_or_create_static_asset(self, file_doc, thumbnail_file_doc=None):
         file_slug = str(file_doc['_id'])
         try:
             static_asset = models_static_assets.StaticAsset.objects.get(slug=file_slug)
@@ -205,7 +213,7 @@ class ImportCommand(BaseCommand):
                 slug=file_slug,
             )
 
-        self.reconcile_static_asset(file_doc, static_asset)
+        self.reconcile_static_asset(file_doc, static_asset, thumbnail_file_doc)
 
         if 'video' in file_doc['content_type'] and 'variations' in file_doc:
             for v in file_doc['variations']:
