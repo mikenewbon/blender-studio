@@ -110,7 +110,45 @@
     </div>
   </section>
 
-  {% comment %} <div id="myCarousel" class="carousel slide w-100" data-ride="carousel">
+  <!--FIXME this is just for testing the random featured assets -->
+  <section class="mb-4">
+    <div class="row justify-content-center mb-3">
+      <div class="col">
+        <h2 class="mb-0">From the archives</h2>
+      </div>
+      <div class="col-auto carousel-card-toolbar">
+        <a class="btn btn-lg btn-transparent btn-icon {% if featured_film_assets|length <= 1 %}onlyOne{% elif featured_film_assets|length <= 4 %} lessThanFour {% endif %}"
+          href="#fromTheArchives" role="button" data-slide="prev">
+          <i class="material-icons">arrow_back</i>
+        </a>
+        <a class="btn btn-lg btn-transparent btn-icon {% if featured_film_assets|length <= 1 %}onlyOne{% elif featured_film_assets|length <= 4 %} lessThanFour {% endif %}"
+          href="#fromTheArchives" role="button" data-slide="next">
+          <i class="material-icons">arrow_forward</i>
+        </a>
+      </div>
+    </div>
+    <div class="row">
+      <div id="fromTheArchives" class="carousel carousel-card-4 slide w-100" data-touch="true" data-ride="carousel" data-interval="0">
+        <div class="carousel-inner w-100" role="listbox">
+          <div class="carousel-item active">
+            {% for asset in featured_film_assets|slice:':1' %}
+            <!--FIXME wrong template -->
+            {% include "common/components/cards/card_training.html" with training=asset card_sizes="col-md-3" %}
+            {% endfor %}
+          </div>
+          {% for asset in featured_film_assets|slice:'1:6' %}
+          <div class="carousel-item">
+            <!--FIXME wrong template -->
+            {% include "common/components/cards/card_training.html" with training=asset card_sizes="col-md-3" %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% comment %}
+  <div id="myCarousel" class="carousel slide w-100" data-ride="carousel">
     <div class="carousel-inner w-100" role="listbox">
       <div class="carousel-item active">
         <div class="col-lg-2">
@@ -161,9 +199,9 @@
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="sr-only">Next</span>
     </a>
-  </div> {% endcomment %}
+  </div>
 
-  {% comment %} <section class="mb-4">
+  <section class="mb-4">
     <div class="row justify-content-center mb-3">
       <div class="col">
         <h2 class="mb-0">Continue Learning</h2>
@@ -222,7 +260,8 @@
         </div>
       </div>
     </div>
-  </section> {% endcomment %}
+  </section>
+  {% endcomment %}
 
 </div>
 

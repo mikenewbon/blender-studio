@@ -1,6 +1,9 @@
 from enum import Enum
-from typing import Optional, cast, Dict, Union, List, Any
+from typing import List, Optional, cast, Dict, Union, Any
+import random
 
+
+from django.db.models import Min, Max, Count
 from django.contrib.auth.models import User
 from django.core import paginator
 from django.db.models.query import Prefetch, QuerySet
@@ -203,6 +206,7 @@ def get_gallery_drawer_context(film: Film, user: User) -> Dict[str, Any]:
     Also the fake 'Featured Artwork' collection is created.
     This function sends TWO database queries (1: fetch film top-level collections,
     2: fetch their child collections, ordered).
+
     Args:
         film: A Film model instance.
         user: The currently logged-in user.
@@ -236,3 +240,40 @@ def get_gallery_drawer_context(film: Film, user: User) -> Dict[str, Any]:
         ),
         'user_can_edit_collection': (user.is_staff and user.has_perm('films.change_collection')),
     }
+
+
+def select_random_from_query(query: QuerySet, limit, min_id, max_id, exclude_ids=None) -> QuerySet:
+    """Select a given number of unique random records from the query set.
+
+    Relies on a numerical ID: takes a random sample in the interval between
+    min and max IDs and UNION-selects one record per sample interval.
+    Faster than ORDER BY RANDOM(),
+    but might not return enough records if the original query result is small.
+    """
+    exclude_ids = exclude_ids or []
+    id_range = random.sample(range(min_id, max_id + 1), limit)
+    tail = max(1, limit - len(id_range))
+    qs = []
+    for i in range(limit):
+        _from, _to = sorted([id_range[i - tail], id_range[i]])
+        qs.append(query.filter(id__gte=_from, id__lte=_to).exclude(id__in=exclude_ids)[:2])
+    return qs[0].union(*qs[1:]).distinct('id')
+
+
+def get_random_featured_assets(limit=8) -> List[Asset]:
+    """Select a desired number of random-ish featured film assets."""
+    query = Asset.objects.filter(is_featured=True, is_published=True)
+    rec = query.aggregate(Min('id'), Max('id'), Count('id'))
+    min_id, max_id, total = rec['id__min'], rec['id__max'], rec['id__count']
+    limit = min(limit, total)
+
+    query_results, attempts_left = [], 3
+    while len(query_results) < limit and attempts_left:
+        # If, albeit unlikely, previous sample didn't return enough records, try again
+        exclude_ids = [_.pk for _ in query_results]
+        query_results.extend(
+            select_random_from_query(query, limit, min_id, max_id, exclude_ids=exclude_ids)
+        )
+        # To be on the safe side, only allow a fixed number of lookups
+        attempts_left -= 1
+    return query_results[:limit]
