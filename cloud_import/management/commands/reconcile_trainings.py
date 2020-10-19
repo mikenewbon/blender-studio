@@ -117,9 +117,13 @@ class Command(ImportCommand):
         file_doc = mongo.files_collection.find_one(
             {'_id': ObjectId(section_doc['properties']['file'])}
         )
-        thumbnail_file_doc = mongo.files_collection.find_one(
-            {'_id': ObjectId(section_doc['picture'])}
-        )
+
+        if 'picture' in section_doc:
+            thumbnail_file_doc = mongo.files_collection.find_one(
+                {'_id': ObjectId(section_doc['picture'])}
+            )
+        else:
+            thumbnail_file_doc = None
         section.static_asset = self.get_or_create_static_asset(file_doc, thumbnail_file_doc)
         section.save()
 
