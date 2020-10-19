@@ -31,8 +31,9 @@ class Profile(mixins.CreatedUpdatedMixin, models.Model):
     @property
     def image_url(self) -> Optional[str]:
         """Return a URL of the Profile image."""
-        if not getattr(self.user, 'oauth_info', None) or \
-                not getattr(self.user.oauth_info, 'oauth_user_id'):
+        if not getattr(self.user, 'oauth_info', None) or not getattr(
+            self.user.oauth_info, 'oauth_user_id'
+        ):
             return None
 
         oauth_info = self.user.oauth_info

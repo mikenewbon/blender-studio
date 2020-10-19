@@ -38,9 +38,7 @@ class ContextProcessorsTest(TestCase):
 
     def test_user_dict_authenticated_user_with_oauth_info(self):
         user = UserFactory(
-            email='mail@example.com',
-            username='ⅉanedoe',
-            oauth_info__oauth_user_id='2',
+            email='mail@example.com', username='ⅉanedoe', oauth_info__oauth_user_id='2',
         )
         user.profile.full_name = 'ⅉane Doe'
         for group_name in ('has_subscription', 'subscriber'):
