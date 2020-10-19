@@ -38,41 +38,6 @@ class Command(ImportCommand):
             nargs='?',
         )
 
-    def reconcile_comment_ratings(self, comment_doc):
-        if 'ratings' not in comment_doc['properties']:
-            return
-
-        comment = self.get_or_create_comment(comment_doc)
-        for rating in comment_doc['properties']['ratings']:
-            user = self.get_or_create_user(rating['user'])
-            self.console_log(f"Updating ratings for comment {comment.id}")
-            models_comments.Like.objects.get_or_create(comment=comment, user=user)
-
-    def get_or_create_comment(self, comment_doc, parent_comment_doc=None):
-        try:
-            comment = models_comments.Comment.objects.get(slug=str(comment_doc['_id']))
-        except models_comments.Comment.DoesNotExist:
-            # Get the comment author
-            user = self.get_or_create_user(comment_doc['user'])
-            comment = models_comments.Comment.objects.create(
-                message=comment_doc['properties']['content'],
-                user=user,
-                slug=str(comment_doc['_id']),
-            )
-        # Force reconcile dates and content
-        comment.date_created = pytz.utc.localize(comment_doc['_created'])
-        comment.date_updated = pytz.utc.localize(comment_doc['_updated'])
-        if 'content_html' in comment_doc['properties']:
-            comment.message_html = comment_doc['properties']['content_html']
-        comment.save()
-
-        if parent_comment_doc:
-            self.console_log(f"Setting parent to comment")
-            parent_comment = self.get_or_create_comment(parent_comment_doc)
-            comment.reply_to = parent_comment
-            comment.save()
-        return comment
-
     def assign_user(self, asset, node_doc):
 
         user = self.get_or_create_user(node_doc['user'])
@@ -80,7 +45,7 @@ class Command(ImportCommand):
 
         asset.static_asset.user = user
         asset.static_asset.save()
-        self.console_log(f"\t Updated static_asset {asset.static_asset.id}")
+        self.console_log(f"\tUpdated static_asset {asset.static_asset.id}")
 
     def reconcile_film_asset_comments(self, asset: models_films.Asset):
         # Fetch comments

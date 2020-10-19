@@ -1,10 +1,13 @@
 import boto3
 import os
 import requests
+import pathlib
 from google.cloud import storage
 import pathlib
 from typing import Optional
 from django.conf import settings
+from botocore.exceptions import ClientError
+
 
 overwrite = False
 
@@ -12,6 +15,12 @@ dirname = os.path.dirname(__file__)
 dirname_abspath = pathlib.Path(os.path.abspath(dirname)).parent
 google_storage_client = storage.Client.from_service_account_json(
     dirname_abspath.parent / "studio" / "blender-cloud-credentials.json"
+)
+
+s3_client = boto3.client(
+    's3',
+    aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
 )
 
 
@@ -75,12 +84,20 @@ def download_file_from_storage(
     #         download_to_file(file_doc, v["file_path"], file_dir_path)
 
 
+def file_on_s3(s3_client, bucket, key):
+    try:
+        s3_client.head_object(Bucket=bucket, Key=key)
+    except ClientError as e:
+        return int(e.response['Error']['Code']) != 404
+    return True
+
+
 def upload_file_to_s3(source_path: str, dest_path: str):
-    s3_client = boto3.client(
-        's3',
-        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-    )
+    def human_size(bytes, units=[' bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB']):
+        """Returns a human readable string representation of bytes """
+        return str(bytes) + units[0] if bytes < 1024 else human_size(bytes >> 10, units[1:])
+
     with open(source_path, "rb") as f:
-        print(f"Uploading {dest_path} to S3 {settings.AWS_STORAGE_BUCKET_NAME}")
+        human_size_str = human_size(pathlib.Path(source_path).stat().st_size)
+        print(f"Uploading {human_size_str} {dest_path} to S3 {settings.AWS_STORAGE_BUCKET_NAME}")
         s3_client.upload_fileobj(f, settings.AWS_STORAGE_BUCKET_NAME, dest_path)

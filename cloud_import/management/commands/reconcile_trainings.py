@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 
 
 from cloud_import.management import mongo
-import comments.models as models_comments
+
 import films.models as models_films
 import static_assets.models as models_assets
 from cloud_import.management.mixins import ImportCommand
@@ -43,64 +43,20 @@ class Command(ImportCommand):
             nargs='?',
         )
 
-    def reconcile_comment_ratings(self, comment_doc):
-        if 'ratings' not in comment_doc['properties']:
-            return
-
-        comment = self.get_or_create_comment(comment_doc)
-        for rating in comment_doc['properties']['ratings']:
-            user = self.get_or_create_user(rating['user'])
-            self.console_log(f"Updating ratings for comment {comment.id}")
-            models_comments.Like.objects.get_or_create(comment=comment, user=user)
-
-    def get_or_create_comment(self, comment_doc, parent_comment_doc=None):
-        try:
-            comment = models_comments.Comment.objects.get(slug=str(comment_doc['_id']))
-        except models_comments.Comment.DoesNotExist:
-            # Get the comment author
-            user = self.get_or_create_user(comment_doc['user'])
-            comment = models_comments.Comment.objects.create(
-                message=comment_doc['properties']['content'],
-                user=user,
-                slug=str(comment_doc['_id']),
-            )
-        # Force reconcile dates and content
-        comment.date_created = pytz.utc.localize(comment_doc['_created'])
-        comment.date_updated = pytz.utc.localize(comment_doc['_updated'])
-        if 'content_html' in comment_doc['properties']:
-            comment.message_html = comment_doc['properties']['content_html']
-        comment.save()
-
-        if parent_comment_doc:
-            self.console_log(f"Setting parent to comment")
-            parent_comment = self.get_or_create_comment(parent_comment_doc)
-            comment.reply_to = parent_comment
-            comment.save()
-        return comment
-
-    def assign_user(self, asset, node_doc):
-
-        user = self.get_or_create_user(node_doc['user'])
-        self.console_log(f"Assign user {user.username} to asset {asset.id} - {asset.name}")
-
-        asset.static_asset.user = user
-        asset.static_asset.save()
-        self.console_log(f"\t Updated static_asset {asset.static_asset.id}")
-
-    def reconcile_film_asset_comments(self, asset: models_films.Asset):
+    def reconcile_training_section_comments(self, section: models_training.Section):
         # Fetch comments
         comments = mongo.nodes_collection.find(
             {
                 'node_type': 'comment',
-                'parent': ObjectId(asset.slug),
+                'parent': ObjectId(section.slug),
                 'properties.status': 'published',
             }
         )
         comments_count = 0
         for comment_doc in comments:
-            self.console_log(f"Processing comment {comment_doc['_id']} for asset {asset.id}")
+            self.console_log(f"Processing comment {comment_doc['_id']} for asset {section.id}")
             comment = self.get_or_create_comment(comment_doc)
-            models_films.AssetComment.objects.get_or_create(asset=asset, comment=comment)
+            models_training.SectionComment.objects.get_or_create(section=section, comment=comment)
             self.reconcile_comment_ratings(comment_doc)
             response_comments = mongo.nodes_collection.find(
                 {
@@ -113,21 +69,25 @@ class Command(ImportCommand):
 
             for reply_comment_doc in response_comments:
                 reply_comment = self.get_or_create_comment(reply_comment_doc, comment_doc)
-                models_films.AssetComment.objects.get_or_create(asset=asset, comment=reply_comment)
+                models_training.SectionComment.objects.get_or_create(
+                    section=section, comment=reply_comment
+                )
                 self.reconcile_comment_ratings(reply_comment_doc)
 
         if comments_count > 0:
             self.console_log(f"Processed {comments_count} comments")
 
-    def reconcile_film_assets(self, film: models_films.Film):
-        for asset in models_films.Asset.objects.filter(film=film.pk):
-            # Fetch original user from MongoDB
-            self.console_log(f"Processing asset {asset.id} with slug {asset.slug}")
-            node_doc = mongo.nodes_collection.find_one({'_id': ObjectId(asset.slug)})
-            # Assign the user
-            self.assign_user(asset, node_doc)
-            # Reconcile comments
-            self.reconcile_film_asset_comments(asset)
+    def fetch_top_level_assets(self, training_doc):
+        assets_top = mongo.nodes_collection.find(
+            {
+                'project': training_doc['_id'],
+                'parent': {'$exists': False},
+                '_deleted': {'$ne': True},
+                'node_type': 'asset',
+            }
+        )
+        for asset in assets_top:
+            yield asset
 
     def get_or_create_section(self, section_doc, chapter):
         section_slug = str(section_doc['_id'])
@@ -152,6 +112,15 @@ class Command(ImportCommand):
         section.date_updated = pytz.utc.localize(section_doc['_updated'])
         section.user = self.get_or_create_user(section_doc['user'])
         section.save()
+
+        file_doc = mongo.files_collection.find_one(
+            {'_id': ObjectId(section_doc['properties']['file'])}
+        )
+        section.static_asset = self.get_or_create_static_asset(file_doc)
+        section.save()
+
+        # Reconcile comments
+        self.reconcile_training_section_comments(section)
 
         return section
 
@@ -240,27 +209,32 @@ class Command(ImportCommand):
         for asset_doc in asset_docs:
             yield asset_doc
 
+    def reconcile_training(self, training_doc):
+        training = self.get_or_create_training(training_doc)
+
+        for chapter_doc in self.fetch_training_chapter_docs(training_doc):
+            chapter = self.get_or_create_chapter(chapter_doc, training)
+
+            for section_doc in self.fetch_training_section_docs(chapter):
+                self.get_or_create_section(section_doc, chapter)
+
+        # Create chapter where we relocate top level content
+        chapter, _ = models_training.Chapter.objects.get_or_create(
+            index=0, training=training, name="Top", slug=f"top-{training.slug}",
+        )
+        for section_doc in self.fetch_top_level_assets(training_doc):
+            self.get_or_create_section(section_doc, chapter)
+
     def handle(self, *args, **options):
 
         if options['all']:
             self.console_log("Reconciling all trainings")
             for training_doc in self.fetch_training_docs():
-                training = self.get_or_create_training(training_doc)
+                self.reconcile_training(training_doc)
             return
 
         for training_slug in options['slugs']:
             training_doc = mongo.projects_collection.find_one(
                 {'url': training_slug, '_deleted': {'$ne': True}}
             )
-            training = self.get_or_create_training(training_doc)
-
-            for chapter_doc in self.fetch_training_chapter_docs(training_doc):
-                chapter = self.get_or_create_chapter(chapter_doc, training)
-
-                for section_doc in self.fetch_training_section_docs(chapter):
-                    section = self.get_or_create_section(section_doc, chapter)
-                    file_doc = mongo.files_collection.find_one(
-                        {'_id': ObjectId(section_doc['properties']['file'])}
-                    )
-                    section.static_asset = self.get_or_create_static_asset(file_doc)
-                    section.save()
+            self.reconcile_training(training_doc)

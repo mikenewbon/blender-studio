@@ -35,7 +35,7 @@ class Command(BaseCommand):
             model.save()
 
     def get_file_object(self, film_doc_path, file_id):
-        self.stdout.write(self.style.NOTICE(f"\t Getting file {file_id}"))
+        self.stdout.write(self.style.NOTICE(f"\tGetting file {file_id}"))
         file_doc_path = film_doc_path.parent / 'files' / str(file_id) / 'file.json'
         return self.load_doc(file_doc_path)
 
