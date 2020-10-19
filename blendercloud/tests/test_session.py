@@ -80,7 +80,7 @@ class TestSession(TestCase):
         self.assertEquals(user.email, 'jane@example.com')
         self.assertEquals(user.oauth_info.oauth_user_id, '2')
         self.assertEquals(user.profile.full_name, 'ⅉane ⅅoe')
-        self.assertTrue(user.profile.avatar.name.endswith('.jpg'))
+        self.assertEquals(user.profile.image_url, 'http://id.local:8000/api/user/2/avatar')
         self.assertEquals(
             sorted([g.name for g in user.groups.all()]),
             ['dev_core', 'has_subscription', 'subscriber',],

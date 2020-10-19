@@ -110,24 +110,6 @@ class WebhooksTest(TestCase):
         self.assertEquals(profile.user.email, 'newmail@example.com')
 
     @responses.activate
-    def test_user_modified_avatar_changed(self):
-        body = {
-            **self.webhook_payload,
-            'avatar_changed': True,
-        }
-
-        with self.assertLogs('profiles.models', level='INFO') as logs:
-            response = self.client.post(
-                self.url, body, content_type='application/json', **prepare_hmac_header(body)
-            )
-            self.assertRegex(logs.output[0], 'Avatar updated for Profile ⅉanedoe')
-
-        self.assertEquals(response.status_code, 204)
-        self.assertEquals(response.content, b'')
-        profile = Profile.objects.get(user_id=self.user.pk)
-        self.assertTrue(profile.avatar.name.endswith('.jpg'))
-
-    @responses.activate
     def test_user_modified_roles_added_removed_adds_removes_user_groups(self):
         # No groups ("roles") assigned yet
         self.assertEquals(list(self.user.groups.all()), [])
@@ -209,29 +191,5 @@ class WebhooksTest(TestCase):
                 self.url, body, content_type='application/json', **prepare_hmac_header(body)
             )
             self.assertRegex(logs.output[0], 'Unable to update username for Profile')
-
-        self.assertEquals(response.status_code, 204)
-
-    @responses.activate
-    def test_user_modified_logs_error_when_blender_id_avatar_broken(self):
-        body = {
-            **self.webhook_payload,
-            'avatar_changed': True,
-        }
-        # Mock a "broken" avatar response
-        responses.replace(
-            responses.GET,
-            f'{BLENDER_ID_BASE_URL}api/user/2/avatar',
-            status=500,
-            body='Houston, we have a problem',
-        )
-
-        with self.assertLogs('profiles.models', level='ERROR') as logs:
-            response = self.client.post(
-                self.url, body, content_type='application/json', **prepare_hmac_header(body)
-            )
-            self.assertRegex(
-                logs.output[0], 'Failed to retrieve an avatar for Profile ⅉanedoe from Blender ID'
-            )
 
         self.assertEquals(response.status_code, 204)

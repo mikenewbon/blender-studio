@@ -36,10 +36,13 @@ class ContextProcessorsTest(TestCase):
             },
         )
 
-    def test_user_dict_authenticated_user(self):
-        user = UserFactory(email='mail@example.com', username='ⅉanedoe',)
+    def test_user_dict_authenticated_user_with_oauth_info(self):
+        user = UserFactory(
+            email='mail@example.com',
+            username='ⅉanedoe',
+            oauth_info__oauth_user_id='2',
+        )
         user.profile.full_name = 'ⅉane Doe'
-        user.profile.avatar.name = 'cache/path/to/avatar.jpg'
         for group_name in ('has_subscription', 'subscriber'):
             group, _ = Group.objects.get_or_create(name=group_name)
             user.groups.add(group)
@@ -59,12 +62,15 @@ class ContextProcessorsTest(TestCase):
                 'is_active': True,
                 'is_staff': False,
                 'is_superuser': False,
-                'profile': {'image_url': ANY, 'full_name': 'ⅉane Doe',},
+                'profile': {
+                    'image_url': 'http://id.local:8000/api/user/2/avatar',
+                    'full_name': 'ⅉane Doe',
+                },
                 'username': 'ⅉanedoe',
             },
         )
 
-    def test_user_dict_authenticated_user_no_avatar(self):
+    def test_user_dict_authenticated_user_without_oauth_info(self):
         user = UserFactory(email='mail@example.com', username='ⅉanedoe',)
         self.request.user = user
 

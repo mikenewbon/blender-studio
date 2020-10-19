@@ -104,8 +104,6 @@ def handle_user_modified(payload: Dict[Any, Any]) -> None:
     if payload['full_name'] != profile.full_name:
         profile.full_name = payload['full_name']
         profile.save()
-    if payload.get('avatar_changed') or not profile.avatar.name:
-        profile.copy_avatar_from_blender_id()
 
     # Sync roles to groups
     group_names = payload.get('roles') or []

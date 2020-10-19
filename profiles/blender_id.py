@@ -1,9 +1,7 @@
 """Implement integration with Blender ID: handling of OAuth2 session, fetching user info etc."""
-from typing import Dict, Any, Tuple
+from typing import Dict, Any
 from requests_oauthlib import OAuth2Session
-from urllib.parse import urlparse, urljoin
-import pathlib
-import io
+from urllib.parse import urljoin
 import logging
 
 from blender_id_oauth_client.models import OAuthUserInfo, OAuthToken
@@ -15,8 +13,6 @@ logger = logging.getLogger(__name__)
 class BIDSession:
     """Wrap up interactions with Blender ID, such as fetching user info and avatar."""
 
-    _anonymous_session = None
-
     def __init__(self):
         """Initialise Blender ID client settings."""
         self.settings = blender_id_oauth_settings()
@@ -26,16 +22,6 @@ class BIDSession:
         if access_token:
             return OAuth2Session(self.settings.client, token={'access_token': access_token,},)
         return OAuth2Session(self.settings.client)
-
-    @property
-    def session(self):
-        """Return a reusable "anonymous" OAuth2Session for fetching avatars from Blender ID.
-
-        Create it the first time this property is accessed.
-        """
-        if not self._anonymous_session:
-            self._anonymous_session = self._make_session()
-        return self._anonymous_session
 
     @classmethod
     def get_oauth_user_info(cls, oauth_user_id: str) -> OAuthUserInfo:
@@ -78,13 +64,6 @@ class BIDSession:
 
         return payload
 
-    def get_avatar(self, oauth_user_id: str) -> Tuple[str, io.BytesIO]:
-        """Retrieve an avatar from Blender ID service using an OAuth2 session.
-
-        Return file name and content of an avatar for the given 'oauth_user_id'.
-        """
-        resp = self.session.get(urljoin(self.settings.url_base, f'api/user/{oauth_user_id}/avatar'))
-        resp.raise_for_status()
-
-        name = pathlib.Path(urlparse(resp.url).path).name
-        return name, io.BytesIO(resp.content)
+    def get_avatar_url(self, oauth_user_id: str) -> str:
+        """Return a Blender ID URL to the avatar for a given OAuth ID."""
+        return urljoin(self.settings.url_base, f'api/user/{oauth_user_id}/avatar')
