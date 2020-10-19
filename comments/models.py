@@ -29,11 +29,17 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
         on_delete=models.CASCADE,
         related_name='replies',
     )
-    message = models.TextField(null=True)
+    # Markdown formatted message
+    message = models.TextField(blank=True)
+    # HTML rendered in the backend (on save)
+    message_html = models.TextField(blank=True)
     date_deleted = models.DateTimeField(null=True, editable=False)
 
     # This flag adds a possibility to mark a comment as 'resolved' or 'outdated'.
     is_archived = models.BooleanField(default=False)
+
+    # This is a temporary field used to migrate comments from the legacy cloud
+    slug = models.SlugField(blank=True)
 
     likes = models.ManyToManyField(User, through='Like', related_name='liked_comments')
 

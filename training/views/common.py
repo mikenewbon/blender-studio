@@ -8,11 +8,14 @@ from common.types import assert_cast
 from training import typed_templates
 from training.models import chapters, sections as sections_models, trainings
 from training.typed_templates.types import ChapterNavigation, Navigation, SectionNavigation
+import static_assets.models as models_static_assets
 
 
 def training_model_to_template_type(
     training: trainings.Training, favorited: bool
 ) -> typed_templates.types.Training:
+    thumbnail = '' if not training.thumbnail else training.thumbnail.url
+    picture_header = '' if not training.picture_header else training.picture_header.url
     return typed_templates.types.Training(
         id=training.pk,
         name=training.name,
@@ -25,8 +28,8 @@ def training_model_to_template_type(
         favorite_url=training.favorite_url,
         date_updated=training.date_updated,
         favorited=favorited,
-        thumbnail=training.thumbnail.url,
-        picture_header=training.picture_header.url,
+        thumbnail=thumbnail,
+        picture_header=picture_header,
     )
 
 
@@ -47,17 +50,21 @@ def section_model_to_template_type(
 
 
 def video_model_to_template_type(
-    video: sections_models.Video, start_position: Optional[datetime.timedelta]
+    video: models_static_assets.Video, start_position: Optional[datetime.timedelta]
 ) -> typed_templates.types.Video:
+    # TODO(fsiddi) implement url using the actual video variation
     return typed_templates.types.Video(
-        url=video.file.url,
+        url=video.static_asset.source.url,
         progress_url=video.progress_url,
         start_position=None if start_position is None else start_position.total_seconds(),
     )
 
 
-def asset_model_to_template_type(asset: sections_models.Asset) -> typed_templates.types.Asset:
-    return typed_templates.types.Asset(name=asset.file.name, url=asset.file.url)
+def asset_model_to_template_type(
+    asset: models_static_assets.StaticAsset,
+) -> typed_templates.types.StaticAsset:
+    # TODO(fsiddi) Remove this
+    return typed_templates.types.StaticAsset(name=asset.source.name, url=asset.source.url)
 
 
 def navigation_to_template_type(

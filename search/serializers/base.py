@@ -52,7 +52,8 @@ class BaseSearchSerializer(ABC):
         return model.objects.filter(**filters)
 
     def prepare_data_for_indexing(
-        self, queryset: 'QuerySet[SearchableModel]',
+        self,
+        queryset: 'QuerySet[SearchableModel]',
     ) -> List[Dict[str, Any]]:
         """Serializes objects for search, adding all the necessary additional fields."""
         model = queryset.model
@@ -68,7 +69,8 @@ class BaseSearchSerializer(ABC):
         return self._serialize_data(qs_values)
 
     def _add_common_annotations(
-        self, queryset: 'QuerySet[SearchableModel]',
+        self,
+        queryset: 'QuerySet[SearchableModel]',
     ) -> 'QuerySet[SearchableModel]':
         """Adds queryset annotations common to all indexed objects: model and search_id."""
         model = queryset.model._meta.model_name

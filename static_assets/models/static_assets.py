@@ -1,4 +1,5 @@
 from typing import Optional
+import logging
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -7,12 +8,16 @@ from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.db.models import FileField
 from django.db.models.fields.files import FieldFile
+from django.urls.base import reverse
 from sorl.thumbnail import get_thumbnail
 from storages.backends.gcloud import GoogleCloudStorage
 
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
 from static_assets.models import License, StorageLocationCategoryChoices
+
+
+log = logging.getLogger(__name__)
 
 
 class StaticAssetFileTypeChoices(models.TextChoices):
@@ -59,7 +64,7 @@ class DynamicStorageFileField(models.FileField):
 
 
 class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Model):
-    source = models.FileField(upload_to=get_upload_to_hashed_path)
+    source = models.FileField(upload_to=get_upload_to_hashed_path, blank=True)
     source_type = models.CharField(choices=StaticAssetFileTypeChoices.choices, max_length=5)
     # TODO(Natalia): source type validation
     original_filename = models.CharField(max_length=128, editable=False)
@@ -87,6 +92,11 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
     thumbnail.description = (
         "Asset thumbnail is auto-generated for images and videos. Required for other files."
     )
+
+    # Reference to legacy Blender Cloud file
+    slug = models.SlugField(blank=True)
+
+    content_type = models.CharField(max_length=256, blank=True)
 
     # TODO(Natalia): generate preview if thumbnail not uploaded.
     @property
@@ -125,8 +135,8 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
 
         Usually the author of the asset will be the same as the user who uploads the asset."""
         if self.author:
-            return self.author.get_full_name()
-        return self.user.get_full_name()
+            return self.author.profile.full_name
+        return self.user.profile.full_name
 
     def clean(self):
         super().clean()
@@ -149,20 +159,39 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
 
 class Video(models.Model):
     static_asset = models.OneToOneField(StaticAsset, on_delete=models.CASCADE)
-    resolution = models.CharField(max_length=32, blank=True)
-    resolution_text = models.CharField(max_length=32, blank=True)
+    height = models.PositiveIntegerField(blank=True, null=True)
+    width = models.PositiveIntegerField(blank=True, null=True)
+    resolution_label = models.CharField(max_length=32, blank=True)
     duration = models.DurationField(help_text='[DD] [[HH:]MM:]ss[.uuuuuu]')
     duration.description = 'Video duration in the format [DD] [[HH:]MM:]ss[.uuuuuu]'
     play_count = models.PositiveIntegerField(default=0, editable=False)
+
+    @property
+    def progress_url(self) -> str:
+        return reverse('video-progress', kwargs={'video_pk': self.pk})
 
     def __str__(self) -> str:
         return f'{self._meta.model_name} {self.static_asset.original_filename}'
 
 
+class VideoVariation(models.Model):
+    video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='variations')
+    height = models.PositiveIntegerField(blank=True, null=True)
+    width = models.PositiveIntegerField(blank=True, null=True)
+    resolution_label = models.CharField(max_length=32, blank=True)
+    source = models.FileField(upload_to=get_upload_to_hashed_path, blank=True)
+    size_bytes = models.BigIntegerField(editable=False)
+    content_type = models.CharField(max_length=256, blank=True)
+
+    def __str__(self) -> str:
+        return f"Video variation for {self.video.static_asset.original_filename}"
+
+
 class Image(models.Model):
     static_asset = models.OneToOneField(StaticAsset, on_delete=models.CASCADE)
-    resolution = models.CharField(max_length=32, blank=True)
-    resolution_text = models.CharField(max_length=32, blank=True)
+    height = models.PositiveIntegerField(blank=True, null=True)
+    width = models.PositiveIntegerField(blank=True, null=True)
+    resolution_label = models.CharField(max_length=32, blank=True)
 
     def __str__(self) -> str:
         return f'{self._meta.model_name} {self.static_asset.original_filename}'

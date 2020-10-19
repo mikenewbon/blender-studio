@@ -2,7 +2,7 @@ import factory
 from factory import fuzzy
 from factory.django import DjangoModelFactory
 
-from common.tests.factories.helpers import generate_image_path, generate_file_path
+from common.tests.factories.helpers import generate_image_path
 from search import signals as search_signals
 from training.models import (
     Training,
@@ -11,8 +11,6 @@ from training.models import (
     TrainingDifficulty,
     Chapter,
     Section,
-    Asset,
-    Video,
 )
 
 
@@ -52,22 +50,3 @@ class SectionFactory(DjangoModelFactory):
     name = factory.Faker('text', max_nb_chars=20)
     slug = factory.Faker('slug')
     text = factory.Faker('text')
-
-
-class AssetFactory(DjangoModelFactory):
-    class Meta:
-        model = Asset
-
-    section = factory.SubFactory(SectionFactory)
-    file = factory.LazyFunction(generate_file_path)
-    size_bytes = 0
-
-
-class VideoFactory(DjangoModelFactory):
-    class Meta:
-        model = Video
-
-    section = factory.SubFactory(SectionFactory)
-    file = factory.LazyFunction(generate_file_path)
-    size_bytes = 0
-    duration = '00:05:00'
