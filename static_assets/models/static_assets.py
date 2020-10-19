@@ -64,7 +64,7 @@ class DynamicStorageFileField(models.FileField):
 
 
 class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Model):
-    source = models.FileField(upload_to=get_upload_to_hashed_path, blank=True)
+    source = models.FileField(upload_to=get_upload_to_hashed_path, blank=True, max_length=256)
     source_type = models.CharField(choices=StaticAssetFileTypeChoices.choices, max_length=5)
     # TODO(Natalia): source type validation
     original_filename = models.CharField(max_length=128, editable=False)
@@ -88,7 +88,7 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
         License, null=True, on_delete=models.SET_NULL, related_name='static_assets'
     )
 
-    thumbnail = models.FileField(upload_to=get_upload_to_hashed_path, blank=True)
+    thumbnail = models.FileField(upload_to=get_upload_to_hashed_path, blank=True, max_length=256)
     thumbnail.description = (
         "Asset thumbnail is auto-generated for images and videos. Required for other files."
     )
@@ -179,7 +179,7 @@ class VideoVariation(models.Model):
     height = models.PositiveIntegerField(blank=True, null=True)
     width = models.PositiveIntegerField(blank=True, null=True)
     resolution_label = models.CharField(max_length=32, blank=True)
-    source = models.FileField(upload_to=get_upload_to_hashed_path, blank=True)
+    source = models.FileField(upload_to=get_upload_to_hashed_path, blank=True, max_length=256)
     size_bytes = models.BigIntegerField(editable=False)
     content_type = models.CharField(max_length=256, blank=True)
 
