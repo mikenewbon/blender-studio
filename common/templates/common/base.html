@@ -95,10 +95,10 @@
           <button data-toggle="dropdown" class="btn btn-secondary btn-nav btn-profile">
             {% if request.user.is_authenticated and request.user.profile %}
             <div style="background-image:url('{{ request.user.profile.image_url }}');" class="profile">
-            {% else %}
-            <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');" class="profile">
-            {% endif %}
-            </div>
+              {% else %}
+              <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');" class="profile">
+                {% endif %}
+              </div>
           </button>
           <div class="dropdown-menu dropdown-menu-right">
 
@@ -138,6 +138,9 @@
         <div class="navbar-login-wrapper">
           <a href="{% url 'oauth:login' %}" class="btn btn-transparent btn-nav login-button">Login</a>
           <a href="#" class="btn btn-primary ">Join <span class="d-none d-lg-inline-block">Blender Cloud</span></a>
+          <a href="{% url 'search' %}" class="btn ml-2 btn-secondary btn-nav btn-icon search-button">
+            <i class="material-icons">search</i>
+          </a>
         </div>
         {% endif %}
       </div>
