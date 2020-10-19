@@ -40,7 +40,7 @@
     height: auto;
     max-height: none;
     overflow: auto;
-    padding: 0 0 $spacer / 4 0;
+    padding: $spacer / 4 0;
     position: sticky;
     width: auto;
     z-index: auto;
@@ -318,6 +318,7 @@
 
 
 .drawer-nav-header {
+  margin-top: -$spacer / 4;
   border-bottom: 1px solid $input-gray;
   margin-bottom: $spacer / 4;
   padding: $spacer;
@@ -413,7 +414,7 @@ $circle-circumference: $circle-diameter * 3.14;
   cursor: pointer;
   display: flex;
   flex-grow: 1;
-  padding: $spacer * .75 $spacer;
+  padding: $spacer / 2 $spacer;
   transition: $transition-base;
 
   &::before {

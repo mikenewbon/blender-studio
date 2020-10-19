@@ -46,14 +46,14 @@
 {% block nested_nav_drawer_header %}
 <div class="drawer-nav-header">
   <p class="subtitle">{{ training.type.label }}</p>
-  <h3>{{ training.name }}</h2>
+  <h3>{{ training.name }}</h3>
 </div>
 
 {% endblock nested_nav_drawer_header %}
 
 <div class="drawer-nav-group">
   <div class="drawer-nav-dropdown-wrapper">
-    <a class="drawer-nav-dropdown h3" href="{{ navigation.overview_url }}">
+    <a class="drawer-nav-dropdown font-weight-bold" href="{{ navigation.overview_url }}">
       <i class="material-icons mr-2">insert_drive_file</i>
       {{ training.type.label }} Overview
     </a>
@@ -63,7 +63,7 @@
 {% for chapter_navigation in navigation.chapters %}
 <div class="drawer-nav-group">
   <div class="drawer-nav-dropdown-wrapper ">
-    <a class="drawer-nav-dropdown h3 {% if chapter_navigation.current %} active {% else %}collapsed{% endif %}"
+    <a class="drawer-nav-dropdown font-weight-bold {% if chapter_navigation.current %} active {% else %}collapsed{% endif %}"
       data-toggle="collapse" data-target="#nav-{{ chapter_navigation.slug }}">
       <span class="drawer-nav-dropdown-text">{{ chapter_navigation.name }}</span>
       <i class="material-icons">keyboard_arrow_down</i>
