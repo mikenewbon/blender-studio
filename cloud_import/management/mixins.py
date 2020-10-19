@@ -30,16 +30,32 @@ class ImportCommand(BaseCommand):
         self.reconcile_user(user, user_doc)
         return user
 
-    def reconcile_user(self, user, user_doc):
-        def reconcile_view_progress():
-            if 'nodes' in user_doc and 'view_progress' in user_doc['nodes']:
-                for node_id, values in user_doc['nodes']['view_progress'].items():
-                    print(node_id)
-                    node = mongo.nodes_collection.find_one({'_id': ObjectId(node_id)})
-                    video_id = node['properties']['file']
-                    static_asset = models_static_assets.StaticAsset.objects.get(slug=str(video_id))
-                    print(static_asset)
+    def reconcile_user_view_progress(self, user, user_doc):
+        if 'nodes' not in user_doc or 'view_progress' not in user_doc['nodes']:
+            return
+        for node_id, values in user_doc['nodes']['view_progress'].items():
+            node = mongo.nodes_collection.find_one({'_id': ObjectId(node_id)})
+            file_doc = mongo.files_collection.find_one(
+                {'_id': ObjectId(node['properties']['file'])}
+            )
+            thumbnail_file_doc = mongo.files_collection.find_one({'_id': ObjectId(node['picture'])})
+            static_asset = self.get_or_create_static_asset(file_doc, thumbnail_file_doc)
+            # Get or create video progress
+            try:
+                progress = models_static_assets.UserVideoProgress.objects.get(
+                    user=user, video=static_asset.video
+                )
+            except models_static_assets.UserVideoProgress.DoesNotExist:
+                progress = models_static_assets.UserVideoProgress.objects.create(
+                    user=user,
+                    video=static_asset.video,
+                    position=datetime.timedelta(seconds=values['progress_in_sec']),
+                )
+            progress.date_created = pytz.utc.localize(values['last_watched'])
+            progress.date_updated = pytz.utc.localize(values['last_watched'])
+            progress.save()
 
+    def reconcile_user(self, user, user_doc):
         self.console_log(f"\tReconciling user {user_doc['username']}")
         user.date_joined = pytz.utc.localize(user_doc['_created'])
         user.save()
@@ -53,8 +69,6 @@ class ImportCommand(BaseCommand):
             OAuthUserInfo.objects.get_or_create(
                 user=user, oauth_user_id=user_doc['auth'][0]['user_id']
             )
-
-        # reconcile_view_progress()
 
     def reconcile_comment_ratings(self, comment_doc):
         if 'ratings' not in comment_doc['properties']:
