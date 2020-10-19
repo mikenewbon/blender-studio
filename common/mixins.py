@@ -1,9 +1,11 @@
 from typing import Optional, Any, Union, List, Tuple
 
+from django.conf import settings
 from django.contrib import admin
 from django.db import models
 from django.db.models.base import Model
 from django.http.request import HttpRequest
+from sorl.thumbnail import get_thumbnail
 
 
 class CreatedUpdatedMixin(models.Model):
@@ -37,3 +39,21 @@ class AdminUserDefaultMixin:
         if not obj.pk:
             obj.user = request.user
         super().save_model(request, obj, form, change)
+
+
+class StaticThumbnailURLMixin:
+    """Add `thumbnail_<size>_url` properties generating static cacheable thumbnail URLs."""
+
+    @property
+    def thumbnail_m_url(self) -> str:
+        """Return a static URL to a medium-sized thumbnail."""
+        return get_thumbnail(
+            self.thumbnail, settings.THUMBNAIL_SIZE_M, crop=settings.THUMBNAIL_CROP_MODE
+        ).url
+
+    @property
+    def thumbnail_s_url(self) -> str:
+        """Return a static URL to a small thumbnail."""
+        return get_thumbnail(
+            self.thumbnail, settings.THUMBNAIL_SIZE_S, crop=settings.THUMBNAIL_CROP_MODE
+        ).url

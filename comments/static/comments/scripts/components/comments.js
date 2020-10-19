@@ -44,7 +44,7 @@ window.comments = (function comments() {
     }
 
     get commentLikesCountElement() {
-      return this.element.querySelector('.comment-likes-count');
+      return this.element.querySelector('.likes-count');
     }
 
     get commentSection() {
@@ -129,14 +129,14 @@ window.comments = (function comments() {
     _getOrCreateReplyInput() {
       const { commentSection, replyInput, replyInputsElement } = this;
       if (replyInput == null) {
-        const replyInput = ReplyInput.create(commentSection.profileImageUrl);
-        let inputText = '@' + this.element.querySelector('.comment-name').innerText;
-        replyInput.element.querySelector('.comment-input-div').innerText = inputText;
+        const replyInput = ReplyInput.create(currentUser.profile.image_url);
+        let inputText = `@${this.element.querySelector('.comment-name').innerText}&nbsp;`;
+        replyInput.element.querySelector('.comment-input-div').innerHTML = inputText;
         replyInputsElement.append(replyInput.element);
         return replyInput;
       } else {
-        let inputText = '@' + this.element.querySelector('.comment-name').innerText;
-        replyInput.element.querySelector('.comment-input-div').innerText = inputText;
+        let inputText = `@${this.element.querySelector('.comment-name').innerText}&nbsp;`;
+        replyInput.element.querySelector('.comment-input-div').innerHTML = inputText;
         return replyInput;
       }
     }
@@ -147,9 +147,9 @@ window.comments = (function comments() {
       replyInput.show();
       replyInputElement.focus();
       //Set caret to the end.
-      var range = document.createRange();
-      var sel = window.getSelection();
-      range.setStart(replyInputElement.firstChild, replyInputElement.innerText.length)
+      const range = document.createRange();
+      const sel = window.getSelection();
+      range.setStart(replyInputElement.firstChild, replyInputElement.innerText.length);
       range.collapse(true)
       sel.removeAllRanges()
       sel.addRange(range)
@@ -187,7 +187,7 @@ window.comments = (function comments() {
     _getOrCreateEditInput() {
       const { profileImageUrl, editInput, editInputsElement } = this;
       if (editInput == null) {
-        const editInput = EditInput.create(profileImageUrl);
+        const editInput = EditInput.create(currentUser.profile.image_url);
         editInputsElement.append(editInput.element);
         return editInput;
       } else {
@@ -346,7 +346,7 @@ window.comments = (function comments() {
     element.querySelector('.comment-name').innerText = fullName;
     element.querySelector('.comment-date').innerText = dateString;
     element.querySelector('.comment-text').innerText = message;
-    element.querySelector('.comment-likes-count').innerText = likes;
+    element.querySelector('.likes-count').innerText = likes;
     if (liked) {
       element.querySelector('.checkbox-like').dataset.checked = 'checked';
     } else {

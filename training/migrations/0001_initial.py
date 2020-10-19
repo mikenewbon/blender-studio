@@ -345,7 +345,8 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name='uservideoprogress',
             constraint=models.UniqueConstraint(
-                fields=('user', 'video'), name='unique_progress_per_user_and_video'
+                # Renamed here, because the constraint had moved elsewhere
+                fields=('user', 'video'), name='unique_progress_per_user_and_video_'
             ),
         ),
         migrations.AddConstraint(

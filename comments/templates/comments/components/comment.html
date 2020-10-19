@@ -48,15 +48,15 @@
           <div class="comment-toolbar row">
             <div class="col d-flex align-items-center">
 
-              <button class="btn btn-dark btn-xs comment-material-button checkbox-like"
+              <button class="btn btn-dark btn-xs btn-icon comment-material-button checkbox-like {% if not user.is_authenticated %}disabled{% endif%}" {% if not user.is_authenticated %}disabled{% endif%}
                 {% if comment.liked %}data-checked="checked" {% endif %}>
                 <i class="material-icons checkbox-like-icon-checked text-primary">favorite</i>
                 <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
-                <span class="comment-likes-count">{{ comment.likes }}</span>
+                <span class="likes-count">{{ comment.likes }}</span>
               </button>
 
-              <button class="btn btn-dark btn-xs comment-action comment-reply">Reply</button>
-
+              <button class="btn btn-dark btn-xs comment-action comment-reply {% if not user.is_authenticated %}disabled{% endif%}" {% if not user.is_authenticated %}disabled{% endif%}>Reply</button>
+              {% if user.is_authenticated and comment.edit_url is not None  %}
               <button class="btn btn-dark btn-xs btn-icon comment-material-button comment-dropdown"
                 data-toggle="dropdown">
                 <i class="material-icons">more_horiz</i>
@@ -109,6 +109,7 @@
                 </a>
                 {% endif %}
               </div>
+              {% endif %}
 
 
 

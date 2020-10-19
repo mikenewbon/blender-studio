@@ -91,9 +91,9 @@ function titleCase(str) {
 }
 
 function authCheck() {
-  if (document.querySelector('body[data-authenticated="true"]')){
+  if (document.querySelector('body[data-authenticated="true"]')) {
     return true;
-  } else{
+  } else {
     return false;
   }
 }
@@ -115,3 +115,10 @@ function cardCarousel(element, slides) {
     next.children(':first-child').clone().appendTo($(element));
   }
 }
+
+let currentUser = '';
+document.addEventListener('DOMContentLoaded', () => {
+  currentUser = JSON.parse(
+    document.getElementById('current-user').textContent
+  );
+});

@@ -43,7 +43,7 @@
           href="#latestTraining" role="button" data-slide="prev">
           <i class="material-icons">arrow_back</i>
         </a>
-        <a class="btn btn-lg btn-transparent btn-icon {% if featured_trainings|length <= 3 %} lessThanThree {% endif %}"
+        <a class="btn btn-lg btn-transparent btn-icon {% if featured_trainings|length <= 1 %}onlyOne{% elif featured_trainings|length <= 3 %} lessThanThree {% endif %}"
           href="#latestTraining" role="button" data-slide="next">
           <i class="material-icons">arrow_forward</i>
         </a>
@@ -78,11 +78,11 @@
         <p class="mb-0">Want to see more? <a href="/training">Explore all training</a></p>
       </div>
       <div class="col-auto carousel-card-toolbar">
-        <a class="btn btn-lg btn-transparent btn-icon {% if featured_trainings|length <= 3 %} lessThanThree {% endif %}"
+        <a class="btn btn-lg btn-transparent btn-icon {% if featured_trainings|length <= 1 %}onlyOne{% elif featured_trainings|length <= 4 %} lessThanFour {% endif %}"
           href="#continueLearning" role="button" data-slide="prev">
           <i class="material-icons">arrow_back</i>
         </a>
-        <a class="btn btn-lg btn-transparent btn-icon {% if featured_trainings|length <= 3 %} lessThanThree {% endif %}"
+        <a class="btn btn-lg btn-transparent btn-icon {% if featured_trainings|length <= 1 %}onlyOne{% elif featured_trainings|length <= 4 %} lessThanFour {% endif %}"
           href="#continueLearning" role="button" data-slide="next">
           <i class="material-icons">arrow_forward</i>
         </a>

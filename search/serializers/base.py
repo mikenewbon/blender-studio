@@ -52,7 +52,8 @@ class BaseSearchSerializer(ABC):
         return model.objects.filter(**filters)
 
     def prepare_data_for_indexing(
-        self, queryset: 'QuerySet[SearchableModel]',
+        self,
+        queryset: 'QuerySet[SearchableModel]',
     ) -> List[Dict[str, Any]]:
         """Serializes objects for search, adding all the necessary additional fields."""
         model = queryset.model
@@ -68,7 +69,8 @@ class BaseSearchSerializer(ABC):
         return self._serialize_data(qs_values)
 
     def _add_common_annotations(
-        self, queryset: 'QuerySet[SearchableModel]',
+        self,
+        queryset: 'QuerySet[SearchableModel]',
     ) -> 'QuerySet[SearchableModel]':
         """Adds queryset annotations common to all indexed objects: model and search_id."""
         model = queryset.model._meta.model_name
@@ -87,18 +89,12 @@ class BaseSearchSerializer(ABC):
 
         if isinstance(instance, Asset):
             instance_dict['thumbnail_url'] = (
-                '' if not instance.static_asset.preview else instance.static_asset.preview.url
+                instance.static_asset.thumbnail_s_url if instance.static_asset.preview else ''
             )
         elif isinstance(instance, Section):
-            instance_dict['thumbnail_url'] = (
-                ''
-                if not instance.chapter.training.thumbnail
-                else instance.chapter.training.thumbnail.url
-            )
+            instance_dict['thumbnail_url'] = instance.chapter.training.thumbnail_s_url
         else:
-            instance_dict['thumbnail_url'] = (
-                '' if not instance.thumbnail else instance.thumbnail.url
-            )
+            instance_dict['thumbnail_url'] = instance.thumbnail_s_url
 
         return instance_dict
 

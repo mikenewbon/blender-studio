@@ -1,6 +1,12 @@
+{% load pipeline %}
+{% load static %}
 <div class="comment-input row {{ div_class }}" onkeydown="event.stopPropagation()">
   <div class="col-auto pr-0 d-flex">
-    <div style="background-image:url({{ profile_image_url }});" class="profile"></div>
+    {% if request.user.is_authenticated and request.user.profile.avatar.name %}
+    <div style="background-image:url('{{ request.user.profile.avatar.url }}');" class="profile"></div>
+    {% else %}
+    <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');" class="profile"></div>
+    {% endif %}
   </div>
   <div class="col">
     <div class="comment-input-div form-control" contenteditable="true"></div>
@@ -11,4 +17,3 @@
     </button>
   </div>
 </div>
-{% comment %} TODO(Mike): Santize contenteditable div (look at opendata) {% endcomment %}

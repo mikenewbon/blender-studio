@@ -36,15 +36,9 @@ window.cardTraining = (function cardTraining() {
             favoriteButton.dataset.originalTitle = "Remove from saved training";
             //Add the current training to the favorited array.
             favoritedTrainingIDs.push(Number(card.dataset.trainingId));
-            //If the favorite section has the 'no saved training' block, it removes it.
-            if (favoriteSection.firstElementChild.classList.contains("empty-saved-training")) {
-              favoriteSection.innerHTML = '';
-            }
-            //Clone the exisiting card from 'All Training'
-            favoriteSection.insertAdjacentElement('afterbegin', card.parentElement.cloneNode(true));
+
             //This adds the event listener to the new card
             document.dispatchEvent(new Event('trainingResults'));
-
           } else {
             delete card.dataset.checked;
             favoriteButton.classList.remove('checked', 'primary');
@@ -52,10 +46,52 @@ window.cardTraining = (function cardTraining() {
             favoriteButton.dataset.originalTitle = "Save for later";
             //Remove the current training from the favorited array.
             favoritedTrainingIDs = favoritedTrainingIDs.filter(function (ele) { return ele != Number(card.dataset.trainingId); });
-            favoriteSection.querySelector('[data-training-id="'+ card.dataset.trainingId + '"]').parentElement.remove();
-            if (favoriteSection.childElementCount == 0){
+
+            favoriteSection.querySelectorAll('[data-training-id="' + card.dataset.trainingId + '"]').forEach(e => {
+              // console.log(e.parentElement)
+              // console.log(e.parentElement.parentElement.firstChild)
+              if (e.parentElement === e.parentElement.parentElement.firstElementChild) {
+                if (e.parentElement.parentElement.classList.contains('active')) {
+                  e.parentElement.parentElement.remove();
+                  if (favoriteSection.firstElementChild.firstElementChild) {
+                    favoriteSection.firstElementChild.firstElementChild.classList.add('active');
+                  } else {
+                    favoriteSection.firstElementChild.innerHTML =
+                      `<div class="col text-center empty-saved-training">
+                        <div class="bg-secondary py-4 rounded">
+                          <h3 class="mb-0">No saved training</h3>
+                          <p class="mb-0">You can favorite a few below!</p>
+                        </div>
+                      </div>`;
+                    favoriteSection.closest('section').querySelectorAll('.carousel-card-toolbar .btn').forEach( e => {
+                      e.classList.add('disabled');
+                    });
+                  }
+                } else {
+                  e.parentElement.parentElement.remove();
+                }
+              } else {
+                e.parentElement.remove();
+              }
+
+              if (favoriteSection.classList.contains('carousel-card-3')) {
+                if (favoriteSection.firstElementChild.childElementCount <= 3){
+                  favoriteSection.closest('section').querySelectorAll('.carousel-card-toolbar .btn').forEach( e => {
+                    e.classList.add('disabled');
+                  });
+                }
+              } else if (favoriteSection.classList.contains('carousel-card-4')) {
+                if (favoriteSection.firstElementChild.childElementCount <= 4){
+                  favoriteSection.closest('section').querySelectorAll('.carousel-card-toolbar .btn').forEach( e => {
+                    e.classList.add('disabled');
+                  });
+                }
+              }
+
+            })
+            if (favoriteSection.childElementCount == 0) {
               favoriteSection.innerHTML =
-              `<div class="col text-center empty-saved-training">
+                `<div class="col text-center empty-saved-training">
                 <div class="bg-secondary py-4 rounded">
                   <h3 class="mb-0">No saved training</h3>
                   <p class="mb-0">You can favorite a few below!</p>
@@ -91,7 +127,6 @@ window.cardTraining = (function cardTraining() {
 
   document.addEventListener('trainingResults', () => {
     document.getElementsByClassName(CardTraining.className).forEach(CardTraining.getOrWrap);
-
   });
 
   return { CardTraining };

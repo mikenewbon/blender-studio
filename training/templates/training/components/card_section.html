@@ -1,6 +1,6 @@
 {% load static %}
 
-<div class="col-12 col-sm-6 col-lg-4 card-grid-item">
+<div class="{{ card_sizes|default:"col-12 col-sm-6 col-lg-4" }} card-grid-item">
     <div class="card card-dark card-hover card-media">
         <!-- TODO(Mike): Add real thumbnails for videos or inherit from course -->
         <a  href="{{ section.url }}" class="card-header" style='background-image: url("{% static 'training/images/placeholders/card_training.png' %}")'>
@@ -9,7 +9,7 @@
         <a class="card-body" href="{{ section.url }}">
             <p class="card-subtitle small mb-0">{{ section.training_name }}</p>
             {% comment %} <p class="card-subtitle">{{ section.chapter_name_with_index }}</p> {% endcomment %}
-            <h3 class="card-title mb-0">{{ section.name_with_index }}</h3>
+            <h4 class="card-title mb-0">{{ section.name_with_index }}</h4>
         </a>
     </div>
 </div>

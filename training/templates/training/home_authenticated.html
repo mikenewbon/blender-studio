@@ -5,7 +5,8 @@
 
 {% block scripts %}
 {% javascript 'training' %}
-<script src="https://cdn.jsdelivr.net/npm/@meilisearch/instant-meilisearch@v0.2.1/dist/instant-meilisearch.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@meilisearch/instant-meilisearch@v0.2.1/dist/instant-meilisearch.umd.min.js">
+</script>
 <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.7.2"></script>
 {{ favorited_training_ids|json_script:"training-favorited-ids" }}
 {{ search_client_config|json_script:"training-search-client-config" }}
@@ -39,18 +40,45 @@
 {% block content %}
 <div class="container-xl pt-3">
 
+  <!-- Recently watched -->
   {% if recently_watched_sections %}
-  <section class="continue-training mb-3">
-    <h2 class="mb-0">Continue training</h2>
-    <p class="mb-3">Recently watched sections will appear here with your position saved</p>
+  <section class="mb-4">
+    <div class="row justify-content-center mb-3">
+      <div class="col">
+        <h2 class="mb-0">Continue training</h2>
+        <p class="mb-0">Recently watched sections will appear here with your position saved</p>
+      </div>
+      <div class="col-auto carousel-card-toolbar">
+        <a class="btn btn-lg btn-transparent btn-icon {% if recently_watched_sections|length <= 1 %}onlyOne{% elif recently_watched_sections|length <= 4 %} lessThanFour {% endif %}"
+          href="#continueTraining" role="button" data-slide="prev">
+          <i class="material-icons">arrow_back</i>
+        </a>
+        <a class="btn btn-lg btn-transparent btn-icon {% if recently_watched_sections|length <= 1 %}onlyOne{% elif recently_watched_sections|length <= 4 %} lessThanFour {% endif %}"
+          href="#continueTraining" role="button" data-slide="next">
+          <i class="material-icons">arrow_forward</i>
+        </a>
+      </div>
+    </div>
     <div class="row">
-      {% for section in recently_watched_sections|slice:':3' %}
-      {% include "training/components/card_section.html" with section=section %}
-      {% endfor %}
+      <div id="continueTraining" class="carousel carousel-card-4 slide w-100" data-touch="true" data-ride="carousel"
+        data-interval="0">
+        <div class="carousel-inner w-100" role="listbox">
+          <div class="carousel-item active">
+            {% for section in recently_watched_sections|slice:':1' %}
+            {% include "training/components/card_section.html" with section=section card_sizes="col-md-3" %}
+            {% endfor %}
+          </div>
+          {% for section in recently_watched_sections|slice:'1:' %}
+          <div class="carousel-item">
+            {% include "training/components/card_section.html" with section=section card_sizes="col-md-3" %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
     </div>
   </section>
   {% endif %}
-
+{% comment %}
   <section class="saved-training mb-4">
     <h2 class="mb-0">Your saved training</h2>
     <p class="mb-3">You can add and remove items from this list by clicking the plus or the tick</p>
@@ -70,8 +98,62 @@
       </div>
     </div>
     {% endif %}
+  </section> {% endcomment %}
+
+  <section class="mb-4">
+    <div class="row justify-content-center mb-3">
+      <div class="col">
+        <h2 class="mb-0">Your saved training</h2>
+        <p class="mb-0">You can add and remove items from this list by clicking the plus or the tick.</p>
+      </div>
+      <div class="col-auto carousel-card-toolbar">
+        <a class="btn btn-lg btn-transparent btn-icon {% if favorited_trainings|length <= 1 %}onlyOne{% elif favorited_trainings|length <= 3 %} lessThanThree {% endif %}"
+          href="#savedTraining" role="button" data-slide="prev">
+          <i class="material-icons">arrow_back</i>
+        </a>
+        <a class="btn btn-lg btn-transparent btn-icon {% if favorited_trainings|length <= 1 %}onlyOne{% elif favorited_trainings|length <= 3 %} lessThanThree {% endif %}"
+          href="#savedTraining" role="button" data-slide="next">
+          <i class="material-icons">arrow_forward</i>
+        </a>
+      </div>
+    </div>
+    <div class="row">
+
+
+      <div id="savedTraining" class="carousel carousel-card-3 carousel-card-saved slide w-100" data-ride="carousel" data-interval="0">
+        <div class="carousel-inner w-100" role="listbox">
+          {% if favorited_trainings %}
+            {% comment %} {% for training in featured_trainings|slice:':1' %}
+            {% include "common/components/cards/card_training.html" with training=training card_sizes="col-md-4" %}
+            {% endfor %} {% endcomment %}
+            {% for training in favorited_trainings|slice:':1' %}
+            <div class="carousel-item active">
+              {% include "training/components/card_training.html" with training=training card_sizes="col-md-4" %}
+            </div>
+            {% endfor %}
+
+            {% for training in favorited_trainings|slice:'1:6' %}
+            <div class="carousel-item">
+              {% include "training/components/card_training.html" with training=training card_sizes="col-md-4" %}
+            </div>
+            {% endfor %}
+          {% else %}
+          <div class="col text-center empty-saved-training">
+            <div class="bg-secondary py-4 rounded">
+              <h3 class="mb-0">No saved training</h3>
+              <p class="mb-0">You can favorite a few below!</p>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+
+    </div>
   </section>
 
+
+  <!-- SEARCH -->
 
   <section>
 
@@ -115,6 +197,16 @@
 </div>
 
 {% javascript 'training_search' %}
+
+<script>
+  $('.carousel-card-3 .carousel-item').each(function () {
+    cardCarousel(this, 3);
+  });
+
+  $('.carousel-card-4 .carousel-item').each(function () {
+    cardCarousel(this, 4);
+  });
+</script>
 
 
 {% endblock content %}

@@ -1,10 +1,12 @@
 {% extends 'training/base_with_navigation.html' %}
 
 {% load static %}
+{% load pipeline %}
 
 {% block scripts %}
 {{ block.super }}
 {{ section_progress_reporting_data|json_script:"sectionProgressReportingData" }}
+{% javascript 'training' %}
 {% endblock scripts %}
 
 {% block nexted_content %}
@@ -13,9 +15,6 @@
   <div class="col training-video">
     {% if request.user.is_authenticated or section.is_free %}
     {% include 'common/components/video_player.html' with url=video.url progress_url=video.progress_url start_position=video.start_position %}
-    <script>
-      new Plyr(document.querySelector('.video-player video'));
-    </script>
     {% else %}
     {% include 'common/components/video_player_locked.html' with url=video.url progress_url=video.progress_url start_position=video.start_position %}
     {% endif %}

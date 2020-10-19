@@ -24,7 +24,7 @@ class TrainingDifficulty(models.TextChoices):
     advanced = 'advanced', 'Advanced'
 
 
-class Training(mixins.CreatedUpdatedMixin, models.Model):
+class Training(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Model):
     class Meta:
         indexes = [
             models.Index(fields=['status', 'type', 'difficulty']),

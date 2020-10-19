@@ -42,7 +42,7 @@ class Post(mixins.CreatedUpdatedMixin, models.Model):
         return reverse('admin:blog_post_change', args=[self.pk])
 
 
-class Revision(mixins.CreatedUpdatedMixin, models.Model):
+class Revision(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='revisions')
 
     # We prevent deletion of the editor account to make sure we preserve all

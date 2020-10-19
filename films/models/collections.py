@@ -7,7 +7,7 @@ from common.upload_paths import get_upload_to_hashed_path
 from films.models import films
 
 
-class Collection(mixins.CreatedUpdatedMixin, models.Model):
+class Collection(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['parent', 'slug'], name='unique_slug_per_collection'),

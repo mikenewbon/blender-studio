@@ -50,6 +50,7 @@
     }
 
     .progress-bar {
+      border-radius: $border-radius;
       transition: $transition-base;
     }
   }

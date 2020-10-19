@@ -13,7 +13,7 @@ class FilmStatus(models.TextChoices):
     released = '2_released', 'Released'
 
 
-class Film(mixins.CreatedUpdatedMixin, models.Model):
+class Film(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Model):
     title = models.CharField(unique=True, max_length=512)
     slug = models.SlugField(unique=True, blank=True)
     description = models.TextField()
