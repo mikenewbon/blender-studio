@@ -62,7 +62,7 @@ class DynamicStorageFileField(models.FileField):
 
 
 class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
-    source = models.FileField(upload_to=get_upload_to_hashed_path)
+    source = models.FileField(upload_to=get_upload_to_hashed_path, blank=True)
     source_type = models.CharField(choices=StaticAssetFileTypeChoices.choices, max_length=5)
     # TODO(Natalia): source type validation
     original_filename = models.CharField(max_length=128, editable=False)
@@ -91,6 +91,11 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
         "Asset thumbnail is auto-generated for images and videos. Required for other files."
     )
 
+    # Reference to legacy Blender Cloud file
+    slug = models.SlugField(blank=True)
+
+    content_type = models.CharField(max_length=256, blank=True)
+
     # TODO(Natalia): generate preview if thumbnail not uploaded.
     @property
     def preview(self):
@@ -108,19 +113,6 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
         if self.author:
             return self.author.profile.full_name
         return self.user.profile.full_name
-
-    @property
-    def video(self) -> Optional['Video']:
-        try:
-            return Video.objects.get(static_asset=self)
-        except Video.DoesNotExist:
-            log.debug(
-                'Attempting to access non existing attribute for %s asset %i'
-                % (self.source_type, self.pk)
-            )
-            return None
-        finally:
-            return None
 
     def clean(self):
         super().clean()
@@ -143,8 +135,9 @@ class StaticAsset(mixins.CreatedUpdatedMixin, models.Model):
 
 class Video(models.Model):
     static_asset = models.OneToOneField(StaticAsset, on_delete=models.CASCADE)
-    resolution = models.CharField(max_length=32, blank=True)
-    resolution_text = models.CharField(max_length=32, blank=True)
+    height = models.PositiveIntegerField(blank=True, null=True)
+    width = models.PositiveIntegerField(blank=True, null=True)
+    resolution_label = models.CharField(max_length=32, blank=True)
     duration = models.DurationField(help_text='[DD] [[HH:]MM:]ss[.uuuuuu]')
     duration.description = 'Video duration in the format [DD] [[HH:]MM:]ss[.uuuuuu]'
     play_count = models.PositiveIntegerField(default=0, editable=False)
@@ -157,10 +150,24 @@ class Video(models.Model):
         return f'{self._meta.model_name} {self.static_asset.original_filename}'
 
 
+class VideoVariation(models.Model):
+    video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='variations')
+    height = models.PositiveIntegerField(blank=True, null=True)
+    width = models.PositiveIntegerField(blank=True, null=True)
+    resolution_label = models.CharField(max_length=32, blank=True)
+    source = models.FileField(upload_to=get_upload_to_hashed_path, blank=True)
+    size_bytes = models.BigIntegerField(editable=False)
+    content_type = models.CharField(max_length=256, blank=True)
+
+    def __str__(self) -> str:
+        return f"Video variation for {self.video.static_asset.original_filename}"
+
+
 class Image(models.Model):
     static_asset = models.OneToOneField(StaticAsset, on_delete=models.CASCADE)
-    resolution = models.CharField(max_length=32, blank=True)
-    resolution_text = models.CharField(max_length=32, blank=True)
+    height = models.PositiveIntegerField(blank=True, null=True)
+    width = models.PositiveIntegerField(blank=True, null=True)
+    resolution_label = models.CharField(max_length=32, blank=True)
 
     def __str__(self) -> str:
         return f'{self._meta.model_name} {self.static_asset.original_filename}'

@@ -1,27 +1,23 @@
+import uuid
 from django.db import models
 from django.urls.base import reverse
-from django.utils.text import slugify
+from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
 
 from comments.models import Comment
 from common import mixins
-from common.upload_paths import get_upload_to_hashed_path
 from training.models import chapters
 
 
 class Section(mixins.CreatedUpdatedMixin, models.Model):
     class Meta:
-        # TODO(fsiddi) Replace these constraints, which are not valid anymore
-        constraints = [
-            models.UniqueConstraint(fields=['chapter', 'index'], name='unique_index_per_section'),
-            models.UniqueConstraint(fields=['chapter', 'slug'], name='unique_slug_per_section'),
-        ]
+        ordering = ['index', 'name']
 
     chapter = models.ForeignKey(chapters.Chapter, on_delete=models.CASCADE, related_name='sections')
     index = models.IntegerField()
 
     name = models.CharField(max_length=512)
-    slug = models.SlugField(blank=True)
+    slug = models.SlugField(unique=True, null=False)
     text = models.TextField()
     is_free = models.BooleanField(default=False)
 
@@ -34,6 +30,7 @@ class Section(mixins.CreatedUpdatedMixin, models.Model):
         blank=True,
         null=True,
     )
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
 
     comments = models.ManyToManyField(Comment, through='SectionComment', related_name='section')
     tags = TaggableManager(blank=True)
@@ -41,8 +38,8 @@ class Section(mixins.CreatedUpdatedMixin, models.Model):
     def clean(self) -> None:
         super().clean()
         if not self.slug:
-            # TODO(fsiddi) Either turn slug into alphaid, or ensure uniqueness of slug
-            self.slug = slugify(self.name)
+            # TODO(fsiddi) Look into alphaid for a shorter slug
+            self.slug = uuid.uuid4().hex
 
     def __str__(self) -> str:
         return (

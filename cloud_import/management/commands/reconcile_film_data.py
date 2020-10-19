@@ -73,17 +73,6 @@ class Command(ImportCommand):
             comment.save()
         return comment
 
-    def get_or_create_user(self, user_object_id: ObjectId):
-        user_doc = mongo.users_collection.find_one({'_id': ObjectId(user_object_id)})
-        try:
-            user = User.objects.get(username=user_doc['username'])
-            self.console_log(f"Fetched user {user.username}")
-        except User.DoesNotExist:
-            user = User.objects.create(username=user_doc['username'], email=user_doc['email'])
-            self.console_log(f"Created user {user.username}")
-            self.reconcile_user(user, user_doc)
-        return user
-
     def assign_user(self, asset, node_doc):
 
         user = self.get_or_create_user(node_doc['user'])
