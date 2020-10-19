@@ -90,6 +90,12 @@
   position: relative;
   transition: $transition-base;
 
+  h4 {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
   >* {
     margin-bottom: 0;
   }
