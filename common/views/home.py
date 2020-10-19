@@ -1,17 +1,18 @@
+# noqa: D100
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_safe
 
-from common.queries import get_activity_feed_page
 from films.models import Film
+from films.queries import get_random_featured_assets
 from training.models import Training
 
 
 @require_safe
 def home(request: HttpRequest) -> HttpResponse:
     """
-    Renders the home page of Blender Studio.
+    Render the home page of Blender Studio.
 
     **Context**:
         ``records``
@@ -27,7 +28,10 @@ def home(request: HttpRequest) -> HttpResponse:
     **Template**
         :template:`common/home.html`
     """
-    context = {'featured_trainings': Training.objects.filter()}
+    context = {
+        'featured_trainings': Training.objects.filter(),
+        'featured_film_assets': get_random_featured_assets(limit=8),
+    }
 
     return render(request, 'common/home.html', context)
 
@@ -35,7 +39,7 @@ def home(request: HttpRequest) -> HttpResponse:
 @require_safe
 def welcome(request: HttpRequest) -> HttpResponse:
     """
-    Renders the welcome page of Blender Studio.
+    Render the welcome page of Blender Studio.
 
     **Context**:
         ``featured_films``
