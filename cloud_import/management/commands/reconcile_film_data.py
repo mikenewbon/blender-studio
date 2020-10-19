@@ -54,6 +54,7 @@ class Command(ImportCommand):
                 'node_type': 'comment',
                 'parent': ObjectId(asset.slug),
                 'properties.status': 'published',
+                '_deleted': {'$ne': True},
             }
         )
         comments_count = 0
@@ -67,6 +68,7 @@ class Command(ImportCommand):
                     'node_type': 'comment',
                     'parent': comment_doc['_id'],
                     'properties.status': 'published',
+                    '_deleted': {'$ne': True},
                 }
             )
             comments_count += 1

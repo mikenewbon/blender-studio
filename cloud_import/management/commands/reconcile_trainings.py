@@ -48,6 +48,7 @@ class Command(ImportCommand):
         comments = mongo.nodes_collection.find(
             {
                 'node_type': 'comment',
+                '_deleted': {'$ne': True},
                 'parent': ObjectId(section.slug),
                 'properties.status': 'published',
             }
@@ -61,6 +62,7 @@ class Command(ImportCommand):
             response_comments = mongo.nodes_collection.find(
                 {
                     'node_type': 'comment',
+                    '_deleted': {'$ne': True},
                     'parent': comment_doc['_id'],
                     'properties.status': 'published',
                 }
