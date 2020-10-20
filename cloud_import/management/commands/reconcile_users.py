@@ -13,5 +13,7 @@ class Command(ImportCommand):
             # Skip Flamenco Manager users
             if user_doc['username'].startswith('SRV-'):
                 continue
+            self.console_log(f"-- Processing user {user_doc['username']}")
             user = self.get_or_create_user(user_doc['_id'])
+            self.console_log(f"-- Processing view progress for user {user_doc['username']}")
             self.reconcile_user_view_progress(user, user_doc)
