@@ -38,8 +38,14 @@ class ImportCommand(BaseCommand):
             file_doc = mongo.files_collection.find_one(
                 {'_id': ObjectId(node['properties']['file'])}
             )
-            thumbnail_file_doc = mongo.files_collection.find_one({'_id': ObjectId(node['picture'])})
+            if 'picture' in node:
+                thumbnail_file_doc = mongo.files_collection.find_one(
+                    {'_id': ObjectId(node['picture'])}
+                )
+            else:
+                thumbnail_file_doc = None
             static_asset = self.get_or_create_static_asset(file_doc, thumbnail_file_doc)
+
             # Get or create video progress
             try:
                 progress = models_static_assets.UserVideoProgress.objects.get(
