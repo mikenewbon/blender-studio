@@ -124,7 +124,7 @@ class ImportCommand(BaseCommand):
 
         self.console_log(f"\tProcessing file {file_uuid} {source.name}")
         with tempfile.TemporaryDirectory() as tmp_dirname:
-            self.console_log(f"Created temporary directory {tmp_dirname}")
+            self.console_log(f"\tCreated temporary directory {tmp_dirname}")
             tmp_path = pathlib.Path(tmp_dirname)
             file_path = (
                 file_doc['file_path'] if not variation_subdoc else variation_subdoc['file_path']
@@ -154,7 +154,7 @@ class ImportCommand(BaseCommand):
     def reconcile_static_asset_video(
         self, file_doc, static_asset: models_static_assets.StaticAsset
     ):
-        self.console_log(f"\tReconciling Video properties for {static_asset.id}")
+        self.console_log(f"\tReconciling Video properties for asset {static_asset.id}")
         try:
             video = models_static_assets.Video.objects.get(static_asset=static_asset)
         except models_static_assets.Video.DoesNotExist:
