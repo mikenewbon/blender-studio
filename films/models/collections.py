@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls.base import reverse
 from django.utils.text import slugify
+from django.contrib.auth.models import User
 
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
@@ -22,6 +23,9 @@ class Collection(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mod
     name = models.CharField(max_length=512)
     slug = models.SlugField(blank=True)
     text = models.TextField(blank=True)
+    # TODO(fsiddi) Add text_html
+
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
 
     thumbnail = models.FileField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
 

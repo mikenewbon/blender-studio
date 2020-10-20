@@ -23,24 +23,12 @@ import training.models as models_training
 class Command(ImportCommand):
     help = 'Reconcile training data'
 
-    # Set on handle and used in various functions to determine whether to
-    # alter the database.
-    dry_run = False
-
     def add_arguments(self, parser):
         parser.add_argument(
             '-s', '--slug', dest='slugs', action='append', help="provides training slugs"
         )
         parser.add_argument(
             '--all', action='store_true', help='Reconcile all trainings',
-        )
-        parser.add_argument(
-            '-d',
-            '--dry-run',
-            dest='dry_run',
-            action='append',
-            help="Do not alter database",
-            nargs='?',
         )
 
     def reconcile_training_section_comments(self, section: models_training.Section):

@@ -115,10 +115,14 @@ class ImportCommand(BaseCommand):
         """Download file from cloud storage and upload to S3."""
         file_doc = mongo.files_collection.find_one({'_id': ObjectId(file_uuid)})
 
-        if getattr(instance, attr_name) and not force:
-            self.console_log(f"\tSkipping existing file {file_uuid}")
-            return
+        source = getattr(instance, attr_name)
+        if source and not force:
+            # If no variation is detected, do not reconcile
+            if '-' not in source.name:
+                self.console_log(f"\tSkipping existing file {file_uuid} {source.name}")
+                return
 
+        self.console_log(f"\tProcessing file {file_uuid} {source.name}")
         with tempfile.TemporaryDirectory() as tmp_dirname:
             self.console_log(f"Created temporary directory {tmp_dirname}")
             tmp_path = pathlib.Path(tmp_dirname)
@@ -184,7 +188,7 @@ class ImportCommand(BaseCommand):
         image.save()
 
     def reconcile_static_asset(
-        self, file_doc, static_asset: models_static_assets.StaticAsset, thumbnail_file_doc
+        self, file_doc, static_asset: models_static_assets.StaticAsset, thumbnail_file_doc=None
     ):
         self.console_log(f"Reconciling file {file_doc['_id']}")
         # Update properties

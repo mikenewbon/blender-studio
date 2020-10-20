@@ -108,7 +108,7 @@ class BaseSearchSerializer(ABC):
 
         if isinstance(instance, Asset):
             instance_dict['thumbnail_url'] = (
-                instance.static_asset.thumbnail_s_url if instance.static_asset.preview else ''
+                '' if not instance.static_asset else instance.static_asset.thumbnail_s_url
             )
         elif isinstance(instance, Section):
             instance_dict['thumbnail_url'] = instance.chapter.training.thumbnail_s_url
