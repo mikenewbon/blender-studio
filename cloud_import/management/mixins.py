@@ -235,6 +235,9 @@ class ImportCommand(BaseCommand):
 
         if 'video' in file_doc['content_type'] and 'variations' in file_doc:
             for v in file_doc['variations']:
+                if v['file_path'].endswith('.webm'):
+                    self.console_log("Skipping .webm variation")
+                    continue
                 variation, _ = models_static_assets.VideoVariation.objects.get_or_create(
                     video=static_asset.video,
                     resolution_label=v['size'],
