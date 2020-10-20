@@ -190,7 +190,7 @@ class ImportCommand(BaseCommand):
     def reconcile_static_asset(
         self, file_doc, static_asset: models_static_assets.StaticAsset, thumbnail_file_doc=None
     ):
-        self.console_log(f"Reconciling file {file_doc['_id']}")
+        self.console_log(f"Reconciling file {file_doc['_id']} {file_doc['file_path']}")
         # Update properties
         static_asset.slug = str(file_doc['_id'])
         # Update original_filename
@@ -235,8 +235,9 @@ class ImportCommand(BaseCommand):
 
         if 'video' in file_doc['content_type'] and 'variations' in file_doc:
             for v in file_doc['variations']:
+                self.console_log(f"\tProcessing variation {v['file_path']}")
                 if v['file_path'].endswith('.webm'):
-                    self.console_log("Skipping .webm variation")
+                    self.console_log("\tSkipping .webm variation")
                     continue
                 variation, _ = models_static_assets.VideoVariation.objects.get_or_create(
                     video=static_asset.video,
