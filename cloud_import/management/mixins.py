@@ -38,6 +38,9 @@ class ImportCommand(BaseCommand):
             file_doc = mongo.files_collection.find_one(
                 {'_id': ObjectId(node['properties']['file'])}
             )
+            if file_doc['content_type'].split('/')[0] != 'video':
+                self.console_log(f"File {file_doc['filename']} is not a video, skipping")
+                continue
             if 'picture' in node:
                 thumbnail_file_doc = mongo.files_collection.find_one(
                     {'_id': ObjectId(node['picture'])}
