@@ -56,6 +56,15 @@ class ProductionLog(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, 
         return self.user.get_full_name()
 
     @property
+    def author_image_url(self) -> str:
+        """Get the asset's author's image.
+
+        Usually the author of the asset will be the same as the user who uploads the asset."""
+        if self.author:
+            return self.author.profile.image_url
+        return self.user.profile.image_url
+
+    @property
     def end_date(self):
         """The last day of a weekly log is the start_date + 6 days"""
         return self.start_date + timedelta(days=6)
@@ -121,12 +130,19 @@ class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
 
     @property
     def author_name(self) -> str:
-        """Get the production log entry's author full name.
-
-        Usually the author of the log entry will be the same as the user who uploads the entry."""
+        """Get the author's full name."""
         if self.author:
-            return self.author.get_full_name() or self.author.username
-        return self.user.get_full_name() or self.user.username
+            return self.author.profile.full_name
+        return self.user.profile.full_name
+
+    @property
+    def author_image_url(self) -> str:
+        """Get the asset's author's image.
+
+        Usually the author of the asset will be the same as the user who uploads the asset."""
+        if self.author:
+            return self.author.profile.image_url
+        return self.user.profile.image_url
 
     def __str__(self):
         return (

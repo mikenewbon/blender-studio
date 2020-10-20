@@ -138,6 +138,15 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
             return self.author.profile.full_name
         return self.user.profile.full_name
 
+    @property
+    def author_image_url(self) -> str:
+        """Get the asset's author's image.
+
+        Usually the author of the asset will be the same as the user who uploads the asset."""
+        if self.author:
+            return self.author.profile.image_url
+        return self.user.profile.image_url
+
     def clean(self):
         super().clean()
         if not self.pk and self.source:

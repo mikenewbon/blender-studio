@@ -60,7 +60,7 @@
         <div class="update-feed-individual-summary">
 
           <div class="update-feed-individual-summary-profile row">
-            <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');"
+            <div style="background-image:url('{{ entry.author_image_url }}');"
               class="profile-image profile ml-2">
             </div>
             <div class="col-auto">

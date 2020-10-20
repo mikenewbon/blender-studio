@@ -47,6 +47,7 @@
     position: absolute;
     top: 0;
     width: 100%;
+    backdrop-filter: blur(10px);
   }
 
   &-text {
@@ -58,5 +59,9 @@
     transform: translate(-50%, -50%);
     width: 100%;
     z-index: 1;
+  }
+
+  .login-button {
+    color: white;
   }
 }

@@ -35,7 +35,9 @@
             <i class="material-icons btn-material-icons">close</i>
           </button>
         </div>
-
+        {% if user.is_anonymous and not asset.is_free %}
+        {% include 'common/components/video_player_locked.html' %}
+        {% else %}
         {% if asset.static_asset.source_type == "video" %}
         {% include 'common/components/video_player.html' with url=asset.static_asset.source.url %}
         {% else %}
@@ -44,7 +46,7 @@
           {% include "common/components/helpers/image_set.html" with alt=asset.name classes="img-fluid" img_source=asset.static_asset.preview xsmall_width="576" small_width="768" medium_width="768" large_width="870" xlarge_width="780" %}
         </a>
         {% endif %}
-
+        {% endif %}
       </div>
       <div class="modal-body">
         <div class="d-none d-md-block">
@@ -73,12 +75,17 @@
 
           <div class="file-toolbar">
 
-            <a class="btn btn-sm btn-dark">
+            {% if user.is_anonymous and not asset.is_free %}
+            {% comment %} TODO(Mike + Anna) Impliment Asset likes {% endcomment %}
+            {% comment %} <button disabled class="btn disabled btn-sm btn-dark btn-icon"><i class="material-icons">favorite_border</i> <span class="likes-count">0</span></button> {% endcomment %}
+            <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to Download</button>
+            {% else %}
+            {% comment %} <a class="btn btn-sm btn-dark">
               <i class="material-icons">favorite_border</i>
               Like
-            </a>
-
+            </a> {% endcomment %}
             <a href="{{ asset.static_asset.source.url }}" download class="btn btn-sm btn-dark">Download</a>
+            {% endif %}
 
             <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
               <i class="material-icons">more_horiz</i>
@@ -100,7 +107,11 @@
           </div>
         </div>
         <div class="row mb-2">
+        {% if asset.static_asset.author_image_url %}
+          <div style="background-image:url('{{ asset.static_asset.author_image_url }}');" class="profile ml-2">
+          {% else %}
           <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');" class="profile ml-2">
+          {% endif %}
           </div>
           <div class="col-auto">
             <p class="subtitle text-white-50 x-small">Author</p>

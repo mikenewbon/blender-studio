@@ -44,9 +44,11 @@
     }
 
     .comment-expand-archived {
+
       @include hover-focus {
         color: $white;
       }
+
 
       color: $highlight-white-xstrong;
       font-size: $x-small-font-size;
@@ -143,9 +145,12 @@
   .btn {
     color: $highlight-white-xstrong;
 
-    &:hover {
-      color: $white;
+    &:not(.disabled) {
+      @include hover-focus {
+        color: $white;
+      }
     }
+
   }
 
   .btn+.btn,
