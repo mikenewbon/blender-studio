@@ -50,6 +50,7 @@ class CollectionAdmin(admin.ModelAdmin):
 class FilmCrewInlineAdmin(admin.TabularInline):
     model = films.Film.crew.through
     verbose_name_plural = 'Crew'
+    autocomplete_fields = ['user']
 
 
 @admin.register(films.Film)
