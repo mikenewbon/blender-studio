@@ -1,5 +1,8 @@
+from django.db.models.expressions import F, Value
+from django.db.models.fields import CharField
 from taggit.models import Tag
 
+from films.models import Asset, AssetCategory
 from search.serializers.base import BaseSearchSerializer
 from training.models import Training, TrainingStatus
 
@@ -7,12 +10,21 @@ from training.models import Training, TrainingStatus
 class TrainingSearchSerializer(BaseSearchSerializer):
     """Prepare database objects to be indexed in the training search index."""
 
-    models_to_index = [Training]
+    models_to_index = [Training, Asset]
     filter_params = {
         Training: {'status': TrainingStatus.published},
+        Asset: {
+            'is_published': True,
+            'film__is_published': True,
+            'category': AssetCategory.production_lesson,
+        },
     }
     annotations = {
         Training: {},
+        Asset: {
+            'project': F('film__title'),
+            'type': Value(AssetCategory.production_lesson, output_field=CharField()),
+        },
     }
     additional_fields = {
         Training: {
@@ -23,4 +35,5 @@ class TrainingSearchSerializer(BaseSearchSerializer):
             ],
             'favorite_url': lambda instance: instance.favorite_url,
         },
+        Asset: {'tags': lambda instance: [tag.name for tag in instance.tags.all()]},
     }
