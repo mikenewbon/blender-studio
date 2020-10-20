@@ -142,13 +142,14 @@ class Command(ImportCommand):
 
         # Traverse parent
         if 'parent' in collection_doc and collection_doc['parent']:
-            parent_collection = mongo.nodes_collection.find_one(
+            parent_collection_doc = mongo.nodes_collection.find_one(
                 {'_id': ObjectId(collection_doc['parent'])}
             )
-            if not parent_collection:
+            if parent_collection_doc:
+                collection.parent = self.get_or_create_collection(parent_collection_doc, film)
+                collection.save()
+            else:
                 self.console_log(f"Parent collection {collection_doc['parent']} not found")
-            collection.parent = self.get_or_create_collection(parent_collection, film)
-            collection.save()
 
         return collection
 
