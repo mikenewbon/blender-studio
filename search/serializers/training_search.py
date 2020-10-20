@@ -6,6 +6,8 @@ from films.models import Asset, AssetCategory
 from search.serializers.base import BaseSearchSerializer
 from training.models import Training, TrainingStatus
 
+clean_tag = BaseSearchSerializer.clean_tag
+
 
 class TrainingSearchSerializer(BaseSearchSerializer):
     """Prepare database objects to be indexed in the training search index."""
@@ -23,17 +25,17 @@ class TrainingSearchSerializer(BaseSearchSerializer):
         Training: {},
         Asset: {
             'project': F('film__title'),
-            'type': Value(AssetCategory.production_lesson, output_field=CharField()),
+            'type': Value(clean_tag(AssetCategory.production_lesson), output_field=CharField()),
         },
     }
     additional_fields = {
         Training: {
-            'tags': lambda instance: [tag.name for tag in instance.tags.all()],
+            'tags': lambda instance: [clean_tag(tag.name) for tag in instance.tags.all()],
             'secondary_tags': lambda instance: [
-                tag.name
+                clean_tag(tag.name)
                 for tag in Tag.objects.filter(section__chapter__training__pk=instance.pk).distinct()
             ],
             'favorite_url': lambda instance: instance.favorite_url,
         },
-        Asset: {'tags': lambda instance: [tag.name for tag in instance.tags.all()]},
+        Asset: {'tags': lambda instance: [clean_tag(tag.name) for tag in instance.tags.all()]},
     }

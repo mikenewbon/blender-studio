@@ -1,5 +1,5 @@
-import datetime as dt
 from typing import Any, Type, Dict
+import datetime as dt
 
 from django.db.models.expressions import F, Value, Case, When
 from django.db.models.fields import CharField
@@ -42,7 +42,6 @@ class MainSearchSerializer(BaseSearchSerializer):
         Section: {
             'project': F('chapter__training__name'),
             'chapter_name': F('chapter__name'),
-            'description': F('text'),
             'media_type': Case(
                 When(static_asset__isnull=False, then=F('static_asset__source_type')),
                 output_field=CharField(),
@@ -75,6 +74,7 @@ class MainSearchSerializer(BaseSearchSerializer):
         },
         Section: {
             'tags': lambda instance: [tag.name for tag in instance.tags.all()],
+            'description': lambda instance: BaseSearchSerializer.clean_html(instance.text),
             'secondary_tags': (
                 lambda instance: [tag.name for tag in instance.chapter.training.tags.all()]
             ),
