@@ -136,6 +136,8 @@ class ImportCommand(BaseCommand):
                 files.s3_client, settings.AWS_STORAGE_BUCKET_NAME, dest_file_path_s3
             ):
                 print(f"File {dest_file_path_s3} already exists on S3, skipping upload")
+                setattr(instance, attr_name, dest_file_path_s3)
+                instance.save()
                 return
 
             # Download file
