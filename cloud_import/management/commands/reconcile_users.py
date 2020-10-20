@@ -8,7 +8,7 @@ class Command(ImportCommand):
     help = 'Reconcile users'
 
     def handle(self, *args, **options):
-        for user_doc in mongo.users_collection.find({'username': 'fsiddi'}):
+        for user_doc in mongo.users_collection.find({'_deleted': {'$ne': True}}):
             # self.stdout.write(self.style.NOTICE(f"Importing user {user_doc['username']}"))
             # Skip Flamenco Manager users
             if user_doc['username'].startswith('SRV-'):
