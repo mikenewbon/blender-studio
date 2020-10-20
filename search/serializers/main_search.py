@@ -5,7 +5,6 @@ from django.db.models.expressions import F, Value, Case, When
 from django.db.models.fields import CharField
 from django.db.models.functions.text import Concat
 from django.db.models.query import QuerySet
-from django.db.models.query_utils import Q
 from taggit.models import Tag
 
 from blog.models import Revision
@@ -45,7 +44,7 @@ class MainSearchSerializer(BaseSearchSerializer):
             'chapter_name': F('chapter__name'),
             'description': F('text'),
             'media_type': Case(
-                When(static_asset__isnull=False, then=Value('static_asset')),
+                When(static_asset__isnull=False, then=F('static_asset__source_type')),
                 output_field=CharField(),
             ),
             # Attributes for faceting have to be string type, not boolean:
