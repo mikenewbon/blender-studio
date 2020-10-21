@@ -32,7 +32,7 @@ class Command(ImportCommand):
 
     def assign_user(self, asset, node_doc):
 
-        user = self.get_or_create_user(node_doc['user'])
+        user, _ = self.get_or_create_user(node_doc['user'])
         self.console_log(f"Assign user {user.username} to asset {asset.id} - {asset.name}")
 
         asset.static_asset.user = user
@@ -133,7 +133,7 @@ class Command(ImportCommand):
 
         collection.date_created = pytz.utc.localize(collection_doc['_created'])
         collection.date_updated = pytz.utc.localize(collection_doc['_updated'])
-        collection.user = self.get_or_create_user(collection_doc['user'])
+        collection.user, _ = self.get_or_create_user(collection_doc['user'])
         collection.save()
 
         # Ensure media

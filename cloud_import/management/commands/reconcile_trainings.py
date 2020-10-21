@@ -101,7 +101,7 @@ class Command(ImportCommand):
         section.chapter = chapter
         section.date_created = pytz.utc.localize(section_doc['_created'])
         section.date_updated = pytz.utc.localize(section_doc['_updated'])
-        section.user = self.get_or_create_user(section_doc['user'])
+        section.user, _ = self.get_or_create_user(section_doc['user'])
         section.save()
 
         file_doc = mongo.files_collection.find_one(
@@ -141,7 +141,7 @@ class Command(ImportCommand):
 
         chapter.date_created = pytz.utc.localize(chapter_doc['_created'])
         chapter.date_updated = pytz.utc.localize(chapter_doc['_updated'])
-        chapter.user = self.get_or_create_user(chapter_doc['user'])
+        chapter.user, _ = self.get_or_create_user(chapter_doc['user'])
         chapter.save()
 
         # Ensure media

@@ -19,7 +19,10 @@ class Command(ImportCommand):
         if user_doc['username'].startswith('SRV-'):
             return
         self.console_log(f"-- Processing user {user_doc['username']}")
-        user = self.get_or_create_user(user_doc['_id'])
+        user, is_created = self.get_or_create_user(user_doc['_id'])
+        if not is_created:
+            self.console_log(f"User {user_doc['username']} already exists")
+            return
         self.console_log(f"-- Processing view progress for user {user_doc['username']}")
         self.reconcile_user_view_progress(user, user_doc)
 

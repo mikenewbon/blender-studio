@@ -19,16 +19,18 @@ class ImportCommand(BaseCommand):
         """Utility to print NOTICE stdout messages."""
         self.stdout.write(self.style.NOTICE(message))
 
-    def get_or_create_user(self, user_object_id: ObjectId) -> User:
+    def get_or_create_user(self, user_object_id: ObjectId) -> (User, bool):
         user_doc = mongo.users_collection.find_one({'_id': ObjectId(user_object_id)})
         try:
             user = User.objects.get(username=user_doc['username'])
             self.console_log(f"Fetched user {user.username}")
+            is_created = False
         except User.DoesNotExist:
             user = User.objects.create(username=user_doc['username'], email=user_doc['email'])
             self.console_log(f"Created user {user.username}")
             self.reconcile_user(user, user_doc)
-        return user
+            is_created = True
+        return user, is_created
 
     def reconcile_user_view_progress(self, user, user_doc):
         if 'nodes' not in user_doc or 'view_progress' not in user_doc['nodes']:
@@ -104,7 +106,7 @@ class ImportCommand(BaseCommand):
 
         comment = self.get_or_create_comment(comment_doc)
         for rating in comment_doc['properties']['ratings']:
-            user = self.get_or_create_user(rating['user'])
+            user, _ = self.get_or_create_user(rating['user'])
             self.console_log(f"Updating ratings for comment {comment.id}")
             models_comments.Like.objects.get_or_create(comment=comment, user=user)
 
@@ -113,7 +115,7 @@ class ImportCommand(BaseCommand):
             comment = models_comments.Comment.objects.get(slug=str(comment_doc['_id']))
         except models_comments.Comment.DoesNotExist:
             # Get the comment author
-            user = self.get_or_create_user(comment_doc['user'])
+            user, _ = self.get_or_create_user(comment_doc['user'])
             comment = models_comments.Comment.objects.create(
                 message=comment_doc['properties']['content'],
                 user=user,
@@ -232,7 +234,7 @@ class ImportCommand(BaseCommand):
         static_asset.date_updated = pytz.utc.localize(file_doc['_updated'])
         # Update content_type
         static_asset.content_type = file_doc['content_type']
-        static_asset.user = self.get_or_create_user(file_doc['user'])
+        static_asset.user, _ = self.get_or_create_user(file_doc['user'])
         static_asset.save()
 
         self.reconcile_file_field(file_doc['_id'], static_asset, 'source')
