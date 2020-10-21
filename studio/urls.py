@@ -14,6 +14,8 @@ import profiles.urls
 import static_assets.urls
 
 from common.views.home import home as home_view, welcome as welcome_view
+import common.views.errors as error_views
+from django.views.generic import TemplateView
 
 admin.site.site_header = settings.ADMIN_SITE_HEADER
 admin.site.site_title = settings.ADMIN_SITE_TITLE
@@ -35,8 +37,15 @@ urlpatterns = [
     path('', include(static_assets.urls)),
 ]
 
+handler400 = error_views.ErrorView.as_view(template_name='common/errors/400.html', status=400)
+handler403 = error_views.ErrorView.as_view(template_name='common/errors/403.html', status=403)
+handler404 = error_views.ErrorView.as_view(template_name='common/errors/404.html', status=404)
+handler500 = error_views.ErrorView.as_view(template_name='common/errors/500.html', status=500)
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # Test different error pages by changing the template (400.html, 403.html, etc.)
+    urlpatterns += [path('error', TemplateView.as_view(template_name='common/errors/404.html'))]
 
     import debug_toolbar
 

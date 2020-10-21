@@ -1,0 +1,4 @@
+{% extends 'common/errors/base.html' %} {% block page_title %}Page Not Found{% endblock %} {% block errorbody %}
+<h1>Page Not Found</h1>
+<p>The page you tried to reach does not exist.</p>
+<p>Try <a href="{% url 'home' %}">the frontpage</a> instead.</p>{% endblock %}
