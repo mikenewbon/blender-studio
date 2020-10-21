@@ -2,6 +2,7 @@
 
 {% load static %}
 {% load pipeline %}
+{% load common_extras %}
 
 {% block scripts %}
 {{ block.super }}
@@ -49,7 +50,7 @@
       </div>
     </div>
 
-    <section class="mb-3">{{ section.text }}</section>
+    <section class="mb-3">{% with_shortcodes section.text %}</section>
 
     {% comment %} <div class="card card-dark d-md-none">
       <div class="card-body">
