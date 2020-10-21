@@ -62,6 +62,10 @@ class ImportCommand(BaseCommand):
                 self.console_log(f"File {static_asset.original_filename} is not a video, skipping")
                 continue
 
+            if not getattr(static_asset, 'video'):
+                self.console_log(f"File {static_asset.original_filename} does not exist, skipping")
+                continue
+
             # Get or create video progress
             try:
                 progress = models_static_assets.UserVideoProgress.objects.get(
