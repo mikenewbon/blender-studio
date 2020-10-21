@@ -1,5 +1,6 @@
 {% extends 'training/base_with_navigation.html' %}
 {% load static %}
+{% load common_extras %}
 
 {% block breadcrumbs %}
 {% comment %} <nav class="navbar-secondary" aria-label="breadcrumbs">
@@ -49,7 +50,7 @@
 
         </div>
       </div>
-      <section class="mb-3">{{ training.summary }}</section>
+      <section class="mb-3">{% with_shortcodes training.summary %}</section>
     </div>
 
 
