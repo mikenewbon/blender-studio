@@ -53,6 +53,17 @@
     width: 50%;
   }
 
+  &.folder {
+    .file-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        height: 100%;
+      }
+    }
+  }
 }
 
 .file-header {
@@ -64,7 +75,7 @@
   position: relative;
   width: 100%;
 
-  .file-modal-link {
+  a {
     align-items: center;
     display: flex;
     height: 100%;
