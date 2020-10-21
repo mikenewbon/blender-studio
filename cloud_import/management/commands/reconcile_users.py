@@ -34,10 +34,13 @@ class Command(ImportCommand):
         is_forced = options['force']
         if options['all']:
             mongo.users_collection.create_index([('_updated', pymongo.DESCENDING)])
-            for user_doc in mongo.users_collection.find({'_deleted': {'$ne': True}}).sort(
-                '_updated', pymongo.DESCENDING
-            ):
+            # Disable cursor timeout for this query, as it take several minutes to run
+            cursor = mongo.users_collection.find(
+                {'_deleted': {'$ne': True}}, no_cursor_timeout=True
+            ).sort('_updated', pymongo.DESCENDING)
+            for user_doc in cursor:
                 self.reconcile_user_with_view_progress(user_doc, is_forced)
+            cursor.close()
             return
 
         for username in options['users']:
