@@ -47,9 +47,6 @@ class ImportCommand(BaseCommand):
                 file_doc = mongo.files_collection.find_one(
                     {'_id': ObjectId(node['properties']['file'])}
                 )
-                if file_doc['content_type'].split('/')[0] != 'video':
-                    self.console_log(f"File {file_doc['filename']} is not a video, skipping")
-                    continue
                 if 'picture' in node:
                     thumbnail_file_doc = mongo.files_collection.find_one(
                         {'_id': ObjectId(node['picture'])}
@@ -60,6 +57,10 @@ class ImportCommand(BaseCommand):
                 self.console_log(f"Create asset_id asset for {node['properties']['file']}")
 
                 static_asset = self.get_or_create_static_asset(file_doc, thumbnail_file_doc)
+
+            if static_asset.source_type != 'video':
+                self.console_log(f"File {static_asset.original_filename} is not a video, skipping")
+                continue
 
             # Get or create video progress
             try:
