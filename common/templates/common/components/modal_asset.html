@@ -51,12 +51,13 @@
         {% endif %}
       </div>
       <div class="modal-body">
-        <div class="d-none d-md-block">
-          <p class="subtitle small">{{ asset.static_asset.get_source_type_display }}</p>
-          <h2 class="mb-0">{{ asset.name }}</h2>
-        </div>
-        <div class="training-toolbar-container">
-          <div class="training-toolbar-details">
+
+        <div class="row align-items-start">
+          <div class="col-12 col-md mb-2 mb-md-3">
+            <div class="d-none d-md-block">
+              <p class="subtitle small">{{ asset.static_asset.get_source_type_display }}</p>
+              <h2 class="">{{ asset.name }}</h2>
+            </div>
             <div class="text-muted x-small">
               <p class="d-inline mr-2">{{ asset.date_created|date:"jS F Y" }}</p>
               {% if asset.static_asset.license %}
@@ -74,58 +75,70 @@
               {% endif %}
             </div>
           </div>
+          <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
+            <div class="training-toolbar-container">
 
-          <div class="file-toolbar">
+              <div class="file-toolbar">
 
-            {% if user.is_anonymous and not asset.is_free %}
-            {% comment %} TODO(Mike + Anna) Impliment Asset likes {% endcomment %}
-            {% comment %} <button disabled class="btn disabled btn-sm btn-dark btn-icon"><i class="material-icons">favorite_border</i> <span class="likes-count">0</span></button> {% endcomment %}
-            <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to Download</button>
-            {% else %}
-            {% comment %} <a class="btn btn-sm btn-dark">
-              <i class="material-icons">favorite_border</i>
-              Like
-            </a> {% endcomment %}
-            <a href="{{ asset.static_asset.source.url }}" download class="btn btn-sm btn-dark">Download</a>
-            {% endif %}
+                {% if user.is_anonymous and not asset.is_free %}
+                {% comment %} TODO(Mike + Anna) Impliment Asset likes {% endcomment %}
+                {% comment %} <button disabled class="btn disabled btn-sm btn-dark btn-icon"><i
+                    class="material-icons">favorite_border</i> <span class="likes-count">0</span></button>
+                {% endcomment %}
+                <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to
+                  Download</button>
+                {% else %}
+                {% comment %} <a class="btn btn-sm btn-dark">
+                  <i class="material-icons">favorite_border</i>
+                  Like
+                </a> {% endcomment %}
+                <a href="{{ asset.static_asset.source.url }}" download class="btn btn-sm btn-dark">Download</a>
+                {% endif %}
 
-            <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
-              <i class="material-icons">more_horiz</i>
-            </button>
+                <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
+                  <i class="material-icons">more_horiz</i>
+                </button>
 
-            <div class="dropdown-menu dropdown-menu-right">
-              <a href="google.com" class="dropdown-item">
-                <i class="material-icons">flag</i>
-                <span>Report Problem</span>
-              </a>
-              {% if user_can_edit_asset %}
-              <a href="{{ asset.admin_url }}" target="_blank" class="dropdown-item">
-                <i class="material-icons">create</i>
-                <span>Admin Edit</span>
-              </a>
-              {% endif %}
+                <div class="dropdown-menu dropdown-menu-right">
+                  <a href="google.com" class="dropdown-item">
+                    <i class="material-icons">flag</i>
+                    <span>Report Problem</span>
+                  </a>
+                  {% if user_can_edit_asset %}
+                  <a href="{{ asset.admin_url }}" target="_blank" class="dropdown-item">
+                    <i class="material-icons">create</i>
+                    <span>Admin Edit</span>
+                  </a>
+                  {% endif %}
+                </div>
+
+              </div>
             </div>
-
           </div>
         </div>
+
+
+
         <div class="row mb-2">
-        {% if asset.static_asset.author_image_url %}
+          {% if asset.static_asset.author_image_url %}
           <div style="background-image:url('{{ asset.static_asset.author_image_url }}');" class="profile ml-2">
-          {% else %}
-          <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');" class="profile ml-2">
-          {% endif %}
-          </div>
-          <div class="col-auto">
-            <p class="subtitle text-white-50 x-small">Author</p>
-            <h4 class="comment-name">{{ asset.static_asset.author_name }}</h4>
+            {% else %}
+            <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');"
+              class="profile ml-2">
+              {% endif %}
+            </div>
+            <div class="col-auto">
+              <p class="subtitle text-white-50 x-small">Author</p>
+              <h4 class="comment-name">{{ asset.static_asset.author_name }}</h4>
+            </div>
           </div>
         </div>
         {% with_shortcodes asset.description|safe %}
 
-        <section class="mt-3">{% include 'comments/components/comment_section.html' %}</section>
+          <section class="mt-3">{% include 'comments/components/comment_section.html' %}</section>
 
+        </div>
       </div>
-    </div>
 
+    </div>
   </div>
-</div>

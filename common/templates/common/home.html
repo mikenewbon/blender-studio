@@ -34,7 +34,7 @@
 
   <section class="mb-4">
 
-    <div class="row justify-content-center mb-2 mb-md-3">
+    <div class="row justify-content-center mb-2">
       <div class="col-md">
         <h2 class="mb-0">Latest Training</h2>
         <p class="mb-0">Want to see more? <a href="/training">Explore all training</a></p>
@@ -84,7 +84,7 @@
 
   <section class="mb-4">
 
-    <div class="row justify-content-center mb-2 mb-md-3">
+    <div class="row justify-content-center mb-2">
       <div class="col-md">
         <h2 class="mb-0">Latest Training</h2>
         <p class="mb-0">Want to see more? <a href="/training">Explore all training</a></p>
@@ -118,11 +118,12 @@
         </div>
       </div>
     </div>
-
+  </section>
   <section class="mb-4">
-    <div class="row justify-content-center mb-3">
+    <div class="row justify-content-center mb-2">
       <div class="col">
-        <h2 class="mb-0">From the archives</h2>
+        <h2 class="mb-0">From The Archives</h2>
+        <p class="mb-0">Explore the depths of the Blender cloud and jump in somewhere random!</p>
       </div>
       <div class="col-auto carousel-card-toolbar">
         <a class="btn btn-lg btn-transparent btn-icon {% if featured_film_assets|length <= 1 %}onlyOne{% elif featured_film_assets|length <= 4 %} lessThanFour {% endif %}"
@@ -136,7 +137,8 @@
       </div>
     </div>
     <div class="row">
-      <div id="fromTheArchives" class="carousel carousel-card-4 slide w-100" data-touch="true" data-ride="carousel" data-interval="0">
+      <div id="fromTheArchives" class="carousel carousel-card-4 slide w-100" data-touch="true" data-ride="carousel"
+        data-interval="0">
         <div class="carousel-inner w-100" role="listbox">
           <div class="carousel-item active">
             {% for asset in featured_film_assets|slice:':1' %}

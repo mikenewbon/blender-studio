@@ -21,33 +21,39 @@
   <img src="{{ training.picture_header }}" class="img-fluid img-width-100 rounded mb-3" alt="{{ training.name }}">
   <div class="row">
     <div class="col">
-      <p class="subtitle">{{ training.type.label }}</p>
-      <h2 class="">{{ training.name }}</h2>
-      <!--<p>{{ training.description }}</p>-->
-      <div class="training-toolbar-container">
 
-        <div class="pills training-toolbar-pills">
-          {% for tag in training.tags %}
-          {% include 'common/components/cards/pill.html' with label=tag %}
-          {% endfor %}
+      <div class="row align-items-start">
+        <div class="col-12 col-md mb-2 mb-md-3">
+          <p class="subtitle">{{ training.type.label }}</p>
+          <h2 class="">{{ training.name }}</h2>
         </div>
+        <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
+          <div class="training-toolbar-container">
 
-        <div class="training-toolbar">
-          <a class="btn btn-sm btn-dark">
-            <i class="material-icons">add</i>
-            Save
-          </a>
+            <div class="pills training-toolbar-pills">
+              {% for tag in training.tags %}
+              {% include 'common/components/cards/pill.html' with label=tag %}
+              {% endfor %}
+            </div>
 
-          <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
-            <i class="material-icons btn-material-icons">more_horiz</i>
-          </button>
-          <div class="dropdown-menu dropdown-menu-right">
-            <a href="#" class="dropdown-item">
-              <i class="material-icons">flag</i>
-              <span>Report Problem</span>
-            </a>
+            <div class="training-toolbar">
+              <a class="btn btn-sm btn-dark">
+                <i class="material-icons">add</i>
+                Save
+              </a>
+
+              <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
+                <i class="material-icons btn-material-icons">more_horiz</i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-right">
+                <a href="#" class="dropdown-item">
+                  <i class="material-icons">flag</i>
+                  <span>Report Problem</span>
+                </a>
+              </div>
+
+            </div>
           </div>
-
         </div>
       </div>
       <section class="mb-3">{% with_shortcodes training.summary %}</section>

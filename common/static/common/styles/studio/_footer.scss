@@ -5,7 +5,6 @@ footer {
 
   border-top: 1px solid $input-gray;
   margin-top: auto;
-  z-index: $zindex-dropdown;
 
   ul {
     @include list-unstyled;
