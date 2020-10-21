@@ -17,7 +17,8 @@
     {% if request.user.is_authenticated or section.is_free %}
     {% include 'common/components/video_player.html' with url=video.url progress_url=video.progress_url start_position=video.start_position %}
     {% else %}
-    {% include 'common/components/video_player_locked.html' with url=video.url progress_url=video.progress_url start_position=video.start_position %}
+    {% comment %} TODO(Mike): Add video thumbnails when created {% endcomment %}
+    {% include 'common/components/content_locked.html' with background=training.picture_header %}
     {% endif %}
   </div>
 </div>

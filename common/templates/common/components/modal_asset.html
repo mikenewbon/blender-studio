@@ -37,7 +37,8 @@
           </button>
         </div>
         {% if user.is_anonymous and not asset.is_free %}
-        {% include 'common/components/video_player_locked.html' %}
+
+        {% include 'common/components/content_locked.html' with background=asset.static_asset.thumbnail_s_url %}
         {% else %}
         {% if asset.static_asset.source_type == "video" %}
         {% include 'common/components/video_player.html' with url=asset.static_asset.source.url %}

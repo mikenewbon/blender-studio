@@ -1,10 +1,9 @@
 {% load static %}
-<div class="video-player-locked video-player" {% if progress_url is not none %}data-progress-url="{{ progress_url }}" {% endif %}
-  {% if start_position is not none %}data-start-position="{{ start_position }}" {% endif %}>
+<div class="content-locked">
 
-  <img class="img-fluid" src="{% static 'training/images/placeholders/card.jpg' %}">
+  <img class="img-fluid" src="{% if background %}{{ background }}{% else %}{% static 'training/images/placeholders/card_training.png' %}{% endif %}">
 
-  <div class="video-player-locked-text">
+  <div class="content-locked-text">
     <h3>You need to login to view this content</h3>
     <p class="mb-3">You can join Blender Cloud for €9.90/month and get access to all of our training & film content
       instantly!</p>

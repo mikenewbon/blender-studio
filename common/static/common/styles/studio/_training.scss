@@ -24,7 +24,7 @@
 }
 
 .training-video {
-  .video-player {
+  .video-player, .content-locked {
     @include media-breakpoint-down(sm) {
       margin: -20px -20px 0;
       border-radius: 0;
@@ -35,8 +35,15 @@
   }
 }
 
-.video-player-locked {
+.modal{
+  .content-locked{
+    width: 100%;
+  }
+}
+
+.content-locked {
   position: relative;
+  // width: 100%;
 
   &::after {
     background: $highlight-black-xstrong;
@@ -63,5 +70,9 @@
 
   .login-button {
     color: white;
+  }
+
+  img {
+    width: 100%!important;
   }
 }
