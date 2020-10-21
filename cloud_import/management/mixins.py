@@ -35,19 +35,31 @@ class ImportCommand(BaseCommand):
             return
         for node_id, values in user_doc['nodes']['view_progress'].items():
             node = mongo.nodes_collection.find_one({'_id': ObjectId(node_id)})
-            file_doc = mongo.files_collection.find_one(
-                {'_id': ObjectId(node['properties']['file'])}
-            )
-            if file_doc['content_type'].split('/')[0] != 'video':
-                self.console_log(f"File {file_doc['filename']} is not a video, skipping")
-                continue
-            if 'picture' in node:
-                thumbnail_file_doc = mongo.files_collection.find_one(
-                    {'_id': ObjectId(node['picture'])}
+
+            try:
+                static_asset = models_static_assets.StaticAsset.objects.get(
+                    slug=str(node['properties']['file'])
                 )
-            else:
-                thumbnail_file_doc = None
-            static_asset = self.get_or_create_static_asset(file_doc, thumbnail_file_doc)
+                self.console_log(
+                    f"Found asset_id {static_asset.id} for {node['properties']['file']}"
+                )
+            except models_static_assets.StaticAsset.DoesNotExist:
+                file_doc = mongo.files_collection.find_one(
+                    {'_id': ObjectId(node['properties']['file'])}
+                )
+                if file_doc['content_type'].split('/')[0] != 'video':
+                    self.console_log(f"File {file_doc['filename']} is not a video, skipping")
+                    continue
+                if 'picture' in node:
+                    thumbnail_file_doc = mongo.files_collection.find_one(
+                        {'_id': ObjectId(node['picture'])}
+                    )
+                else:
+                    thumbnail_file_doc = None
+
+                self.console_log(f"Create asset_id asset for {node['properties']['file']}")
+
+                static_asset = self.get_or_create_static_asset(file_doc, thumbnail_file_doc)
 
             # Get or create video progress
             try:
