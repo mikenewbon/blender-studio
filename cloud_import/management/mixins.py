@@ -27,7 +27,7 @@ class ImportCommand(BaseCommand):
         except User.DoesNotExist:
             user = User.objects.create(username=user_doc['username'], email=user_doc['email'])
             self.console_log(f"Created user {user.username}")
-        self.reconcile_user(user, user_doc)
+            self.reconcile_user(user, user_doc)
         return user
 
     def reconcile_user_view_progress(self, user, user_doc):
