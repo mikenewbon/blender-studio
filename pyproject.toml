@@ -27,6 +27,7 @@ attrs = "^19.3.0"
 Flask = "1.0.3"
 bleach = "^3.2.1"
 shortcodes = "2.5"
+sentry-sdk = "^0.19.1"
 
 [tool.poetry.dev-dependencies]
 black = {version = "*", allow-prereleases = true}
