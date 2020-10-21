@@ -146,6 +146,10 @@
     object-fit: cover;
     width: 100%;
   }
+
+  .file-icon {
+    object-fit: contain;
+  }
 }
 
 .card-grid-item {
