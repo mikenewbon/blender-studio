@@ -1,5 +1,19 @@
 import unittest
+
+from django.contrib.auth.models import Group, AnonymousUser
+from django.test import TestCase
+from django.test.client import RequestFactory
+
 from common.shortcodes import comment_shortcodes, render
+from common.tests.factories.users import UserFactory
+
+
+class TestCaseWithRequest(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.factory = RequestFactory()
+        self.request = self.factory.get('/')
+        self.request.user = AnonymousUser()
 
 
 class EscapeHTMLTest(unittest.TestCase):
@@ -35,7 +49,7 @@ class DemoTest(unittest.TestCase):
         self.assertEqual('<dl><dt>test</dt><dt>ü</dt><dd>é</dd></dl>', render('{test ü="é"}'))
 
 
-class YouTubeTest(unittest.TestCase):
+class YouTubeTest(TestCaseWithRequest):
     def test_missing(self):
         self.assertEqual('{youtube missing YouTube ID/URL}', render('{youtube}'))
 
@@ -95,80 +109,107 @@ class YouTubeTest(unittest.TestCase):
             render('{youtube "https://www.youtube.com/watch?v=NwVGvcIrNWA" width=5 height="3"}'),
         )
 
-    @unittest.skip('not implemented TODO')
-    def test_user_no_cap(self):
-        with self.app.app_context():
-            # Anonymous user, so no subscriber capability.
-            self.assertEqual('', render('{youtube ABCDEF cap=subscriber}'))
-            self.assertEqual('', render('{youtube ABCDEF cap="subscriber"}'))
-            self.assertEqual(
-                '<p class="shortcode nocap">Aðeins áskrifendur hafa aðgang að þessu efni.</p>',
-                render(
-                    '{youtube ABCDEF'
-                    ' cap="subscriber"'
-                    ' nocap="Aðeins áskrifendur hafa aðgang að þessu efni."}'
-                ),
-            )
+    def test_user_no_group(self):
+        context = {'request': self.request}
+        self.assertEqual('', render('{youtube ABCDEF group=subscriber}', context))
+        self.assertEqual('', render('{youtube ABCDEF group="subscriber"}', context))
+        self.assertEqual(
+            '<p class="shortcode nogroup">Aðeins áskrifendur hafa aðgang að þessu efni.</p>',
+            render(
+                '{youtube ABCDEF'
+                ' group="subscriber"'
+                ' nogroup="Aðeins áskrifendur hafa aðgang að þessu efni."}',
+                context,
+            ),
+        )
 
 
-class IFrameTest(unittest.TestCase):
-    @unittest.skip('not implemented TODO')
-    def test_missing_cap(self):
+class IFrameTest(TestCaseWithRequest):
+    def test_missing_group(self):
         md = '{iframe src="https://docs.python.org/3/library/"}'
         expect = '<iframe src="https://docs.python.org/3/library/" class="shortcode"></iframe>'
         self.assertEqual(expect, render(md))
 
-    @unittest.skip('not implemented TODO')
-    def test_user_no_cap(self):
-        with self.app.app_context():
-            # Anonymous user, so no subscriber capability.
-            self.assertEqual('', render('{iframe cap=subscriber}'))
-            self.assertEqual('', render('{iframe cap="subscriber"}'))
-            self.assertEqual(
-                '<p class="shortcode nocap">Aðeins áskrifendur hafa aðgang að þessu efni.</p>',
-                render(
-                    '{iframe'
-                    ' cap="subscriber"'
-                    ' nocap="Aðeins áskrifendur hafa aðgang að þessu efni."}'
-                ),
-            )
+    def test_no_user_no_group(self):
+        self.assertEqual('', render('{iframe group=subscriber}'))
+        self.assertEqual('', render('{iframe group="subscriber"}'))
+        self.assertEqual(
+            '<p class="shortcode nogroup">Aðeins áskrifendur hafa aðgang að þessu efni.</p>',
+            render(
+                '{iframe'
+                ' group="subscriber"'
+                ' nogroup="Aðeins áskrifendur hafa aðgang að þessu efni."}'
+            ),
+        )
 
-    @unittest.skip('not implemented TODO')
-    def test_user_has_cap(self):
-        roles = {'demo'}
-        uid = self.create_user(roles=roles)
+    def test_anonymous_user_no_group(self):
+        context = {'request': self.request}
+        self.assertEqual('', render('{iframe group=subscriber}', context))
+        self.assertEqual('', render('{iframe group="subscriber"}', context))
+        self.assertEqual(
+            '<p class="shortcode nogroup">Aðeins áskrifendur hafa aðgang að þessu efni.</p>',
+            render(
+                '{iframe'
+                ' group="subscriber"'
+                ' nogroup="Aðeins áskrifendur hafa aðgang að þessu efni."}',
+                context,
+            ),
+        )
 
-        with self.app.app_context():
-            self.login_api_as(uid, roles=roles)
-            self.assertEqual(
-                '<iframe class="shortcode"></iframe>', render('{iframe cap=subscriber}')
-            )
-            self.assertEqual(
-                '<iframe class="shortcode"></iframe>', render('{iframe cap="subscriber"}')
-            )
-            self.assertEqual(
-                '<iframe class="shortcode"></iframe>', render('{iframe cap="subscriber" nocap="x"}')
-            )
+    def test_user_nocap(self):
+        user = UserFactory(email='mail@example.com')
+        group, _ = Group.objects.get_or_create(name='demo')
+        user.groups.add(group)
 
-    @unittest.skip('not implemented TODO')
+        self.request.user = user
+        context = {'request': self.request}
+        self.assertEqual(
+            '<iframe class="shortcode"></iframe>', render('{iframe cap=subscriber}', context)
+        )
+        self.assertEqual(
+            '<iframe class="shortcode"></iframe>', render('{iframe cap="subscriber"}', context)
+        )
+        self.assertEqual(
+            '<iframe class="shortcode"></iframe>',
+            render('{iframe cap="subscriber" nocap="x"}', context),
+        )
+
+    def test_user_nogroup(self):
+        user = UserFactory(email='mail@example.com')
+        group, _ = Group.objects.get_or_create(name='demo')
+        user.groups.add(group)
+
+        self.request.user = user
+        context = {'request': self.request}
+        self.assertEqual(
+            '<iframe class="shortcode"></iframe>', render('{iframe cap=subscriber}', context)
+        )
+        self.assertEqual(
+            '<iframe class="shortcode"></iframe>', render('{iframe cap="subscriber"}', context)
+        )
+        self.assertEqual(
+            '<iframe class="shortcode"></iframe>',
+            render('{iframe group="subscriber" nogroup="x"}', context),
+        )
+
     def test_attributes(self):
-        roles = {'demo'}
-        uid = self.create_user(roles=roles)
+        user = UserFactory(email='mail@example.com')
+        group, _ = Group.objects.get_or_create(name='demo')
+        user.groups.add(group)
 
         md = (
-            '{iframe cap=subscriber zzz=xxx class="bigger" '
+            '{iframe group=subscriber zzz=xxx class="bigger" '
             'src="https://docs.python.org/3/library/xml.etree.elementtree.html#functions"}'
         )
         expect = (
-            '<iframe class="shortcode bigger"'
-            ' src="https://docs.python.org/3/library/xml.etree.elementtree.html#functions"'
-            ' zzz="xxx">'
+            '<iframe zzz="xxx" class="shortcode bigger"'
+            ' src="https://docs.python.org/3/library/xml.etree.elementtree.html#functions">'
             '</iframe>'
         )
 
-        with self.app.app_context():
-            self.login_api_as(uid, roles=roles)
-            self.assertEqual(expect, render(md))
+        self.request.user = user
+        context = {'request': self.request}
+        self.assertEqual(expect, render(md, context=context))
 
 
 @unittest.skip('not implemented TODO')
@@ -193,11 +234,7 @@ class AttachmentTest(unittest.TestCase):
             }
         )
 
-        node_properties = {
-            'attachments': {
-                'img': {'oid': oid},
-            }
-        }
+        node_properties = {'attachments': {'img': {'oid': oid}}}
 
         node_doc = {'properties': node_properties}
 

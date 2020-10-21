@@ -1,5 +1,6 @@
 from typing import Optional, Union, Dict, List
 
+from django.contrib.auth.models import User
 from django.core import paginator
 from django.db.models import QuerySet
 from django.db.models.base import Model
@@ -11,13 +12,17 @@ from films.models import ProductionLog
 from training.models import Training
 
 DEFAULT_FEED_PAGE_SIZE = 10
+# Certain permissions can be defined by multiple groups
+EQUVALENT_GROUPS = {
+    'subscriber': ['demo'],
+}
 
 
 def get_activity_feed_page(
     page_number: Optional[Union[int, str]] = 1,
     per_page: Optional[Union[int, str]] = DEFAULT_FEED_PAGE_SIZE,
 ) -> paginator.Page:
-    """Fetches a page of the latest Post Revision, Production Log, and Training objects.
+    """Fetch a page of the latest Post Revision, Production Log, and Training objects.
 
     The objects are sorted by their date_created attribute.
     The code has been adopted from the post:
@@ -85,3 +90,11 @@ def get_activity_feed_page(
         record['object'] = fetched[key]
 
     return records_page
+
+
+def has_group(user: User, group_name: str) -> bool:
+    """Check if given user is assigned to a given group, or its equivalent."""
+    if not user or user.is_anonymous:
+        return False
+    equivalent_groups = {group_name, *EQUVALENT_GROUPS.get(group_name, [])}
+    return user.groups.filter(name__in=equivalent_groups).exists()

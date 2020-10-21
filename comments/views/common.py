@@ -7,7 +7,6 @@ import bleach
 from comments import typed_templates
 from comments.models import Comment
 from common import markdown
-from common.shortcodes import render as with_shortcodes
 from common.types import assert_cast
 
 
@@ -34,7 +33,7 @@ def comments_to_template_type(
             full_name=comment.full_name,
             date=comment.date_created,
             message=assert_cast(str, comment.message),
-            message_html=assert_cast(str, with_shortcodes(comment.message_html)),
+            message_html=assert_cast(str, comment.message_html),
             like_url=comment.like_url,
             liked=assert_cast(bool, getattr(comment, 'liked')),
             likes=assert_cast(int, getattr(comment, 'number_of_likes')),

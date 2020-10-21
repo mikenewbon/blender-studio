@@ -6,7 +6,7 @@ module assumes its input is HTML-with-shortcodes.
 
 See mulholland.xyz/docs/shortcodes/.
 
-{iframe src='http://hey' has-cap='subscriber'}
+{iframe src='http://hey' group='subscriber' nogroup='Please subscribe to view this content'}
 
 NOTE: nested braces fail, so something like {shortcode abc='{}'} is not
 supported.
@@ -21,6 +21,8 @@ import typing
 import urllib.parse
 
 import shortcodes
+
+from common import queries
 
 _parser: shortcodes.Parser = None
 _commented_parser: shortcodes.Parser = None
@@ -42,21 +44,21 @@ def shortcode(name: str):
     return decorator
 
 
-class capcheck:
+class group_check:
     """Decorator for shortcodes.
 
-    On call, check for capabilities before calling the function. If the user does not
-    have a capability, display a message insdead of the content.
+    On call, check if the user is in a required group, otherwise,
+    display a message instead of the content.
 
     kwargs:
-        - 'cap': Capability required for viewing.
-        - 'nocap': Optional, text shown when the user does not have this capability.
+        - 'group': Name of the group required for viewing.
+        - 'nogroup': Optional, text shown when the user is not in the expected group.
         - others: Passed to the decorated shortcode.
     """
 
     def __init__(self, decorated):
         """Initialise the decorator."""
-        assert hasattr(decorated, '__call__'), '@capcheck should be used on callables.'
+        assert hasattr(decorated, '__call__'), '@group_check should be used on callables.'
         if isinstance(decorated, type):
             as_callable = decorated()
         else:
@@ -71,22 +73,24 @@ class capcheck:
         kwargs: typing.Dict[str, str],
     ) -> str:
         """Check user for subscription status, roles etc."""
-        # TODO(anna) check request.user for groups, subscriber status etc.
-        current_user = None
-        cap = kwargs.pop('cap', '')
-        if cap:
-            nocap = kwargs.pop('nocap', '')
-            if not current_user.has_cap(cap):
-                if not nocap:
+        current_user = getattr(context.get('request'), 'user', None) if context else None
+        if current_user is None:
+            log.debug('Current user is not available, unable to check for groups')
+        # FIXME(anna) support cap/nocap, in case there's existing content using this
+        group_name = kwargs.pop('group', kwargs.pop('cap', ''))
+        if group_name:
+            fallback = kwargs.pop('nogroup', kwargs.pop('nocap', ''))
+            if not queries.has_group(current_user, group_name):
+                if not fallback:
                     return ''
-                html = html_module.escape(nocap)
-                return f'<p class="shortcode nocap">{html}</p>'
+                html = html_module.escape(fallback)
+                return f'<p class="shortcode nogroup">{html}</p>'
 
         return self.decorated(context, content, pargs, kwargs)
 
 
 @shortcode('test')
-@capcheck
+@group_check
 class Test:
     # noqa: D101
     def __call__(
@@ -109,7 +113,7 @@ class Test:
 
 
 @shortcode('youtube')
-@capcheck
+@group_check
 class YouTube:
     # noqa: D101
     log = log.getChild('YouTube')
@@ -179,14 +183,14 @@ class YouTube:
 
 
 @shortcode('iframe')
-@capcheck
+@group_check
 def iframe(
     context: typing.Any, content: str, pargs: typing.List[str], kwargs: typing.Dict[str, str]
 ) -> str:
-    """Show an iframe to users with the required capability.
+    """Show an iframe to users with from required group.
 
     kwargs:
-        - 'cap': Capability required for viewing.
+        - 'group': Group required for viewing.
         - others: Turned into attributes for the iframe element.
     """
     import xml.etree.ElementTree as ET
@@ -198,7 +202,7 @@ def iframe(
 
 
 @shortcode('attachment')
-@capcheck
+@group_check
 class Attachment:
     # noqa: D101
 
