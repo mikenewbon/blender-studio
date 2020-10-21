@@ -30,7 +30,7 @@ class SessionMiddleware:
         """
         if settings.BLENDER_CLOUD_AUTH_ENABLED and (
             settings.BLENDER_CLOUD_DOMAIN is None
-            or request.META['HTTP_HOST'] == settings.BLENDER_CLOUD_DOMAIN
+            or request.META.get('HTTP_X_FORWARDED_HOST') == settings.BLENDER_CLOUD_DOMAIN
         ):
             self._modify_session(request)
 
