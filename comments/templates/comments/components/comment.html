@@ -1,8 +1,10 @@
 {% load static %}
+{% load common_extras %}
 
 <div
   class="comment {% if comment.is_archived and comment.is_top_level %}archived{% endif %} {% if comment.is_top_level %}top-level-comment{% endif %}"
   data-comment-id="{{ comment.id }}"
+  data-message="{{ comment.message }}"
   data-profile-image-url="{{ comment.profile_image_url }}"
   data-like-url="{{ comment.like_url }}"
   {% if comment.delete_tree_url is not None %}
@@ -42,7 +44,7 @@
       <div class="row comment-content-inner">
         <div class="comment-body">
 
-          <p class="comment-text">{{ comment.message | safe }}</p>
+          <p class="comment-text">{% with_shortcodes comment.message_html %}</p>
 
           {% if not comment.is_deleted %}
           <div class="comment-toolbar row">

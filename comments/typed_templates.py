@@ -23,6 +23,7 @@ class CommentTree:
     full_name: str
     profile_image_url: str
     message: str
+    message_html: str
     like_url: Optional[str]
     liked: bool
     likes: int
@@ -40,6 +41,7 @@ class CommentTree:
 class DeletedCommentTree(CommentTree):
     full_name: Literal['[deleted]'] = '[deleted]'
     message: Literal['[deleted]'] = '[deleted]'
+    message_html: Literal['[deleted]'] = '[deleted]'
     profile_image_url: Literal[None] = None
     like_url: Literal[None] = None
     liked: Literal[False] = False

@@ -1,5 +1,6 @@
 {% extends 'common/base.html' %}
 {% load static %}
+{% load common_extras %}
 
 {% block content %}
 <div class="jumbotron jumbotron-fluid jumbotron-blog">
@@ -68,7 +69,7 @@
   <div class="mb-3">
 
   </div>
-  <div>{{ post.html_content|safe }}</div>
+  <div>{% with_shortcodes post.html_content %}</div>
 
   <section class="mb-3">{% include 'comments/components/comment_section.html' %}</section>
 

@@ -11,6 +11,7 @@ window.comments = (function comments() {
       this.hardDeleteTreeUrl = element.dataset.hardDeleteTreeUrl;
       this.archiveUrl = element.dataset.archiveUrl;
       this.profileImageUrl = element.dataset.profileImageUrl;
+      this.message_ = element.dataset.message;
       this.element = element;
       this._setupEventListeners();
     }
@@ -327,6 +328,7 @@ window.comments = (function comments() {
     profileImageUrl,
     dateString,
     message,
+    message_html,
     likeUrl,
     liked,
     likes,
@@ -342,10 +344,11 @@ window.comments = (function comments() {
     element.dataset.editUrl = editUrl;
     element.dataset.deleteUrl = deleteUrl;
     element.dataset.archiveUrl = archiveUrl;
+    element.dataset.message = message;
     element.querySelector('.profile').style.backgroundImage = `url('${profileImageUrl}')`;
     element.querySelector('.comment-name').innerText = fullName;
     element.querySelector('.comment-date').innerText = dateString;
-    element.querySelector('.comment-text').innerText = message;
+    element.querySelector('.comment-text').innerHTML = message_html;
     element.querySelector('.likes-count').innerText = likes;
     if (liked) {
       element.querySelector('.checkbox-like').dataset.checked = 'checked';
@@ -441,6 +444,7 @@ window.comments = (function comments() {
             data.profile_image_url,
             data.date_string,
             data.message,
+            data.message_html,
             data.like_url,
             data.liked,
             data.likes,
@@ -513,6 +517,7 @@ window.comments = (function comments() {
             data.profile_image_url,
             data.date_string,
             data.message,
+            data.message_html,
             data.like_url,
             data.liked,
             data.likes,
@@ -592,6 +597,7 @@ window.comments = (function comments() {
         })
         .then(data => {
           this.comment.message = data.message;
+          this.comment.message_html = data.message_html;
         });
     }
   }

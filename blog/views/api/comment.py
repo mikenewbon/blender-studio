@@ -9,6 +9,7 @@ from django.views.decorators.http import require_POST
 
 from blog.models import PostComment
 from comments.models import Comment
+from common.shortcodes import render as with_shortcodes
 from common.types import assert_cast
 
 
@@ -39,6 +40,7 @@ def comment(request: HttpRequest, *, post_pk: int) -> JsonResponse:
             'profile_image_url': comment.profile_image_url,
             'date_string': comment.date_created.strftime('%d %B %Y - %H:%M'),
             'message': comment.message,
+            'message_html': with_shortcodes(comment.message_html),
             'like_url': comment.like_url,
             'liked': False,
             'likes': 0,

@@ -1,15 +1,20 @@
+# noqa: D100
 from typing import Dict, List, Optional, Sequence
 
 from django.contrib.auth.models import User
+import bleach
 
 from comments import typed_templates
 from comments.models import Comment
+from common import markdown
+from common.shortcodes import render as with_shortcodes
 from common.types import assert_cast
 
 
 def comments_to_template_type(
     comments: Sequence[Comment], comment_url: str, user: User
 ) -> typed_templates.Comments:
+    # noqa: D103
     user_is_moderator = user.has_perm('comments.moderate_comment')
     lookup: Dict[Optional[int], List[Comment]] = {}
     for comment in sorted(comments, key=lambda c: c.date_created, reverse=True):
@@ -20,11 +25,16 @@ def comments_to_template_type(
     def build_tree(comment: Comment) -> typed_templates.CommentTree:
         if comment.is_deleted:
             return build_deleted_tree(comment)
+        # FIXME(anna) remove when all comments have message_html
+        comment.message_html = comment.message_html or markdown.render(
+            bleach.clean(comment.message)
+        )
         return typed_templates.CommentTree(
             id=comment.pk,
             full_name=comment.full_name,
             date=comment.date_created,
-            message=assert_cast(str, comment.message_html),
+            message=assert_cast(str, comment.message),
+            message_html=assert_cast(str, with_shortcodes(comment.message_html)),
             like_url=comment.like_url,
             liked=assert_cast(bool, getattr(comment, 'liked')),
             likes=assert_cast(int, getattr(comment, 'number_of_likes')),
