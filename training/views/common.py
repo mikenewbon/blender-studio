@@ -52,9 +52,8 @@ def section_model_to_template_type(
 def video_model_to_template_type(
     video: models_static_assets.Video, start_position: Optional[datetime.timedelta]
 ) -> typed_templates.types.Video:
-    # TODO(fsiddi) implement url using the actual video variation
     return typed_templates.types.Video(
-        url=video.static_asset.source.url,
+        url=video.default_variation_url,
         progress_url=video.progress_url,
         start_position=None if start_position is None else start_position.total_seconds(),
     )

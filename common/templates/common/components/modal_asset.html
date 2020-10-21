@@ -41,7 +41,7 @@
         {% include 'common/components/content_locked.html' with background=asset.static_asset.thumbnail_s_url %}
         {% else %}
         {% if asset.static_asset.source_type == "video" %}
-        {% include 'common/components/video_player.html' with url=asset.static_asset.source.url %}
+        {% include 'common/components/video_player.html' with url=asset.static_asset.video.default_variation_url %}
         {% else %}
         <a data-toggle="modal" data-target="#file-zoom-modal" class="modal-asset-image-wrapper" href="#"
           data-url="{% url 'api-asset-zoom' asset.id %}">

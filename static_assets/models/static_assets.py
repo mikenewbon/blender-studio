@@ -176,6 +176,15 @@ class Video(models.Model):
     play_count = models.PositiveIntegerField(default=0, editable=False)
 
     @property
+    def default_variation_url(self):
+        default_variation: VideoVariation = self.variations.first()
+        # TODO(fsiddi) ensure that default_variation.source is never None
+        if not default_variation or not default_variation.source:
+            log.warning('Variation for video %i not found' % self.pk)
+            return self.static_asset.source.url
+        return default_variation.source.url
+
+    @property
     def progress_url(self) -> str:
         return reverse('video-progress', kwargs={'video_pk': self.pk})
 
