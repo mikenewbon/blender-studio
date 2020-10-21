@@ -45,15 +45,19 @@ class StaticThumbnailURLMixin:
     """Add `thumbnail_<size>_url` properties generating static cacheable thumbnail URLs."""
 
     @property
-    def thumbnail_m_url(self) -> str:
+    def thumbnail_m_url(self) -> Optional[str]:
         """Return a static URL to a medium-sized thumbnail."""
+        if not self.thumbnail:
+            return None
         return get_thumbnail(
             self.thumbnail, settings.THUMBNAIL_SIZE_M, crop=settings.THUMBNAIL_CROP_MODE
         ).url
 
     @property
-    def thumbnail_s_url(self) -> str:
+    def thumbnail_s_url(self) -> Optional[str]:
         """Return a static URL to a small thumbnail."""
+        if not self.thumbnail:
+            return None
         return get_thumbnail(
             self.thumbnail, settings.THUMBNAIL_SIZE_S, crop=settings.THUMBNAIL_CROP_MODE
         ).url
