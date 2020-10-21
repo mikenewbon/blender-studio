@@ -1,6 +1,8 @@
-import json
 from abc import ABC
-from typing import Union, Dict, Any, Callable, List, Type, TYPE_CHECKING
+from html.parser import HTMLParser
+from io import StringIO
+from typing import Optional, Any, Type, Dict, Union, Callable, List, TYPE_CHECKING
+import json
 
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models.expressions import Value
@@ -17,6 +19,22 @@ from films.models import Film, Asset
 from training.models import Training, Section
 
 SearchableModel = Union[Film, Asset, Training, Section, Revision]
+
+
+class HTMLText(HTMLParser):
+    def __init__(self):
+        """Initialise HTML parser."""
+        super().__init__()
+        self.reset()
+        self.strict = False
+        self.convert_charrefs = True
+        self.text = StringIO()
+
+    def handle_data(self, d):
+        self.text.write(d)
+
+    def get_data(self):
+        return self.text.getvalue()
 
 
 class BaseSearchSerializer(ABC):
@@ -85,9 +103,12 @@ class BaseSearchSerializer(ABC):
         instance_dict['url'] = instance.url
         instance_dict['timestamp'] = instance.date_created.timestamp()
 
+        if hasattr(instance, 'description'):
+            instance_dict['description'] = self.clean_html(instance.description)
+
         if isinstance(instance, Asset):
             instance_dict['thumbnail_url'] = (
-                instance.static_asset.thumbnail_s_url if instance.static_asset.preview else ''
+                '' if not instance.static_asset else instance.static_asset.thumbnail_s_url
             )
         elif isinstance(instance, Section):
             instance_dict['thumbnail_url'] = instance.chapter.training.thumbnail_s_url
@@ -108,3 +129,19 @@ class BaseSearchSerializer(ABC):
             json.dumps(list(qs_values), cls=DjangoJSONEncoder)
         )
         return serialized_data
+
+    @classmethod
+    def clean_html(cls, text: Optional[str]) -> Optional[str]:
+        """Strip HTML tags from given text."""
+        if not text:
+            return text
+        s = HTMLText()
+        s.feed(s.unescape(text))
+        return s.get_data()
+
+    @classmethod
+    def clean_tag(cls, tag: Optional[str]) -> Optional[str]:
+        """Replace '_' and '-' characters with spaces in a given tag."""
+        if not tag:
+            return tag
+        return tag.replace('-', ' ').replace('_', ' ')

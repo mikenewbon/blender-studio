@@ -20,12 +20,11 @@ def comments_to_template_type(
     def build_tree(comment: Comment) -> typed_templates.CommentTree:
         if comment.is_deleted:
             return build_deleted_tree(comment)
-
         return typed_templates.CommentTree(
             id=comment.pk,
             full_name=comment.full_name,
             date=comment.date_created,
-            message=assert_cast(str, comment.message),
+            message=assert_cast(str, comment.message_html),
             like_url=comment.like_url,
             liked=assert_cast(bool, getattr(comment, 'liked')),
             likes=assert_cast(int, getattr(comment, 'number_of_likes')),

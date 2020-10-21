@@ -23,4 +23,4 @@ class UserVideoProgress(mixins.CreatedUpdatedMixin, models.Model):
     position = models.DurationField(help_text='[DD] [[HH:]MM:]ss[.uuuuuu]')
 
     def __str__(self) -> str:
-        return f'Progress of {self.user.username} ({self.user.id}) on Video {self.video.file.path} ({self.video.id})'
+        return f'Progress of {self.user.username} ({self.user.id}) on Video {self.video.id}'

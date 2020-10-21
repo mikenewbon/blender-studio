@@ -42,7 +42,7 @@
       <div class="row comment-content-inner">
         <div class="comment-body">
 
-          <p class="comment-text">{{ comment.message }}</p>
+          <p class="comment-text">{{ comment.message | safe }}</p>
 
           {% if not comment.is_deleted %}
           <div class="comment-toolbar row">

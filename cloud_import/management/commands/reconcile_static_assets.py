@@ -28,21 +28,21 @@ class Command(ImportCommand):
             filename = pathlib.Path(static_asset.source.name).stem
             filename = filename.split('-')[0]
             filename = f"{filename}*"
-            file = None
+            file_doc = None
 
             # First, attempt at looking up the file by uuid
             if static_asset.slug:
-                file = mongo.files_collection.find_one({'_id': ObjectId(static_asset.slug)})
+                file_doc = mongo.files_collection.find_one({'_id': ObjectId(static_asset.slug)})
 
             # Perform various searches using the filename
-            if not file:
-                file = mongo.files_collection.find_one({'name': {'$regex': filename}})
-            if not file:
-                file = mongo.files_collection.find_one({'file_path': {'$regex': filename}})
-            if not file:
-                file = mongo.files_collection.find_one({'md5': {'$regex': filename}})
-            if not file:
+            if not file_doc:
+                file_doc = mongo.files_collection.find_one({'name': {'$regex': filename}})
+            if not file_doc:
+                file_doc = mongo.files_collection.find_one({'file_path': {'$regex': filename}})
+            if not file_doc:
+                file_doc = mongo.files_collection.find_one({'md5': {'$regex': filename}})
+            if not file_doc:
                 self.console_log(f"Missing {static_asset.id}")
                 continue
 
-            self.reconcile_static_asset(file, static_asset)
+            self.reconcile_static_asset(file_doc, static_asset)

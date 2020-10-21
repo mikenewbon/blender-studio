@@ -136,8 +136,9 @@ const renderHits = (renderOptions, isFirstRender) => {
                 <div class="card-subtitle-group">
                   <p class="card-subtitle">${ titleCase(item.type) }</p>
                   <p class="card-subtitle">
+                  ${ !!(item.difficulty) ? `
                     <i class="material-icons icon-inline small">school</i>
-                    ${ titleCase(item.difficulty) }
+                    ${ titleCase(item.difficulty) }` : ''}
                   </p>
                 </div>
                 <h3 class="card-title">${instantsearch.highlight({ attribute: 'name', hit: item })}</h3>

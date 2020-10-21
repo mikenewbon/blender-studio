@@ -19,27 +19,73 @@ class ImportCommand(BaseCommand):
         """Utility to print NOTICE stdout messages."""
         self.stdout.write(self.style.NOTICE(message))
 
-    def get_or_create_user(self, user_object_id: ObjectId) -> User:
+    def get_or_create_user(self, user_object_id: ObjectId) -> (User, bool):
         user_doc = mongo.users_collection.find_one({'_id': ObjectId(user_object_id)})
         try:
             user = User.objects.get(username=user_doc['username'])
             self.console_log(f"Fetched user {user.username}")
+            is_created = False
         except User.DoesNotExist:
             user = User.objects.create(username=user_doc['username'], email=user_doc['email'])
             self.console_log(f"Created user {user.username}")
-        self.reconcile_user(user, user_doc)
-        return user
+            self.reconcile_user(user, user_doc)
+            is_created = True
+        return user, is_created
+
+    def reconcile_user_view_progress(self, user, user_doc):
+        if 'nodes' not in user_doc or 'view_progress' not in user_doc['nodes']:
+            return
+        for node_id, values in user_doc['nodes']['view_progress'].items():
+            node = mongo.nodes_collection.find_one({'_id': ObjectId(node_id)})
+
+            try:
+                static_asset = models_static_assets.StaticAsset.objects.get(
+                    slug=str(node['properties']['file'])
+                )
+                self.console_log(
+                    f"Found asset_id {static_asset.id} for {node['properties']['file']}"
+                )
+            except models_static_assets.StaticAsset.DoesNotExist:
+                file_doc = mongo.files_collection.find_one(
+                    {'_id': ObjectId(node['properties']['file'])}
+                )
+                if 'picture' in node:
+                    thumbnail_file_doc = mongo.files_collection.find_one(
+                        {'_id': ObjectId(node['picture'])}
+                    )
+                else:
+                    thumbnail_file_doc = None
+
+                self.console_log(f"Create asset_id asset for {node['properties']['file']}")
+
+                static_asset = self.get_or_create_static_asset(file_doc, thumbnail_file_doc)
+
+            if static_asset.source_type != 'video':
+                self.console_log(f"File {static_asset.original_filename} is not a video, skipping")
+                continue
+
+            try:
+                static_asset.video
+            except models_static_assets.Video.DoesNotExist:
+                self.console_log(f"File {static_asset.original_filename} does not exist, skipping")
+                continue
+
+            # Get or create video progress
+            try:
+                progress = models_static_assets.UserVideoProgress.objects.get(
+                    user=user, video=static_asset.video
+                )
+            except models_static_assets.UserVideoProgress.DoesNotExist:
+                progress = models_static_assets.UserVideoProgress.objects.create(
+                    user=user,
+                    video=static_asset.video,
+                    position=datetime.timedelta(seconds=values['progress_in_sec']),
+                )
+            progress.date_created = pytz.utc.localize(values['last_watched'])
+            progress.date_updated = pytz.utc.localize(values['last_watched'])
+            progress.save()
 
     def reconcile_user(self, user, user_doc):
-        def reconcile_view_progress():
-            if 'nodes' in user_doc and 'view_progress' in user_doc['nodes']:
-                for node_id, values in user_doc['nodes']['view_progress'].items():
-                    print(node_id)
-                    node = mongo.nodes_collection.find_one({'_id': ObjectId(node_id)})
-                    video_id = node['properties']['file']
-                    static_asset = models_static_assets.StaticAsset.objects.get(slug=str(video_id))
-                    print(static_asset)
-
         self.console_log(f"\tReconciling user {user_doc['username']}")
         user.date_joined = pytz.utc.localize(user_doc['_created'])
         user.save()
@@ -54,15 +100,13 @@ class ImportCommand(BaseCommand):
                 user=user, oauth_user_id=user_doc['auth'][0]['user_id']
             )
 
-        # reconcile_view_progress()
-
     def reconcile_comment_ratings(self, comment_doc):
         if 'ratings' not in comment_doc['properties']:
             return
 
         comment = self.get_or_create_comment(comment_doc)
         for rating in comment_doc['properties']['ratings']:
-            user = self.get_or_create_user(rating['user'])
+            user, _ = self.get_or_create_user(rating['user'])
             self.console_log(f"Updating ratings for comment {comment.id}")
             models_comments.Like.objects.get_or_create(comment=comment, user=user)
 
@@ -71,7 +115,7 @@ class ImportCommand(BaseCommand):
             comment = models_comments.Comment.objects.get(slug=str(comment_doc['_id']))
         except models_comments.Comment.DoesNotExist:
             # Get the comment author
-            user = self.get_or_create_user(comment_doc['user'])
+            user, _ = self.get_or_create_user(comment_doc['user'])
             comment = models_comments.Comment.objects.create(
                 message=comment_doc['properties']['content'],
                 user=user,
@@ -80,8 +124,12 @@ class ImportCommand(BaseCommand):
         # Force reconcile dates and content
         comment.date_created = pytz.utc.localize(comment_doc['_created'])
         comment.date_updated = pytz.utc.localize(comment_doc['_updated'])
+        # Legacy comments were converted under content_html
         if 'content_html' in comment_doc['properties']:
             comment.message_html = comment_doc['properties']['content_html']
+        # Newer comments are available under _content_html
+        if '_content_html' in comment_doc['properties']:
+            comment.message_html = comment_doc['properties']['_content_html']
         comment.save()
 
         if parent_comment_doc:
@@ -97,12 +145,16 @@ class ImportCommand(BaseCommand):
         """Download file from cloud storage and upload to S3."""
         file_doc = mongo.files_collection.find_one({'_id': ObjectId(file_uuid)})
 
-        if getattr(instance, attr_name) and not force:
-            self.console_log(f"\tSkipping existing file {file_uuid}")
-            return
+        source = getattr(instance, attr_name)
+        if source and not force:
+            # If no variation is detected, do not reconcile
+            if '-' not in source.name:
+                self.console_log(f"\tSkipping existing file {file_uuid} {source.name}")
+                return
 
+        self.console_log(f"\tProcessing file {file_uuid} {source.name}")
         with tempfile.TemporaryDirectory() as tmp_dirname:
-            self.console_log(f"Created temporary directory {tmp_dirname}")
+            self.console_log(f"\tCreated temporary directory {tmp_dirname}")
             tmp_path = pathlib.Path(tmp_dirname)
             file_path = (
                 file_doc['file_path'] if not variation_subdoc else variation_subdoc['file_path']
@@ -114,6 +166,8 @@ class ImportCommand(BaseCommand):
                 files.s3_client, settings.AWS_STORAGE_BUCKET_NAME, dest_file_path_s3
             ):
                 print(f"File {dest_file_path_s3} already exists on S3, skipping upload")
+                setattr(instance, attr_name, dest_file_path_s3)
+                instance.save()
                 return
 
             # Download file
@@ -132,7 +186,7 @@ class ImportCommand(BaseCommand):
     def reconcile_static_asset_video(
         self, file_doc, static_asset: models_static_assets.StaticAsset
     ):
-        self.console_log(f"\tReconciling Video properties for {static_asset.id}")
+        self.console_log(f"\tReconciling Video properties for asset {static_asset.id}")
         try:
             video = models_static_assets.Video.objects.get(static_asset=static_asset)
         except models_static_assets.Video.DoesNotExist:
@@ -165,8 +219,10 @@ class ImportCommand(BaseCommand):
             image.width = file_doc['width']
         image.save()
 
-    def reconcile_static_asset(self, file_doc, static_asset: models_static_assets.StaticAsset):
-        self.console_log(f"Reconciling file {file_doc['_id']}")
+    def reconcile_static_asset(
+        self, file_doc, static_asset: models_static_assets.StaticAsset, thumbnail_file_doc=None
+    ):
+        self.console_log(f"Reconciling file {file_doc['_id']} {file_doc['file_path']}")
         # Update properties
         static_asset.slug = str(file_doc['_id'])
         # Update original_filename
@@ -178,10 +234,12 @@ class ImportCommand(BaseCommand):
         static_asset.date_updated = pytz.utc.localize(file_doc['_updated'])
         # Update content_type
         static_asset.content_type = file_doc['content_type']
-        static_asset.user = self.get_or_create_user(file_doc['user'])
+        static_asset.user, _ = self.get_or_create_user(file_doc['user'])
         static_asset.save()
 
         self.reconcile_file_field(file_doc['_id'], static_asset, 'source')
+        if thumbnail_file_doc:
+            self.reconcile_file_field(thumbnail_file_doc['_id'], static_asset, 'thumbnail')
 
         if static_asset.source_type == 'video':
             self.reconcile_static_asset_video(file_doc, static_asset)
@@ -189,7 +247,7 @@ class ImportCommand(BaseCommand):
         if static_asset.source_type == 'image':
             self.reconcile_static_asset_image(file_doc, static_asset)
 
-    def get_or_create_static_asset(self, file_doc):
+    def get_or_create_static_asset(self, file_doc, thumbnail_file_doc=None):
         file_slug = str(file_doc['_id'])
         try:
             static_asset = models_static_assets.StaticAsset.objects.get(slug=file_slug)
@@ -205,10 +263,14 @@ class ImportCommand(BaseCommand):
                 slug=file_slug,
             )
 
-        self.reconcile_static_asset(file_doc, static_asset)
+        self.reconcile_static_asset(file_doc, static_asset, thumbnail_file_doc)
 
         if 'video' in file_doc['content_type'] and 'variations' in file_doc:
             for v in file_doc['variations']:
+                self.console_log(f"\tProcessing variation {v['file_path']}")
+                if v['file_path'].endswith('.webm'):
+                    self.console_log("\tSkipping .webm variation")
+                    continue
                 variation, _ = models_static_assets.VideoVariation.objects.get_or_create(
                     video=static_asset.video,
                     resolution_label=v['size'],

@@ -44,13 +44,14 @@ def download_file_from_storage(
         blob = bucket.get_blob(f"_/{filepath}")
         if not blob:
             print(f"Blob {destination_filepath.name} does not exist")
-            return
+            return None
         if blob and blob.exists():
             if not destination_filepath.exists() or overwrite:
                 print(f"Downloading {destination_filepath.name}")
                 blob.download_to_filename(str(destination_filepath))
             else:
                 print(f"Blob {destination_filepath.name} already downloaded")
+            return destination_filepath.name
 
     def download_static_to_file(url, destination_filepath):
         if destination_filepath.exists() and overwrite is False:
@@ -66,8 +67,10 @@ def download_file_from_storage(
         destination_filepath = file_dir_path / pathlib.Path(file_path).name
 
         if file_doc["backend"] == "gcs":
-            download_blob_to_file(file_doc["project"], file_path, destination_filepath)
-            return destination_filepath
+            if download_blob_to_file(file_doc["project"], file_path, destination_filepath):
+                return destination_filepath
+            else:
+                return None
         elif file_doc["backend"] == "pillar":
             download_static_to_file(file_doc["link"], destination_filepath)
             return destination_filepath

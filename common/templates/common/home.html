@@ -110,7 +110,6 @@
     </div>
   </section>
 
-  <!--FIXME this is just for testing the random featured assets -->
   <section class="mb-4">
     <div class="row justify-content-center mb-3">
       <div class="col">
@@ -132,14 +131,12 @@
         <div class="carousel-inner w-100" role="listbox">
           <div class="carousel-item active">
             {% for asset in featured_film_assets|slice:':1' %}
-            <!--FIXME wrong template -->
-            {% include "common/components/cards/card_training.html" with training=asset card_sizes="col-md-3" %}
+            {% include "common/components/cards/card_featured_asset.html" with film_asset=asset card_sizes="col-md-3" %}
             {% endfor %}
           </div>
           {% for asset in featured_film_assets|slice:'1:6' %}
           <div class="carousel-item">
-            <!--FIXME wrong template -->
-            {% include "common/components/cards/card_training.html" with training=asset card_sizes="col-md-3" %}
+            {% include "common/components/cards/card_featured_asset.html" with film_asset=asset card_sizes="col-md-3" %}
           </div>
           {% endfor %}
         </div>

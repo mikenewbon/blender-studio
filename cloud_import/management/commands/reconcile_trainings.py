@@ -23,10 +23,6 @@ import training.models as models_training
 class Command(ImportCommand):
     help = 'Reconcile training data'
 
-    # Set on handle and used in various functions to determine whether to
-    # alter the database.
-    dry_run = False
-
     def add_arguments(self, parser):
         parser.add_argument(
             '-s', '--slug', dest='slugs', action='append', help="provides training slugs"
@@ -34,20 +30,13 @@ class Command(ImportCommand):
         parser.add_argument(
             '--all', action='store_true', help='Reconcile all trainings',
         )
-        parser.add_argument(
-            '-d',
-            '--dry-run',
-            dest='dry_run',
-            action='append',
-            help="Do not alter database",
-            nargs='?',
-        )
 
     def reconcile_training_section_comments(self, section: models_training.Section):
         # Fetch comments
         comments = mongo.nodes_collection.find(
             {
                 'node_type': 'comment',
+                '_deleted': {'$ne': True},
                 'parent': ObjectId(section.slug),
                 'properties.status': 'published',
             }
@@ -61,6 +50,7 @@ class Command(ImportCommand):
             response_comments = mongo.nodes_collection.find(
                 {
                     'node_type': 'comment',
+                    '_deleted': {'$ne': True},
                     'parent': comment_doc['_id'],
                     'properties.status': 'published',
                 }
@@ -87,6 +77,7 @@ class Command(ImportCommand):
             }
         )
         for asset in assets_top:
+            self.console_log(f"Fetched top level asset {asset['name']}")
             yield asset
 
     def get_or_create_section(self, section_doc, chapter):
@@ -107,16 +98,23 @@ class Command(ImportCommand):
 
         if 'order' in section_doc['properties']:
             section.index = section_doc['properties']['order']
-
+        section.chapter = chapter
         section.date_created = pytz.utc.localize(section_doc['_created'])
         section.date_updated = pytz.utc.localize(section_doc['_updated'])
-        section.user = self.get_or_create_user(section_doc['user'])
+        section.user, _ = self.get_or_create_user(section_doc['user'])
         section.save()
 
         file_doc = mongo.files_collection.find_one(
             {'_id': ObjectId(section_doc['properties']['file'])}
         )
-        section.static_asset = self.get_or_create_static_asset(file_doc)
+
+        if 'picture' in section_doc:
+            thumbnail_file_doc = mongo.files_collection.find_one(
+                {'_id': ObjectId(section_doc['picture'])}
+            )
+        else:
+            thumbnail_file_doc = None
+        section.static_asset = self.get_or_create_static_asset(file_doc, thumbnail_file_doc)
         section.save()
 
         # Reconcile comments
@@ -143,7 +141,7 @@ class Command(ImportCommand):
 
         chapter.date_created = pytz.utc.localize(chapter_doc['_created'])
         chapter.date_updated = pytz.utc.localize(chapter_doc['_updated'])
-        chapter.user = self.get_or_create_user(chapter_doc['user'])
+        chapter.user, _ = self.get_or_create_user(chapter_doc['user'])
         chapter.save()
 
         # Ensure media
