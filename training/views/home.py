@@ -38,6 +38,7 @@ def home_authenticated(request: HttpRequest) -> TypeSafeTemplateResponse:
                     or getattr(section, 'video_duration') is None
                     else getattr(section, 'video_position') / getattr(section, 'video_duration')
                 ),
+                thumbnail_s_url=section.thumbnail_s_url,
             )
             for section in recently_watched_sections
         ],

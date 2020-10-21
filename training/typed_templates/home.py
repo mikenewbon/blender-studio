@@ -1,5 +1,5 @@
 import dataclasses as dc
-from typing import Sequence
+from typing import Sequence, Optional
 
 from django.http.request import HttpRequest
 from django.template.response import TemplateResponse
@@ -17,6 +17,7 @@ class RecentlyWatchedSection:
     chapter_index: int
     chapter_name: str
     progress_fraction: float
+    thumbnail_s_url: Optional[str]
 
     @property
     def name_with_index(self) -> str:

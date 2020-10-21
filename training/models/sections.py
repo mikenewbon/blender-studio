@@ -1,4 +1,5 @@
 import uuid
+from typing import Optional
 from django.db import models
 from django.urls.base import reverse
 from django.contrib.auth.models import User
@@ -9,7 +10,7 @@ from common import mixins
 from training.models import chapters
 
 
-class Section(mixins.CreatedUpdatedMixin, models.Model):
+class Section(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Model):
     class Meta:
         ordering = ['index', 'name']
 
@@ -46,6 +47,15 @@ class Section(mixins.CreatedUpdatedMixin, models.Model):
             f'{self.chapter.training.name} > {self.chapter.index:02.0f}. {self.chapter.name} > '
             f'{self.index:02.0f}. {self.name}'
         )
+
+    @property
+    def thumbnail(self) -> Optional[str]:
+        # Try to use asset thumbnail
+        if self.static_asset and self.static_asset.preview:
+            return self.static_asset.preview
+        # Try to use chapter thumbnail
+        if self.chapter.thumbnail:
+            return None
 
     def get_absolute_url(self) -> str:
         return self.url

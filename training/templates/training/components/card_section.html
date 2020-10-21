@@ -3,7 +3,7 @@
 <div class="{{ card_sizes|default:"col-12 col-sm-6 col-lg-4" }} card-grid-item">
     <div class="card card-dark card-hover card-media">
         <!-- TODO(Mike): Add real thumbnails for videos or inherit from course -->
-        <a  href="{{ section.url }}" class="card-header" style='background-image: url("{% static 'training/images/placeholders/card_training.png' %}")'>
+        <a href="{{ section.url }}" class="card-header" {% if section.thumbnail_s_url %} style='background-image: url("{{ section.thumbnail_s_url }}")' {% endif %}>
             {% include 'training/components/progress_bar.html' with fraction=section.progress_fraction %}
         </a>
         <a class="card-body" href="{{ section.url }}">
