@@ -53,9 +53,9 @@
 
 <div class="drawer-nav-group">
   <div class="drawer-nav-dropdown-wrapper">
-    <a class="drawer-nav-dropdown font-weight-bold" href="{{ navigation.overview_url }}">
+    <a class="drawer-nav-dropdown font-weight-bold" href="{{ navigation.overview_url }}" data-tooltip="tooltip-overflow" data-placement="top" title="{{ training.type.label }} Overview">
       <i class="material-icons mr-2">insert_drive_file</i>
-      {{ training.type.label }} Overview
+      <span class="overflow-text">{{ training.type.label }} Overview</span>
     </a>
   </div>
 </div>
@@ -64,8 +64,8 @@
 <div class="drawer-nav-group">
   <div class="drawer-nav-dropdown-wrapper ">
     <a class="drawer-nav-dropdown font-weight-bold {% if chapter_navigation.current %} active {% else %}collapsed{% endif %}"
-      data-toggle="collapse" data-target="#nav-{{ chapter_navigation.slug }}">
-      <span class="drawer-nav-dropdown-text">{{ chapter_navigation.name }}</span>
+      data-toggle="collapse" data-target="#nav-{{ chapter_navigation.slug }}" data-tooltip="tooltip-overflow" data-placement="top" title="{{ chapter_navigation.name }}">
+      <span class="drawer-nav-dropdown-text overflow-text">{{ chapter_navigation.name }}</span>
       <i class="material-icons">keyboard_arrow_down</i>
     </a>
   </div>

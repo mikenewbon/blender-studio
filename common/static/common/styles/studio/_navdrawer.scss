@@ -143,6 +143,7 @@
 
 .drawer-nav-group,
 .drawer-nav-header {
+
   h1,
   h2,
   h3,
@@ -229,6 +230,7 @@
   flex-grow: 1;
   padding: ($spacer / 4 * 3) $spacer;
   transition: $transition-base;
+  width: 100%;
 
   .drawer-nav-section-icon-progress .progress {
     transition: $transition-base;
@@ -236,8 +238,7 @@
   }
 
   h4 {
-    overflow-wrap: break-word;
-    word-break: break-word;
+    margin-left: $spacer * 2;
   }
 
   &::before {
@@ -327,7 +328,7 @@
 .nav-drawer-section-progress-wrapper {
   height: 24px;
   margin-right: $spacer / 2;
-  position: relative;
+  position: absolute;
   width: 24px;
 
   .material-icons {
@@ -416,6 +417,7 @@ $circle-circumference: $circle-diameter * 3.14;
   flex-grow: 1;
   padding: $spacer / 2 $spacer;
   transition: $transition-base;
+  width: 100%;
 
   &::before {
     background: $highlight-white;
@@ -464,4 +466,10 @@ $circle-circumference: $circle-diameter * 3.14;
 
 .drawer-nav-dropdown-text {
   margin-right: auto;
+}
+
+.overflow-text {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }

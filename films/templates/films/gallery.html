@@ -93,9 +93,9 @@ has-secondary-nav
 
             <div class="drawer-nav-dropdown-wrapper">
 
-              <a class="drawer-nav-dropdown font-weight-bold " href="{% url 'film-gallery' film_slug=film.slug %}">
+              <a class="drawer-nav-dropdown font-weight-bold" href="{% url 'film-gallery' film_slug=film.slug %}" data-tooltip="tooltip-overflow" data-placement="top" title="Featured Artwork">
                 <i class="material-icons mr-2">grade</i>
-                Featured Artwork
+                <span class="overflow-text">Featured Artwork</span>
               </a>
 
               {% if admin_change_href is not none %}
@@ -110,9 +110,9 @@ has-secondary-nav
             <div class="drawer-nav-dropdown-wrapper">
 
               <a class="drawer-nav-dropdown font-weight-bold {% if current_collection.parent != collection and current_collection != collection %}collapsed{% endif %}"
-                href="{{ collection.url }}" {% if child_collections %}data-toggle="collapse"
-                data-target="#collection-{{ collection.id }}" {% endif %}>
-                <span class="drawer-nav-dropdown-text">
+                href="{{ collection.url }}" {% if child_collections %} data-toggle="collapse"
+                data-target="#collection-{{ collection.id }}" {% endif %} data-tooltip="tooltip-overflow" data-placement="top" title="{{ collection.name }}">
+                <span class="drawer-nav-dropdown-text overflow-text">
                   {{ collection.name }}
                 </span>
                 {% if child_collections %}
@@ -134,10 +134,10 @@ has-secondary-nav
 
                 {% for child_collection in child_collections %}
                 <li class="drawer-nav-section">
-                  <a href="{{ child_collection.url }}" class="drawer-nav-section-link">
+                  <a href="{{ child_collection.url }}" class="drawer-nav-section-link" data-tooltip="tooltip-overflow" data-placement="top" title="{{ child_collection.name }}">
 
                     <i class="material-icons">folder</i>
-                    <h4>{{ child_collection.name }}</h4>
+                    <h4 class="overflow-text">{{ child_collection.name }}</h4>
 
                   </a>
                   {% if user_can_edit_collection %}

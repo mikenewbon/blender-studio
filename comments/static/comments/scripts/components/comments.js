@@ -12,6 +12,7 @@ window.comments = (function comments() {
       this.archiveUrl = element.dataset.archiveUrl;
       this.profileImageUrl = element.dataset.profileImageUrl;
       this.message_ = element.dataset.message;
+      this.message_html = element.querySelector('.comment-text').innerHTML;
       this.element = element;
       this._setupEventListeners();
     }
@@ -156,9 +157,9 @@ window.comments = (function comments() {
       sel.addRange(range)
     }
 
-    prependReply(comment) {
-      const repliesElement = this.element.querySelector('.replies .comments');
-      repliesElement.prepend(comment.element);
+    appendReply(comment) {
+      const repliesElement = this.element.closest('.top-level-comment').querySelector('.replies .comments');
+      repliesElement.append(comment.element);
     }
 
     get editInputsElement() {
@@ -416,9 +417,12 @@ window.comments = (function comments() {
       });
 
       this.inputElement.addEventListener('keydown', event => {
-        if (event.key == 'Enter') {
+        if (event.key === 'Enter' && !event.shiftKey) {
           event.preventDefault();
           this.sendButton.click();
+        } else if (event.key === 'Escape') {
+          this.comment.showContent();
+          this.hide();
         }
       });
     }
@@ -426,12 +430,13 @@ window.comments = (function comments() {
     _postComment() {
       const { commentSection, inputElement } = this;
       const message = inputElement.innerText;
+
       if (message === '') {
         return
       }
 
       inputElement.innerText = '';
-
+      console.log(message)
       ajax
         .jsonRequest('POST', commentSection.commentUrl, {
           reply_to: null,
@@ -451,7 +456,9 @@ window.comments = (function comments() {
             data.edit_url,
             data.delete_url
           );
+          comment.element.classList.add('top-level-comment');
           commentSection.prependComment(comment);
+          console.log(comment.message_html);
         });
     }
   }
@@ -486,16 +493,13 @@ window.comments = (function comments() {
         this._postReply();
       });
 
-      // this.element.addEventListener('focusout', event => {
-      //   if (!this.element.contains(event.relatedTarget)) {
-      //     this.hide();
-      //   }
-      // });
-
       this.inputElement.addEventListener('keydown', event => {
-        if (event.key == 'Enter') {
+        if (event.key === 'Enter' && !event.shiftKey) {
           event.preventDefault();
           this.sendButton.click();
+        } else if (event.key === 'Escape') {
+          // this.comment.showContent();
+          this.hide();
         }
       });
     }
@@ -503,8 +507,9 @@ window.comments = (function comments() {
     _postReply() {
       const { commentSection, inputElement, replyTo } = this;
       const message = inputElement.innerText;
-      inputElement.innerText = '';
 
+      inputElement.innerText = '';
+      console.log(message);
       ajax
         .jsonRequest('POST', commentSection.commentUrl, {
           reply_to: replyTo.id,
@@ -524,7 +529,8 @@ window.comments = (function comments() {
             data.edit_url,
             data.delete_url
           );
-          replyTo.prependReply(comment);
+          replyTo.appendReply(comment);
+          console.log(data.message_html)
         });
     }
   }
@@ -579,9 +585,12 @@ window.comments = (function comments() {
       // });
 
       this.inputElement.addEventListener('keydown', event => {
-        if (event.key == 'Enter') {
+        if (event.key === 'Enter' && !event.shiftKey) {
           event.preventDefault();
           this.sendButton.click();
+        } else if (event.key === 'Escape') {
+          this.comment.showContent();
+          this.hide();
         }
       });
     }
@@ -589,15 +598,19 @@ window.comments = (function comments() {
     _postEdit() {
       const { comment, inputElement } = this;
       const message = inputElement.innerText;
-      inputElement.innerText = '';
 
+      inputElement.innerText = '';
+      console.log(message);
       ajax
         .jsonRequest('POST', comment.editUrl, {
           message
         })
         .then(data => {
           this.comment.message = data.message;
+          this.comment.element.dataset.message = this.comment.message;
           this.comment.message_html = data.message_html;
+          console.log(comment.message_html);
+          this.comment.element.querySelector('.comment-text').innerHTML = this.comment.message_html;
         });
     }
   }

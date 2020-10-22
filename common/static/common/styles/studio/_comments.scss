@@ -1,28 +1,11 @@
 .comment {
+  padding: $spacer / 2;
   display: flex;
   flex-direction: column;
   margin-top: $spacer / 2;
 
   >.comment {
     margin-top: $spacer;
-  }
-
-  .comment {
-    padding-left: $spacer;
-    position: relative;
-
-    &::before {
-
-      background: $highlight-white-strong;
-      content: close-quote;
-      display: block;
-      height: 100%;
-      left: 0;
-      position: absolute;
-      top: 0;
-      width: 2px;
-
-    }
   }
 
   &.archived {
@@ -104,7 +87,7 @@
 
 .more-comments-button {
   display: none;
-  margin: $spacer / 2 $spacer / 2;
+  margin-top: $spacer / 2;
 
   &.collapsed {
     display: inline-block;
@@ -135,6 +118,7 @@
 }
 
 .comment-text {
+  text-align: left;
   font-size: $small-font-size;
   margin-bottom: $spacer / 4;
 }
@@ -180,6 +164,7 @@
   min-height: $input-height-sm;
   padding: $input-padding-y-sm $input-padding-x-sm;
   position: relative;
+  text-align: left;
 
   &.disabled {
     opacity: $btn-disabled-opacity;
@@ -195,5 +180,22 @@
       top: 50%;
       transform: translateY(-50%);
     }
+  }
+}
+
+.top-level-comment {
+  background: $navigation-gray;
+  border-radius: $border-radius;
+  border: 1px solid $input-gray;
+}
+
+.replies {
+  .comments {
+    text-align: center;
+  }
+
+  .comment {
+    border-radius: $border-radius;
+    background: $highlight-black-strong;
   }
 }

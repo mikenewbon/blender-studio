@@ -122,3 +122,18 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('current-user').textContent
   );
 });
+
+// Adds tooltips if text overflows.
+$(function () {
+  $('[data-tooltip="tooltip-overflow"]').each(function () {
+    $(this).tooltip()
+    $(this).tooltip('disable')
+    const text = this.querySelector('.overflow-text');
+    $(this).mouseenter(function () {
+      if (text.scrollWidth > text.clientWidth) {
+        $(this).tooltip('enable');
+        $(this).tooltip('show');
+      }
+    })
+  });
+});

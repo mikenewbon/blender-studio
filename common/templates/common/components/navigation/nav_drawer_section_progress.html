@@ -1,5 +1,5 @@
 <li class="drawer-nav-section {% if finished %}complete{% endif %}">
-  <a href="{{ href }}" class="drawer-nav-section-link {% if active %}active{% endif %}">
+  <a href="{{ href }}" class="drawer-nav-section-link {% if active %}active{% endif %}" data-tooltip="tooltip-overflow" data-placement="top" title="{{ title }}">
     <div class="nav-drawer-section-progress-wrapper">
       {% comment %} <i class="material-icons">play_arrow</i> {% endcomment %}
       <h5>{{ nth }}</h5>
@@ -11,8 +11,7 @@
         <circle class="progress" cx="15" cy="15" r="12" />
       </svg>
     </div>
-    <h4>{{ title }}</h4>
-
+    <h4 class="overflow-text">{{ title }}</h4>
   </a>
   {% if admin_change_href is not none %}
   <a class="btn btn-float btn-xs btn-secondary btn-icon" href="{{ admin_change_href }}">
