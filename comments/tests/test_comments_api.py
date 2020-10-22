@@ -289,9 +289,7 @@ class TestCommentEditEndpoint(TestCase):
     def test_edit_linkify_urlize(self):
         edit_message = '**bold** https://example.com'
         response = self.client.post(
-            self.edit_url,
-            {'message': edit_message},
-            content_type='application/json',
+            self.edit_url, {'message': edit_message}, content_type='application/json',
         )
 
         response_data = json.loads(response.content)
