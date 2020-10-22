@@ -87,7 +87,6 @@ def update_main_search_indexes(
 
 
 @receiver(post_save, sender=Training)
-@receiver(post_save, sender=Section)
 @receiver(post_save, sender=Asset)
 def update_training_search_index(
     sender: Type[SearchableModel], instance: SearchableModel, **kwargs: Any
