@@ -13,6 +13,7 @@ import profiles.tests.util as util
 
 session_cookie_value_anon = 'eyJuZXh0X2FmdGVyX2xvZ2luIjoiLyJ9.X4CFJQ.5wFiwDul5Z3u2LECPfN8n4iwRWI'
 session_cookie_value = '.eJyNj7FOAzEQRP_FNYXtXdu7-YOIDkgkqpO9u9Yhogvc5USB-HesFNSUI703mvl27WKL2jq96XSt-22ebtd3W9zB-XXGejp_fbxA1vMiM2-f-3F_fZTnp9PRPbh9u2v_Qae-2ja7w23dbaS7pBq6r2CKRIXIAhoTQrJcg0QrENDHAtlHYo1AzGq5RQ0Yhpkk55JiIezWyYB8NRTM3ljBd05Ja5chgVUo7AWi1EytFh-imTKPWbKt_e9vCSCsraFwjKmOlmScAQYNPFZ1bIgk2f38AlUFXOw.X4B_wQ.5EQ4gtZeRkKciEa2VdJZe3J2Mrk'  # noqa: E501
+remember_token_value = '0rh4aUVwpT36dVnch9squIuYKcSRUI|82f757dc73a2a87ea43f0a985e656df2c9fbd56bb6394f0c095c5b70baefec32fb3b8b0c8b4d45d0a9f30a1763cfbd69b0fae34e6aa099809f084c6285623903'  # noqa: E501
 
 
 @override_settings(
@@ -83,7 +84,7 @@ class TestSession(TestCase):
         self.assertEquals(user.profile.image_url, 'http://id.local:8000/api/user/2/avatar')
         self.assertEquals(
             sorted([g.name for g in user.groups.all()]),
-            ['dev_core', 'has_subscription', 'subscriber',],
+            ['dev_core', 'has_subscription', 'subscriber'],
         )
 
     @responses.activate
@@ -139,6 +140,56 @@ class TestSession(TestCase):
         self.assertEquals(user.pk, existing_user.pk)
         self.assertEquals(user.username, 'ⅉanedoe')
         self.assertEquals(user.email, 'jane@example.com')
+
+    @responses.activate
+    def test_get_or_create_current_user_from_remember_token(self):
+        UserFactory(email='jane@example.com',)
+        existing_user = UserFactory(email='somemail@example.com', oauth_info__oauth_user_id='2')
+        request = self.factory.get('/')
+        request.COOKIES[settings.BLENDER_CLOUD_REMEMBER_COOKIE_NAME] = remember_token_value
+
+        user = get_or_create_current_user(request)
+
+        assert user is not None
+        self.assertEquals(user.oauth_info.oauth_user_id, '2')
+        self.assertEquals(user.pk, existing_user.pk)
+        self.assertEquals(user.email, 'jane@example.com')
+
+    @responses.activate
+    def test_get_or_create_current_user_missing_session_cookie(self):
+        request = self.factory.get('/')
+
+        user = get_or_create_current_user(request)
+
+        self.assertIsNone(user)
+
+    @responses.activate
+    def test_get_or_create_current_user_broken_session_cookie(self):
+        request = self.factory.get('/')
+        request.COOKIES[settings.BLENDER_CLOUD_REMEMBER_COOKIE_NAME] = 'foobar'
+
+        user = get_or_create_current_user(request)
+
+        self.assertIsNone(user)
+
+    @responses.activate
+    def test_get_or_create_current_user_broken_remember_cookies(self):
+        request = self.factory.get('/')
+        request.COOKIES[settings.BLENDER_CLOUD_REMEMBER_COOKIE_NAME] = 'foobar'
+
+        user = get_or_create_current_user(request)
+
+        self.assertIsNone(user)
+
+    @responses.activate
+    def test_get_or_create_current_user_broken_session_and_remember_cookies(self):
+        request = self.factory.get('/')
+        request.COOKIES[settings.BLENDER_CLOUD_SESSION_COOKIE_NAME] = 'foobar'
+        request.COOKIES[settings.BLENDER_CLOUD_REMEMBER_COOKIE_NAME] = 'foobar'
+
+        user = get_or_create_current_user(request)
+
+        self.assertIsNone(user)
 
 
 @override_settings(

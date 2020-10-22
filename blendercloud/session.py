@@ -1,6 +1,6 @@
 """Reads Flask session set by Blender Cloud and retrieves user info linked to it."""
-from typing import Any, Optional, Dict
 from collections import namedtuple
+from typing import Any, Optional, Dict
 import logging
 
 from django.conf import settings
@@ -13,6 +13,7 @@ import blender_id_oauth_client.models as models
 import blender_id_oauth_client.signals as signals
 
 from profiles.blender_id import BIDSession
+from .flask_login import open_remember_token
 
 bid = BIDSession()
 logger = logging.getLogger(__name__)
@@ -22,14 +23,14 @@ logger = logging.getLogger(__name__)
 # The attributes were chosen based on what Flask 1.0.3's `SecureCookieSessionInterface.open_session`
 # requires to work.
 FlaskApp = namedtuple(
-    'FlaskApp', ['session_cookie_name', 'permanent_session_lifetime', 'secret_key',],
+    'FlaskApp', ['session_cookie_name', 'permanent_session_lifetime', 'secret_key'],
 )
 app = FlaskApp(
     session_cookie_name=settings.BLENDER_CLOUD_SESSION_COOKIE_NAME,
     permanent_session_lifetime=settings.BLENDER_CLOUD_SESSION_LIFETIME,
     secret_key=settings.BLENDER_CLOUD_SECRET_KEY,
 )
-FlaskRequest = namedtuple('FlaskRequest', ['cookies',],)
+FlaskRequest = namedtuple('FlaskRequest', ['cookies'])
 session_interface = SecureCookieSessionInterface()
 
 
@@ -97,11 +98,11 @@ def _get_or_create_user(user_oauth: Dict[str, Any]) -> User:
 def get_or_create_current_user(request: HttpRequest) -> Optional[User]:
     """Retrieve user info from Blender Cloud session cookie and Blender ID, return a User record."""
     flask_session = open_session(request)
-    if not flask_session:
-        logger.debug('Unable to read Blender Cloud session')
-        return None
-
     access_token = flask_session.get('blender_id_oauth_token')
+    if not access_token:
+        logger.debug('Unable to read Blender Cloud session, falling back to remember token')
+        access_token = open_remember_token(request)
+
     if not access_token:
         logger.debug('Unable to find access token for current user')
         return None

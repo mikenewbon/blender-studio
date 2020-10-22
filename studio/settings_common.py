@@ -291,6 +291,7 @@ THUMBNAIL_SIZE_S = '400x225'
 THUMBNAIL_SIZE_M = '1280x720'
 
 BLENDER_CLOUD_SESSION_COOKIE_NAME = 'session'
+BLENDER_CLOUD_REMEMBER_COOKIE_NAME = 'remember_token'
 # Caveat emptor:
 # BLENDER_CLOUD_SESSION_LIFETIME should be **at least as long** as Blender Cloud's session lifetime,
 # otherwise Blender Studio will consider a session invalid **before** Blender Cloud does,
