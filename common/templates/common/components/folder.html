@@ -2,7 +2,7 @@
 
 <div class="file folder">
   <div class="file-header">
-    <a href="{{ child_collection.url }}">
+    <a class="file-folder-link" href="{{ child_collection.url }}">
       {% if child_collection.preview %}
       <img class="file-image ml-auto mr-auto" src="{{ child_collection.preview.url }}" alt="collection preview">
       <img class="file-icon" src="{% static "common/images/icons/folder.svg" %}" alt="Folder Icon">

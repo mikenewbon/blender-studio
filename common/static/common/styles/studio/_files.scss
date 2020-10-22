@@ -75,7 +75,8 @@
   position: relative;
   width: 100%;
 
-  a {
+  .file-modal-link,
+  .file-folder-link {
     align-items: center;
     display: flex;
     height: 100%;

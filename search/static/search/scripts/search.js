@@ -110,7 +110,6 @@ let lastRenderArgs;
 const renderHits = (renderOptions, isFirstRender) => {
   const { hits, showMore, widgetParams } = renderOptions;
 
-
   widgetParams.container.innerHTML = `
       ${hits
       .map(
@@ -119,19 +118,19 @@ const renderHits = (renderOptions, isFirstRender) => {
           <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
             <div class="card card-dark card-hover card-media">
               <div class="card-header">
-                <a class="card-header-link" href="${ item.url }">
-                  <img src="${ item.thumbnail_url || fileIconURL }" class="${ item.thumbnail_url ? 'card-image' : 'file-icon' }" loading=lazy>
+                <a class="card-header-link" href="${item.url}">
+                  <img src="${item.thumbnail_url || fileIconURL}" class="${item.thumbnail_url ? 'card-image' : 'file-icon'}" loading=lazy>
                 </a>
               </div>
-              <a href="${ item.url}" class="card-body">
+              <a href="${item.url}" class="card-body">
                 <div class="card-subtitle-group">
                   <p class="card-subtitle content-type">
-                  ${ item.model == "section" ? item.project : item.model }
+                  ${item.model == "section" ? item.project : item.model}
                   </p>
 
                   <p class="card-subtitle">
                     <i class="material-icons icon-inline small">schedule</i>
-                    ${ timeDifference(epochToDate(item.timestamp))}
+                    ${timeDifference(epochToDate(item.timestamp))}
                   </p>
 
                 </div>
@@ -218,11 +217,11 @@ const customMenuSelect = instantsearch.connectors.connectMenu(renderMenuSelect);
 
 // -------- CONFIGURE -------- //
 
-const renderConfigure = (renderOptions, isFirstRender) => {};
+const renderConfigure = (renderOptions, isFirstRender) => { };
 
 const customConfigure = instantsearch.connectors.connectConfigure(
   renderConfigure,
-  () => {}
+  () => { }
 );
 
 
