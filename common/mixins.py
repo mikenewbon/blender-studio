@@ -5,6 +5,8 @@ from django.contrib import admin
 from django.db import models
 from django.db.models.base import Model
 from django.http.request import HttpRequest
+from django.utils.safestring import mark_safe
+
 from sorl.thumbnail import get_thumbnail
 
 
@@ -39,6 +41,14 @@ class AdminUserDefaultMixin:
         if not obj.pk:
             obj.user = request.user
         super().save_model(request, obj, form, change)
+
+
+class ViewOnSiteMixin:
+    def view_link(self, obj):
+        return mark_safe('<a href="{0}">{1}</a>'.format(obj.get_absolute_url(), "View on site"))
+
+    view_link.allow_tags = True
+    view_link.short_description = "View on site"
 
 
 class StaticThumbnailURLMixin:
