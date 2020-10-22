@@ -71,8 +71,6 @@ class Command(ImportCommand):
 
     def reconcile_content_disposition(self, static_asset: models_static_assets.StaticAsset):
         def update_object(key, disposition_metadata, content_type):
-            if not key:
-                return
             self.console_log(f"Updating file {key}")
             self.console_log(f"\t Disposition: {disposition_metadata}")
             self.console_log(f"\t ContentType: {content_type}")
@@ -87,6 +85,10 @@ class Command(ImportCommand):
                 )
             except botocore_exceptions.ClientError:
                 self.console_log(f"File {key} is too large")
+            except botocore_exceptions.ParamValidationError:
+                self.console_log(f"ParamValidationError on {key}")
+            except Exception as e:
+                self.console_log(f"Generic exception on {key}")
 
         section, film_asset = self.get_film_asset_or_section(static_asset)
 
