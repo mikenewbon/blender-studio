@@ -137,7 +137,7 @@ PIPELINE = {
                 'training/scripts/components/card_training.js',
                 'training/scripts/components/video_player.js',
             ],
-            'output_filename': 'js/training_search.js',
+            'output_filename': 'js/training.js',
             'extra_context': {'async': False, 'defer': False},
         },
         'search': {
