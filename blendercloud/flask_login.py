@@ -30,7 +30,7 @@ def decode_cookie(cookie: str) -> Optional[str]:
 def _cookie_digest(payload: str) -> str:
     key = settings.BLENDER_CLOUD_SECRET_KEY
     if isinstance(key, str):
-        key = key.encode()
+        key = key.encode('latin1')
 
     return hmac.new(key, payload.encode('utf-8'), sha512).hexdigest()
 
