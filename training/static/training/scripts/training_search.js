@@ -6,7 +6,7 @@ var favoritedTrainingIDs = JSON.parse(
   document.getElementById('training-favorited-ids').textContent
 );
 const search = instantsearch({
-  indexName: "training",
+  indexName: "training_date_desc",
   searchClient: instantMeiliSearch(searchClientConfig.hostUrl, searchClientConfig.apiKey)
 });
 
@@ -261,7 +261,7 @@ search.addWidgets([
   customSortBy({
     container: document.querySelector('#sorting'),
     items: [
-      { label: 'Relevance', value: 'training' },
+      // { label: 'Relevance', value: 'training' },
       { label: 'Date (new first)', value: 'training_date_desc' },
       { label: 'Date (old first)', value: 'training_date_asc' },
     ],
