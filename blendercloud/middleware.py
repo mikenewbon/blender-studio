@@ -28,9 +28,11 @@ class SessionMiddleware:
         is not available, user is not logged in from Django's point of view.
         This middleware can be enabled with a `settings.BLENDER_CLOUD_AUTH_ENABLED` flag.
         """
+        forwarded_host = request.META.get('HTTP_X_FORWARDED_HOST')
+        host = request.META.get('HTTP_HOST')
         if settings.BLENDER_CLOUD_AUTH_ENABLED and (
             settings.BLENDER_CLOUD_DOMAIN is None
-            or request.META.get('HTTP_X_FORWARDED_HOST') == settings.BLENDER_CLOUD_DOMAIN
+            or settings.BLENDER_CLOUD_DOMAIN in (host, forwarded_host)
         ):
             self._modify_session(request)
 
