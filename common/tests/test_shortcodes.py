@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group, AnonymousUser
 from django.test import TestCase
 from django.test.client import RequestFactory
 
-from common.shortcodes import comment_shortcodes, render
+from common.shortcodes import render
 from common.tests.factories.users import UserFactory
 
 
@@ -14,20 +14,6 @@ class TestCaseWithRequest(TestCase):
         self.factory = RequestFactory()
         self.request = self.factory.get('/')
         self.request.user = AnonymousUser()
-
-
-class EscapeHTMLTest(unittest.TestCase):
-    def test_simple(self):
-        self.assertEqual(
-            "text\\n<!-- {shortcode abc='def'} -->\\n",
-            comment_shortcodes("text\\n{shortcode abc='def'}\\n"),
-        )
-
-    def test_double_tags(self):
-        self.assertEqual(
-            "text\\n<!-- {shortcode abc='def'} -->hey<!-- {othercode} -->\\n",
-            comment_shortcodes("text\\n{shortcode abc='def'}hey{othercode}\\n"),
-        )
 
 
 class DegenerateTest(unittest.TestCase):

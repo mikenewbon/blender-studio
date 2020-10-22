@@ -228,40 +228,19 @@ def _get_parser() -> typing.Tuple[shortcodes.Parser, shortcodes.Parser]:
     return _parser, _commented_parser
 
 
-def render_commented(text: str, context: typing.Any = None) -> str:
-    """Parse and render HTML-commented shortcodes.
-
-    Expects shortcodes like "<!-- {shortcode abc='def'} -->", as output by
-    escape_html().
-    """
-    _, parser = _get_parser()
-
-    # TODO(Sybren): catch exceptions and handle those gracefully in the response.
-    try:
-        return parser.parse(text, context)
-    except shortcodes.InvalidTagError as ex:
-        return html_module.escape('{%s}' % ex)
-    except shortcodes.RenderingError as ex:
-        log.info('Error rendering tag', exc_info=True)
-        return html_module.escape('{unable to render tag: %s}' % str(ex.__cause__ or ex))
-
-
 def render(text: str, context: typing.Any = None) -> str:
     """Parse and render shortcodes."""
     parser, _ = _get_parser()
 
-    # TODO(Sybren): catch exceptions and handle those gracefully in the response.
-    return parser.parse(text, context)
-
-
-def comment_shortcodes(html: str) -> str:
-    r"""Escape shortcodes in HTML comments.
-
-    This is required to pass the shortcodes as-is through Markdown. Render the
-    shortcodes afterwards with render_commented().
-
-    >>> comment_shortcodes("text\\n{shortcode abc='def'}\\n")
-    "text\\n<!-- {shortcode abc='def'} -->\\n"
-    """
-    parser, _ = _get_parser()
-    return parser.regex.sub(r'<!-- \g<0> -->', html)
+    # TODO(anna,Sybren): instead of raising an exception, parser should just ignore unknown tags
+    # otherwise having both code snippets/formulas with "{*" and shortcodes will be impossible
+    try:
+        return parser.parse(text, context)
+    except shortcodes.InvalidTagError as ex:
+        log.exception('Error rendering tag')
+        error_message = '<p>Error: unable to render shortcode: %s</p>' % str(ex.__cause__ or ex)
+        return f'{error_message}{text}'
+    except shortcodes.RenderingError as ex:
+        log.exception('Error rendering tag')
+        error_message = '<p>Error: unable to render shortcode: %s</p>' % str(ex.__cause__ or ex)
+        return f'{error_message}{text}'
