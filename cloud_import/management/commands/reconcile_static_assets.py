@@ -71,6 +71,9 @@ class Command(ImportCommand):
 
     def reconcile_content_disposition(self, static_asset: models_static_assets.StaticAsset):
         def update_object(key, disposition_metadata, content_type):
+            self.console_log(f"Updating file {key}")
+            self.console_log(f"\t Disposition: {disposition_metadata}")
+            self.console_log(f"\t ContentType: {content_type}")
             try:
                 files.s3_client.copy_object(
                     Bucket=settings.AWS_STORAGE_BUCKET_NAME,
@@ -94,7 +97,6 @@ class Command(ImportCommand):
         if static_asset.source:
             extension = pathlib.Path(static_asset.source.name).suffix
             disposition = f'attachment; filename=\"{filename}{extension}\"'
-            self.console_log(f"Updating source to {disposition}")
             update_object(static_asset.source.name, disposition, static_asset.content_type)
 
         if static_asset.source_type == 'video':
@@ -103,7 +105,6 @@ class Command(ImportCommand):
                     return
                 extension = pathlib.Path(variation.source.name).suffix
                 disposition = f'attachment; filename=\"{filename}{extension}\"'
-                self.console_log(f"Updating variation to {disposition}")
                 update_object(variation.source.name, disposition, variation.content_type)
 
     def handle(self, *args, **options):
