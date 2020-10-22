@@ -98,7 +98,7 @@ def _get_or_create_user(user_oauth: Dict[str, Any]) -> User:
 def get_or_create_current_user(request: HttpRequest) -> Optional[User]:
     """Retrieve user info from Blender Cloud session cookie and Blender ID, return a User record."""
     flask_session = open_session(request)
-    access_token = flask_session.get('blender_id_oauth_token')
+    access_token = flask_session.get('blender_id_oauth_token', flask_session.get('user_id'))
     if not access_token:
         logger.debug('Unable to read Blender Cloud session, falling back to remember token')
         access_token = open_remember_token(request)
