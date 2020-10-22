@@ -1,4 +1,5 @@
 {% extends 'films/base_films.html' %}
+{% load common_extras %}
 
 {% block content %}
 <div class="container-fluid pt-4">
@@ -14,7 +15,7 @@
       <p class="subtitle">{{ film.title }}</p>
       <h1 class="mb-0">{{ flatpage.title }}</h1>
     </div>
-    <div>{{ flatpage.html_content|safe }}</div>
+    <div>{% with_shortcodes flatpage.html_content %}</div>
   </section>
 </div>
 
