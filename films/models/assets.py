@@ -50,6 +50,7 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
     tags = TaggableManager(blank=True)
 
     def clean(self) -> None:
+        # TODO(fsiddi) Add background job to update file metadata for static_asset on the bucket
         super().clean()
         if not self.slug:
             self.slug = slugify(self.name)

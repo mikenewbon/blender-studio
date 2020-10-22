@@ -38,6 +38,7 @@ class Section(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models
 
     def clean(self) -> None:
         super().clean()
+        # TODO(fsiddi) Add background job to update file metadata for static_asset on the bucket
         if not self.slug:
             # TODO(fsiddi) Look into alphaid for a shorter slug
             self.slug = uuid.uuid4().hex
