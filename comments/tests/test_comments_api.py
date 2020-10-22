@@ -285,3 +285,19 @@ class TestCommentEditEndpoint(TestCase):
                 'profile_image_url': None,
             },
         )
+
+    def test_edit_linkify_urlize(self):
+        edit_message = '**bold** https://example.com'
+        response = self.client.post(
+            self.edit_url,
+            {'message': edit_message},
+            content_type='application/json',
+        )
+
+        response_data = json.loads(response.content)
+        self.assertEqual(response_data['message'], edit_message)
+        self.assertEqual(
+            response_data['message_html'],
+            '<p><strong>bold</strong> '
+            '<a href="https://example.com">https://example.com</a></p>\n',
+        )
