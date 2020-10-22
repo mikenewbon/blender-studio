@@ -71,6 +71,8 @@ class Command(ImportCommand):
 
     def reconcile_content_disposition(self, static_asset: models_static_assets.StaticAsset):
         def update_object(key, disposition_metadata, content_type):
+            if not key:
+                return
             self.console_log(f"Updating file {key}")
             self.console_log(f"\t Disposition: {disposition_metadata}")
             self.console_log(f"\t ContentType: {content_type}")
