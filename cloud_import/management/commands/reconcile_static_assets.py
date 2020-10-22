@@ -4,6 +4,8 @@ import pathlib
 import shutil
 import pytz
 from bson import json_util, ObjectId
+from typing import Optional
+import botocore.exceptions as botocore_exceptions
 
 from django.core.management.base import BaseCommand
 from django.core.files import File
@@ -34,8 +36,9 @@ class Command(ImportCommand):
                 )
             variation.delete()
 
-    def reconcile_free(self, static_asset: models_static_assets.StaticAsset):
-
+    def get_film_asset_or_section(
+        self, static_asset
+    ) -> (Optional[models_training.Section], Optional[models_films.Asset]):
         try:
             section = static_asset.section
         except models_training.Section.DoesNotExist:
@@ -45,6 +48,12 @@ class Command(ImportCommand):
 
         # if not film_asset and not section:
         #     print(static_asset.original_filename)
+
+        return section, film_asset
+
+    def reconcile_free(self, static_asset: models_static_assets.StaticAsset):
+
+        section, film_asset = self.get_film_asset_or_section(static_asset)
 
         node = mongo.nodes_collection.find_one(
             {'properties.file': ObjectId(static_asset.slug), 'permissions.world': {'$exists': True}}
@@ -60,8 +69,45 @@ class Command(ImportCommand):
             section.is_free = True
             section.save()
 
+    def reconcile_content_disposition(self, static_asset: models_static_assets.StaticAsset):
+        def update_object(key, disposition_metadata, content_type):
+            try:
+                files.s3_client.copy_object(
+                    Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+                    Key=static_asset.source.name,
+                    CopySource={'Bucket': settings.AWS_STORAGE_BUCKET_NAME, 'Key': key},
+                    ContentDisposition=disposition_metadata,
+                    ContentType=content_type,
+                    MetadataDirective="REPLACE",
+                )
+            except botocore_exceptions.ClientError:
+                self.console_log(f"File {key} is too large")
+
+        section, film_asset = self.get_film_asset_or_section(static_asset)
+
+        filename = static_asset.original_filename
+        if film_asset:
+            filename = film_asset.name
+        if section:
+            filename = section.name
+
+        if static_asset.source:
+            extension = pathlib.Path(static_asset.source.name).suffix
+            disposition = f'attachment; filename=\"{filename}{extension}\"'
+            self.console_log(f"Updating source to {disposition}")
+            update_object(static_asset.source.name, disposition, static_asset.content_type)
+
+        if static_asset.source_type == 'video':
+            for variation in static_asset.video.variations.all():
+                if not variation.source:
+                    return
+                extension = pathlib.Path(variation.source.name).suffix
+                disposition = f'attachment; filename=\"{filename}{extension}\"'
+                self.console_log(f"Updating variation to {disposition}")
+                update_object(variation.source.name, disposition, variation.content_type)
+
     def handle(self, *args, **options):
-        for static_asset in models_static_assets.StaticAsset.objects.filter(source_type='video'):
+        for static_asset in models_static_assets.StaticAsset.objects.all():
             # self.console_log(f"Fetching asset {static_asset.id} {static_asset.source}")
             file_doc = None
             filename = ''
@@ -89,5 +135,5 @@ class Command(ImportCommand):
 
             # self.get_or_create_static_asset(file_doc)
             # self.remove_webm_video_variations(static_asset)
-            # self.fix_empty_paths(static_asset)
-            self.reconcile_free(static_asset)
+            # self.reconcile_free(static_asset)
+            self.reconcile_content_disposition(static_asset)
