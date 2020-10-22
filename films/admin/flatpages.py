@@ -10,3 +10,4 @@ class FilmFlatPageAdmin(mixins.ViewOnSiteMixin, admin.ModelAdmin):
     list_filter = [
         'film',
     ]
+    prepopulated_fields = {'slug': ('slug',)}

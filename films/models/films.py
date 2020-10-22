@@ -34,6 +34,9 @@ class Film(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Mo
     youtube_link = models.URLField(blank=True)
     crew = models.ManyToManyField(User, through='FilmCrew')
 
+    class Meta:
+        ordering = ('-release_date',)
+
     def clean(self) -> None:
         super().clean()
         if not self.slug:

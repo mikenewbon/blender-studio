@@ -3,6 +3,7 @@ from django.db.models.query import QuerySet
 from django.http.request import HttpRequest
 
 from films.models import assets, collections, films
+from common import mixins
 
 
 @admin.register(assets.Asset)
@@ -54,6 +55,7 @@ class FilmCrewInlineAdmin(admin.TabularInline):
 
 
 @admin.register(films.Film)
-class FilmAdmin(admin.ModelAdmin):
+class FilmAdmin(mixins.ViewOnSiteMixin, admin.ModelAdmin):
+    list_display = ('title', 'view_link')
     prepopulated_fields = {'slug': ('title',)}
     inlines = (FilmCrewInlineAdmin,)
