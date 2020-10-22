@@ -3,7 +3,6 @@ from typing import Dict, List, Optional, Sequence
 
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-import bleach
 
 from comments import typed_templates
 from comments.models import Comment
@@ -28,7 +27,7 @@ def comments_to_template_type(
             return build_deleted_tree(comment)
         # FIXME(anna) remove when all comments have message_html
         comment.message_html = comment.message_html or markdown.render(
-            bleach.clean(comment.message)
+            markdown.sanitize(comment.message)
         )
         return typed_templates.CommentTree(
             id=comment.pk,
