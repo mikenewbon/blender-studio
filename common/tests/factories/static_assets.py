@@ -1,10 +1,16 @@
+import datetime
 import factory
 from factory import fuzzy
 from factory.django import DjangoModelFactory
 
 from common.tests.factories.helpers import generate_file_path
 from common.tests.factories.users import UserFactory
-from static_assets.models import StaticAsset, StaticAssetFileTypeChoices, License
+from static_assets.models import (
+    StaticAsset,
+    StaticAssetFileTypeChoices,
+    License,
+    Video,
+)
 
 
 class LicenseFactory(DjangoModelFactory):
@@ -27,3 +33,11 @@ class StaticAssetFactory(DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     license = factory.SubFactory(LicenseFactory)
     thumbnail = factory.LazyFunction(generate_file_path)
+
+
+class VideoFactory(DjangoModelFactory):
+    class Meta:
+        model = Video
+
+    static_asset = factory.SubFactory(StaticAssetFactory)
+    duration = datetime.timedelta(seconds=0)

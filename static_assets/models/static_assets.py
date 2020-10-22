@@ -176,6 +176,34 @@ class Video(models.Model):
     play_count = models.PositiveIntegerField(default=0, editable=False)
 
     @property
+    def duration_label(self):
+        """A duration label that adaptively displays time.
+
+        For example: 0:02, 1:02, 10:02, 1:20:01.
+        """
+        total_seconds = int(self.duration.total_seconds())
+        remaining_hours = total_seconds % 86400
+        remaining_minutes = remaining_hours % 3600
+        hours = remaining_hours // 3600
+        minutes = remaining_minutes // 60
+        seconds = remaining_minutes % 60
+
+        # Show hours only if present
+        hours_str = f'{hours}:' if hours else ''
+
+        # Show minutes with zero padding only if hours are present
+        if minutes and hours:
+            minutes_str = f'{minutes:02d}:'
+        elif minutes:
+            minutes_str = f'{minutes}:'
+        # Show zero minutes when no minutes are present (0:12)
+        else:
+            minutes_str = '0:'
+        # Always pad seconds display
+        seconds_str = f'{seconds:02d}'
+        return f'{hours_str}{minutes_str}{seconds_str}'
+
+    @property
     def default_variation_url(self):
         default_variation: VideoVariation = self.variations.first()
         # TODO(fsiddi) ensure that default_variation.source is never None
