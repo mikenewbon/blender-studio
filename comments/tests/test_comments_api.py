@@ -1,3 +1,4 @@
+from unittest.mock import ANY
 import json
 import logging
 
@@ -88,7 +89,9 @@ class TestCommentDeleteTreeEndpoints(TestCase):
         # Create comment tree
         comment_base = CommentFactory()
         comment_should_stay, self.comment_to_delete = CommentFactory.create_batch(
-            2, reply_to=comment_base, user=self.user,
+            2,
+            reply_to=comment_base,
+            user=self.user,
         )
         reply_to_delete_0, reply_to_delete_1 = CommentFactory.create_batch(
             2, reply_to=self.comment_to_delete
@@ -218,3 +221,73 @@ class TestCommentArchiveTreeEndpoint(TestCase):
             comment.refresh_from_db()
             self.assertTrue(comment.is_archived)
         self.assertFalse(other_comment.is_archived)
+
+
+class TestCommentEditEndpoint(TestCase):
+    maxDiff = None
+
+    def setUp(self):
+        self.user = UserFactory()
+        self.comment = CommentFactory(user=self.user)
+        self.edit_url = reverse('comment-edit', kwargs={'comment_pk': self.comment.pk})
+        self.client.force_login(self.user)
+
+    def test_edit_full_response(self):
+        edit_message = '# Header\n**bold** _italic_'
+        response = self.client.post(
+            self.edit_url,
+            {'message': edit_message},
+            content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            json.loads(response.content),
+            {
+                'date_string': ANY,
+                'delete_url': f'/comments/api/comments/{self.comment.pk}/delete/',
+                'edit_url': f'/comments/api/comments/{self.comment.pk}/edit/',
+                'full_name': '',
+                'id': self.comment.pk,
+                'like_url': f'/comments/api/comments/{self.comment.pk}/like/',
+                'liked': False,
+                'likes': 0,
+                'message': '# Header\n**bold** _italic_',
+                'message_html': '<h1>Header</h1>\n'
+                '<p><strong>bold</strong> <em>italic</em></p>\n',
+                'profile_image_url': None,
+            },
+        )
+
+    def test_edit_with_shortcodes(self):
+        edit_message = '# Header\n**bold** _italic_ {youtube UbyxFZSZZ90}'
+        response = self.client.post(
+            self.edit_url,
+            {'message': edit_message},
+            content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            json.loads(response.content),
+            {
+                'date_string': ANY,
+                'delete_url': f'/comments/api/comments/{self.comment.pk}/delete/',
+                'edit_url': f'/comments/api/comments/{self.comment.pk}/edit/',
+                'full_name': '',
+                'id': self.comment.pk,
+                'like_url': f'/comments/api/comments/{self.comment.pk}/like/',
+                'liked': False,
+                'likes': 0,
+                'message': edit_message,
+                'message_html': '<h1>Header</h1>\n'
+                '<p><strong>bold</strong> <em>italic</em> <div '
+                'class="embed-responsive embed-responsive-16by9"><iframe '
+                'class="shortcode youtube embed-responsive-item" width="560" '
+                'height="315" '
+                'src="https://www.youtube.com/embed/UbyxFZSZZ90?rel=0" '
+                'frameborder="0" allow="autoplay; encrypted-media" '
+                'allowfullscreen></iframe></div></p>\n',
+                'profile_image_url': None,
+            },
+        )
