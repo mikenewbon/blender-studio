@@ -6,6 +6,7 @@ from django.http.response import JsonResponse
 from django.views.decorators.http import require_POST
 
 from comments.queries import edit_comment, moderator_edit_comment
+from comments.views.common import comment_to_json_response
 from common.types import assert_cast
 
 
@@ -21,4 +22,4 @@ def comment_edit(request: HttpRequest, *, comment_pk: int) -> JsonResponse:
     else:
         comment = edit_comment(comment_pk=comment_pk, user_pk=request.user.id, message=message)
 
-    return JsonResponse({'message': comment.message,})
+    return comment_to_json_response(comment)

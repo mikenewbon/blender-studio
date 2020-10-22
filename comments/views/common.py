@@ -2,11 +2,13 @@
 from typing import Dict, List, Optional, Sequence
 
 from django.contrib.auth.models import User
+from django.http import JsonResponse
 import bleach
 
 from comments import typed_templates
 from comments.models import Comment
 from common import markdown
+from common.shortcodes import render as with_shortcodes
 from common.types import assert_cast
 
 
@@ -80,4 +82,23 @@ def comments_to_template_type(
         number_of_comments=len(comments),
         comment_trees=[build_tree(comment) for comment in lookup.get(None, [])],
         profile_image_url=user.profile.image_url if getattr(user, 'profile', None) else None,
+    )
+
+
+def comment_to_json_response(comment: Comment):
+    """Serialize given comment to JSON."""
+    return JsonResponse(
+        {
+            'id': comment.pk,
+            'full_name': comment.full_name,
+            'profile_image_url': comment.profile_image_url,
+            'date_string': comment.date_created.strftime('%d %B %Y - %H:%M'),
+            'message': comment.message,
+            'message_html': with_shortcodes(comment.message_html),
+            'like_url': comment.like_url,
+            'liked': False,
+            'likes': 0,
+            'edit_url': comment.edit_url,
+            'delete_url': comment.delete_url,
+        }
     )

@@ -5,8 +5,8 @@ from django.http import JsonResponse
 from django.http.request import HttpRequest
 from django.views.decorators.http import require_POST
 
+from comments.views.common import comment_to_json_response
 from common.types import assert_cast
-from common.shortcodes import render as with_shortcodes
 from training import queries
 
 
@@ -21,18 +21,4 @@ def comment(request: HttpRequest, *, section_pk: int) -> JsonResponse:
     comment = queries.sections.comment(
         user_pk=request.user.pk, section_pk=section_pk, message=message, reply_to_pk=reply_to_pk
     )
-    return JsonResponse(
-        {
-            'id': comment.pk,
-            'full_name': comment.full_name,
-            'profile_image_url': comment.profile_image_url,
-            'date_string': comment.date_created.strftime('%d %B %Y - %H:%M'),
-            'message': comment.message,
-            'message_html': with_shortcodes(comment.message_html),
-            'like_url': comment.like_url,
-            'liked': False,
-            'likes': 0,
-            'edit_url': comment.edit_url,
-            'delete_url': comment.delete_url,
-        }
-    )
+    return comment_to_json_response(comment)
