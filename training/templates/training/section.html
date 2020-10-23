@@ -40,10 +40,11 @@
 
 
           <div class="training-toolbar">
-            <a class="btn btn-sm btn-dark"><i class="material-icons">favorite_border</i> Like</a>
-            <a class="btn btn-sm btn-dark">Download</a>
+            {% comment %} <a class="btn btn-sm btn-dark"><i class="material-icons">favorite_border</i> Like</a> {% endcomment %}
+            {% if request.user.is_authenticated and request.user|has_group:"subscriber" or section.is_free %}
+            <a href="{{ video.url }}" download class="btn btn-sm btn-dark">Download</a>
+            {% endif %}
             <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
-
               <i class="material-icons">more_horiz</i>
             </button>
             <div class="dropdown-menu dropdown-menu-right">

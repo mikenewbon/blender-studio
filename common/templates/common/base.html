@@ -30,9 +30,12 @@
   <meta property="og:url" content="{{request.scheme}}://{{request.META.HTTP_HOST}}">
   <meta property="og:title" content="Blender Cloud">
   <meta name="twitter:title" content="Blender Cloud">
-  <meta name="twitter:description" content="Blender Cloud is a web based service developed by Blender Institute that allows people to access the training videos and all the data from the open projects.">
-  <meta property="og:image" content="{{request.scheme}}://{{request.META.HTTP_HOST}}{% static '/common/images/blender-cloud-og.jpg' %}">
-  <meta name="twitter:image" content="{{request.scheme}}://{{request.META.HTTP_HOST}}{% static '/common/images/blender-cloud-og.jpg' %}">
+  <meta name="twitter:description"
+    content="Blender Cloud is a web based service developed by Blender Institute that allows people to access the training videos and all the data from the open projects.">
+  <meta property="og:image"
+    content="{{request.scheme}}://{{request.META.HTTP_HOST}}{% static '/common/images/blender-cloud-og.jpg' %}">
+  <meta name="twitter:image"
+    content="{{request.scheme}}://{{request.META.HTTP_HOST}}{% static '/common/images/blender-cloud-og.jpg' %}">
   {% endblock meta_indivudal %}
 
   {% endblock meta %}
@@ -116,12 +119,12 @@
           </div> {% endcomment %}
 
           <button data-toggle="dropdown" class="btn btn-secondary btn-nav btn-profile">
-            {% if request.user.is_authenticated and request.user.profile %}
-            <div style="background-image:url('{{ request.user.profile.image_url }}');" class="profile">
-              {% else %}
-              <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');" class="profile">
-                {% endif %}
-              </div>
+            {% if request.user.is_authenticated and request.user.profile.image_url %}
+            <div style="background-image:url('{{ request.user.profile.image_url }}');" class="profile"></div>
+            {% else %}
+            <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');" class="profile">
+            </div>
+            {% endif %}
           </button>
           <div class="dropdown-menu dropdown-menu-right">
 
@@ -364,7 +367,10 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id={{ settings_analytics_id }}"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
     gtag('js', new Date());
 
     gtag('config', '{{ settings_analytics_id }}');

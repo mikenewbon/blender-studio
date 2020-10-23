@@ -135,6 +135,7 @@ PIPELINE = {
         'training': {
             'source_filenames': [
                 'training/scripts/section.js',
+                'training/scripts/training.js',
                 'training/scripts/components/card_training.js',
                 'training/scripts/components/video_player.js',
             ],

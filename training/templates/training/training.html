@@ -1,6 +1,12 @@
 {% extends 'training/base_with_navigation.html' %}
 {% load static %}
+{% load pipeline %}
 {% load common_extras %}
+
+{% block scripts %}
+{{ block.super }}
+{% javascript 'training' %}
+{% endblock scripts %}
 
 {% block breadcrumbs %}
 {% comment %} <nav class="navbar-secondary" aria-label="breadcrumbs">
@@ -37,16 +43,17 @@
             </div>
 
             <div class="training-toolbar">
-              <a class="btn btn-sm btn-dark">
-                <i class="material-icons">add</i>
-                Save
+              <a class="btn btn-sm save-button {% if not training.favorited %}btn-dark{% else %}btn-primary{% endif %}" data-favorite-url="{{ training.favorite_url }}" {% if training.favorited %}data-checked="checked"{% endif %} data-toggle="tooltip" {% if training.favorited %}title="Save for later"{% else %}title=" Remove from saved for later"{% endif %}>
+                <i class="material-icons">{% if not training.favorited %}add{% else %}check{% endif %}</i>
+                <span>{% if not training.favorited %}Save{% else %}Saved{% endif %}</span>
               </a>
 
               <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
                 <i class="material-icons btn-material-icons">more_horiz</i>
               </button>
               <div class="dropdown-menu dropdown-menu-right">
-                <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank" class="dropdown-item">
+                <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank"
+                  class="dropdown-item">
                   <i class="material-icons">flag</i>
                   <span>Report Problem</span>
                 </a>
