@@ -1,10 +1,11 @@
 import unittest
 
 from django.contrib.auth.models import Group, AnonymousUser
-from django.test import TestCase
+from django.test import TestCase, SimpleTestCase
 from django.test.client import RequestFactory
 
 from common.shortcodes import render
+from common.markdown import render as render_markdown
 from common.tests.factories.users import UserFactory
 
 
@@ -198,67 +199,8 @@ class IFrameTest(TestCaseWithRequest):
         self.assertEqual(expect, render(md, context=context))
 
 
-@unittest.skip('not implemented TODO')
-class AttachmentTest(unittest.TestCase):
+class AttachmentTest(TestCaseWithRequest):
     def test_image(self):
-        oid, _ = self.ensure_file_exists(
-            file_overrides={
-                'variations': [
-                    {
-                        'format': 'jpg',
-                        'height': 2048,
-                        'width': 2048,
-                        'length': 819569,
-                        'link': 'https://i.imgur.com/FmbuPNe.jpg',
-                        'content_type': 'image/jpeg',
-                        'md5': '--',
-                        'file_path': 'c2a5c897769ce1ef0eb10f8fa1c472bcb8e2d5a4-h.jpg',
-                        'size': 'l',
-                    },
-                ],
-                'filename': 'cute_kitten.jpg',
-            }
+        self.assertEqual(
+            '{attachment 123 link=self}', render_markdown('{attachment 123 link=self}'),
         )
-
-        node_properties = {'attachments': {'img': {'oid': oid}}}
-
-        node_doc = {'properties': node_properties}
-
-        # Collect the two possible context that can be provided for attachemt
-        # rendering. See pillar.shortcodes.sdk_file for more info.
-        possible_contexts = [node_properties, node_doc]
-
-        # We have to get the file document again, because retrieving it via the
-        # API (which is what the shortcode rendering is doing) will change its
-        # link URL.
-        db_file = self.get(f'/api/files/{oid}').get_json()
-        link = db_file['variations'][0]['link']
-
-        def do_render(context, link):
-            """Run attachment rendering in different contexts."""
-            with self.app.test_request_context():
-                self_linked = (
-                    f'<a class="expand-image-links" href="{link}">'
-                    f'<img src="{link}" alt="cute_kitten.jpg"/></a>'
-                )
-                self.assertEqual(
-                    self_linked, render('{attachment img link}', context=context).strip()
-                )
-                self.assertEqual(
-                    self_linked, render('{attachment img link=self}', context=context).strip()
-                )
-                self.assertEqual(
-                    f'<img src="{link}" alt="cute_kitten.jpg"/>',
-                    render('{attachment img}', context=context).strip(),
-                )
-
-                tag_link = 'https://i.imgur.com/FmbuPNe.jpg'
-                self.assertEqual(
-                    f'<a href="{tag_link}" target="_blank">'
-                    f'<img src="{link}" alt="cute_kitten.jpg"/></a>',
-                    render('{attachment img link=%r}' % tag_link, context=context).strip(),
-                )
-
-        # Test both possible contexts for rendering attachments
-        for context in possible_contexts:
-            do_render(context, link)
