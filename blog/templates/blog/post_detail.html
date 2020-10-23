@@ -19,7 +19,9 @@
 {% block content %}
 <div class="jumbotron jumbotron-fluid jumbotron-blog">
   <div class="jumbotron-bg-wrapper">
+    {% if post.header %}
     <img class="jumbotron-bg" src="{{ post.header.url }}">
+    {% endif %}
     <!-- TODO(Mike): Implement image sets when flat-pages are done. -->
   </div>
 </div>
