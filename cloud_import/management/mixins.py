@@ -144,6 +144,9 @@ class ImportCommand(BaseCommand):
     ):
         """Download file from cloud storage and upload to S3."""
         file_doc = mongo.files_collection.find_one({'_id': ObjectId(file_uuid)})
+        if not file_doc:
+            self.console_log(f"\tFile {file_uuid} does not exist, skipping")
+            return
 
         source = getattr(instance, attr_name)
         if source and not force:

@@ -32,36 +32,40 @@
 
 <div class="container-xl">
 
+  <!-- FIXME: exact copy-pasta of the snippet in training/home_authenticated.html: maybe use include? -->
+  <!-- Recently watched -->
+  {% if recently_watched_sections %}
   <section class="mb-4">
 
-    <div class="row justify-content-center mb-2">
+    <div class="row justify-content-center mb-2 mb-md-3">
       <div class="col-md">
-        <h2 class="mb-0">Latest Training</h2>
-        <p class="mb-0">Want to see more? <a href="/training">Explore all training</a></p>
+        <h2 class="mb-0">Continue training</h2>
+        <p class="mb-0">Recently watched sections will appear here with your position saved</p>
       </div>
       <div class="col-md-auto d-none d-md-block carousel-card-toolbar">
-        <a class="btn btn-lg btn-transparent btn-icon {% if featured_trainings|length <= 1 %}onlyOne{% elif featured_trainings|length <= 3 %} lessThanThree {% endif %}"
-          href="#latestTraining" role="button" data-slide="prev">
+        <a class="btn btn-lg btn-transparent btn-icon {% if recently_watched_sections|length <= 1 %}onlyOne{% elif recently_watched_sections|length <= 4 %} lessThanFour {% endif %}"
+          href="#continueTraining" role="button" data-slide="prev">
           <i class="material-icons">arrow_back</i>
         </a>
-        <a class="btn btn-lg btn-transparent btn-icon {% if featured_trainings|length <= 1 %}onlyOne{% elif featured_trainings|length <= 3 %} lessThanThree {% endif %}"
-          href="#latestTraining" role="button" data-slide="next">
+        <a class="btn btn-lg btn-transparent btn-icon {% if recently_watched_sections|length <= 1 %}onlyOne{% elif recently_watched_sections|length <= 4 %} lessThanFour {% endif %}"
+          href="#continueTraining" role="button" data-slide="next">
           <i class="material-icons">arrow_forward</i>
         </a>
       </div>
     </div>
 
     <div class="row">
-      <div id="latestTraining" class="carousel carousel-card-3 slide w-100" data-ride="carousel" data-interval="0">
+      <div id="continueTraining" class="carousel carousel-card-4 slide w-100" data-touch="true" data-ride="carousel"
+        data-interval="0">
         <div class="carousel-inner w-100" role="listbox">
           <div class="carousel-item active">
-            {% for training in featured_trainings|slice:':1' %}
-            {% include "common/components/cards/card_training.html" with training=training card_sizes="col-md-4" %}
+            {% for section in recently_watched_sections|slice:':1' %}
+            {% include "training/components/card_section.html" with section=section card_sizes="col-md-3" %}
             {% endfor %}
           </div>
-          {% for training in featured_trainings|slice:'1:6' %}
+          {% for section in recently_watched_sections|slice:'1:' %}
           <div class="carousel-item">
-            {% include "common/components/cards/card_training.html" with training=training card_sizes="col-md-4" %}
+            {% include "training/components/card_section.html" with section=section card_sizes="col-md-3" %}
           </div>
           {% endfor %}
         </div>
@@ -70,14 +74,53 @@
 
     <div class="row d-block d-md-none">
       <div class="col-md-auto carousel-card-toolbar">
-        <a class="btn btn-lg btn-transparent btn-icon {% if featured_trainings|length <= 1 %}onlyOne{% elif featured_trainings|length <= 3 %} lessThanThree {% endif %}"
-          href="#latestTraining" role="button" data-slide="prev">
+        <a class="btn btn-lg btn-transparent btn-icon {% if recently_watched_sections|length <= 1 %}onlyOne{% elif recently_watched_sections|length <= 4 %} lessThanFour {% endif %}"
+          href="#continueTraining" role="button" data-slide="prev">
           <i class="material-icons">arrow_back</i>
         </a>
-        <a class="btn btn-lg btn-transparent btn-icon {% if featured_trainings|length <= 1 %}onlyOne{% elif featured_trainings|length <= 3 %} lessThanThree {% endif %}"
-          href="#latestTraining" role="button" data-slide="next">
+        <a class="btn btn-lg btn-transparent btn-icon {% if recently_watched_sections|length <= 1 %}onlyOne{% elif recently_watched_sections|length <= 4 %} lessThanFour {% endif %}"
+          href="#continueTraining" role="button" data-slide="next">
           <i class="material-icons">arrow_forward</i>
         </a>
+      </div>
+    </div>
+
+  </section>
+  {% endif %}
+
+  <section class="mb-3">
+
+    <div class="row justify-content-center mb-2">
+      <div class="col">
+        <h2 class="mb-0">Blog</h2>
+        <p class="mb-0">Lorem lorem blah</p>
+      </div>
+      <div class="col-auto carousel-card-toolbar">
+        <a class="btn btn-lg btn-transparent btn-icon {% if latest_posts|length <= 1 %}onlyOne{% elif latest_posts|length <= 4 %} lessThanFour {% endif %}"
+          href="#latestPosts" role="button" data-slide="prev">
+          <i class="material-icons">arrow_back</i>
+        </a>
+        <a class="btn btn-lg btn-transparent btn-icon {% if latest_posts|length <= 1 %}onlyOne{% elif latest_posts|length <= 4 %} lessThanFour {% endif %}"
+          href="#latestPosts" role="button" data-slide="next">
+          <i class="material-icons">arrow_forward</i>
+        </a>
+      </div>
+    </div>
+    <div class="row">
+      <div id="latestPosts" class="carousel carousel-card-3 slide w-100" data-touch="true" data-ride="carousel"
+        data-interval="0">
+        <div class="carousel-inner w-100" role="listbox">
+          <div class="carousel-item active">
+            {% for post in latest_posts|slice:':1' %}
+            {% include 'blog/card_blog.html' %}
+            {% endfor %}
+          </div>
+          {% for post in latest_posts|slice:'1:6' %}
+          <div class="carousel-item">
+            {% include 'blog/card_blog.html' %}
+          </div>
+          {% endfor %}
+        </div>
       </div>
     </div>
   </section>

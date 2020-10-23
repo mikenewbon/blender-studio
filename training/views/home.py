@@ -4,8 +4,10 @@ from django.views.decorators.http import require_safe
 
 from common.typed_templates.types import TypeSafeTemplateResponse
 from training import queries, typed_templates
-from training.typed_templates.home import RecentlyWatchedSection
-from training.views.common import training_model_to_template_type
+from training.views.common import (
+    training_model_to_template_type,
+    recently_watched_sections_to_template_type,
+)
 
 
 @require_safe
@@ -24,24 +26,9 @@ def home_authenticated(request: HttpRequest) -> TypeSafeTemplateResponse:
 
     return typed_templates.home.home_authenticated(
         request,
-        recently_watched_sections=[
-            RecentlyWatchedSection(
-                index=section.index,
-                name=section.name,
-                url=section.url,
-                training_name=getattr(section, 'training_name'),
-                chapter_index=getattr(section, 'chapter_index'),
-                chapter_name=getattr(section, 'chapter_name'),
-                progress_fraction=(
-                    0.5
-                    if getattr(section, 'video_position') is None
-                    or getattr(section, 'video_duration') is None
-                    else getattr(section, 'video_position') / getattr(section, 'video_duration')
-                ),
-                thumbnail_s_url=section.thumbnail_s_url,
-            )
-            for section in recently_watched_sections
-        ],
+        recently_watched_sections=recently_watched_sections_to_template_type(
+            recently_watched_sections
+        ),
         favorited_trainings=[
             training_model_to_template_type(training, favorited=True)
             for training in favorited_trainings

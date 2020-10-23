@@ -4,9 +4,12 @@ from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_safe
 
+from blog.queries import get_latest_post_revisions
 from films.models import Film
 from films.queries import get_random_featured_assets
 from training.models import Training
+from training.queries.sections import recently_watched
+from training.views.common import recently_watched_sections_to_template_type
 
 
 @require_safe
@@ -29,9 +32,17 @@ def home(request: HttpRequest) -> HttpResponse:
         :template:`common/home.html`
     """
     context = {
+        'featured_films': Film.objects.filter(is_featured=True),
         'featured_trainings': Training.objects.filter(),
         'featured_film_assets': get_random_featured_assets(limit=8),
+        'latest_posts': get_latest_post_revisions(limit=6),
+        'recently_watched_sections': [],
     }
+    if request.user.is_authenticated:
+        recently_watched_sections = recently_watched(user_pk=request.user.pk)
+        context['recently_watched_sections'] = recently_watched_sections_to_template_type(
+            recently_watched_sections
+        )
 
     return render(request, 'common/home.html', context)
 

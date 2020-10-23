@@ -1,5 +1,5 @@
 import dataclasses as dc
-from typing import Sequence, Optional
+from typing import Sequence, Optional, List
 
 from django.http.request import HttpRequest
 from django.template.response import TemplateResponse

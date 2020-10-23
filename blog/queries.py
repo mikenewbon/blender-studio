@@ -8,14 +8,14 @@ from django.utils import timezone
 from blog.models import Revision
 
 
-def get_latest_post_revisions() -> 'QuerySet[Revision]':
-    """Returns the newest published revisions of all published posts, sorted (newest posts first)."""
+def get_latest_post_revisions(limit: int = 12) -> 'QuerySet[Revision]':
+    """Return the newest published revisions of all published posts, newest posts first."""
     return (
         Revision.objects.filter(
             pk__in=Subquery(
                 Revision.objects.filter(is_published=True, post__is_published=True)
                 # Include only the latest revision for each post:
-                .order_by('post_id', '-post__date_created')
+                .order_by('post_id', '-post__date_published')
                 .distinct('post_id')
                 .values('pk')
             )
@@ -28,5 +28,5 @@ def get_latest_post_revisions() -> 'QuerySet[Revision]':
                 output_field=BooleanField(),
             ),
         )
-        .order_by('-post__date_created')
-    )
+        .order_by('-post__date_published')
+    )[:limit]

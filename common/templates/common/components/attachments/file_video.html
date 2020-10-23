@@ -1,0 +1,7 @@
+{% if is_processing %}
+<p>Content is processing</p>
+{% else %}
+<div class="embed-responsive embed-responsive-16by9">
+  <video src="{{ static_asset.video.default_variation_url }}"  controls="controls"></video>
+</div>
+{% endif %}

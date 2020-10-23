@@ -8,6 +8,7 @@ from comments.models import Comment
 from common import mixins, markdown
 from common.upload_paths import get_upload_to_hashed_path
 from films.models import Film
+import static_assets.models as models_static_assets
 
 
 class Post(mixins.CreatedUpdatedMixin, models.Model):
@@ -17,14 +18,17 @@ class Post(mixins.CreatedUpdatedMixin, models.Model):
     # TODO(sem): Maybe add a ForeignKey to a Profile instead? Because authors
     #            might not have an account per se.
     author = models.ForeignKey(User, on_delete=models.PROTECT, related_name='authored_posts')
-    slug = models.SlugField()
+    slug = models.SlugField(max_length=128)
+    date_published = models.DateTimeField(blank=True, null=True)
+    legacy_id = models.CharField(max_length=256, blank=True)
 
     is_published = models.BooleanField(default=False)
 
     comments = models.ManyToManyField(Comment, through='PostComment', related_name='post')
+    attachments = models.ManyToManyField(models_static_assets.StaticAsset, blank=True)
 
     def __str__(self):
-        return f'Post "{self.slug}" by {self.author}'
+        return self.slug
 
     def get_absolute_url(self) -> str:
         return self.url
@@ -55,7 +59,8 @@ class Revision(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, model
     )
     content = models.TextField()
     html_content = models.TextField(blank=True, editable=False)
-    thumbnail = models.FileField(upload_to=get_upload_to_hashed_path)
+    thumbnail = models.FileField(upload_to=get_upload_to_hashed_path, blank=True)
+    header = models.FileField(upload_to=get_upload_to_hashed_path, blank=True)
 
     is_published = models.BooleanField(default=False)
 

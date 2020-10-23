@@ -71,7 +71,7 @@ def post_detail(request: HttpRequest, post_slug: str) -> HttpResponse:
 
     context = {
         'post': latest_revision,
-        'post_author': post.author.get_full_name(),
+        'post_author_profile': post.author.profile,
         'post_date_created': post.date_created,
         'user_can_edit_post': (request.user.is_staff and request.user.has_perm('blog.change_post')),
         'comments': comments_to_template_type(comments, post.comment_url, request.user),

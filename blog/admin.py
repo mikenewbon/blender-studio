@@ -12,13 +12,14 @@ from django.utils.text import slugify
 from blog.forms import PostChangeForm, PostAddForm
 from blog.models import Post, Revision
 from common.types import assert_cast
+from common.mixins import ViewOnSiteMixin
 
 
 @admin.register(Revision)
 class RevisionAdmin(admin.ModelAdmin):
     readonly_fields = ['date_created', 'date_updated', 'editor']
     list_display = ['__str__', 'post', 'topic', 'editor', 'is_published']
-    list_filter = ['is_published', 'editor', 'post']
+    list_filter = ['is_published', 'post']
     search_fields = ['title']
     save_as = True
 
@@ -30,18 +31,21 @@ class RevisionAdmin(admin.ModelAdmin):
 
 
 @admin.register(Post)
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(ViewOnSiteMixin, admin.ModelAdmin):
     list_display = [
         '__str__',
-        'last_revision_title',
         'film',
         'author',
         'is_published',
         'is_last_revision_published',
-        'date_created',
         'date_updated',
+        'view_link',
     ]
-    list_filter = ['is_published', 'film', 'author']
+    list_filter = [
+        'is_published',
+        'film',
+    ]
+    autocomplete_fields = ['author']
     search_fields = ['slug']
 
     def get_queryset(self, request: HttpRequest) -> 'QuerySet[Post]':
