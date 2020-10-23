@@ -1,22 +1,10 @@
-import datetime
-import os
-import pathlib
-import shutil
 import pytz
-from bson import json_util, ObjectId
-
-from django.core.management.base import BaseCommand
-from django.core.files import File
-from django.conf import settings
-from django.contrib.auth.models import User
-
+from bson import ObjectId
 
 from cloud_import.management import mongo
-import comments.models as models_comments
-import films.models as models_films
-import static_assets.models as models_assets
 from cloud_import.management.mixins import ImportCommand
 import blog.models as models_blog
+import films.models as models_films
 
 
 class Command(ImportCommand):
@@ -99,27 +87,29 @@ class Command(ImportCommand):
             revision.html_content = revision.html_content.replace(str_src, str_dst)
             revision.save()
 
-    def handle(self, *args, **options):
-        cloud_project_id = ObjectId('563a9c8cf0e722006ce97b03')
+    def reconcile_blog(self, film):
+        project = mongo.projects_collection.find_one({'url': film.slug})
 
         cloud_posts = mongo.nodes_collection.find(
             {
                 'node_type': 'post',
                 '_deleted': {'$ne': True},
-                'project': cloud_project_id,
+                'project': project['_id'],
                 'properties.status': 'published',
             }
         )
         for post_doc in cloud_posts:
             user, _ = self.get_or_create_user(post_doc['user'])
+            slug = f"{film.slug}-{post_doc['properties']['url']}"
             try:
-                post = models_blog.Post.objects.get(slug=post_doc['properties']['url'])
+                post = models_blog.Post.objects.get(slug=slug)
             except models_blog.Post.DoesNotExist:
                 post = models_blog.Post.objects.create(
-                    slug=post_doc['properties']['url'],
+                    slug=slug,
                     author=user,
                     is_published=True,
                     legacy_id=str(post_doc['_id']),
+                    film=film,
                 )
             models_blog.Post.objects.filter(pk=post.pk).update(
                 date_updated=pytz.utc.localize(post_doc['_updated']),
@@ -128,7 +118,7 @@ class Command(ImportCommand):
             )
             post = models_blog.Post.objects.get(pk=post.pk)
             post.save()
-            self.console_log(f"Retreived post for {post_doc['_id']} with id {post.id}")
+            self.console_log(f"Retrieved post for {post_doc['_id']} with id {post.id}")
 
             try:
                 revision = models_blog.Revision.objects.get(post=post)
@@ -161,3 +151,7 @@ class Command(ImportCommand):
             self.reconcile_post_comments(post)
             # Get attachments
             self.reconcile_post_attachments(post_doc, post)
+
+    def handle(self, *args, **options):
+        for film in models_films.Film.objects.all():
+            self.reconcile_blog(film)

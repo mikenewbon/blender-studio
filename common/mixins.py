@@ -1,4 +1,5 @@
 from typing import Optional, Any, Union, List, Tuple
+import logging
 
 from django.conf import settings
 from django.contrib import admin
@@ -8,6 +9,8 @@ from django.http.request import HttpRequest
 from django.utils.safestring import mark_safe
 
 from sorl.thumbnail import get_thumbnail
+
+log = logging.getLogger(__name__)
 
 
 class CreatedUpdatedMixin(models.Model):
@@ -54,20 +57,26 @@ class ViewOnSiteMixin:
 class StaticThumbnailURLMixin:
     """Add `thumbnail_<size>_url` properties generating static cacheable thumbnail URLs."""
 
+    thumbnail = None  # Is always overridden
+
+    def _get_thumbnail(self, size_settings):
+        if not self.thumbnail:
+            return None
+        try:
+            return get_thumbnail(
+                self.thumbnail, size_settings, crop=settings.THUMBNAIL_CROP_MODE
+            ).url
+        except OSError as e:
+            # Handle the classic 'cannot write mode RGBA as JPEG'
+            log.error(e.strerror)
+            return None
+
     @property
     def thumbnail_m_url(self) -> Optional[str]:
         """Return a static URL to a medium-sized thumbnail."""
-        if not self.thumbnail:
-            return None
-        return get_thumbnail(
-            self.thumbnail, settings.THUMBNAIL_SIZE_M, crop=settings.THUMBNAIL_CROP_MODE
-        ).url
+        return self._get_thumbnail(settings.THUMBNAIL_SIZE_M)
 
     @property
     def thumbnail_s_url(self) -> Optional[str]:
         """Return a static URL to a small thumbnail."""
-        if not self.thumbnail:
-            return None
-        return get_thumbnail(
-            self.thumbnail, settings.THUMBNAIL_SIZE_S, crop=settings.THUMBNAIL_CROP_MODE
-        ).url
+        return self._get_thumbnail(settings.THUMBNAIL_SIZE_S)
