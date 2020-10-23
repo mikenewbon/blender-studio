@@ -36,7 +36,7 @@
             <i class="material-icons btn-material-icons">close</i>
           </button>
         </div>
-        {% if request.user.is_authenticated and request.user|has_group:"subscriber" or section.is_free %}
+        {% if request.user.is_authenticated and request.user|has_group:"subscriber" or asset.is_free %}
         {% if asset.static_asset.source_type == "video" %}
         {% include 'common/components/video_player.html' with url=asset.static_asset.video.default_variation_url %}
         {% else %}
@@ -120,7 +120,7 @@
 
 
         <div class="row mb-2">
-          {% if asset.static_asset.author_image_url %}
+          {% if request.user.is_authenticated and request.user|has_group:"subscriber" or asset.is_free %}
           <div style="background-image:url('{{ asset.static_asset.author_image_url }}');" class="profile ml-2"></div>
           {% else %}
           <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');" class="profile ml-2">
