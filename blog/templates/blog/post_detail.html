@@ -2,6 +2,20 @@
 {% load static %}
 {% load common_extras %}
 
+{% block title_append %} - {{ post.title }}{% endblock title_append %}
+
+{% block meta_indivudal %}
+<meta property="og:url" content="{{request.scheme}}://{{request.META.HTTP_HOST}}{{ post.url }}">
+<meta property="og:title" content="Blender Cloud - {{ post.title }}">
+<meta name="twitter:title" content="Blender Cloud - {{ post.title }}">
+<meta property="og:description"
+  content="{{ post.description }}">
+<meta name="twitter:description"
+  content="{{ post.description }}">
+<meta property="og:image" content="{{request.scheme}}://{{request.META.HTTP_HOST}}{{ post.thumbnail }}">
+<meta name="twitter:image" content="{{request.scheme}}://{{request.META.HTTP_HOST}}{{ post.thumbnail }}">
+{% endblock %}
+
 {% block content %}
 <div class="jumbotron jumbotron-fluid jumbotron-blog">
   <div class="jumbotron-bg-wrapper">
@@ -18,8 +32,7 @@
   <div class="training-toolbar-container mb-3">
     <div class="training-toolbar-details row">
 
-      <div style="background-image:url('{{ post_author_profile.image_url }}');"
-        class="profile-image profile ml-2">
+      <div style="background-image:url('{{ post_author_profile.image_url }}');" class="profile-image profile ml-2">
       </div>
       <div class="col-auto">
         <h4 class="profile-name mb-0">{{ post_author_profile.full_name }}</h4>
