@@ -165,6 +165,7 @@ class Command(ImportCommand):
             )
         training.date_created = pytz.utc.localize(training_doc['_created'])
         training.date_updated = pytz.utc.localize(training_doc['_updated'])
+        training.save()
 
         # Ensure media
         if 'picture_header' in training_doc:
@@ -209,6 +210,7 @@ class Command(ImportCommand):
 
     def reconcile_training(self, training_doc):
         training = self.get_or_create_training(training_doc)
+        return
 
         for chapter_doc in self.fetch_training_chapter_docs(training_doc):
             chapter = self.get_or_create_chapter(chapter_doc, training)
