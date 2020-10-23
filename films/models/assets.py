@@ -7,6 +7,7 @@ from taggit.managers import TaggableManager
 from comments.models import Comment
 from common import mixins
 from films.models import Collection
+import static_assets.models as models_static_assets
 
 
 class AssetCategory(models.TextChoices):
@@ -44,6 +45,9 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
     is_free = models.BooleanField(default=False)
     contains_blend_file = models.BooleanField(
         default=False, help_text='Is the asset a .blend file or a package containing .blend files?',
+    )
+    attachments = models.ManyToManyField(
+        models_static_assets.StaticAsset, blank=True, related_name='+'
     )
 
     comments = models.ManyToManyField(Comment, through='AssetComment', related_name='asset')

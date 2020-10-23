@@ -8,6 +8,7 @@ from taggit.managers import TaggableManager
 from comments.models import Comment
 from common import mixins
 from training.models import chapters
+import static_assets.models as models_static_assets
 
 
 class Section(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Model):
@@ -34,6 +35,9 @@ class Section(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
 
     comments = models.ManyToManyField(Comment, through='SectionComment', related_name='section')
+    attachments = models.ManyToManyField(
+        models_static_assets.StaticAsset, blank=True, related_name='+'
+    )
     tags = TaggableManager(blank=True)
 
     def clean(self) -> None:
