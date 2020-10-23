@@ -32,6 +32,9 @@ class TrainingAdmin(admin.ModelAdmin):
         '__str__',
         with_name('url', lambda obj: format_html('<a href="{url}">{url}</a>', url=obj.url)),
     ]
+    search_fields = [
+        'name',
+    ]
     inlines = [ChapterInline]
 
 
@@ -40,19 +43,26 @@ class SectionInline(admin.TabularInline):
     model = sections.Section
     prepopulated_fields = {'slug': ('name',)}
     ordering = ('index',)
-    autocomplete_fields = ['static_asset']
+    autocomplete_fields = ['static_asset', 'user']
 
 
 @admin.register(chapters.Chapter)
 class ChapterAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
+    autocomplete_fields = ['training', 'user']
     inlines = [SectionInline]
-    search_fields = ['name']
+    search_fields = [
+        'name',
+    ]
+    list_filter = [
+        'training',
+    ]
 
 
 class StaticAssetInline(admin.TabularInline):
     show_change_link = True
     model = models_static_assets.StaticAsset
+    search_fields = ['name']
 
 
 @admin.register(sections.Section)
