@@ -12,6 +12,7 @@ from django.utils.text import slugify
 from blog.forms import PostChangeForm, PostAddForm
 from blog.models import Post, Revision
 from common.types import assert_cast
+from common.mixins import ViewOnSiteMixin
 
 
 @admin.register(Revision)
@@ -30,7 +31,7 @@ class RevisionAdmin(admin.ModelAdmin):
 
 
 @admin.register(Post)
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(ViewOnSiteMixin, admin.ModelAdmin):
     list_display = [
         '__str__',
         'film',
@@ -38,6 +39,7 @@ class PostAdmin(admin.ModelAdmin):
         'is_published',
         'is_last_revision_published',
         'date_updated',
+        'view_link',
     ]
     list_filter = [
         'is_published',

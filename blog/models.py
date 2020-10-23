@@ -28,7 +28,7 @@ class Post(mixins.CreatedUpdatedMixin, models.Model):
     attachments = models.ManyToManyField(models_static_assets.StaticAsset, blank=True)
 
     def __str__(self):
-        return f'Post "{self.slug}" by {self.author}'
+        return self.slug
 
     def get_absolute_url(self) -> str:
         return self.url
