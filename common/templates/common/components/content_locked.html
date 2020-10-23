@@ -1,14 +1,26 @@
 {% load static %}
+{% load common_extras %}
+
 <div class="content-locked">
 
-  <img class="img-fluid" src="{% if background %}{{ background }}{% else %}{% static 'training/images/placeholders/card_training.png' %}{% endif %}">
+  <img class="img-fluid"
+    src="{% if background %}{{ background }}{% else %}{% static 'training/images/placeholders/card_training.png' %}{% endif %}">
 
   <div class="content-locked-text">
+    {% if not request.user.is_authenticated %}
     <h3>You need to login to view this content</h3>
     <p class="mb-3">You can join Blender Cloud for €9.90/month and get access to all of our training & film content
       instantly!</p>
-      <a href="{% url 'oauth:login' %}" class="btn btn-transparent btn-nav login-button">Login</a>
-    <a href="https://store.blender.org/product/membership/" target="_blank" class="btn btn-primary">Join Blender Cloud</a>
+    <a href="{% url 'oauth:login' %}" class="btn btn-transparent btn-nav login-button">Login</a>
+    <a href="https://store.blender.org/product/membership/" target="_blank" class="btn btn-primary">Join Blender
+      Cloud</a>
+    {% else %}
+    <h3>You need to subscribe to view this content</h3>
+    <p class="mb-3">You can join Blender Cloud for €9.90/month and get access to all of our training & film content
+      instantly!</p>
+    <a href="https://store.blender.org/product/membership/" target="_blank" class="btn btn-primary">Join Blender
+      Cloud</a>
+    {% endif %}
   </div>
 
 </div>

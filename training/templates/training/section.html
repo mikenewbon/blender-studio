@@ -14,7 +14,7 @@
 {% if video is not none %}
 <div class="row mb-3">
   <div class="col training-video">
-    {% if request.user.is_authenticated or section.is_free %}
+    {% if request.user.is_authenticated and request.user|has_group:"subscriber" or section.is_free %}
     {% include 'common/components/video_player.html' with url=video.url progress_url=video.progress_url start_position=video.start_position %}
     {% else %}
     {% comment %} TODO(Mike): Add video thumbnails when created {% endcomment %}

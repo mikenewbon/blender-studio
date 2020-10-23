@@ -177,7 +177,9 @@ has-secondary-nav
           <div class="card-columns">
 
             {% for asset in featured_artwork %}
+            {% if asset.is_published or request.user.is_superuser %}
             {% include "common/components/file.html" with asset=asset site_context="featured_artwork" %}
+            {% endif %}
             {% endfor %}
 
           </div>

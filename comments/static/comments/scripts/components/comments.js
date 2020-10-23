@@ -429,6 +429,7 @@ window.comments = (function comments() {
 
     _postComment() {
       const { commentSection, inputElement } = this;
+      console.log(inputElement.innerText)
       const message = inputElement.innerText;
 
       if (message === '') {
@@ -489,8 +490,8 @@ window.comments = (function comments() {
     _setupEventListeners() {
       this.sendButton.addEventListener('click', event => {
         event.preventDefault();
-        this.hide();
         this._postReply();
+        this.hide();
       });
 
       this.inputElement.addEventListener('keydown', event => {
@@ -506,6 +507,7 @@ window.comments = (function comments() {
 
     _postReply() {
       const { commentSection, inputElement, replyTo } = this;
+      console.log(inputElement.innerText)
       const message = inputElement.innerText;
 
       inputElement.innerText = '';
@@ -573,8 +575,8 @@ window.comments = (function comments() {
       this.sendButton.addEventListener('click', event => {
         event.preventDefault();
         this.comment.showContent();
-        this.hide();
         this._postEdit();
+        this.hide();
       });
 
       // this.element.addEventListener('focusout', event => {
