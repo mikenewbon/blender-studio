@@ -18,7 +18,7 @@ from common.types import assert_cast
 class RevisionAdmin(admin.ModelAdmin):
     readonly_fields = ['date_created', 'date_updated', 'editor']
     list_display = ['__str__', 'post', 'topic', 'editor', 'is_published']
-    list_filter = ['is_published', 'editor', 'post']
+    list_filter = ['is_published', 'post']
     search_fields = ['title']
     save_as = True
 
@@ -33,15 +33,17 @@ class RevisionAdmin(admin.ModelAdmin):
 class PostAdmin(admin.ModelAdmin):
     list_display = [
         '__str__',
-        'last_revision_title',
         'film',
         'author',
         'is_published',
         'is_last_revision_published',
-        'date_created',
         'date_updated',
     ]
-    list_filter = ['is_published', 'film', 'author']
+    list_filter = [
+        'is_published',
+        'film',
+    ]
+    autocomplete_fields = ['author']
     search_fields = ['slug']
 
     def get_queryset(self, request: HttpRequest) -> 'QuerySet[Post]':
