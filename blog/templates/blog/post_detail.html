@@ -29,20 +29,20 @@
 
     <div class="file-toolbar">
 
-      <a class="btn btn-sm btn-icon btn-dark">
+      {% comment %} <a class="btn btn-sm btn-icon btn-dark">
         <i class="material-icons">favorite_border</i>
         <span class="likes-count">1</span>
-      </a>
+      </a> {% endcomment %}
 
       {% comment %} TODO(Mike): Add working share buttons {% endcomment %}
-      <a href="http://www.facebook.com/share.php?u=cloud.blender.org/blog/{{ post.post.slug }}"
+      {% comment %} <a href="http://www.facebook.com/share.php?u=cloud.blender.org/blog/{{ post.post.slug }}"
         class="btn btn-sm btn-icon btn-dark">
         <i class="material-icons">facebook</i>
       </a>
 
       <a href="#" class="btn btn-sm btn-icon btn-dark">
         <i class="material-icons">share</i>
-      </a>
+      </a> {% endcomment %}
 
       {% if user_can_edit_post %}
       <a href="{{ post.admin_url }}" class="btn btn-sm btn-icon btn-dark">

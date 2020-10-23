@@ -251,10 +251,10 @@ search.addWidgets([
     container: document.querySelector('#searchMedia'),
     attribute: 'media_type',
   }),
-  customMenuSelect({
-    container: document.querySelector('#searchFree'),
-    attribute: 'free',
-  }),
+  // customMenuSelect({
+  //   container: document.querySelector('#searchFree'),
+  //   attribute: 'free',
+  // }),
   customSortBy({
     container: document.querySelector('#sorting'),
     items: [
