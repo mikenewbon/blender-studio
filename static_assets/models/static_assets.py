@@ -64,6 +64,9 @@ class DynamicStorageFileField(models.FileField):
 
 
 class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Model):
+    class Meta:
+        ordering = ['-date_created']
+
     source = models.FileField(upload_to=get_upload_to_hashed_path, blank=True, max_length=256)
     source_type = models.CharField(choices=StaticAssetFileTypeChoices.choices, max_length=5)
     # TODO(Natalia): source type validation
@@ -163,7 +166,7 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
             )
 
     def __str__(self):
-        return f'{self.source_type} {self.original_filename}'
+        return f'({self.id}) {self.original_filename}'
 
 
 class Video(models.Model):

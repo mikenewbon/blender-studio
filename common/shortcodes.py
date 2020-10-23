@@ -19,10 +19,11 @@ import logging
 import re
 import typing
 import urllib.parse
-
 import shortcodes
+from django.template.loader import render_to_string
 
 from common import queries
+import static_assets.models as models_static_assets
 
 _parser: shortcodes.Parser = None
 _commented_parser: shortcodes.Parser = None
@@ -213,9 +214,81 @@ class Attachment:
         pargs: typing.List[str],
         kwargs: typing.Dict[str, str],
     ) -> str:
-        # noqa: D102
-        # TODO(anna) implement attachments
-        return '{attachment not implemented}'
+
+        try:
+            slug = pargs[0]
+        except KeyError:
+            return '{attachment No slug given}'
+
+        try:
+            static_asset_id = int(slug)
+        except ValueError:
+            return '{attachment Invalid slug %s - should be a static_asset id}' % slug
+
+        try:
+            attachment = models_static_assets.StaticAsset.objects.get(pk=static_asset_id)
+        except models_static_assets.StaticAsset.DoesNotExist:
+            return html_module.escape('{attachment %r does not exist}' % slug)
+
+        return self.render(attachment, pargs, kwargs)
+
+    def render(
+        self,
+        static_asset: models_static_assets.StaticAsset,
+        pargs: typing.List[str],
+        kwargs: typing.Dict[str, str],
+    ) -> str:
+
+        file_renderers = {
+            'image': self.render_image,
+            'video': self.render_video,
+        }
+
+        renderer = file_renderers.get(static_asset.source_type, self.render_generic)
+        return renderer(static_asset, pargs, kwargs)
+
+    def render_generic(
+        self,
+        static_asset: models_static_assets.StaticAsset,
+        pargs: typing.List[str],
+        kwargs: typing.Dict[str, str],
+    ):
+        return render_to_string(
+            'common/components/attachments/file_generic.html', {'static_asset': static_asset},
+        )
+
+    def render_image(
+        self,
+        static_asset: models_static_assets.StaticAsset,
+        pargs: typing.List[str],
+        kwargs: typing.Dict[str, str],
+    ):
+        """Renders an image file."""
+
+        if 'link' in pargs:
+            kwargs['link'] = 'self'
+        link = None if 'link' not in kwargs else kwargs['link']
+        return render_to_string(
+            'common/components/attachments/file_image.html',
+            {'static_asset': static_asset, 'link': link},
+        )
+
+    def render_video(
+        self,
+        static_asset: models_static_assets.StaticAsset,
+        pargs: typing.List[str],
+        kwargs: typing.Dict[str, str],
+    ):
+        """Renders a video file."""
+
+        # TODO(fsiddi) Handle processing video
+        is_processing = False
+        # TODO(fsiddi) Support looping and other options
+
+        return render_to_string(
+            'common/components/attachments/file_video.html',
+            {'static_asset': static_asset, 'is_processing': is_processing},
+        )
 
 
 def _get_parser() -> typing.Tuple[shortcodes.Parser, shortcodes.Parser]:

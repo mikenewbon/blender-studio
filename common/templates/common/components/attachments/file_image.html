@@ -1,0 +1,14 @@
+{% if link %}
+  {% if link == 'self' %}
+  <a class="expand-image-links" href="{{ static_asset.thumbnail_m_url }}">
+    <img src="{{ static_asset.thumbnail_m_url }}" alt="{{ static_asset.original_filename }}"/>
+  </a>
+  {% else %}
+    <a href="{{ link }}" target="_blank">
+      <img src="{{ static_asset.thumbnail_m_url }}" alt="{{ static_asset.original_filename }}"/>
+    </a>
+  {% endif %}
+
+{% else %}
+  <img src="{{ static_asset.thumbnail_m_url }}" alt="{{ static_asset.original_filename }}" />
+{% endif %}

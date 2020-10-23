@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 from common import mixins, markdown
+import static_assets.models as models_static_assets
 from films.models import Film
 
 
@@ -38,6 +39,7 @@ class FilmFlatPage(mixins.CreatedUpdatedMixin, models.Model):
         help_text='Format the content in <a href="https://commonmark.org/help/">Markdown</a>.',
     )
     html_content = models.TextField(blank=True, editable=False)
+    attachments = models.ManyToManyField(models_static_assets.StaticAsset, blank=True)
 
     def save(self, *args: Any, **kwargs: Any) -> None:
         """Generates the html version of the content and saves the object."""

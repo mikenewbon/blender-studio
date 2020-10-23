@@ -27,11 +27,13 @@ class VideoInline(admin.TabularInline):
 @admin.register(static_assets.StaticAsset)
 class StaticAssetAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
     inlines = [ImageInline, VideoInline]
+    autocomplete_fields = ['user', 'author']
     fieldsets = (
         (
             None,
             {
                 'fields': [
+                    'id',
                     'source',
                     'original_filename',
                     'size_bytes',
@@ -54,7 +56,9 @@ class StaticAssetAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
             },
         ),
     )
-    list_filter = ['source_type', 'user', 'author']
+    list_filter = [
+        'source_type',
+    ]
     search_fields = [
         'original_filename',
         'user__first_name',
@@ -63,7 +67,7 @@ class StaticAssetAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
         'author__last_name',
         'source_type',
     ]
-    readonly_fields = ['original_filename', 'size_bytes', 'date_created']
+    readonly_fields = ['original_filename', 'size_bytes', 'date_created', 'id']
 
 
 admin.site.register(storages.StorageLocation)
