@@ -22,7 +22,6 @@ class AttachmentLinkInlineLexer(mistune.InlineLexer):
         self.default_rules.insert(1, 'attachment_link')
 
     def output_attachment_link(self, m):
-        print(m.string)
         return m.string
 
 
