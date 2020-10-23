@@ -32,6 +32,7 @@ def home(request: HttpRequest) -> HttpResponse:
         :template:`common/home.html`
     """
     context = {
+        'featured_films': Film.objects.filter(is_featured=True),
         'featured_trainings': Training.objects.filter(),
         'featured_film_assets': get_random_featured_assets(limit=8),
         'latest_posts': get_latest_post_revisions(limit=6),
