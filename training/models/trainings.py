@@ -26,6 +26,8 @@ class TrainingDifficulty(models.TextChoices):
 
 class Training(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Model):
     class Meta:
+        ordering = ['-date_created']
+
         indexes = [
             models.Index(fields=['status', 'type', 'difficulty']),
             models.Index(fields=['status', 'difficulty', 'type']),
