@@ -70,4 +70,4 @@ class PostChangeForm(forms.ModelForm):
 
     class Meta:
         model = Revision
-        fields = ('title', 'topic', 'description', 'content', 'thumbnail', 'is_published')
+        fields = ('title', 'topic', 'description', 'content', 'thumbnail', 'header', 'is_published')

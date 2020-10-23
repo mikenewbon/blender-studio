@@ -141,6 +141,7 @@ class PostAdmin(ViewOnSiteMixin, admin.ModelAdmin):
                     # It is not possible to set an initial value in a FileField, so we use
                     # the previous picture so as not to force the user to set it each time.
                     revision.thumbnail = previous_revision.thumbnail
+                    revision.header = previous_revision.header
 
                 post.save()
                 revision.save(force_insert=True)
