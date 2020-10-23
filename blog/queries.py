@@ -8,8 +8,8 @@ from django.utils import timezone
 from blog.models import Revision
 
 
-def get_latest_post_revisions() -> 'QuerySet[Revision]':
-    """Returns the newest published revisions of all published posts, sorted (newest posts first)."""
+def get_latest_post_revisions(limit: int = 12) -> 'QuerySet[Revision]':
+    """Return the newest published revisions of all published posts, newest posts first."""
     return (
         Revision.objects.filter(
             pk__in=Subquery(
@@ -29,4 +29,4 @@ def get_latest_post_revisions() -> 'QuerySet[Revision]':
             ),
         )
         .order_by('-post__date_published')
-    )[:12]
+    )[:limit]

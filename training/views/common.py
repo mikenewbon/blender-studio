@@ -8,6 +8,7 @@ from common.types import assert_cast
 from training import typed_templates
 from training.models import chapters, sections as sections_models, trainings
 from training.typed_templates.types import ChapterNavigation, Navigation, SectionNavigation
+from training.typed_templates.home import RecentlyWatchedSection
 import static_assets.models as models_static_assets
 
 
@@ -135,3 +136,27 @@ def navigation_to_template_type(
             for chapter in sorted(chapters, key=lambda c: c.index)
         ],
     )
+
+
+def recently_watched_sections_to_template_type(
+    recently_watched_sections: List[sections_models.Section],
+) -> List[RecentlyWatchedSection]:
+    """Return types Sections for use in templates."""
+    return [
+        RecentlyWatchedSection(
+            index=section.index,
+            name=section.name,
+            url=section.url,
+            training_name=getattr(section, 'training_name'),
+            chapter_index=getattr(section, 'chapter_index'),
+            chapter_name=getattr(section, 'chapter_name'),
+            progress_fraction=(
+                0.5
+                if getattr(section, 'video_position') is None
+                or getattr(section, 'video_duration') is None
+                else getattr(section, 'video_position') / getattr(section, 'video_duration')
+            ),
+            thumbnail_s_url=section.thumbnail_s_url,
+        )
+        for section in recently_watched_sections
+    ]
