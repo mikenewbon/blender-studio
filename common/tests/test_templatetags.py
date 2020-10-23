@@ -22,6 +22,14 @@ class CommonExtrasTest(TestCase):
 
         self.assertFalse(has_group(user, 'doesnotexist'))
 
+    def test_has_group_in_group_subscriber_and_demo_are_equivalent(self):
+        user = UserFactory(email='mail@example.com')
+        group, _ = Group.objects.get_or_create(name='demo')
+        user.groups.add(group)
+
+        self.assertTrue(has_group(user, 'demo'))
+        self.assertTrue(has_group(user, 'subscriber'))
+
     def test_has_group_in_group(self):
         user = UserFactory(email='mail@example.com')
         for group_name in ('subscriber', 'has_subscription'):
