@@ -63,7 +63,7 @@
 </div>
 
 {% for chapter_navigation in navigation.chapters %}
-{% if chapter_navigation.status or request.user.is_superuser %}
+{% comment %} {% if chapter_navigation.status or request.user.is_superuser %} {% endcomment %}
 <div class="drawer-nav-group">
   <div class="drawer-nav-dropdown-wrapper ">
     <a class="drawer-nav-dropdown font-weight-bold {% if chapter_navigation.current %} active {% else %}collapsed{% endif %}"
@@ -77,14 +77,14 @@
     <ol class="drawer-nav-list training">
 
       {% for section_navigation in chapter_navigation.sections %}
-      {% if section_navigation.is_published or request.user.is_superuser %}
+      {% comment %} {% if section_navigation.is_published or request.user.is_superuser %} {% endcomment %}
       {% include 'common/components/navigation/nav_drawer_section_progress.html' with title=section_navigation.name subtitle='Video' href=section_navigation.url active=section_navigation.current started=section_navigation.started finished=section_navigation.finished progress_fraction=section_navigation.progress_fraction admin_change_href=section_navigation.admin_url nth=forloop.counter|stringformat:"02d" %}
-      {% endif %}
+      {% comment %} {% endif %} {% endcomment %}
       {% endfor %}
 
     </ol>
   </div>
 </div>
-{% endif %}
+{% comment %} {% endif %} {% endcomment %}
 {% endfor %}
 {% endblock nested_nav_drawer_inner %}
