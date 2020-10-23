@@ -4,15 +4,15 @@ from bson import ObjectId
 from cloud_import.management import mongo
 from cloud_import.management.mixins import ImportCommand
 import blog.models as models_blog
-import films.models as models_films
+import training.models as models_training
 
 
 class Command(ImportCommand):
-    help = 'Augment film assets with extra info'
+    help = 'Augment training assets with extra info'
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '-s', '--slug', dest='slugs', action='append', help="provides film slugs"
+            '-s', '--slug', dest='slugs', action='append', help="provides training slugs"
         )
 
         parser.add_argument(
@@ -87,8 +87,8 @@ class Command(ImportCommand):
             revision.html_content = revision.html_content.replace(str_src, str_dst)
             revision.save()
 
-    def reconcile_blog(self, film):
-        project = mongo.projects_collection.find_one({'url': film.slug})
+    def reconcile_blog(self, training):
+        project = mongo.projects_collection.find_one({'url': training.slug})
 
         cloud_posts = mongo.nodes_collection.find(
             {
@@ -100,16 +100,12 @@ class Command(ImportCommand):
         )
         for post_doc in cloud_posts:
             user, _ = self.get_or_create_user(post_doc['user'])
-            slug = f"{film.slug}-{post_doc['properties']['url']}"
+            slug = f"{training.slug}-{post_doc['properties']['url']}"
             try:
                 post = models_blog.Post.objects.get(slug=slug)
             except models_blog.Post.DoesNotExist:
                 post = models_blog.Post.objects.create(
-                    slug=slug,
-                    author=user,
-                    is_published=True,
-                    legacy_id=str(post_doc['_id']),
-                    film=film,
+                    slug=slug, author=user, is_published=True, legacy_id=str(post_doc['_id']),
                 )
             models_blog.Post.objects.filter(pk=post.pk).update(
                 date_updated=pytz.utc.localize(post_doc['_updated']),
@@ -153,5 +149,5 @@ class Command(ImportCommand):
             self.reconcile_post_attachments(post_doc, post)
 
     def handle(self, *args, **options):
-        for film in models_films.Film.objects.all():
-            self.reconcile_blog(film)
+        for training in models_training.Training.objects.all():
+            self.reconcile_blog(training)
