@@ -84,4 +84,4 @@ class SectionAdmin(admin.ModelAdmin):
     ]
     list_per_page = 20
     search_fields = ['name', 'chapter__name', 'chapter__training__name']
-    autocomplete_fields = ['chapter', 'static_asset']
+    autocomplete_fields = ['chapter', 'static_asset', 'user']
