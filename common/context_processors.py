@@ -12,3 +12,8 @@ def search_client_config(request: HttpRequest) -> Dict[str, Dict[str, str]]:
             'apiKey': settings.MEILISEARCH_PUBLIC_KEY,
         },
     }
+
+
+def settings_analytics_id(request: HttpRequest) -> Dict[str, Dict[str, str]]:
+    """Inject the Google Analytics data the template context."""
+    return {'settings_analytics_id': settings.GOOGLE_ANALYTICS_TRACKING_ID}

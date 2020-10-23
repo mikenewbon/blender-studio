@@ -77,6 +77,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'common.context_processors.search_client_config',
+                'common.context_processors.settings_analytics_id',
                 'training.context_processors.enums',
                 # TODO(anna) when Profile model is added, this should become a prop on it instead.
                 'training.context_processors.favorited',
@@ -275,6 +276,8 @@ TRAINING_SEARCH = {
 
 
 TAGGIT_CASE_INSENSITIVE = True
+
+GOOGLE_ANALYTICS_TRACKING_ID = ''
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 PUBLIC_FILE_STORAGE = 'common.storage.S3PublicStorage'
