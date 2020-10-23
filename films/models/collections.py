@@ -10,6 +10,7 @@ from films.models import films
 
 class Collection(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Model):
     class Meta:
+        ordering = ['-date_created']
         constraints = [
             models.UniqueConstraint(fields=['parent', 'slug'], name='unique_slug_per_collection'),
         ]

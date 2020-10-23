@@ -43,9 +43,9 @@ class CollectionAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     inlines = [AssetInline]
     list_display = ['__str__', 'film', 'order', 'parent']
-    list_filter = ['film', 'parent']
+    list_filter = ['film']
     search_fields = ['name', 'film__title']
-    autocomplete_fields = ['parent']
+    autocomplete_fields = ['parent', 'user', 'film']
 
 
 class FilmCrewInlineAdmin(admin.TabularInline):
