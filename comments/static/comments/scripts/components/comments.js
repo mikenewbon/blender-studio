@@ -429,15 +429,13 @@ window.comments = (function comments() {
 
     _postComment() {
       const { commentSection, inputElement } = this;
-      console.log(inputElement.innerText)
-      const message = inputElement.innerText;
+      const message = inputElement.innerHTML;
 
       if (message === '') {
         return
       }
 
       inputElement.innerText = '';
-      console.log(message)
       ajax
         .jsonRequest('POST', commentSection.commentUrl, {
           reply_to: null,
@@ -459,7 +457,6 @@ window.comments = (function comments() {
           );
           comment.element.classList.add('top-level-comment');
           commentSection.prependComment(comment);
-          console.log(comment.message_html);
         });
     }
   }
@@ -507,11 +504,11 @@ window.comments = (function comments() {
 
     _postReply() {
       const { commentSection, inputElement, replyTo } = this;
-      console.log(inputElement.innerText)
-      const message = inputElement.innerText;
+
+      const message = inputElement.innerHTML;
 
       inputElement.innerText = '';
-      console.log(message);
+
       ajax
         .jsonRequest('POST', commentSection.commentUrl, {
           reply_to: replyTo.id,
@@ -532,7 +529,7 @@ window.comments = (function comments() {
             data.delete_url
           );
           replyTo.prependReply(comment);
-          console.log(data.message_html)
+
         });
     }
   }
@@ -568,7 +565,7 @@ window.comments = (function comments() {
     }
 
     prepopulateMessage() {
-      this.inputElement.innerText = this.comment.message;
+      this.inputElement.innerHTML = this.comment.message;
     }
 
     _setupEventListeners() {
@@ -599,10 +596,9 @@ window.comments = (function comments() {
 
     _postEdit() {
       const { comment, inputElement } = this;
-      const message = inputElement.innerText;
+      const message = inputElement.innerHTML;
 
       inputElement.innerText = '';
-      console.log(message);
       ajax
         .jsonRequest('POST', comment.editUrl, {
           message
@@ -611,7 +607,6 @@ window.comments = (function comments() {
           this.comment.message = data.message;
           this.comment.element.dataset.message = this.comment.message;
           this.comment.message_html = data.message_html;
-          console.log(comment.message_html);
           this.comment.element.querySelector('.comment-text').innerHTML = this.comment.message_html;
         });
     }
