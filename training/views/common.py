@@ -112,7 +112,7 @@ def navigation_to_template_type(
                         started=assert_cast(bool, getattr(section, 'started')),
                         finished=assert_cast(bool, getattr(section, 'finished')),
                         progress_fraction=(
-                            0.5
+                            0
                             if getattr(section, 'video_position') is None
                             or getattr(section, 'video_duration') is None
                             else getattr(section, 'video_position')
@@ -151,7 +151,7 @@ def recently_watched_sections_to_template_type(
             chapter_index=getattr(section, 'chapter_index'),
             chapter_name=getattr(section, 'chapter_name'),
             progress_fraction=(
-                0.5
+                0
                 if getattr(section, 'video_position') is None
                 or getattr(section, 'video_duration') is None
                 else getattr(section, 'video_position') / getattr(section, 'video_duration')
