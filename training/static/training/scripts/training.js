@@ -29,9 +29,12 @@ function postFavorite(element) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelector('.save-button').addEventListener('click', (e) => {
-    postFavorite(e.target.closest('.save-button'));
-  });
+  const saveButton = document.querySelector('.save-button');
+  if (saveButton) {
+    saveButton.addEventListener('click', (e) => {
+      postFavorite(e.target.closest('.save-button'));
+    });
+  }
 
   $(function () {
     $('[data-toggle="tooltip"]').tooltip()
