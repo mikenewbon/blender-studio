@@ -157,9 +157,9 @@ window.comments = (function comments() {
       sel.addRange(range)
     }
 
-    appendReply(comment) {
+    prependReply(comment) {
       const repliesElement = this.element.closest('.top-level-comment').querySelector('.replies .comments');
-      repliesElement.append(comment.element);
+      repliesElement.prepend(comment.element);
     }
 
     get editInputsElement() {
@@ -531,7 +531,7 @@ window.comments = (function comments() {
             data.edit_url,
             data.delete_url
           );
-          replyTo.appendReply(comment);
+          replyTo.prependReply(comment);
           console.log(data.message_html)
         });
     }

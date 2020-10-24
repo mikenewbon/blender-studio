@@ -2,6 +2,8 @@
 {% load pipeline %}
 {% load static %}
 
+{% block title_append %} - Search{% endblock title_append %}
+
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/@meilisearch/instant-meilisearch@v0.2.1/dist/instant-meilisearch.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.7.2"></script>

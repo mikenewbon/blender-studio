@@ -1,5 +1,9 @@
 {%  extends 'films/gallery.html' %}
 
+{% load film_extras %}
+
+{% block title_append %} - {{ film.title }} {{ current_collection.name }}{% endblock title_append %}
+
 {% block gallery_files %}
 
 <div>

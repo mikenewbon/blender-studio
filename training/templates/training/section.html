@@ -4,6 +4,8 @@
 {% load pipeline %}
 {% load common_extras %}
 
+{% block title_append %} - {{ training.name }}{% endblock title_append %}
+
 {% block scripts %}
 {{ block.super }}
 {% if request.user.is_authenticated %}

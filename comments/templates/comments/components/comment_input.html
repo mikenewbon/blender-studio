@@ -5,7 +5,7 @@
     {% if request.user.is_authenticated and request.user.profile.image_url %}
     <div style="background-image:url('{{ request.user.profile.image_url }}');" class="profile"></div>
     {% else %}
-    <div style="background-image:url('{% static 'common/images/blank-profile-pic.jpg' %}');" class="profile"></div>
+    <div style="background-image:url('{% static 'common/images/blank-profile-pic.png' %}');" class="profile"></div>
     {% endif %}
   </div>
   <div class="col">

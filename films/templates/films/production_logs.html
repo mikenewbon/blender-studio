@@ -1,6 +1,8 @@
 {% extends 'films/base_films.html' %}
 {% load static %}
 
+{% block title_append %} - {{ film.title }} Weeklies{% endblock title_append %}
+
 {% block content %}
 <div class="container-xl pt-4">
   <section class="mb-5">

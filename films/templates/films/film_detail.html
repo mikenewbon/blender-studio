@@ -1,6 +1,8 @@
 {% extends 'films/base_films.html' %}
 {% load static %}
 
+{% block title_append %} - {{ film.title }}{% endblock title_append %}
+
 {% block jumbotron %}
 {% include "films/components/jumbotron_film.html" with film=film %}
 {% endblock jumbotron %}

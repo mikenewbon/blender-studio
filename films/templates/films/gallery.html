@@ -2,6 +2,8 @@
 {% load static %}
 {% load film_extras %}
 
+{% block title_append %} - {{ film.title }} Gallery{% endblock title_append %}
+
 {% block bodyclasses %}
 {% comment %} has-nav-drawer{% endcomment %}
 has-secondary-nav

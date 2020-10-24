@@ -3,6 +3,8 @@
 {% load static %}
 {% load pipeline %}
 
+{% block title_append %} - Training{% endblock title_append %}
+
 {% block scripts %}
 {% javascript 'training' %}
 <script src="https://cdn.jsdelivr.net/npm/@meilisearch/instant-meilisearch@v0.2.1/dist/instant-meilisearch.umd.min.js">
