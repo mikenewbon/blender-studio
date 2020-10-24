@@ -19,6 +19,7 @@ class ChapterInline(admin.TabularInline):
     model = chapters.Chapter
     prepopulated_fields = {'slug': ('name',)}
     ordering = ('index',)
+    autocomplete_fields = ['user']
 
 
 # class TagInline(admin.TabularInline):
@@ -43,7 +44,7 @@ class SectionInline(admin.TabularInline):
     model = sections.Section
     prepopulated_fields = {'slug': ('name',)}
     ordering = ('index',)
-    autocomplete_fields = ['static_asset', 'user']
+    autocomplete_fields = ['static_asset', 'user', 'attachments']
 
 
 @admin.register(chapters.Chapter)
@@ -84,4 +85,4 @@ class SectionAdmin(admin.ModelAdmin):
     ]
     list_per_page = 20
     search_fields = ['name', 'chapter__name', 'chapter__training__name']
-    autocomplete_fields = ['chapter', 'static_asset', 'user']
+    autocomplete_fields = ['chapter', 'static_asset', 'user', 'attachments']
