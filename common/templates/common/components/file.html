@@ -7,6 +7,15 @@
 
       {% if asset.static_asset.preview %}
       {% include "common/components/helpers/image_set.html" with alt=asset.name classes="file-image" img_source=asset.static_asset.preview xsmall_width="350" small_width="350" medium_width="350" large_width="350" xlarge_width="350" %}
+      {% if asset.contains_blend_file %}
+      <img class="file-icon" src="{% static "common/images/icons/blend.svg" %}" alt="asset preview">
+      {% elif asset.static_asset.source_type == "file" %}
+      <img class="file-icon" src="{% static "common/images/icons/file.svg" %}" alt="asset preview">
+      {% elif asset.static_asset.source_type == "video" %}
+      <div class="badge badge-video-duration badge-darkhighlight-strong">
+        {{ asset.static_asset.video.duration_label }}
+      </div>
+      {% endif %}
       {% else %}
       {% if asset.contains_blend_file %}
       <img class="file-icon" src="{% static "common/images/icons/blend.svg" %}" alt="asset preview">
@@ -20,15 +29,7 @@
       {% endif %}
       {% endif %}
 
-      {% if asset.contains_blend_file %}
-      <img class="file-icon" src="{% static "common/images/icons/blend.svg" %}" alt="asset preview">
-      {% elif asset.static_asset.source_type == "file" %}
-      <img class="file-icon" src="{% static "common/images/icons/file.svg" %}" alt="asset preview">
-      {% elif asset.static_asset.source_type == "video" %}
-      <div class="badge badge-video-duration badge-darkhighlight-strong">
-        {{ asset.static_asset.video.duration_label }}
-      </div>
-      {% endif %}
+
     </a>
     {% if user_can_edit_asset %}
     <a href="{{ asset.admin_url }}" target="_blank" class="btn btn-secondary btn-xs btn-icon btn-float">
@@ -36,9 +37,9 @@
     </a>
     {% endif %}
   </div>
-  <a class="file-body" href="?asset={{ asset.id }}" data-tooltip="tooltip-overflow" data-placement="top" title="{{ asset.name }}"
+  <a class="file-body" href="?asset={{ asset.id }}"
     data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
-    <h4 class="overflow-text">{{ asset.name }}</h4>
+    <h4>{{ asset.name }}</h4>
   </a>
 
 </div>
