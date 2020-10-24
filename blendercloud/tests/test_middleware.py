@@ -42,6 +42,10 @@ class TestSessionMiddleware(TestCase):
         user = User.objects.get(email='jane@example.com')
         self.assertIn('_auth_user_id', self.client.session)
         self.assertEquals(int(self.client.session['_auth_user_id']), user.pk)
+        self.assertEquals(
+            {g.name for g in user.groups.all()},
+            {'dev_core', 'has_subscription', 'subscriber'},
+        )
 
     @responses.activate
     def test_middleware_signs_in_an_already_authenticated_already_existing_user(self):
@@ -54,3 +58,7 @@ class TestSessionMiddleware(TestCase):
         user = User.objects.get(pk=existing_user.pk)
         self.assertIn('_auth_user_id', self.client.session)
         self.assertEquals(int(self.client.session['_auth_user_id']), user.pk)
+        self.assertEquals(
+            {g.name for g in user.groups.all()},
+            {'dev_core', 'has_subscription', 'subscriber'},
+        )
