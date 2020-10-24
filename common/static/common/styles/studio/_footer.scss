@@ -17,6 +17,16 @@ footer {
       width: 48px;
     }
   }
+
+  a {
+    opacity: .5;
+    transition: $transition-base;
+
+    &:hover {
+      opacity: 1;
+      text-decoration: none;
+    }
+  }
 }
 
 // Pushes the footer down the the bottom of the page using margin-top auto on footer

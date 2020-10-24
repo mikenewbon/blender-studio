@@ -267,8 +267,16 @@
           </div>
           <div class="col-md-8 offset-lg-1">
             <div class="row text-white">
-              <div class="col-md-3 col-6"><a href="{% url 'training-home' %}" class="h3 text-white">Training</a>
+              <div class="col-md-3 col-6">
                 <ul>
+                  <li class="mb-2"><a href="{% url 'film-list' %}" class="h3 text-white">Films</a></li>
+                  <li class="mb-2"><a href="{% url 'training-home' %}" class="h3 text-white">Training</a></li>
+                  <li class="mb-2"><a href="{% url 'post-list' %}" class="h3 text-white">Blog</a></li>
+                  {% comment %} <li class="mb-2"><a href="/services" class="h3 text-white">Services</a></li>
+                  {% endcomment %}
+                </ul>
+
+                {% comment %} <ul>
                   <li>
                     <a href="#" class="small text-white">Courses</a>
                   </li>
@@ -278,58 +286,58 @@
                   <li>
                     <a href="#" class="small text-white">Production Lessons</a>
                   </li>
-                </ul><a href="{% url 'film-list' %}" class="h3 text-white">Films</a>
+                </ul> {% endcomment %}
+
               </div>
-              <div class="col-md-3 col-6"><a href="#" class="h3 text-white">Libraries</a>
+              <div class="col-md-3 col-6">
+                <a href="/services" class="h3 text-white">Services</a>
                 <ul>
                   <li>
-                    <a href="#" class="small text-white">HDRIs</a>
+                    <a href="/services#blender-cloud-add-on" class="small text-white">Add-on</a>
                   </li>
                   <li>
-                    <a href="#" class="small text-white">Textures</a>
+                    <a href="/p/home/" class="small text-white">Blender Sync</a>
                   </li>
                   <li>
-                    <a href="#" class="small text-white">Characters</a>
+                    <a href="/attract" class="small text-white">Attract</a>
                   </li>
                   <li>
-                    <a href="#" class="small text-white">Art Gallery</a>
+                    <a href="/flamenco" class="small text-white">Flamenco</a>
+                  </li>
+                  <li>
+                    <a href="/p/home/images" class="small text-white">Image Sharing</a>
                   </li>
                 </ul>
               </div>
               <div class="col-md-3 col-6">
-                <a href="#" class="h3 text-white">Services</a>
+                <a href="/libraries" class="h3 text-white">Libraries</a>
                 <ul>
                   <li>
-                    <a href="#" class="small text-white">Add-on</a>
+                    <a href="/p/hdri/" class="small text-white">HDRIs</a>
                   </li>
                   <li>
-                    <a href="#" class="small text-white">Blender Sync</a>
+                    <a href="/p/textures/" class="small text-white">Textures</a>
                   </li>
                   <li>
-                    <a href="#" class="small text-white">Attract</a>
+                    <a href="/p/characters/" class="small text-white">Characters</a>
                   </li>
                   <li>
-                    <a href="#" class="small text-white">Flamenco</a>
-                  </li>
-                  <li>
-                    <a href="#" class="small text-white">Image Sharing</a>
+                    <a href="/p/gallery/" class="small text-white">Art Gallery</a>
                   </li>
                 </ul>
               </div>
+
               <div class="col-md-3 col-6">
-                <a href="#" class="h3 text-white">Cloud</a>
+                <a href="/" class="h3 text-white">Cloud</a>
                 <ul>
                   <li>
-                    <a href="{% url 'post-list' %}" class="small text-white">Blog</a>
+                    <a href="/terms-and-conditions" class="small text-white">Terms &amp; Conditions</a>
                   </li>
                   <li>
-                    <a href="#" class="small text-white">Terms &amp; Conditions</a>
-                  </li>
-                  <li>
-                    <a href="#" class="small text-white">Privacy Policy</a>
+                    <a href="/privacy" class="small text-white">Privacy Policy</a>
                   </li>
                 </ul>
-                <a href="#" class="small text-white">Blender.org</a>
+                <a href="https://www.blender.org/" target="_blank" class="small text-white">Blender.org</a>
               </div>
             </div>
           </div>
