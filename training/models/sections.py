@@ -20,7 +20,7 @@ class Section(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models
 
     name = models.CharField(max_length=512)
     slug = models.SlugField(unique=True, null=False)
-    text = models.TextField()
+    text = models.TextField(blank=True)
     is_free = models.BooleanField(default=False)
 
     # Can be a video, an image or a file
