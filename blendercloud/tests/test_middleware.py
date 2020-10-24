@@ -43,8 +43,7 @@ class TestSessionMiddleware(TestCase):
         self.assertIn('_auth_user_id', self.client.session)
         self.assertEquals(int(self.client.session['_auth_user_id']), user.pk)
         self.assertEquals(
-            {g.name for g in user.groups.all()},
-            {'dev_core', 'has_subscription', 'subscriber'},
+            {g.name for g in user.groups.all()}, {'dev_core', 'has_subscription', 'subscriber'},
         )
 
     @responses.activate
@@ -59,6 +58,5 @@ class TestSessionMiddleware(TestCase):
         self.assertIn('_auth_user_id', self.client.session)
         self.assertEquals(int(self.client.session['_auth_user_id']), user.pk)
         self.assertEquals(
-            {g.name for g in user.groups.all()},
-            {'dev_core', 'has_subscription', 'subscriber'},
+            {g.name for g in user.groups.all()}, {'dev_core', 'has_subscription', 'subscriber'},
         )

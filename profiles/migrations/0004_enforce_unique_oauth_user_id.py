@@ -23,14 +23,12 @@ class Migration(migrations.Migration):
                 'ALTER TABLE "blender_id_oauth_client_oauthuserinfo" '
                 'ADD CONSTRAINT "blender_id_oauth_client__oauth_user_id_b1e52371_uniq" '
                 'UNIQUE ("oauth_user_id");',
-
                 'CREATE INDEX "blender_id_oauth_client__oauth_user_id_b1e52371_like" '
                 'ON "blender_id_oauth_client_oauthuserinfo" ("oauth_user_id" varchar_pattern_ops);',
             ],
             reverse_sql=[
                 # ./manage.py sqlmigrate blender_id_oauth_client NNNN --backwards
                 'DROP INDEX IF EXISTS "blender_id_oauth_client__oauth_user_id_b1e52371_like";',
-
                 'ALTER TABLE "blender_id_oauth_client_oauthuserinfo" '
                 'DROP CONSTRAINT IF EXISTS "blender_id_oauth_client__oauth_user_id_b1e52371_uniq";',
             ],
