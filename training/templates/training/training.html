@@ -43,10 +43,12 @@
             </div>
 
             <div class="training-toolbar">
+              {% if request.user.is_authenticated %}
               <a class="btn btn-sm save-button {% if not training.favorited %}btn-dark{% else %}btn-primary{% endif %}" data-favorite-url="{{ training.favorite_url }}" {% if training.favorited %}data-checked="checked"{% endif %} data-toggle="tooltip" {% if training.favorited %}title="Save for later"{% else %}title=" Remove from saved for later"{% endif %}>
                 <i class="material-icons">{% if not training.favorited %}add{% else %}check{% endif %}</i>
                 <span>{% if not training.favorited %}Save{% else %}Saved{% endif %}</span>
               </a>
+              {% endif %}
 
               <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
                 <i class="material-icons btn-material-icons">more_horiz</i>
