@@ -158,6 +158,7 @@ def recently_watched_sections_to_template_type(
                 else getattr(section, 'video_position') / getattr(section, 'video_duration')
             ),
             thumbnail_s_url=section.thumbnail_s_url,
+            thumbnail_m_url=section.thumbnail_m_url,
         )
         for section in recently_watched_sections
     ]

@@ -18,6 +18,7 @@ class RecentlyWatchedSection:
     chapter_name: str
     progress_fraction: float
     thumbnail_s_url: Optional[str]
+    thumbnail_m_url: Optional[str]
 
     @property
     def name_with_index(self) -> str:
