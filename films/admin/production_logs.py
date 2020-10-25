@@ -48,12 +48,14 @@ class ProductionLogEntryAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
         'production_log__start_date',
     ]
     readonly_fields = ['date_created']
+    autocomplete_fields = ['author']
 
 
 class ProductionLogEntryInline(EditLinkMixin, AdminUserDefaultMixin, admin.StackedInline):
     model = production_logs.ProductionLogEntry
     show_change_link = True
     extra = 0
+    autocomplete_fields = ['author']
 
 
 @admin.register(production_logs.ProductionLog)
@@ -63,7 +65,7 @@ class ProductionLogAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
     list_display = ['__str__', 'name', 'start_date']
     list_filter = ['film', 'start_date']
     readonly_fields = ['date_created']
-    autocomplete_fields = ['author']
+    autocomplete_fields = ['author', 'film']
     fieldsets = (
         (None, {'fields': ['film', 'name', 'start_date', 'user']}),
         ('Summary', {'fields': ['thumbnail', 'youtube_link', 'author', 'summary']}),

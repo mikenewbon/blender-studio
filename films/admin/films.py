@@ -56,7 +56,7 @@ class FilmCrewInlineAdmin(admin.TabularInline):
 
 @admin.register(films.Film)
 class FilmAdmin(mixins.ViewOnSiteMixin, admin.ModelAdmin):
-    search_fields = ['name']
+    search_fields = ['title', 'slug']
     list_display = ('title', 'view_link')
     prepopulated_fields = {'slug': ('title',)}
     inlines = (FilmCrewInlineAdmin,)
