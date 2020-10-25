@@ -11,8 +11,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='section',
-            name='is_featured',
-            field=models.BooleanField(default=False),
+            model_name='section', name='is_featured', field=models.BooleanField(default=False),
         ),
     ]

@@ -27,14 +27,10 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='chapter',
-            name='is_published',
-            field=models.BooleanField(default=False),
+            model_name='chapter', name='is_published', field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='section',
-            name='is_published',
-            field=models.BooleanField(default=False),
+            model_name='section', name='is_published', field=models.BooleanField(default=False),
         ),
         migrations.RunPython(set_is_published, reverse_func),
     ]
