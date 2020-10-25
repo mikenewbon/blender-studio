@@ -41,7 +41,7 @@
     data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
 
     {% if asset.is_free %}
-    <i class="material-icons icon-inline small text-success mr-1">lock_open</i>
+    <i class="material-icons icon-inline small text-success mr-1" data-toggle="tooltip" data-placement="top" title="Free">lock_open</i>
     {% endif %}
     <span data-tooltip="tooltip-overflow" data-placement="top" title="{{ asset.name }}" class="overflow-text">
       <h4 class="overflow-text">{{ asset.name }}</h4>
