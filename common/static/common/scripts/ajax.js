@@ -15,7 +15,7 @@ window.ajax = (function ajax() {
     return cookieValue;
   }
 
-  const csrfToken = getCookie('csrftoken');
+  const csrfToken = getCookie('bstudiocsrftoken');
 
   function jsonRequest(method, url, data = null) {
     return fetch(url, {
