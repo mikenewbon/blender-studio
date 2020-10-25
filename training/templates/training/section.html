@@ -26,7 +26,7 @@
   </div>
   {% else %}
     {% if section.thumbnail_m_url %}
-      <img src="{{ section.thumbnail_m_url }}" class="img-fluid img-width-100 rounded mb-3" alt="{{ section.name }}">
+      <img src="{{ section.thumbnail_m_url }}" class="img-fluid img-width-100 rounded" alt="{{ section.name }}">
     {% endif %}
   {% endif %}
 </div>
@@ -69,7 +69,7 @@
       </div>
     </div>
 
-    <section class="mb-3">{% with_shortcodes section.text %}</section>
+    <section class="mb-3 markdown-text">{% with_shortcodes section.text %}</section>
 
     {% comment %} <div class="card card-dark d-md-none">
       <div class="card-body">

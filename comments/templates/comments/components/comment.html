@@ -32,7 +32,7 @@
       <div class="row comment-content-inner">
         <div class="comment-body">
 
-          <div class="comment-text">{% with_shortcodes comment.message_html %}</div>
+          <div class="comment-text markdown-text">{% with_shortcodes comment.message_html %}</div>
 
           {% if not comment.is_deleted %}
           <div class="comment-toolbar row">

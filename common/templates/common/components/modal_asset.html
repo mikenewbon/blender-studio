@@ -106,7 +106,8 @@
                 </button>
 
                 <div class="dropdown-menu dropdown-menu-right">
-                  <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank" class="dropdown-item">
+                  <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank"
+                    class="dropdown-item">
                     <i class="material-icons">flag</i>
                     <span>Report Problem</span>
                   </a>
@@ -138,8 +139,9 @@
             <h4 class="comment-name">{{ asset.static_asset.author_name }}</h4>
           </div>
         </div>
-
-        {% with_shortcodes asset.description|safe %}
+        <div class="markdown-text">
+          {% with_shortcodes asset.description|safe %}
+        </div>
 
         <section class="mt-3">{% include 'comments/components/comment_section.html' %}</section>
 
