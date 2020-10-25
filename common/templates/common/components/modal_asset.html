@@ -127,6 +127,7 @@
         <div class="row mb-2">
           {% if asset.static_asset.author_image_url %}
           <div style="background-image:url('{{ asset.static_asset.author_image_url }}');" class="profile ml-2"></div>
+          {% endif %}
           <div class="col-auto">
             <p class="subtitle text-white-50 x-small">Author</p>
             <h4 class="comment-name">{{ asset.static_asset.author_name }}</h4>
