@@ -7,6 +7,7 @@ from typing import List, Optional, Set, TypedDict
 from markupsafe import Markup
 
 from training.models import trainings
+from static_assets.models import StaticAsset
 
 
 @dc.dataclass
@@ -50,6 +51,8 @@ class Section:
     is_published: bool
     thumbnail_s_url: str
     thumbnail_m_url: str
+    static_asset: StaticAsset
+    date_created: datetime.datetime
 
     @property
     def name_with_index(self) -> str:

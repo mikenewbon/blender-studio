@@ -55,6 +55,8 @@ def section_model_to_template_type(
         is_published=section.is_published,
         thumbnail_s_url=section.thumbnail_s_url,
         thumbnail_m_url=section.thumbnail_m_url,
+        static_asset=section.static_asset,
+        date_created=section.date_created,
     )
 
 
