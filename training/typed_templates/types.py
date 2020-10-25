@@ -107,6 +107,7 @@ class SectionNavigation:
     is_free: bool
     is_featured: bool
     is_published: bool
+    source_type: str
 
     admin_url: Optional[str]
 

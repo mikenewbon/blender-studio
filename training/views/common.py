@@ -135,6 +135,8 @@ def navigation_to_template_type(
                         is_free=assert_cast(bool, getattr(section, 'is_free')),
                         is_featured=assert_cast(bool, getattr(section, 'is_featured')),
                         is_published=assert_cast(bool, getattr(section, 'is_published')),
+                        source_type=section.static_asset.source_type
+                        if getattr(section, 'static_asset', None) else None,
                         admin_url=(
                             section.admin_url
                             if user.is_staff and user.has_perm('training.change_section')
