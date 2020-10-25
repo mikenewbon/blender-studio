@@ -234,6 +234,14 @@ body {
   }
 }
 
+.has-secondary-nav {
+  .nav-drawer {
+    &.nested {
+      top: calc(#{$navbar-height} + #{$spacer} + 42px);
+    }
+  }
+}
+
 .navbar-brand {
   @include media-breakpoint-down(sm) {
     flex-grow: 1;

@@ -45,6 +45,7 @@
     width: auto;
     z-index: auto;
     border: 1px solid $input-gray;
+    top: calc(#{$navbar-height} + #{$spacer});
 
     .nav-drawer-body {
       height: auto;
