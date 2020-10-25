@@ -55,6 +55,12 @@ class Training(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, model
         if not self.slug:
             self.slug = slugify(self.name)
 
+    # TODO(anna): get rid of TrainingStatus, replace with a boolean is_published
+    @property
+    def is_published(self) -> bool:
+        """Return published status."""
+        return self.status == 'published'
+
     def __str__(self) -> str:
         return self.name
 

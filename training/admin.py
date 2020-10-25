@@ -59,6 +59,8 @@ class ChapterAdmin(admin.ModelAdmin):
     list_filter = [
         'training',
     ]
+    list_display = ['__str__', 'is_published']
+    list_editable = ['is_published']
 
 
 class StaticAssetInline(admin.TabularInline):
@@ -75,7 +77,10 @@ class SectionAdmin(admin.ModelAdmin):
         with_name(
             'url', lambda obj: format_html('<a href="{url}" target="_blank">View</a>', url=obj.url)
         ),
+        'is_published',
+        'is_free',
     ]
+    list_editable = ['is_published', 'is_free']
     # inlines = [
     #     StaticAssetInline,
     # ]

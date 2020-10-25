@@ -22,6 +22,7 @@ class Section(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models
     slug = models.SlugField(unique=True, null=False)
     text = models.TextField(blank=True)
     is_free = models.BooleanField(default=False)
+    is_published = models.BooleanField(default=False)
 
     # Can be a video, an image or a file
     # If the static asset is a video, a video player will be shown

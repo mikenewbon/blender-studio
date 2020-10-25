@@ -22,6 +22,7 @@ class Chapter(mixins.CreatedUpdatedMixin, models.Model):
     description = models.TextField(blank=True)
     thumbnail = models.FileField(upload_to=get_upload_to_hashed_path, blank=True)
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+    is_published = models.BooleanField(default=False)
 
     def clean(self) -> None:
         super().clean()
