@@ -69,7 +69,7 @@ class ContextProcessorsTest(TestCase):
         )
 
     def test_user_dict_authenticated_user_without_oauth_info(self):
-        user = UserFactory(email='mail@example.com', username='ⅉanedoe',)
+        user = UserFactory(email='mail@example.com', username='ⅉanedoe', oauth_info=None)
         self.request.user = user
 
         context = user_dict(self.request)

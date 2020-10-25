@@ -9,6 +9,8 @@ class OAuthUserInfoFactory(DjangoModelFactory):
     class Meta:
         model = OAuthUserInfo
 
+    oauth_user_id = factory.Sequence(lambda n: n + 899999)
+
     user = factory.SubFactory('common.tests.factories.users.UserFactory')
 
 

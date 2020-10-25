@@ -43,7 +43,7 @@ class TestCommentEndpoint(TestCase):
                 'likes': 0,
                 'message': message,
                 'message_html': '<h1>Header</h1>\n<p><strong>bold</strong> <em>italic</em></p>\n',
-                'profile_image_url': None,
+                'profile_image_url': ANY,
             },
         )
 
@@ -78,6 +78,6 @@ class TestCommentEndpoint(TestCase):
                 'src="https://www.youtube.com/embed/UbyxFZSZZ90?rel=0" '
                 'frameborder="0" allow="autoplay; encrypted-media" '
                 'allowfullscreen></iframe></div></p>\n',
-                'profile_image_url': None,
+                'profile_image_url': ANY,
             },
         )

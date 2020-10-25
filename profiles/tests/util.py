@@ -23,7 +23,7 @@ def mock_blender_id_responses() -> None:
             'roles': {'dev_core': True, 'cloud_has_subscription': True, 'cloud_subscriber': True,},
         },
     )
-    with open('common/static/common/images/blank-profile-pic.jpg', 'rb') as out:
+    with open('common/static/common/images/blank-profile-pic.png', 'rb') as out:
         responses.add(
             responses.GET,
             'http://id.local:8000/media/cache/1c/da/1cda54d605799b1f4b0dc080.jpg',
