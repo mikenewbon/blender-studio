@@ -35,7 +35,11 @@ def training_model_to_template_type(
 
 
 def chapter_model_to_template_type(chapter: chapters.Chapter,) -> typed_templates.types.Chapter:
-    return typed_templates.types.Chapter(index=chapter.index, name=chapter.name)
+    return typed_templates.types.Chapter(
+        index=chapter.index,
+        name=chapter.name,
+        is_published=chapter.is_published,
+    )
 
 
 def section_model_to_template_type(
@@ -109,6 +113,7 @@ def navigation_to_template_type(
                     if user.is_staff and user.has_perm('training.change_chapter')
                     else None
                 ),
+                is_published=assert_cast(bool, getattr(chapter, 'is_published')),
                 sections=[
                     SectionNavigation(
                         index=section.index,

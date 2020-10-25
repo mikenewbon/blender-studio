@@ -30,6 +30,7 @@ class Training:
 class Chapter:
     index: int
     name: str
+    is_published: bool
 
     @property
     def name_with_index(self) -> str:
@@ -83,6 +84,7 @@ class ChapterNavigation:
     name: str
     slug: str
     current: bool
+    is_published: bool
 
     admin_url: Optional[str]
 
