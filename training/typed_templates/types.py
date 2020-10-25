@@ -43,6 +43,8 @@ class Section:
     text: Markup
     url: str
     is_free: bool
+    thumbnail_s_url: str
+    thumbnail_m_url: str
 
     @property
     def name_with_index(self) -> str:
