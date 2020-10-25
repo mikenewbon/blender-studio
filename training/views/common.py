@@ -47,6 +47,8 @@ def section_model_to_template_type(
         text=markdown.render(section.text),
         url=section.url,
         is_free=section.is_free,
+        is_featured=section.is_featured,
+        is_published=section.is_published,
         thumbnail_s_url=section.thumbnail_s_url,
         thumbnail_m_url=section.thumbnail_m_url,
     )
@@ -125,6 +127,8 @@ def navigation_to_template_type(
                             and current.id == section.id
                         ),
                         is_free=assert_cast(bool, getattr(section, 'is_free')),
+                        is_featured=assert_cast(bool, getattr(section, 'is_featured')),
+                        is_published=assert_cast(bool, getattr(section, 'is_published')),
                         admin_url=(
                             section.admin_url
                             if user.is_staff and user.has_perm('training.change_section')

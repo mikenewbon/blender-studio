@@ -43,6 +43,8 @@ class Section:
     text: Markup
     url: str
     is_free: bool
+    is_featured: bool
+    is_published: bool
     thumbnail_s_url: str
     thumbnail_m_url: str
 
@@ -100,6 +102,8 @@ class SectionNavigation:
     progress_fraction: float
     current: bool
     is_free: bool
+    is_featured: bool
+    is_published: bool
 
     admin_url: Optional[str]
 
