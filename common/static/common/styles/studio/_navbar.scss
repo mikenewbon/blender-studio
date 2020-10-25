@@ -95,6 +95,7 @@ body {
     }
 
     .btn-profile {
+      position: relative;
       margin-left: 0;
     }
 
@@ -271,4 +272,26 @@ body {
     margin-right: $spacer / 2;
     display: none;
   }
+}
+
+.profile-subscription-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 50%;
+  color: white;
+  font-size: $spacer * .6 !important;
+  padding: $spacer / 8;
+}
+
+.unsubscribed {
+  background: $danger;
+}
+
+.demo {
+  background: $blue;
+}
+
+.subscriber {
+  background: $success;
 }

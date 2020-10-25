@@ -1,6 +1,7 @@
 {% load pipeline %}
 {% load static %}
 {% load comment_extras %}
+{% load common_extras %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -119,14 +120,42 @@
           </div> {% endcomment %}
 
           <button data-toggle="dropdown" class="btn btn-secondary btn-nav btn-profile">
+
             {% if request.user.is_authenticated and request.user.profile.image_url %}
             <div style="background-image:url('{{ request.user.profile.image_url }}');" class="profile"></div>
+            {% if request.user|has_group:"demo"  %}
+            <i class="profile-subscription-badge demo material-icons">favorite</i>
+            {% elif request.user|has_group:"subscriber" %}
+            <i class="profile-subscription-badge subscriber material-icons">done</i>
+            {% else %}
+            <i class="profile-subscription-badge unsubscribed material-icons">priority_high</i>
+            {% endif %}
             {% else %}
             <div style="background-image:url('{% static 'common/images/blank-profile-pic.png' %}');" class="profile">
             </div>
             {% endif %}
+
           </button>
           <div class="dropdown-menu dropdown-menu-right">
+
+            {% if request.user.is_authenticated %}
+            {% if request.user|has_group:"demo" %}
+            <a href="/settings/billing" class="dropdown-item demo">
+              <i class="material-icons">credit_card</i>
+              <span>You have a free account.</span>
+            </a>
+            {% elif request.user|has_group:"subscriber" %}
+            <a href="/settings/billing" class="dropdown-item subscriber">
+              <i class="material-icons">credit_card</i>
+              <span>Your subscription is active!</span>
+            </a>
+            {% else %}
+            <a href="/settings/billing" class="dropdown-item unsubscribed">
+              <i class="material-icons">credit_card</i>
+              <span>Your subscription is not active.</span>
+            </a>
+            {% endif %}
+            {% endif %}
 
             <a href="/p/home/" class="dropdown-item">
               <i class="material-icons">home</i>
