@@ -98,7 +98,7 @@
                   <i class="material-icons">favorite_border</i>
                   Like
                 </a> {% endcomment %}
-                <a href="{{ asset.static_asset.source.url }}" download class="btn btn-sm btn-dark">Download</a>
+                <a href="{{ asset.download_url }}" download class="btn btn-sm btn-dark">Download ({{ asset.download_size }})</a>
                 {% endif %}
 
                 <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">

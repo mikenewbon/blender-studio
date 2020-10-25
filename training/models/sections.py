@@ -4,6 +4,7 @@ from django.db import models
 from django.urls.base import reverse
 from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
+from django.template.defaultfilters import filesizeformat
 
 from comments.models import Comment
 from common import mixins
@@ -82,6 +83,18 @@ class Section(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models
             return self.static_asset.video.default_variation_url
         else:
             return self.static_asset.source.url
+
+    @property
+    def download_size(self) -> str:
+        if not self.static_asset:
+            return ''
+        if self.static_asset.source_type == 'video':
+            variation = self.static_asset.video.variations.first()
+            if not variation:
+                return ''
+            return filesizeformat(variation.size_bytes)
+        else:
+            return filesizeformat(self.static_asset.size_bytes)
 
     @property
     def comment_url(self) -> str:

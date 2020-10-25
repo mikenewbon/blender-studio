@@ -50,7 +50,7 @@
             {% comment %} <a class="btn btn-sm btn-dark"><i class="material-icons">favorite_border</i> Like</a> {% endcomment %}
             {% if request.user.is_authenticated and request.user|has_group:"subscriber" or request.user|has_group:"demo" or section.is_free %}
             {% if section.download_url %}
-            <a href="{{ section.download_url }}" download class="btn btn-sm btn-dark">Download</a>
+            <a href="{{ section.download_url }}" download class="btn btn-sm btn-dark">Download ({{ section.download_size }})</a>
             {% endif %}
             {% endif %}
             <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">

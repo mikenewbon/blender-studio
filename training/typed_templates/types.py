@@ -44,6 +44,7 @@ class Section:
     text: Markup
     url: str
     download_url: str
+    download_size: str
     is_free: bool
     is_featured: bool
     is_published: bool

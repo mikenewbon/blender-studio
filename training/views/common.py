@@ -36,9 +36,7 @@ def training_model_to_template_type(
 
 def chapter_model_to_template_type(chapter: chapters.Chapter,) -> typed_templates.types.Chapter:
     return typed_templates.types.Chapter(
-        index=chapter.index,
-        name=chapter.name,
-        is_published=chapter.is_published,
+        index=chapter.index, name=chapter.name, is_published=chapter.is_published,
     )
 
 
@@ -51,6 +49,7 @@ def section_model_to_template_type(
         text=markdown.render(section.text),
         url=section.url,
         download_url=section.download_url,
+        download_size=section.download_size,
         is_free=section.is_free,
         is_featured=section.is_featured,
         is_published=section.is_published,
@@ -136,7 +135,8 @@ def navigation_to_template_type(
                         is_featured=assert_cast(bool, getattr(section, 'is_featured')),
                         is_published=assert_cast(bool, getattr(section, 'is_published')),
                         source_type=section.static_asset.source_type
-                        if getattr(section, 'static_asset', None) else None,
+                        if getattr(section, 'static_asset', None)
+                        else None,
                         admin_url=(
                             section.admin_url
                             if user.is_staff and user.has_perm('training.change_section')

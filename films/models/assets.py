@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls.base import reverse
 from django.utils.text import slugify
+from django.template.defaultfilters import filesizeformat
 from taggit.managers import TaggableManager
 
 from comments.models import Comment
@@ -63,6 +64,29 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+    # TODO(fsiddi, anna) Share this code with Sections
+    @property
+    def download_url(self) -> str:
+        if not self.static_asset:
+            return ''
+        if self.static_asset.source_type == 'video':
+            return self.static_asset.video.default_variation_url
+        else:
+            return self.static_asset.source.url
+
+    # TODO(fsiddi, anna) Share this code with Sections
+    @property
+    def download_size(self) -> str:
+        if not self.static_asset:
+            return ''
+        if self.static_asset.source_type == 'video':
+            variation = self.static_asset.video.variations.first()
+            if not variation:
+                return ''
+            return filesizeformat(variation.size_bytes)
+        else:
+            return filesizeformat(self.static_asset.size_bytes)
 
     def get_absolute_url(self) -> str:
         return self.url
