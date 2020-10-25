@@ -9,6 +9,7 @@
     background-position: center;
     background-size: cover;
     overflow: hidden;
+    background: $highlight-black;
   }
 
   .btn-save-media {
@@ -35,6 +36,10 @@
 
       .progress-bar {
         background: $primary;
+      }
+
+      .file-icon {
+        opacity: 1;
       }
     }
 
@@ -63,6 +68,8 @@
 
   &.card-media {
     border: 1px solid $input-gray;
+
+
 
     &.card-poster {
 
@@ -318,5 +325,11 @@
 .card-comment {
   .card-body {
     display: block;
+  }
+}
+
+#hits {
+  .file-icon {
+    padding: $spacer * 2;
   }
 }

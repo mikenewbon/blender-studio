@@ -40,6 +40,10 @@
     a {
       text-decoration: none;
     }
+
+    .file-icon {
+      opacity: 1;
+    }
   }
 
   .subtitle {
@@ -70,6 +74,7 @@
   @include button-float;
 
   border-radius: $border-radius;
+  background: $navigation-gray;
   overflow: hidden;
   padding: 0;
   position: relative;
@@ -133,13 +138,15 @@
     padding: $spacer / 4;
     position: absolute;
     top: $spacer / 2;
-    transition: $transition-base;
     width: $spacer * 1.5;
+    opacity: 1;
   }
 }
 
 .file-icon {
-  padding: $spacer / 2;
+  padding: $spacer;
+  opacity: .5;
+  transition: $transition-base;
 }
 
 
