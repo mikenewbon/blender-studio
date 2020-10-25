@@ -17,7 +17,6 @@ def _published() -> 'QuerySet[sections.Section]':
 
 
 def recently_watched(*, user_pk: int) -> List[sections.Section]:
-    # TODO(fsiddi) this is hardcoded to WHERE usp.user_id = 1, should probably use user_pk
     return list(
         sections.Section.objects.raw(
             '''
@@ -37,12 +36,13 @@ def recently_watched(*, user_pk: int) -> List[sections.Section]:
                            LEFT JOIN static_assets_staticasset sa ON s.static_asset_id = sa.id
                            LEFT JOIN static_assets_video v ON sa.id = v.static_asset_id
                            LEFT JOIN static_assets_uservideoprogress uvp ON v.id = uvp.video_id AND usp.user_id = uvp.user_id
-                  WHERE usp.user_id = 1
+                  WHERE usp.user_id = %s
                     AND usp.started
                     AND NOT usp.finished
                   ORDER BY coalesce(uvp.date_updated, usp.date_updated) DESC) progress
             WHERE progress.row_number_per_training = 1;
-            '''
+            ''',
+            [user_pk],
         )
     )
 
