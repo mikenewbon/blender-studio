@@ -46,6 +46,7 @@ def section_model_to_template_type(
         name=section.name,
         text=markdown.render(section.text),
         url=section.url,
+        download_url=section.download_url,
         is_free=section.is_free,
         is_featured=section.is_featured,
         is_published=section.is_published,

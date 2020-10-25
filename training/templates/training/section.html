@@ -15,8 +15,8 @@
 {% endblock scripts %}
 
 {% block nexted_content %}
-{% if video is not none %}
 <div class="row mb-3">
+  {% if video is not none %}
   <div class="col training-video">
     {% if request.user.is_authenticated and request.user|has_group:"subscriber" or section.is_free %}
     {% include 'common/components/video_player.html' with url=video.url progress_url=video.progress_url start_position=video.start_position poster=section.thumbnail_m_url %}
@@ -24,14 +24,18 @@
     {% include 'common/components/content_locked.html' with background=section.thumbnail_m_url %}
     {% endif %}
   </div>
+  {% else %}
+    {% if section.thumbnail_m_url %}
+      <img src="{{ section.thumbnail_m_url }}" class="img-fluid img-width-100 rounded mb-3" alt="{{ section.name }}">
+    {% endif %}
+  {% endif %}
 </div>
-{% endif %}
 <div class="row">
   <div class="col">
     <div class="row align-items-start">
       <div class="col-12 col-md mb-2 mb-md-3">
-        <p class="subtitle small">{{ chapter.name_with_index }}</p>
-        <h2 class="mb-0">{{ section.name_with_index }}</h2>
+        <p class="subtitle small">{{ chapter.name }}</p>
+        <h2 class="mb-0">{{ section.name }}</h2>
       </div>
       <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
         <div class="training-toolbar-container">
@@ -44,8 +48,10 @@
 
           <div class="training-toolbar">
             {% comment %} <a class="btn btn-sm btn-dark"><i class="material-icons">favorite_border</i> Like</a> {% endcomment %}
-            {% if request.user.is_authenticated and request.user|has_group:"subscriber" or section.is_free %}
-            <a href="{{ video.url }}" download class="btn btn-sm btn-dark">Download</a>
+            {% if request.user.is_authenticated and request.user|has_group:"subscriber" or request.user|has_group:"demo" or section.is_free %}
+            {% if section.download_url %}
+            <a href="{{ section.download_url }}" download class="btn btn-sm btn-dark">Download</a>
+            {% endif %}
             {% endif %}
             <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
               <i class="material-icons">more_horiz</i>

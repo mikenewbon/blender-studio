@@ -75,6 +75,15 @@ class Section(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models
         )
 
     @property
+    def download_url(self) -> str:
+        if not self.static_asset:
+            return ''
+        if self.static_asset.source_type == 'video':
+            return self.static_asset.video.default_variation_url
+        else:
+            return self.static_asset.source.url
+
+    @property
     def comment_url(self) -> str:
         return reverse('section-comment', kwargs={'section_pk': self.pk},)
 
