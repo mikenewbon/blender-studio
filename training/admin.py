@@ -16,6 +16,7 @@ def with_name(name: str, func: T) -> T:
 
 class ChapterInline(admin.TabularInline):
     show_change_link = True
+    exclude = ['description', 'user']
     model = chapters.Chapter
     prepopulated_fields = {'slug': ('name',)}
     ordering = ('index',)
