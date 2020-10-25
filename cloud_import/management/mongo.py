@@ -16,6 +16,7 @@ projects_collection = db.projects
 files_collection = db.files
 nodes_collection = db.nodes
 users_collection = db.users
+stats_collection = db.cloudstats
 
 
 def dump_doc(doc, path):
