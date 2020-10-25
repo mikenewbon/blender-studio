@@ -122,6 +122,7 @@ def navigation_to_template_type(
                             isinstance(current, sections_models.Section)
                             and current.id == section.id
                         ),
+                        is_free=assert_cast(bool, getattr(section, 'is_free')),
                         admin_url=(
                             section.admin_url
                             if user.is_staff and user.has_perm('training.change_section')

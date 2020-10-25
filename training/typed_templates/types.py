@@ -97,6 +97,7 @@ class SectionNavigation:
     finished: bool
     progress_fraction: float
     current: bool
+    is_free: bool
 
     admin_url: Optional[str]
 
