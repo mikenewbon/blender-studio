@@ -19,7 +19,9 @@
           </p>
           <h1 class="mb-2 em">Blender Cloud v4</h1>
           <p>Welcome to the fresh redesign of Blender Cloud!</p>
-          <p class="mb-3">In this new version of the platform we deliver design and interaction improvements that will make it easier and more fun to discover all the content created by the Blender Studio team over the years.</p>
+          <p class="mb-3">In this new version of the platform we deliver design and interaction improvements that will
+            make it easier and more fun to discover all the content created by the Blender Studio team over the years.
+          </p>
           <a href="/blog/blender-cloud-v4" class="btn btn-primary">Read the Blog Post</a>
         </div>
       </div>
@@ -93,7 +95,7 @@
         <h2 class="mb-0">Latest Blog Posts</h2>
         <p class="mb-0">Hear the latest news about the Blender Cloud right here.</p>
       </div>
-      <div class="col-auto carousel-card-toolbar">
+      <div class="col-md-auto d-none d-md-block carousel-card-toolbar">
         <a class="btn btn-lg btn-transparent btn-icon {% if latest_posts|length <= 1 %}onlyOne{% elif latest_posts|length <= 4 %} lessThanFour {% endif %}"
           href="#latestPosts" role="button" data-slide="prev">
           <i class="material-icons">arrow_back</i>
@@ -119,6 +121,19 @@
           </div>
           {% endfor %}
         </div>
+      </div>
+    </div>
+
+    <div class="row d-block d-md-none">
+      <div class="col-md-auto carousel-card-toolbar">
+        <a class="btn btn-lg btn-transparent btn-icon {% if latest_posts|length <= 1 %}onlyOne{% elif latest_posts|length <= 4 %} lessThanFour {% endif %}"
+          href="#latestPosts" role="button" data-slide="prev">
+          <i class="material-icons">arrow_back</i>
+        </a>
+        <a class="btn btn-lg btn-transparent btn-icon {% if latest_posts|length <= 1 %}onlyOne{% elif latest_posts|length <= 4 %} lessThanFour {% endif %}"
+          href="#latestPosts" role="button" data-slide="next">
+          <i class="material-icons">arrow_forward</i>
+        </a>
       </div>
     </div>
   </section>
@@ -159,13 +174,27 @@
         </div>
       </div>
     </div>
+
+    <div class="row d-block d-md-none">
+      <div class="col-md-auto carousel-card-toolbar">
+        <a class="btn btn-lg btn-transparent btn-icon {% if featured_trainings|length <= 1 %}onlyOne{% elif featured_trainings|length <= 4 %} lessThanFour {% endif %}"
+          href="#continueLearning" role="button" data-slide="prev">
+          <i class="material-icons">arrow_back</i>
+        </a>
+        <a class="btn btn-lg btn-transparent btn-icon {% if featured_trainings|length <= 1 %}onlyOne{% elif featured_trainings|length <= 4 %} lessThanFour {% endif %}"
+          href="#continueLearning" role="button" data-slide="next">
+          <i class="material-icons">arrow_forward</i>
+        </a>
+      </div>
+    </div>
   </section>
 
   <section class="mb-4">
     <div class="row justify-content-center mb-3">
       <div class="col-md-6 text-center">
         <h2 class="mb-0">Featured Open Movies</h2>
-        <p class="mb-0">The Blender <a href="/films">Open Movie projects</a> are made possible by subscriptions to the Blender
+        <p class="mb-0">The Blender <a href="/films">Open Movie projects</a> are made possible by subscriptions to the
+          Blender
           Studio.</p>
       </div>
     </div>
@@ -182,7 +211,7 @@
         <h2 class="mb-0">From The Archives</h2>
         <p class="mb-0">Explore the depths of the Blender cloud and jump in somewhere random!</p>
       </div>
-      <div class="col-auto carousel-card-toolbar">
+      <div class="col-md-auto d-none d-md-block carousel-card-toolbar">
         <a class="btn btn-lg btn-transparent btn-icon {% if featured_film_assets|length <= 1 %}onlyOne{% elif featured_film_assets|length <= 4 %} lessThanThree {% endif %}"
           href="#fromTheArchives" role="button" data-slide="prev">
           <i class="material-icons">arrow_back</i>
@@ -214,6 +243,19 @@
           </div>
           {% endfor %}
         </div>
+      </div>
+    </div>
+
+    <div class="row d-block d-md-none">
+      <div class="col-md-auto carousel-card-toolbar">
+        <a class="btn btn-lg btn-transparent btn-icon {% if featured_film_assets|length <= 1 %}onlyOne{% elif featured_film_assets|length <= 4 %} lessThanFour {% endif %}"
+          href="#fromTheArchives" role="button" data-slide="prev">
+          <i class="material-icons">arrow_back</i>
+        </a>
+        <a class="btn btn-lg btn-transparent btn-icon {% if featured_film_assets|length <= 1 %}onlyOne{% elif featured_film_assets|length <= 4 %} lessThanFour {% endif %}"
+          href="#fromTheArchives" role="button" data-slide="next">
+          <i class="material-icons">arrow_forward</i>
+        </a>
       </div>
     </div>
   </section>
