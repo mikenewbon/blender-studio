@@ -40,3 +40,52 @@ u,
   color: $highlight-white-xstrong;
   margin-bottom: 0;
 }
+
+.markdown-text {
+
+  h1,
+  .h1 {
+    font-size: $markdown-h1-font-size;
+  }
+
+  h2,
+  .h2 {
+    font-size: $markdown-h2-font-size;
+  }
+
+  h3,
+  .h3 {
+    font-size: $markdown-h3-font-size;
+  }
+
+  h4,
+  .h4 {
+    font-size: $markdown-h4-font-size;
+  }
+
+  h5,
+  .h5 {
+    font-size: $markdown-h5-font-size;
+  }
+
+  h6,
+  .h6 {
+    font-size: $markdown-h6-font-size;
+  }
+
+  img {
+    @extend .img-fluid;
+    border-radius: $border-radius;
+    margin: $spacer / 2 0;
+
+  }
+}
+
+.display-1,
+.display-2,
+.display-3,
+.display-4 {
+  @include media-breakpoint-down(sm) {
+    font-size: $h1-font-size;
+  }
+}

@@ -8,26 +8,37 @@
 <meta property="og:url" content="{{request.scheme}}://{{request.META.HTTP_HOST}}{{ post.url }}">
 <meta property="og:title" content="Blender Cloud - {{ post.title }}">
 <meta name="twitter:title" content="Blender Cloud - {{ post.title }}">
-<meta property="og:description"
-  content="{{ post.description }}">
-<meta name="twitter:description"
-  content="{{ post.description }}">
+<meta property="og:description" content="{{ post.description }}">
+<meta name="twitter:description" content="{{ post.description }}">
 <meta property="og:image" content="{{request.scheme}}://{{request.META.HTTP_HOST}}{{ post.thumbnail }}">
 <meta name="twitter:image" content="{{request.scheme}}://{{request.META.HTTP_HOST}}{{ post.thumbnail }}">
 {% endblock %}
 
 {% block content %}
-<div class="jumbotron jumbotron-fluid jumbotron-blog jumbotron-overlay overlay-blog">
+<div class="jumbotron jumbotron-fluid jumbotron-blog jumbotron-overlay overlay-blog mb-3">
   <div class="jumbotron-bg-wrapper">
     {% if post.header %}
     {% include "common/components/helpers/image_set.html" with alt=asset.name classes="jumbotron-bg" img_source=post.header xsmall_width="600" small_width="800" medium_width="1000" large_width="1200" xlarge_width="1920" %}
     {% endif %}
   </div>
   <div class="container-blog">
-    <p class="subtitle">{{ post.topic }}</p>
-    <h1 class="">{{ post.title }}</h1>
-    <p class="subtitle">{{ post_date_created|date:"jS M Y" }}</p>
+    <div class="row mb-3">
+      <div class="col">
+        <p class="subtitle">{{ post.topic }}</p>
+        <h1 class="display-3">{{ post.title }}</h1>
+        <p class="subtitle">{{ post_date_created|date:"jS M Y" }}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div style="background-image:url('{{ post_author_profile.image_url }}');" class="profile-image profile ml-2">
+      </div>
+      <div class="col-auto">
+        <h4 class="profile-name mb-0">{{ post_author_profile.full_name }}</h4>
+        <p class="profile-title subtitle text-white-50 x-small">Author</p>
+      </div>
+    </div>
   </div>
+
 </div>
 
 
@@ -35,7 +46,7 @@
   {% comment %} <p class="subtitle">{{ post.topic }}</p>
   <h1 class="">{{ post.title }}</h1>
   <p class="subtitle small mb-3">{{ post_date_created|date:"jS M Y" }}</p> {% endcomment %}
-  <div class="training-toolbar-container mb-3">
+  {% comment %} <div class="training-toolbar-container mb-3">
     <div class="training-toolbar-details row">
 
       <div style="background-image:url('{{ post_author_profile.image_url }}');" class="profile-image profile ml-2">
@@ -48,20 +59,19 @@
 
     <div class="file-toolbar">
 
-      {% comment %} <a class="btn btn-sm btn-icon btn-dark">
+      <a class="btn btn-sm btn-icon btn-dark">
         <i class="material-icons">favorite_border</i>
         <span class="likes-count">1</span>
-      </a> {% endcomment %}
+      </a>
 
-      {% comment %} TODO(Mike): Add working share buttons {% endcomment %}
-      {% comment %} <a href="http://www.facebook.com/share.php?u=cloud.blender.org/blog/{{ post.post.slug }}"
+      <a href="http://www.facebook.com/share.php?u=cloud.blender.org/blog/{{ post.post.slug }}"
         class="btn btn-sm btn-icon btn-dark">
         <i class="material-icons">facebook</i>
       </a>
 
       <a href="#" class="btn btn-sm btn-icon btn-dark">
         <i class="material-icons">share</i>
-      </a> {% endcomment %}
+      </a>
 
       {% if user_can_edit_post %}
       <a href="{{ post.admin_url }}" class="btn btn-sm btn-icon btn-dark">
@@ -83,12 +93,8 @@
 
     </div>
 
-  </div>
+  </div> {% endcomment %}
 
-
-  <div class="mb-3">
-
-  </div>
   <div class="markdown-text">{% with_shortcodes post.html_content %}</div>
 
   <section class="mb-3">{% include 'comments/components/comment_section.html' %}</section>
