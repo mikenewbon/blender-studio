@@ -198,7 +198,7 @@ $link-decoration: none !default;
 $link-hover-color: lighten($link-color, 20%) !default;
 $link-hover-decoration: underline !default;
 // Darken percentage for links with `.text-*` class (e.g. `.text-success`)
-$emphasized-link-hover-darken-percentage: 20% !default;
+$emphasized-link-hover-darken-percentage: 5% !default;
 
 // Paragraphs
 //
@@ -802,9 +802,9 @@ $nav-drawer-animation-duration: 0.5s;
 // Dropdown menu container and contents.
 
 $dropdown-min-width: 10rem !default;
-$dropdown-padding-y: 0 !default;
+$dropdown-padding-y: $spacer / 4 !default;
 $dropdown-spacer: 0 !default;
-$dropdown-font-size: $font-size-sm !default;
+$dropdown-font-size: $font-size-base !default;
 $dropdown-color: $body-color !default;
 $dropdown-bg: $navigation-gray !default;
 $dropdown-border-color: null !default;
@@ -815,9 +815,9 @@ $dropdown-divider-bg: $highlight-white !default;
 $dropdown-divider-margin-y: 0 !default;
 $dropdown-box-shadow: 0 0.5rem 1rem rgba($black, 0.175) !default;
 
-$dropdown-link-color: $body-color !default;
-$dropdown-link-hover-color: darken($body-color, 5%) !default;
-$dropdown-link-hover-bg: $highlight-white !default;
+$dropdown-link-color: $highlight-white-xstrong !default;
+$dropdown-link-hover-color: $body-color !default;
+$dropdown-link-hover-bg: none !default;
 
 $dropdown-link-active-color: $component-active-color !default;
 $dropdown-link-active-bg: $component-active-bg !default;

@@ -138,41 +138,41 @@
           </button>
           <div class="dropdown-menu dropdown-menu-right">
 
-            {% if request.user.is_authenticated %}
-            {% if request.user|has_group:"demo" %}
-            <a href="/settings/billing" class="dropdown-item demo">
-              <i class="material-icons">credit_card</i>
-              <span>You have a free account.</span>
-            </a>
-            {% elif request.user|has_group:"subscriber" %}
-            <a href="/settings/billing" class="dropdown-item subscriber">
-              <i class="material-icons">credit_card</i>
-              <span>Your subscription is active!</span>
-            </a>
-            {% else %}
-            <a href="/settings/billing" class="dropdown-item unsubscribed">
-              <i class="material-icons">credit_card</i>
-              <span>Your subscription is not active.</span>
-            </a>
-            {% endif %}
-            {% endif %}
-
             <a href="/p/home/" class="dropdown-item">
               <i class="material-icons">home</i>
               <span>My Cloud</span>
             </a>
 
-            <a href="/settings/profile" class="dropdown-item">
-              <i class="material-icons">settings</i>
-              <span>Settings</span>
-            </a>
+            <div class="dropdown-menu-nested">
+              {% if request.user.is_authenticated %}
+              {% if request.user|has_group:"demo" %}
+              <a href="/settings/billing" class="dropdown-item text-blue">
+                <i class="material-icons">favorite</i>
+                <span>Free Account</span>
+              </a>
+              {% elif request.user|has_group:"subscriber" %}
+              <a href="/settings/billing" class="dropdown-item text-green">
+                <i class="material-icons">done</i>
+                <span>Subscription Active</span>
+              </a>
+              {% else %}
+              <a href="/settings/billing" class="dropdown-item text-red">
+                <i class="material-icons">error</i>
+                <span>Subscription Inactive</span>
+              </a>
+              {% endif %}
+              {% endif %}
 
-            <a href="/settings/billing" class="dropdown-item">
-              <i class="material-icons">credit_card</i>
-              <span>Subscription</span>
-            </a>
+              <a href="/settings/profile" class="dropdown-item">
+                <i class="material-icons">settings</i>
+                <span>Settings</span>
+              </a>
 
-            <div class="dropdown-divider"></div>
+              <a href="/settings/billing" class="dropdown-item">
+                <i class="material-icons">credit_card</i>
+                <span>Subscription</span>
+              </a>
+            </div>
 
             {% if user.is_superuser %}
             <a href="/admin" class="dropdown-item">
