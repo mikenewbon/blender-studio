@@ -100,6 +100,11 @@
   padding: $spacer / 2 $spacer / 2 0;
   position: relative;
   transition: $transition-base;
+  display: flex;
+
+  i {
+    line-height: $headings-line-height;
+  }
 
   h4 {
     text-overflow: ellipsis;
