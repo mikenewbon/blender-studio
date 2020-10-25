@@ -11,7 +11,7 @@ window.comments = (function comments() {
       this.hardDeleteTreeUrl = element.dataset.hardDeleteTreeUrl;
       this.archiveUrl = element.dataset.archiveUrl;
       this.profileImageUrl = element.dataset.profileImageUrl;
-      this.message_ = element.dataset.message;
+      this.message_markdown = element.dataset.message;
       this.message_html = element.querySelector('.comment-text').innerHTML;
       this.element = element;
       this._setupEventListeners();
@@ -565,8 +565,7 @@ window.comments = (function comments() {
     }
 
     prepopulateMessage() {
-      console.log(this.comment.message);
-      this.inputElement.innerText = this.comment.message;
+      this.inputElement.innerText = this.comment.message_markdown;
     }
 
     _setupEventListeners() {
@@ -597,7 +596,7 @@ window.comments = (function comments() {
 
     _postEdit() {
       const { comment, inputElement } = this;
-      const message = inputElement.innerHTML;
+      const message = inputElement.innerText;
 
       inputElement.innerText = '';
       ajax
@@ -605,10 +604,11 @@ window.comments = (function comments() {
           message
         })
         .then(data => {
+          console.log(data)
           this.comment.message = data.message;
           this.comment.element.dataset.message = this.comment.message;
           this.comment.message_html = data.message_html;
-          this.comment.element.querySelector('.comment-text').innerHTML = this.comment.message_html;
+          this.comment.element.querySelector('.comment-text').innerHTML = data.message_html;
         });
     }
   }
