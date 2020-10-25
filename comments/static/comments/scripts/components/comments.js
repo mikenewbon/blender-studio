@@ -429,7 +429,7 @@ window.comments = (function comments() {
 
     _postComment() {
       const { commentSection, inputElement } = this;
-      const message = inputElement.innerHTML;
+      const message = inputElement.innerText;
 
       if (message === '') {
         return
@@ -505,7 +505,7 @@ window.comments = (function comments() {
     _postReply() {
       const { commentSection, inputElement, replyTo } = this;
 
-      const message = inputElement.innerHTML;
+      const message = inputElement.innerText;
 
       inputElement.innerText = '';
 
@@ -565,7 +565,8 @@ window.comments = (function comments() {
     }
 
     prepopulateMessage() {
-      this.inputElement.innerHTML = this.comment.message;
+      console.log(this.comment.message);
+      this.inputElement.innerText = this.comment.message;
     }
 
     _setupEventListeners() {
