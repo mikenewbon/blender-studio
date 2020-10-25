@@ -81,7 +81,6 @@
         <div class="update-feed-individual-files">
           <div class="files">
             <div class="row row-cols-1 row-cols-md-3  row-cols-2">
-              <!--TODO(Mike): Need an API to handle file requests-->
               {% for entry_asset in entry.assets|slice:':3' %}
               <div class="col">
                 {% include "common/components/file.html" with asset=entry_asset.asset site_context="production_logs" %}

@@ -130,7 +130,6 @@ window.asset = (function asset() {
 
   function getModalHtml(element, modal, event) {
     animateProgress();
-    //TODO(Mike): If left/right arrow - loading spinner
     if (element.classList.contains('modal-navigation')) {
       loadingSpinner(modal)
     }

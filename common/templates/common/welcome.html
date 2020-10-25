@@ -68,41 +68,6 @@
   </section>
 </div>
 
-<div class="jumbotron jumbotron-fluid jumbotron-overlay overlay-medium jumbotron header">
-  <div class="jumbotron-bg-wrapper">
-    <img class="jumbotron-bg" src="{% static "common/images/welcome/coffee-run-background.png" %}">
-    <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
-    {% comment %}
-    {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
-    {% endcomment %}
-  </div>
-  <div class="container-xl">
-    <div class="row jumbotron-content">
-      <div class="col-lg-6 col-xl-5">
-        <a href="/films/coffee-run" class="jumbotron-body d-block mb-4">
-          <div class="jumbotron-subtitle-group">
-            <div class="badge badge-primary">New</div>
-            <p class="subtitle">Featured Project</p>
-          </div>
-          <h1 class="mb-2">Coffee Run</h1>
-          <p>This 2d-scroller-inspired short film will take you on the journey of a lifetime, as we sip on a
-            cup of coffee.</p>
-          <p class="mb-0">Coffee Run (currently in development) is directed by Hjalti Hjalmarsson and produced
-            by the team at Blender Animation Studio. This 2d-scroller-inspired short film will take you on
-            the journey of a lifetime, as we sip on a cup of coffee.</p>
-        </a>
-      </div>
-    </div>
-    <div class="row">
-      {% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Premiere" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" card_classes="mb-0" %}
-
-      {% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Production Log #02" description="We proudly present 'Coffee Run', our latest Open Movie made with Blender 2.8!" card_classes="mb-0" %}
-
-      {% include 'common/components/cards/card_news_simple.html' with url="#" subtitle="Project Update" title="Coffee Run Production Log #01" description="Coffee Run was announced just a couple of weeks ago, but it has been in the works for a while already." card_classes="mb-0" %}
-    </div>
-  </div>
-</div>
-
 <div class="container-xl mt-5">
   <section class="mb-5">
     <div class="row justify-content-center mb-3">

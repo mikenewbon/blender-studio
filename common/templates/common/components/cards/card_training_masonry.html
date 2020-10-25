@@ -11,12 +11,6 @@
       {% if request.user.is_authenticated %}
       {% include 'training/components/card_button_favorite.html' with class='btn-save-media card-training-favorite' checked=training.favorited %}
       {% endif %}
-
-
-      {% comment %}
-      TODO(Mike): get this working and remove old code
-      {{ card_training_checkbox_favorite(checked=training.favorited, class=['btn-save-media', 'card-training-favorite']) }}
-      {% endcomment %}
     </div>
 
     <a class="card-body" href="{{ training.url }}">

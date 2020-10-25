@@ -22,6 +22,10 @@
     min-height: 400px;
     padding-bottom: $spacer;
 
+    @include media-breakpoint-down(sm) {
+      min-height: 30vh;
+    }
+
     .container-blog {
       margin-top: auto;
     }

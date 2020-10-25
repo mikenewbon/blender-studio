@@ -19,10 +19,9 @@
 <div class="row mb-3">
   <div class="col training-video">
     {% if request.user.is_authenticated and request.user|has_group:"subscriber" or section.is_free %}
-    {% include 'common/components/video_player.html' with url=video.url progress_url=video.progress_url start_position=video.start_position %}
+    {% include 'common/components/video_player.html' with url=video.url progress_url=video.progress_url start_position=video.start_position poster=section.thumbnail_m_url %}
     {% else %}
-    {% comment %} TODO(Mike): Add video thumbnails when created {% endcomment %}
-    {% include 'common/components/content_locked.html' with background=training.picture_header %}
+    {% include 'common/components/content_locked.html' with background=section.thumbnail_m_url %}
     {% endif %}
   </div>
 </div>

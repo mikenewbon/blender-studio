@@ -114,7 +114,6 @@ let lastRenderArgs;
 const renderHits = (renderOptions, isFirstRender) => {
   const { hits, showMore, widgetParams } = renderOptions;
 
-  //TODO(Mike): When favorite status is added to the index, add favorite button status
   widgetParams.container.innerHTML = `
       ${hits
       .map(
