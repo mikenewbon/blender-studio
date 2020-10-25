@@ -9,10 +9,30 @@
     </div>
 
     <a class="card-body text-center" href="{{ film.url }}">
+      {% comment %} <div class="card-subtitle-group">
+
+        <p class="card-subtitle">
+          Open Movie Project
+        </p>
+
+        {% if film.status == "2_released" %}
+        <p class="card-subtitle">
+          <i class="material-icons icon-inline small">event</i>
+          <span class="date">
+            {{ film.release_date|date:"Y" }}
+          </span>
+        </p>
+        {% else %}
+        <div class="badge badge-primary">
+          {{ film.get_status_display }}
+        </div>
+        {% endif %}
+
+      </div> {% endcomment %}
       <h2 class="card-title">
         {{ film.title }}
 
-        {% if film.status == "2_released" %}
+        {% comment %} {% if film.status == "2_released" %}
         <span class="film-title-date">
           ({{ film.release_date|date:"Y" }})
         </span>
@@ -20,7 +40,7 @@
         <div class="badge badge-primary badge-production">
           {{ film.get_status_display }}
         </div>
-        {% endif %}
+        {% endif %} {% endcomment %}
 
       </h2>
       <p class="card-text">{{ film.description }}</p>
