@@ -79,8 +79,9 @@ class SectionAdmin(admin.ModelAdmin):
         ),
         'is_published',
         'is_free',
+        'is_featured',
     ]
-    list_editable = ['is_published', 'is_free']
+    list_editable = ['is_published', 'is_free', 'is_featured']
     # inlines = [
     #     StaticAssetInline,
     # ]
