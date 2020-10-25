@@ -22,6 +22,7 @@
     {% endif %}
   </div>
   <div class="container-blog">
+
     <div class="row mb-3">
       <div class="col">
         <p class="subtitle">{{ post.topic }}</p>
@@ -30,6 +31,11 @@
       </div>
     </div>
     <div class="row">
+    {% if user_can_edit_post %}
+    <a href="{{ post.admin_url }}" class="btn btn-sm btn-icon btn-dark admin-float">
+      <i class="material-icons">edit</i>
+    </a>
+    {% endif %}
       <div style="background-image:url('{{ post_author_profile.image_url }}');" class="profile-image profile ml-2">
       </div>
       <div class="col-auto">
@@ -43,6 +49,7 @@
 
 
 <section class="container-blog mt-3 mb-4">
+
   {% comment %} <p class="subtitle">{{ post.topic }}</p>
   <h1 class="">{{ post.title }}</h1>
   <p class="subtitle small mb-3">{{ post_date_created|date:"jS M Y" }}</p> {% endcomment %}
