@@ -30,6 +30,7 @@ class SessionMiddleware:
         """
         forwarded_host = request.META.get('HTTP_X_FORWARDED_HOST')
         host = request.META.get('HTTP_HOST')
+        logger.debug(f'blendercloud.middleware {request.META}')
         if settings.BLENDER_CLOUD_AUTH_ENABLED and (
             settings.BLENDER_CLOUD_DOMAIN is None
             or settings.BLENDER_CLOUD_DOMAIN in (host, forwarded_host)
@@ -48,7 +49,15 @@ class SessionMiddleware:
             logger.exception('Error while reading Blender Cloud session')
 
         if user is not None:
+            # This should be killed with fire.
+            keep_csrf = request.META.get('CSRF_COOKIE')
+            # **N.B**: `login()` always rotates the CSRF token!
             login(request, user)
+            # Undo what `login()` does with the CSRF token, otherwise
+            # CSRF verification will always be failing when this middleware is active
+            if keep_csrf:
+                request.META['CSRF_COOKIE'] = keep_csrf
+                request.csrf_cookie_needs_reset = False
             logger.debug('Authenticated Blender Cloud user: %s', user)
         elif request.user.is_authenticated:
             logout(request)
