@@ -1,7 +1,7 @@
 <div class="{{ card_sizes|default:"col-12 col-sm-6 col-lg-4" }} card-grid-item">
   <div class="card card-dark card-training card-media card-hover" {% if training.favorited %}data-checked="checked"{% endif %} data-favorite-url="{{ training.favorite_url }}" data-training-id="{{ training.id }}">
 
-    <div class="card-header" style='background-image: url("{{ training.thumbnail }}")'>
+    <div class="card-header" style='background-image: url("{{ training.thumbnail_s_url }}")'>
       <a href="{{ training.url }}" class="card-header-link"></a>
       {% if request.user.is_authenticated %}
       {% include 'training/components/card_button_favorite.html' with class='btn-save-media card-training-favorite' checked=training.favorited %}

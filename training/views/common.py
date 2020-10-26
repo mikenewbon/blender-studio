@@ -15,7 +15,8 @@ import static_assets.models as models_static_assets
 def training_model_to_template_type(
     training: trainings.Training, favorited: bool
 ) -> typed_templates.types.Training:
-    thumbnail = '' if not training.thumbnail else training.thumbnail.url
+    thumbnail_s_url = '' if not training.thumbnail_s_url else training.thumbnail_s_url
+    thumbnail_m_url = '' if not training.thumbnail_m_url else training.thumbnail_m_url
     picture_header = '' if not training.picture_header else training.picture_header.url
     return typed_templates.types.Training(
         id=training.pk,
@@ -29,7 +30,9 @@ def training_model_to_template_type(
         favorite_url=training.favorite_url,
         date_updated=training.date_updated,
         favorited=favorited,
-        thumbnail=thumbnail,
+        thumbnail=thumbnail_s_url,
+        thumbnail_s_url=thumbnail_s_url,
+        thumbnail_m_url=thumbnail_m_url,
         picture_header=picture_header,
     )
 
