@@ -2,11 +2,11 @@
   <div class="modal-content bg-dark">
     <div class="modal-header p-0">
       <div class="file-toolbar">
-        <a class="btn btn-sm btn-dark">
+        {% comment %} <a class="btn btn-sm btn-dark">
           <i class="material-icons">favorite_border</i>
           Like
           {# TODO(Natalia): Implement likes#}
-        </a>
+        </a> {% endcomment %}
         <a href="{{ asset.download_url }}" download class="btn btn-sm btn-dark">Download ({{ asset.download_size }})</a>
         <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
           <i class="material-icons">more_horiz</i>
