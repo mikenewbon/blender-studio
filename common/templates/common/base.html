@@ -240,7 +240,7 @@
               {% comment %} <a class="list-group-item" href="#">Services</a>{% endcomment %}
               <a class="list-group-item" href="{% url 'post-list' %}">Blog</a>
               <a class="list-group-item" href="/services">Services</a>
-              <a class="list-group-item" href="/admin">Login</a>
+              <a class="list-group-item" href="{% url 'oauth:login' %}">Login</a>
               <a class="list-group-item search" href="{% url 'search' %}">
                 <i class="material-icons icon-inline">search</i>
               </a>
