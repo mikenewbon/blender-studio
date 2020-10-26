@@ -10,10 +10,10 @@
       <div class="update-feed-week-header">
 
         {% if production_log.start_date.month == production_log.end_date.month %}
-        <p class="subtitle small"><i class="material-icons icon-inline small">calendar_today</i>  {{ production_log.start_date|date:'jS' }} - {{ production_log.end_date|date:'jS M' }} </p>
+        <p class="subtitle small"><i class="material-icons icon-inline small">calendar_today</i>  {{ production_log.start_date|date:'jS' }} - {{ production_log.end_date|date:'jS M' }} {{ production_log.start_date|date:'Y' }}</p>
         {% else %}
 
-        <p class="subtitle small"><i class="material-icons icon-inline small">calendar_today</i>  {{ production_log.start_date|date:'jS M' }} - {{ production_log.end_date|date:'jS M' }} </p>
+        <p class="subtitle small"><i class="material-icons icon-inline small">calendar_today</i>  {{ production_log.start_date|date:'jS M' }} - {{ production_log.end_date|date:'jS M' }} {{ production_log.start_date|date:'Y' }}</p>
         {% endif %}
         <h2>{{ production_log.name }}</h2>
 
