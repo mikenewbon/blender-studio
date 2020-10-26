@@ -42,6 +42,7 @@ u,
 }
 
 .markdown-text {
+  word-break: break-word;
 
   h1,
   .h1 {
@@ -79,6 +80,18 @@ u,
     margin: $spacer / 2 0;
 
   }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a {
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .display-1,

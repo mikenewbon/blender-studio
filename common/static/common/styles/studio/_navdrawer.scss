@@ -343,6 +343,8 @@
     line-height: 0;
     position: absolute;
     top: 50%;
+    word-break: normal;
+    overflow-wrap: normal;
     transform: translate(-50%, -50%);
   }
 }
