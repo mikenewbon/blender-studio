@@ -40,7 +40,7 @@
         {% if asset.static_asset.source_type == "video" %}
         {% include 'common/components/video_player.html' with url=asset.static_asset.video.default_variation_url poster=asset.static_asset.thumbnail_m_url %}
         {% else %}
-        <a data-toggle="modal" data-target="#file-zoom-modal" class="modal-asset-image-wrapper" href="#"
+        <a data-toggle="modal" data-target="#file-zoom-modal" class="modal-asset-image-wrapper"
           data-url="{% url 'api-asset-zoom' asset.id %}">
           {% include "common/components/helpers/image_set.html" with alt=asset.name classes="img-fluid" img_source=asset.static_asset.preview xsmall_width="576" small_width="768" medium_width="768" large_width="870" xlarge_width="780" %}
         </a>
