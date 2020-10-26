@@ -2,6 +2,7 @@ import datetime as dt
 from typing import Optional, Any
 
 from django.contrib import admin
+from django.contrib.auth.models import User
 from django.db.models import ForeignKey, Q
 from django.forms.models import ModelChoiceField
 from django.http.request import HttpRequest
@@ -50,12 +51,26 @@ class ProductionLogEntryAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
     readonly_fields = ['date_created']
     autocomplete_fields = ['author']
 
+    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    #     """Limit users to film crew members."""
+    #     if db_field.name == 'user':
+    #         try:
+    #             object_id = request.resolver_match.kwargs['object_id']
+    #         except KeyError:
+    #             return super().formfield_for_foreignkey(db_field, request, **kwargs)
+    #         film = production_logs.ProductionLog.objects.get(pk=object_id).film
+    #         kwargs['queryset'] = User.objects.filter(film_crew__film=film).distinct()
+    #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
-class ProductionLogEntryInline(EditLinkMixin, AdminUserDefaultMixin, admin.StackedInline):
+
+class ProductionLogEntryInline(EditLinkMixin, admin.StackedInline):
     model = production_logs.ProductionLogEntry
     show_change_link = True
     extra = 0
-    autocomplete_fields = ['author']
+    autocomplete_fields = [
+        'author',
+        'user',
+    ]
 
 
 @admin.register(production_logs.ProductionLog)

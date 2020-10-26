@@ -64,7 +64,7 @@ class FilmCrew(models.Model):
     display it in the production logs.
     """
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='film_crew')
     film = models.ForeignKey(Film, on_delete=models.CASCADE)
     role = models.CharField(max_length=128)
 

@@ -127,9 +127,10 @@ class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
     def author_role(self) -> str:
         """Find the role for the log entry author."""
         try:
-            crew_member_role = FilmCrew.objects.values_list('role', flat=True).get(
-                user=self.author, film=self.production_log.film
-            )
+            user = self.author or self.user
+            crew_member_role = user.film_crew.filter(film=self.production_log.film).first()
+            crew_member_role = crew_member_role.role
+
         except FilmCrew.DoesNotExist:
             crew_member_role = ''
 

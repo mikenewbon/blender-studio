@@ -35,7 +35,8 @@ class AssetInline(admin.StackedInline):
     prepopulated_fields = {'slug': ('name',)}
     readonly_fields = ['date_created']
     extra = 0
-    autocomplete_fields = ['static_asset']
+    autocomplete_fields = ['static_asset', 'attachments', 'film']
+    fields = ['static_asset', 'order', 'name', 'description', 'category', 'slug']
 
 
 @admin.register(collections.Collection)
