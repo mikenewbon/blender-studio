@@ -14,19 +14,23 @@ def sanitize(text: str) -> str:
     return bleach.clean(text)
 
 
-class AttachmentLinkInlineLexer(mistune.InlineLexer):
-    def enable_attachment_link(self):
-        # Any line that features '{attachment <digit> link='
-        self.rules.attachment_link = re.compile(r'{attachment\s\d+\slink=.*')
-        # Place the rule towards the top
-        self.default_rules.insert(1, 'attachment_link')
+class ShortcodeLinkLinkInlineLexer(mistune.InlineLexer):
+    """Allows shortcodes with links to skip urlise/linkify."""
 
-    def output_attachment_link(self, m):
+    def enable_shortcode_link(self):
+        """Find lines that feature '{attachment link=' or '{iframe src=' intact."""
+        lexer_regexp = r'{(?:attachment\s+|iframe\s+)\w*(?:\s*link|\s*src)=.*'
+        self.rules.shortcode_link = re.compile(lexer_regexp)
+        # Place the rule towards the top
+        self.default_rules.insert(1, 'shortcode_link')
+
+    def output_shortcode_link(self, m):
+        """Leave found lexem intact."""
         return m.string
 
 
-markdown_inline_lexer = AttachmentLinkInlineLexer(mistune.Renderer())
-markdown_inline_lexer.enable_attachment_link()
+markdown_inline_lexer = ShortcodeLinkLinkInlineLexer(mistune.Renderer())
+markdown_inline_lexer.enable_shortcode_link()
 
 
 def render(text: str) -> Markup:
