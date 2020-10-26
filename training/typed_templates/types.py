@@ -24,6 +24,8 @@ class Training:
     date_updated: datetime.datetime
     favorited: bool
     thumbnail: str
+    thumbnail_s_url: str
+    thumbnail_m_url: str
     picture_header: str
 
 
