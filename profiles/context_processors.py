@@ -9,8 +9,8 @@ from profiles.datatypes import User, Profile, Group
 
 def user_dict(request: HttpRequest) -> Dict[str, User]:
     """Inject a JSON-serializable user into the template context."""
-    user = request.user
-    if user.is_authenticated:
+    user = getattr(request, 'user', None)
+    if user and user.is_authenticated:
         user_data = User(
             is_anonymous=user.is_anonymous,
             is_authenticated=user.is_authenticated,
@@ -20,12 +20,12 @@ def user_dict(request: HttpRequest) -> Dict[str, User]:
             is_superuser=user.is_superuser,
             last_login=user.last_login,
             date_joined=user.date_joined,
-            groups=[Group(name=group.name,) for group in user.groups.all()],
+            groups=[Group(name=group.name) for group in user.groups.all()],
             profile=Profile(
                 full_name=user.profile.full_name if getattr(user, 'profile', None) else None,
                 image_url=user.profile.image_url if getattr(user, 'profile', None) else None,
             ),
         )
     else:
-        user_data = User(is_anonymous=user.is_anonymous, is_authenticated=user.is_authenticated,)
+        user_data = User(is_anonymous=True, is_authenticated=False)
     return {'user_dict': asdict(user_data)}
