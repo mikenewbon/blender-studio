@@ -308,11 +308,6 @@ def render(text: str, context: typing.Any = None) -> str:
     # otherwise having both code snippets/formulas with "{*" and shortcodes will be impossible
     try:
         return parser.parse(text, context)
-    except shortcodes.InvalidTagError as ex:
+    except (shortcodes.InvalidTagError, shortcodes.RenderingError):
         log.exception('Error rendering tag')
-        error_message = '<p>Error: unable to render shortcode: %s</p>' % str(ex.__cause__ or ex)
-        return f'{error_message}{text}'
-    except shortcodes.RenderingError as ex:
-        log.exception('Error rendering tag')
-        error_message = '<p>Error: unable to render shortcode: %s</p>' % str(ex.__cause__ or ex)
-        return f'{error_message}{text}'
+        return text
