@@ -23,7 +23,9 @@
 }
 
 .training-video {
-  .video-player, .content-locked {
+
+  .video-player,
+  .content-locked {
     @include media-breakpoint-down(sm) {
       margin: -20px -20px 0;
       border-radius: 0;
@@ -34,8 +36,8 @@
   }
 }
 
-.modal{
-  .content-locked{
+.modal {
+  .content-locked {
     width: 100%;
   }
 }
@@ -57,14 +59,13 @@
   }
 
   &-text {
-    left: 50%;
     max-width: 500px;
-    position: absolute;
+    position: relative;
     text-align: center;
-    top: 50%;
-    transform: translate(-50%, -50%);
+
     width: 100%;
     z-index: 1;
+    margin: $spacer * 4 auto;
   }
 
   .login-button {
@@ -72,6 +73,10 @@
   }
 
   img {
-    width: 100%!important;
+    width: 100% !important;
+    height: 100%;
+    position: absolute;
+    object-fit: cover;
+    object-position: center;
   }
 }

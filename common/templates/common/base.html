@@ -237,45 +237,44 @@
       </div> {% endcomment %}
       <div class="navbar-secondary d-md-none">
         <div class="navdrawer-offset">
-          <div class="container-xl">
-            <div class="row py-1">
-              <div class="col">
+          <div class="container-fluid px-2 py-1">
+            <div class="row ">
+
+              <div class="col-6 p-0">
                 <a class="h3 drawer-nav-dropdown" href="{% url 'film-list' %}">
                   <span>Films</span>
                 </a>
               </div>
 
-              <div class="col">
+              <div class="col-6 p-0">
                 <a class="h3 drawer-nav-dropdown" href="{% url 'training-home' %}">
                   <span>Training</span>
                 </a>
               </div>
 
-              <div class="w-100"></div>
-              <div class="col">
+              <div class="col-6 p-0">
                 <a class="h3 drawer-nav-dropdown" href="{% url 'post-list' %}">Blog</a>
               </div>
 
-              <div class="col">
+              <div class="col-6 p-0">
                 <a class="h3 drawer-nav-dropdown" href="/libraries">Libraries</a>
               </div>
 
-              <div class="w-100"></div>
-              <div class="col">
+              <div class="col-6 p-0">
                 <a class="h3 drawer-nav-dropdown" href="/services">Services</a>
               </div>
 
-              <div class="col">
+              <div class="col-6 p-0">
                 <a class="h3 drawer-nav-dropdown" href="{% url 'search' %}">Search</a>
               </div>
 
               {% if not request.user.is_authenticated %}
-              <div class="w-100"></div>
-              <div class="col">
+
+              <div class="col-6 p-0">
                 <a class="h3 drawer-nav-dropdown" href="{% url 'oauth:login' %}">Login</a>
               </div>
 
-              <div class="col">
+              <div class="col-6 p-0">
                 <a class="h3 drawer-nav-dropdown text-primary" href="{% url 'oauth:login' %}">Join</a>
               </div>
               {% endif %}

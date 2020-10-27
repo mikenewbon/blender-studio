@@ -11,6 +11,10 @@ has-secondary-nav
 
 {% block nav_drawer_inner %}
 <div class="nav-drawer-inner">
+  <div class="drawer-nav-header">
+    <p class="subtitle">Gallery</p>
+    <h2 class="mb-1">{{ film.title }}</h2>
+  </div>
   <div class="drawer-nav-group">
 
     <div class="drawer-nav-dropdown-wrapper">
@@ -95,7 +99,8 @@ has-secondary-nav
 
             <div class="drawer-nav-dropdown-wrapper">
 
-              <a class="drawer-nav-dropdown font-weight-bold" href="{% url 'film-gallery' film_slug=film.slug %}" data-tooltip="tooltip-overflow" data-placement="top" title="Featured Artwork">
+              <a class="drawer-nav-dropdown font-weight-bold" href="{% url 'film-gallery' film_slug=film.slug %}"
+                data-tooltip="tooltip-overflow" data-placement="top" title="Featured Artwork">
                 <i class="material-icons mr-2">grade</i>
                 <span class="overflow-text">Featured Artwork</span>
               </a>
@@ -113,7 +118,8 @@ has-secondary-nav
 
               <a class="drawer-nav-dropdown font-weight-bold {% if current_collection.parent != collection and current_collection != collection %}collapsed{% endif %}"
                 href="{{ collection.url }}" {% if child_collections %} data-toggle="collapse"
-                data-target="#collection-{{ collection.id }}" {% endif %} data-tooltip="tooltip-overflow" data-placement="top" title="{{ collection.name }}">
+                data-target="#collection-{{ collection.id }}" {% endif %} data-tooltip="tooltip-overflow"
+                data-placement="top" title="{{ collection.name }}">
                 <span class="drawer-nav-dropdown-text overflow-text">
                   {{ collection.name }}
                 </span>
@@ -136,7 +142,8 @@ has-secondary-nav
 
                 {% for child_collection in child_collections %}
                 <li class="drawer-nav-section">
-                  <a href="{{ child_collection.url }}" class="drawer-nav-section-link" data-tooltip="tooltip-overflow" data-placement="top" title="{{ child_collection.name }}">
+                  <a href="{{ child_collection.url }}" class="drawer-nav-section-link" data-tooltip="tooltip-overflow"
+                    data-placement="top" title="{{ child_collection.name }}">
 
                     <i class="material-icons">folder</i>
                     <h4 class="overflow-text">{{ child_collection.name }}</h4>

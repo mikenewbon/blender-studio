@@ -177,9 +177,9 @@ body {
     padding: 0 $spacer;
     scrollbar-width: none;
 
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    // &::-webkit-scrollbar {
+    //   display: none;
+    // }
   }
 
   .breadcrumb-item {

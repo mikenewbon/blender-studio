@@ -5,7 +5,7 @@
 
   <div class="drawer-nav-header">
     <p class="subtitle">{{ training.type.label }}</p>
-    <h2>{{ training.name }}</h2>
+    <h2 class="mb-">{{ training.name }}</h2>
   </div>
 
   <div class="drawer-nav-group">
@@ -18,6 +18,7 @@
   </div>
 
   {% for chapter_navigation in navigation.chapters %}
+  {% if chapter_navigation.is_published or request.user.is_superuser %}
   <div class="drawer-nav-group">
     <div class="drawer-nav-dropdown-wrapper ">
       <a class="drawer-nav-dropdown h3 {% if chapter_navigation.current %} active {% else %}collapsed{% endif %}"
@@ -32,13 +33,18 @@
 
         {% for section_navigation in chapter_navigation.sections %}
         {% if section_navigation.is_published or request.user.is_superuser %}
-        {% include 'common/components/navigation/nav_drawer_section_progress.html' with title=section_navigation.name subtitle='Video' href=section_navigation.url active=section_navigation.current started=section_navigation.started finished=section_navigation.finished progress_fraction=section_navigation.progress_fraction admin_change_href=section_navigation.admin_url nth=forloop.counter|stringformat:"02d" %}
+        {% if section_navigation.source_type == "video" %}
+        {% include 'common/components/navigation/nav_drawer_section_progress.html' with title=section_navigation.name href=section_navigation.url active=section_navigation.current started=section_navigation.started finished=section_navigation.finished progress_fraction=section_navigation.progress_fraction admin_change_href=section_navigation.admin_url nth=forloop.counter|stringformat:"02d" free=section_navigation.is_free %}
+        {% else %}
+        {% include 'common/components/navigation/nav_drawer_section_file.html' with title=section_navigation.name href=section_navigation.url admin_change_href=section_navigation.admin_url free=section_navigation.is_free %}
+        {% endif %}
         {% endif %}
         {% endfor %}
 
       </ol>
     </div>
   </div>
+  {% endif %}
   {% endfor %}
 </div>
 {% endblock nav_drawer_inner %}
@@ -55,7 +61,8 @@
 
 <div class="drawer-nav-group">
   <div class="drawer-nav-dropdown-wrapper">
-    <a class="drawer-nav-dropdown font-weight-bold" href="{{ navigation.overview_url }}" data-tooltip="tooltip-overflow" data-placement="top" title="{{ training.type.label }} Overview">
+    <a class="drawer-nav-dropdown font-weight-bold" href="{{ navigation.overview_url }}" data-tooltip="tooltip-overflow"
+      data-placement="top" title="{{ training.type.label }} Overview">
       <i class="material-icons mr-2">insert_drive_file</i>
       <span class="overflow-text">{{ training.type.label }} Overview</span>
     </a>
@@ -67,7 +74,8 @@
 <div class="drawer-nav-group">
   <div class="drawer-nav-dropdown-wrapper ">
     <a class="drawer-nav-dropdown font-weight-bold {% if chapter_navigation.current %} active {% else %}collapsed{% endif %}"
-      data-toggle="collapse" data-target="#nav-{{ chapter_navigation.slug }}" data-tooltip="tooltip-overflow" data-placement="top" title="{{ chapter_navigation.name }}">
+      data-toggle="collapse" data-target="#nav-{{ chapter_navigation.slug }}" data-tooltip="tooltip-overflow"
+      data-placement="top" title="{{ chapter_navigation.name }}">
       <span class="drawer-nav-dropdown-text overflow-text">{{ chapter_navigation.name }}</span>
       <i class="material-icons">keyboard_arrow_down</i>
     </a>

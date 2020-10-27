@@ -324,6 +324,10 @@
   border-bottom: 1px solid $input-gray;
   margin-bottom: $spacer / 4;
   padding: $spacer;
+
+  @include media-breakpoint-down(sm) {
+    padding: $spacer / 2 $spacer;
+  }
 }
 
 .nav-drawer-section-progress-wrapper {

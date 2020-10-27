@@ -25,9 +25,15 @@
     {% endif %}
   </div>
   {% else %}
-  {% if section.thumbnail_m_url %}
-  <img src="{{ section.thumbnail_m_url }}" class="img-fluid img-width-100 rounded" alt="{{ section.name }}">
-  {% endif %}
+  <div class="col training-video">
+    {% if request.user.is_authenticated and request.user|has_group:"subscriber" or section.is_free %}
+    {% if section.static_asset.source_type == "image" %}
+    {% include "common/components/helpers/image_set.html" with alt=section.name classes="img-fluid img-width-100 rounded" img_source=section.static_asset.source xsmall_width="600" small_width="800" medium_width="1000" large_width="1200" xlarge_width="1920" %}
+    {% endif %}
+    {% else %}
+    {% include 'common/components/content_locked.html' with background=training.picture_header %}
+    {% endif %}
+  </div>
   {% endif %}
 </div>
 <div class="row">
