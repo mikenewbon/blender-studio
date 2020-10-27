@@ -1,3 +1,4 @@
+import datetime
 from typing import Optional
 import logging
 
@@ -164,6 +165,19 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
             raise ValidationError(
                 f'Source preview has to be provided for `{StaticAssetFileTypeChoices.file}` source type.'
             )
+
+    def save(self, *args, **kwargs):
+        created = self.pk is None
+        super().save(*args, **kwargs)
+        if not created:
+            return
+        # Create related tables for video or image
+        if self.source_type == 'video':
+            Video.objects.create(static_asset=self, duration=datetime.timedelta(seconds=0))
+            # TODO(fsiddi) Background job to process video variation and generate a thumbnail
+        elif self.source_type == 'image':
+            Image.objects.create(static_asset=self)
+            # TODO(fsiddi) Background job to update the image info
 
     def __str__(self):
         return f'({self.id}) {self.original_filename}'
