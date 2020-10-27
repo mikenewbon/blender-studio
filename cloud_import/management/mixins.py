@@ -22,7 +22,8 @@ class ImportCommand(BaseCommand):
     def get_or_create_user(self, user_object_id: ObjectId) -> (User, bool):
         user_doc = mongo.users_collection.find_one({'_id': ObjectId(user_object_id)})
         try:
-            user = User.objects.get(username=user_doc['username'])
+            oauth = OAuthUserInfo.objects.get(oauth_user_id=user_doc['auth'][0]['user_id'])
+            user = oauth.user
             self.console_log(f"Fetched user {user.username}")
             is_created = False
         except User.DoesNotExist:
