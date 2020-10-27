@@ -22,7 +22,7 @@ window.comments = (function comments() {
     }
 
     get editLink() {
-      return this.element.querySelector('.comment-edit');
+      return this.element.querySelector(':scope > .comment-content .comment-edit');
     }
 
     get deleteLink() {
@@ -76,10 +76,14 @@ window.comments = (function comments() {
         this._showReplyInput();
       });
 
-      this.editLink && this.editLink.addEventListener('click', event => {
-        event.preventDefault();
-        this._showEditInput();
-      });
+
+      // if (this.editURL != null) {
+        console.log(this)
+        this.editLink && this.editLink.addEventListener('click', event => {
+          event.preventDefault();
+          this._showEditInput();
+        });
+      // }
 
       this.deleteLink && this.deleteLink.addEventListener('click', event => {
         event.preventDefault();
