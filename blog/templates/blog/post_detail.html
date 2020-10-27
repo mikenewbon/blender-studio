@@ -10,8 +10,8 @@
 <meta name="twitter:title" content="Blender Cloud - {{ post.title }}">
 <meta property="og:description" content="{{ post.description }}">
 <meta name="twitter:description" content="{{ post.description }}">
-<meta property="og:image" content="{{request.scheme}}://{{request.META.HTTP_HOST}}/{{ post.thumbnail }}">
-<meta name="twitter:image" content="{{request.scheme}}://{{request.META.HTTP_HOST}}/{{ post.thumbnail }}">
+<meta property="og:image" content="{{ post.thumbnail_m_url }}">
+<meta name="twitter:image" content="{{ post.thumbnail_m_url }}">
 {% endblock %}
 
 {% block content %}
