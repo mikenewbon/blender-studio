@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.db.models import QuerySet
-from django.db.models import Value, Case, When, Exists, OuterRef, Q
+from django.db.models import Value, Case, When, Exists, OuterRef
 from django.db.models.fields import BooleanField, CharField
 from django.http.request import HttpRequest
 
@@ -12,9 +12,18 @@ from common.types import assert_cast
 @admin.register(models.Comment)
 class CommentAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
     list_display = ['__str__', 'comment_under', 'has_replies', 'is_deleted']
-    list_filter = ['user', 'date_created', 'date_deleted']
-    search_fields = ['message', 'asset__name', 'section__name', 'post__slug']
+    list_filter = ['date_created', 'date_deleted']
+    search_fields = [
+        'message',
+        'asset__name',
+        'section__name',
+        'post__slug',
+        'user__username',
+        'user__email',
+        'user__profile__full_name',
+    ]
     readonly_fields = ['date_created', 'date_updated', 'date_deleted']
+    raw_id_fields = ['reply_to']
 
     def get_queryset(self, request: HttpRequest) -> 'QuerySet[models.Comment]':
         queryset = super().get_queryset(request)
@@ -43,3 +52,15 @@ class CommentAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
 
     def is_deleted(self, obj: models.Comment) -> bool:
         return assert_cast(bool, getattr(obj, '_is_deleted'))
+
+
+@admin.register(models.Like)
+class LikeAdmin(admin.ModelAdmin):
+    list_display = ['__str__', 'comment']
+    search_fields = [
+        'comment__message',
+        'user__email',
+        'user__profile__full_name',
+        'user__username',
+    ]
+    readonly_fields = ['date_created', 'date_updated', 'user', 'comment']
