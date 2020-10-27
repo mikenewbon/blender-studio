@@ -41,11 +41,11 @@
     max-height: none;
     overflow: auto;
     padding: $spacer / 4 0;
-    position: sticky;
+    position: relative;
     width: auto;
     z-index: auto;
     border: 1px solid $input-gray;
-    top: calc(#{$navbar-height} + #{$spacer});
+    top: 0;
 
     .nav-drawer-body {
       height: auto;
