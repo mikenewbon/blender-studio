@@ -1,11 +1,10 @@
 import unittest
 
 from django.contrib.auth.models import Group, AnonymousUser
-from django.test import TestCase, SimpleTestCase
+from django.test import TestCase
 from django.test.client import RequestFactory
 
 from common.shortcodes import render
-from common.markdown import render as render_markdown
 from common.tests.factories.users import UserFactory
 
 
@@ -197,10 +196,3 @@ class IFrameTest(TestCaseWithRequest):
         self.request.user = user
         context = {'request': self.request}
         self.assertEqual(expect, render(md, context=context))
-
-
-class AttachmentTest(TestCaseWithRequest):
-    def test_image(self):
-        self.assertEqual(
-            '{attachment 123 link=self}', render_markdown('{attachment 123 link=self}'),
-        )

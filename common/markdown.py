@@ -1,5 +1,5 @@
 """Handle cleaning and rendering of markdown."""
-from typing import Optional
+from typing import Optional, Tuple
 import re
 
 from markupsafe import Markup
@@ -7,6 +7,7 @@ import bleach
 import mistune
 
 _markdown: Optional[mistune.Markdown] = None
+SHORTCODE_WITH_LINK_PATTERN = r'{(?:attachment\s+|iframe\s+)\w*(?:\s*link|\s*src)=.*'
 
 
 def sanitize(text: str) -> str:
@@ -14,23 +15,24 @@ def sanitize(text: str) -> str:
     return bleach.clean(text)
 
 
-class ShortcodeLinkLinkInlineLexer(mistune.InlineLexer):
-    """Allows shortcodes with links to skip urlise/linkify."""
-
-    def enable_shortcode_link(self):
-        """Find lines that feature '{attachment link=' or '{iframe src=' intact."""
-        lexer_regexp = r'{(?:attachment\s+|iframe\s+)\w*(?:\s*link|\s*src)=.*'
-        self.rules.shortcode_link = re.compile(lexer_regexp)
-        # Place the rule towards the top
-        self.default_rules.insert(1, 'shortcode_link')
-
-    def output_shortcode_link(self, m):
-        """Leave found lexem intact."""
-        return m.string
+def parse_shortcode_link(self, match: re.Match, state) -> Tuple[str]:
+    """Define how to parse a shortcode with link."""
+    return 'shortcode_link', match.group()
 
 
-markdown_inline_lexer = ShortcodeLinkLinkInlineLexer(mistune.Renderer())
-markdown_inline_lexer.enable_shortcode_link()
+def keep_shortcode_link(matched_text: str) -> str:
+    """Leave shortcode link as is."""
+    return matched_text
+
+
+def plugin_shortcode_with_link(md):
+    """Define a plugin that will keep shortcode links intact.
+
+    This is necessary because by default mistune "urlises" (wraps into "a href") all links.
+    """
+    md.inline.register_rule('shortcode_link', SHORTCODE_WITH_LINK_PATTERN, parse_shortcode_link)
+    md.inline.rules.append('shortcode_link')
+    md.renderer.register('shortcode_link', keep_shortcode_link)
 
 
 def render(text: str) -> Markup:
@@ -38,6 +40,9 @@ def render(text: str) -> Markup:
     global _markdown
 
     if _markdown is None:
-        _markdown = mistune.Markdown(escape=True, inline=markdown_inline_lexer)
+        _markdown = mistune.create_markdown(
+            escape=True,
+            plugins=[plugin_shortcode_with_link, mistune.plugins.extra.plugin_url],
+        )
 
     return Markup(_markdown(text))
