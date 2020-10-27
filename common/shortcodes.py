@@ -13,6 +13,9 @@ supported.
 
 NOTE: only single-line shortcodes are supported for now, due to the need to
 pass them though Markdown unscathed.
+
+NOTE: The reason this is not implemented as a markdown plugin is that
+shortcodes are often applied after markdown has been rendered and stored as HTML.
 """
 import html as html_module  # I want to be able to use the name 'html' in local scope.
 import logging
@@ -290,24 +293,42 @@ class Attachment:
         )
 
 
+class SilentParser(shortcodes.Parser):
+    """Silence InvalidTagError and other exceptions shortcodes.Parser raises.
+
+    "shortcodes.Parser" raises unhandled exceptions when it meets something
+    that looks like a shortcode but doesn't not have a registered handler.
+    Instead, it should ignore these occurrences and keep them as-is,
+    and this monkeypatches the parser to do just that.
+
+    Ideally, this should be fixed in the "shortcodes" module, however
+    latest "shortcodes==3.0.0" is not compatible with this implementation,
+    and ain't nobody got time for both figuring out why and making sure it handles its exceptions.
+    """
+
+    def _parse_token(self, token, stack, *args, **kwargs):
+        try:
+            super()._parse_token(token, stack, *args, **kwargs)
+        except Exception:
+            # Just leave it as it is.
+            stack[-1].children.append(shortcodes.Text(token))
+
+
 def _get_parser() -> typing.Tuple[shortcodes.Parser, shortcodes.Parser]:
     """Return the shortcodes parser, create it if necessary."""
-    global _parser, _commented_parser
+    global _parser
     if _parser is None:
         start, end = '{}'
-        _parser = shortcodes.Parser(start, end)
-        _commented_parser = shortcodes.Parser(f'<!-- {start}', f'{end} -->')
-    return _parser, _commented_parser
+        _parser = SilentParser(start, end)
+    return _parser
 
 
 def render(text: str, context: typing.Any = None) -> str:
     """Parse and render shortcodes."""
-    parser, _ = _get_parser()
+    parser = _get_parser()
 
-    # TODO(anna,Sybren): instead of raising an exception, parser should just ignore unknown tags
-    # otherwise having both code snippets/formulas with "{*" and shortcodes will be impossible
     try:
         return parser.parse(text, context)
-    except (shortcodes.InvalidTagError, shortcodes.RenderingError):
+    except shortcodes.ShortcodeError:
         log.exception('Error rendering tag')
         return text
