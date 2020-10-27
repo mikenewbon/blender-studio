@@ -12,7 +12,7 @@ log = logging.getLogger(__name__)
 
 
 def get_annotated_comments(obj: Model, user_pk: int) -> List[Comment]:
-    """Returns a list of annotated comments associated with the model instance `obj`.
+    """Return a list of annotated comments associated with the model instance `obj`.
 
     Args:
         obj: a model instance with comments under the attribute 'comments';
@@ -32,10 +32,13 @@ def get_annotated_comments(obj: Model, user_pk: int) -> List[Comment]:
     return list(
         comments.exclude(date_deleted__isnull=False, replies__isnull=True)
         .exclude(date_deleted__isnull=False, replies__date_deleted__isnull=False)
-        .prefetch_related('user', 'reply_to')
+        .prefetch_related('user', 'reply_to', 'like_set')
         .annotate(
             liked=Exists(Like.objects.filter(comment_id=OuterRef('pk'), user_id=user_pk)),
-            number_of_likes=Count('likes'),
+            # This excludes likes from deleted users:
+            #    see https://code.djangoproject.com/ticket/15183
+            # number_of_likes=Count('likes'),
+            number_of_likes=Count('like__id'),
             owned_by_current_user=Case(
                 When(user_id=user_pk, then=Value(True)),
                 default=Value(False),

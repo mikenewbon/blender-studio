@@ -96,7 +96,7 @@ def comment_to_json_response(comment: Comment):
             'message_html': with_shortcodes(comment.message_html),
             'like_url': comment.like_url,
             'liked': False,
-            'likes': 0,
+            'likes': comment.like_set.count(),
             'edit_url': comment.edit_url,
             'delete_url': comment.delete_url,
         }

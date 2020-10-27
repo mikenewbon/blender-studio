@@ -1,6 +1,8 @@
 from django.test.testcases import TestCase
 from django.urls import reverse
 
+from comments.models import Like
+from comments.queries import get_annotated_comments, set_comment_like
 from common.tests.factories.blog import RevisionFactory
 from common.tests.factories.comments import CommentUnderPostFactory
 from common.tests.factories.users import UserFactory
@@ -53,3 +55,38 @@ class TestCommentTreeConstruction(TestCase):
         comment_trees = response.context['comments'].comment_trees
         self.assertEqual(len(comment_trees), 1)
         self.assertEqual(comment_trees[0].id, self.comment_no_replies.id)
+
+    def test_get_annotated_comments_returns_correct_like_count(self):
+        comment = CommentUnderPostFactory(comment_post__post=self.post)
+        post = comment.post.all()[0]
+        set_comment_like(comment_pk=post.comments.all()[0].pk, user_pk=self.user.pk, like=True)
+
+        annotated_comments = get_annotated_comments(post, user_pk=self.user.pk)
+
+        self.assertEqual(annotated_comments[0].likes.count(), 1)
+        self.assertEqual(annotated_comments[0].number_of_likes, 1)
+
+    def test_get_annotated_comments_returns_correct_like_count_even_if_user_deleted(self):
+        comment = CommentUnderPostFactory(comment_post__post=self.post)
+        post = comment.post.all()[0]
+        set_comment_like(comment_pk=post.comments.all()[0].pk, user_pk=self.user.pk, like=True)
+
+        annotated_comments = get_annotated_comments(post, user_pk=self.user.pk)
+
+        self.assertEqual(annotated_comments[0].number_of_likes, 1)
+        self.assertEqual(
+            annotated_comments[0].number_of_likes,
+            Like.objects.filter(comment_id=annotated_comments[0].pk).count(),
+        )
+
+        # After the user has been deleted, the likes count should still be the same
+        user_pk = self.user.pk
+        self.user.delete()
+
+        annotated_comments = get_annotated_comments(post, user_pk=user_pk)
+
+        self.assertEqual(annotated_comments[0].number_of_likes, 1)
+        self.assertEqual(
+            annotated_comments[0].number_of_likes,
+            Like.objects.filter(comment_id=annotated_comments[0].pk).count(),
+        )

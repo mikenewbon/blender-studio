@@ -299,3 +299,51 @@ class TestCommentEditEndpoint(TestCase):
             '<p><strong>bold</strong> '
             '<a href="https://example.com">https://example.com</a></p>\n',
         )
+
+
+class TestCommentLikeEndpoint(TestCase):
+    maxDiff = None
+
+    def setUp(self):
+        self.user = UserFactory()
+        self.comment = CommentFactory(user=self.user)
+        self.client.force_login(self.user)
+
+    def test_like_comment_increases_number_of_likes_by_one(self):
+        self.assertEqual(self.comment.likes.count(), 0)
+        response = self.client.post(
+            self.comment.like_url, {'like': True}, content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            json.loads(response.content),
+            {'like': True, 'number_of_likes': 1},
+        )
+        self.assertEqual(self.comment.likes.count(), 1)
+
+        # One more like from a different user
+        user = UserFactory()
+        self.client.force_login(user)
+        response = self.client.post(
+            self.comment.like_url, {'like': True}, content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            json.loads(response.content),
+            {'like': True, 'number_of_likes': 2},
+        )
+        self.assertEqual(self.comment.likes.count(), 2)
+
+        # Unlike the comment
+        response = self.client.post(
+            self.comment.like_url, {'like': False}, content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            json.loads(response.content),
+            {'like': False, 'number_of_likes': 1},
+        )
+        self.assertEqual(self.comment.likes.count(), 1)
