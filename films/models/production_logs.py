@@ -44,7 +44,7 @@ class ProductionLog(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, 
     )
     author.description = 'The actual author of the summary in the production log.'
     youtube_link = models.URLField(blank=True)
-    thumbnail = models.FileField(upload_to=get_upload_to_hashed_path)
+    thumbnail = models.FileField(upload_to=get_upload_to_hashed_path, blank=True)
 
     def get_absolute_url(self) -> str:
         return self.url
@@ -122,6 +122,7 @@ class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
         help_text='The actual author of the assets in the production log entry',
     )
     author.description = 'The actual author of the assets in the production log entry.'
+    legacy_id = models.SlugField(blank=True)
 
     @property
     def author_role(self) -> str:
@@ -129,6 +130,8 @@ class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
         try:
             user = self.author or self.user
             crew_member_role = user.film_crew.filter(film=self.production_log.film).first()
+            if not crew_member_role:
+                return ''
             crew_member_role = crew_member_role.role
 
         except FilmCrew.DoesNotExist:
