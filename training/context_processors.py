@@ -18,7 +18,7 @@ def enums(request: HttpRequest) -> Mapping[str, object]:
 def favorited(request: HttpRequest) -> Mapping[str, List[int]]:
     """Inject IDs of favorite trainings into the template context."""
     favorited_training_ids = []
-    if request.user.is_authenticated:
+    if getattr(request, 'user', None) and request.user.is_authenticated:
         favorited_training_ids = [
             training.pk for training in trainings.favorited(user_pk=request.user.pk)
         ]
