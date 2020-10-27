@@ -25,7 +25,7 @@ def film_list(request: HttpRequest) -> HttpResponse:
     :template:`films/films.html`
     """
     context = {
-        'films': (Film.objects.filter(is_published=True).order_by('status', '-release_date')),
+        'films': (Film.objects.order_by('status', '-release_date')),
         'user_can_edit_film': (
             request.user.is_staff and request.user.has_perm('films.change_film')
         ),

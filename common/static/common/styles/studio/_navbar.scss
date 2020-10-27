@@ -13,6 +13,11 @@ body {
   transition: margin-left $nav-drawer-animation-duration;
   z-index: 1040;
 
+  a {
+    word-break: normal;
+    overflow-wrap: normal;
+  }
+
   // Because flex properties aren't inherited, we need to redeclare these first
   // few properties so that content nested within behave properly.
   .profile {

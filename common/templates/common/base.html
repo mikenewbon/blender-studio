@@ -98,6 +98,10 @@
             <span>Blog</span>
           </a>
 
+          <a href="/libraries" class="btn btn-secondary btn-nav">
+            <span>Libraries</span>
+          </a>
+
           <a href="/services" class="btn btn-secondary btn-nav">
             <span>Services</span>
           </a>
@@ -234,16 +238,48 @@
       <div class="navbar-secondary d-md-none">
         <div class="navdrawer-offset">
           <div class="container-xl">
-            <div class="list-group list-group-flush list-group-horizontal px-2">
-              <a class="list-group-item" href="{% url 'film-list' %}">Films</a>
-              <a class="list-group-item" href="{% url 'training-home' %}">Training</a>
-              {% comment %} <a class="list-group-item" href="#">Services</a>{% endcomment %}
-              <a class="list-group-item" href="{% url 'post-list' %}">Blog</a>
-              <a class="list-group-item" href="/services">Services</a>
-              <a class="list-group-item" href="{% url 'oauth:login' %}">Login</a>
-              <a class="list-group-item search" href="{% url 'search' %}">
-                <i class="material-icons icon-inline">search</i>
-              </a>
+            <div class="row py-1">
+              <div class="col">
+                <a class="h3 drawer-nav-dropdown" href="{% url 'film-list' %}">
+                  <span>Films</span>
+                </a>
+              </div>
+
+              <div class="col">
+                <a class="h3 drawer-nav-dropdown" href="{% url 'training-home' %}">
+                  <span>Training</span>
+                </a>
+              </div>
+
+              <div class="w-100"></div>
+              <div class="col">
+                <a class="h3 drawer-nav-dropdown" href="{% url 'post-list' %}">Blog</a>
+              </div>
+
+              <div class="col">
+                <a class="h3 drawer-nav-dropdown" href="/libraries">Libraries</a>
+              </div>
+
+              <div class="w-100"></div>
+              <div class="col">
+                <a class="h3 drawer-nav-dropdown" href="/services">Services</a>
+              </div>
+
+              <div class="col">
+                <a class="h3 drawer-nav-dropdown" href="{% url 'search' %}">Search</a>
+              </div>
+
+              {% if not request.user.is_authenticated %}
+              <div class="w-100"></div>
+              <div class="col">
+                <a class="h3 drawer-nav-dropdown" href="{% url 'oauth:login' %}">Login</a>
+              </div>
+
+              <div class="col">
+                <a class="h3 drawer-nav-dropdown text-primary" href="{% url 'oauth:login' %}">Join</a>
+              </div>
+              {% endif %}
+
             </div>
           </div>
         </div>
