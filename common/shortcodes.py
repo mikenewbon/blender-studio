@@ -214,7 +214,7 @@ class Attachment:
         pargs: typing.List[str],
         kwargs: typing.Dict[str, str],
     ) -> str:
-
+        """Handle attachment shortcode."""
         try:
             slug = pargs[0]
         except KeyError:
@@ -238,7 +238,7 @@ class Attachment:
         pargs: typing.List[str],
         kwargs: typing.Dict[str, str],
     ) -> str:
-
+        """Render attachment."""
         file_renderers = {
             'image': self.render_image,
             'video': self.render_video,
@@ -253,6 +253,7 @@ class Attachment:
         pargs: typing.List[str],
         kwargs: typing.Dict[str, str],
     ):
+        """Render a generic attachment."""
         return render_to_string(
             'common/components/attachments/file_generic.html', {'static_asset': static_asset},
         )
@@ -263,8 +264,7 @@ class Attachment:
         pargs: typing.List[str],
         kwargs: typing.Dict[str, str],
     ):
-        """Renders an image file."""
-
+        """Render an image file."""
         if 'link' in pargs:
             kwargs['link'] = 'self'
         link = None if 'link' not in kwargs else kwargs['link']
@@ -279,8 +279,7 @@ class Attachment:
         pargs: typing.List[str],
         kwargs: typing.Dict[str, str],
     ):
-        """Renders a video file."""
-
+        """Render a video file."""
         # TODO(fsiddi) Handle processing video
         is_processing = False
         # TODO(fsiddi) Support looping and other options
