@@ -2,7 +2,7 @@
 {% load static %}
 {% load film_extras %}
 
-{% block title_append %} - {{ film.title }} Gallery{% endblock title_append %}
+{% block title_append %} - {{ film.title }} Content Gallery{% endblock title_append %}
 
 {% block bodyclasses %}
 {% comment %} has-nav-drawer{% endcomment %}
@@ -12,7 +12,7 @@ has-secondary-nav
 {% block nav_drawer_inner %}
 <div class="nav-drawer-inner">
   <div class="drawer-nav-header">
-    <p class="subtitle">Gallery</p>
+    <p class="subtitle">Content Gallery</p>
     <h2 class="mb-1">{{ film.title }}</h2>
   </div>
   <div class="drawer-nav-group">
