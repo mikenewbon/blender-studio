@@ -76,14 +76,10 @@ window.comments = (function comments() {
         this._showReplyInput();
       });
 
-
-      // if (this.editURL != null) {
-        console.log(this)
-        this.editLink && this.editLink.addEventListener('click', event => {
-          event.preventDefault();
-          this._showEditInput();
-        });
-      // }
+      this.editLink && this.editLink.addEventListener('click', event => {
+        event.preventDefault();
+        this._showEditInput();
+      });
 
       this.deleteLink && this.deleteLink.addEventListener('click', event => {
         event.preventDefault();
@@ -161,9 +157,9 @@ window.comments = (function comments() {
       sel.addRange(range)
     }
 
-    prependReply(comment) {
+    appendReply(comment) {
       const repliesElement = this.element.closest('.top-level-comment').querySelector('.replies .comments');
-      repliesElement.prepend(comment.element);
+      repliesElement.append(comment.element);
     }
 
     get editInputsElement() {
@@ -532,7 +528,7 @@ window.comments = (function comments() {
             data.edit_url,
             data.delete_url
           );
-          replyTo.prependReply(comment);
+          replyTo.appendReply(comment);
 
         });
     }
