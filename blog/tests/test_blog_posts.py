@@ -30,7 +30,7 @@ class TestPostAndRevisionCreation(TestCase):
                 'film': self.film.id,
                 'title': 'New blog post',
                 'topic': 'Announcement',
-                'content': '#Test text',
+                'content': '# Test text',
                 'thumbnail': img,
             }
             response = self.client.post(self.post_add_url, post_form_data, follow=True)
