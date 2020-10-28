@@ -17,7 +17,8 @@ def comments_to_template_type(
     # noqa: D103
     user_is_moderator = user.has_perm('comments.moderate_comment')
     lookup: Dict[Optional[int], List[Comment]] = {}
-    for comment in sorted(comments, key=lambda c: c.date_created, reverse=True):
+    # Sort all comments chronologically, oldest first
+    for comment in sorted(comments, key=lambda c: c.date_created):
         reply_to_pk = None if comment.reply_to is None else comment.reply_to.pk
 
         lookup.setdefault(reply_to_pk, []).append(comment)
@@ -79,7 +80,8 @@ def comments_to_template_type(
     return typed_templates.Comments(
         comment_url=comment_url,
         number_of_comments=len(comments),
-        comment_trees=[build_tree(comment) for comment in lookup.get(None, [])],
+        # Reverse ordering of top-level comments to newest first:
+        comment_trees=list(reversed([build_tree(comment) for comment in lookup.get(None, [])])),
         profile_image_url=user.profile.image_url if getattr(user, 'profile', None) else None,
     )
 
