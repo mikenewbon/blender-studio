@@ -24,9 +24,9 @@
   <div class="container-blog">
 
     <div class="row mb-3">
-      <div class="col">
+      <div class="col col-lg-11">
         <p class="subtitle">{{ post.topic }}</p>
-        <h1 class="display-3">{{ post.title }}</h1>
+        <h1 class="display-3">{{ post.title|linebreaksbr }}</h1>
         <p class="subtitle">{{ post_date_created|date:"jS M Y" }}</p>
       </div>
     </div>
