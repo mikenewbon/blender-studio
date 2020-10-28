@@ -230,6 +230,26 @@ class TestCommentEditEndpoint(TestCase):
         self.edit_url = reverse('comment-edit', kwargs={'comment_pk': self.comment.pk})
         self.client.force_login(self.user)
 
+    def test_cannot_edit_unless_authenticated(self):
+        self.client.logout()
+        edit_message = '# Header\n**bold** _italic_'
+        response = self.client.post(
+            self.edit_url, {'message': edit_message}, content_type='application/json',
+        )
+
+        # TODO(anna): should be 403, which is possible with LoginRequiredMixin
+        self.assertEqual(response.status_code, 302)
+
+    def test_cannot_edit_anothers_comment(self):
+        user = UserFactory()
+        self.client.force_login(user)
+        edit_message = '# Header\n**bold** _italic_'
+        response = self.client.post(
+            self.edit_url, {'message': edit_message}, content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, 404)
+
     def test_edit_full_response(self):
         edit_message = '# Header\n**bold** _italic_'
         response = self.client.post(

@@ -5,6 +5,7 @@ from django.http.request import HttpRequest
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_POST
 
+from comments.models import Comment
 from comments.queries import edit_comment, moderator_edit_comment
 from comments.views.common import comment_to_json_response
 from common.types import assert_cast
@@ -20,6 +21,9 @@ def comment_edit(request: HttpRequest, *, comment_pk: int) -> JsonResponse:
     if request.user.has_perm('comments.moderate_comment'):
         comment = moderator_edit_comment(comment_pk=comment_pk, message=message)
     else:
-        comment = edit_comment(comment_pk=comment_pk, user_pk=request.user.id, message=message)
+        try:
+            comment = edit_comment(comment_pk=comment_pk, user_pk=request.user.id, message=message)
+        except Comment.DoesNotExist:
+            return JsonResponse({}, status=404)
 
     return comment_to_json_response(comment)
