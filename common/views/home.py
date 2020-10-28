@@ -7,7 +7,7 @@ from django.views.decorators.http import require_safe
 from blog.queries import get_latest_post_revisions
 from films.models import Film
 from films.queries import get_random_featured_assets
-from training.models import Training
+from training.models import Training, Section
 from training.queries.sections import recently_watched
 from training.views.common import recently_watched_sections_to_template_type
 
@@ -64,6 +64,8 @@ def welcome(request: HttpRequest) -> HttpResponse:
     context = {
         'featured_films': Film.objects.filter(is_featured=True),
         'featured_trainings': Training.objects.filter(is_featured=True),
+        'featured_sections': Section.objects.filter(is_featured=True),
+        'featured_film_assets': get_random_featured_assets(limit=8),
     }
 
     return render(request, 'common/welcome.html', context)
