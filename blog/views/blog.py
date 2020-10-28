@@ -61,7 +61,10 @@ def post_detail(request: HttpRequest, post_slug: str) -> HttpResponse:
     **Template**
         :template:`blog/post_detail.html`
     """
-    post = get_object_or_404(Post, slug=post_slug, is_published=True)
+    if request.user.is_superuser or request.user.is_staff:
+        post = get_object_or_404(Post, slug=post_slug)
+    else:
+        post = get_object_or_404(Post, slug=post_slug, is_published=True)
     try:
         latest_revision: Revision = post.revisions.filter(is_published=True).latest('date_created')
     except Revision.DoesNotExist:
