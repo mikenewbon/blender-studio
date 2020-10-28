@@ -127,6 +127,14 @@ a.jumbotron {
 
     }
   }
+
+  &.overlay-dark {
+    .jumbotron-bg-wrapper::before {
+      background: radial-gradient(38.58% 218.51% at 78.58% 51.9%, rgba(0, 0, 0, 0) 11.87%, rgba(0, 0, 0, 0.3) 34.9%, rgba(0, 0, 0, 0.75) 100%);
+
+
+    }
+  }
 }
 
 a.jumbotron-body {

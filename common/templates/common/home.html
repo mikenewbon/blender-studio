@@ -5,7 +5,7 @@
 
 <div class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content jumbotron header mb-4">
   <div class="jumbotron-bg-wrapper">
-    <img class="jumbotron-bg" src="{% static "common/images/home/settlers-bg.jpg" %}">
+    <img class="jumbotron-bg" src="{% static "common/images/home/sf-background.png" %}">
     <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
     {% comment %}
     {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
@@ -15,14 +15,12 @@
     <div class="row">
       <div class="col-lg-5 col-md-6">
         <div class="jumbotron-body">
-          <p class="mb-1"><span class="badge badge-primary mr-2">New</span><span class="subtitle">Blog Post</span>
+          <p class="mb-3"><span class="badge badge-primary mr-2">New</span><span class="subtitle">Open Movie Announcement</span>
           </p>
-          <h1 class="mb-2 em">Blender Cloud v4</h1>
-          <p>Welcome to the fresh redesign of Blender Cloud!</p>
-          <p class="mb-3">In this new version of the platform we deliver design and interaction improvements that will
-            make it easier and more fun to discover all the content created by the Blender Studio team over the years.
+          <img class="mb-3 film-logo" src="{% static "common/images/home/sf-logo.png" %}">
+          <p class="mb-3">When a group of rowdy teenagers trek into an isolated forest, they discover peaceful mushroom creatures that turn out to be a deadly force of nature.
           </p>
-          <a href="/blog/blender-cloud-v4" class="btn btn-primary">Read the Blog Post</a>
+          <a href="blog/announcing-sprite-fright-a-horror-comedy" class="btn btn-primary">Read the Blog Post</a>
         </div>
       </div>
     </div>
