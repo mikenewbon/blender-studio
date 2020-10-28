@@ -68,6 +68,14 @@
       }
     }
   }
+
+  &.locked {
+    .file-image {
+      filter: blur(10px);
+      position: relative;
+      transform: scale(1.1);
+    }
+  }
 }
 
 .file-header {
@@ -217,5 +225,38 @@
   .btn+.btn,
   .dropdown-menu+.btn {
     margin-left: $spacer / 2;
+  }
+}
+
+
+.file-lock-text {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  >* {
+    z-index: 1;
+  }
+
+  i {
+    font-size: 48px;
+    margin-bottom: $spacer / 2;
+  }
+
+  &::before {
+    content: close-quote;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: $highlight-black-xstrong;
+    top: 0;
+    left: 0;
+    display: block;
   }
 }

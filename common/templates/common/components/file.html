@@ -1,12 +1,22 @@
 {% load static %}
 {% load thumbnail %}
-<div class="file">
+{% load common_extras %}
+
+<div class="file {% if request.user.is_authenticated and request.user|has_group:"subscriber" or asset.is_free %}{% else %}locked{% endif%}">
   <div class="file-header">
     <a href="?asset={{ asset.id }}" class="file-modal-link" data-asset-id="{{ asset.id }}"
       data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
 
       {% if asset.static_asset.preview %}
+      {% if request.user.is_authenticated and request.user|has_group:"subscriber" or asset.is_free %}
       {% include "common/components/helpers/image_set.html" with alt=asset.name classes="file-image" img_source=asset.static_asset.preview xsmall_width="350" small_width="350" medium_width="350" large_width="350" xlarge_width="350" %}
+      {% else %}
+      <div class="file-lock-text">
+        <i class="material-icons text-danger">lock</i>
+        <h4 class="mb-0 text-white">Subscribe to view</h4>
+      </div>
+      {% include "common/components/helpers/image_set.html" with alt=asset.name classes="file-image locked" img_source=asset.static_asset.preview xsmall_width="200" small_width="200" medium_width="200" large_width="200" xlarge_width="200" %}
+      {% endif %}
       {% if asset.contains_blend_file %}
       <img class="file-icon" src="{% static "common/images/icons/blend.svg" %}" alt="asset preview">
       {% elif asset.static_asset.source_type == "file" %}
@@ -41,7 +51,8 @@
     data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
 
     {% if asset.is_free %}
-    <i class="material-icons icon-inline small text-success mr-1" data-toggle="tooltip" data-placement="top" title="Free">lock_open</i>
+    <i class="material-icons icon-inline small text-success mr-1" data-toggle="tooltip" data-placement="top"
+      title="Free">lock_open</i>
     {% endif %}
     <span data-tooltip="tooltip-overflow" data-placement="top" title="{{ asset.name }}" class="overflow-text">
       <h4 class="overflow-text">{{ asset.name }}</h4>
