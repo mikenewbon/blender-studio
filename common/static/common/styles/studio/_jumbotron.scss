@@ -5,6 +5,7 @@
   margin-bottom: 0;
   position: relative;
   border: 1px solid $input-gray;
+  padding: 20px;
 
   .card-pills {
     margin-top: $spacer;
@@ -13,7 +14,12 @@
   .film-logo {
     max-height: 200px;
     max-width: 400px;
-    width: 100%;
+    width: auto;
+
+    @include media-breakpoint-down(md) {
+      max-height: 200px;
+      max-width: 300px;
+    }
   }
 
   .jumbotron-body>*:last-child {
@@ -30,6 +36,21 @@
     border-top: 0;
     border-right: 0;
     border-left: 0;
+  }
+
+
+}
+
+.jumbotron-inline {
+  @include media-breakpoint-down(sm) {
+    margin-left: -$spacer;
+    margin-right: -$spacer;
+    border-radius: 0;
+  }
+
+  .film-logo {
+    max-height: 200px;
+    max-width: 300px;
   }
 }
 

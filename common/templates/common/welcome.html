@@ -34,8 +34,9 @@
               <p class="small">Featuring task tracking, render management and asset libraries.</p>
             </div>
           </div> {% endcomment %}
-          <div class="d-flex flex-row align-items-center">
-            <a href="https://store.blender.org/product/membership/" target="_blank" class="btn btn-lg btn-primary mr-4">Join the Blender Cloud</a>
+          <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center">
+            <a href="https://store.blender.org/product/membership/" target="_blank"
+              class="btn btn-lg btn-primary mr-md-4 mb-2 mb-md-0">Join the Blender Cloud</a>
             <div class="d-inline-block">
               <p class="mb-0">Access to all training, assets<br>and films for €9.90/month</p>
             </div>
@@ -44,10 +45,10 @@
       </div>
     </div>
   </div>
-
 </div>
-<div class="container-xl mt-4">
-  <section class="mb-4">
+
+<div class="container-xl mt-4 mt-md-5">
+  <section class="mb-4 mb-md-5">
     <div class="row justify-content-center mb-3">
       <div class="col-md-6 text-center">
         <h2 class="mb-0">From A to UV, we’ve got it covered.</h2>
@@ -66,10 +67,61 @@
       </div>
     </div>
   </section>
-</div>
 
-<div class="container-xl mt-4">
-  <section class="mb-4">
+  <section class="mb-4 mb-md-5">
+    <div class="row">
+      {% for section in featured_sections|slice:':1' %}
+      {% if section.static_asset.source_type == 'video' %}
+      {% include "common/components/video_player.html" with url=section.static_asset.source.url poster=section.thumbnail_m_url classes="col-12 col-md-6 mb-3 mb-md-0 rounded"%}
+      {% endif %}
+      {% endfor %}
+      {% comment %} <div class="col-12 col-md-6 video-player rounded">
+        <video src=""></video>
+      </div> {% endcomment %}
+      <div class="col-12 col-md-5 offset-md-1 d-flex flex-column justify-content-center">
+        <h2>Learn from the Blender Team</h2>
+        <p>Wether it’s Blender Develop Dr. Sybren teaching <a href="/training/scripting-for-artists/">Scripting for Artists</a>, or Animation Director Hjalti teaching
+          <a href="/training/animation-fundamentals/">Animation Fundementals</a> - you’re getting industry leading training from the people in Blender.</p>
+        <p>Ask questions and receive replies from the Author, download resources and join the discussion.</p>
+        <div class="button-group">
+          <a href="#" class="btn btn-primary">Subscribe for 9.90/mo</a>
+          <a href="#" class="btn btn-transparent">Explore Training</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-5">
+    <div class="row mb-3">
+      <div class="col">
+        <div class="jumbotron jumbotron-overlay jumbotron-inline header">
+          <div class="jumbotron-bg-wrapper">
+            <img class="jumbotron-bg" src="{% static "common/images/welcome/coffee-run-background.png" %}">
+            <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
+            {% comment %}
+            {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
+            {% endcomment %}
+          </div>
+          <div class="row">
+            <div class="col-md-5 offset-md-1">
+              <div class="jumbotron-body">
+                <img class="mb-3 film-logo" src="{% static "common/images/welcome/coffee-run-logo.png" %}">
+                {% comment %} <h1>Coffee Run</h1> {% endcomment %}
+                <p class="mb-4">Coffee Run was directed by Hjalti Hjalmarsson and produced by the team at Blender
+                  Animation Studio. Fueled by caffeine, a young woman runs through the bittersweet memories of her past
+                  relationship.</p>
+                <a href="https://store.blender.org/product/membership/" target="_blank"
+                  class="btn btn-primary mb-2 mb-md-0">Subscribe for €9.90/month</a>
+                <a href="/films/coffee-run" target="_blank" class="btn btn-transparent">Explore the Film</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-4 mb-md-5">
     <div class="row justify-content-center mb-3">
       <div class="col-md-6 text-center">
         <h2 class="mb-0">Support Blender Open Movies</h2>
@@ -86,6 +138,61 @@
       <div class="col-md-6 text-center">
         <p class="mb-0">Learn more about our other <a href="/films">open movies</a> and <a href="#">how your
             contribution is used</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-4 mb-md-5">
+    <div class="row justify-content-center mb-2">
+      <div class="col">
+        <h2 class="mb-0">Access all our production assets!</h2>
+        <p class="mb-0">You can access all the production files from our films with a Blender Cloud subscription.</p>
+      </div>
+      <div class="col-md-auto d-none d-md-block carousel-card-toolbar">
+        <a class="btn btn-lg btn-transparent btn-icon {% if featured_film_assets|length <= 1 %}onlyOne{% elif featured_film_assets|length <= 4 %} lessThanThree {% endif %}"
+          href="#fromTheArchives" role="button" data-slide="prev">
+          <i class="material-icons">arrow_back</i>
+        </a>
+        <a class="btn btn-lg btn-transparent btn-icon {% if featured_film_assets|length <= 1 %}onlyOne{% elif featured_film_assets|length <= 4 %} lessThanThree {% endif %}"
+          href="#fromTheArchives" role="button" data-slide="next">
+          <i class="material-icons">arrow_forward</i>
+        </a>
+      </div>
+    </div>
+    <div class="row">
+      <div id="fromTheArchives" class="carousel carousel-card-4 slide w-100" data-touch="true" data-ride="carousel"
+        data-interval="0">
+        <div class="carousel-inner w-100" role="listbox">
+          <div class="carousel-item active">
+            {% for asset in featured_film_assets|slice:':1' %}
+            {% include "common/components/file_carousel.html" with film_asset=asset card_sizes="col-md-3" %}
+            {% comment %}
+            {% include "common/components/cards/card_featured_asset.html" with film_asset=asset card_sizes="col-md-3" %}
+            {% endcomment %}
+            {% endfor %}
+          </div>
+          {% for asset in featured_film_assets|slice:'1:6' %}
+          <div class="carousel-item">
+            {% include "common/components/file_carousel.html" with film_asset=asset card_sizes="col-md-3" %}
+            {% comment %}
+            {% include "common/components/cards/card_featured_asset.html" with film_asset=asset card_sizes="col-md-3" %}
+            {% endcomment %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="row d-block d-md-none">
+      <div class="col-md-auto carousel-card-toolbar">
+        <a class="btn btn-lg btn-transparent btn-icon {% if featured_film_assets|length <= 1 %}onlyOne{% elif featured_film_assets|length <= 4 %} lessThanFour {% endif %}"
+          href="#fromTheArchives" role="button" data-slide="prev">
+          <i class="material-icons">arrow_back</i>
+        </a>
+        <a class="btn btn-lg btn-transparent btn-icon {% if featured_film_assets|length <= 1 %}onlyOne{% elif featured_film_assets|length <= 4 %} lessThanFour {% endif %}"
+          href="#fromTheArchives" role="button" data-slide="next">
+          <i class="material-icons">arrow_forward</i>
+        </a>
       </div>
     </div>
   </section>
@@ -197,7 +304,7 @@
   <section class="mb-5">
     <div class="row mb-3">
       <div class="col">
-        <div class="jumbotron jumbotron-overlay overlay-flipped header">
+        <div class="jumbotron jumbotron-overlay jumbotron-inline overlay-flipped header">
           <div class="jumbotron-bg-wrapper">
             <img class="jumbotron-bg" src="{% static "common/images/welcome/dweebs-bg.png" %}">
             <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
@@ -212,7 +319,8 @@
                 <p class="mb-4">Join Blender Cloud and get access to hundreds of hours of training,
                   production assets and files from the open movies as well as a platform to learn at
                   your own pace, in your own time.</p>
-                <a href="https://store.blender.org/product/membership/" target="_blank" class="btn btn-lg btn-primary">Subscribe for €9.90/month</a>
+                <a href="https://store.blender.org/product/membership/" target="_blank"
+                  class="btn btn-lg btn-primary">Subscribe for €9.90/month</a>
               </div>
             </div>
           </div>
@@ -236,7 +344,7 @@
     <div class="row">
       <div class="col-md-6">
         <h3 class="text-center">General</h3>
-        <div class="accordion" id="faqGeneral">
+        <div class="accordion mb-3" id="faqGeneral">
           <div class="card card-dark">
             <div class="card-header" id="faqHeadingWhatIsBlenderStudio">
               <h5 class="mb-0">
@@ -251,19 +359,8 @@
             <div id="faqCollapseWhatIsBlenderStudio" class="collapse" aria-labelledby="faqHeadingWhatIsBlenderStudio"
               data-parent="#faqGeneral">
               <div class="card-body small">
-                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-                richardson ad
-                squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
-                truck
-                quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
-                bird on it
-                squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
-                helvetica,
-                craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
-                excepteur
-                butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
-                aesthetic synth
-                nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                Blender Cloud is a Film and Training publishing platform for everything produced by the Studio team in
+                the Blender Institute.
               </div>
             </div>
           </div>
@@ -280,19 +377,9 @@
             <div id="faqCollapseHowIsMyMoneySpent" class="collapse" aria-labelledby="faqHeadingHowIsMyMoneySpent"
               data-parent="#faqGeneral">
               <div class="card-body small">
-                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-                richardson ad
-                squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
-                truck
-                quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
-                bird on it
-                squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
-                helvetica,
-                craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
-                excepteur
-                butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
-                aesthetic synth
-                nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                The money Blender Cloud makes through subscriptions we use to keep our services running, and to make
+                open source and open content productions possible. Throughout the production cycle our team produce
+                training, rigs and assets for publishing to Blender Cloud subscribers.
               </div>
             </div>
           </div>
@@ -302,27 +389,16 @@
                 <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
                   data-target="#faqCollapseHowSupportBlender" aria-expanded="false"
                   aria-controls="faqCollapseHowSupportBlender">
-                  <span>How does Blender Cloud support Blender?</span> <i
-                    class="material-icons">keyboard_arrow_down</i>
+                  <span>How does Blender Cloud support Blender?</span> <i class="material-icons">keyboard_arrow_down</i>
                 </button>
               </h5>
             </div>
             <div id="faqCollapseHowSupportBlender" class="collapse" aria-labelledby="faqHeadingHowSupportBlender"
               data-parent="#faqGeneral">
               <div class="card-body small">
-                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-                richardson ad
-                squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
-                truck
-                quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
-                bird on it
-                squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
-                helvetica,
-                craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
-                excepteur
-                butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
-                aesthetic synth
-                nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                The Blender Cloud funds the Blender Studio team, who rigorously test and use Blender in the Open Movie
+                productions. Working with core Blender Developers at the Blender Institute to plan, design and test core
+                Blender features.
               </div>
             </div>
           </div>
@@ -331,7 +407,7 @@
 
       <div class="col-md-6">
         <h3 class="text-center">Payment & Billing</h3>
-        <div class="accordion" id="faqPayment">
+        <div class="accordion mb-3" id="faqPayment">
           <div class="card card-dark">
             <div class="card-header" id="faqHeadingPaymentMethod">
               <h5 class="mb-0">
@@ -345,19 +421,9 @@
             <div id="faqCollapsePaymentMethod" class="collapse" aria-labelledby="faqHeadingPaymentMethod"
               data-parent="#faqPayment">
               <div class="card-body small">
-                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-                richardson ad
-                squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
-                truck
-                quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
-                bird on it
-                squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
-                helvetica,
-                craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
-                excepteur
-                butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
-                aesthetic synth
-                nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                Blender Cloud subscriptions are available for purchase through the <a href="https://store.blender.org/"
+                  target="_blank">Blender Store</a>.<br><br>
+                The Blender Store offers payment through major credit cards, paypal or direct bank transfer.
               </div>
             </div>
           </div>
@@ -375,19 +441,16 @@
             <div id="faqColapseCancelSubscription" class="collapse" aria-labelledby="faqHeadingCancelSubscription"
               data-parent="#faqPayment">
               <div class="card-body small">
-                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-                richardson ad
-                squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
-                truck
-                quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
-                bird on it
-                squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
-                helvetica,
-                craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
-                excepteur
-                butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
-                aesthetic synth
-                nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                You may delete your account at any time via your personal account page, or by contacting us at
+                <a href="mailto:cloudsupport@blender.org">cloudsupport@blender.org</a>.<br><br>
+
+                In case of suspected fraud or abuse of the service after registration and membership payment, the
+                account owner will be contacted and asked for clarification. Failure to alleviate charges of fraud may
+                result in the termination of the member’s account.<br><br>
+
+                Upon termination, all licenses granted by the Blender Cloud will terminate. In the event of account
+                deletion for any reason, content that you submitted may no longer be available. The Blender Cloud shall
+                not be responsible for the loss of such content.
               </div>
             </div>
           </div>
@@ -402,19 +465,17 @@
             </div>
             <div id="faqColapseRefund" class="collapse" aria-labelledby="faqHeadingRefund" data-parent="#faqPayment">
               <div class="card-body small">
-                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-                richardson ad
-                squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food
-                truck
-                quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a
-                bird on it
-                squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
-                helvetica,
-                craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
-                excepteur
-                butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
-                aesthetic synth
-                nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                Membership fees and supporter contributions are non-refundable. That money we really need to keep our
+                services running, and to make open source and open content productions possible.<br><br>
+
+                We really care about our members and supporters though - in case you are really not happy with our
+                Blender Cloud we will kindly respond to your comments and try to settle a dispute with you in
+                harmony.<br><br>
+
+                Refunds will happen without delay when we get a report of fraud, abuse or non-authorised usage of
+                funds.<br><br>
+
+                Contact: <a href="mailto:cloudsupport@blender.org">cloudsupport@blender.org</a>.
               </div>
             </div>
           </div>
@@ -425,5 +486,21 @@
   </section>
 
 </div>
+
+<script>
+  new Plyr(document.querySelector('.video-player video'));
+
+</script>
+
+<script>
+  $('.carousel-card-3 .carousel-item').each(function () {
+    cardCarousel(this, 3);
+  });
+
+  $('.carousel-card-4 .carousel-item').each(function () {
+    cardCarousel(this, 4);
+  });
+
+</script>
 
 {% endblock content %}

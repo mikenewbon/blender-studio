@@ -1,4 +1,4 @@
-<div class="video-player" {% if progress_url is not none %}data-progress-url="{{ progress_url }}"{% endif %} {% if start_position is not none %}data-start-position="{{ start_position }}"{% endif %}>
+<div class="video-player {% if classes %}{{ classes}}{% endif %}" {% if progress_url is not none %}data-progress-url="{{ progress_url }}"{% endif %} {% if start_position is not none %}data-start-position="{{ start_position }}"{% endif %}>
 	<video playsinline controls data-poster="{{ poster }}">
 		<source src="{{ url }}">
 	</video>

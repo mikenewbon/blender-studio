@@ -20,3 +20,11 @@
 .embed-responsive {
   border-radius: $border-radius;
 }
+
+.video-player {
+  &.rounded {
+    .plyr--video {
+      border-radius: $border-radius;
+    }
+  }
+}
