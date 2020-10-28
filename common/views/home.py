@@ -64,7 +64,7 @@ def welcome(request: HttpRequest) -> HttpResponse:
     context = {
         'featured_films': Film.objects.filter(is_featured=True),
         'featured_trainings': Training.objects.filter(is_featured=True),
-        'featured_sections': Section.objects.filter(is_featured=True),
+        'featured_sections': Section.objects.filter(is_featured=True, is_published=True),
         'featured_film_assets': get_random_featured_assets(limit=8),
     }
 
