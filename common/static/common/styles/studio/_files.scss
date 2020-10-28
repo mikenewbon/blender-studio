@@ -246,8 +246,10 @@
   }
 
   i {
-    font-size: 48px;
-    margin-bottom: $spacer / 2;
+    // font-size: 48px;
+    // margin-bottom: $spacer / 2;
+    line-height: 1.25;
+    margin-right: $spacer / 4;
   }
 
   &::before {
