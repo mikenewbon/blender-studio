@@ -15,9 +15,9 @@
             data-video="{{ film.youtube_link }}">Watch
             {{ film.title }}</button>
           <a class="btn btn-transparent mb-0" href="{% url 'film-gallery' film.slug %}">Explore
-            Content</a>
+            Content Gallery</a>
           {% else %}
-          <a class="btn btn-primary mb-0" href="{% url 'film-gallery' film.slug %}">Explore Content</a>
+          <a class="btn btn-primary mb-0" href="{% url 'film-gallery' film.slug %}">Explore Content Gallery</a>
           {% endif %}
         </div>
       </div>
