@@ -6,26 +6,32 @@ has-secondary-nav
 
 {% block secondary_nav %}
 <div class="navbar-secondary">
-	<div class="navdrawer-offset">
-		<div class="container-xl">
-			<div class="list-group list-group-flush list-group-horizontal small side-scroll">
-				<a class="list-group-item" href="{% url 'film-detail' film_slug=film.slug %}">
-					{{ film.title }}
-				</a>
+  <div class="navdrawer-offset">
+    <div class="container-xl">
+      <div class="list-group list-group-flush list-group-horizontal small side-scroll">
+        <a class="list-group-item" href="{% url 'film-detail' film_slug=film.slug %}">
+          {{ film.title }}
+        </a>
         {% for flatpage in film.flatpages.all %}
-          <a class="list-group-item" href="{% url 'film-flatpage' film_slug=film.slug page_slug=flatpage.slug %}">
-            {{ flatpage.title|title }}
-          </a>
+        <a class="list-group-item" href="{% url 'film-flatpage' film_slug=film.slug page_slug=flatpage.slug %}">
+          {{ flatpage.title|title }}
+        </a>
         {% endfor %}
-				<a class="list-group-item {% if current_collection %}active{% endif %}" href="{% url 'film-gallery' film_slug=film.slug %}">
-					Content Gallery
-				</a>
-				<!-- <a class="list-group-item" href="{% url 'film-production-logs' film_slug=film.slug %}">
+        <a class="list-group-item {% if current_collection %}active{% endif %}"
+          href="{% url 'film-gallery' film_slug=film.slug %}">
+          Content Gallery
+        </a>
+        <!-- <a class="list-group-item" href="{% url 'film-production-logs' film_slug=film.slug %}">
 					Weeklies
 				</a> -->
-			</div>
-		</div>
-	</div>
+        {% if user_can_edit_film %}
+        <a href="{{ film.admin_url }}" class="list-group-item btn-icon small">
+          Admin Edit
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock secondary_nav %}
