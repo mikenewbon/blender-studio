@@ -23,10 +23,21 @@ class AssetAdmin(admin.ModelAdmin):
         'film__title',
         'collection__name',
     ]
-    autocomplete_fields = ['static_asset', 'collection']
+    autocomplete_fields = ['static_asset', 'attachments']
 
     def get_queryset(self, request: HttpRequest) -> 'QuerySet[assets.Asset]':
         return super().get_queryset(request).select_related('film', 'collection__film')
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """Limit collections to the current film."""
+        if db_field.name == 'collection':
+            try:
+                object_id = request.resolver_match.kwargs['object_id']
+            except KeyError:
+                return super().formfield_for_foreignkey(db_field, request, **kwargs)
+            film = assets.Asset.objects.get(pk=object_id).film
+            kwargs['queryset'] = collections.Collection.objects.filter(film=film).distinct()
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class AssetInline(admin.StackedInline):

@@ -1,4 +1,5 @@
 from django.http import HttpResponse, HttpRequest
+from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_safe
 
@@ -91,7 +92,9 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
 
     :template:`films/collection_detail.html`
     """
-    film = get_object_or_404(Film, slug=film_slug, is_published=True)
+    film = get_object_or_404(Film, slug=film_slug)
+    if not request.user.is_superuser and not film.is_published:
+        raise Http404("Film does not exist")
     collection = get_object_or_404(Collection, slug=collection_slug, film_id=film.id)
     child_collections = collection.child_collections.order_by('order', 'name')
     drawer_menu_context = get_gallery_drawer_context(film, request.user)
