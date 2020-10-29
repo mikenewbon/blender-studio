@@ -15,7 +15,7 @@ def get_latest_post_revisions(limit: int = 12) -> 'QuerySet[Revision]':
             pk__in=Subquery(
                 Revision.objects.filter(is_published=True, post__is_published=True)
                 # Include only the latest revision for each post:
-                .order_by('post_id', '-post__date_published')
+                .order_by('post_id', '-date_created')
                 .distinct('post_id')
                 .values('pk')
             )
