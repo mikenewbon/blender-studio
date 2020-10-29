@@ -28,6 +28,7 @@ class VideoInline(admin.TabularInline):
 class StaticAssetAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
     inlines = [ImageInline, VideoInline]
     autocomplete_fields = ['user', 'author']
+    list_display = ['__str__', 'date_created', 'date_updated']
     fieldsets = (
         (
             None,
