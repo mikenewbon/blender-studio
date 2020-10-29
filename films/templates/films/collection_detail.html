@@ -1,5 +1,4 @@
-{%  extends 'films/gallery.html' %}
-
+{% extends 'films/gallery.html' %}
 {% load film_extras %}
 
 {% block title_append %} - {{ film.title }} {{ current_collection.name }}{% endblock title_append %}
@@ -8,6 +7,7 @@
 
 <div>
 
+  <p>{{ current_collection.text|linebreaksbr }}</p>
   <div class="files">
     <div class="card-columns">
 
