@@ -1,4 +1,6 @@
 # noqa: D100
+import urllib.parse
+
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
@@ -70,5 +72,10 @@ def welcome(request: HttpRequest) -> HttpResponse:
         'featured_sections': Section.objects.filter(is_featured=True, is_published=True),
         'featured_film_assets': get_random_featured_assets(limit=8),
     }
+    referrer = request.META.get('HTTP_REFERER')
+    referred_path = urllib.parse.urlparse(referrer).path if referrer else None
+    # If the user has just been authenticated, redirect them back to homepage
+    if request.user.is_authenticated and referred_path == '/':
+        return redirect('home')
 
     return render(request, 'common/welcome.html', context)
