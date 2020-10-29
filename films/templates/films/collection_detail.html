@@ -13,9 +13,7 @@
 
       {% if child_collections %}
         {% for child_collection in child_collections %}
-          {% if child_collection.is_published or request.user.is_superuser %}
-            {% include "common/components/folder.html" %}
-          {% endif %}
+        {% include "common/components/folder.html" %}
         {% endfor %}
       {% endif %}
 
