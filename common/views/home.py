@@ -1,7 +1,7 @@
 # noqa: D100
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views.decorators.http import require_safe
 
 from blog.queries import get_latest_post_revisions
@@ -31,6 +31,9 @@ def home(request: HttpRequest) -> HttpResponse:
     **Template**
         :template:`common/home.html`
     """
+    if not request.user.is_authenticated:
+        return redirect('welcome')
+
     context = {
         'featured_films': Film.objects.filter(is_featured=True),
         'featured_trainings': Training.objects.filter(),
