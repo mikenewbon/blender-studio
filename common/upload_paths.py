@@ -1,18 +1,34 @@
+"""Implements utilities related to media uploads."""
 import hashlib
 import typing
 import uuid
 from pathlib import Path
+import logging
 
 if typing.TYPE_CHECKING:
     import static_assets.models.StaticAsset
     import films
     import training
 
+DISALLOWED_MEDIA_PREFIXES = ['ad']
+logger = logging.getLogger(__name__)
 
-def generate_hash_from_filename(filename: str) -> str:
-    """Combine filename and uuid4 and get a unique string."""
-    unique_filename = f'{uuid.uuid4()}_{filename}'
-    return hashlib.md5(unique_filename.encode('utf-8')).hexdigest()
+
+def generate_hash_from_filename(filename: str) -> typing.Optional[str]:
+    """Combine filename and uuid4 and get a unique string.
+
+    Tries to avoid prefix "ad" because it tends to trigger adblockers. Yes, for real.
+    """
+    attempts = 5
+    while attempts:
+        unique_filename = f'{uuid.uuid4()}_{filename}'
+        digest = hashlib.md5(unique_filename.encode('utf-8')).hexdigest()
+        attempts -= 1
+        if any(digest.startswith(prefix) for prefix in DISALLOWED_MEDIA_PREFIXES):
+            logger.warning(f'Had to make ({attempts}th) attempt at generate_hash_from_filename')
+            continue
+        return digest
+    logger.error(f'Failed to generate a valid hash after {attempts} attempts')
 
 
 ModelWithFile = typing.Union[
