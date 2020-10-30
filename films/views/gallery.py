@@ -1,21 +1,44 @@
+"""Render film asset gallery and collections."""
+from typing import Dict
+import logging
+
 from django.http import HttpResponse, HttpRequest
 from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_safe
 
-from films.models import Film, Collection
-from films.queries import get_gallery_drawer_context
+from films.models import Film, Collection, Asset
+from films.queries import get_gallery_drawer_context, get_asset
+
+logger = logging.getLogger(__name__)
+
+
+def prefetch_current_asset(request: HttpRequest) -> Dict[str, Asset]:
+    """Add asset to the template context, so that asset meta could be added."""
+    asset_pk = request.GET.get('asset')
+    asset = None
+    print('adsfasdfasd', asset_pk, asset)
+    if asset_pk:
+        try:
+            asset = get_asset(asset_pk)
+            return {'asset': asset}
+        except Asset.DoesNotExist:
+            logger.debug(f'Unable to find asset_pk={asset_pk}')
+    return {}
 
 
 @require_safe
 def collection_list(request: HttpRequest, film_slug: str) -> HttpResponse:
     """
-    Displays all the film collections as well as the featured artwork in the gallery.
+    Display all the film collections as well as the featured artwork in the gallery.
 
     **Context:**
 
     ``film``
         An instance of :model:`films.Film`.
+    ``asset``
+        An :model:`films.Asset` that's currently selected and will be shown via the JS modal.
+        It's necessary to retrieve it in advance so that correct OG meta could be set.
     ``collections``
         A dict of all the film's collections; needed for the drawer menu.
 
@@ -50,6 +73,7 @@ def collection_list(request: HttpRequest, film_slug: str) -> HttpResponse:
             request.user.is_staff and request.user.has_perm('films.change_asset')
         ),
         **drawer_menu_context,
+        **prefetch_current_asset(request),
     }
 
     return render(request, 'films/gallery.html', context)
@@ -58,12 +82,15 @@ def collection_list(request: HttpRequest, film_slug: str) -> HttpResponse:
 @require_safe
 def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str) -> HttpResponse:
     """
-    Displays all the published assets in a :model:`films.Collection`.
+    Display all the published assets in a :model:`films.Collection`.
 
     **Context:**
 
     ``film``
         An instance of :model:`films.Film`. The film that the current collection belongs to.
+    ``asset``
+        An :model:`films.Asset` that's currently selected and will be shown via the JS modal.
+        It's necessary to retrieve it in advance so that correct OG meta could be set.
     ``current_collection``
         An instance of :model:`films.Collection`.
     ``current_assets``
@@ -108,6 +135,7 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
             request.user.is_staff and request.user.has_perm('films.change_asset')
         ),
         **drawer_menu_context,
+        **prefetch_current_asset(request),
     }
 
     return render(request, 'films/collection_detail.html', context)

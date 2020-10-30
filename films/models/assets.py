@@ -100,15 +100,15 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
         If none of the above conditions applies, the asset is probably not available anywhere
         on the website, and the url property returns an empty string.
         """
+        if self.is_featured:
+            film_url = reverse('film-detail', kwargs={'film_slug': self.film.slug})
+            return f'{film_url}?asset={self.pk}'
         if self.collection:
             collection_url = reverse(
                 'collection-detail',
                 kwargs={'film_slug': self.film.slug, 'collection_slug': self.collection.slug},
             )
             return f'{collection_url}?asset={self.pk}'
-        if self.is_featured:
-            film_url = reverse('film-detail', kwargs={'film_slug': self.film.slug})
-            return f'{film_url}?asset={self.pk}'
         return ''
 
     @property

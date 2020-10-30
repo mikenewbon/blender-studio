@@ -153,6 +153,23 @@ def get_asset_context(
     return context
 
 
+def get_asset(asset_pk: int) -> Optional[Asset]:
+    """Retrieve a published film asset by a given asset ID."""
+    return (
+        Asset.objects.filter(pk=asset_pk, is_published=True)
+        .select_related(
+            'film',
+            'collection',
+            'static_asset',
+            'static_asset__license',
+            'static_asset__author',
+            'static_asset__user',
+            'entry_asset__production_log_entry',
+        )
+        .get()
+    )
+
+
 def get_production_logs_page(
     film: Film,
     page_number: Optional[Union[int, str]] = 1,

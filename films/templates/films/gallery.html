@@ -4,6 +4,16 @@
 
 {% block title_append %} - {{ film.title }} Content Gallery{% endblock title_append %}
 
+{% block meta_indivudal %}
+<meta property="og:url" content="{{request.scheme}}://{{request.META.HTTP_HOST}}{% if asset %}{{ asset.url }}{% elif current_collection %}{{ current_collection.url }}{% else %}{{ film.url }}{% endif %}">
+<meta property="og:title" content="{{ film.title }}{% if asset %} - {{ asset.collection.name }}/{{ asset.name }}{% elif current_collection %} - {{ current_collection.name }}{% endif %} - Blender Cloud">
+<meta name="twitter:title" content="{{ film.title }}{% if asset %} - {{ asset.collection.name }}/{{ asset.name }}{% elif current_collection %} - {{ current_collection.name }}{% endif %} - Blender Cloud">
+<meta property="og:description" content="{% if asset and asset.description %}{{ asset.description }}{% elif asset.collection and asset.collection.text %}{{ asset.collection.text }}{% else %}{{ film.description }}{% endif %}">
+<meta name="twitter:description" content="{% if asset and asset.description %}{{ asset.description }}{% elif asset.collection and asset.collection.text %}{{ asset.collection.text }}{% else %}{{ film.description }}{% endif %}">
+<meta property="og:image" content="{% if asset %}{{ asset.static_asset.thumbnail_m_url }}{% else %}{{ film.thumbnail_m_url }}{% endif %}">
+<meta name="twitter:image" content="{% if asset %}{{ asset.static_asset.thumbnail_m_url }}{% else %}{{ film.thumbnail_m_url }}{% endif %}">
+{% endblock %}
+
 {% block bodyclasses %}
 {% comment %} has-nav-drawer{% endcomment %}
 has-secondary-nav

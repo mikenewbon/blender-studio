@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.views.decorators.http import require_safe
 
 from films.models import Asset
-from films.queries import get_asset_context
+from films.queries import get_asset_context, get_asset
 
 
 @require_safe
@@ -31,19 +31,7 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
         :template:`common/components/modal_asset.html`
     """
     try:
-        asset = (
-            Asset.objects.filter(pk=asset_pk, is_published=True)
-            .select_related(
-                'film',
-                'collection',
-                'static_asset',
-                'static_asset__license',
-                'static_asset__author',
-                'static_asset__user',
-                'entry_asset__production_log_entry',
-            )
-            .get()
-        )
+        asset = get_asset(asset_pk)
     except Asset.DoesNotExist:
         raise Http404('No asset matches the given query.')
 
