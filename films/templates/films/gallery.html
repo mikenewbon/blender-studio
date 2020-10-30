@@ -126,7 +126,7 @@ has-secondary-nav
           <div class="drawer-nav-group">
             <div class="drawer-nav-dropdown-wrapper">
 
-              <a class="drawer-nav-dropdown font-weight-bold {% if current_collection.parent != collection and current_collection != collection %}collapsed{% endif %}"
+              <a class="drawer-nav-dropdown font-weight-bold {% if current_collection.parent.parent != collection and current_collection.parent != collection and current_collection != collection %}collapsed{% endif %}"
                 href="{{ collection.url }}" {% if child_collections %} data-toggle="collapse"
                 data-target="#collection-{{ collection.id }}" {% endif %} data-tooltip="tooltip-overflow"
                 data-placement="top" title="{{ collection.name }}">
@@ -146,7 +146,7 @@ has-secondary-nav
             </div>
             {% if child_collections %}
             <div
-              class="collapse {% if current_collection.parent == collection or current_collection == collection %}show{% endif %}"
+              class="collapse {% if current_collection.parent == collection or current_collection.parent.parent == collection or current_collection == collection %}show{% endif %}"
               id="collection-{{ collection.id }}">
               <ol class="drawer-nav-list ">
 
@@ -191,17 +191,21 @@ has-secondary-nav
 
       <div>
 
-        <div class="files">
+        <div class="files grid">
           {% if featured_artwork %}
-          <div class="card-columns">
 
-            {% for asset in featured_artwork %}
-            {% if asset.is_published or request.user.is_superuser %}
-            {% include "common/components/file.html" with asset=asset site_context="featured_artwork" %}
-            {% endif %}
-            {% endfor %}
+          {% for asset in featured_artwork %}
+          {% if asset.is_published or request.user.is_superuser %}
+          {% include "common/components/file.html" with asset=asset site_context="featured_artwork" %}
+          {% endif %}
+          {% endfor %}
 
+          <div class="container">
+            <div class="row">
+              <div class="grid-sizer col-md-4"></div>
+            </div>
           </div>
+
           {% else %}
           <div class="d-inline-block w-100">
             <div class="text-center">
@@ -254,3 +258,21 @@ has-secondary-nav
   </div>
 </footer>
 {% endblock footer%}
+
+
+{% block scripts_footer %}
+
+<script>
+  var $grid = $('.grid').masonry({
+    itemSelector: '.grid-item',
+    columnWidth: '.grid-sizer',
+
+  });
+
+  $grid.imagesLoaded().progress(function () {
+    $grid.masonry('layout');
+  });
+
+</script>
+
+{% endblock scripts_footer %}
