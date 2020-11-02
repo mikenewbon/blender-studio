@@ -40,6 +40,12 @@
       width: 100%;
     }
 
+    .file-icon {
+      max-width: 50%;
+      padding: $spacer * 3;
+      width: 100%;
+    }
+
     .video-player {
       width: 100%;
 
@@ -97,7 +103,7 @@
 
 .modal-navigation {
   @include media-breakpoint-down(md) {
-    padding: 1rem!important;
+    padding: 1rem !important;
   }
 
   pointer-events: auto;
