@@ -105,3 +105,4 @@ class TrainingFlatPageAdmin(mixins.ViewOnSiteMixin, admin.ModelAdmin):
         'training',
     ]
     prepopulated_fields = {'slug': ('slug',)}
+    raw_id_fields = ['training', 'attachments']
