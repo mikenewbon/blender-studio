@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 from common import mixins, markdown
+from common.upload_paths import get_upload_to_hashed_path
 from training.models import Training
 import static_assets.models as models_static_assets
 
@@ -41,6 +42,7 @@ class TrainingFlatPage(mixins.CreatedUpdatedMixin, models.Model):
     )
     html_content = models.TextField(blank=True, editable=False)
     attachments = models.ManyToManyField(models_static_assets.StaticAsset, blank=True)
+    header = models.FileField(upload_to=get_upload_to_hashed_path, blank=True)
 
     def save(self, *args: Any, **kwargs: Any) -> None:
         """Generate the html version of the content and saves the object."""

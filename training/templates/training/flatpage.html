@@ -4,6 +4,22 @@
 {% block title_append %} - {{ training.title }} {{ flatpage.title }}{% endblock title_append %}
 
 {% block content %}
+{% if flatpage.header %}
+<div class="jumbotron jumbotron-fluid jumbotron-blog jumbotron-overlay overlay-blog mb-3">
+  <div class="container py-5 px-5">
+    <div class="row">
+      <div class="col-md-5">
+        <p class="subtitle">{{ training.title }}</p>
+        <h1 class="display-3 text-uppercase font-weight-bold">{{ flatpage.title }}</h1>
+      </div>
+    </div>
+  </div>
+  <div class="jumbotron-bg-wrapper">
+    {% include "common/components/helpers/image_set.html" with alt=asset.name classes="jumbotron-bg" img_source=flatpage.header xsmall_width="600" small_width="800" medium_width="1000" large_width="1200" xlarge_width="1920" %}
+  </div>
+</div>
+{% endif %}
+
 <div class="container-fluid pt-4">
   <section class="flat-page-content mb-4">
     {% if user_can_edit_flatpage %}
@@ -13,10 +29,12 @@
       </a>
     </div>
     {% endif %}
+    {% if not flatpage.header %}
     <div class="text-center mb-3">
       <p class="subtitle">{{ training.title }}</p>
       <h1 class="mb-0">{{ flatpage.title }}</h1>
     </div>
+    {% endif %}
     <div>{% with_shortcodes flatpage.html_content %}</div>
   </section>
 </div>
