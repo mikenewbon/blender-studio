@@ -1,6 +1,6 @@
 {% load static %}
 
-<div class="file folder">
+<div class="file folder grid-item {{ card_sizes|default:"col-12 col-sm-6 col-md-6 col-lg-4" }}">
   <div class="file-header">
     <a class="file-folder-link" href="{{ child_collection.url }}">
       {% if child_collection.preview %}

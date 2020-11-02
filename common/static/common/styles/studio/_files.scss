@@ -1,31 +1,17 @@
-.files {
-  .card-columns {
-    @include media-breakpoint-down(md) {
-      column-count: 2;
-    }
-
-    column-gap: $spacer;
-    orphans: 1;
-    widows: 1;
-  }
-}
-
 .file {
   @extend .card;
   @extend .card-media;
   @extend .card-dark;
 
-  height: 100%;
+  height: auto;
   margin-bottom: 0;
-  transition: $transition-base;
   width: 100%;
-
+  transition: none;
   background: none;
   border: 0;
 
   &:hover {
-    background-color: none;
-    text-decoration: none;
+
 
     .file-body {
       color: $white;
@@ -264,4 +250,14 @@
     display: block;
     z-index: 1;
   }
+}
+
+
+// .grid {
+//   margin: ($spacer / 2) (-$spacer / 2);
+// }
+
+.grid-item {
+  margin-bottom: $spacer;
+
 }

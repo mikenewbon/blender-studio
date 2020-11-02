@@ -1,14 +1,3 @@
-.blogs {
-  .grid-item:first-of-type {
-    @extend .grid-item-large;
-
-    h3 {
-      @extend .h2;
-
-    }
-  }
-}
-
 .container-blog {
   @extend .container;
 

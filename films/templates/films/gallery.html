@@ -5,13 +5,20 @@
 {% block title_append %} - {{ film.title }} Content Gallery{% endblock title_append %}
 
 {% block meta_indivudal %}
-<meta property="og:url" content="{{request.scheme}}://{{request.META.HTTP_HOST}}{% if asset %}{{ asset.url }}{% elif current_collection %}{{ current_collection.url }}{% else %}{{ film.url }}{% endif %}">
-<meta property="og:title" content="{{ film.title }}{% if asset %} - {{ asset.collection.name }}/{{ asset.name }}{% elif current_collection %} - {{ current_collection.name }}{% endif %} - Blender Cloud">
-<meta name="twitter:title" content="{{ film.title }}{% if asset %} - {{ asset.collection.name }}/{{ asset.name }}{% elif current_collection %} - {{ current_collection.name }}{% endif %} - Blender Cloud">
-<meta property="og:description" content="{% if asset and asset.description %}{{ asset.description }}{% elif asset.collection and asset.collection.text %}{{ asset.collection.text }}{% else %}{{ film.description }}{% endif %}">
-<meta name="twitter:description" content="{% if asset and asset.description %}{{ asset.description }}{% elif asset.collection and asset.collection.text %}{{ asset.collection.text }}{% else %}{{ film.description }}{% endif %}">
-<meta property="og:image" content="{% if asset %}{{ asset.static_asset.thumbnail_m_url }}{% else %}{{ film.thumbnail_m_url }}{% endif %}">
-<meta name="twitter:image" content="{% if asset %}{{ asset.static_asset.thumbnail_m_url }}{% else %}{{ film.thumbnail_m_url }}{% endif %}">
+<meta property="og:url"
+  content="{{request.scheme}}://{{request.META.HTTP_HOST}}{% if asset %}{{ asset.url }}{% elif current_collection %}{{ current_collection.url }}{% else %}{{ film.url }}{% endif %}">
+<meta property="og:title"
+  content="{{ film.title }}{% if asset %} - {{ asset.collection.name }}/{{ asset.name }}{% elif current_collection %} - {{ current_collection.name }}{% endif %} - Blender Cloud">
+<meta name="twitter:title"
+  content="{{ film.title }}{% if asset %} - {{ asset.collection.name }}/{{ asset.name }}{% elif current_collection %} - {{ current_collection.name }}{% endif %} - Blender Cloud">
+<meta property="og:description"
+  content="{% if asset and asset.description %}{{ asset.description }}{% elif asset.collection and asset.collection.text %}{{ asset.collection.text }}{% else %}{{ film.description }}{% endif %}">
+<meta name="twitter:description"
+  content="{% if asset and asset.description %}{{ asset.description }}{% elif asset.collection and asset.collection.text %}{{ asset.collection.text }}{% else %}{{ film.description }}{% endif %}">
+<meta property="og:image"
+  content="{% if asset %}{{ asset.static_asset.thumbnail_m_url }}{% else %}{{ film.thumbnail_m_url }}{% endif %}">
+<meta name="twitter:image"
+  content="{% if asset %}{{ asset.static_asset.thumbnail_m_url }}{% else %}{{ film.thumbnail_m_url }}{% endif %}">
 {% endblock %}
 
 {% block bodyclasses %}
@@ -189,22 +196,16 @@ has-secondary-nav
 
       {% block gallery_files %}
 
-      <div>
+      <div class="">
 
-        <div class="files grid">
+        <div class="files row grid">
           {% if featured_artwork %}
-
+          <div class="grid-sizer col-12 col-sm-6 col-md-6 col-lg-4"></div>
           {% for asset in featured_artwork %}
           {% if asset.is_published or request.user.is_superuser %}
           {% include "common/components/file.html" with asset=asset site_context="featured_artwork" %}
           {% endif %}
           {% endfor %}
-
-          <div class="container">
-            <div class="row">
-              <div class="grid-sizer col-md-4"></div>
-            </div>
-          </div>
 
           {% else %}
           <div class="d-inline-block w-100">
@@ -224,7 +225,6 @@ has-secondary-nav
           <span class="sr-only">Loading...</span>
         </div>
       </div>
-
       {% endblock nested_content%}
     </div>
   </div>
@@ -266,7 +266,7 @@ has-secondary-nav
   var $grid = $('.grid').masonry({
     itemSelector: '.grid-item',
     columnWidth: '.grid-sizer',
-
+    percentPosition: true,
   });
 
   $grid.imagesLoaded().progress(function () {

@@ -56,12 +56,12 @@
 
 {% if featured_artwork %}
 
-<div class="files">
-  <div class="card-columns card-columns-2">
-
+<div class="">
+  <div class="files row grid">
+    <div class="grid-sizer col-12 col-sm-6 col-md-4 col-lg-3"></div>
     {% for asset in featured_artwork %}
     {% if asset.is_published or request.user.is_superuser %}
-    {% include "common/components/file.html" with asset=asset site_context="featured_artwork" %}
+    {% include "common/components/file.html" with asset=asset site_context="featured_artwork" card_sizes="col-12 col-sm-6 col-md-4 col-lg-3" %}
     {% endif %}
     {% endfor %}
 
@@ -83,3 +83,20 @@
 </div>
 
 {% endblock %}
+
+{% block scripts_footer %}
+
+<script>
+  var $grid = $('.grid').masonry({
+    itemSelector: '.grid-item',
+    columnWidth: '.grid-sizer',
+    percentPosition: true,
+  });
+
+  $grid.imagesLoaded().progress(function () {
+    $grid.masonry('layout');
+  });
+
+</script>
+
+{% endblock scripts_footer %}
