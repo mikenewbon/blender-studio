@@ -3,7 +3,9 @@ from typing import Callable, TypeVar
 from django.contrib import admin
 from django.utils.html import format_html
 
-from training.models import chapters, sections, trainings
+
+from common import mixins
+from training.models import chapters, sections, trainings, flatpages
 import static_assets.models as models_static_assets
 
 T = TypeVar('T', bound=Callable[..., object])
@@ -93,3 +95,13 @@ class SectionAdmin(admin.ModelAdmin):
     list_per_page = 20
     search_fields = ['name', 'chapter__name', 'chapter__training__name', 'slug']
     autocomplete_fields = ['chapter', 'static_asset', 'user', 'attachments']
+
+
+@admin.register(flatpages.TrainingFlatPage)
+class TrainingFlatPageAdmin(mixins.ViewOnSiteMixin, admin.ModelAdmin):
+    autocomplete_fields = ['training', 'attachments']
+    list_display = ('title', 'training', 'view_link')
+    list_filter = [
+        'training',
+    ]
+    prepopulated_fields = {'slug': ('slug',)}

@@ -5,7 +5,7 @@ from training.views.api.favorite import favorite
 from training.views.api.progress import section_progress  # video_progress tracked in static_asset
 from training.views.home import home
 from training.views.training.section import section
-from training.views.training.training import training
+from training.views.training.training import training, flatpage
 
 urlpatterns = [
     path('', home, name='training-home'),
@@ -31,8 +31,9 @@ urlpatterns = [
         include(
             [
                 path('', training, name='training'),
-                path('<slug:section_slug>', section, name='section',),
+                path('<slug:section_slug>', section, name='section'),
             ]
         ),
     ),
+    path('<slug:training_slug>/pages/<slug:page_slug>', flatpage, name='training-flatpage'),
 ]

@@ -11,6 +11,7 @@ from training.models import (
     TrainingDifficulty,
     Chapter,
     Section,
+    TrainingFlatPage,
 )
 
 
@@ -50,3 +51,12 @@ class SectionFactory(DjangoModelFactory):
     name = factory.Faker('text', max_nb_chars=20)
     slug = factory.Faker('slug')
     text = factory.Faker('text')
+
+
+class TrainingFlatPageFactory(DjangoModelFactory):
+    class Meta:
+        model = TrainingFlatPage
+
+    training = factory.SubFactory(TrainingFactory)
+    title = factory.Faker('word')
+    content = factory.Faker('text')

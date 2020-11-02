@@ -1,0 +1,24 @@
+{% extends 'training/base_training.html' %}
+{% load common_extras %}
+
+{% block title_append %} - {{ training.title }} {{ flatpage.title }}{% endblock title_append %}
+
+{% block content %}
+<div class="container-fluid pt-4">
+  <section class="flat-page-content mb-4">
+    {% if user_can_edit_flatpage %}
+    <div class="admin-button">
+      <a href="{{ flatpage.admin_url }}" class="btn btn-sm btn-secondary btn-icon btn-float">
+        <i class="material-icons">create</i>
+      </a>
+    </div>
+    {% endif %}
+    <div class="text-center mb-3">
+      <p class="subtitle">{{ training.title }}</p>
+      <h1 class="mb-0">{{ flatpage.title }}</h1>
+    </div>
+    <div>{% with_shortcodes flatpage.html_content %}</div>
+  </section>
+</div>
+
+{% endblock content %}
