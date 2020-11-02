@@ -144,12 +144,12 @@ PIPELINE = {
             'extra_context': {'async': False, 'defer': False},
         },
         'search': {
-            'source_filenames': ['search/scripts/*.js',],
+            'source_filenames': ['search/scripts/*.js'],
             'output_filename': 'js/search.js',
             'extra_context': {'async': False, 'defer': False},
         },
         'training_search': {
-            'source_filenames': ['training/scripts/training_search.js',],
+            'source_filenames': ['training/scripts/training_search.js'],
             'output_filename': 'js/training_search.js',
             'extra_context': {'async': False, 'defer': False},
         },
