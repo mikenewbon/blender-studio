@@ -1,7 +1,15 @@
 {% extends 'films/base_films.html' %}
 {% load common_extras %}
 
-{% block title_append %} - {{ film.title }} {{ flatpage.title }}{% endblock title_append %}
+{% block title_prepend %}{{ film.title }}: {{ flatpage.title }} - {% endblock title_prepend %}
+
+{% block meta %}
+{% capture title %}{{ film.title }}: {{ flatpage.title }}{% endcapture %}
+{% firstof title flatpage.title film.title as title %}
+{% with description=film.description %}
+{% include 'common/components/meta.html' %}
+{% endwith %}
+{% endblock %}
 
 {% block content %}
 <div class="container-fluid pt-4">
