@@ -79,6 +79,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'common.context_processors.search_client_config',
                 'common.context_processors.settings_analytics_id',
+                'common.context_processors.canonical_url',
                 'training.context_processors.enums',
                 # TODO(anna) when Profile model is added, this should become a prop on it instead.
                 'training.context_processors.favorited',

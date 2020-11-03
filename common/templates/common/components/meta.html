@@ -1,0 +1,41 @@
+{% spaceless %}
+{% load static %}
+{% load common_extras %}
+
+{% with default_title="Blender Cloud" %}
+{% with default_author="Blender Institute" %}
+
+{% with default_description="Blender Cloud is a web based service developed by Blender Institute that allows people to access the training videos and all the data from the open projects." %}
+
+{% if not image_url %}
+{% static '/common/images/blender-cloud-og.jpg' as default_image_path %}
+{% absolute_url default_image_path as image_url %}
+{% endif %}
+
+{% if url %}{% absolute_url url as url %}{% endif %}
+
+<link rel="canonical" href="{% firstof url canonical_url %}" />
+<meta property="og:url" content="{% firstof url canonical_url %}">
+
+<meta name="author" content="{% firstof author default_author %}">
+<meta name="theme-color" content="#009eff">
+<meta property="og:site_name" content="Blender Cloud">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@Blender_Cloud">
+<meta property="og:type" content="website">
+
+<meta property="og:title" content="{% if title %}{{ title }} - {% endif %}{{ default_title }}">
+<meta name="twitter:title" content="{% if title %}{{ title }} - {% endif %}{{ default_title }}">
+
+<meta name="description" content="{% firstof description default_description %}">
+<meta property="og:description" content="{% firstof description default_description %}">
+<meta name="twitter:description" content="{% firstof description default_description %}">
+
+<meta property="og:image" content="{{ image_url }}">
+<meta name="twitter:image" content="{{ image_url }}">
+
+{% endwith %}
+{% endwith %}
+{% endwith %}
+{% endspaceless %}

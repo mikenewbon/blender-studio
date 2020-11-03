@@ -4,14 +4,10 @@
 
 {% block title_append %} - {{ post.title }}{% endblock title_append %}
 
-{% block meta_indivudal %}
-<meta property="og:url" content="{{request.scheme}}://{{request.META.HTTP_HOST}}{{ post.url }}">
-<meta property="og:title" content="Blender Cloud - {{ post.title }}">
-<meta name="twitter:title" content="Blender Cloud - {{ post.title }}">
-<meta property="og:description" content="{{ post.description }}">
-<meta name="twitter:description" content="{{ post.description }}">
-<meta property="og:image" content="{{ post.thumbnail_m_url }}">
-<meta name="twitter:image" content="{{ post.thumbnail_m_url }}">
+{% block meta %}
+{% with title=post.title description=post.description image_url=post.thumbnail_m_url %}
+{% include 'common/components/meta.html' %}
+{% endwith %}
 {% endblock %}
 
 {% block content %}

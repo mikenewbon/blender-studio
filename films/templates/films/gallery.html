@@ -1,24 +1,23 @@
 {% extends 'films/base_films.html' %}
-{% load static %}
+{% load common_extras %}
 {% load film_extras %}
+{% load static %}
 
 {% block title_append %} - {{ film.title }} Content Gallery{% endblock title_append %}
 
-{% block meta_indivudal %}
-<meta property="og:url"
-  content="{{request.scheme}}://{{request.META.HTTP_HOST}}{% if asset %}{{ asset.url }}{% elif current_collection %}{{ current_collection.url }}{% else %}{{ film.url }}{% endif %}">
-<meta property="og:title"
-  content="{{ film.title }}{% if asset %} - {{ asset.collection.name }}/{{ asset.name }}{% elif current_collection %} - {{ current_collection.name }}{% endif %} - Blender Cloud">
-<meta name="twitter:title"
-  content="{{ film.title }}{% if asset %} - {{ asset.collection.name }}/{{ asset.name }}{% elif current_collection %} - {{ current_collection.name }}{% endif %} - Blender Cloud">
-<meta property="og:description"
-  content="{% if asset and asset.description %}{{ asset.description }}{% elif asset.collection and asset.collection.text %}{{ asset.collection.text }}{% else %}{{ film.description }}{% endif %}">
-<meta name="twitter:description"
-  content="{% if asset and asset.description %}{{ asset.description }}{% elif asset.collection and asset.collection.text %}{{ asset.collection.text }}{% else %}{{ film.description }}{% endif %}">
-<meta property="og:image"
-  content="{% if asset %}{{ asset.static_asset.thumbnail_m_url }}{% else %}{{ film.thumbnail_m_url }}{% endif %}">
-<meta name="twitter:image"
-  content="{% if asset %}{{ asset.static_asset.thumbnail_m_url }}{% else %}{{ film.thumbnail_m_url }}{% endif %}">
+{% block meta %}
+{% firstof asset.url current_collection.url as url %}
+{% firstof asset.description asset.collection.text current_collection.text film.description as description %}
+{% firstof asset.static_asset.thumbnail_m_url film.thumbnail_m_url as image_url %}
+{% if asset and asset.collection.name %}
+{% capture title %}{{ film.title }} - {{ asset.collection.name }}: {{ asset.name }}{% endcapture %}
+{% elif asset %}
+{% capture title %}{{ film.title }} - {{ asset.name }}{% endcapture %}
+{% elif current_collection %}
+{% capture title %}{{ film.title }} - {{ current_collection.name }}{% endcapture %}
+{% endif %}
+{% firstof title film.title as title %}
+{% include 'common/components/meta.html' %}
 {% endblock %}
 
 {% block bodyclasses %}

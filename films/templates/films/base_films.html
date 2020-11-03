@@ -4,14 +4,10 @@
 has-secondary-nav
 {% endblock bodyclasses %}
 
-{% block meta_indivudal %}
-<meta property="og:url" content="{{request.scheme}}://{{request.META.HTTP_HOST}}{{ film.url }}">
-<meta property="og:title" content="{{ film.title }} - Blender Cloud">
-<meta name="twitter:title" content="{{ film.title }} - Blender Cloud">
-<meta property="og:description" content="{{ film.description }}">
-<meta name="twitter:description" content="{{ film.description }}">
-<meta property="og:image" content="{{ film.thumbnail_m_url }}">
-<meta name="twitter:image" content="{{ film.thumbnail_m_url }}">
+{% block meta %}
+{% with title=film.title description=film.description image_url=film.thumbnail_m_url %}
+{% include 'common/components/meta.html'  %}
+{% endwith %}
 {% endblock %}
 
 {% block secondary_nav %}
