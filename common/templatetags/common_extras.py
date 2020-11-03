@@ -3,8 +3,10 @@ from django import template
 from django.contrib.auth.models import User
 from django.utils.html import mark_safe
 
-from common.shortcodes import render
 from common import queries
+from common.markdown import render as render_markdown
+from common.shortcodes import render
+from markupsafe import Markup
 
 register = template.Library()
 
@@ -41,6 +43,12 @@ def do_capture(parser, token):
 def with_shortcodes(context, text: str) -> str:
     """Transform shortcodes in a given text into their HTML snippets."""
     return mark_safe(render(text, context))
+
+
+@register.filter(name='markdown')
+def markdown(text: str) -> Markup:
+    """Render markdown."""
+    return render_markdown(text)
 
 
 @register.filter(name='has_group')

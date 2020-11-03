@@ -140,7 +140,7 @@
           </div>
         </div>
         <div class="markdown-text">
-          {% with_shortcodes asset.description|safe %}
+          {% with_shortcodes asset.description|markdown %}
         </div>
 
         <section>{% include 'comments/components/comment_section.html' %}</section>

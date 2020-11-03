@@ -1,5 +1,6 @@
 {% extends 'films/gallery.html' %}
 {% load film_extras %}
+{% load common_extras %}
 
 {% block title_append %} - {{ film.title }} {{ current_collection.name }}{% endblock title_append %}
 
@@ -7,7 +8,7 @@
 
 <div>
 
-  <p>{{ current_collection.text|linebreaksbr }}</p>
+  <p>{% with_shortcodes current_collection.text|markdown %}</p>
   <div class="">
     <div class="files row grid">
       <div class="grid-sizer col-12 col-sm-6 col-md-6 col-lg-4"></div>

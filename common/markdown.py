@@ -12,7 +12,7 @@ SHORTCODE_WITH_LINK_PATTERN = r'{(?:attachment\s+|iframe\s+)\w*(?:\s*link|\s*src
 
 def sanitize(text: str) -> str:
     """Remove **all** HTML tags from a given text."""
-    return bleach.clean(text)
+    return bleach.clean(text, tags=[], attributes={}, styles=[], strip=True)
 
 
 def parse_shortcode_link(self, match: re.Match, state) -> Tuple[str]:
