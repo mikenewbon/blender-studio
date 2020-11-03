@@ -8,7 +8,7 @@
 
 {% block meta %}
 {% capture title %}{{ training.name }}: {{ section.name }}{% endcapture %}
-{% with section.thumbnail_m_url training.thumbnail_m_url as image_url %}
+{% firstof section.thumbnail_m_url training.thumbnail_m_url as image_url %}
 {% with description=training.description image_url=section.thumbnail_m_url %}
 {% include 'common/components/meta.html'  %}
 {% endwith %}
