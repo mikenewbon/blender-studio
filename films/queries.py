@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List, Optional, cast, Dict, Union, Any
+import logging
 import random
-
 
 from django.contrib.auth.models import User
 from django.core import paginator
@@ -14,6 +14,7 @@ from comments.queries import get_annotated_comments
 from comments.views.common import comments_to_template_type
 from films.models import Asset, Collection, Film, ProductionLogEntryAsset
 
+logger = logging.getLogger(__name__)
 DEFAULT_LOGS_PAGE_SIZE = 3
 
 
@@ -264,3 +265,17 @@ def get_random_featured_assets(limit=8) -> List[Asset]:
     featured_ids = {row['id'] for row in query.values('id')}
     featured_ids_sample = random.sample(featured_ids, min(limit, len(featured_ids)))
     return list(query.filter(id__in=featured_ids_sample))
+
+
+def get_current_asset(request: HttpRequest) -> Dict[str, Asset]:
+    """Retrieve a film asset using an asset ID from the given request."""
+    asset_pk = request.GET.get('asset')
+    asset = None
+    print('adsfasdfasd', asset_pk, asset)
+    if asset_pk:
+        try:
+            asset = get_asset(asset_pk)
+            return {'asset': asset}
+        except Asset.DoesNotExist:
+            logger.debug(f'Unable to find asset_pk={asset_pk}')
+    return {}

@@ -1,4 +1,4 @@
-from unittest.mock import patch
+from unittest.mock import patch, PropertyMock
 import re
 
 from django.test.testcases import TestCase
@@ -19,8 +19,29 @@ shared_meta = {
 }
 
 
-@patch('common.mixins.get_thumbnail')
 class TestSiteMetadata(TestCase):
+    def setUp(self):
+        super().setUp()
+        # Patch away all thumbnailing and S3 storage
+        for patcher in [
+            patch('botocore.client.ClientCreator'),
+            patch('sorl.thumbnail.base.ThumbnailBackend.get_thumbnail'),
+            patch(
+                'films.models.films.Film.thumbnail_m_url',
+                PropertyMock(return_value='https://film/thumbnail_m.jpg'),
+            ),
+            patch(
+                'blog.models.Revision.thumbnail_m_url',
+                PropertyMock(return_value='https://revision/thumbnail_m.jpg'),
+            ),
+            patch(
+                'static_assets.models.static_assets.StaticAsset.thumbnail_m_url',
+                PropertyMock(return_value='https://static/asset/thumbnail_m.jpg'),
+            ),
+        ]:
+            patcher.start()
+            self.addCleanup(patcher.stop)
+
     def _find_link(self, html: bytes):
         found_link = re.findall(
             r'<link\s+rel=.canonical.\s+href="([^"]+)"\s*/>',
@@ -49,7 +70,7 @@ class TestSiteMetadata(TestCase):
     def assertCanonicalLinkEquals(self, html: bytes, value: str):
         self.assertEquals(self._find_link(html), value)
 
-    def test_homepage(self, _):
+    def test_homepage(self):
         # Login to avoid being redirected to the welcome page
         user = UserFactory()
         self.client.force_login(user)
@@ -73,7 +94,7 @@ class TestSiteMetadata(TestCase):
         }.items():
             self.assertMetaEquals(html, meta, value)
 
-    def test_welcome(self, _):
+    def test_welcome(self):
         page_url = reverse('welcome')
 
         response = self.client.get(page_url + '?foo=bar')
@@ -94,11 +115,10 @@ class TestSiteMetadata(TestCase):
         }.items():
             self.assertMetaEquals(html, meta, value)
 
-    def test_film(self, mock_get_thumbnail):
+    def test_film(self):
         film_slug = 'coffee-run'
         film = FilmFactory(slug=film_slug)
         page_url = reverse('film-detail', kwargs={'film_slug': film_slug})
-        mock_get_thumbnail.return_value.url = 'fakestorage://thumbnail/path.jpg'
 
         response = self.client.get(page_url + '?foo=bar')
 
@@ -113,16 +133,68 @@ class TestSiteMetadata(TestCase):
             'name=.twitter:title.': f'{film.title} - Blender Cloud',
             'property=.og:description.': film.description,
             'name=.twitter:description.': film.description,
-            'property=.og:image.': 'fakestorage://thumbnail/path.jpg',
-            'name=.twitter:image.': 'fakestorage://thumbnail/path.jpg',
+            'property=.og:image.': 'https://film/thumbnail_m.jpg',
+            'name=.twitter:image.': 'https://film/thumbnail_m.jpg',
         }.items():
             self.assertMetaEquals(html, meta, value)
 
-    def test_film_gallery(self, mock_get_thumbnail):
+    def test_film_non_featured_asset_links_asset_in_collection(self):
+        film_slug = 'coffee-run'
+        film = FilmFactory(slug=film_slug)
+        asset = AssetFactory(film=film, static_asset=StaticAssetFactory())
+        page_url = reverse('film-detail', kwargs={'film_slug': film_slug})
+
+        response = self.client.get(page_url + f'?asset={asset.pk}&foo=bar')
+
+        self.assertEqual(response.status_code, 200)
+        html = response.content
+
+        self.assertCanonicalLinkEquals(
+            html,
+            f'http://testserver{asset.collection.url}?asset={asset.pk}',
+        )
+        for meta, value in {
+            'property=.og:url.': f'http://testserver{asset.collection.url}?asset={asset.pk}',
+            **shared_meta,
+            'property=.og:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
+            'name=.twitter:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
+            'property=.og:description.': asset.description,
+            'name=.twitter:description.': asset.description,
+            'property=.og:image.': 'https://static/asset/thumbnail_m.jpg',
+            'name=.twitter:image.': 'https://static/asset/thumbnail_m.jpg',
+        }.items():
+            self.assertMetaEquals(html, meta, value)
+
+    def test_film_featured_asset_links_to_film_page(self):
+        film_slug = 'coffee-run'
+        film = FilmFactory(slug=film_slug)
+        asset = AssetFactory(film=film, is_featured=True, static_asset=StaticAssetFactory())
+        page_url = reverse('film-gallery', kwargs={'film_slug': film_slug})
+
+        response = self.client.get(page_url + f'?asset={asset.pk}&foo=bar')
+
+        self.assertEqual(response.status_code, 200)
+        html = response.content
+
+        self.assertCanonicalLinkEquals(
+            html, f'http://testserver/films/{film_slug}?asset={asset.pk}'
+        )
+        for meta, value in {
+            'property=.og:url.': f'http://testserver/films/{film_slug}?asset={asset.pk}',
+            **shared_meta,
+            'property=.og:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
+            'name=.twitter:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
+            'property=.og:description.': asset.description,
+            'name=.twitter:description.': asset.description,
+            'property=.og:image.': 'https://static/asset/thumbnail_m.jpg',
+            'name=.twitter:image.': 'https://static/asset/thumbnail_m.jpg',
+        }.items():
+            self.assertMetaEquals(html, meta, value)
+
+    def test_film_gallery(self):
         film_slug = 'coffee-run'
         film = FilmFactory(slug=film_slug)
         page_url = reverse('film-gallery', kwargs={'film_slug': film_slug})
-        mock_get_thumbnail.return_value.url = 'fakestorage://thumbnail/path.jpg'
 
         response = self.client.get(page_url + '?foo=bar')
 
@@ -137,136 +209,16 @@ class TestSiteMetadata(TestCase):
             'name=.twitter:title.': f'{film.title} - Blender Cloud',
             'property=.og:description.': film.description,
             'name=.twitter:description.': film.description,
-            'property=.og:image.': 'fakestorage://thumbnail/path.jpg',
-            'name=.twitter:image.': 'fakestorage://thumbnail/path.jpg',
+            'property=.og:image.': 'https://film/thumbnail_m.jpg',
+            'name=.twitter:image.': 'https://film/thumbnail_m.jpg',
         }.items():
             self.assertMetaEquals(html, meta, value)
 
-    @patch('static_assets.models.static_assets.get_thumbnail')
-    def test_film_gallery_asset(self, mock_get_thumbnail1, mock_get_thumbnail2):
+    def test_film_gallery_asset(self):
         film_slug = 'coffee-run'
         film = FilmFactory(slug=film_slug)
         asset = AssetFactory(film=film, static_asset=StaticAssetFactory())
         page_url = reverse('film-gallery', kwargs={'film_slug': film_slug})
-        mock_get_thumbnail1.return_value.url = 'fakestorage://thumbnail/path.jpg'
-        mock_get_thumbnail2.return_value.url = 'fakestorage://thumbnail/path.jpg'
-
-        response = self.client.get(page_url + f'?asset={asset.pk}&foo=bar')
-
-        self.assertEqual(response.status_code, 200)
-        html = response.content
-
-        self.assertCanonicalLinkEquals(
-            html,
-            f'http://testserver/films/{film_slug}/{asset.collection.slug}?asset={asset.pk}',
-        )
-        for meta, value in {
-            'property=.og:url.':
-            # TODO(anna): should be gallery URL, not collection?
-            f'http://testserver/films/{film_slug}/{asset.collection.slug}?asset={asset.pk}',
-            **shared_meta,
-            'property=.og:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
-            'name=.twitter:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
-            'property=.og:description.': asset.description,
-            'name=.twitter:description.': asset.description,
-            'property=.og:image.': 'fakestorage://thumbnail/path.jpg',
-            'name=.twitter:image.': 'fakestorage://thumbnail/path.jpg',
-        }.items():
-            self.assertMetaEquals(html, meta, value)
-
-    @patch('static_assets.models.static_assets.get_thumbnail')
-    def test_film_gallery_collection(self, mock_get_thumbnail1, mock_get_thumbnail2):
-        film_slug = 'coffee-run'
-        film = FilmFactory(slug=film_slug)
-        asset = AssetFactory(film=film, static_asset=StaticAssetFactory())
-        page_url = reverse(
-            'collection-detail',
-            kwargs={
-                'film_slug': film_slug,
-                'collection_slug': asset.collection.slug,
-            },
-        )
-        mock_get_thumbnail1.return_value.url = 'fakestorage://thumbnail/path.jpg'
-        mock_get_thumbnail2.return_value.url = 'fakestorage://thumbnail/path.jpg'
-
-        response = self.client.get(page_url + '?foo=bar')
-
-        self.assertEqual(response.status_code, 200)
-        html = response.content
-
-        self.assertCanonicalLinkEquals(
-            html,
-            f'http://testserver/films/{film_slug}/{asset.collection.slug}',
-        )
-        for meta, value in {
-            'property=.og:url.': f'http://testserver/films/{film_slug}/{asset.collection.slug}',
-            **shared_meta,
-            'property=.og:title.': f'{film.title} - {asset.collection.name} - Blender Cloud',
-            'name=.twitter:title.': f'{film.title} - {asset.collection.name} - Blender Cloud',
-            'property=.og:description.': asset.collection.text,
-            'name=.twitter:description.': asset.collection.text,
-            'property=.og:image.': 'fakestorage://thumbnail/path.jpg',
-            'name=.twitter:image.': 'fakestorage://thumbnail/path.jpg',
-        }.items():
-            self.assertMetaEquals(html, meta, value)
-
-    @patch('static_assets.models.static_assets.get_thumbnail')
-    def test_film_gallery_collection_empty_text_and_name(
-        self, mock_get_thumbnail1, mock_get_thumbnail2
-    ):
-        film_slug = 'coffee-run'
-        film = FilmFactory(slug=film_slug)
-        asset = AssetFactory(
-            film=film,
-            static_asset=StaticAssetFactory(),
-            collection__text='',
-            collection__name='',
-        )
-        page_url = reverse(
-            'collection-detail',
-            kwargs={
-                'film_slug': film_slug,
-                'collection_slug': asset.collection.slug,
-            },
-        )
-        mock_get_thumbnail1.return_value.url = 'fakestorage://thumbnail/path.jpg'
-        mock_get_thumbnail2.return_value.url = 'fakestorage://thumbnail/path.jpg'
-
-        response = self.client.get(page_url + '?foo=bar')
-
-        self.assertEqual(response.status_code, 200)
-        html = response.content
-
-        self.assertCanonicalLinkEquals(
-            html,
-            f'http://testserver/films/{film_slug}/{asset.collection.slug}',
-        )
-        for meta, value in {
-            'property=.og:url.': f'http://testserver/films/{film_slug}/{asset.collection.slug}',
-            **shared_meta,
-            'property=.og:title.': f'{film.title} - {asset.collection.name} - Blender Cloud',
-            'name=.twitter:title.': f'{film.title} - {asset.collection.name} - Blender Cloud',
-            'property=.og:description.': film.description,
-            'name=.twitter:description.': film.description,
-            'property=.og:image.': 'fakestorage://thumbnail/path.jpg',
-            'name=.twitter:image.': 'fakestorage://thumbnail/path.jpg',
-        }.items():
-            self.assertMetaEquals(html, meta, value)
-
-    @patch('static_assets.models.static_assets.get_thumbnail')
-    def test_film_gallery_collection_asset(self, mock_get_thumbnail1, mock_get_thumbnail2):
-        film_slug = 'coffee-run'
-        film = FilmFactory(slug=film_slug)
-        asset = AssetFactory(film=film, static_asset=StaticAssetFactory())
-        page_url = reverse(
-            'collection-detail',
-            kwargs={
-                'film_slug': film_slug,
-                'collection_slug': asset.collection.slug,
-            },
-        )
-        mock_get_thumbnail1.return_value.url = 'fakestorage://thumbnail/path.jpg'
-        mock_get_thumbnail2.return_value.url = 'fakestorage://thumbnail/path.jpg'
 
         response = self.client.get(page_url + f'?asset={asset.pk}&foo=bar')
 
@@ -284,18 +236,119 @@ class TestSiteMetadata(TestCase):
             'name=.twitter:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
             'property=.og:description.': asset.description,
             'name=.twitter:description.': asset.description,
-            'property=.og:image.': 'fakestorage://thumbnail/path.jpg',
-            'name=.twitter:image.': 'fakestorage://thumbnail/path.jpg',
+            'property=.og:image.': 'https://static/asset/thumbnail_m.jpg',
+            'name=.twitter:image.': 'https://static/asset/thumbnail_m.jpg',
         }.items():
             self.assertMetaEquals(html, meta, value)
 
-    @patch('static_assets.models.static_assets.get_thumbnail')
-    def test_blog_post(self, mock_get_thumbnail1, mock_get_thumbnail2):
+    def test_film_gallery_collection(self):
+        film_slug = 'coffee-run'
+        film = FilmFactory(slug=film_slug)
+        asset = AssetFactory(film=film, static_asset=StaticAssetFactory())
+        page_url = reverse(
+            'collection-detail',
+            kwargs={
+                'film_slug': film_slug,
+                'collection_slug': asset.collection.slug,
+            },
+        )
+
+        response = self.client.get(page_url + '?foo=bar')
+
+        self.assertEqual(response.status_code, 200)
+        html = response.content
+
+        self.assertCanonicalLinkEquals(
+            html,
+            f'http://testserver/films/{film_slug}/{asset.collection.slug}',
+        )
+        for meta, value in {
+            'property=.og:url.': f'http://testserver/films/{film_slug}/{asset.collection.slug}',
+            **shared_meta,
+            'property=.og:title.': f'{film.title} - {asset.collection.name} - Blender Cloud',
+            'name=.twitter:title.': f'{film.title} - {asset.collection.name} - Blender Cloud',
+            'property=.og:description.': asset.collection.text,
+            'name=.twitter:description.': asset.collection.text,
+            'property=.og:image.': 'https://film/thumbnail_m.jpg',
+            'name=.twitter:image.': 'https://film/thumbnail_m.jpg',
+        }.items():
+            self.assertMetaEquals(html, meta, value)
+
+    def test_film_gallery_collection_empty_text_and_name(self):
+        film_slug = 'coffee-run'
+        film = FilmFactory(slug=film_slug)
+        asset = AssetFactory(
+            film=film,
+            static_asset=StaticAssetFactory(),
+            collection__text='',
+            collection__name='',
+        )
+        page_url = reverse(
+            'collection-detail',
+            kwargs={
+                'film_slug': film_slug,
+                'collection_slug': asset.collection.slug,
+            },
+        )
+
+        response = self.client.get(page_url + '?foo=bar')
+
+        self.assertEqual(response.status_code, 200)
+        html = response.content
+
+        self.assertCanonicalLinkEquals(
+            html,
+            f'http://testserver/films/{film_slug}/{asset.collection.slug}',
+        )
+        for meta, value in {
+            'property=.og:url.': f'http://testserver/films/{film_slug}/{asset.collection.slug}',
+            **shared_meta,
+            'property=.og:title.': f'{film.title} - {asset.collection.name} - Blender Cloud',
+            'name=.twitter:title.': f'{film.title} - {asset.collection.name} - Blender Cloud',
+            'property=.og:description.': film.description,
+            'name=.twitter:description.': film.description,
+            'property=.og:image.': 'https://film/thumbnail_m.jpg',
+            'name=.twitter:image.': 'https://film/thumbnail_m.jpg',
+        }.items():
+            self.assertMetaEquals(html, meta, value)
+
+    def test_film_gallery_collection_asset(self):
+        film_slug = 'coffee-run'
+        film = FilmFactory(slug=film_slug)
+        asset = AssetFactory(film=film, static_asset=StaticAssetFactory())
+        page_url = reverse(
+            'collection-detail',
+            kwargs={
+                'film_slug': film_slug,
+                'collection_slug': asset.collection.slug,
+            },
+        )
+
+        response = self.client.get(page_url + f'?asset={asset.pk}&foo=bar')
+
+        self.assertEqual(response.status_code, 200)
+        html = response.content
+
+        self.assertCanonicalLinkEquals(
+            html,
+            f'http://testserver/films/{film_slug}/{asset.collection.slug}?asset={asset.pk}',
+        )
+        for meta, value in {
+            'property=.og:url.': f'http://testserver/films/{film_slug}/{asset.collection.slug}?asset={asset.pk}',
+            **shared_meta,
+            'property=.og:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
+            'name=.twitter:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
+            'property=.og:description.': asset.description,
+            'name=.twitter:description.': asset.description,
+            'property=.og:image.': 'https://static/asset/thumbnail_m.jpg',
+            'name=.twitter:image.': 'https://static/asset/thumbnail_m.jpg',
+        }.items():
+            self.assertMetaEquals(html, meta, value)
+
+    def test_blog_post(self):
         post = PostFactory()
         revision = RevisionFactory(post=post)
         page_url = reverse('post-detail', kwargs={'post_slug': post.slug})
-        mock_get_thumbnail1.return_value.url = 'fakestorage://thumbnail/path.jpg'
-        mock_get_thumbnail2.return_value.url = 'fakestorage://thumbnail/path.jpg'
 
         response = self.client.get(page_url + '?foo=bar')
 
@@ -313,7 +366,7 @@ class TestSiteMetadata(TestCase):
             'name=.twitter:title.': f'{revision.title} - Blender Cloud',
             'property=.og:description.': revision.description,
             'name=.twitter:description.': revision.description,
-            'property=.og:image.': 'fakestorage://thumbnail/path.jpg',
-            'name=.twitter:image.': 'fakestorage://thumbnail/path.jpg',
+            'property=.og:image.': 'https://revision/thumbnail_m.jpg',
+            'name=.twitter:image.': 'https://revision/thumbnail_m.jpg',
         }.items():
             self.assertMetaEquals(html, meta, value)

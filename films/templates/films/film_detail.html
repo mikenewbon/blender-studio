@@ -1,11 +1,25 @@
 {% extends 'films/base_films.html' %}
 {% load static %}
+{% load common_extras %}
 
 {% block title_append %} - {{ film.title }}{% endblock title_append %}
 
 {% block jumbotron %}
 {% include "films/components/jumbotron_film.html" with film=film %}
 {% endblock jumbotron %}
+
+{% block meta %}
+{% firstof asset.url as url %}
+{% firstof asset.description film.description as description %}
+{% firstof asset.static_asset.thumbnail_m_url film.thumbnail_m_url as image_url %}
+{% if asset and asset.collection.name %}
+{% capture title %}{{ film.title }} - {{ asset.collection.name }}: {{ asset.name }}{% endcapture %}
+{% elif asset %}
+{% capture title %}{{ film.title }} - {{ asset.name }}{% endcapture %}
+{% endif %}
+{% firstof title film.title as title %}
+{% include 'common/components/meta.html' %}
+{% endblock %}
 
 {% block content %}
 

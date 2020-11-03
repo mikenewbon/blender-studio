@@ -1,30 +1,11 @@
 """Render film asset gallery and collections."""
-from typing import Dict
-import logging
-
 from django.http import HttpResponse, HttpRequest
 from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_safe
 
-from films.models import Film, Collection, Asset
-from films.queries import get_gallery_drawer_context, get_asset
-
-logger = logging.getLogger(__name__)
-
-
-def prefetch_current_asset(request: HttpRequest) -> Dict[str, Asset]:
-    """Add asset to the template context, so that asset meta could be added."""
-    asset_pk = request.GET.get('asset')
-    asset = None
-    print('adsfasdfasd', asset_pk, asset)
-    if asset_pk:
-        try:
-            asset = get_asset(asset_pk)
-            return {'asset': asset}
-        except Asset.DoesNotExist:
-            logger.debug(f'Unable to find asset_pk={asset_pk}')
-    return {}
+from films.models import Film, Collection
+from films.queries import get_gallery_drawer_context, get_current_asset
 
 
 @require_safe
@@ -73,7 +54,7 @@ def collection_list(request: HttpRequest, film_slug: str) -> HttpResponse:
             request.user.is_staff and request.user.has_perm('films.change_asset')
         ),
         **drawer_menu_context,
-        **prefetch_current_asset(request),
+        **get_current_asset(request),
     }
 
     return render(request, 'films/gallery.html', context)
@@ -135,7 +116,7 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
             request.user.is_staff and request.user.has_perm('films.change_asset')
         ),
         **drawer_menu_context,
-        **prefetch_current_asset(request),
+        **get_current_asset(request),
     }
 
     return render(request, 'films/collection_detail.html', context)

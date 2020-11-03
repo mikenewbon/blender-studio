@@ -1,16 +1,17 @@
+# noqa: D100
 from django.http import HttpResponse
 from django.http.request import HttpRequest
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_safe
 
 from films.models import Film, FilmStatus, FilmFlatPage
-from films.queries import get_production_logs_page
+from films.queries import get_production_logs_page, get_current_asset
 
 
 @require_safe
 def film_list(request: HttpRequest) -> HttpResponse:
     """
-    Displays all the published films.
+    Display all the published films.
 
     **Context:**
 
@@ -37,12 +38,15 @@ def film_list(request: HttpRequest) -> HttpResponse:
 @require_safe
 def film_detail(request: HttpRequest, film_slug: str) -> HttpResponse:
     """
-    Displays the detail page of the :model:`films.Film` specified by the given slug.
+    Display the detail page of the :model:`films.Film` specified by the given slug.
 
     **Context:**
 
     ``film``
         An instance of :model:`films.Film`.
+    ``asset``
+        An :model:`films.Asset` that's currently selected and will be shown via the JS modal.
+        It's necessary to retrieve it in advance so that correct OG meta could be set.
     ``featured_artwork``
         A queryset of :model:`films.Asset`-s belonging to the film and marked as featured.
     ``production_logs_page`` (only for non-released films!)
@@ -72,6 +76,7 @@ def film_detail(request: HttpRequest, film_slug: str) -> HttpResponse:
         'user_can_edit_asset': (
             request.user.is_staff and request.user.has_perm('films.change_asset')
         ),
+        **get_current_asset(request),
     }
     if film.status != FilmStatus.released:
         context['production_logs_page'] = get_production_logs_page(film)
@@ -82,7 +87,7 @@ def film_detail(request: HttpRequest, film_slug: str) -> HttpResponse:
 @require_safe
 def flatpage(request: HttpRequest, film_slug: str, page_slug: str) -> HttpResponse:
     """
-    Displays the "About" page of the :model:`films.Film` specified by the given slug.
+    Display the "About" page of the :model:`films.Film` specified by the given slug.
 
     **Context:**
 
