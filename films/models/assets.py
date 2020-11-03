@@ -8,6 +8,7 @@ from taggit.managers import TaggableManager
 from comments.models import Comment
 from common import mixins
 from films.models import Collection
+import common.help_texts
 import static_assets.models as models_static_assets
 
 
@@ -38,7 +39,7 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
     order = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=512)
     slug = models.SlugField(blank=True)
-    description = models.TextField(blank=True)
+    description = models.TextField(blank=True, help_text=common.help_texts.markdown)
     category = models.CharField(choices=AssetCategory.choices, max_length=17, db_index=True)
     view_count = models.PositiveIntegerField(default=0, editable=False)
     is_published = models.BooleanField(default=False)

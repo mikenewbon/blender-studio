@@ -8,6 +8,7 @@ from django.utils.text import slugify
 from common import mixins, markdown
 from common.upload_paths import get_upload_to_hashed_path
 from training.models import Training
+import common.help_texts
 import static_assets.models as models_static_assets
 
 
@@ -36,10 +37,7 @@ class TrainingFlatPage(mixins.CreatedUpdatedMixin, models.Model):
             'If it is not filled, it will be the slugified page title.'
         ),
     )
-    content = models.TextField(
-        blank=True,
-        help_text='Format the content in <a href="https://commonmark.org/help/">Markdown</a>.',
-    )
+    content = models.TextField(blank=True, help_text=common.help_texts.markdown)
     html_content = models.TextField(blank=True, editable=False)
     attachments = models.ManyToManyField(models_static_assets.StaticAsset, blank=True)
     header = models.FileField(upload_to=get_upload_to_hashed_path, blank=True)

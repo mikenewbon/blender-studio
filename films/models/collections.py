@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
 from films.models import films
+import common.help_texts
 
 
 class Collection(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Model):
@@ -23,7 +24,7 @@ class Collection(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mod
 
     name = models.CharField(max_length=512)
     slug = models.SlugField(blank=True)
-    text = models.TextField(blank=True)
+    text = models.TextField(blank=True, help_text=common.help_texts.markdown)
     # TODO(fsiddi) Add text_html
 
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
