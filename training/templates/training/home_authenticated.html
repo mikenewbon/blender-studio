@@ -2,8 +2,17 @@
 
 {% load static %}
 {% load pipeline %}
+{% load common_extras %}
 
-{% block title_append %} - Training{% endblock title_append %}
+{% block title_prepend %}Training - {% endblock title_prepend %}
+
+{% block meta %}
+{% static 'training/images/placeholders/opengraph.jpg' as image_path %}
+{% absolute_url image_path as image_url %}
+{% with title="Training" description="Learn from our expert team. Courses, workshops and production lessons with .blend files included." %}
+{% include 'common/components/meta.html' %}
+{% endwith %}
+{% endblock %}
 
 {% block scripts %}
 {% javascript 'training' %}

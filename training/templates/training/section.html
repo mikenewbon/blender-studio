@@ -4,7 +4,15 @@
 {% load pipeline %}
 {% load common_extras %}
 
-{% block title_append %} - {{ training.name }}{% endblock title_append %}
+{% block title_append %} - {{ training.name }}: {{ section.name }}{% endblock title_append %}
+
+{% block meta %}
+{% capture title %}{{ training.name }}: {{ section.name }}{% endcapture %}
+{% with section.thumbnail_m_url training.thumbnail_m_url as image_url %}
+{% with description=training.description image_url=section.thumbnail_m_url %}
+{% include 'common/components/meta.html'  %}
+{% endwith %}
+{% endblock %}
 
 {% block scripts %}
 {{ block.super }}

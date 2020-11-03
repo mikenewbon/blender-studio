@@ -1,5 +1,11 @@
 {% extends 'common/base.html' %}
 
+{% block meta %}
+{% with title=training.name description=training.description image_url=training.thumbnail_m_url %}
+{% include 'common/components/meta.html'  %}
+{% endwith %}
+{% endblock %}
+
 {% block content %}
 <div class="container-xl pt-3 nested-navigation">
   <div class="row">

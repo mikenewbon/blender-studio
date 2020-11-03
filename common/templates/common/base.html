@@ -12,7 +12,7 @@
   {% comment %}
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet"> {% endcomment %}
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <title>Blender Cloud{% block title_append %}{% endblock title_append %}</title>
+  <title>{% block title_prepend %}{% endblock title_prepend %}Blender Cloud{% block title_append %}{% endblock title_append %}</title>
   <meta name="google-site-verification" content="r-8DuUEYwMyb14SRVj0I4mSUSEPmdRRMrT-zMSbFkas">
 
   {% block meta %}
