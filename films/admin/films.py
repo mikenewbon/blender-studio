@@ -8,8 +8,10 @@ from common import mixins
 
 @admin.register(assets.Asset)
 class AssetAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ('name',)}
-    readonly_fields = ['date_created']
+    # asset slugs aren't currently in use and were prepopulate
+    # during import from previous version of Blender Cloud
+    # prepopulated_fields = {'slug': ('name',)}
+    readonly_fields = ['date_created', 'slug']
     list_display = ['__str__', 'order', 'film', 'collection']
     list_filter = [
         'film',
@@ -26,6 +28,7 @@ class AssetAdmin(admin.ModelAdmin):
     autocomplete_fields = ['static_asset', 'attachments']
 
     def get_queryset(self, request: HttpRequest) -> 'QuerySet[assets.Asset]':
+        """Select extra related data in the default queryset."""
         return super().get_queryset(request).select_related('film', 'collection__film')
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -43,8 +46,10 @@ class AssetAdmin(admin.ModelAdmin):
 class AssetInline(admin.StackedInline):
     model = assets.Asset
     show_change_link = True
-    prepopulated_fields = {'slug': ('name',)}
-    readonly_fields = ['date_created']
+    # asset slugs aren't currently in use and were prepopulate
+    # during import from previous version of Blender Cloud
+    # prepopulated_fields = {'slug': ('name',)}
+    readonly_fields = ['date_created', 'slug']
     extra = 0
     autocomplete_fields = ['static_asset', 'attachments', 'film']
     fields = ['static_asset', 'order', 'name', 'description', 'category', 'slug']
