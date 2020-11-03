@@ -26,7 +26,48 @@ class SiteContexts(Enum):
     GALLERY = 'gallery'
 
 
-def get_previous_asset_in_production_logs(asset: Asset) -> Optional[Asset]:
+def _get_other_featured_assets(asset: Asset) -> QuerySet:
+    return Asset.objects.filter(
+        film=asset.film,
+        is_published=True,
+        is_featured=True,
+    ).order_by(*Asset._meta.ordering)
+
+
+def _get_other_assets_in_collection(asset: Asset) -> QuerySet:
+    collection = cast(Collection, asset.collection)
+    return collection.assets.filter(is_published=True).order_by(*Asset._meta.ordering)
+
+
+def _get_previous_in_query(q: QuerySet, instance: Asset) -> Optional[Asset]:
+    """Fetch a record previous from this one in the given query.
+
+    Because some records, such as assets, must be ordered by multiple columns,
+    ORM's `get_previous_by_FOO` cannot be used.
+    See https://code.djangoproject.com/ticket/16505 for more details.
+    """
+    result_list = list(q)
+    instance_index = result_list.index(instance)
+    if instance_index == 0:
+        return None
+    return result_list[instance_index - 1]
+
+
+def _get_next_in_query(q: QuerySet, instance: Asset) -> Optional[Any]:
+    """Fetch a record next to this one in the given query.
+
+    Because some records, such as assets, must be ordered by multiple columns,
+    ORM's `get_next_by_FOO` cannot be used.
+    See https://code.djangoproject.com/ticket/16505 for more details.
+    """
+    result_list = list(q)
+    instance_index = result_list.index(instance)
+    if instance_index == len(result_list) - 1:
+        return None
+    return result_list[instance_index + 1]
+
+
+def get_previous_asset_in_production_logs(asset: Asset) -> Optional[Asset]:  # noqa: D103
     current_log_entry = asset.entry_asset.production_log_entry
     previous_asset: Optional[Asset]
     try:
@@ -38,7 +79,7 @@ def get_previous_asset_in_production_logs(asset: Asset) -> Optional[Asset]:
     return previous_asset
 
 
-def get_next_asset_in_production_logs(asset: Asset) -> Optional[Asset]:
+def get_next_asset_in_production_logs(asset: Asset) -> Optional[Asset]:  # noqa: D103
     current_log_entry = asset.entry_asset.production_log_entry
     next_asset: Optional[Asset]
     try:
@@ -51,49 +92,33 @@ def get_next_asset_in_production_logs(asset: Asset) -> Optional[Asset]:
 
 
 def get_previous_asset_in_featured_artwork(asset: Asset) -> Optional[Asset]:
-    previous_asset: Optional[Asset]
-    try:
-        previous_asset = asset.get_previous_by_date_created(
-            film=asset.film, is_published=True, is_featured=True
-        )
-    except Asset.DoesNotExist:
-        previous_asset = None
-    return previous_asset
+    """Fetch asset previous from this one in featured film assets."""
+    featured_assets = _get_other_featured_assets(asset)
+    return _get_previous_in_query(featured_assets, asset)
 
 
 def get_next_asset_in_featured_artwork(asset: Asset) -> Optional[Asset]:
-    next_asset: Optional[Asset]
-    try:
-        next_asset = asset.get_next_by_date_created(
-            film=asset.film, is_published=True, is_featured=True
-        )
-    except Asset.DoesNotExist:
-        next_asset = None
-    return next_asset
+    """Fetch asset next from this one in featured film assets."""
+    featured_assets = _get_other_featured_assets(asset)
+    return _get_next_in_query(featured_assets, asset)
 
 
 def get_previous_asset_in_gallery(asset: Asset) -> Optional[Asset]:
-    collection = cast(Collection, asset.collection)
-    collection_assets = list(collection.assets.filter(is_published=True).order_by('order', 'name'))
-    asset_index = collection_assets.index(asset)
-    if asset_index == 0:
-        return None
-    return collection_assets[asset_index - 1]
+    """Fetch asset previous from this one in this asset's collection."""
+    collection_assets = _get_other_assets_in_collection(asset)
+    return _get_previous_in_query(collection_assets, asset)
 
 
 def get_next_asset_in_gallery(asset: Asset) -> Optional[Asset]:
-    collection = cast(Collection, asset.collection)
-    collection_assets = list(collection.assets.filter(is_published=True).order_by('order', 'name'))
-    asset_index = collection_assets.index(asset)
-    if asset_index == len(collection_assets) - 1:
-        return None
-    return collection_assets[(asset_index + 1)]
+    """Fetch asset next from this one in the this asset's collection."""
+    collection_assets = _get_other_assets_in_collection(asset)
+    return _get_next_in_query(collection_assets, asset)
 
 
 def get_asset_context(
     asset: Asset, request: HttpRequest
 ) -> Dict[str, Union[Asset, typed_templates.Comments, str, None, bool]]:
-    """Creates context for the api-asset view: the current, previous and next published assets.
+    """Create context for the api-asset view: the current, previous and next published assets.
 
     The request's URL is expected to contain a query string 'site_context=...' with one
     of the following values (see the SiteContexts enum):
@@ -102,7 +127,7 @@ def get_asset_context(
     - 'featured_artwork' - for featured assets in the 'Gallery' section; they are sorted by
         their `date_created`,
     - 'gallery' - for assets inside collections in the 'Gallery section; they are sorted by
-        their `order` and `name` (`order` may not define an unambiguous order).
+        their `order` and `date_created` (`order` may not define an unambiguous order).
     If 'site_context' parameter has another value, is not provided, or the current asset
     is the first one or the last one in the given context, the previous and next
     assets are set to None.
@@ -204,7 +229,7 @@ def get_production_logs_page(
             'log_entries__entry_assets',
             queryset=ProductionLogEntryAsset.objects.select_related(
                 'asset__static_asset__video',
-            ).order_by('asset__date_created'),
+            ).order_by('asset__order', 'asset__date_created'),
             to_attr='assets',
         ),
     )
@@ -236,11 +261,11 @@ def get_gallery_drawer_context(film: Film, user: User) -> Dict[str, Any]:
     """
     top_level_collections = (
         film.collections.filter(parent__isnull=True)
-        .order_by('order', 'name')
+        .order_by(*Collection._meta.ordering)
         .prefetch_related(
             Prefetch(
                 'child_collections',
-                queryset=film.collections.order_by('order', 'name'),
+                queryset=film.collections.order_by(*Collection._meta.ordering),
                 to_attr='nested',
             )
         )
@@ -253,7 +278,7 @@ def get_gallery_drawer_context(film: Film, user: User) -> Dict[str, Any]:
     return {
         'collections': nested_collections,
         'featured_artwork': film.assets.filter(is_featured=True, is_published=True).order_by(
-            'date_created'
+            *Asset._meta.ordering,
         ),
         'user_can_edit_collection': (user.is_staff and user.has_perm('films.change_collection')),
     }
@@ -271,7 +296,6 @@ def get_current_asset(request: HttpRequest) -> Dict[str, Asset]:
     """Retrieve a film asset using an asset ID from the given request."""
     asset_pk = request.GET.get('asset')
     asset = None
-    print('adsfasdfasd', asset_pk, asset)
     if asset_pk:
         try:
             asset = get_asset(asset_pk)

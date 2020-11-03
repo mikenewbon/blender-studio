@@ -4,7 +4,7 @@ from django.http.request import HttpRequest
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_safe
 
-from films.models import Film, FilmStatus, FilmFlatPage
+from films.models import Film, FilmStatus, FilmFlatPage, Asset
 from films.queries import get_production_logs_page, get_current_asset
 
 
@@ -65,7 +65,7 @@ def film_detail(request: HttpRequest, film_slug: str) -> HttpResponse:
     :template:`films/film_detail.html`
     """
     film = get_object_or_404(Film, slug=film_slug)
-    featured_artwork = film.assets.filter(is_featured=True).order_by('date_created')
+    featured_artwork = film.assets.filter(is_featured=True).order_by(*Asset._meta.ordering)
 
     context = {
         'film': film,

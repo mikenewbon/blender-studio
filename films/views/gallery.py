@@ -4,7 +4,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_safe
 
-from films.models import Film, Collection
+from films.models import Film, Collection, Asset
 from films.queries import get_gallery_drawer_context, get_current_asset
 
 
@@ -75,7 +75,8 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
     ``current_collection``
         An instance of :model:`films.Collection`.
     ``current_assets``
-        A queryset of published assets in the current_collection, ordered by ``order``, ``name``.
+        A queryset of published assets in the current_collection,
+        ordered by ``order``, ``date_created``.
     ``collections``
         A dict of all the film's collections; needed for the drawer menu.
 
@@ -104,13 +105,15 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
     if not request.user.is_superuser and not film.is_published:
         raise Http404("Film does not exist")
     collection = get_object_or_404(Collection, slug=collection_slug, film_id=film.id)
-    child_collections = collection.child_collections.order_by('order', 'name')
+    child_collections = collection.child_collections.order_by(*Collection._meta.ordering)
     drawer_menu_context = get_gallery_drawer_context(film, request.user)
 
     context = {
         'film': film,
         'current_collection': collection,
-        'current_assets': (collection.assets.filter(is_published=True).order_by('order', 'name')),
+        'current_assets': (
+            collection.assets.filter(is_published=True).order_by(*Asset._meta.ordering)
+        ),
         'child_collections': child_collections,
         'user_can_edit_asset': (
             request.user.is_staff and request.user.has_perm('films.change_asset')

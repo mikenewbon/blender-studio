@@ -24,6 +24,9 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
     An asset can be of one of the three types: image, video, or file.
     """
 
+    class Meta:
+        ordering = ['order', 'date_created']
+
     film = models.ForeignKey('Film', on_delete=models.CASCADE, related_name='assets')
     static_asset = models.ForeignKey(
         'static_assets.StaticAsset',
@@ -114,7 +117,7 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
 
     @property
     def comment_url(self) -> str:
-        return reverse('api-asset-comment', kwargs={'asset_pk': self.pk},)
+        return reverse('api-asset-comment', kwargs={'asset_pk': self.pk})
 
     @property
     def admin_url(self) -> str:
