@@ -205,8 +205,8 @@ class TestSiteMetadata(TestCase):
         for meta, value in {
             'property=.og:url.': f'http://testserver/films/{film_slug}/gallery',
             **shared_meta,
-            'property=.og:title.': f'{film.title} - Blender Cloud',
-            'name=.twitter:title.': f'{film.title} - Blender Cloud',
+            'property=.og:title.': f'{film.title} - Featured Artwork - Blender Cloud',
+            'name=.twitter:title.': f'{film.title} - Featured Artwork - Blender Cloud',
             'property=.og:description.': film.description,
             'name=.twitter:description.': film.description,
             'property=.og:image.': 'https://film/thumbnail_m.jpg',
