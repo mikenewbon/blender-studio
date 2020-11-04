@@ -14,7 +14,6 @@ from training.typed_templates.types import SectionProgressReportingData
 from training.views.common import (
     chapter_model_to_template_type,
     navigation_to_template_type,
-    section_model_to_template_type,
     training_model_to_template_type,
     video_model_to_template_type,
 )
@@ -58,7 +57,7 @@ def section(
         request,
         training=training_model_to_template_type(training, training_favorited),
         chapter=chapter_model_to_template_type(chapter),
-        section=section_model_to_template_type(section),
+        section=section,
         video=video,
         comments=comments_to_template_type(comments, section.comment_url, user=request.user,),
         section_progress_reporting_data=SectionProgressReportingData(

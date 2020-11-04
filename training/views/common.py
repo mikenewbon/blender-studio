@@ -43,26 +43,6 @@ def chapter_model_to_template_type(chapter: chapters.Chapter,) -> typed_template
     )
 
 
-def section_model_to_template_type(
-    section: sections_models.Section,
-) -> typed_templates.types.Section:
-    return typed_templates.types.Section(
-        index=section.index,
-        name=section.name,
-        text=markdown.render(section.text),
-        url=section.url,
-        download_url=section.download_url,
-        download_size=section.download_size,
-        is_free=section.is_free,
-        is_featured=section.is_featured,
-        is_published=section.is_published,
-        thumbnail_s_url=section.thumbnail_s_url,
-        thumbnail_m_url=section.thumbnail_m_url,
-        static_asset=section.static_asset,
-        date_created=section.date_created,
-    )
-
-
 def video_model_to_template_type(
     video: models_static_assets.Video, start_position: Optional[datetime.timedelta]
 ) -> typed_templates.types.Video:

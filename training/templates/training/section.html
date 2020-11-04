@@ -35,8 +35,8 @@
   {% else %}
   <div class="col training-video">
     {% if request.user.is_authenticated and request.user|has_group:"subscriber" or section.is_free %}
-    {% if section.static_asset.source_type == "image" %}
-    {% include "common/components/helpers/image_set.html" with alt=section.name classes="img-fluid img-width-100 rounded" img_source=section.static_asset.source xsmall_width="600" small_width="800" medium_width="1000" large_width="1200" xlarge_width="1920" %}
+    {% if section.thumbnail %}
+    {% include "common/components/helpers/image_set.html" with alt=section.name classes="img-fluid img-width-100 rounded" img_source=section.thumbnail xsmall_width="600" small_width="800" medium_width="1000" large_width="1200" xlarge_width="1920" %}
     {% endif %}
     {% else %}
     {% include 'common/components/content_locked.html' with background=training.picture_header %}
@@ -119,7 +119,7 @@
       </div>
     </div>
 
-    <section class="mb-3 markdown-text">{% with_shortcodes section.text %}</section>
+    <section class="mb-3 markdown-text">{% with_shortcodes section.text|markdown %}</section>
 
     {% comment %} <div class="card card-dark d-md-none">
       <div class="card-body">
