@@ -10,7 +10,7 @@ from taggit.models import Tag
 from blog.models import Revision
 from films.models import Film, Asset
 from search.serializers.base import SearchableModel, BaseSearchSerializer
-from training.models import Training, Section, TrainingStatus
+from training.models import Training, Section
 
 
 class MainSearchSerializer(BaseSearchSerializer):
@@ -20,8 +20,8 @@ class MainSearchSerializer(BaseSearchSerializer):
     filter_params = {
         Film: {'is_published': True},
         Asset: {'is_published': True, 'film__is_published': True},
-        Training: {'status': TrainingStatus.published},
-        Section: {'chapter__training__status': TrainingStatus.published, 'is_published': True},
+        Training: {'is_published': True},
+        Section: {'chapter__training__is_published': True, 'is_published': True},
         Revision: {'is_published': True, 'post__is_published': True},
     }
     annotations = {

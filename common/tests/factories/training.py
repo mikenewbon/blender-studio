@@ -6,7 +6,6 @@ from common.tests.factories.helpers import generate_image_path
 from search import signals as search_signals
 from training.models import (
     Training,
-    TrainingStatus,
     TrainingType,
     TrainingDifficulty,
     Chapter,
@@ -24,7 +23,6 @@ class TrainingFactory(DjangoModelFactory):
     slug = factory.Faker('slug')
     description = factory.Faker('sentence')
     summary = factory.Faker('paragraph')
-    status = fuzzy.FuzzyChoice(TrainingStatus.choices, getter=lambda c: c[0])
     type = fuzzy.FuzzyChoice(TrainingType.choices, getter=lambda c: c[0])
     difficulty = fuzzy.FuzzyChoice(TrainingDifficulty.choices, getter=lambda c: c[0])
     picture_header = factory.LazyFunction(generate_image_path)

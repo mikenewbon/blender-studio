@@ -34,6 +34,8 @@ class TrainingAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     list_display = [
         '__str__',
+        'is_published',
+        'is_featured',
         with_name('url', lambda obj: format_html('<a href="{url}">{url}</a>', url=obj.url)),
     ]
     search_fields = [

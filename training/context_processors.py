@@ -2,7 +2,7 @@ from typing import Mapping, List
 
 from django.http.request import HttpRequest
 
-from training.models.trainings import TrainingDifficulty, TrainingType, TrainingStatus
+from training.models.trainings import TrainingDifficulty, TrainingType
 from training.queries import trainings
 
 
@@ -11,7 +11,6 @@ def enums(request: HttpRequest) -> Mapping[str, object]:
     return {
         'TrainingDifficulty': TrainingDifficulty,
         'TrainingType': TrainingType,
-        'TrainingStatus': TrainingStatus,
     }
 
 

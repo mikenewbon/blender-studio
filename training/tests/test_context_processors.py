@@ -3,7 +3,7 @@ from django.test import RequestFactory, TestCase
 
 from common.tests.factories.training import TrainingFactory
 from training import context_processors
-from training.models import TrainingStatus, Training
+from training.models import Training
 from training.queries.trainings import set_favorite
 
 
@@ -16,7 +16,7 @@ class ContextProcessorsTest(TestCase):
         request.user = AnonymousUser()
 
         # Create 1 published training
-        TrainingFactory(status=TrainingStatus.published)
+        TrainingFactory(is_published=True)
 
         context = context_processors.favorited(request)
 
@@ -28,9 +28,9 @@ class ContextProcessorsTest(TestCase):
         request.user = user
 
         # Create 3 published trainings, 2 of them favorited by John
-        TrainingFactory(status=TrainingStatus.published)
-        training_fav1: Training = TrainingFactory(status=TrainingStatus.published)
-        training_fav2: Training = TrainingFactory(status=TrainingStatus.published)
+        TrainingFactory(is_published=True)
+        training_fav1: Training = TrainingFactory(is_published=True)
+        training_fav2: Training = TrainingFactory(is_published=True)
         set_favorite(training_pk=training_fav1.pk, user_pk=user.pk, favorite=True)
         set_favorite(training_pk=training_fav2.pk, user_pk=user.pk, favorite=True)
 

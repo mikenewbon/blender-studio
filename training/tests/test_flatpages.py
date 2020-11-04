@@ -65,7 +65,7 @@ class TestTrainingFlatPage(TestCase):
         self.training_slug = 'scripting-for-artists'
         self.page_slug = 'blender-28'
         self.content = '## A very specific flat page'
-        self.training = TrainingFactory(slug=self.training_slug, status='published')
+        self.training = TrainingFactory(slug=self.training_slug, is_published=True)
         self.page = TrainingFlatPageFactory(
             training=self.training, slug=self.page_slug, content=self.content
         )

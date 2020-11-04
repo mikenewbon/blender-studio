@@ -7,19 +7,19 @@ import static_assets.models as models_static_assets
 
 
 def _published() -> 'QuerySet[trainings.Training]':
-    return trainings.Training.objects.filter(status=trainings.TrainingStatus.published)
+    return trainings.Training.objects.filter(is_published=True)
 
 
 def set_favorite(*, training_pk: int, user_pk: int, favorite: bool) -> None:
     if favorite:
         trainings.Favorite.objects.filter(
-            training__status=trainings.TrainingStatus.published
+            training__is_published=True
         ).update_or_create(
             training_id=training_pk, user_id=user_pk,
         )
     else:
         trainings.Favorite.objects.filter(
-            training__status=trainings.TrainingStatus.published,
+            training__is_published=True,
             training_id=training_pk,
             user_id=user_pk,
         ).delete()

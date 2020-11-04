@@ -11,9 +11,7 @@ import static_assets.models as models_static_assets
 
 
 def _published() -> 'QuerySet[sections.Section]':
-    return sections.Section.objects.filter(
-        chapter__training__status=trainings.TrainingStatus.published
-    )
+    return sections.Section.objects.filter(chapter__training__is_published=True)
 
 
 def recently_watched(*, user_pk: int) -> List[sections.Section]:

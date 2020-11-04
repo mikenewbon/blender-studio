@@ -4,7 +4,7 @@ from taggit.models import Tag
 
 from films.models import Asset, AssetCategory
 from search.serializers.base import BaseSearchSerializer
-from training.models import Training, TrainingStatus
+from training.models import Training
 
 clean_tag = BaseSearchSerializer.clean_tag
 
@@ -14,7 +14,7 @@ class TrainingSearchSerializer(BaseSearchSerializer):
 
     models_to_index = [Training, Asset]
     filter_params = {
-        Training: {'status': TrainingStatus.published},
+        Training: {'is_published': True},
         Asset: {
             'is_published': True,
             'film__is_published': True,

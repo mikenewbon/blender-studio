@@ -8,11 +8,6 @@ from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
 
 
-class TrainingStatus(models.TextChoices):
-    published = 'published', 'Published'
-    unpublished = 'unpublished', 'Unpublished'
-
-
 class TrainingType(models.TextChoices):
     workshop = 'workshop', 'Workshop'
     course = 'course', 'Course'
@@ -29,8 +24,8 @@ class Training(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, model
         ordering = ['-date_created']
 
         indexes = [
-            models.Index(fields=['status', 'type', 'difficulty']),
-            models.Index(fields=['status', 'difficulty', 'type']),
+            models.Index(fields=['is_published', 'type', 'difficulty']),
+            models.Index(fields=['is_published', 'difficulty', 'type']),
         ]
 
     name = models.CharField(unique=True, max_length=512)
@@ -40,7 +35,7 @@ class Training(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, model
     summary = models.TextField()
     summary.description = 'Summary consisting of multiple paragraphs.'
 
-    status = models.TextField(choices=TrainingStatus.choices)
+    is_published = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)
 
     tags = TaggableManager(blank=True)
@@ -54,12 +49,6 @@ class Training(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, model
         super().clean()
         if not self.slug:
             self.slug = slugify(self.name)
-
-    # TODO(anna): get rid of TrainingStatus, replace with a boolean is_published
-    @property
-    def is_published(self) -> bool:
-        """Return published status."""
-        return self.status == 'published'
 
     def __str__(self) -> str:
         return self.name

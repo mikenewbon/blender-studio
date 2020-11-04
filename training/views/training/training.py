@@ -10,7 +10,7 @@ from common.typed_templates.types import TypeSafeTemplateResponse
 from training import queries
 from training.typed_templates.training import training as typed_template_training
 from training.views.common import navigation_to_template_type, training_model_to_template_type
-from training.models import Training, TrainingStatus, TrainingFlatPage
+from training.models import Training, TrainingFlatPage
 
 
 @require_safe
@@ -55,7 +55,7 @@ def flatpage(request: HttpRequest, training_slug: str, page_slug: str) -> HttpRe
 
     :template:`training/flatpage.html`
     """
-    training = get_object_or_404(Training, slug=training_slug, status=TrainingStatus.published)
+    training = get_object_or_404(Training, slug=training_slug, is_published=True)
     flatpage = get_object_or_404(TrainingFlatPage, training=training, slug=page_slug)
     context = {
         'training': training,
