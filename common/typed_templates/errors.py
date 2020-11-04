@@ -6,5 +6,5 @@ from common.typed_templates.types import TypeSafeTemplateResponse
 
 def not_found(request: HttpRequest) -> TypeSafeTemplateResponse:
     return TypeSafeTemplateResponse(
-        TemplateResponse(request, 'common/errors/not_found.html', status=404)
+        TemplateResponse(request, 'common/errors/404.html', status=404)
     )
