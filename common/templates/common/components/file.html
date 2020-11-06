@@ -2,7 +2,7 @@
 {% load thumbnail %}
 {% load common_extras %}
 
-<div class="file grid-item {{ card_sizes|default:"col-12 col-sm-6 col-md-6 col-lg-4" }} {% if request.user.is_authenticated and request.user|has_group:"subscriber" or asset.is_free %}{% else %}locked{% endif%}">
+<div class="file grid-item {{ card_sizes|default:"col-12 col-sm-6 col-md-6 col-lg-4" }} {% if aspect_ratio == "16:9" %}widescreen{% elif aspect_ratio == "4:3" %}fourbythree{% elif aspect_ratio == "1:1" %}square{% endif %} {% if request.user.is_authenticated and request.user|has_group:"subscriber" or asset.is_free %}{% else %}locked{% endif%}">
   <div class="file-header">
     <a href="?asset={{ asset.id }}" class="file-modal-link" data-asset-id="{{ asset.id }}"
       data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">

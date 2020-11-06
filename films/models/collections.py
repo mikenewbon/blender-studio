@@ -9,6 +9,13 @@ from films.models import films
 import common.help_texts
 
 
+class ThumbnailAspectRatioChoices(models.TextChoices):
+    original = 'original', 'Original'
+    square = '1:1', 'Square (1:1)'
+    widescreen = '16:9', 'Widescreen (16:9)'
+    four_by_three = '4:3', 'Four-By-Three (4:3)'
+
+
 class Collection(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Model):
     class Meta:
         ordering = ['order', 'date_created']
@@ -30,6 +37,12 @@ class Collection(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mod
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
 
     thumbnail = models.FileField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
+    thumbnail_aspect_ratio = models.CharField(
+        choices=ThumbnailAspectRatioChoices.choices,
+        max_length=10,
+        default=ThumbnailAspectRatioChoices.original,
+        help_text='Controls aspect ratio of the thumbnails shown in the gallery.',
+    )
 
     def clean(self) -> None:
         super().clean()

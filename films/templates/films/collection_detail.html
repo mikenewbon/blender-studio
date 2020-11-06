@@ -21,7 +21,7 @@
       {% if current_assets %}
       {% for asset in current_assets %}
       {% if asset.is_published or request.user.is_superuser %}
-      {% include "common/components/file.html" with asset=asset site_context="gallery" %}
+      {% include "common/components/file.html" with asset=asset site_context="gallery" aspect_ratio=current_collection.thumbnail_aspect_ratio %}
       {% endif %}
       {% endfor %}
       {% endif %}
