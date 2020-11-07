@@ -348,7 +348,7 @@ class TestSiteMetadata(TestCase):
     def test_blog_post(self):
         post = PostFactory()
         revision = RevisionFactory(post=post)
-        page_url = reverse('post-detail', kwargs={'post_slug': post.slug})
+        page_url = reverse('post-detail', kwargs={'slug': post.slug})
 
         response = self.client.get(page_url + '?foo=bar')
 

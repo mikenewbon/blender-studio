@@ -1,13 +1,13 @@
 <div class="{% block classes %}grid-item{% endblock classes %}">
   <div class="card card-dark card-hover card-media">
     <div class="card-header">
-      <a class="card-header-link" href="{% url 'post-detail' post_slug=post.slug %}">
+      <a class="card-header-link" href="{% url 'post-detail' slug=post.slug %}">
         {% block image %}
         {% include "common/components/helpers/image_set.html" with alt=post.title classes="card-image" img_source=post.thumbnail xsmall_width="350" small_width="350" medium_width="350" large_width="350" xlarge_width="350" %}
         {% endblock image %}
       </a>
     </div>
-    <a href="{% url 'post-detail' post_slug=post.slug %}" class="card-body">
+    <a href="{% url 'post-detail' slug=post.slug %}" class="card-body">
       <div class="card-subtitle-group">
 
         <p class="card-subtitle">
@@ -22,7 +22,7 @@
         <p class="card-subtitle">
           <i class="material-icons icon-inline small">schedule</i>
           <span class="date">
-          {{ post.date_created|date:"U" }}
+          {{ post.date_published|date:"U" }}
           </span>
         </p>
         {% endif %}

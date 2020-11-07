@@ -6,7 +6,7 @@ from django.conf import settings
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
-from blog.models import Revision
+from blog.models import Post
 from common.types import assert_cast
 from films.models import Film, Asset
 from search import MAIN_INDEX_UIDS, TRAINING_INDEX_UIDS, ALL_INDEX_UIDS
@@ -77,7 +77,7 @@ class TrainingPostSaveSearchIndexer(BasePostSaveSearchIndexer):
 @receiver(post_save, sender=Asset)
 @receiver(post_save, sender=Training)
 @receiver(post_save, sender=Section)
-@receiver(post_save, sender=Revision)
+@receiver(post_save, sender=Post)
 def update_main_search_indexes(
     sender: Type[SearchableModel], instance: SearchableModel, **kwargs: Any
 ) -> None:
@@ -104,7 +104,7 @@ def update_training_search_index(
 @receiver(pre_delete, sender=Asset)
 @receiver(pre_delete, sender=Training)
 @receiver(pre_delete, sender=Section)
-@receiver(pre_delete, sender=Revision)
+@receiver(pre_delete, sender=Post)
 def delete_from_index(
     sender: Type[SearchableModel], instance: SearchableModel, **kwargs: Any
 ) -> None:
@@ -118,20 +118,7 @@ def delete_from_index(
         log.error(f'Did not update search indexes pre_delete: {err}')
         return
 
-    if isinstance(instance, Revision):
-        # Only send the signal if the deleted revision is the latest one of a post.
-        # Normally revisions should only be deleted when the related blog post is deleted.
-        # TODO(Nat): Manually deleting a revision won't revert the indexed post version to the previous one.
-        if (
-            instance.post.is_published
-            and instance.post.revisions.filter(is_published=True).latest('date_created').pk
-            == instance.pk
-        ):
-            search_id = f'post_{instance.post.id}'
-        else:
-            return
-    else:
-        search_id = f'{sender._meta.model_name}_{instance.id}'
+    search_id = f'{sender._meta.model_name}_{instance.id}'
 
     for index_uid in ALL_INDEX_UIDS:
         settings.SEARCH_CLIENT.get_index(index_uid).delete_document(search_id)
