@@ -14,7 +14,7 @@ class TestCommentTreeConstruction(TestCase):
         cls.user = UserFactory()
         cls.other_user = UserFactory()
         cls.post = RevisionFactory().post
-        cls.post_url = reverse('post-detail', kwargs={'post_slug': cls.post.slug})
+        cls.post_url = reverse('post-detail', kwargs={'slug': cls.post.slug})
 
     def setUp(self) -> None:
         self.comment_no_replies = CommentUnderPostFactory(comment_post__post=self.post)

@@ -1,4 +1,5 @@
 from abc import ABC
+import bleach
 from html.parser import HTMLParser
 from io import StringIO
 from typing import Optional, Any, Type, Dict, Union, Callable, List, TYPE_CHECKING
@@ -14,11 +15,11 @@ if TYPE_CHECKING:
     # ValuesQuerySet has long been removed from Django, but it is required by mypy
     from django.db.models.query import ValuesQuerySet
 
-from blog.models import Revision
+from blog.models import Post
 from films.models import Film, Asset
 from training.models import Training, Section
 
-SearchableModel = Union[Film, Asset, Training, Section, Revision]
+SearchableModel = Union[Film, Asset, Training, Section, Post]
 
 
 class HTMLText(HTMLParser):

@@ -2,8 +2,8 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
-from blog.models import Post, Revision
-from common.tests.factories.blog import RevisionFactory, PostFactory
+from blog.models import Post
+from common.tests.factories.blog import PostFactory
 from common.tests.factories.films import FilmFactory
 from common.tests.factories.helpers import create_test_image
 
@@ -23,40 +23,35 @@ class TestPostAndRevisionCreation(TestCase):
 
     def test_post_creation(self):
         initial_post_count = Post.objects.count()
-        initial_revision_count = Revision.objects.count()
 
         with self.thumbnail as img:
             post_form_data = {
                 'film': self.film.id,
                 'title': 'New blog post',
+                'slug': 'new-blog-post',
                 'topic': 'Announcement',
                 'content': '# Test text',
                 'thumbnail': img,
+                'author': self.admin.id,
             }
             response = self.client.post(self.post_add_url, post_form_data, follow=True)
             self.assertEqual(response.status_code, 200)
 
         self.assertEqual(Post.objects.count(), initial_post_count + 1)
-        self.assertEqual(Revision.objects.count(), initial_revision_count + 1)
-        revision = Revision.objects.latest('date_created')
-        self.assertHTMLEqual(revision.html_content, '<h1>Test text</h1>')
+        post = Post.objects.latest('date_created')
+        self.assertHTMLEqual(post.content_html, '<h1>Test text</h1>')
 
     def test_updating_post_creates_new_revision(self):
         post = PostFactory()
-        revision = RevisionFactory(post=post)
         initial_post_count = Post.objects.count()
-        initial_revision_count = Revision.objects.count()
 
-        post_change_url = reverse('admin:blog_post_change', kwargs={'object_id': revision.post.pk})
+        post_change_url = reverse('admin:blog_post_change', kwargs={'object_id': post.pk})
         change_data = {
-            'title': revision.title,
-            'topic': revision.topic,
+            'title': post.title,
+            'category': post.category,
             'content': 'Updated content with *markdown*',
         }
         response = self.client.post(post_change_url, change_data, follow=True)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Post.objects.count(), initial_post_count)
-        self.assertEqual(Revision.objects.count(), initial_revision_count + 1)
-        latest_revision = post.revisions.latest('date_created')
-        self.assertEqual(latest_revision.content, change_data['content'])

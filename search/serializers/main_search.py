@@ -7,7 +7,7 @@ from django.db.models.functions.text import Concat
 from django.db.models.query import QuerySet
 from taggit.models import Tag
 
-from blog.models import Revision
+from blog.models import Post
 from films.models import Film, Asset
 from search.serializers.base import SearchableModel, BaseSearchSerializer
 from training.models import Training, Section
@@ -16,13 +16,13 @@ from training.models import Training, Section
 class MainSearchSerializer(BaseSearchSerializer):
     """Prepare database objects to be indexed in the main search index."""
 
-    models_to_index = [Film, Asset, Training, Section, Revision]
+    models_to_index = [Film, Asset, Training, Section, Post]
     filter_params = {
         Film: {'is_published': True},
         Asset: {'is_published': True, 'film__is_published': True},
         Training: {'is_published': True},
         Section: {'chapter__training__is_published': True, 'is_published': True},
-        Revision: {'is_published': True, 'post__is_published': True},
+        Post: {'is_published': True},
     }
     annotations = {
         Film: {'project': F('title'), 'name': F('title')},
@@ -53,9 +53,9 @@ class MainSearchSerializer(BaseSearchSerializer):
                 output_field=CharField(),
             ),
         },
-        Revision: {
+        Post: {
             'project': Case(
-                When(post__film__isnull=False, then=F('post__film__title')),
+                When(film__isnull=False, then=F('film__title')),
                 default=Value(''),
                 output_field=CharField(),
             ),
@@ -82,7 +82,7 @@ class MainSearchSerializer(BaseSearchSerializer):
                 lambda instance: instance.media_type.split() if instance.media_type else []
             ),
         },
-        Revision: {},
+        Post: {'description': lambda instance: '' if not instance.excerpt else instance.excerpt},
     }
 
     def get_searchable_queryset(
@@ -90,33 +90,16 @@ class MainSearchSerializer(BaseSearchSerializer):
     ) -> 'QuerySet[SearchableModel]':
         queryset = super().get_searchable_queryset(model, **filter_params)
 
-        if model == Revision:
-            # Only the latest revision of a post should be available in search
-            queryset = queryset.order_by('post_id', '-date_created').distinct('post_id')
-
         return queryset
-
-    def _add_common_annotations(
-        self, queryset: 'QuerySet[SearchableModel]',
-    ) -> 'QuerySet[SearchableModel]':
-        model = queryset.model._meta.model_name
-        if model == 'revision':
-            # 'Revision' is the actual model for internal use, but the user searches for posts.
-            # Also: the search_id is set to post's id, so that in the search index a new revision
-            # always overwrites the previous one, which should not be searchable any more.
-            return queryset.annotate(
-                model=Value('post', output_field=CharField()),
-                search_id=Concat(Value('post_'), 'post__id', output_field=CharField()),
-            )
-        return super()._add_common_annotations(queryset)
 
     def _set_common_additional_fields(
         self, instance_dict: Dict[Any, Any], instance: SearchableModel
     ) -> Dict[Any, Any]:
         instance_dict = super()._set_common_additional_fields(instance_dict, instance)
 
-        if isinstance(instance, Revision):
-            instance_dict['timestamp'] = instance.post.date_created.timestamp()
+        if isinstance(instance, Post):
+            # TODO(fsiddi) Switch to date_published, and take care of 'None' case
+            instance_dict['timestamp'] = instance.date_created.timestamp()
         elif isinstance(instance, Film) and instance.release_date is not None:
             instance_dict['timestamp'] = dt.datetime(
                 year=instance.release_date.year,

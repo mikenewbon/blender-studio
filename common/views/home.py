@@ -6,7 +6,7 @@ from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_safe
 
-from blog.queries import get_latest_post_revisions
+import blog.models as models_blog
 from films.models import Film
 from films.queries import get_random_featured_assets
 from training.models import Training, Section
@@ -40,7 +40,9 @@ def home(request: HttpRequest) -> HttpResponse:
         'featured_films': Film.objects.filter(is_featured=True),
         'featured_trainings': Training.objects.filter(),
         'featured_film_assets': get_random_featured_assets(limit=8),
-        'latest_posts': get_latest_post_revisions(limit=6),
+        'latest_posts': models_blog.Post.objects.filter(is_published=True).order_by(
+            '-date_created'
+        )[:6],
         'recently_watched_sections': [],
     }
     if request.user.is_authenticated:

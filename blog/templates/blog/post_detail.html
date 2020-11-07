@@ -5,7 +5,7 @@
 {% block title_append %} - {{ post.title }}{% endblock title_append %}
 
 {% block meta %}
-{% with title=post.title description=post.description image_url=post.thumbnail_m_url %}
+{% with title=post.title description=post.excerpt image_url=post.thumbnail_m_url %}
 {% include 'common/components/meta.html' %}
 {% endwith %}
 {% endblock %}
@@ -21,9 +21,9 @@
 
     <div class="row mb-3">
       <div class="col col-lg-11">
-        <p class="subtitle">{{ post.topic }}</p>
+        <p class="subtitle">{{ post.category }}</p>
         <h1 class="display-3">{{ post.title|linebreaksbr }}</h1>
-        <p class="subtitle">{{ post_date_created|date:"jS M Y" }}</p>
+        <p class="subtitle">{{ post.date_published|date:"jS M Y" }}</p>
       </div>
     </div>
     <div class="row">
@@ -48,7 +48,7 @@
 
   {% comment %} <p class="subtitle">{{ post.topic }}</p>
   <h1 class="">{{ post.title }}</h1>
-  <p class="subtitle small mb-3">{{ post_date_created|date:"jS M Y" }}</p> {% endcomment %}
+  <p class="subtitle small mb-3">{{ post.date_published|date:"jS M Y" }}</p> {% endcomment %}
   {% comment %} <div class="training-toolbar-container mb-3">
     <div class="training-toolbar-details row">
 
@@ -98,7 +98,7 @@
 
   </div> {% endcomment %}
 
-  <div class="markdown-text">{% with_shortcodes post.html_content %}</div>
+  <div class="markdown-text">{% with_shortcodes post.content_html %}</div>
 
   <section class="mb-3">{% include 'comments/components/comment_section.html' %}</section>
 
