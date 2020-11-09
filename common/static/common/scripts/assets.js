@@ -156,15 +156,17 @@ window.asset = (function asset() {
         <span class="label--not-pressed plyr__sr-only">Enable looping</span>
       </button>
       `;
+      if (document.querySelector('.video-player video')) {
+        videoPlayer.elements.container.addEventListener('ready', () => {
+          videoPlayer.elements.controls.querySelector('.plyr__menu').insertAdjacentHTML('afterend', loopButton)
 
-      videoPlayer.elements.container.addEventListener('ready', () => {
-        videoPlayer.elements.controls.querySelector('.plyr__menu').insertAdjacentHTML('afterend', loopButton)
+          videoPlayer.elements.controls.querySelector('[data-plyr="loop"]').addEventListener('click', event => {
+            event.target.classList.toggle("plyr__control--pressed");
+            videoPlayer.media.loop = !videoPlayer.media.loop;
+          })
+        });
+      }
 
-        videoPlayer.elements.controls.querySelector('[data-plyr="loop"]').addEventListener('click', event => {
-          event.target.classList.toggle("plyr__control--pressed");
-          videoPlayer.media.loop = !videoPlayer.media.loop;
-        })
-      });
 
       modal.focus();
 
