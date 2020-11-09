@@ -3,6 +3,8 @@ from unittest.mock import patch, ANY
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import RequestFactory, TransactionTestCase, TestCase, override_settings
+from django.urls.base import reverse
+from freezegun import freeze_time
 import responses
 
 import blender_id_oauth_client.models as models
@@ -16,18 +18,18 @@ session_cookie_value = '.eJyNj7FOAzEQRP_FNYXtXdu7-YOIDkgkqpO9u9Yhogvc5USB-HesFNS
 remember_token_value = '0rh4aUVwpT36dVnch9squIuYKcSRUI|82f757dc73a2a87ea43f0a985e656df2c9fbd56bb6394f0c095c5b70baefec32fb3b8b0c8b4d45d0a9f30a1763cfbd69b0fae34e6aa099809f084c6285623903'  # noqa: E501
 
 
-@override_settings(
-    BLENDER_CLOUD_SECRET_KEY='supersecret', BLENDER_CLOUD_AUTH_ENABLED=True,
-)
+@override_settings(BLENDER_CLOUD_SECRET_KEY='supersecret', BLENDER_CLOUD_AUTH_ENABLED=True)
+@freeze_time('2020-10-14 11:41:11')  # test cookies contain fixed expiration times
 class TestSession(TestCase):
     maxDiff = None
 
     def setUp(self):
         self.factory = RequestFactory()
         util.mock_blender_id_responses()
+        self.test_url = reverse('film-list')
 
     def test_open_session_authenticated_user(self):
-        request = self.factory.get('/')
+        request = self.factory.get(self.test_url)
         request.COOKIES[settings.BLENDER_CLOUD_SESSION_COOKIE_NAME] = session_cookie_value
 
         session = open_session(request)
@@ -45,7 +47,7 @@ class TestSession(TestCase):
         )
 
     def test_open_session_broken_session_cookie(self):
-        request = self.factory.get('/')
+        request = self.factory.get(self.test_url)
         request.COOKIES[settings.BLENDER_CLOUD_SESSION_COOKIE_NAME] = 'foobar'
 
         session = open_session(request)
@@ -53,7 +55,7 @@ class TestSession(TestCase):
         self.assertDictEqual(session, {})
 
     def test_open_session_anonymous_session(self):
-        request = self.factory.get('/')
+        request = self.factory.get(self.test_url)
         request.COOKIES[settings.BLENDER_CLOUD_SESSION_COOKIE_NAME] = session_cookie_value_anon
 
         session = open_session(request)
@@ -61,7 +63,7 @@ class TestSession(TestCase):
         self.assertDictEqual(session, {'next_after_login': '/'})
 
     def test_get_or_create_current_user_anonymous_session(self):
-        request = self.factory.get('/')
+        request = self.factory.get(self.test_url)
         request.COOKIES[settings.BLENDER_CLOUD_SESSION_COOKIE_NAME] = session_cookie_value_anon
 
         user = get_or_create_current_user(request)
@@ -71,7 +73,7 @@ class TestSession(TestCase):
     @responses.activate
     def test_get_or_create_current_user_creates_new_user(self):
         self.assertFalse(User.objects.filter(email='jane@example.com').exists())
-        request = self.factory.get('/')
+        request = self.factory.get(self.test_url)
         request.COOKIES[settings.BLENDER_CLOUD_SESSION_COOKIE_NAME] = session_cookie_value
 
         user = get_or_create_current_user(request)
@@ -89,8 +91,8 @@ class TestSession(TestCase):
 
     @responses.activate
     def test_get_or_create_current_user_existing_user(self):
-        existing_user = UserFactory(email='somemail@example.com', oauth_info__oauth_user_id='2',)
-        request = self.factory.get('/')
+        existing_user = UserFactory(email='somemail@example.com', oauth_info__oauth_user_id='2')
+        request = self.factory.get(self.test_url)
         request.COOKIES[settings.BLENDER_CLOUD_SESSION_COOKIE_NAME] = session_cookie_value
 
         user = get_or_create_current_user(request)
@@ -103,9 +105,9 @@ class TestSession(TestCase):
 
     @responses.activate
     def test_get_or_create_current_user_allows_duplicate_email(self):
-        UserFactory(email='jane@example.com',)
-        existing_user = UserFactory(email='somemail@example.com', oauth_info__oauth_user_id='2',)
-        request = self.factory.get('/')
+        UserFactory(email='jane@example.com')
+        existing_user = UserFactory(email='somemail@example.com', oauth_info__oauth_user_id='2')
+        request = self.factory.get(self.test_url)
         request.COOKIES[settings.BLENDER_CLOUD_SESSION_COOKIE_NAME] = session_cookie_value
 
         user = get_or_create_current_user(request)
@@ -122,7 +124,7 @@ class TestSession(TestCase):
             email='jane@example.com',
             oauth_info__oauth_user_id='2',
         )
-        request = self.factory.get('/')
+        request = self.factory.get(self.test_url)
         request.COOKIES[settings.BLENDER_CLOUD_SESSION_COOKIE_NAME] = session_cookie_value
 
         # Sort of emulate the situation when OAuthUserInfo was created by another request:
@@ -143,9 +145,9 @@ class TestSession(TestCase):
 
     @responses.activate
     def test_get_or_create_current_user_from_remember_token(self):
-        UserFactory(email='jane@example.com',)
+        UserFactory(email='jane@example.com')
         existing_user = UserFactory(email='somemail@example.com', oauth_info__oauth_user_id='2')
-        request = self.factory.get('/')
+        request = self.factory.get(self.test_url)
         request.COOKIES[settings.BLENDER_CLOUD_REMEMBER_COOKIE_NAME] = remember_token_value
 
         user = get_or_create_current_user(request)
@@ -157,7 +159,7 @@ class TestSession(TestCase):
 
     @responses.activate
     def test_get_or_create_current_user_missing_session_cookie(self):
-        request = self.factory.get('/')
+        request = self.factory.get(self.test_url)
 
         user = get_or_create_current_user(request)
 
@@ -165,7 +167,7 @@ class TestSession(TestCase):
 
     @responses.activate
     def test_get_or_create_current_user_broken_session_cookie(self):
-        request = self.factory.get('/')
+        request = self.factory.get(self.test_url)
         request.COOKIES[settings.BLENDER_CLOUD_REMEMBER_COOKIE_NAME] = 'foobar'
 
         user = get_or_create_current_user(request)
@@ -174,7 +176,7 @@ class TestSession(TestCase):
 
     @responses.activate
     def test_get_or_create_current_user_broken_remember_cookies(self):
-        request = self.factory.get('/')
+        request = self.factory.get(self.test_url)
         request.COOKIES[settings.BLENDER_CLOUD_REMEMBER_COOKIE_NAME] = 'foobar'
 
         user = get_or_create_current_user(request)
@@ -183,7 +185,7 @@ class TestSession(TestCase):
 
     @responses.activate
     def test_get_or_create_current_user_broken_session_and_remember_cookies(self):
-        request = self.factory.get('/')
+        request = self.factory.get(self.test_url)
         request.COOKIES[settings.BLENDER_CLOUD_SESSION_COOKIE_NAME] = 'foobar'
         request.COOKIES[settings.BLENDER_CLOUD_REMEMBER_COOKIE_NAME] = 'foobar'
 
@@ -192,9 +194,8 @@ class TestSession(TestCase):
         self.assertIsNone(user)
 
 
-@override_settings(
-    BLENDER_CLOUD_SECRET_KEY='supersecret', BLENDER_CLOUD_AUTH_ENABLED=True,
-)
+@override_settings(BLENDER_CLOUD_SECRET_KEY='supersecret', BLENDER_CLOUD_AUTH_ENABLED=True)
+@freeze_time('2020-10-14 11:41:11')  # test cookies contain fixed expiration times
 class TestIntegrityErrors(TransactionTestCase):
     """Check that get_or_create_current_user handles cases that trigger `IntegrityError`s.
 
@@ -208,12 +209,13 @@ class TestIntegrityErrors(TransactionTestCase):
     def setUp(self):
         self.factory = RequestFactory()
         util.mock_blender_id_responses()
+        self.test_url = reverse('film-list')
 
     @responses.activate
     def test_get_or_create_current_user_handles_duplicate_username(self):
-        UserFactory(username='ⅉanedoe',)
-        existing_user = UserFactory(email='somemail@example.com', oauth_info__oauth_user_id='2',)
-        request = self.factory.get('/')
+        UserFactory(username='ⅉanedoe')
+        existing_user = UserFactory(email='somemail@example.com', oauth_info__oauth_user_id='2')
+        request = self.factory.get(self.test_url)
         request.COOKIES[settings.BLENDER_CLOUD_SESSION_COOKIE_NAME] = session_cookie_value
 
         with self.assertLogs('blendercloud.session', level='ERROR') as logs:

@@ -403,6 +403,17 @@ docs = ["sphinx", "pallets-sphinx-themes", "sphinxcontrib-log-cabinet"]
 dotenv = ["python-dotenv"]
 
 [[package]]
+name = "freezegun"
+version = "1.0.0"
+description = "Let your Python tests travel through time"
+category = "dev"
+optional = false
+python-versions = ">=3.5"
+
+[package.dependencies]
+python-dateutil = ">=2.7"
+
+[[package]]
 name = "geoip2"
 version = "3.0.0"
 description = "MaxMind GeoIP2 API"
@@ -1250,7 +1261,7 @@ watchdog = ["watchdog"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "59d1ca7911c4a1307a678e99ddf5dedda177fb4082fa943ccf2054a1e6809b08"
+content-hash = "5b1ee06aab63ab95cfa152c8428c122c3159614c9679163da85a0eb7f08135fb"
 
 [metadata.files]
 appdirs = [
@@ -1415,6 +1426,10 @@ flake8-docstrings = [
 flask = [
     {file = "Flask-1.0.3-py2.py3-none-any.whl", hash = "sha256:e7d32475d1de5facaa55e3958bc4ec66d3762076b074296aa50ef8fdc5b9df61"},
     {file = "Flask-1.0.3.tar.gz", hash = "sha256:ad7c6d841e64296b962296c2c2dabc6543752985727af86a975072dea984b6f3"},
+]
+freezegun = [
+    {file = "freezegun-1.0.0-py2.py3-none-any.whl", hash = "sha256:02b35de52f4699a78f6ac4518e4cd3390dddc43b0aeb978335a8f270a2d9668b"},
+    {file = "freezegun-1.0.0.tar.gz", hash = "sha256:1cf08e441f913ff5e59b19cc065a8faa9dd1ddc442eaf0375294f344581a0643"},
 ]
 geoip2 = [
     {file = "geoip2-3.0.0-py2.py3-none-any.whl", hash = "sha256:99ec12d2f1271a73a0a4a2b663fe6ce25fd02289c0a6bef05c0a1c3b30ee95a4"},
