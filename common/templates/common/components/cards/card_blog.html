@@ -11,7 +11,7 @@
       <div class="card-subtitle-group">
 
         <p class="card-subtitle">
-          {{ post.topic|title }}
+          {{ post.category|title }}
         </p>
 
         {% if post.is_new %}
@@ -29,7 +29,7 @@
 
       </div>
       <h3 class="card-title">{{ post.title }}</h3>
-      <p class="card-text">{{ post.description }}</p>
+      <p class="card-text">{{ post.excerpt }}</p>
 
     </a>
   </div>
