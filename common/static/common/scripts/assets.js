@@ -142,8 +142,7 @@ window.asset = (function asset() {
       // Create a new video player for the modal
       $(baseModalId).modal('show');
 
-      const videoPlayer = new Plyr(document.querySelector('.video-player video'), {
-      });
+      const videoPlayer = new Plyr(document.querySelector('.video-player video'));
 
       const loopButton = `
       <button class="plyr__controls__item plyr__control" type="button" data-plyr="loop">
@@ -156,7 +155,7 @@ window.asset = (function asset() {
         <span class="label--pressed plyr__sr-only">Disable looping</span>
         <span class="label--not-pressed plyr__sr-only">Enable looping</span>
       </button>
-      `
+      `;
 
       videoPlayer.elements.container.addEventListener('ready', () => {
         videoPlayer.elements.controls.querySelector('.plyr__menu').insertAdjacentHTML('afterend', loopButton)

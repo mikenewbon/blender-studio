@@ -33,7 +33,7 @@ window.videoPlayer = (function videoPlayer() {
         <span class="label--pressed plyr__sr-only">Disable looping</span>
         <span class="label--not-pressed plyr__sr-only">Enable looping</span>
       </button>
-      `
+      `;
 
       this.plyr.elements.container.addEventListener('ready', () => {
         this.plyr.elements.controls.querySelector('.plyr__menu').insertAdjacentHTML('afterend', loopButton)
