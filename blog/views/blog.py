@@ -1,6 +1,7 @@
 from typing import List
 
 from django.views.generic import ListView, DetailView
+from django.db.models.query import QuerySet
 
 from blog.models import Post
 from comments.models import Comment
@@ -12,6 +13,9 @@ class PostList(ListView):
     model = Post
     context_object_name = 'posts'
     paginate_by = 12
+
+    def get_queryset(self) -> QuerySet:
+        return Post.objects.filter(is_published=True)
 
 
 class PostDetail(DetailView):
