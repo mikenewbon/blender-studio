@@ -9,7 +9,6 @@ from django.views.decorators.http import require_POST
 
 from blog.models import PostComment
 from comments.models import Comment
-from common.shortcodes import render as with_shortcodes
 from common.types import assert_cast
 
 
@@ -33,18 +32,4 @@ def comment(request: HttpRequest, *, post_pk: int) -> JsonResponse:
         user_pk=request.user.pk, post_pk=post_pk, message=message, reply_to_pk=reply_to_pk
     )
 
-    return JsonResponse(
-        {
-            'id': comment.pk,
-            'full_name': comment.full_name,
-            'profile_image_url': comment.profile_image_url,
-            'date_string': comment.date_created.strftime('%d %B %Y - %H:%M'),
-            'message': comment.message,
-            'message_html': with_shortcodes(comment.message_html),
-            'like_url': comment.like_url,
-            'liked': False,
-            'likes': 0,
-            'edit_url': comment.edit_url,
-            'delete_url': comment.delete_url,
-        }
-    )
+    return JsonResponse(comment.to_dict())

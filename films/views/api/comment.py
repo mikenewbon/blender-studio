@@ -32,17 +32,4 @@ def comment(request: HttpRequest, *, asset_pk: int) -> JsonResponse:
         user_pk=request.user.pk, asset_pk=asset_pk, message=message, reply_to_pk=reply_to_pk
     )
 
-    return JsonResponse(
-        {
-            'id': comment.pk,
-            'full_name': comment.full_name,
-            'profile_image_url': comment.profile_image_url,
-            'date_string': comment.date_created.strftime('%d %B %Y - %H:%M'),
-            'message': comment.message,
-            'like_url': comment.like_url,
-            'liked': False,
-            'likes': 0,
-            'edit_url': comment.edit_url,
-            'delete_url': comment.delete_url,
-        }
-    )
+    return JsonResponse(comment.to_dict())

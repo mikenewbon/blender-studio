@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -145,6 +145,24 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
         Comment.objects.filter(pk__in=tree_pks).update(is_archived=new_archived_status)
 
         return new_archived_status
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Return comment data as a dict, useful for preparing JSON API responses."""
+        from common.shortcodes import render as with_shortcodes
+
+        return {
+            'id': self.pk,
+            'full_name': self.full_name,
+            'profile_image_url': self.profile_image_url,
+            'date_string': self.date_created.strftime('%d %B %Y - %H:%M'),
+            'message': self.message,
+            'message_html': with_shortcodes(self.message_html),
+            'like_url': self.like_url,
+            'liked': False,
+            'likes': 0,
+            'edit_url': self.edit_url,
+            'delete_url': self.delete_url,
+        }
 
 
 class Like(mixins.CreatedUpdatedMixin, models.Model):
