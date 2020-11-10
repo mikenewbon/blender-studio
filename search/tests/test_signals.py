@@ -3,8 +3,7 @@ from unittest.mock import patch
 from django.db.models.signals import post_save, pre_delete
 from django.test.testcases import TestCase
 
-from blog.models import Revision, Post
-from common.tests.factories.blog import PostFactory
+from blog.models import Post
 from common.tests.factories.films import FilmFactory
 from common.tests.factories.helpers import generate_file_path, catch_signal
 from common.tests.factories.users import UserFactory
@@ -15,75 +14,25 @@ class TestBlogPostIndexing(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
         cls.user = UserFactory()
-        cls.published_post = PostFactory(film=None)
-        cls.unpublished_post = PostFactory(is_published=False, film=None)
-        cls.revision_data = {
-            'editor': cls.user,
+        cls.post_data = {
+            'author': cls.user,
             'title': 'Strawberry Fields Forever',
-            'topic': 'Announcement',
+            'category': 'Announcement',
             'content': '# Hot news',
             'thumbnail': generate_file_path(),
         }
 
-    def test_blog_post_without_revision_does_not_trigger_post_save_signal(self):
-        with catch_signal(post_save, sender=Revision) as handler:
-            post = Post.objects.create(author=self.user, slug='empty-post')
-            handler.assert_not_called()
-
-            post.is_published = True
-            post.save()
-            handler.assert_not_called()
-
     @patch('search.signals.MainPostSaveSearchIndexer._add_document_to_index')
-    def test_unpublished_revisions_trigger_signal_but_are_not_indexed(self, add_documents_mock):
-        with catch_signal(post_save, sender=Revision) as handler:
-            Revision.objects.create(
-                **self.revision_data, post=self.published_post, is_published=False,
-            )
-            handler.assert_called()
-            add_documents_mock.assert_not_called()
-
-            Revision.objects.create(
-                **self.revision_data, post=self.unpublished_post, is_published=True,
-            )
+    def test_unpublished_posts_trigger_signal_but_are_not_indexed(self, add_documents_mock):
+        with catch_signal(post_save, sender=Post) as handler:
+            Post.objects.create(**self.post_data, is_published=False)
             handler.assert_called()
             add_documents_mock.assert_not_called()
 
     @patch('search.signals.MainPostSaveSearchIndexer._add_document_to_index')
-    def test_new_published_revision_are_indexed(self, add_documents_mock):
-        revision = Revision.objects.create(
-            **self.revision_data, post=self.published_post, is_published=True,
-        )
+    def test_new_published_posts_are_indexed(self, add_documents_mock):
+        Post.objects.create(**self.post_data, is_published=True)
         add_documents_mock.assert_called_once()
-
-    @patch('search.signals.MainPostSaveSearchIndexer._add_document_to_index')
-    def test_new_published_revision_overwrites_previous_revision(self, add_documents_mock):
-        """A document is updated in the index if it has the same search_id."""
-        revision = Revision.objects.create(
-            **self.revision_data, post=self.published_post, is_published=True,
-        )
-
-        add_documents_mock.assert_called_once()
-
-        search_id_1 = add_documents_mock.call_args_list[0].args[0][0]['search_id']
-        mock_arg_name = add_documents_mock.call_args_list[0].args[0][0]['name']
-        initial_title = self.revision_data['title']
-
-        self.assertEqual(mock_arg_name, initial_title)
-
-        new_title = 'I am the Walrus'
-        new_revision_data = {**self.revision_data, 'title': new_title}
-        new_revision = Revision.objects.create(
-            **new_revision_data, post=self.published_post, is_published=True,
-        )
-
-        self.assertEqual(add_documents_mock.call_count, 2)
-
-        search_id_2 = add_documents_mock.call_args_list[1].args[0][0]['search_id']
-        mock_arg_name = add_documents_mock.call_args_list[1].args[0][0]['name']
-
-        self.assertEqual(mock_arg_name, new_title)
-        self.assertEqual(search_id_1, search_id_2)
 
 
 class TestPostDeleteSignal(TestCase):

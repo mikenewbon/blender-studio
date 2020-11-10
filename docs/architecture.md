@@ -62,23 +62,11 @@ It represents an extra file attached to a Section.
 Posts will usually be related to films, and displayed in the 'Weeklies' section
 alongside production logs.
 
-There are two models: `Post` and `Revision`. Revisions are consecutive versions of the
-post content; whenever a blog post is edited or updated, actually a new revision is
-created. The `Revision` model stores all the data that can be updated: the post content,
-the title, etc. The `Post` model only stores the information that should not change, like
-the slug or the original author of the post.
+In the blog page, only the published posts are listed. The same holds for the search results.
 
-In the blog page, only the published posts are listed, each one with its latest published
-revision. The same holds for the search results.
-
-Both the `Post` and the `Revision` model have an `is_published` field.
-If a post has no published revisions, it should not be published as well.
-Once you create a published revision of an unpublished post, the post's `is_published`
-is set to `True`.
-Also, a post can be published, but e.g. its latest update may be still unpublished.
-
-The blog forms for `Post` used in the admin panel are overwritten to handle revision
-creation and setting or updating all the necessary fields automatically.
+The blog `Post` model has an `is_published` field, as well as `date_published`, set
+`is_published` to `True` and `date_published` to a suitable date when the blog post
+is ready to be published.
 
 
 ## Comments

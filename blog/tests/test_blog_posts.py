@@ -41,7 +41,7 @@ class TestPostAndRevisionCreation(TestCase):
         post = Post.objects.latest('date_created')
         self.assertHTMLEqual(post.content_html, '<h1>Test text</h1>')
 
-    def test_updating_post_creates_new_revision(self):
+    def test_updating_post(self):
         post = PostFactory()
         initial_post_count = Post.objects.count()
 

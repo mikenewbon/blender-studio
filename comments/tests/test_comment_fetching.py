@@ -3,7 +3,7 @@ from django.urls import reverse
 
 from comments.models import Like
 from comments.queries import get_annotated_comments, set_comment_like
-from common.tests.factories.blog import RevisionFactory
+from common.tests.factories.blog import PostFactory
 from common.tests.factories.comments import CommentUnderPostFactory
 from common.tests.factories.users import UserFactory
 
@@ -13,12 +13,12 @@ class TestCommentTreeConstruction(TestCase):
     def setUpTestData(cls) -> None:
         cls.user = UserFactory()
         cls.other_user = UserFactory()
-        cls.post = RevisionFactory().post
+        cls.post = PostFactory()
         cls.post_url = reverse('post-detail', kwargs={'slug': cls.post.slug})
 
     def setUp(self) -> None:
-        self.comment_no_replies = CommentUnderPostFactory(comment_post__post=self.post)
         self.comment_with_replies = CommentUnderPostFactory(comment_post__post=self.post)
+        self.comment_no_replies = CommentUnderPostFactory(comment_post__post=self.post)
         self.reply_1 = CommentUnderPostFactory(
             comment_post__post=self.post, reply_to=self.comment_with_replies
         )
@@ -33,7 +33,9 @@ class TestCommentTreeConstruction(TestCase):
         self.assertEqual(response.status_code, 200)
         comment_trees = response.context['comments'].comment_trees
         self.assertEqual(len(comment_trees), 2)
-        self.assertEqual(comment_trees[0].id, self.comment_with_replies.id)
+        self.assertEqual(
+            comment_trees[0].id, self.comment_with_replies.id, [str(_) for _ in comment_trees]
+        )
         self.assertEqual(comment_trees[0].message, '[deleted]')
         self.assertEqual(len(comment_trees[0].replies), 2)
 

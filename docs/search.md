@@ -19,7 +19,7 @@ The models that are 'searchable', i.e. added to the index, are:
  - films.Asset - the published ones that belong to a published film,
  - training.Training - the published ones,
  - training.Section - belonging to a published training,
- - blog.Revision - only the latest published revision of each published post.
+ - blog.Post - the published ones.
 
 #### Training search
 For the training search, there is a separate index `training` (`TRAINING_INDEX_UID`
@@ -31,8 +31,7 @@ in settings.py). The searchable models are:
 ### Indexing
 Each document in any index needs to have a unique ID field. The field is called `search_id`
 and is generated based on the model and the object `pk`, e.g. `film_1` for the film with
-`pk=1`. For revisions, the model name is `post` and the post's `pk` is used (for the reasons
-described [below](#indexing-blog-posts)).
+`pk=1`.
 
 Django signals take care of indexing new objects in the database or updating the existing
 ones on change: a `post_save` signal is attached to each of the above mentioned models.
@@ -50,17 +49,6 @@ Django management command:
 ```
 For more details, see the command's `--help` or the
 [search setup instructions](#adding-documents-to-the-search-index).
-
-#### Indexing blog posts
-It is possible to search for blog posts. However, the model which is actually indexed is
-**Revision** - it contains almost all search- and display-relevant data about a blog post.
-
-Only the latest published revision for each published post should be indexed for search.
-When a new post revision is created for an already existing post, it is added to the index
-with the same `search_id` as the previous post revision, which means the old revision
-is updated and its contents are overwritten. Therefore the `search_id` of a revision is
-`post_{post.id}`.
-
 
 ## Management commands
 Two Django management commands are available:

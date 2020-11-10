@@ -4,7 +4,7 @@ import re
 from django.test.testcases import TestCase
 from django.urls import reverse
 
-from common.tests.factories.blog import RevisionFactory, PostFactory
+from common.tests.factories.blog import PostFactory
 from common.tests.factories.films import FilmFactory, AssetFactory
 from common.tests.factories.static_assets import StaticAssetFactory
 from common.tests.factories.users import UserFactory
@@ -31,8 +31,8 @@ class TestSiteMetadata(TestCase):
                 PropertyMock(return_value='https://film/thumbnail_m.jpg'),
             ),
             patch(
-                'blog.models.Revision.thumbnail_m_url',
-                PropertyMock(return_value='https://revision/thumbnail_m.jpg'),
+                'blog.models.Post.thumbnail_m_url',
+                PropertyMock(return_value='https://post/thumbnail_m.jpg'),
             ),
             patch(
                 'static_assets.models.static_assets.StaticAsset.thumbnail_m_url',
@@ -347,7 +347,6 @@ class TestSiteMetadata(TestCase):
 
     def test_blog_post(self):
         post = PostFactory()
-        revision = RevisionFactory(post=post)
         page_url = reverse('post-detail', kwargs={'slug': post.slug})
 
         response = self.client.get(page_url + '?foo=bar')
@@ -362,11 +361,11 @@ class TestSiteMetadata(TestCase):
         for meta, value in {
             'property=.og:url.': f'http://testserver/blog/{post.slug}',
             **shared_meta,
-            'property=.og:title.': f'{revision.title} - Blender Cloud',
-            'name=.twitter:title.': f'{revision.title} - Blender Cloud',
-            'property=.og:description.': revision.description,
-            'name=.twitter:description.': revision.description,
-            'property=.og:image.': 'https://revision/thumbnail_m.jpg',
-            'name=.twitter:image.': 'https://revision/thumbnail_m.jpg',
+            'property=.og:title.': f'{post.title} - Blender Cloud',
+            'name=.twitter:title.': f'{post.title} - Blender Cloud',
+            'property=.og:description.': post.excerpt,
+            'name=.twitter:description.': post.excerpt,
+            'property=.og:image.': 'https://post/thumbnail_m.jpg',
+            'name=.twitter:image.': 'https://post/thumbnail_m.jpg',
         }.items():
             self.assertMetaEquals(html, meta, value)

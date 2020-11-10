@@ -13,7 +13,7 @@ from blog.models import Post
 
 DEFAULT_FEED_PAGE_SIZE = 10
 # Certain permissions can be defined by multiple groups
-EQUVALENT_GROUPS = {
+EQUIVALENT_GROUPS = {
     'subscriber': ['demo'],
 }
 
@@ -67,7 +67,7 @@ def get_activity_feed_page(
     records_page = p.get_page(page_number)
 
     obj_type_to_queryset: Dict[str, 'QuerySet[Model]'] = {
-        'post': Post.objects.select_related('post__author'),
+        'post': Post.objects.select_related('author'),
         'production log': ProductionLog.objects.select_related('film'),
         'training': Training.objects,
     }
@@ -95,5 +95,5 @@ def has_group(user: User, group_name: str) -> bool:
     """Check if given user is assigned to a given group, or its equivalent."""
     if not user or user.is_anonymous:
         return False
-    equivalent_groups = {group_name, *EQUVALENT_GROUPS.get(group_name, [])}
+    equivalent_groups = {group_name, *EQUIVALENT_GROUPS.get(group_name, [])}
     return user.groups.filter(name__in=equivalent_groups).exists()
