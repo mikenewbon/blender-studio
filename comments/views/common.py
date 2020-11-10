@@ -77,11 +77,16 @@ def comments_to_template_type(
             is_top_level=True if comment.reply_to is None else False,
         )
 
+    # Top-level comments are ordered by number of likes and date
+    top_level_comments = sorted(
+        (comment for comment in lookup.get(None, [])),
+        key=lambda c: (-c.number_of_likes, c.date_created),
+    )
+
     return typed_templates.Comments(
         comment_url=comment_url,
         number_of_comments=len(comments),
-        # Reverse ordering of top-level comments to newest first:
-        comment_trees=list(reversed([build_tree(comment) for comment in lookup.get(None, [])])),
+        comment_trees=[build_tree(comment) for comment in top_level_comments],
         profile_image_url=user.profile.image_url if getattr(user, 'profile', None) else None,
     )
 
