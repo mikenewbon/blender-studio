@@ -4,6 +4,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_safe
 
+from common.queries import has_group
 from films.models import Film, Collection, Asset
 from films.queries import get_gallery_drawer_context, get_current_asset
 
@@ -50,6 +51,9 @@ def collection_list(request: HttpRequest, film_slug: str) -> HttpResponse:
 
     context = {
         'film': film,
+        'user_can_view_asset': (
+            request.user.is_authenticated and has_group(request.user, 'subscriber')
+        ),
         'user_can_edit_asset': (
             request.user.is_staff and request.user.has_perm('films.change_asset')
         ),
@@ -115,6 +119,9 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
             collection.assets.filter(is_published=True).order_by(*Asset._meta.ordering)
         ),
         'child_collections': child_collections,
+        'user_can_view_asset': (
+            request.user.is_authenticated and has_group(request.user, 'subscriber')
+        ),
         'user_can_edit_asset': (
             request.user.is_staff and request.user.has_perm('films.change_asset')
         ),

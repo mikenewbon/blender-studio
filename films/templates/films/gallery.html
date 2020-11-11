@@ -203,7 +203,7 @@ has-secondary-nav
           {% if featured_artwork %}
           <div class="grid-sizer col-12 col-sm-6 col-md-6 col-lg-4"></div>
           {% for asset in featured_artwork %}
-          {% if asset.is_published or request.user.is_superuser %}
+          {% if asset.is_published or user_can_edit_collection %}
           {% include "common/components/file.html" with asset=asset site_context="featured_artwork" %}
           {% endif %}
           {% endfor %}
