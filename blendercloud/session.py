@@ -2,6 +2,7 @@
 from collections import namedtuple
 from typing import Any, Optional, Dict
 import logging
+import uuid
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -53,10 +54,17 @@ def _get_or_create_user(user_oauth: Dict[str, Any]) -> User:
     oauth_user_email = user_oauth['email']
     oauth_user_nickname = user_oauth['nickname']
 
+    is_username_taken = (
+        User.objects.filter(username=oauth_user_nickname)
+        .exclude(oauth_info__oauth_user_id=oauth_user_id)
+        .exists()
+    )
     try:
         user_info = models.OAuthUserInfo.objects.get(oauth_user_id=oauth_user_id)
     except models.OAuthUserInfo.DoesNotExist:
         logger.debug('User not seen before, going to search by email address.')
+        if is_username_taken:
+            oauth_user_nickname += '#' + uuid.uuid4().hex[5:15]
         user, created = User.objects.get_or_create(
             email=oauth_user_email,
             defaults={
@@ -86,11 +94,12 @@ def _get_or_create_user(user_oauth: Dict[str, Any]) -> User:
         # it should probably be Blender ID's job to handle duplicate emails.
         # Otherwise, default User model should be replaced with one that enforces unique emails.
         user.email = oauth_user_email
-        user.username = oauth_user_nickname
+        user.username = oauth_user_nickname if not is_username_taken else user.username
         try:
             user.save(update_fields=['email', 'username'])
         except django.db.utils.IntegrityError as e:
             if '(username)' in str(e):
+                # TODO(anna): these shouldn't happen anymore, remove later
                 logger.exception('Unable to update user pk=%s: duplicate username', user.pk)
             else:
                 logger.exception('Unable to update user pk=%s', user.pk)

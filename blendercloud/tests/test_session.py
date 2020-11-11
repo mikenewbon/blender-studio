@@ -2,7 +2,7 @@ from unittest.mock import patch, ANY
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.test import RequestFactory, TransactionTestCase, TestCase, override_settings
+from django.test import RequestFactory, TestCase, override_settings
 from django.urls.base import reverse
 from freezegun import freeze_time
 import responses
@@ -193,38 +193,30 @@ class TestSession(TestCase):
 
         self.assertIsNone(user)
 
-
-@override_settings(BLENDER_CLOUD_SECRET_KEY='supersecret', BLENDER_CLOUD_AUTH_ENABLED=True)
-@freeze_time('2020-10-14 11:41:11')  # test cookies contain fixed expiration times
-class TestIntegrityErrors(TransactionTestCase):
-    """Check that get_or_create_current_user handles cases that trigger `IntegrityError`s.
-
-    In order to do that, it has to handle database transactions commits and rollbacks the same way
-    "normal" code does, as opposed to how TestCase does it, otherwise it breaks test runs.
-    See https://docs.djangoproject.com/en/3.0/topics/testing/tools/#django.test.TransactionTestCase
-    """
-
-    maxDiff = None
-
-    def setUp(self):
-        self.factory = RequestFactory()
-        util.mock_blender_id_responses()
-        self.test_url = reverse('film-list')
-
     @responses.activate
-    def test_get_or_create_current_user_handles_duplicate_username(self):
+    def test_get_or_create_current_user_handles_duplicate_username_existing_user(self):
         UserFactory(username='ⅉanedoe')
         existing_user = UserFactory(email='somemail@example.com', oauth_info__oauth_user_id='2')
         request = self.factory.get(self.test_url)
         request.COOKIES[settings.BLENDER_CLOUD_SESSION_COOKIE_NAME] = session_cookie_value
 
-        with self.assertLogs('blendercloud.session', level='ERROR') as logs:
-            user = get_or_create_current_user(request)
+        user = get_or_create_current_user(request)
 
-        self.assertRegex(logs.output[0], r'Unable to update user pk=\d+: duplicate username')
         assert user is not None
         self.assertEquals(user.oauth_info.oauth_user_id, '2')
         self.assertEquals(user.pk, existing_user.pk)
-        # The OAuth ID is correct, however username had not been updated to match Blender ID's
         self.assertNotEquals(user.username, 'ⅉanedoe')
         self.assertEquals(user.username, existing_user.username)
+
+    @responses.activate
+    def test_get_or_create_current_user_handles_duplicate_username_new_user(self):
+        UserFactory(username='ⅉanedoe')
+        request = self.factory.get(self.test_url)
+        request.COOKIES[settings.BLENDER_CLOUD_SESSION_COOKIE_NAME] = session_cookie_value
+
+        user = get_or_create_current_user(request)
+
+        assert user is not None
+        self.assertEquals(user.oauth_info.oauth_user_id, '2')
+        self.assertNotEquals(user.username, 'ⅉanedoe')
+        self.assertTrue(user.username.startswith('ⅉanedoe#'), user.username)
