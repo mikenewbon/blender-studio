@@ -61,10 +61,10 @@ def flatpage(request: HttpRequest, training_slug: str, page_slug: str) -> HttpRe
         'training': training,
         'flatpage': flatpage,
         'user_can_edit_training': (
-            request.user.is_staff and request.user.has_perm('trainings.change_training')
+            request.user.is_staff and request.user.has_perm('training.change_training')
         ),
         'user_can_edit_flatpage': (
-            request.user.is_staff and request.user.has_perm('trainings.change_trainingflatpage')
+            request.user.is_staff and request.user.has_perm('training.change_trainingflatpage')
         ),
     }
     return render(request, 'training/flatpage.html', context)
