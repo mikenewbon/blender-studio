@@ -1,10 +1,6 @@
 """Profile activity pages, such as notifications and My activity."""
-from django.shortcuts import render
-
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.contenttypes.models import ContentType
 from django.db.models.query import QuerySet
 from django.views.generic import ListView
 
@@ -27,15 +23,14 @@ class Notifications(LoginRequiredMixin, ListView):
         return self.request.user.profile.notifications
 
 
-@login_required
-def activity(request):
+class Activity(LoginRequiredMixin, ListView):
     """Display latest activity of an authenticated user."""
-    return render(
-        request,
-        'profiles/activity.html',
-        context={
-            'ctype': ContentType.objects.get_for_model(USER_MODEL),
-            'actor': request.user,
-            'action_list': models.actor_stream(request.user),
-        },
-    )
+
+    context_object_name = 'action_list'
+    model = models.Action
+    paginate_by = 10
+    template_name = 'profiles/activity.html'
+
+    def get_queryset(self) -> QuerySet:
+        """Return user activity."""
+        return models.actor_stream(self.request.user)
