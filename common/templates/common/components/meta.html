@@ -8,7 +8,7 @@
 {% with default_description="Blender Cloud is a web based service developed by Blender Institute that allows people to access the training videos and all the data from the open projects." %}
 
 {% if not image_url %}
-{% static '/common/images/blender-cloud-og.jpg' as default_image_path %}
+{% static 'common/images/blender-cloud-og.jpg' as default_image_path %}
 {% absolute_url default_image_path as image_url %}
 {% endif %}
 
