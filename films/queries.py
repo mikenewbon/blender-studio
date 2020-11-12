@@ -298,8 +298,10 @@ def get_current_asset(request: HttpRequest) -> Dict[str, Asset]:
     asset = None
     if asset_pk:
         try:
-            asset = get_asset(asset_pk)
+            asset = get_asset(int(asset_pk))
             return {'asset': asset}
         except Asset.DoesNotExist:
             logger.debug(f'Unable to find asset_pk={asset_pk}')
+        except ValueError:
+            logger.debug('Invalid asset_pk')
     return {}
