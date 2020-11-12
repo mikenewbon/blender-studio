@@ -132,7 +132,7 @@ PIPELINE = {
                 'comments/scripts/components/*.js',
                 'common/scripts/*.js',
             ],
-            'output_filename': 'js/studio.js',
+            'output_filename': 'js/studio.js?v=20201112',
             'extra_context': {'async': False, 'defer': False},
         },
         'training': {
@@ -142,17 +142,17 @@ PIPELINE = {
                 'training/scripts/components/card_training.js',
                 'training/scripts/components/video_player.js',
             ],
-            'output_filename': 'js/training.js',
+            'output_filename': 'js/training.js?v=20201112',
             'extra_context': {'async': False, 'defer': False},
         },
         'search': {
             'source_filenames': ['search/scripts/*.js'],
-            'output_filename': 'js/search.js',
+            'output_filename': 'js/search.js?v=20201112',
             'extra_context': {'async': False, 'defer': False},
         },
         'training_search': {
             'source_filenames': ['training/scripts/training_search.js'],
-            'output_filename': 'js/training_search.js',
+            'output_filename': 'js/training_search.js?v=20201112',
             'extra_context': {'async': False, 'defer': False},
         },
         'vendor': {
@@ -165,19 +165,19 @@ PIPELINE = {
                 'common/scripts/vendor/masonry.pkgd.js',
                 'common/scripts/vendor/imagesloaded.pkgd.js',
             ],
-            'output_filename': 'js/vendor.js',
+            'output_filename': 'js/vendor.js?v=20201112',
             'extra_context': {'async': False, 'defer': False},
         },
         'vendor_chartjs': {
             'source_filenames': ['common/scripts/vendor/chart.bundle.min.js'],
-            'output_filename': 'js/vendor_chartjs.js',
+            'output_filename': 'js/vendor_chartjs.js?v=20201112',
             'extra_context': {'async': False, 'defer': False},
         },
     },
     'STYLESHEETS': {
         'studio': {
             'source_filenames': ('common/styles/studio/studio.scss',),
-            'output_filename': 'css/studio.css',
+            'output_filename': 'css/studio.css?v=20201112',
             'extra_context': {'media': 'screen'},
         },
     },
