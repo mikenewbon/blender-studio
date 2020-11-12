@@ -73,8 +73,14 @@ def create_notification(sender: object, instance: Action, created: bool, **kwarg
     ):
         users.add(action_object.user)
 
+    # Notify about likes on blog posts
+    if target and not action_object and verb in [Action.objects.verb_liked]:
+        # Separate clause otherwise likes on blog comments also end up in notifications
+        if getattr(target, 'author', None):
+            users.add(target.author)
+
     # Notify about comments and likes on
-    if target and verb in [Action.objects.verb_commented, Action.objects.verb_liked]:
+    if target and verb in [Action.objects.verb_commented]:
         # blog `Post`s
         if getattr(target, 'author', None):
             users.add(target.author)
