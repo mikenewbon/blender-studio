@@ -4,15 +4,19 @@
   data-is-read={% if notification.date_read %}"true"{% else %}"false"{% endif %} {% endif %}>
   <span class="name">
     <span style="background-image: url({{ action.actor.profile.image_url }});" class="profile col-profile"></span>
-    {% if action.actor.get_absolute_url %}
-    {{ action.actor }}
+    {% if action.actor %}
+    {% if action.actor == request.user %}
+    You
     {% else %}
     {% firstof action.actor.profile.full_name action.actor %}
+    {% endif %}
+    {% else %}
+    Someone
     {% endif %}
   </span>
   <span class="text">
     {{ action.verb|capfirst }}
-    {% if action.action_object and action.action_object.user == user %}
+    {% if action.action_object and action.action_object.user == user and request.user != action.actor %}
     your {{ action.action_object_content_type.name|lower }}
     {% endif %}
     {% if action.action_object and action.target %}
