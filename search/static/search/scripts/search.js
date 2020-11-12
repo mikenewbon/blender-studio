@@ -22,6 +22,7 @@ const renderSearchBox = (renderOptions, isFirstRender) => {
     const input = document.createElement('input');
     input.setAttribute('class', 'form-control');
     input.setAttribute('type', 'text')
+    input.setAttribute('id', 'searchInput')
     input.setAttribute('placeholder', 'Search tags and keywords')
 
     //const loadingIndicator = document.createElement('span');
@@ -280,3 +281,7 @@ search.addWidgets([
 ]);
 
 search.start();
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelector('#searchInput').focus();
+});
