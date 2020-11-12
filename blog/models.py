@@ -1,5 +1,5 @@
 import datetime
-from typing import Optional, Union, Sequence, Any
+from typing import Any
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -80,3 +80,6 @@ class PostComment(models.Model):
 
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     comment = models.OneToOneField(Comment, on_delete=models.CASCADE)
+
+    def get_absolute_url(self) -> str:
+        return self.post.url

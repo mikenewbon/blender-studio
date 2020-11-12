@@ -1,3 +1,4 @@
+"""Implements blog post comments API."""
 import json
 from typing import Optional
 
@@ -15,9 +16,10 @@ from common.types import assert_cast
 @require_POST
 @login_required
 def comment(request: HttpRequest, *, post_pk: int) -> JsonResponse:
+    """Add a top-level comment under a blog post or a reply to another comment."""
     parsed_body = json.loads(request.body)
 
-    reply_to_pk = None if parsed_body['reply_to'] is None else int(parsed_body['reply_to'])
+    reply_to_pk = int(parsed_body['reply_to']) if parsed_body.get('reply_to') else None
     message = assert_cast(str, parsed_body['message'])
 
     @transaction.atomic

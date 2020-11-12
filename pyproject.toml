@@ -29,6 +29,7 @@ bleach = "^3.2.1"
 shortcodes = "2.5"
 sentry-sdk = "^0.19.1"
 requests-oauthlib = "^1.3.0"
+django-activity-stream = "^0.9.0"
 
 [tool.poetry.dev-dependencies]
 black = {version = "*", allow-prereleases = true}

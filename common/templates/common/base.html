@@ -12,7 +12,8 @@
   {% comment %}
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet"> {% endcomment %}
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <title>{% block title_prepend %}{% endblock title_prepend %}Blender Cloud{% block title_append %}{% endblock title_append %}</title>
+  <title>{% block title_prepend %}{% endblock title_prepend %}Blender
+    Cloud{% block title_append %}{% endblock title_append %}</title>
   <meta name="google-site-verification" content="r-8DuUEYwMyb14SRVj0I4mSUSEPmdRRMrT-zMSbFkas">
 
   {% block meta %}
@@ -92,6 +93,49 @@
             <i class="material-icons">search</i>
           </a>
 
+          <div>
+            <button href="{% url 'profile-notifications' %}" data-toggle="dropdown"
+              class="btn btn-secondary btn-nav btn-icon notification-button mr-2">
+              <i class="material-icons">notifications</i>
+              {% if user.profile.notifications_unread.count >= 1 %}
+              <span class="notifications-counter">{{ user.profile.notifications_unread.count }}</span>
+              {% endif %}
+            </button>
+            <div class="dropdown-menu dropdown-menu-right notification-dropdown">
+
+              <div class="dropdown-double">
+                <a href="{% url 'profile-notifications' %}" class="dropdown-item">
+                  <i class="material-icons">notifications</i>
+                  <span>Notifications</span>
+                </a>
+
+                <button class="dropdown-item icon {% if user.profile.notifications_unread.count >= 1 %}unread{% endif %}" data-toggle="tooltip" data-placement="top"
+                  data-mark-all-read-url="{% url 'api-notifications-mark-read' %}" title="Mark all as read">
+                  <i class="material-icons">markunread_mailbox</i>
+                </button>
+              </div>
+
+              <div class="dropdown-menu-nested">
+
+                {% for notification in user.profile.notifications.all|slice:":10" %}
+                {% with action=notification.action %}
+                {% include 'profiles/components/nav_action.html' %}
+                {% endwith %}
+                {% empty %}
+                <p class="px-2 py-2 subtitle text-center">
+                  No notifications yet
+                </p>
+                {% endfor %}
+
+              </div>
+
+              <a href="{% url 'profile-notifications' %}" class="dropdown-item small">
+                <span>See all notifications</span>
+              </a>
+
+            </div>
+          </div>
+
           {% comment %} <div class="searchbar-wrapper">
             <div class="searchbar">
               <div class="input-group-prepend"><span class="input-group-text"><i
@@ -100,72 +144,78 @@
               <input type="text" placeholder="Search tags and keywords" class="form-control">
             </div>
           </div> {% endcomment %}
-
-          <button data-toggle="dropdown" class="btn btn-secondary btn-nav btn-profile">
-            {% if request.user.is_authenticated and request.user.profile.image_url %}
-            <div style="background-image:url('{{ request.user.profile.image_url }}');" class="profile"></div>
-            {% else %}
-            <div style="background-image:url('{% static 'common/images/blank-profile-pic.png' %}');" class="profile">
-            </div>
-            {% endif %}
-            {% if request.user|has_group:"demo"  %}
-            <i class="profile-subscription-badge demo material-icons">favorite</i>
-            {% elif request.user|has_group:"subscriber" %}
-            <i class="profile-subscription-badge subscriber material-icons">done</i>
-            {% else %}
-            <i class="profile-subscription-badge unsubscribed material-icons">priority_high</i>
-            {% endif %}
-          </button>
-          <div class="dropdown-menu dropdown-menu-right">
-
-            <a href="/p/home/" class="dropdown-item">
-              <i class="material-icons">home</i>
-              <span>My Cloud</span>
-            </a>
-
-            <div class="dropdown-menu-nested">
-              {% if request.user.is_authenticated %}
-              {% if request.user|has_group:"demo" %}
-              <a href="/settings/billing" class="dropdown-item text-blue">
-                <i class="material-icons">favorite</i>
-                <span>Free Account</span>
-              </a>
-              {% elif request.user|has_group:"subscriber" %}
-              <a href="/settings/billing" class="dropdown-item text-green">
-                <i class="material-icons">done</i>
-                <span>Subscription Active</span>
-              </a>
+          <div>
+            <button data-toggle="dropdown" class="btn btn-secondary btn-nav btn-profile">
+              {% if request.user.is_authenticated and request.user.profile.image_url %}
+              <div style="background-image:url('{{ request.user.profile.image_url }}');" class="profile"></div>
               {% else %}
-              <a href="/settings/billing" class="dropdown-item text-red">
-                <i class="material-icons">error</i>
-                <span>Subscription Inactive</span>
+              <div style="background-image:url('{% static 'common/images/blank-profile-pic.png' %}');" class="profile">
+              </div>
+              {% endif %}
+              {% if request.user|has_group:"demo"  %}
+              <i class="profile-subscription-badge demo material-icons">favorite</i>
+              {% elif request.user|has_group:"subscriber" %}
+              <i class="profile-subscription-badge subscriber material-icons">done</i>
+              {% else %}
+              <i class="profile-subscription-badge unsubscribed material-icons">priority_high</i>
+              {% endif %}
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+
+              <a href="/p/home/" class="dropdown-item">
+                <i class="material-icons">home</i>
+                <span>My Cloud</span>
+              </a>
+
+              <a href="{% url 'profile-activity' %}" class="dropdown-item">
+                <i class="material-icons">timeline</i>
+                <span>My Activity</span>
+              </a>
+
+              <div class="dropdown-menu-nested">
+                {% if request.user.is_authenticated %}
+                {% if request.user|has_group:"demo" %}
+                <a href="/settings/billing" class="dropdown-item text-blue">
+                  <i class="material-icons">favorite</i>
+                  <span>Free Account</span>
+                </a>
+                {% elif request.user|has_group:"subscriber" %}
+                <a href="/settings/billing" class="dropdown-item text-green">
+                  <i class="material-icons">done</i>
+                  <span>Subscription Active</span>
+                </a>
+                {% else %}
+                <a href="/settings/billing" class="dropdown-item text-red">
+                  <i class="material-icons">error</i>
+                  <span>Subscription Inactive</span>
+                </a>
+                {% endif %}
+                {% endif %}
+
+                <a href="/settings/profile" class="dropdown-item">
+                  <i class="material-icons">settings</i>
+                  <span>Settings</span>
+                </a>
+
+                <a href="/settings/billing" class="dropdown-item">
+                  <i class="material-icons">credit_card</i>
+                  <span>Subscription</span>
+                </a>
+              </div>
+
+              {% if user.is_superuser %}
+              <a href="/admin" class="dropdown-item">
+                <i class="material-icons">security</i>
+                <span>Admin</span>
               </a>
               {% endif %}
-              {% endif %}
 
-              <a href="/settings/profile" class="dropdown-item">
-                <i class="material-icons">settings</i>
-                <span>Settings</span>
+              <a href="{% url 'oauth:logout' %}" class="dropdown-item">
+                <i class="material-icons">exit_to_app</i>
+                <span>Sign Out</span>
               </a>
 
-              <a href="/settings/billing" class="dropdown-item">
-                <i class="material-icons">credit_card</i>
-                <span>Subscription</span>
-              </a>
             </div>
-
-            {% if user.is_superuser %}
-            <a href="/admin" class="dropdown-item">
-              <i class="material-icons">security</i>
-              <span>Admin</span>
-            </a>
-            {% endif %}
-
-            <a href="{% url 'oauth:logout' %}" class="dropdown-item">
-              <i class="material-icons">exit_to_app</i>
-              <span>Sign Out</span>
-            </a>
-
           </div>
 
         </div>
@@ -175,8 +225,8 @@
             <i class="material-icons">search</i>
           </a>
           <a href="{% url 'oauth:login' %}" class="btn btn-transparent btn-nav login-button">Login</a>
-          <a href="https://store.blender.org/product/membership/" target="_blank" class="btn btn-primary ">Join <span
-              class="d-none d-lg-inline-block">Blender Cloud</span></a>
+          <a href="https://store.blender.org/product/membership/" target="_blank" class="btn btn-primary ">Join
+            <span class="d-none d-lg-inline-block">Blender Cloud</span></a>
 
         </div>
         {% endif %}
@@ -244,6 +294,10 @@
 
               <div class="col-6 p-0">
                 <a class="h3 drawer-nav-dropdown" href="{% url 'search' %}">Search</a>
+              </div>
+
+              <div class="col-6 p-0">
+                <a class="h3 drawer-nav-dropdown" href="{% url 'profile-notifications' %}">Notifications</a>
               </div>
 
               {% if not request.user.is_authenticated %}
@@ -422,6 +476,14 @@
     gtag('js', new Date());
 
     gtag('config', '{{ settings_analytics_id }}');
+
+  </script>
+
+  <script>
+    // Humanizes dates
+    document.querySelectorAll('.date').forEach(i => {
+      i.textContent = timeDifference(epochToDate(i.textContent));
+    });
 
   </script>
   {% block scripts_footer %}{% endblock scripts_footer %}

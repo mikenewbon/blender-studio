@@ -1,29 +1,31 @@
 {% extends 'common/base.html' %}
 
-{% block title_prepend %}Blog - {% endblock title_prepend %}
-
-{% block meta %}
-{% with title="Blog" description="Follow the latest updates from the Blender Cloud." %}
-{% include 'common/components/meta.html' %}
-{% endwith %}
-{% endblock %}
-
 {% block content %}
+<div class="container-xl">
+  <section class="my-4 text-center">
+    {% include "common/components/simple_header.html" with title="Notifications" subtitle="All the latest likes and replies to your content are here." %}
+    <button class="btn btn-dark btn-sm mb-3" data-mark-all-read-url="{% url 'api-notifications-mark-read' %}">
+      <i
+        class="material-icons {% if user.profile.notifications_unread.count >= 1 %}unread{% endif %}">markunread_mailbox</i>
+      <span>Mark all as read</span>
+    </button>
+    <ul class="list-group activity-list">
 
-<div class="container-xl pt-4">
-  {% include "common/components/simple_header.html" with title="Blog" subtitle="Follow the latest updates from the Blender Cloud." %}
+      {% for notification in notifications %}
+      {% with action=notification.action %}
+      {% include 'profiles/components/action.html' %}
+      {% endwith %}
+      {% empty %}
+      <li class="activity-list-item">
+        No notifications yet
+      </li>
+      {% endfor %}
+    </ul>
 
-  <div class="row">
-    {% for post in posts %}
-      {% include 'blog/card_blog.html' %}
-    {% endfor %}
-
-  </div>
-
-  <div class="row justify-content-center py-3">
+    <div class="row justify-content-center mt-3">
       <div class="col-auto text-center">
         <nav aria-label="Notification page navigation">
-          <ul class="pagination">
+          <ul class="pagination mb-0">
             {% if page_obj.has_previous %}
             {% comment %} <li class="page-item">
               <a href="?page=1" class="page-link">First</a>
@@ -93,6 +95,32 @@
         </nav>
       </div>
     </div>
-</div>
 
-{% endblock content %}
+    {% comment %} <div class="row justify-content-md-center py-3">
+      <div class="col col-lg-6 text-center">
+        <span class="step-links">
+          {% if page_obj.has_previous %}
+          <a href="?page=1">&laquo; first</a>
+          <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+          {% endif %}
+
+          <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+          </span>
+
+          {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}">next</a>
+          <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+          {% endif %}
+        </span>
+      </div>
+    </div> {% endcomment %}
+
+
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts_footer %}
+
+{% endblock %}

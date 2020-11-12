@@ -23,7 +23,7 @@
 @import '../vendor/bootstrap/navbar';
 @import '../vendor/bootstrap/card';
 @import '../vendor/bootstrap/breadcrumb';
-// @import '../vendor/bootstrap/pagination';
+@import '../vendor/bootstrap/pagination';
 @import '../vendor/bootstrap/badge';
 @import '../vendor/bootstrap/jumbotron';
 @import '../vendor/bootstrap/alert';
@@ -84,6 +84,7 @@
 // @import 'print';
 
 @import 'training';
+@import 'activity';
 
 @import 'flatpages';
 @import 'admin';

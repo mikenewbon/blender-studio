@@ -2,6 +2,7 @@
 {% load common_extras %}
 
 <div
+  id="{{ comment.anchor }}"
   class="comment {% if comment.is_archived and comment.is_top_level %}archived{% endif %} {% if comment.is_top_level %}top-level-comment{% endif %}"
   data-comment-id="{{ comment.id }}" data-message="{{ comment.message }}"
   data-profile-image-url="{{ comment.profile_image_url }}" data-like-url="{{ comment.like_url }}"

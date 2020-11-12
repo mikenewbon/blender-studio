@@ -6,3 +6,7 @@ class CommentsConfig(AppConfig):
 
     def ready(self) -> None:
         import comments.signals  # noqa: F401
+        from actstream import registry
+
+        registry.register(self.get_model('Comment'))
+        registry.register(self.get_model('Like'))

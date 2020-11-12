@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'pipeline',
     'sorl.thumbnail',
     'taggit',
+    'actstream',
 ]
 
 MIDDLEWARE = [
@@ -316,3 +317,8 @@ BLENDER_CLOUD_SECRET_KEY = 'CHANGE_ME'
 # If set, only use Blender Cloud session cookie for this specific domain
 BLENDER_CLOUD_DOMAIN = None
 CSRF_COOKIE_NAME = 'bstudiocsrftoken'
+
+ACTSTREAM_SETTINGS = {
+    'MANAGER': 'profiles.managers.CustomStreamManager',
+    'FETCH_RELATIONS': True,
+}

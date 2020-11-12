@@ -36,6 +36,7 @@ urlpatterns = [
     path('', include(profiles.urls)),
     path('', include(static_assets.urls)),
     path('stats/', include('stats.urls')),
+    path('activity/', include('actstream.urls')),
 ]
 
 handler400 = error_views.ErrorView.as_view(template_name='common/errors/400.html', status=400)

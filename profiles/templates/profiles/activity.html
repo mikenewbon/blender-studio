@@ -1,0 +1,18 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+<div class="container-xl">
+  <section class="my-4">
+    {% url 'profile-activity' as my_activity_url %}
+    {% url 'profile-notifications' as my_notifications_url %}
+    {% if request.path == my_activity_url %}
+    {% include "common/components/simple_header.html" with title="My activity" subtitle="All your most recent acivity in the cloud is here." %}
+    {% elif request.path == my_notifications_url %}
+    {% include "common/components/simple_header.html" with title="Notifications" subtitle="All the latest likes and replies to your content are here." %}
+    {% else %}
+
+    {% endif %}
+    {% include 'profiles/components/actions.html' %}
+  </section>
+</div>
+{% endblock %}

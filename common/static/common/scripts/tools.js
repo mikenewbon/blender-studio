@@ -20,18 +20,18 @@ function timeDifference(datetime) {
   if (elapsed < msPerMinute) {
     let value = Math.round(elapsed / 1000);
     if (value == 1) {
-      return value + ' second ago'
+      return value + ' sec ago'
     } else {
-      return value + ' seconds ago';
+      return value + ' secs ago';
     }
   }
 
   else if (elapsed < msPerHour) {
     let value = Math.round(elapsed / msPerMinute);
     if (value == 1) {
-      return value + ' minute ago'
+      return value + ' min ago'
     } else {
-      return value + ' minutes ago';
+      return value + ' mins ago';
     }
   }
 

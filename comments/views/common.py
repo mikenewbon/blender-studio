@@ -32,6 +32,7 @@ def comments_to_template_type(
         )
         return typed_templates.CommentTree(
             id=comment.pk,
+            anchor=comment.anchor,
             full_name=comment.full_name,
             date=comment.date_created,
             message=assert_cast(str, comment.message),
@@ -71,6 +72,7 @@ def comments_to_template_type(
         """
         return typed_templates.DeletedCommentTree(
             id=comment.pk,
+            anchor=comment.anchor,
             date=comment.date_created,
             replies=[build_tree(reply) for reply in lookup.get(comment.pk, [])],
             is_archived=comment.is_archived,

@@ -1,5 +1,6 @@
 from typing import Optional, List, Dict, Any
 
+from actstream import action
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls.base import reverse
@@ -163,6 +164,33 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
             'edit_url': self.edit_url,
             'delete_url': self.delete_url,
         }
+
+    def get_action_target(self):
+        """Return an object this comment is relevant to, e.g. a blog post or a training section."""
+        for field in ('section', 'post', 'asset'):
+            target = getattr(self, field, None)
+            if target and target.all():
+                return target.first()
+
+    def create_action(self):
+        """Create an activity action from this comment.
+
+        Used to notify users about comments in various pages, such as blog posts or film assets.
+        """
+        target = self.get_action_target()
+
+        return action.send(self.user, verb='commented', action_object=self, target=target)
+
+    @property
+    def anchor(self):
+        """Return an anchor for referencing the comment in a page, e.g. blog post or film asset."""
+        return f'comment-{self.pk}'
+
+    def get_absolute_url(self):
+        """Return a URL to the comment within a specific page, e.g. blog post or film asset."""
+        action_target = self.get_action_target()
+        if action_target:
+            return action_target.get_absolute_url() + f'#{self.anchor}'
 
 
 class Like(mixins.CreatedUpdatedMixin, models.Model):

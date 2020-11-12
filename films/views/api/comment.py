@@ -17,7 +17,7 @@ from films.models import AssetComment
 def comment(request: HttpRequest, *, asset_pk: int) -> JsonResponse:
     parsed_body = json.loads(request.body)
 
-    reply_to_pk = None if parsed_body['reply_to'] is None else int(parsed_body['reply_to'])
+    reply_to_pk = int(parsed_body['reply_to']) if parsed_body.get('reply_to') else None
     message = assert_cast(str, parsed_body['message'])
 
     @transaction.atomic

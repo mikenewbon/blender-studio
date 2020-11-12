@@ -2,6 +2,7 @@ from unittest.mock import ANY
 import json
 import logging
 
+from actstream.models import Action
 from django.test import TestCase
 from django.urls import reverse
 
@@ -367,3 +368,49 @@ class TestCommentLikeEndpoint(TestCase):
             {'like': False, 'number_of_likes': 1},
         )
         self.assertEqual(self.comment.likes.count(), 1)
+
+    def test_like_comment_does_not_create_a_notification_for_the_same_user(self):
+        # No activity yet
+        self.assertEqual(Action.objects.count(), 0)
+
+        response = self.client.post(
+            self.comment.like_url, {'like': True}, content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, 200)
+        # No activity still
+        self.assertEqual(Action.objects.count(), 0)
+
+    def test_like_comment_creates_a_notification(self):
+        # No activity yet
+        self.assertEqual(Action.objects.count(), 0)
+
+        # Login as a new user
+        user = UserFactory()
+        self.client.force_login(user)
+        response = self.client.post(
+            self.comment.like_url, {'like': True}, content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Action.objects.count(), 1)
+
+        action = Action.objects.first()
+        # Comment's author should be notified about the like
+        self.assertEqual(
+            [str(_) for _ in Action.objects.notifications(self.comment.user)],
+            [f'{user} liked {self.comment} 0 minutes ago'],
+        )
+        self.assertEqual(
+            [str(_.action) for _ in self.comment.user.profile.notifications],
+            [f'{user} liked {self.comment} 0 minutes ago'],
+        )
+        self.assertEqual(
+            [str(_.action) for _ in self.comment.user.profile.notifications_unread],
+            [f'{user} liked {self.comment} 0 minutes ago'],
+        )
+        # TODO(anna): check notification endpoint too
+
+        self.assertEqual(action.action_object, self.comment)
+        self.assertEqual(action.actor, user)
+        self.assertFalse(action.public)

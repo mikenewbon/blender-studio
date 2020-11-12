@@ -16,6 +16,7 @@ class Comments:
 @dc.dataclass
 class CommentTree:
     id: int
+    anchor: str
     date: datetime.datetime
     replies: List[CommentTree]
     is_archived: bool

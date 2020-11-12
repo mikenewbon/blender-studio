@@ -1,0 +1,8 @@
+{% if user.is_authenticated %}
+{% url 'profile-activity' as my_activity_url %}
+{% url 'profile-notifications' as my_notifications_url %}
+<div class="row">
+    <div class="col-2 mb-3">{% if request.path == my_activity_url %}My activity{% else %}<a href="{{ my_activity_url }}">My activity</a>{% endif %}</div>
+    <div class="col-2 mb-3">{% if request.path == my_notifications_url %}My notifications{% else %}<a href="{{ my_notifications_url }}">My notifications</a>{% endif %}</div>
+</div>
+{% endif %}

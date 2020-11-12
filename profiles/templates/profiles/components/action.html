@@ -1,0 +1,14 @@
+{% url 'profile-notifications' as my_notifications_url %}
+
+<div class="activity-list-item-wrapper">
+  {% include 'profiles/components/action_summary.html' %}
+
+  {% if not notification.date_read and request.path == my_notifications_url %}
+  <button class="btn btn-sm btn-secondary btn-icon markasread" data-toggle="tooltip" data-placement="top"
+    title="Mark as read" {% if notification %} data-mark-read-url="{{ notification.mark_read_url }}"
+    data-is-read={% if notification.date_read %}"true"{% else %}"false"{% endif %} {% endif %}>
+    <i class="material-icons">markunread_mailbox</i>
+  </button>
+  {% endif %}
+
+</div>

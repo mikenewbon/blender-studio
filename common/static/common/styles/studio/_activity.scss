@@ -1,0 +1,201 @@
+.activity-list-wrapper {
+  border-radius: $border-radius;
+  background: $navigation-gray;
+  border: 1px solid $input-gray;
+  padding: $spacer;
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  padding-left: 0;
+  margin-bottom: 0;
+  border-radius: $border-radius;
+  padding: $spacer / 4 0;
+  background: $navigation-gray;
+  border: 1px solid $input-gray;
+  border-radius: $border-radius;
+  flex-wrap: wrap;
+}
+
+.activity-list-item {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  padding: $spacer * .6 $spacer;
+  color: $highlight-white-xstrong;
+  border: 0 solid;
+  transition: $transition-base;
+  flex-wrap: wrap;
+  flex-grow: 1;
+
+  .date {
+    float: right;
+    color: $highlight-white-strong;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  .name {
+    font-weight: bold;
+    margin-right: $spacer / 4;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+
+  .text {
+    white-space: normal;
+    text-align: left;
+  }
+
+  .profile {
+    margin-right: $spacer / 2;
+    height: 1.25rem;
+    width: 1.25rem;
+    border-radius: $border-radius-sm;
+    flex-shrink: 0;
+    display: block;
+  }
+
+  &::before {
+    background: $highlight-white;
+    border-radius: $border-radius;
+    content: close-quote;
+    height: calc(100% - #{$spacer / 2});
+    left: $spacer / 2;
+    opacity: 0;
+    position: absolute;
+    top: 5px;
+    transition: $transition-base;
+    width: calc(100% - #{$spacer});
+    pointer-events: none;
+    // z-index: -1;
+  }
+
+  &:hover {
+    color: $white;
+    text-decoration: none;
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  &.unread {
+    .text {
+      color: $white;
+    }
+
+    .name {
+      color: $white;
+    }
+
+    .date {
+      color: $primary;
+    }
+  }
+}
+
+.activity-list-item-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .activity-list-item+.markasread {
+    margin-right: $spacer / 2;
+  }
+
+  @include media-breakpoint-down(md) {
+    .name {
+      order: 1;
+    }
+
+    .date {
+      order: 2;
+    }
+
+    .text {
+
+      font-size: $font-size-sm;
+      order: 3;
+    }
+  }
+}
+
+.notification-dropdown {
+  flex-direction: column;
+  max-height: calc(100vh - 64px);
+  width: 350px;
+
+  &.show {
+    display: flex;
+  }
+
+  .dropdown-menu-nested {
+    overflow-y: scroll;
+    flex-shrink: 1;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: none;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $input-gray;
+      border-radius: $border-radius;
+    }
+  }
+}
+
+.notification-button {
+  @extend .search-button;
+  position: relative;
+}
+
+.notifications-counter {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: $primary;
+  border-radius: $border-radius-lg;
+  color: $white;
+  font-size: 0.75rem;
+  min-width: $font-size-sm;
+  text-align: center;
+  padding: 1px $spacer / 8;
+}
+
+.dropdown-menu {
+  .activity-list-item-wrapper {
+    .name {
+      order: 1;
+    }
+
+    .date {
+      order: 2;
+    }
+
+    .text {
+
+      font-size: $font-size-sm;
+      order: 3;
+    }
+  }
+}
+
+.dropdown-item.unread {
+  color: $primary;
+}
+
+.material-icons {
+  &.unread {
+    color: $primary;
+  }
+}
