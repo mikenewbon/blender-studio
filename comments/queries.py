@@ -4,14 +4,13 @@ from typing import List
 from django.db.models import Model, Exists, OuterRef, Case, Value, When, Count, QuerySet
 from django.db.models.fields import BooleanField
 
-from comments import models
-from comments.models import Comment, Like
+import comments.models as models
 
 
 log = logging.getLogger(__name__)
 
 
-def get_annotated_comments(obj: Model, user_pk: int) -> List[Comment]:
+def get_annotated_comments(obj: Model, user_pk: int) -> List[models.Comment]:
     """Return a list of annotated comments associated with the model instance `obj`.
 
     Args:
@@ -27,14 +26,14 @@ def get_annotated_comments(obj: Model, user_pk: int) -> List[Comment]:
         - number_of_likes: int; the number of likes associated with a comment;
         - owned_by_current_user: bool.
     """
-    comments: 'QuerySet[Comment]' = getattr(obj, 'comments')
+    comments: 'QuerySet[models.Comment]' = getattr(obj, 'comments')
 
     return list(
         comments.exclude(date_deleted__isnull=False, replies__isnull=True)
         .exclude(date_deleted__isnull=False, replies__date_deleted__isnull=False)
         .prefetch_related('user', 'reply_to', 'like_set')
         .annotate(
-            liked=Exists(Like.objects.filter(comment_id=OuterRef('pk'), user_id=user_pk)),
+            liked=Exists(models.Like.objects.filter(comment_id=OuterRef('pk'), user_id=user_pk)),
             # This excludes likes from deleted users:
             #    see https://code.djangoproject.com/ticket/15183
             # number_of_likes=Count('likes'),

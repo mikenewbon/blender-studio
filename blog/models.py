@@ -67,6 +67,10 @@ class Post(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Mo
         return reverse('api-post-comment', kwargs={'post_pk': self.pk})
 
     @property
+    def like_url(self) -> str:
+        return reverse('api-post-like', kwargs={'post_pk': self.pk})
+
+    @property
     def admin_url(self) -> str:
         return reverse('admin:blog_post_change', args=[self.pk])
 
@@ -83,3 +87,25 @@ class PostComment(models.Model):
 
     def get_absolute_url(self) -> str:
         return self.post.url
+
+
+class Like(mixins.CreatedUpdatedMixin, models.Model):
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'post'], name='only_one_like_per_post_and_user')
+        ]
+
+    # Whenever a User is deleted their Like lives on to ensure integrity of the conversation.
+    # Instead, we remove the reference to the User to honor the deletion request as much as
+    # possible.
+    user = models.ForeignKey(
+        User, null=True, blank=False, on_delete=models.SET_NULL, related_name='liked_posts'
+    )
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
+
+    def __str__(self) -> str:
+        return f'Like by {self.username} on {self.post}'
+
+    @property
+    def username(self) -> str:
+        return '<deleted>' if self.user is None else self.user.username

@@ -100,9 +100,39 @@
 
   <div class="markdown-text">{% with_shortcodes post.content_html %}</div>
 
+  <div class="file-toolbar row">
+    <button data-like-url="{{ post.like_url }}"
+      class="btn btn-transparent btn-xs btn-icon comment-material-button checkbox-like {% if not user.is_authenticated %}disabled{% endif%}"
+      {% if not user.is_authenticated %}disabled{% endif%} {% if post.liked %}data-checked="checked"
+      {% endif %}>
+      <i class="material-icons checkbox-like-icon-checked text-primary">favorite</i>
+      <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
+      <span class="likes-count">{{ post.likes.count }}</span>
+    </button>
+  </div>
+
   <section class="mb-3">{% include 'comments/components/comment_section.html' %}</section>
 
 </section>
 
+{% endblock %}
 
+{% block scripts_footer %}
+<script type="text/javascript">
+$(function() {
+  $('[data-like-url]').on('click', function() {
+      $el = $(this);
+      likeUrl = $el.data('like-url');
+      liked = $el.data('checked');
+      ajax.jsonRequest('POST', likeUrl, {like: !liked}).then((data) => {
+          if (data.like) {
+            $el.data('checked', 'checked');
+          } else {
+            $el.data('checked', false);
+          }
+          $('.likes-count').text(data.number_of_likes)
+      });
+  });
+});
+</script>
 {% endblock %}
