@@ -4,6 +4,7 @@ from django.http.request import HttpRequest
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_safe
 
+from common.queries import has_group
 from films.models import Film, FilmStatus, FilmFlatPage, Asset
 from films.queries import get_production_logs_page, get_current_asset
 
@@ -70,6 +71,9 @@ def film_detail(request: HttpRequest, film_slug: str) -> HttpResponse:
     context = {
         'film': film,
         'featured_artwork': featured_artwork,
+        'user_can_view_asset': (
+            request.user.is_authenticated and has_group(request.user, 'subscriber')
+        ),
         'user_can_edit_film': (
             request.user.is_staff and request.user.has_perm('films.change_film')
         ),
