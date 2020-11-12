@@ -20,77 +20,9 @@
 
   </div>
 
-  <div class="row justify-content-center py-3">
+  <div class="row justify-content-center mb-4">
       <div class="col-auto text-center">
-        <nav aria-label="Notification page navigation">
-          <ul class="pagination">
-            {% if page_obj.has_previous %}
-            {% comment %} <li class="page-item">
-              <a href="?page=1" class="page-link">First</a>
-            </li> {% endcomment %}
-            <li class="page-item">
-              <a href="?page={{ page_obj.previous_page_number }}" class="page-link">Previous</a>
-            </li>
-            {% if not page_obj.previous_page_number == 1 %}
-            <li class="page-item">
-              <a href="?page=1"
-                class="page-link">1</a>
-            </li>
-            <li class="page-item disabled">
-              <span class="page-link">...</span>
-            </li>
-            {% endif %}
-            <li class="page-item">
-              <a class="page-link"
-                href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
-            </li>
-            {% else %}
-            {% comment %} <li class="page-item disabled">
-              <span class="page-link">First</span>
-            </li> {% endcomment %}
-            <li class="page-item disabled">
-              <span class="page-link">Prev</span>
-            </li>
-            {% endif %}
-
-            <li class="page-item active" aria-current="page">
-              <span class="page-link">
-                {{ page_obj.number }}
-                <span class="sr-only">(current)</span>
-              </span>
-            </li>
-
-            {% if page_obj.has_next %}
-            <li class="page-item">
-              <a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
-            </li>
-            {% if not page_obj.next_page_number == page_obj.paginator.num_pages %}
-            <li class="page-item disabled">
-              <span class="page-link">...</span>
-            </li>
-            <li class="page-item">
-              <a href="?page={{ page_obj.paginator.num_pages }}"
-                class="page-link">{{ page_obj.paginator.num_pages }}</a>
-            </li>
-            {% endif %}
-            <li class="page-item">
-              <a href="?page={{ page_obj.next_page_number }}" class="page-link">Next</a>
-            </li>
-            {% comment %} <li class="page-item">
-              <a href="?page={{ page_obj.paginator.num_pages }}"
-                class="page-link">Last</a>
-            </li> {% endcomment %}
-            {% else %}
-            <li class="page-item disabled">
-              <span class="page-link">Next</span>
-            </li>
-            {% comment %} <li class="page-item disabled">
-              <span class="page-link">Last</span>
-            </li> {% endcomment %}
-            {% endif %}
-
-          </ul>
-        </nav>
+        {% include "common/components/navigation/pagination.html" %}
       </div>
     </div>
 </div>

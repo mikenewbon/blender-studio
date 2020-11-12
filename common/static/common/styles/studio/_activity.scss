@@ -136,7 +136,7 @@
   }
 
   .dropdown-menu-nested {
-    overflow-y: scroll;
+    overflow-y: auto;
     flex-shrink: 1;
 
     &::-webkit-scrollbar {
