@@ -4,7 +4,7 @@ window.comments = (function comments() {
   class Comment {
     constructor(element) {
       this.id = element.dataset.commentId;
-      this.likeUrl = element.dataset.likeUrl;
+      this.likeUrl = element.dataset.commentLikeUrl;
       this.editUrl = element.dataset.editUrl;
       this.deleteUrl = element.dataset.deleteUrl;
       this.deleteTreeUrl = element.dataset.deleteTreeUrl;
@@ -341,7 +341,7 @@ window.comments = (function comments() {
     const element = template.content.cloneNode(true).querySelector(`.${Comment.className}`);
     element.dataset.commentId = id;
     element.dataset.profileImageUrl = profileImageUrl;
-    element.dataset.likeUrl = likeUrl;
+    element.dataset.commentLikeUrl = likeUrl;
     element.dataset.editUrl = editUrl;
     element.dataset.deleteUrl = deleteUrl;
     element.dataset.archiveUrl = archiveUrl;

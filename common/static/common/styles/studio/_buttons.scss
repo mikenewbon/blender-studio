@@ -87,6 +87,38 @@
   transition: $transition-base;
 }
 
-.likes-count{
+.likes-count {
   margin-left: .25em;
+}
+
+.checkbox-like {
+
+  span {
+    color: $highlight-white-xstrong;
+    pointer-events: none;
+    // font-weight: $font-weight-normal;
+  }
+
+  i {
+    pointer-events: none;
+  }
+
+  .checkbox-like-icon-unchecked {
+    display: inline-block;
+  }
+
+  .checkbox-like-icon-checked {
+    display: none;
+  }
+
+  &[data-checked] {
+    .checkbox-like-icon-unchecked {
+      display: none;
+    }
+
+    .checkbox-like-icon-checked {
+      display: inline-block;
+    }
+
+  }
 }

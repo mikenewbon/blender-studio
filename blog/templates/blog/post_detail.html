@@ -27,11 +27,11 @@
       </div>
     </div>
     <div class="row">
-    {% if user_can_edit_post %}
-    <a href="{{ post.admin_url }}" class="btn btn-sm btn-icon btn-dark admin-float">
-      <i class="material-icons">edit</i>
-    </a>
-    {% endif %}
+      {% if user_can_edit_post %}
+      <a href="{{ post.admin_url }}" class="btn btn-sm btn-icon btn-dark admin-float">
+        <i class="material-icons">edit</i>
+      </a>
+      {% endif %}
       <div style="background-image:url('{{ post_author_profile.image_url }}');" class="profile-image profile ml-2">
       </div>
       <div class="col-auto">
@@ -46,35 +46,50 @@
 
 <section class="container-blog mt-3 mb-4">
 
-  {% comment %} <p class="subtitle">{{ post.topic }}</p>
-  <h1 class="">{{ post.title }}</h1>
-  <p class="subtitle small mb-3">{{ post.date_published|date:"jS M Y" }}</p> {% endcomment %}
-  {% comment %} <div class="training-toolbar-container mb-3">
-    <div class="training-toolbar-details row">
+  <div class="markdown-text">{% with_shortcodes post.content_html %}</div>
 
-      <div style="background-image:url('{{ post_author_profile.image_url }}');" class="profile-image profile ml-2">
-      </div>
-      <div class="col-auto">
-        <h4 class="profile-name mb-0">{{ post_author_profile.full_name }}</h4>
-        <p class="profile-title subtitle text-white-50 x-small">Author</p>
+  <div class="row my-4">
+    <div class="col">
+      <div class="row">
+        <div style="background-image:url('{{ post_author_profile.image_url }}');" class="profile-image profile ml-2">
+        </div>
+        <div class="col-auto">
+          <h4 class="profile-name mb-0">{{ post_author_profile.full_name }}</h4>
+          <p class="profile-title subtitle text-white-50 x-small">Author</p>
+        </div>
       </div>
     </div>
 
-    <div class="file-toolbar">
+    <div class="file-toolbar col-12 col-sm mt-3 mt-sm-0">
 
-      <a class="btn btn-sm btn-icon btn-dark">
-        <i class="material-icons">favorite_border</i>
-        <span class="likes-count">1</span>
-      </a>
+      <button data-like-url="{{ post.like_url }}"
+        class="btn btn-transparent btn-sm btn-icon comment-material-button checkbox-like {% if not user.is_authenticated %}disabled{% endif%}"
+        {% if not user.is_authenticated %}disabled{% endif%} {% if post.liked %}data-checked="checked" {% endif %}>
+        <i class="material-icons checkbox-like-icon-checked text-primary">favorite</i>
+        <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
+        <span class="likes-count">{{ post.likes.count }}</span>
+      </button>
 
-      <a href="http://www.facebook.com/share.php?u=cloud.blender.org/blog/{{ post.post.slug }}"
+      {% comment %} <a href="http://www.facebook.com/share.php?u=cloud.blender.org/blog/{{ post.post.slug }}"
         class="btn btn-sm btn-icon btn-dark">
         <i class="material-icons">facebook</i>
-      </a>
+      </a> {% endcomment %}
 
-      <a href="#" class="btn btn-sm btn-icon btn-dark">
+      {% comment %} <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
         <i class="material-icons">share</i>
-      </a>
+      </button>
+
+      <div class="dropdown-menu dropdown-menu-right">
+        <button class="dropdown-item copy-url-clipboard">
+          <i class="material-icons">link</i>
+          <span>Copy link</span>
+        </button>
+        <a href="http://www.facebook.com/share.php?u=cloud.blender.org/blog/{{ post.post.slug }}" target="_blank"
+          class="dropdown-item">
+          <i class="material-icons">facebook</i>
+          <span>Share to Facebook</span>
+        </a>
+      </div> {% endcomment %}
 
       {% if user_can_edit_post %}
       <a href="{{ post.admin_url }}" class="btn btn-sm btn-icon btn-dark">
@@ -91,48 +106,13 @@
           <i class="material-icons">flag</i>
           <span>Report Problem</span>
         </a>
-
       </div>
 
     </div>
-
-  </div> {% endcomment %}
-
-  <div class="markdown-text">{% with_shortcodes post.content_html %}</div>
-
-  <div class="file-toolbar row">
-    <button data-like-url="{{ post.like_url }}"
-      class="btn btn-transparent btn-xs btn-icon comment-material-button checkbox-like {% if not user.is_authenticated %}disabled{% endif%}"
-      {% if not user.is_authenticated %}disabled{% endif%} {% if post.liked %}data-checked="checked"
-      {% endif %}>
-      <i class="material-icons checkbox-like-icon-checked text-primary">favorite</i>
-      <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
-      <span class="likes-count">{{ post.likes.count }}</span>
-    </button>
   </div>
 
   <section class="mb-3">{% include 'comments/components/comment_section.html' %}</section>
 
 </section>
 
-{% endblock %}
-
-{% block scripts_footer %}
-<script type="text/javascript">
-$(function() {
-  $('[data-like-url]').on('click', function() {
-      $el = $(this);
-      likeUrl = $el.data('like-url');
-      liked = $el.data('checked');
-      ajax.jsonRequest('POST', likeUrl, {like: !liked}).then((data) => {
-          if (data.like) {
-            $el.data('checked', 'checked');
-          } else {
-            $el.data('checked', false);
-          }
-          $('.likes-count').text(data.number_of_likes)
-      });
-  });
-});
-</script>
 {% endblock %}

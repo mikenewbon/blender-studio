@@ -5,7 +5,7 @@
   id="{{ comment.anchor }}"
   class="comment {% if comment.is_archived and comment.is_top_level %}archived{% endif %} {% if comment.is_top_level %}top-level-comment{% endif %}"
   data-comment-id="{{ comment.id }}" data-message="{{ comment.message }}"
-  data-profile-image-url="{{ comment.profile_image_url }}" data-like-url="{{ comment.like_url }}"
+  data-profile-image-url="{{ comment.profile_image_url }}" data-comment-like-url="{{ comment.like_url }}"
   {% if comment.delete_tree_url is not None %} data-delete-tree-url="{{ comment.delete_tree_url }}" {% endif %}
   {% if comment.hard_delete_tree_url is not None %} data-hard-delete-tree-url="{{ comment.hard_delete_tree_url }}"
   {% endif %} {% if comment.edit_url is not None %} data-edit-url="{{ comment.edit_url }}" {% endif %}

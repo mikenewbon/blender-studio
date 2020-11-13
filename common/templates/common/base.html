@@ -109,7 +109,9 @@
                   <span>Notifications</span>
                 </a>
 
-                <button class="dropdown-item icon {% if user.profile.notifications_unread.count >= 1 %}unread{% endif %}" data-toggle="tooltip" data-placement="top"
+                <button
+                  class="dropdown-item icon {% if user.profile.notifications_unread.count >= 1 %}unread{% endif %}"
+                  data-toggle="tooltip" data-placement="top"
                   data-mark-all-read-url="{% url 'api-notifications-mark-read' %}" title="Mark all as read">
                   <i class="material-icons">markunread_mailbox</i>
                 </button>

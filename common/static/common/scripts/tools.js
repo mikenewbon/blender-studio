@@ -137,3 +137,26 @@ $(function () {
     })
   });
 });
+
+// Generic like button
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('[data-like-url]').forEach((i) => {
+    i.addEventListener('click', (e) => {
+      likeButton = e.target;
+      likeCount = e.target.querySelector('.likes-count');
+      likeUrl = likeButton.dataset.likeUrl;
+      liked = likeButton.dataset.checked;
+
+      ajax.jsonRequest('POST', likeUrl, {
+        like: !liked
+      }).then((data) => {
+        if (data.like) {
+          likeButton.dataset.checked = 'checked';
+        } else {
+          delete likeButton.dataset.checked;
+        }
+        likeCount.innerText = data.number_of_likes;
+      });
+    });
+  });
+});

@@ -50,33 +50,6 @@
 
 .comment-section {
   margin-top: $spacer;
-
-  .checkbox-like {
-
-    span {
-      color: $highlight-white-xstrong;
-      // font-weight: $font-weight-normal;
-    }
-
-    .checkbox-like-icon-unchecked {
-      display: inline-block;
-    }
-
-    .checkbox-like-icon-checked {
-      display: none;
-    }
-
-    &[data-checked] {
-      .checkbox-like-icon-unchecked {
-        display: none;
-      }
-
-      .checkbox-like-icon-checked {
-        display: inline-block;
-      }
-
-    }
-  }
 }
 
 .comment-input {
