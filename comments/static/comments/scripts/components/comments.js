@@ -346,7 +346,9 @@ window.comments = (function comments() {
     element.dataset.deleteUrl = deleteUrl;
     element.dataset.archiveUrl = archiveUrl;
     element.dataset.message = message;
-    element.querySelector('.profile').style.backgroundImage = `url('${profileImageUrl}')`;
+    if (!!profileImageUrl) {
+      element.querySelector('.profile').style.backgroundImage = `url('${profileImageUrl}')`;
+    }
     element.querySelector('.comment-name').innerText = fullName;
     element.querySelector('.comment-date').innerText = dateString;
     element.querySelector('.comment-text').innerHTML = message_html;
@@ -549,7 +551,9 @@ window.comments = (function comments() {
   ReplyInput.create = function create(profileImageUrl) {
     const template = document.getElementById('comment-reply-input-template');
     const element = template.content.cloneNode(true).querySelector(`.${ReplyInput.className}`);
-    element.querySelector('.profile').style.backgroundImage = `url('${profileImageUrl}')`;
+    if (!!profileImageUrl) {
+      element.querySelector('.profile').style.backgroundImage = `url('${profileImageUrl}')`;
+    }
     return ReplyInput.getOrWrap(element);
   };
 
@@ -628,7 +632,9 @@ window.comments = (function comments() {
   EditInput.create = function create(profileImageUrl) {
     const template = document.getElementById('comment-edit-input-template');
     const element = template.content.cloneNode(true).querySelector(`.${EditInput.className}`);
-    element.querySelector('.profile').style.backgroundImage = `url('${profileImageUrl}')`;
+    if (!!profileImageUrl) {
+      element.querySelector('.profile').style.backgroundImage = `url('${profileImageUrl}')`;
+    }
     return EditInput.getOrWrap(element);
   };
 
