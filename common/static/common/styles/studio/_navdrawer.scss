@@ -229,7 +229,7 @@
   display: flex;
   flex-direction: row;
   flex-grow: 1;
-  padding: ($spacer / 4 * 3) $spacer;
+  padding: ($spacer / 2) $spacer;
   transition: $transition-base;
   width: 100%;
 
@@ -240,6 +240,10 @@
 
   .nav-drawer-section-progress-wrapper+h4 {
     margin-left: $spacer * 1.75;
+  }
+
+  h4 {
+    margin-bottom: 0;
   }
 
   &::before {
@@ -282,6 +286,7 @@
 
     h4 {
       color: $white;
+
     }
 
     .drawer-nav-section-icon {
@@ -424,9 +429,13 @@ $circle-circumference: $circle-diameter * 3.14;
   flex-grow: 1;
   padding: $spacer / 2 $spacer;
   transition: $transition-base;
-  width: 100%;
+  max-width: 100%;
   position: relative;
   margin-bottom: 0;
+
+  &.dropdown {
+    max-width: calc(100% - 44px);
+  }
 
   &::before {
     background: $highlight-white;
@@ -470,6 +479,13 @@ $circle-circumference: $circle-diameter * 3.14;
 
     transition: transform .35s ease;
     vertical-align: text-top;
+  }
+
+  &.icon {
+    flex-grow: 0;
+    flex-shrink: 1;
+    margin-left: - $spacer / 2;
+    padding: $spacer / 2 $spacer * .75;
   }
 }
 

@@ -131,56 +131,62 @@ has-secondary-nav
 
           {% for collection, child_collections in collections.items %}
 
-          <div class="drawer-nav-group">
-            <div class="drawer-nav-dropdown-wrapper">
 
-              <a class="drawer-nav-dropdown font-weight-bold {% if current_collection.parent.parent != collection and current_collection.parent != collection and current_collection != collection %}collapsed{% endif %}"
-                href="{{ collection.url }}" {% if child_collections %} data-toggle="collapse"
-                data-target="#collection-{{ collection.id }}" {% endif %} data-tooltip="tooltip-overflow"
-                data-placement="top" title="{{ collection.name }}">
-                <span class="drawer-nav-dropdown-text overflow-text">
-                  {{ collection.name }}
-                </span>
-                {% if child_collections %}
-                <i class="material-icons">keyboard_arrow_down</i>
-                {% endif %}
-
-              </a>
-              {% if user_can_edit_collection %}
-              <a href="{{ collection.admin_url }}" class="btn btn-secondary btn-xs btn-icon btn-float">
-                <i class="material-icons btn-material-icons">create</i>
-              </a>
-              {% endif %}
-            </div>
+          <div class="drawer-nav-dropdown-wrapper">
             {% if child_collections %}
-            <div
-              class="collapse {% if current_collection.parent == collection or current_collection.parent.parent == collection or current_collection == collection %}show{% endif %}"
-              id="collection-{{ collection.id }}">
-              <ol class="drawer-nav-list ">
-
-                {% for child_collection in child_collections %}
-                <li class="drawer-nav-section">
-                  <a href="{{ child_collection.url }}" class="drawer-nav-section-link" data-tooltip="tooltip-overflow"
-                    data-placement="top" title="{{ child_collection.name }}">
-
-                    <i class="material-icons">folder</i>
-                    <h4 class="overflow-text">{{ child_collection.name }}</h4>
-
-                  </a>
-                  {% if user_can_edit_collection %}
-                  <a href="{{ child_collection.admin_url }}" target="_blank"
-                    class="btn btn-secondary btn-xs btn-float btn-icon">
-                    <i class="material-icons btn-material-icons">create</i>
-                  </a>
-                  {% endif %}
-                </li>
-
-                {% endfor %}
-
-              </ol>
-            </div>
+            <a class="drawer-nav-dropdown font-weight-bold dropdown"
+              href="{{ collection.url }}" data-tooltip="tooltip-overflow" data-placement="top"
+              title="{{ collection.name }}">
+              <span class="drawer-nav-dropdown-text overflow-text">
+                {{ collection.name }}
+              </span>
+            </a>
+            <a class="drawer-nav-dropdown icon {% if current_collection.parent.parent != collection and current_collection.parent != collection and current_collection != collection %}collapsed{% endif %}" data-toggle="collapse" data-target="#collection-{{ collection.id }}">
+              <i class="material-icons">keyboard_arrow_down</i>
+            </a>
+            {% else %}
+            <a class="drawer-nav-dropdown font-weight-bold" href="{{ collection.url }}" data-tooltip="tooltip-overflow"
+              data-placement="top" title="{{ collection.name }}">
+              <span class="drawer-nav-dropdown-text overflow-text">
+                {{ collection.name }}
+              </span>
+            </a>
+            {% endif %}
+            {% if user_can_edit_collection %}
+            <a href="{{ collection.admin_url }}" class="btn btn-secondary btn-xs btn-icon btn-float">
+              <i class="material-icons btn-material-icons">create</i>
+            </a>
             {% endif %}
           </div>
+          {% if child_collections %}
+          <div
+            class="collapse {% if current_collection.parent == collection or current_collection.parent.parent == collection or current_collection == collection %}show{% endif %}"
+            id="collection-{{ collection.id }}">
+            <ol class="drawer-nav-list ">
+
+              {% for child_collection in child_collections %}
+              <li class="drawer-nav-section">
+                <a href="{{ child_collection.url }}" class="drawer-nav-section-link" data-tooltip="tooltip-overflow"
+                  data-placement="top" title="{{ child_collection.name }}">
+
+                  <i class="material-icons">folder</i>
+                  <h4 class="overflow-text">{{ child_collection.name }}</h4>
+
+                </a>
+                {% if user_can_edit_collection %}
+                <a href="{{ child_collection.admin_url }}" target="_blank"
+                  class="btn btn-secondary btn-xs btn-float btn-icon">
+                  <i class="material-icons btn-material-icons">create</i>
+                </a>
+                {% endif %}
+              </li>
+
+              {% endfor %}
+
+            </ol>
+          </div>
+          {% endif %}
+
           {% endfor %}
 
 
