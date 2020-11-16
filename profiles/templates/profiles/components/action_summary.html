@@ -1,4 +1,4 @@
-<a href="{% firstof action.action_object.get_absolute_url action.action_object_url %}"
+<a href="{% if action.action_object %}{% firstof action.action_object.get_absolute_url action.action_object_url %}{% else %}{{ action.target.get_absolute_url }}{% endif %}"
   class="list-group-item activity-list-item {% if notification and not notification.date_read %}unread{% endif %}"
   {% if notification %} data-mark-read-url="{{ notification.mark_read_url }}"
   data-is-read={% if notification.date_read %}"true"{% else %}"false"{% endif %} {% endif %}>
@@ -16,11 +16,17 @@
   </span>
   <span class="text">
     {{ action.verb|capfirst }}
-    {% if action.action_object and action.action_object.user == user and request.user != action.actor %}
+    {% if action.action_object %}
+    {% if action.action_object.user == user and user != action.actor %}
     your {{ action.action_object_content_type.name|lower }}
+    {% elif action.action_object.user != action.actor %}
+    {{ action.action_object }}
+    {% endif %}
     {% endif %}
     {% if action.action_object and action.target %}
     on {{ action.target }}
+    {% else %}
+    {{ action.target }}
     {% endif %}
   </span>
   <span class="date">{{ action.timestamp|date:"U" }}</span>
