@@ -6,7 +6,7 @@
       <a href="{{ section.url }}">
 
         {% if section.thumbnail_s_url %}
-        <img class="file-image" src="{{ section.thumbnail_s_url }}" alt="{{ section.name }}"/>
+        <img class="file-image" src="{{ section.thumbnail_s_url }}" alt="{{ section.name }}" />
         {% endif %}
 
         <div class="badge badge-video-duration badge-darkhighlight-strong">
@@ -17,6 +17,10 @@
     </div>
     <a class="file-body" href="{{ section.url }}" data-tooltip="tooltip-overflow" data-placement="top"
       title="{{ section.name }}">
+      {% if section.is_free %}
+      <i class="material-icons icon-inline small text-success mr-1" data-toggle="tooltip" data-placement="top"
+        title="Free">lock_open</i>
+      {% endif %}
       <h4 class="overflow-text">{{ section.name }}</h4>
     </a>
 
