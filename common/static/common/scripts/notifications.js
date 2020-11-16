@@ -19,7 +19,11 @@ $(function () {
         $(e.currentTarget).tooltip('dispose');
         e.currentTarget.remove();
       }
-    }).catch(window.location.href = e.currentTarget.href);
+    }).catch((error) => {
+      if (e.currentTarget.href != null) {
+        window.location.href = e.currentTarget.href
+      }
+    });
   });
 
   $('[data-mark-all-read-url]').on('click', function (e) {

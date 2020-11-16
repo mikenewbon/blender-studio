@@ -904,7 +904,7 @@ $card-columns-margin: $card-columns-gap !default;
 $tooltip-font-size: $font-size-sm !default;
 $tooltip-max-width: 200px !default;
 $tooltip-color: $white !default;
-$tooltip-bg: $navigation-gray !default;
+$tooltip-bg: rgba($charcoal-gray, 1) !default;
 $tooltip-border-radius: $border-radius !default;
 $tooltip-opacity: 0.9 !default;
 $tooltip-padding-y: 0.125rem !default;
