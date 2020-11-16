@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from common import markdown
 from common.types import assert_cast
 from training import typed_templates
-from training.models import chapters, sections as sections_models, trainings
+from training.models import chapters as chapters_models, sections as sections_models, trainings
 from training.typed_templates.types import ChapterNavigation, Navigation, SectionNavigation
 from training.typed_templates.home import RecentlyWatchedSection
 import static_assets.models as models_static_assets
@@ -37,12 +37,6 @@ def training_model_to_template_type(
     )
 
 
-def chapter_model_to_template_type(chapter: chapters.Chapter,) -> typed_templates.types.Chapter:
-    return typed_templates.types.Chapter(
-        index=chapter.index, name=chapter.name, is_published=chapter.is_published,
-    )
-
-
 def video_model_to_template_type(
     video: models_static_assets.Video, start_position: Optional[datetime.timedelta]
 ) -> typed_templates.types.Video:
@@ -62,7 +56,7 @@ def asset_model_to_template_type(
 
 def navigation_to_template_type(
     training: trainings.Training,
-    chapters: List[chapters.Chapter],
+    chapters: List[chapters_models.Chapter],
     sections: List[sections_models.Section],
     *,
     user: User,
@@ -91,6 +85,8 @@ def navigation_to_template_type(
                         current.id == section.id
                         for section in sections_per_chapter.get(chapter.id, [])
                     )
+                    or isinstance(current, chapters_models.Chapter)
+                    and current.id == chapter.id
                 ),
                 admin_url=(
                     chapter.admin_url

@@ -1,0 +1,94 @@
+{% extends 'training/base_with_navigation.html' %}
+
+{% load static %}
+{% load pipeline %}
+{% load common_extras %}
+
+{% block title_append %} - {{ training.name }}: {{ chapter.name }}{% endblock title_append %}
+
+{% block meta %}
+{% capture title %}{{ training.name }}: {{ chapter.name }}{% endcapture %}
+{% firstof chapter.thumbnail_m_url training.thumbnail_m_url as image_url %}
+{% with description=training.description image_url=chapter.thumbnail_m_url %}
+{% include 'common/components/meta.html'  %}
+{% endwith %}
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+{% javascript 'training' %}
+{% endblock scripts %}
+
+{% block nexted_content %}
+<div class="row mb-3">
+  <div class="col training-video">
+    {% if request.user.is_authenticated and request.user|has_group:"subscriber" or section.is_free %}
+    {% if chapter.thumbnail %}
+    {% include "common/components/helpers/image_set.html" with alt=chapter.name classes="img-fluid img-width-100 rounded" img_source=chapter.thumbnail xsmall_width="600" small_width="800" medium_width="1000" large_width="1200" xlarge_width="1920" %}
+    {% endif %}
+    {% else %}
+    {% include 'common/components/content_locked.html' with background=training.picture_header %}
+    {% endif %}
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <div class="row align-items-start">
+      <div class="col-12 col-md mb-2 mb-md-3">
+        <div class="d-none d-md-block">
+          <p class="subtitle small">{{ chapter.name }}</p>
+          <h2 class="">{{ chapter.name }}</h2>
+        </div>
+        <div class="text-muted x-small">
+          <p class="d-inline mr-2">{{ chapter.date_created|date:"jS F Y" }}</p>
+        </div>
+      </div>
+
+
+      <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
+        <div class="training-toolbar-container">
+          <div class="training-toolbar">
+            <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
+              <i class="material-icons">more_horiz</i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank"
+                class="dropdown-item">
+                <i class="material-icons">flag</i>
+                <span>Report Problem</span>
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      {% if chapter.user.profile and chapter.user.profile.image_url  %}
+      <div style="background-image:url('{{ chapger.user.profile.image_url }}');" class="profile ml-2"></div>
+      {% else %}
+      <div style="background-image:url('{% static 'common/images/blank-profile-pic.png' %}');" class="profile ml-2">
+      </div>
+      {% endif %}
+
+      <div class="col-auto">
+        <p class="subtitle text-white-50 x-small">Author</p>
+        <h4 class="comment-name">{{ chapter.user.profile.full_name }}</h4>
+      </div>
+    </div>
+
+    <section class="mb-3 markdown-text">{% with_shortcodes chapter.description|markdown %}</section>
+
+    <div class="FIXME">
+    {% for section in chapter.sections.all %}
+    {% if section.is_published %}
+    {{ section }}
+    {% endif %}
+    {% endfor %}
+    </div>
+
+  </div>
+</div>
+
+{% endblock nexted_content %}
