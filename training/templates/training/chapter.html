@@ -31,7 +31,7 @@
     {% endif %}
   </div>
 </div>
-<div class="row">
+<div class="row mb-3">
   <div class="col">
     <div class="row align-items-start">
       <div class="col-12 col-md mb-2 mb-md-3">
@@ -80,15 +80,45 @@
 
     <section class="mb-3 markdown-text">{% with_shortcodes chapter.description|markdown %}</section>
 
-    <div class="FIXME">
-    {% for section in chapter.sections.all %}
-    {% if section.is_published %}
-    {{ section }}
-    {% endif %}
-    {% endfor %}
+    {% comment %} <div class="FIXME">
+      {% for section in chapter.sections.all %}
+      {% if section.is_published %}
+      {{ section }}
+      {% endif %}
+      {% endfor %}
+    </div> {% endcomment %}
+
+    <div class="files row grid">
+      <div class="grid-sizer col-12 col-sm-6 col-md-6 col-lg-4"></div>
+      {% for section in chapter.sections.all %}
+      {% if section.is_published  %}
+      {% comment %} <p>{{ section.name }}</p> {% endcomment %}
+      {% with title=post.title description=post.excerpt image_url=post.thumbnail_m_url %}
+      {% include "common/components/file_section.html" with section=section %}
+      {% endwith %}
+      {% endif %}
+      {% endfor %}
     </div>
 
   </div>
 </div>
 
 {% endblock nexted_content %}
+
+{% block scripts_footer %}
+
+<script>
+  var $grid = $('.grid').masonry({
+    itemSelector: '.grid-item',
+    columnWidth: '.grid-sizer',
+    percentPosition: true,
+    horizontalOrder: true,
+  });
+
+  $grid.imagesLoaded().progress(function () {
+    $grid.masonry('layout');
+  });
+
+</script>
+
+{% endblock scripts_footer %}

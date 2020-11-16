@@ -1,0 +1,24 @@
+{% load static %}
+{% load thumbnail %}
+<div class="{{ card_sizes|default:"col-12 col-sm-6 col-md-6 col-lg-4" }} grid-item card-grid-item">
+  <div class="file">
+    <div class="file-header">
+      <a href="{{ section.url }}">
+
+        {% if section.thumbnail_s_url %}
+        <img class="file-image" src="{{ section.thumbnail_s_url }}" alt="{{ section.name }}"/>
+        {% endif %}
+
+        <div class="badge badge-video-duration badge-darkhighlight-strong">
+          {{ section.duration_label }}
+        </div>
+
+      </a>
+    </div>
+    <a class="file-body" href="{{ section.url }}" data-tooltip="tooltip-overflow" data-placement="top"
+      title="{{ section.name }}">
+      <h4 class="overflow-text">{{ section.name }}</h4>
+    </a>
+
+  </div>
+</div>
