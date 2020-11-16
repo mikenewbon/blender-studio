@@ -140,7 +140,11 @@ $(function () {
 
 // Generic like button
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('[data-like-url]').forEach((i) => {
+  likeButtonSetup(document);
+});
+
+function likeButtonSetup(element) {
+  element.querySelectorAll('[data-like-url]').forEach((i) => {
     i.addEventListener('click', (e) => {
       likeButton = e.target;
       likeCount = e.target.querySelector('.likes-count');
@@ -159,4 +163,4 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   });
-});
+}

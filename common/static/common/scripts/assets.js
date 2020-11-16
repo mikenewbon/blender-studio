@@ -90,6 +90,7 @@ window.asset = (function asset() {
     if (assetParam != null && assetElem != null) {
       assetElem.click();
     }
+
   }
 
   function addURLParam(param, value) {
@@ -172,6 +173,7 @@ window.asset = (function asset() {
 
       // Trigger activation of comment event listeners
       activateComments();
+      likeButtonSetup(document);
       $('[data-toggle="tooltip"]').tooltip();
       resetProgress();
     });
