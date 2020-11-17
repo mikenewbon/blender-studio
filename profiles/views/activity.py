@@ -33,4 +33,4 @@ class Activity(LoginRequiredMixin, ListView):
 
     def get_queryset(self) -> QuerySet:
         """Return user activity."""
-        return models.actor_stream(self.request.user)
+        return self.request.user.actor_actions.all()

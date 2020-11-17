@@ -1,11 +1,16 @@
+import json
+
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http.request import HttpRequest
 from django.http.response import Http404
+from django.http.response import JsonResponse
 from django.shortcuts import render
-from django.views.decorators.http import require_safe
+from django.views.decorators.http import require_POST, require_safe
 
+from common.types import assert_cast
 from films.models import Asset
-from films.queries import get_asset_context, get_asset
+from films.queries import get_asset_context, get_asset, set_asset_like
 
 
 @require_safe
@@ -31,7 +36,7 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
         :template:`common/components/modal_asset.html`
     """
     try:
-        asset = get_asset(asset_pk)
+        asset = get_asset(asset_pk, request)
     except Asset.DoesNotExist:
         raise Http404('No asset matches the given query.')
 
@@ -43,8 +48,22 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
 @require_safe
 def asset_zoom(request: HttpRequest, asset_pk: int) -> HttpResponse:
     try:
-        asset = Asset.objects.filter(pk=asset_pk, is_published=True).get()
+        asset = get_asset(asset_pk, request)
     except Asset.DoesNotExist:
         raise Http404('No asset matches the given query.')
 
     return render(request, 'common/components/modal_asset_zoom.html', {'asset': asset})
+
+
+@require_POST
+@login_required
+def asset_like(request: HttpRequest, *, asset_pk: int) -> JsonResponse:
+    parsed_body = json.loads(request.body)
+
+    requested_like = assert_cast(bool, parsed_body['like'])
+
+    number_of_likes = set_asset_like(
+        asset_pk=asset_pk, user_pk=request.user.pk, like=requested_like
+    )
+
+    return JsonResponse({'like': requested_like, 'number_of_likes': number_of_likes})

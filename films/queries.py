@@ -12,7 +12,7 @@ from comments import typed_templates
 from comments.models import Comment
 from comments.queries import get_annotated_comments
 from comments.views.common import comments_to_template_type
-from films.models import Asset, Collection, Film, ProductionLogEntryAsset
+from films.models import Asset, Collection, Film, ProductionLogEntryAsset, Like
 
 logger = logging.getLogger(__name__)
 DEFAULT_LOGS_PAGE_SIZE = 3
@@ -179,9 +179,9 @@ def get_asset_context(
     return context
 
 
-def get_asset(asset_pk: int) -> Optional[Asset]:
+def get_asset(asset_pk: int, request: HttpRequest = None) -> Optional[Asset]:
     """Retrieve a published film asset by a given asset ID."""
-    return (
+    asset = (
         Asset.objects.filter(pk=asset_pk, is_published=True)
         .select_related(
             'film',
@@ -194,6 +194,10 @@ def get_asset(asset_pk: int) -> Optional[Asset]:
         )
         .get()
     )
+
+    if request and request.user.is_authenticated:
+        asset.liked = Like.objects.filter(asset_id=asset.pk, user_id=request.user.pk).exists()
+    return asset
 
 
 def get_production_logs_page(
@@ -305,3 +309,13 @@ def get_current_asset(request: HttpRequest) -> Dict[str, Asset]:
         except ValueError:
             logger.debug('Invalid asset_pk')
     return {}
+
+
+def set_asset_like(*, asset_pk: int, user_pk: int, like: bool) -> int:
+    """Like or unlike an asset."""
+    if like:
+        Like.objects.update_or_create(asset_id=asset_pk, user_id=user_pk)
+    else:
+        Like.objects.filter(asset_id=asset_pk, user_id=user_pk).delete()
+
+    return Like.objects.filter(asset_id=asset_pk).count()

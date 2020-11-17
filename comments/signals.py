@@ -6,13 +6,14 @@ from django.dispatch import receiver
 
 from comments.models import Comment, Like
 from common import markdown
+from profiles.queries import create_action_from_like
 
 logger = logging.getLogger(__name__)
 
 
-def _create_action_from_comment(user, comment: Comment, verb: str) -> None:
+def _create_action_from_reply(user, comment: Comment) -> None:
     target = comment.get_action_target()
-
+    verb = 'replied to'
     action.send(user, verb=verb, action_object=comment, target=target, public=False)
 
 
@@ -33,7 +34,8 @@ def notify_about_like(sender: object, instance: Like, created: bool, **kwargs: o
     if instance.user == instance.comment.user:
         return
 
-    _create_action_from_comment(instance.user, instance.comment, verb='liked')
+    target = instance.comment.get_action_target()
+    create_action_from_like(actor=instance.user, target=target, action_object=instance.comment)
 
 
 @receiver(post_save, sender=Comment)
@@ -49,4 +51,4 @@ def notify_about_reply(sender: object, instance: Comment, created: bool, **kwarg
     if instance.reply_to.user == instance.user:
         return
 
-    _create_action_from_comment(instance.user, instance.reply_to, verb='replied to')
+    _create_action_from_reply(instance.user, instance.reply_to)

@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls.base import reverse
 from django.utils.text import slugify
@@ -64,7 +65,7 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         if self.collection and self.collection.film != self.film:
-            raise ValidationError(f'Collection\'s film does not match the asset\'s film.')
+            raise ValidationError('Collection\'s film does not match the asset\'s film.')
 
     def __str__(self) -> str:
         return self.name
@@ -123,6 +124,10 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
     def admin_url(self) -> str:
         return reverse('admin:films_asset_change', args=[self.pk])
 
+    @property
+    def like_url(self) -> str:
+        return reverse('api-asset-like', kwargs={'asset_pk': self.pk})
+
 
 class AssetComment(models.Model):
     """This is an intermediary model between Asset and Comment.
@@ -133,3 +138,27 @@ class AssetComment(models.Model):
 
     asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
     comment = models.OneToOneField(Comment, on_delete=models.CASCADE)
+
+
+class Like(mixins.CreatedUpdatedMixin, models.Model):
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'asset'], name='only_one_like_per_asset_and_user'
+            )
+        ]
+
+    # Whenever a User is deleted their Like lives on to ensure integrity of the conversation.
+    # Instead, we remove the reference to the User to honor the deletion request as much as
+    # possible.
+    user = models.ForeignKey(
+        User, null=True, blank=False, on_delete=models.SET_NULL, related_name='liked_assets'
+    )
+    asset = models.ForeignKey(Asset, on_delete=models.CASCADE, related_name='likes')
+
+    def __str__(self) -> str:
+        return f'Like by {self.username} on {self.asset}'
+
+    @property
+    def username(self) -> str:
+        return '<deleted>' if self.user is None else self.user.username

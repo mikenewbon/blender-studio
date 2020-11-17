@@ -14,6 +14,19 @@ from profiles.queries import set_groups
 logger = logging.getLogger(__name__)
 
 
+def _get_target_author(target) -> User:
+    if getattr(target, 'author', None):
+        return target.author
+    # training `Section`s
+    elif getattr(target, 'user', None):
+        return target.user
+    # film `Asset`s
+    elif getattr(target, 'static_asset', None):
+        asset_author = target.static_asset.author or target.static_asset.user
+        if asset_author:
+            return asset_author
+
+
 @receiver(bid_signals.user_created)
 def fill_profile(
     sender: object, instance: User, oauth_info: Dict[str, str], **kwargs: object
@@ -73,25 +86,17 @@ def create_notification(sender: object, instance: Action, created: bool, **kwarg
     ):
         users.add(action_object.user)
 
-    # Notify about likes on blog posts
-    if target and not action_object and verb in [Action.objects.verb_liked]:
-        # Separate clause otherwise likes on blog comments also end up in notifications
-        if getattr(target, 'author', None):
-            users.add(target.author)
+    if target:
+        target_author = _get_target_author(target)
+        if target_author:
+            # Notify about likes on blog posts and film assets
+            if not action_object and verb in [Action.objects.verb_liked]:
+                # Separate clause otherwise likes on related comments also end up in notifications
+                users.add(target_author)
 
-    # Notify about comments and likes on
-    if target and verb in [Action.objects.verb_commented]:
-        # blog `Post`s
-        if getattr(target, 'author', None):
-            users.add(target.author)
-        # training `Section`s
-        elif getattr(target, 'user', None):
-            users.add(target.user)
-        # film `Asset`s
-        elif getattr(target, 'static_asset', None):
-            asset_author = target.static_asset.author or target.static_asset.user
-            if asset_author:
-                users.add(asset_author)
+            # Notify about comments and likes on
+            if verb in [Action.objects.verb_commented]:
+                users.add(target_author)
 
     if not users:
         logger.debug(f'Unable to determine a relevant user for a new action: {instance}')

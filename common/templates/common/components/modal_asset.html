@@ -87,19 +87,18 @@
             <div class="training-toolbar-container">
 
               <div class="file-toolbar">
+                <button data-like-url="{{ asset.like_url }}"
+                        class="btn btn-transparent btn-sm btn-icon comment-material-button checkbox-like {% if not user.is_authenticated %}disabled{% endif%}"
+                        {% if not user.is_authenticated %}disabled{% endif%} {% if asset.liked %}data-checked="checked" {% endif %}>
+                    <i class="material-icons checkbox-like-icon-checked text-primary">favorite</i>
+                    <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
+                    <span class="likes-count">{{ asset.likes.count }}</span>
+                </button>
 
                 {% if user.is_anonymous and not asset.is_free %}
-                {% comment %} TODO(Mike + Anna) Impliment Asset likes {% endcomment %}
-                {% comment %} <button disabled class="btn disabled btn-sm btn-dark btn-icon"><i
-                    class="material-icons">favorite_border</i> <span class="likes-count">0</span></button>
-                {% endcomment %}
                 <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to
                   Download</button>
                 {% else %}
-                {% comment %} <a class="btn btn-sm btn-dark">
-                  <i class="material-icons">favorite_border</i>
-                  Like
-                </a> {% endcomment %}
                 <a href="{{ asset.download_url }}" download class="btn btn-sm btn-dark">Download <span
                     class="subtitle">({{ asset.download_size }})</span></a>
                 {% endif %}

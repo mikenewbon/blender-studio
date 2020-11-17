@@ -1,8 +1,11 @@
-from typing import List, Set, Union
+from typing import List, Set, Union, Any
 import logging
 import re
 
+from actstream import action
+from actstream.models import Action
 from django.contrib.auth.models import User, Group
+from django.contrib.contenttypes.models import ContentType
 
 logger = logging.getLogger(__name__)
 re_cloud_role_name_cleanup = re.compile('^cloud_')
@@ -45,3 +48,41 @@ def set_groups(user: User, group_names: Union[List[str], Set[str]]) -> None:
     if groups_to_remove_from:
         logger.warning(f'Removing user #{user.pk} from the groups: {groups_to_remove_from}')
         user.groups.remove(*groups_to_remove_from)
+
+
+def duplicate_action_exists(actor: User, target: Any, verb: str, action_object: Any = None) -> bool:
+    """Check if user activity on the given objects exists already.
+
+    Useful in cases when creating activity record doesn't make sense,
+    such as when a person "unliked" a post and then "liked" it again.
+    """
+    qs = Action.objects.filter(
+        actor_object_id=actor.pk,
+        verb=verb,
+    )
+    if target:
+        target_ct = ContentType.objects.get_for_model(type(target))
+        qs = qs.filter(
+            target_content_type=target_ct,
+            target_object_id=target.pk,
+        )
+    if action_object:
+        action_object_ct = ContentType.objects.get_for_model(type(action_object))
+        qs = qs.filter(
+            action_object_content_type=action_object_ct,
+            action_object_object_id=action_object.pk,
+        )
+
+    return qs.exists()
+
+
+def create_action_from_like(actor: User, target: Any, action_object: Any = None) -> None:
+    """Creates an activity action for a Like."""
+    verb_liked = 'liked'
+    if duplicate_action_exists(
+        actor=actor, target=target, action_object=action_object, verb=verb_liked
+    ):
+        # Avoid generating duplicate activity for repeated likes
+        return
+
+    action.send(actor, verb=verb_liked, target=target, action_object=action_object, public=False)

@@ -1,10 +1,10 @@
 import logging
 
-from actstream import action
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from blog.models import PostComment, Like
+from profiles.queries import create_action_from_like
 
 
 logger = logging.getLogger(__name__)
@@ -36,4 +36,4 @@ def notify_about_like(sender: object, instance: Like, created: bool, **kwargs: o
     if instance.user == instance.post.author:
         return
 
-    action.send(instance.user, verb='liked', target=instance.post, public=False)
+    create_action_from_like(actor=instance.user, target=instance.post)
