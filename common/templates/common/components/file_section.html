@@ -11,7 +11,7 @@
         <img class="file-image" src="{{ section.thumbnail_s_url }}" alt="{{ section.name }}" />
         {% endif %}
 
-        {% if section.contains_blend_file %}
+        {% if section.static_asset.source|endswith:".blend" %}
         <img class="file-icon" src="{% static "common/images/icons/blend.svg" %}" alt="asset preview">
         {% elif section.static_asset.source_type == "file" %}
         <img class="file-icon" src="{% static "common/images/icons/file.svg" %}" alt="asset preview">
@@ -20,9 +20,7 @@
           {% firstof section.duration_label section.static_asset.video.duration_label %}
         </div>
         {% endif %}
-
       </a>
-      {% if section.static_asset.source|endswith:".blend" %}tis a blend file!{% endif %}
     </div>
     <a class="file-body" href="{{ section.url }}" data-tooltip="tooltip-overflow" data-placement="top"
       title="{{ section.name }}">
