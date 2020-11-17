@@ -1,5 +1,7 @@
 {% load static %}
 {% load thumbnail %}
+{% load common_extras %}
+
 <div class="{{ card_sizes|default:"col-12 col-sm-6 col-md-6 col-lg-4" }} grid-item card-grid-item">
   <div class="file">
     <div class="file-header">
@@ -20,6 +22,7 @@
         {% endif %}
 
       </a>
+      {% if section.static_asset.source|endswith:".blend" %}tis a blend file!{% endif %}
     </div>
     <a class="file-body" href="{{ section.url }}" data-tooltip="tooltip-overflow" data-placement="top"
       title="{{ section.name }}">

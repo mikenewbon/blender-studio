@@ -1,6 +1,7 @@
 """Commonly used template tags and filters."""
 from django import template
 from django.contrib.auth.models import User
+from django.template.defaultfilters import stringfilter
 from django.utils.html import mark_safe
 
 from common import queries
@@ -70,3 +71,10 @@ def absolute_url(context, path: str) -> str:
     if not request:
         return ''
     return request.build_absolute_uri(path)
+
+
+@register.filter(is_safe=False)
+@stringfilter
+def endswith(value: str, suffix: str) -> bool:
+    """Check if a string ends with a given suffix."""
+    return value.endswith(suffix)
