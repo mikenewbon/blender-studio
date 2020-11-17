@@ -33,5 +33,12 @@ class Chapter(mixins.CreatedUpdatedMixin, models.Model):
         return f'{self.training.name} > {self.index:02.0f}. {self.name}'
 
     @property
+    def url(self) -> str:
+        return reverse(
+            'chapter',
+            kwargs={'training_slug': self.training.slug, 'chapter_slug': self.slug},
+        )
+
+    @property
     def admin_url(self) -> str:
         return reverse('admin:training_chapter_change', args=[self.pk])

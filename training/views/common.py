@@ -79,6 +79,7 @@ def navigation_to_template_type(
                 index=chapter.index,
                 name=chapter.name,
                 slug=chapter.slug,
+                url=chapter.url,
                 current=(
                     isinstance(current, sections_models.Section)
                     and any(

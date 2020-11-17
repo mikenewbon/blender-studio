@@ -93,6 +93,7 @@ class ChapterNavigation:
     is_published: bool
 
     admin_url: Optional[str]
+    url: Optional[str]
 
     sections: List[SectionNavigation]
 
