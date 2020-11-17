@@ -14,12 +14,15 @@
   flex-direction: row;
   margin-bottom: $spacer;
   padding: $spacer;
+
   @include media-breakpoint-down(sm) {
     padding-bottom: 0;
   }
 }
 
 .update-feed-week-column {
+  width: 100%;
+
   >*:last-child {
     margin-bottom: 0;
   }
