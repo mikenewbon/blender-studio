@@ -1,9 +1,7 @@
+# noqa: D100
 from typing import Optional, Dict
-import datetime
+import re
 
-from django.core.management.base import BaseCommand
-import training.models as models_training
-import static_assets.models as models_static_assets
 from django.contrib.auth.models import User
 from bson import ObjectId
 import films.models as models_films
@@ -25,9 +23,11 @@ def _lookup_user(user_doc: Dict) -> Optional[User]:
 
 
 class Command(ImportCommand):
+    """Create production logs."""
+
     help = 'Create production logs'
 
-    def get_or_create_production_log(self, collection):
+    def _get_or_create_production_log(self, collection):
         try:
             production_log = models_films.ProductionLog.objects.get(
                 film=collection.film, name=collection.name
@@ -36,16 +36,33 @@ class Command(ImportCommand):
             node_doc = mongo.nodes_collection.find_one({'_id': ObjectId(collection.slug)})
             user_doc = mongo.users_collection.find_one({'_id': node_doc['user']})
             user = _lookup_user(user_doc)
+            print(user, node_doc)
+            description = node_doc.get('description') or collection.text
+            youtube_link = ''
+            if description:
+                youtube_iframe = re.findall(r'.iframe..*..iframe.', description)
+                youtube_iframe = youtube_iframe[0] if youtube_iframe else None
+                if youtube_iframe:
+                    youtube_link = re.findall(r'src=.([^"\']+)', youtube_iframe)
+                    youtube_link = youtube_link[0] if youtube_link else None
+                    if 'embed/' in youtube_link:
+                        # Replace with a normal watch link to stop youtube_modals.js from breaking
+                        youtube_id = youtube_link.split('embed/')[-1]
+                        youtube_link = f'https://www.youtube.com/watch?v={youtube_id}'
+            if youtube_link:
+                # Clean up the description
+                description = description.replace(youtube_iframe, '')
+
             production_log = models_films.ProductionLog.objects.create(
                 date_created=node_doc['_created'],
                 date_updated=node_doc['_updated'],
                 film=collection.film,
                 name=collection.name,
-                summary=node_doc.get('description') or collection.text,
+                summary=description,
                 start_date=collection.date_created,
+                youtube_link=youtube_link,
                 user=user,
             )
-            # ?
             thumbnail_doc = mongo.nodes_collection.find_one({'_id': ObjectId(collection.slug)})
             if thumbnail_doc and 'picture' in thumbnail_doc:
                 self.reconcile_file_field(thumbnail_doc['picture'], production_log, 'thumbnail')
@@ -53,7 +70,7 @@ class Command(ImportCommand):
                 self.reconcile_file_field(node_doc['picture'], production_log, 'thumbnail')
         return production_log
 
-    def get_or_create_production_log_entry(self, production_log, collection):
+    def _get_or_create_production_log_entry(self, production_log, collection):
         try:
             production_log_entry = models_films.ProductionLogEntry.objects.get(
                 legacy_id=collection.slug,
@@ -62,6 +79,7 @@ class Command(ImportCommand):
             node_doc = mongo.nodes_collection.find_one({'_id': ObjectId(collection.slug)})
             user_doc = mongo.users_collection.find_one({'_id': node_doc['user']})
             user = _lookup_user(user_doc)
+            print(user, node_doc)
 
             production_log_entry = models_films.ProductionLogEntry.objects.create(
                 date_created=node_doc['_created'],
@@ -73,17 +91,21 @@ class Command(ImportCommand):
             )
         return production_log_entry
 
-    def handle(self, *args, **options):
-        agent_327 = '570e7f14c379cf032c7b511f'
-        caminandes_3 = '563cdc6bc379cf01030637ed'
-        weeklies_collection = models_films.Collection.objects.get(slug=agent_327)
+    def _create_production_logs_for_film(self, slug):
+        weeklies_collection = models_films.Collection.objects.get(slug=slug)
         for collection in weeklies_collection.child_collections.all():
-            production_log = self.get_or_create_production_log(collection)
+            production_log = self._get_or_create_production_log(collection)
             for subcollection in collection.child_collections.all():
-                production_log_entry = self.get_or_create_production_log_entry(
+                production_log_entry = self._get_or_create_production_log_entry(
                     production_log, subcollection
                 )
                 for asset in subcollection.assets.all():
                     models_films.ProductionLogEntryAsset.objects.get_or_create(
                         asset=asset, production_log_entry=production_log_entry
                     )
+
+    def handle(self, *args, **options):  # noqa: D102
+        agent_327 = '570e7f14c379cf032c7b511f'
+        caminandes_3 = '563cdc6bc379cf01030637ed'
+        for slug in (caminandes_3, agent_327):
+            self._create_production_logs_for_film(slug)
