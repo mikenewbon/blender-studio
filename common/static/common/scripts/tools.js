@@ -164,3 +164,27 @@ function likeButtonSetup(element) {
     });
   });
 }
+
+
+//Notification highlighting
+function getAnchor() {
+  var currentUrl = document.URL,
+    urlParts = currentUrl.split('#');
+
+  return (urlParts.length > 1) ? urlParts[1] : null;
+}
+
+function hightlightAnchor(element) {
+
+  id = getAnchor();
+  anchor = element.querySelector('#' + id)
+
+  if (id != null && anchor != null) {
+    anchor.classList.add('highlight')
+    anchor.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  hightlightAnchor(document);
+});

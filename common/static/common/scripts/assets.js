@@ -173,7 +173,8 @@ window.asset = (function asset() {
 
       // Trigger activation of comment event listeners
       activateComments();
-      likeButtonSetup(document);
+      likeButtonSetup(modal);
+      hightlightAnchor(modal);
       $('[data-toggle="tooltip"]').tooltip();
       resetProgress();
     });
