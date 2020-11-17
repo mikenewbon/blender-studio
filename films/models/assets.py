@@ -88,7 +88,7 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
         if self.static_asset.source_type == 'video':
             variation = self.static_asset.video.variations.first()
             if not variation:
-                return ''
+                return filesizeformat(self.static_asset.size_bytes)
             return filesizeformat(variation.size_bytes)
         else:
             return filesizeformat(self.static_asset.size_bytes)
