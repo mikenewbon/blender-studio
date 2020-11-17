@@ -20,7 +20,7 @@ def from_slug(
                 )
             )
             .select_related('training')
-            .prefetch_related('sections', 'sections__static_asset')
+            .prefetch_related('sections', 'sections__static_asset', 'sections__static_asset__video')
             .get(training__slug=training_slug, slug=slug)
         )
     except chapters.Chapter.DoesNotExist:

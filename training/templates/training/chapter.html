@@ -44,7 +44,6 @@
         </div>
       </div>
 
-
       <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
         <div class="training-toolbar-container">
           <div class="training-toolbar">
@@ -80,22 +79,11 @@
 
     <section class="mb-3 markdown-text">{% with_shortcodes chapter.description|markdown %}</section>
 
-    {% comment %} <div class="FIXME">
-      {% for section in chapter.sections.all %}
-      {% if section.is_published %}
-      {{ section }}
-      {% endif %}
-      {% endfor %}
-    </div> {% endcomment %}
-
     <div class="files row grid">
       <div class="grid-sizer col-12 col-sm-6 col-md-6 col-lg-4"></div>
       {% for section in chapter.sections.all %}
       {% if section.is_published  %}
-      {% comment %} <p>{{ section.name }}</p> {% endcomment %}
-      {% with title=post.title description=post.excerpt image_url=post.thumbnail_m_url %}
       {% include "common/components/file_section.html" with section=section %}
-      {% endwith %}
       {% endif %}
       {% endfor %}
     </div>

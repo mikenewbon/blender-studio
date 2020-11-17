@@ -10,7 +10,7 @@
         {% endif %}
 
         <div class="badge badge-video-duration badge-darkhighlight-strong">
-          {{ section.duration_label }}
+          {% firstof section.duration_label section.static_asset.video.duration_label %}
         </div>
 
       </a>
