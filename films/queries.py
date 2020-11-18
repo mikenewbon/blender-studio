@@ -226,7 +226,7 @@ def get_production_logs_page(
             performance (see the note in the docs:
             https://docs.djangoproject.com/en/dev/ref/models/querysets/#django.db.models.Prefetch).
     """
-    production_logs = film.production_logs.order_by('-start_date').prefetch_related(
+    production_logs = film.production_logs.order_by('-start_date', '-name').prefetch_related(
         'log_entries__author',
         'log_entries__user',
         Prefetch(
