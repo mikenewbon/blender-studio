@@ -92,7 +92,7 @@
               {% endfor %}
             </div>
 
-            {% if entry.assets|length > 4 %}
+            {% if entry.assets|length > 3 %}
             <div class="collapse" id="entry-{{ entry.id }}">
               <div class="row row-cols-1 row-cols-md-3  row-cols-2">
                 {% for entry_asset in entry.assets|slice:'3:' %}
