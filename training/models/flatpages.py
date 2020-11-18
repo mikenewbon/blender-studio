@@ -12,7 +12,7 @@ import common.help_texts
 import static_assets.models as models_static_assets
 
 
-class TrainingFlatPage(mixins.CreatedUpdatedMixin, models.Model):
+class TrainingFlatPage(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Model):
     """Stores a single training-related flat page."""
 
     class Meta:  # noqa: D106
@@ -51,6 +51,11 @@ class TrainingFlatPage(mixins.CreatedUpdatedMixin, models.Model):
 
     def __str__(self):
         return f'Flat page "{self.title}" of the training {self.training.name}'
+
+    @property
+    def thumbnail(self):
+        """Make static thumbnails mixin work."""
+        return self.header
 
     def get_absolute_url(self) -> str:  # noqa: D102
         return self.url

@@ -3,6 +3,14 @@
 
 {% block title_append %} - {{ training.title }} {{ flatpage.title }}{% endblock title_append %}
 
+{% block meta %}
+{% firstof flatpage.title as title %}
+{% firstof flatpage.thumbnail_m_url training.thumbnail_m_url as image_url %}
+{% with description=flatpage.content|truncatewords:25 %}
+{% include 'common/components/meta.html'  %}
+{% endwith %}
+{% endblock %}
+
 {% block content %}
 {% if flatpage.header %}
 <div class="jumbotron jumbotron-fluid jumbotron-blog jumbotron-overlay overlay-blog mb-3">
