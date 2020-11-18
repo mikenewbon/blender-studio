@@ -24,6 +24,8 @@ class AssetAdmin(admin.ModelAdmin):
         'name',
         'film__title',
         'collection__name',
+        'slug',
+        'static_asset__slug',
     ]
     autocomplete_fields = ['static_asset', 'attachments']
 

@@ -48,6 +48,9 @@ class ProductionLogEntryAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
         'production_log',
         'production_log__start_date',
     ]
+    search_fields = [
+        'production_log__name',
+    ]
     readonly_fields = ['date_created']
     autocomplete_fields = ['author']
 
@@ -79,6 +82,9 @@ class ProductionLogAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
     date_hierarchy = 'start_date'
     list_display = ['__str__', 'name', 'start_date']
     list_filter = ['film', 'start_date']
+    search_fields = [
+        'name',
+    ]
     readonly_fields = ['date_created']
     autocomplete_fields = ['author', 'film']
     fieldsets = (
