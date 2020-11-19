@@ -10,17 +10,19 @@
 
       <div class="update-feed-week-header">
 
+
+        <h2>{{ production_log.name }}</h2>
+
         {% if production_log.start_date.month == production_log.end_date.month %}
-        <p class="subtitle small"><i class="material-icons icon-inline small">calendar_today</i>
+        <p class="subtitle small mb-3"><i class="material-icons icon-inline small">calendar_today</i>
           {{ production_log.start_date|date:'jS' }} - {{ production_log.end_date|date:'jS M' }}
           {{ production_log.start_date|date:'Y' }}</p>
         {% else %}
 
-        <p class="subtitle small"><i class="material-icons icon-inline small">calendar_today</i>
+        <p class="subtitle small mb-3"><i class="material-icons icon-inline small">calendar_today</i>
           {{ production_log.start_date|date:'jS M' }} - {{ production_log.end_date|date:'jS M' }}
           {{ production_log.start_date|date:'Y' }}</p>
         {% endif %}
-        <h2>{{ production_log.name }}</h2>
 
         {% if user_can_edit_production_log %}
 
@@ -106,7 +108,7 @@
               <div class="col text-center">
                 <a data-toggle="collapse" data-objects-type="files" href="#entry-{{ entry.id }}" role="button"
                   aria-expanded="false" aria-controls="entry-{{ entry.id }}"
-                  class="btn btn-sm btn-secondary collapsed show-more-less">Show </a>
+                  class="btn btn-sm btn-dark collapsed show-more-less">Show </a>
               </div>
             </div>
             {% endif %}

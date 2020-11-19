@@ -32,7 +32,7 @@
   position: relative;
 
   h2 {
-    margin-bottom: $spacer;
+    margin-bottom: 0;
   }
 }
 
@@ -123,7 +123,11 @@
 
 .update-feed-header-summary-text {
   @extend .col-md-9;
-  margin-bottom: $spacer;
+  margin-bottom: $spacer / 2;
+
+  h3 {
+    margin-bottom: $spacer / 4;
+  }
 }
 
 .update-feed-header-summary-image {
