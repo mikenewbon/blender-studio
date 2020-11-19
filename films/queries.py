@@ -69,26 +69,18 @@ def _get_next_in_query(q: QuerySet, instance: Asset) -> Optional[Any]:
 
 def get_previous_asset_in_production_logs(asset: Asset) -> Optional[Asset]:  # noqa: D103
     current_log_entry = asset.entry_asset.production_log_entry
-    previous_asset: Optional[Asset]
-    try:
-        previous_asset = asset.get_previous_by_date_created(
-            entry_asset__production_log_entry=current_log_entry, is_published=True,
-        )
-    except Asset.DoesNotExist:
-        previous_asset = None
-    return previous_asset
+    current_log_entry_assets = Asset.objects.filter(
+        entry_asset__production_log_entry=current_log_entry
+    )
+    return _get_previous_in_query(current_log_entry_assets, asset)
 
 
 def get_next_asset_in_production_logs(asset: Asset) -> Optional[Asset]:  # noqa: D103
     current_log_entry = asset.entry_asset.production_log_entry
-    next_asset: Optional[Asset]
-    try:
-        next_asset = asset.get_next_by_date_created(
-            entry_asset__production_log_entry=current_log_entry, is_published=True,
-        )
-    except Asset.DoesNotExist:
-        next_asset = None
-    return next_asset
+    current_log_entry_assets = Asset.objects.filter(
+        entry_asset__production_log_entry=current_log_entry
+    )
+    return _get_next_in_query(current_log_entry_assets, asset)
 
 
 def get_previous_asset_in_featured_artwork(asset: Asset) -> Optional[Asset]:
