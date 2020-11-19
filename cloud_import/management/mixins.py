@@ -12,9 +12,13 @@ from cloud_import.management import mongo
 import static_assets.models as models_static_assets
 import comments.models as models_comments
 from cloud_import.management import files
+import films.models as models_films
 
 
 class ImportCommand(BaseCommand):
+    def _localize_date(self, date):
+        return pytz.utc.localize(date)
+
     def console_log(self, message: str):
         """Utility to print NOTICE stdout messages."""
         self.stdout.write(self.style.NOTICE(message))
@@ -134,7 +138,7 @@ class ImportCommand(BaseCommand):
         comment.save()
 
         if parent_comment_doc:
-            self.console_log(f"Setting parent to comment")
+            self.console_log("Setting parent to comment")
             parent_comment = self.get_or_create_comment(parent_comment_doc)
             comment.reply_to = parent_comment
             comment.save()
@@ -148,6 +152,13 @@ class ImportCommand(BaseCommand):
         if not file_doc:
             self.console_log(f"\tFile {file_uuid} does not exist, skipping")
             return
+        file_path = (
+            file_doc.get('file_path')
+            if not variation_subdoc else variation_subdoc.get('file_path')
+        )
+        if not file_path:
+            self.console_log(f'No file_path for {file_doc} or {variation_subdoc}')
+            return
 
         source = getattr(instance, attr_name)
         if source and not force:
@@ -160,9 +171,6 @@ class ImportCommand(BaseCommand):
         with tempfile.TemporaryDirectory() as tmp_dirname:
             self.console_log(f"\tCreated temporary directory {tmp_dirname}")
             tmp_path = pathlib.Path(tmp_dirname)
-            file_path = (
-                file_doc['file_path'] if not variation_subdoc else variation_subdoc['file_path']
-            )
             dest_file_path_s3 = files.generate_s3_path(file_path)
 
             # Check if file is already on S3
@@ -198,7 +206,7 @@ class ImportCommand(BaseCommand):
                 static_asset=static_asset, duration=datetime.timedelta(seconds=10)
             )
 
-        if 'duration' in file_doc['variations'][0]:
+        if file_doc.get('variations') and 'duration' in file_doc['variations'][0]:
             video.duration = datetime.timedelta(seconds=file_doc['variations'][0]['duration'])
         if 'size' in file_doc:
             video.resolution_label = file_doc['size']
@@ -226,7 +234,7 @@ class ImportCommand(BaseCommand):
     def reconcile_static_asset(
         self, file_doc, static_asset: models_static_assets.StaticAsset, thumbnail_file_doc=None
     ):
-        self.console_log(f"Reconciling file {file_doc['_id']} {file_doc['file_path']}")
+        self.console_log(f"Reconciling file {file_doc['_id']} {file_doc.get('file_path')}")
         # Update properties
         static_asset.slug = str(file_doc['_id'])
         # Update original_filename
@@ -251,6 +259,93 @@ class ImportCommand(BaseCommand):
         if static_asset.source_type == 'image':
             self.reconcile_static_asset_image(file_doc, static_asset)
 
+    def reconcile_film_asset(self, asset_doc, collection: models_films.Collection):
+        if not (asset_doc.get('properties') or {}).get('file'):
+            if not asset_doc.get('_deleted'):
+                self.console_log(f'No file available in {asset_doc}')
+            return
+        asset_slug = str(asset_doc['_id'])
+        self.console_log(f"Processing asset with {asset_slug}")
+        try:
+            asset = models_films.Asset.objects.get(slug=asset_slug)
+        except models_films.Asset.DoesNotExist:
+            if 'description' not in asset_doc:
+                self.console_log(f'Missing description on {asset_doc}')
+            description = asset_doc.get('description', '')
+            asset = models_films.Asset.objects.create(
+                date_created=self._localize_date(asset_doc['_created']),
+                date_updated=self._localize_date(asset_doc['_updated']),
+                slug=asset_slug,
+                film=collection.film,
+                collection=collection,
+                description=description,
+                category='artwork',
+                is_published=True,
+            )
+
+        # Set Production File category if asset is of type file and file is an image
+        if (
+            'content_type' in asset_doc['properties']
+            and asset_doc['properties']['content_type'] == 'file'
+        ):
+            asset.category = 'production_file'
+
+        # Set Tags
+        if 'tags' in asset_doc['properties']:
+            asset.tags.add(*asset_doc['properties']['tags'])
+
+        # Assign static asset
+        file_doc = mongo.files_collection.find_one(
+            {'_id': ObjectId(asset_doc['properties']['file'])}
+        )
+        if not file_doc:
+            self.console_log(f'Missing file_doc for {asset_doc}')
+            return
+        if 'picture' in asset_doc:
+            thumbnail_file_doc = mongo.files_collection.find_one(
+                {'_id': ObjectId(asset_doc['picture'])}
+            )
+        else:
+            thumbnail_file_doc = None
+        asset.static_asset = self.get_or_create_static_asset(file_doc, thumbnail_file_doc)
+        asset.save()
+
+        self.reconcile_film_asset_comments(asset)
+
+    def reconcile_film_asset_comments(self, asset: models_films.Asset):
+        """Fetch comments."""
+        comments = mongo.nodes_collection.find(
+            {
+                'node_type': 'comment',
+                'parent': ObjectId(asset.slug),
+                'properties.status': 'published',
+                '_deleted': {'$ne': True},
+            }
+        )
+        comments_count = 0
+        for comment_doc in comments:
+            self.console_log(f"Processing comment {comment_doc['_id']} for asset {asset.id}")
+            comment = self.get_or_create_comment(comment_doc)
+            models_films.AssetComment.objects.get_or_create(asset=asset, comment=comment)
+            self.reconcile_comment_ratings(comment_doc)
+            response_comments = mongo.nodes_collection.find(
+                {
+                    'node_type': 'comment',
+                    'parent': comment_doc['_id'],
+                    'properties.status': 'published',
+                    '_deleted': {'$ne': True},
+                }
+            )
+            comments_count += 1
+
+            for reply_comment_doc in response_comments:
+                reply_comment = self.get_or_create_comment(reply_comment_doc, comment_doc)
+                models_films.AssetComment.objects.get_or_create(asset=asset, comment=reply_comment)
+                self.reconcile_comment_ratings(reply_comment_doc)
+
+        if comments_count > 0:
+            self.console_log(f"Processed {comments_count} comments")
+
     def get_or_create_static_asset(self, file_doc, thumbnail_file_doc=None):
         file_slug = str(file_doc['_id'])
         try:
@@ -271,8 +366,9 @@ class ImportCommand(BaseCommand):
 
         if 'video' in file_doc['content_type'] and 'variations' in file_doc:
             for v in file_doc['variations']:
-                self.console_log(f"\tProcessing variation {v['file_path']}")
-                if v['file_path'].endswith('.webm'):
+                file_path = v.get('file_path')
+                self.console_log(f"\tProcessing variation {file_path}")
+                if file_path and file_path.endswith('.webm'):
                     self.console_log("\tSkipping .webm variation")
                     continue
                 variation, _ = models_static_assets.VideoVariation.objects.get_or_create(
@@ -287,3 +383,42 @@ class ImportCommand(BaseCommand):
                 self.reconcile_file_field(file_doc['_id'], variation, 'source', variation_subdoc=v)
 
         return static_asset
+
+    def get_or_create_collection(self, collection_doc, film):
+        collection_slug = str(collection_doc['_id'])
+
+        try:
+            self.console_log(f"Getting collection {collection_slug}")
+            collection = models_films.Collection.objects.get(slug=collection_slug)
+        except models_films.Collection.DoesNotExist:
+            self.console_log(f"Not found, creating collection {collection_slug}")
+            collection = models_films.Collection.objects.create(
+                order=1, film=film, name=collection_doc['name'], slug=collection_slug,
+            )
+        if 'order' in collection_doc['properties']:
+            collection.order = collection_doc['properties']['order']
+
+        if 'description' in collection_doc:
+            collection.text = collection_doc['description']
+
+        collection.date_created = pytz.utc.localize(collection_doc['_created'])
+        collection.date_updated = pytz.utc.localize(collection_doc['_updated'])
+        collection.user, _ = self.get_or_create_user(collection_doc['user'])
+        collection.save()
+
+        # Ensure media
+        if 'picture' in collection_doc and collection_doc['picture']:
+            self.reconcile_file_field(collection_doc['picture'], collection, 'thumbnail')
+
+        # Traverse parent
+        if 'parent' in collection_doc and collection_doc['parent']:
+            parent_collection_doc = mongo.nodes_collection.find_one(
+                {'_id': ObjectId(collection_doc['parent'])}
+            )
+            if parent_collection_doc:
+                collection.parent = self.get_or_create_collection(parent_collection_doc, film)
+                collection.save()
+            else:
+                self.console_log(f"Parent collection {collection_doc['parent']} not found")
+
+        return collection
