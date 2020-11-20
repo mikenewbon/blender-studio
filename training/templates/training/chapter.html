@@ -65,7 +65,7 @@
 
     <div class="row mb-2">
       {% if chapter.user.profile and chapter.user.profile.image_url  %}
-      <div style="background-image:url('{{ chapger.user.profile.image_url }}');" class="profile ml-2"></div>
+      <div style="background-image:url('{{ chapter.user.profile.image_url }}');" class="profile ml-2"></div>
       {% else %}
       <div style="background-image:url('{% static 'common/images/blank-profile-pic.png' %}');" class="profile ml-2">
       </div>
