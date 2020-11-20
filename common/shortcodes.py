@@ -116,6 +116,25 @@ class Test:
         return ''.join(parts)
 
 
+@shortcode('subscribe_banner')
+@group_check
+class SubscribeBanner:
+    # noqa: D101
+    def __call__(
+        self,
+        context: typing.Any,
+        content: str,
+        pargs: typing.List[str],
+        kwargs: typing.Dict[str, str],
+    ) -> str:
+        """Display a subscribe banner for anonymous and subscription-less viewers."""
+        user = getattr(context.get('request'), 'user', None) if context else None
+        if not user or user.is_anonymous or not queries.has_group(user, 'subscriber'):
+            subscribe_banner = render_to_string('blog/subscribe_jumbotron.html')
+            return subscribe_banner
+        return ''
+
+
 @shortcode('youtube')
 @group_check
 class YouTube:
