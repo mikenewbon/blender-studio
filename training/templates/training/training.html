@@ -33,7 +33,7 @@
       <div class="row align-items-start">
         <div class="col-12 col-md mb-2 mb-md-3">
           <p class="subtitle">{{ training.type.label }}</p>
-          <h2 class="">{{ training.name }}</h2>
+          <h2 class="mb-0">{{ training.name }}</h2>
         </div>
         <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
           <div class="training-toolbar-container">
@@ -46,7 +46,10 @@
 
             <div class="training-toolbar">
               {% if request.user.is_authenticated %}
-              <a class="btn btn-sm save-button {% if not training.favorited %}btn-dark{% else %}btn-primary{% endif %}" data-favorite-url="{{ training.favorite_url }}" {% if training.favorited %}data-checked="checked"{% endif %} data-toggle="tooltip" {% if training.favorited %}title="Save for later"{% else %}title=" Remove from saved for later"{% endif %}>
+              <a class="btn btn-sm save-button {% if not training.favorited %}btn-dark{% else %}btn-primary{% endif %}"
+                data-favorite-url="{{ training.favorite_url }}" {% if training.favorited %}data-checked="checked"
+                {% endif %} data-toggle="tooltip" {% if training.favorited %}title="Save for later"
+                {% else %}title=" Remove from saved for later" {% endif %}>
                 <i class="material-icons">{% if not training.favorited %}add{% else %}check{% endif %}</i>
                 <span>{% if not training.favorited %}Save{% else %}Saved{% endif %}</span>
               </a>
@@ -67,6 +70,7 @@
           </div>
         </div>
       </div>
+
       <section class="mb-3 markdown-text">{% with_shortcodes training.summary %}</section>
     </div>
 
