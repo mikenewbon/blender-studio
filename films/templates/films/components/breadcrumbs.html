@@ -1,10 +1,36 @@
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb pt-0 pb-2 side-scroll">
+{% load common_extras %}
+{% load film_extras %}
+
+<nav class="row mb-2" aria-label="breadcrumb">
+
+  <ol class="breadcrumb col mb-n2">
     {% for name, url in breadcrumbs %}
-      <li class="breadcrumb-item">
-        <a href="{{ url }}">{{ name }}</a>
-      </li>
+    <a class="breadcrumb-item btn btn-dark btn-sm mb-2" href="{{ url }}">
+      {{ name }}
+    </a>
     {% endfor %}
-    <li class="breadcrumb-item active">{{ current_location }}</li>
+    <li class="breadcrumb-item active btn btn-sm disabled mb-2">{{ current_location }}</li>
   </ol>
+
+  <div class="file-toolbar col-auto mt-0 flex-shrink-1 flex-grow-0">
+
+    {% if user_can_edit_collection %}
+    <a href="{{ collection.admin_url }}" class="btn btn-sm btn-icon btn-dark">
+      <i class="material-icons">edit</i>
+    </a>
+    {% endif %}
+
+    <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
+      <i class="material-icons">more_horiz</i>
+    </button>
+
+    <div class="dropdown-menu dropdown-menu-right">
+      <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank" class="dropdown-item">
+        <i class="material-icons">flag</i>
+        <span>Report Problem</span>
+      </a>
+    </div>
+
+  </div>
+
 </nav>

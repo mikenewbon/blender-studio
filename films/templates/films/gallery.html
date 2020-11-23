@@ -42,9 +42,9 @@ has-secondary-nav
         Featured Artwork
       </a>
 
-      {% if admin_change_href is not none %}
+      {% comment %} {% if admin_change_href is not none %}
       <a href="{{ admin_change_href }}">edit</a>
-      {% endif %}
+      {% endif %} {% endcomment %}
     </div>
   </div>
 
@@ -91,11 +91,11 @@ has-secondary-nav
           <h4>{{ child_collection.name }}</h4>
 
         </a>
-        {% if user_can_edit_collection %}
+        {% comment %} {% if user_can_edit_collection %}
         <a href="{{ child_collection.admin_url }}" target="_blank" class="btn btn-secondary btn-xs btn-float btn-icon">
           <i class="material-icons btn-material-icons">create</i>
         </a>
-        {% endif %}
+        {% endif %} {% endcomment %}
       </li>
 
       {% endfor %}
@@ -129,9 +129,9 @@ has-secondary-nav
                 <span class="overflow-text">Featured Artwork</span>
               </a>
 
-              {% if admin_change_href is not none %}
+              {% comment %} {% if admin_change_href is not none %}
               <a href="{{ admin_change_href }}">edit</a>
-              {% endif %}
+              {% endif %} {% endcomment %}
             </div>
           </div>
 
@@ -158,11 +158,11 @@ has-secondary-nav
               </span>
             </a>
             {% endif %}
-            {% if user_can_edit_collection %}
+            {% comment %} {% if user_can_edit_collection %}
             <a href="{{ collection.admin_url }}" class="btn btn-secondary btn-xs btn-icon btn-float">
               <i class="material-icons btn-material-icons">create</i>
             </a>
-            {% endif %}
+            {% endif %} {% endcomment %}
           </div>
           {% if child_collections %}
           <div
@@ -179,12 +179,12 @@ has-secondary-nav
                   <h4 class="overflow-text">{{ child_collection.name }}</h4>
 
                 </a>
-                {% if user_can_edit_collection %}
+                {% comment %} {% if user_can_edit_collection %}
                 <a href="{{ child_collection.admin_url }}" target="_blank"
                   class="btn btn-secondary btn-xs btn-float btn-icon">
                   <i class="material-icons btn-material-icons">create</i>
                 </a>
-                {% endif %}
+                {% endif %} {% endcomment %}
               </li>
 
               {% endfor %}

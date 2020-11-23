@@ -1,22 +1,33 @@
 .breadcrumb {
+
+  align-items: center;
+  padding: 0 $spacer / 2;
+
   @include media-breakpoint-down(md) {
-    flex-wrap: nowrap;
     margin: 0 (-$spacer);
     overflow-x: auto;
     padding: 0 $spacer;
   }
 
   .breadcrumb-item {
+    position: relative;
     white-space: nowrap;
-    color: $highlight-white-xstrong;
-
-    &:last-of-type {
-      padding-right: $spacer;
-    }
+    font-weight: normal;
 
     a {
       color: $breadcrumb-link-color;
     }
+
+    &+.breadcrumb-item {
+      margin-left: $spacer / 2;
+
+      &::before {
+        left: -.5rem;
+        position: absolute;
+        padding-right: 0;
+      }
+    }
+
   }
 }
 
