@@ -5,6 +5,7 @@ from typing import Type, Any, List
 from django.conf import settings
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
+import meilisearch.errors
 
 from blog.models import Post
 from common.types import assert_cast
@@ -17,6 +18,22 @@ from search.serializers.training_search import TrainingSearchSerializer
 from training.models import Training, Section
 
 log = logging.getLogger(__name__)
+
+
+def _search_id(sender: Type[SearchableModel], instance: SearchableModel) -> str:
+    return f'{sender._meta.model_name}_{instance.id}'
+
+
+def _is_indexed(index_uid: str, search_id: str) -> bool:
+    try:
+        settings.SEARCH_CLIENT.get_index(index_uid).get_document(search_id)
+        return True
+    except meilisearch.errors.MeiliSearchApiError as err:
+        if 'document_not_found' != err.error_code:
+            log.error(f'Unable to check if {search_id} is indexed by {index_uid}: {err}')
+    except MeiliSearchServiceError as err:
+        log.error(f'Unable to check if {search_id} is indexed by {index_uid}: {err}')
+    return False
 
 
 class BasePostSaveSearchIndexer(ABC):
@@ -55,6 +72,15 @@ class BasePostSaveSearchIndexer(ABC):
             data_to_load = self.serializer.prepare_data_for_indexing(instance_qs)
             self._add_document_to_index(data_to_load)
             log.info(f'Added {instance} to the {self.index_uids} search indexes.')
+        else:
+            # Make sure that, if this instance shouldn't be in the index, it's not there
+            search_id = _search_id(sender, instance)
+            for index_uid in self.index_uids:
+                is_indexed = _is_indexed(index_uid, search_id)
+                if not is_indexed:
+                    continue
+                settings.SEARCH_CLIENT.get_index(index_uid).delete_document(search_id)
+                log.warning(f'Removed {instance} from the {index_uid} index.')
 
 
 class MainPostSaveSearchIndexer(BasePostSaveSearchIndexer):
@@ -118,7 +144,7 @@ def delete_from_index(
         log.error(f'Did not update search indexes pre_delete: {err}')
         return
 
-    search_id = f'{sender._meta.model_name}_{instance.id}'
+    search_id = _search_id(sender, instance)
 
     for index_uid in ALL_INDEX_UIDS:
         settings.SEARCH_CLIENT.get_index(index_uid).delete_document(search_id)
