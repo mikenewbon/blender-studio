@@ -12,7 +12,7 @@ psycopg2 = "^2.8"
 blender_id_oauth_client = "^0.9.3"
 libsasscompiler = "^0.1.5"
 jsmin = "^2.2.2"
-sorl-thumbnail = "^12.6.3"
+sorl-thumbnail = "^12.7.0"
 mistune = "2.0.0a4"
 looper = {git = "git://git.blender.org/looper.git", branch = "master"}
 Pillow = "^7.2"
