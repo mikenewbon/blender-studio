@@ -93,6 +93,9 @@ class SectionAdmin(admin.ModelAdmin):
         'chapter__training__type',
         'chapter__training__difficulty',
         'chapter__training',
+        'is_published',
+        'is_free',
+        'is_featured',
     ]
     list_per_page = 20
     search_fields = ['name', 'chapter__name', 'chapter__training__name', 'slug']
