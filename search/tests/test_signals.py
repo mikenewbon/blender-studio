@@ -22,17 +22,23 @@ class TestBlogPostIndexing(TestCase):
             'thumbnail': generate_file_path(),
         }
 
-    @patch('search.signals.MainPostSaveSearchIndexer._add_document_to_index')
-    def test_unpublished_posts_trigger_signal_but_are_not_indexed(self, add_documents_mock):
+    @patch('search.signals.check_meilisearch')
+    @patch('django.conf.settings.SEARCH_CLIENT')
+    def test_unpublished_posts_trigger_signal_but_are_not_indexed(
+        self, search_client_mock, check_meilisearch_mock
+    ):
         with catch_signal(post_save, sender=Post) as handler:
             Post.objects.create(**self.post_data, is_published=False)
             handler.assert_called()
-            add_documents_mock.assert_not_called()
+            check_meilisearch_mock.assert_called_once()
+            search_client_mock.assert_not_called()
 
-    @patch('search.signals.MainPostSaveSearchIndexer._add_document_to_index')
-    def test_new_published_posts_are_indexed(self, add_documents_mock):
+    @patch('search.signals.check_meilisearch')
+    @patch('django.conf.settings.SEARCH_CLIENT')
+    def test_new_published_posts_are_indexed(self, search_client_mock, check_meilisearch_mock):
         Post.objects.create(**self.post_data, is_published=True)
-        add_documents_mock.assert_called_once()
+        check_meilisearch_mock.assert_called_once()
+        search_client_mock.get_index.return_value.add_documents.assert_called()
 
 
 class TestPostDeleteSignal(TestCase):

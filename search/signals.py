@@ -36,6 +36,15 @@ def _is_indexed(index_uid: str, search_id: str) -> bool:
     return False
 
 
+def _is_search_service_available() -> bool:
+    try:
+        check_meilisearch(check_indexes=True)
+        return True
+    except MeiliSearchServiceError as err:
+        log.error(f'Search service unavailable: {err}')
+    return False
+
+
 class BasePostSaveSearchIndexer(ABC):
     """A base class for post_save signal handlers.
 
@@ -51,12 +60,6 @@ class BasePostSaveSearchIndexer(ABC):
 
     def _add_document_to_index(self, data_to_load: List[Any]) -> None:
         """Adds document to the appropriate search index and its replicas."""
-        try:
-            check_meilisearch(check_indexes=True)
-        except MeiliSearchServiceError as err:
-            log.error(f'Did not update the {self.index_uids} search indexes post_save: {err}')
-            return
-
         for index_uid in self.index_uids:
             index = settings.SEARCH_CLIENT.get_index(index_uid)
             index.add_documents(data_to_load)
@@ -65,8 +68,21 @@ class BasePostSaveSearchIndexer(ABC):
             # fields automatically to searchable attrs, so we update the settings to set them:
             index.update_searchable_attributes(self.searchable_attributes)
 
+    def _remove_document(self, sender: Type[SearchableModel], instance: SearchableModel) -> None:
+        search_id = _search_id(sender, instance)
+        for index_uid in self.index_uids:
+            is_indexed = _is_indexed(index_uid, search_id)
+            if not is_indexed:
+                continue
+            settings.SEARCH_CLIENT.get_index(index_uid).delete_document(search_id)
+            log.warning(f'Removed {instance} from the {index_uid} index.')
+
     def handle(self, sender: Type[SearchableModel], instance: SearchableModel) -> None:
         """Indexes the objects that should be available in search."""
+        if not _is_search_service_available():
+            log.warning('Skipping index updates on post_save: search service unavailable')
+            return
+
         instance_qs = self.serializer.get_searchable_queryset(sender, id=instance.id)
         if instance_qs:
             data_to_load = self.serializer.prepare_data_for_indexing(instance_qs)
@@ -74,13 +90,7 @@ class BasePostSaveSearchIndexer(ABC):
             log.info(f'Added {instance} to the {self.index_uids} search indexes.')
         else:
             # Make sure that, if this instance shouldn't be in the index, it's not there
-            search_id = _search_id(sender, instance)
-            for index_uid in self.index_uids:
-                is_indexed = _is_indexed(index_uid, search_id)
-                if not is_indexed:
-                    continue
-                settings.SEARCH_CLIENT.get_index(index_uid).delete_document(search_id)
-                log.warning(f'Removed {instance} from the {index_uid} index.')
+            self._remove_document(sender, instance)
 
 
 class MainPostSaveSearchIndexer(BasePostSaveSearchIndexer):
@@ -138,10 +148,8 @@ def delete_from_index(
 
     If there is no related document in an index, nothing happens.
     """
-    try:
-        check_meilisearch(check_indexes=True)
-    except MeiliSearchServiceError as err:
-        log.error(f'Did not update search indexes pre_delete: {err}')
+    if not _is_search_service_available():
+        log.error('Did not update search indexes pre_delete: search service unavailable')
         return
 
     search_id = _search_id(sender, instance)
