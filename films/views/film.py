@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_safe
 
 from common.queries import has_group
-from films.models import Film, FilmStatus, FilmFlatPage, Asset
+from films.models import Film, FilmFlatPage, Asset
 from films.queries import get_production_logs_page, get_current_asset
 
 
@@ -82,7 +82,7 @@ def film_detail(request: HttpRequest, film_slug: str) -> HttpResponse:
         ),
         **get_current_asset(request),
     }
-    if film.status != FilmStatus.released:
+    if film.show_production_logs_as_featured:
         context['production_logs_page'] = get_production_logs_page(film)
 
     return render(request, 'films/film_detail.html', context)

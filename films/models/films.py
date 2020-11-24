@@ -34,6 +34,15 @@ class Film(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Mo
     youtube_link = models.URLField(blank=True)
     crew = models.ManyToManyField(User, through='FilmCrew')
 
+    show_production_logs_nav_link = models.BooleanField(
+        default=False,
+        help_text='Display a link to production logs in the navigation.',
+    )
+    show_production_logs_as_featured = models.BooleanField(
+        default=False,
+        help_text='Display production logs instead of the featured gallery on the film page.',
+    )
+
     class Meta:
         ordering = ('-release_date',)
 
