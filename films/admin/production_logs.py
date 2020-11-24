@@ -1,14 +1,16 @@
-import datetime as dt
+# import datetime as dt
 from typing import Optional, Any
 
 from django.contrib import admin
-from django.contrib.auth.models import User
-from django.db.models import ForeignKey, Q
+
+# from django.contrib.auth.models import User
+from django.db.models import ForeignKey  # , Q
 from django.forms.models import ModelChoiceField
 from django.http.request import HttpRequest
-from django.utils import timezone
 
-from common.mixins import AdminUserDefaultMixin
+# from django.utils import timezone
+
+from common.mixins import AdminUserDefaultMixin, ViewOnSiteMixin
 from films.admin.mixins import EditLinkMixin
 from films.models import production_logs, Asset
 
@@ -25,8 +27,7 @@ class ProductionLogEntryAssetInline(admin.StackedInline):
     def formfield_for_foreignkey(
         self, db_field: 'ForeignKey[Any, Any]', request: Optional[HttpRequest], **kwargs: Any
     ) -> Optional[ModelChoiceField]:
-        """In the asset choice dropdown, only show published assets created
-        in the last 7 days by the current user."""
+        """Show only published assets created in the last 7 days by the current user."""
         # TODO(Natalia): add filtering by film, show assets since the last log
         if db_field.name == 'asset' and request is not None:
             kwargs['queryset'] = Asset.objects.filter(
@@ -77,10 +78,10 @@ class ProductionLogEntryInline(EditLinkMixin, admin.StackedInline):
 
 
 @admin.register(production_logs.ProductionLog)
-class ProductionLogAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
+class ProductionLogAdmin(AdminUserDefaultMixin, ViewOnSiteMixin, admin.ModelAdmin):
     inlines = [ProductionLogEntryInline]
     date_hierarchy = 'start_date'
-    list_display = ['__str__', 'name', 'start_date']
+    list_display = ['__str__', 'name', 'start_date', 'view_link']
     list_filter = ['film', 'start_date']
     search_fields = [
         'name',
