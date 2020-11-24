@@ -15,8 +15,9 @@
   <div class="file-toolbar col-auto mt-0 flex-shrink-1 flex-grow-0">
 
     {% if user_can_edit_collection %}
-    <a href="{{ collection.admin_url }}" class="btn btn-sm btn-icon btn-dark">
+    <a href="{{ current_collection.admin_url }}" class="btn btn-sm btn-dark">
       <i class="material-icons">edit</i>
+      Edit
     </a>
     {% endif %}
 
