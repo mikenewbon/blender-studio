@@ -27,9 +27,11 @@ has-secondary-nav
           href="{% url 'film-gallery' film_slug=film.slug %}">
           Content Gallery
         </a>
+        {% if film.show_production_logs_nav_link %}
         <a class="list-group-item" href="{% url 'film-production-logs' film_slug=film.slug %}">
 					Production Logs
 				</a>
+        {% endif %}
         {% if user_can_edit_film %}
         <a href="{{ film.admin_url }}" class="list-group-item btn-icon small">
           Admin Edit
