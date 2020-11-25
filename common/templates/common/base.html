@@ -21,8 +21,6 @@
   {% endblock meta %}
 
   {% stylesheet 'studio' %}
-  {% javascript 'vendor' %}
-  {% javascript 'studio' %}
 
   {% block html_templates %}
   <template id="comment-template">
@@ -37,9 +35,6 @@
     {% comment_input div_class='comment-edit-input' %}
   </template>
   {% endblock %}
-
-  {{ user_dict|json_script:"current-user" }}
-  {% block scripts %}{% endblock scripts %}
 </head>
 
 <body class="{% block bodyclasses %}{% endblock bodyclasses %}"
@@ -468,6 +463,13 @@
       </div>
     </div>
   </div>
+
+  {{ user_dict|json_script:"current-user" }}
+  {% javascript 'vendor' %}
+  {% javascript 'studio' %}
+
+  {% block scripts %}{% endblock scripts %}
+
   <script async src="https://www.googletagmanager.com/gtag/js?id={{ settings_analytics_id }}"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -488,7 +490,6 @@
     });
 
   </script>
-  {% block scripts_footer %}{% endblock scripts_footer %}
 </body>
 
 </html>

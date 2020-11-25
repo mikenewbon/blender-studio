@@ -168,6 +168,14 @@ PIPELINE = {
             'output_filename': 'js/vendor.js',
             'extra_context': {'async': False, 'defer': False},
         },
+        'vendor_instantsearch': {
+            'source_filenames': [
+                'common/scripts/vendor/instant-meilisearch.umd.min.js',
+                'common/scripts/vendor/instantsearch.js',
+            ],
+            'output_filename': 'js/vendor_instantsearch.js',
+            'extra_context': {'async': False, 'defer': False},
+        },
         'vendor_chartjs': {
             'source_filenames': ['common/scripts/vendor/chart.bundle.min.js'],
             'output_filename': 'js/vendor_chartjs.js',

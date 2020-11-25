@@ -18,7 +18,7 @@
 
 {% endblock content %}
 
-{% block scripts_footer %}
+{% block scripts %}
 {% javascript 'vendor_chartjs' %}
 {{ subscribers_by_month_series|json_script:"subscribers_by_month_series" }}
 <script>
@@ -51,4 +51,4 @@
   });
 </script>
 
-{% endblock scripts_footer %}
+{% endblock scripts %}
