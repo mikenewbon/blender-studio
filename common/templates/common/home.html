@@ -258,6 +258,9 @@
 
 </div>
 
+{% endblock content %}
+
+{% block scripts %}
 <script>
   $('.carousel-card-3 .carousel-item').each(function () {
     cardCarousel(this, 3);
@@ -267,5 +270,4 @@
     cardCarousel(this, 4);
   });
 </script>
-
-{% endblock content %}
+{% endblock scripts %}
