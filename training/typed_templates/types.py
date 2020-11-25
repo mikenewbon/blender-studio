@@ -20,6 +20,7 @@ class Training:
     difficulty: trainings.TrainingDifficulty
     tags: Set[str]
     url: str
+    admin_url: str
     favorite_url: str
     date_updated: datetime.datetime
     favorited: bool

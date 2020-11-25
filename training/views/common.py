@@ -27,6 +27,7 @@ def training_model_to_template_type(
         difficulty=trainings.TrainingDifficulty(training.difficulty),
         tags=set(str(tag) for tag in training.tags.all()),
         url=training.url,
+        admin_url=training.admin_url,
         favorite_url=training.favorite_url,
         date_updated=training.date_updated,
         favorited=favorited,
