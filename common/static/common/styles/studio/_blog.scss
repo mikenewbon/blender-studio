@@ -6,12 +6,12 @@
   margin-top: $spacer;
 
   @include media-breakpoint-up(md) {
-    margin-top: -$spacer * 8;
+    margin-top: -$spacer * 6;
 
     &::before {
       content: close-quote;
       position: absolute;
-      top: -40px;
+      top: -$spacer * 2;
       height: 100%;
       width: calc(100% + #{$spacer * 8});
       left: -$spacer * 4;
