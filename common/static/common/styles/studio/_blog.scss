@@ -3,13 +3,31 @@
 
   max-width: 780px;
   position: relative;
+  margin-top: $spacer;
+
+  @include media-breakpoint-up(md) {
+    margin-top: -$spacer * 8;
+
+    &::before {
+      content: close-quote;
+      position: absolute;
+      top: -40px;
+      height: 100%;
+      width: calc(100% + #{$spacer * 8});
+      left: -$spacer * 4;
+      background: $dark;
+      z-index: -1;
+      border-radius: $border-radius;
+    }
+  }
 }
 
 .jumbotron {
   &.jumbotron-blog {
     display: flex;
-    min-height: 400px;
+    min-height: 500px;
     padding-bottom: $spacer;
+    border-bottom: 0;
 
     @include media-breakpoint-down(sm) {
       min-height: 30vh;
@@ -25,7 +43,7 @@
     &.overlay-blog {
       .jumbotron-bg-wrapper {
         &::before {
-          background: $highlight-black-xstrong;
+          // background: $highlight-black-xstrong;
         }
       }
     }

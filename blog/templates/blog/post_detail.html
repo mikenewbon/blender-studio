@@ -11,107 +11,31 @@
 {% endblock %}
 
 {% block content %}
-<div class="jumbotron jumbotron-fluid jumbotron-blog jumbotron-overlay overlay-blog mb-3">
+<div class="jumbotron jumbotron-fluid jumbotron-blog mb-0">
   <div class="jumbotron-bg-wrapper">
     {% if post.header %}
     {% include "common/components/helpers/image_set.html" with alt=asset.name classes="jumbotron-bg" img_source=post.header xsmall_width="600" small_width="800" medium_width="1000" large_width="1200" xlarge_width="1920" %}
     {% endif %}
   </div>
-  <div class="container-blog">
-
-    <div class="row mb-3">
-      <div class="col col-lg-11">
-        <p class="subtitle">{{ post.category }}</p>
-        <h1 class="display-3">{{ post.title|linebreaksbr }}</h1>
-        <p class="subtitle">{{ post.date_published|date:"jS M Y" }}</p>
-      </div>
-    </div>
-    <div class="row">
-      {% if user_can_edit_post %}
-      <a href="{{ post.admin_url }}" class="btn btn-sm btn-icon btn-dark admin-float">
-        <i class="material-icons">edit</i>
-      </a>
-      {% endif %}
-      <div style="background-image:url('{{ post_author_profile.image_url }}');" class="profile-image profile ml-2">
-      </div>
-      <div class="col-auto">
-        <h4 class="profile-name mb-0">{{ post_author_profile.full_name }}</h4>
-        <p class="profile-title subtitle text-white-50 x-small">Author</p>
-      </div>
-    </div>
-  </div>
 
 </div>
 
 
-<section class="container-blog mt-3 mb-4">
+<section class="container-blog">
 
-  <div class="markdown-text">{% with_shortcodes post.content_html %}</div>
-
-  <div class="row my-4">
+  <div class="row mb-3">
     <div class="col">
-      <div class="row">
-        <div style="background-image:url('{{ post_author_profile.image_url }}');" class="profile-image profile ml-2">
-        </div>
-        <div class="col-auto">
-          <h4 class="profile-name mb-0">{{ post_author_profile.full_name }}</h4>
-          <p class="profile-title subtitle text-white-50 x-small">Author</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="file-toolbar col-12 col-sm mt-3 mt-sm-0">
-
-      <button data-like-url="{{ post.like_url }}"
-        class="btn btn-transparent btn-sm btn-icon comment-material-button checkbox-like {% if not user.is_authenticated %}disabled{% endif%}"
-        {% if not user.is_authenticated %}disabled{% endif%} {% if post.liked %}data-checked="checked" {% endif %}>
-        <i class="material-icons checkbox-like-icon-checked text-primary">favorite</i>
-        <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
-        <span class="likes-count">{{ post.likes.count }}</span>
-      </button>
-
-      {% comment %} <a href="http://www.facebook.com/share.php?u=cloud.blender.org/blog/{{ post.post.slug }}"
-        class="btn btn-sm btn-icon btn-dark">
-        <i class="material-icons">facebook</i>
-      </a> {% endcomment %}
-
-      {% comment %} <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
-        <i class="material-icons">share</i>
-      </button>
-
-      <div class="dropdown-menu dropdown-menu-right">
-        <button class="dropdown-item copy-url-clipboard">
-          <i class="material-icons">link</i>
-          <span>Copy link</span>
-        </button>
-        <a href="http://www.facebook.com/share.php?u=cloud.blender.org/blog/{{ post.post.slug }}" target="_blank"
-          class="dropdown-item">
-          <i class="material-icons">facebook</i>
-          <span>Share to Facebook</span>
-        </a>
-      </div> {% endcomment %}
-
-      {% if user_can_edit_post %}
-      <a href="{{ post.admin_url }}" class="btn btn-sm btn-icon btn-dark">
-        <i class="material-icons">edit</i>
-      </a>
-      {% endif %}
-
-      <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
-        <i class="material-icons">more_horiz</i>
-      </button>
-
-      <div class="dropdown-menu dropdown-menu-right">
-        <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank" class="dropdown-item">
-          <i class="material-icons">flag</i>
-          <span>Report Problem</span>
-        </a>
-      </div>
-
+      <p class="subtitle">{{ post.date_published|date:"jS M Y" }} | {{ post.category }}</p>
+      <h1 class="display-3 mb-0">{{ post.title|linebreaksbr }}</h1>
     </div>
   </div>
+  {% include "blog/blog_toolbar.html" %}
 
-  <section class="mb-3">{% include 'comments/components/comment_section.html' %}</section>
+  <div class="markdown-text mb-4">{% with_shortcodes post.content_html %}</div>
+
+  {% include "blog/blog_toolbar.html" %}
+
+  <section class="my-4">{% include 'comments/components/comment_section.html' %}</section>
 
 </section>
 
