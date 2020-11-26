@@ -33,7 +33,7 @@ def comments_to_template_type(
         return typed_templates.CommentTree(
             id=comment.pk,
             anchor=comment.anchor,
-            full_name=comment.full_name,
+            full_name=comment.full_name or comment.username,
             date=comment.date_created,
             message=assert_cast(str, comment.message),
             message_html=assert_cast(str, comment.message_html),
@@ -98,7 +98,7 @@ def comment_to_json_response(comment: Comment):
     return JsonResponse(
         {
             'id': comment.pk,
-            'full_name': comment.full_name,
+            'full_name': comment.full_name or comment.username,
             'profile_image_url': comment.profile_image_url,
             'date_string': comment.date_created.strftime('%d %B %Y - %H:%M'),
             'message': comment.message,

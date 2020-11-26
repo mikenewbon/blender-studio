@@ -90,7 +90,7 @@ class TestCommentDeleteTreeEndpoints(TestCase):
         # Create comment tree
         comment_base = CommentFactory()
         comment_should_stay, self.comment_to_delete = CommentFactory.create_batch(
-            2, reply_to=comment_base, user=self.user,
+            2, reply_to=comment_base, user=self.user
         )
         reply_to_delete_0, reply_to_delete_1 = CommentFactory.create_batch(
             2, reply_to=self.comment_to_delete
@@ -235,7 +235,7 @@ class TestCommentEditEndpoint(TestCase):
         self.client.logout()
         edit_message = '# Header\n**bold** _italic_'
         response = self.client.post(
-            self.edit_url, {'message': edit_message}, content_type='application/json',
+            self.edit_url, {'message': edit_message}, content_type='application/json'
         )
 
         # TODO(anna): should be 403, which is possible with LoginRequiredMixin
@@ -246,7 +246,7 @@ class TestCommentEditEndpoint(TestCase):
         self.client.force_login(user)
         edit_message = '# Header\n**bold** _italic_'
         response = self.client.post(
-            self.edit_url, {'message': edit_message}, content_type='application/json',
+            self.edit_url, {'message': edit_message}, content_type='application/json'
         )
 
         self.assertEqual(response.status_code, 404)
@@ -254,7 +254,7 @@ class TestCommentEditEndpoint(TestCase):
     def test_edit_full_response(self):
         edit_message = '# Header\n**bold** _italic_'
         response = self.client.post(
-            self.edit_url, {'message': edit_message}, content_type='application/json',
+            self.edit_url, {'message': edit_message}, content_type='application/json'
         )
 
         self.assertEqual(response.status_code, 200)
@@ -264,7 +264,7 @@ class TestCommentEditEndpoint(TestCase):
                 'date_string': ANY,
                 'delete_url': f'/comments/api/comments/{self.comment.pk}/delete/',
                 'edit_url': f'/comments/api/comments/{self.comment.pk}/edit/',
-                'full_name': '',
+                'full_name': self.user.username,
                 'id': self.comment.pk,
                 'like_url': f'/comments/api/comments/{self.comment.pk}/like/',
                 'liked': False,
@@ -279,7 +279,7 @@ class TestCommentEditEndpoint(TestCase):
     def test_edit_with_shortcodes(self):
         edit_message = '# Header\n**bold** _italic_ {youtube UbyxFZSZZ90}'
         response = self.client.post(
-            self.edit_url, {'message': edit_message}, content_type='application/json',
+            self.edit_url, {'message': edit_message}, content_type='application/json'
         )
 
         self.assertEqual(response.status_code, 200)
@@ -289,7 +289,7 @@ class TestCommentEditEndpoint(TestCase):
                 'date_string': ANY,
                 'delete_url': f'/comments/api/comments/{self.comment.pk}/delete/',
                 'edit_url': f'/comments/api/comments/{self.comment.pk}/edit/',
-                'full_name': '',
+                'full_name': self.user.username,
                 'id': self.comment.pk,
                 'like_url': f'/comments/api/comments/{self.comment.pk}/like/',
                 'liked': False,
@@ -310,7 +310,7 @@ class TestCommentEditEndpoint(TestCase):
     def test_edit_linkify_urlize(self):
         edit_message = '**bold** https://example.com'
         response = self.client.post(
-            self.edit_url, {'message': edit_message}, content_type='application/json',
+            self.edit_url, {'message': edit_message}, content_type='application/json'
         )
 
         response_data = json.loads(response.content)
@@ -333,7 +333,7 @@ class TestCommentLikeEndpoint(TestCase):
     def test_like_comment_increases_number_of_likes_by_one(self):
         self.assertEqual(self.comment.likes.count(), 0)
         response = self.client.post(
-            self.comment.like_url, {'like': True}, content_type='application/json',
+            self.comment.like_url, {'like': True}, content_type='application/json'
         )
 
         self.assertEqual(response.status_code, 200)
@@ -347,7 +347,7 @@ class TestCommentLikeEndpoint(TestCase):
         user = UserFactory()
         self.client.force_login(user)
         response = self.client.post(
-            self.comment.like_url, {'like': True}, content_type='application/json',
+            self.comment.like_url, {'like': True}, content_type='application/json'
         )
 
         self.assertEqual(response.status_code, 200)
@@ -359,7 +359,7 @@ class TestCommentLikeEndpoint(TestCase):
 
         # Unlike the comment
         response = self.client.post(
-            self.comment.like_url, {'like': False}, content_type='application/json',
+            self.comment.like_url, {'like': False}, content_type='application/json'
         )
 
         self.assertEqual(response.status_code, 200)
@@ -374,7 +374,7 @@ class TestCommentLikeEndpoint(TestCase):
         self.assertEqual(Action.objects.count(), 0)
 
         response = self.client.post(
-            self.comment.like_url, {'like': True}, content_type='application/json',
+            self.comment.like_url, {'like': True}, content_type='application/json'
         )
 
         self.assertEqual(response.status_code, 200)
@@ -389,7 +389,7 @@ class TestCommentLikeEndpoint(TestCase):
         user = UserFactory()
         self.client.force_login(user)
         response = self.client.post(
-            self.comment.like_url, {'like': True}, content_type='application/json',
+            self.comment.like_url, {'like': True}, content_type='application/json'
         )
 
         self.assertEqual(response.status_code, 200)
