@@ -22,6 +22,7 @@ class CommentTree:
     is_archived: bool
     is_top_level: bool
     full_name: str
+    username: str
     profile_image_url: str
     message: str
     message_html: str
@@ -41,6 +42,7 @@ class CommentTree:
 @dc.dataclass
 class DeletedCommentTree(CommentTree):
     full_name: Literal['[deleted]'] = '[deleted]'
+    username: Literal['[deleted]'] = '[deleted]'
     message: Literal['[deleted]'] = '[deleted]'
     message_html: Literal['[deleted]'] = '[deleted]'
     profile_image_url: Literal[None] = None
