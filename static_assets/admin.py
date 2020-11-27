@@ -26,6 +26,7 @@ class VideoInline(admin.TabularInline):
 
 @admin.register(static_assets.StaticAsset)
 class StaticAssetAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
+    actions = ['process_videos']
     inlines = [ImageInline, VideoInline]
     autocomplete_fields = ['user', 'author']
     list_display = ['__str__', 'date_created', 'date_updated']
@@ -69,6 +70,22 @@ class StaticAssetAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
         'source_type',
     ]
     readonly_fields = ['original_filename', 'size_bytes', 'date_created', 'id']
+
+    def process_videos(self, request, queryset):
+        videos_processing_count = 0
+        # For each asset, process all videos attached if available
+        for a in queryset:
+            a.process_video()
+            videos_processing_count += 1
+        if videos_processing_count == 0:
+            message_bit = "No video is"
+        elif videos_processing_count == 1:
+            message_bit = "1 video is"
+        else:
+            message_bit = "%s videos are" % videos_processing_count
+        self.message_user(request, "%s processing." % message_bit)
+
+    process_videos.short_description = "Process videos for selected assets"
 
 
 admin.site.register(storages.StorageLocation)

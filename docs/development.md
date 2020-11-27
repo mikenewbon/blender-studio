@@ -52,7 +52,11 @@ and it must not be committed.
     it possible to immediately view objects created/edited via admin on site.
 12. Set up the [Blender ID server](#blender-id-authentication) for authentication
     and [MeiliSerach server](#search) for the search functionality.
-
+13. Setup for video processing jobs. Download ngrok.
+    - Run `./ngrok http 8010`
+    - Update `settings.py`:
+        - Set `COCONUT_API_KEY` to a valid value (see `settings.example.py`)
+        - Set `COCONUT_DECLARED_HOSTNAME` to `https://<random-value>.ngrok.io`
 
 ## Data import
 You can add objects to the database manually via the Django's Admin panel.

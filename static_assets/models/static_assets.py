@@ -16,6 +16,7 @@ from storages.backends.gcloud import GoogleCloudStorage
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
 from static_assets.models import License, StorageLocationCategoryChoices
+from static_assets.tasks import create_video_processing_job
 
 
 log = logging.getLogger(__name__)
@@ -151,6 +152,15 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
             return self.author.profile.image_url
         return self.user.profile.image_url
 
+    def process_video(self):
+        """Create video processing task if asset has correct type."""
+        if self.source_type != StaticAssetFileTypeChoices.video:
+            return
+        if not self.source:
+            return
+        # Create a background job, using only hashable arguments
+        create_video_processing_job(self.id)
+
     def clean(self):
         super().clean()
         if not self.pk and self.source:
@@ -174,7 +184,7 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
         # Create related tables for video or image
         if self.source_type == 'video':
             Video.objects.create(static_asset=self, duration=datetime.timedelta(seconds=0))
-            # TODO(fsiddi) Background job to process video variation and generate a thumbnail
+            self.process_video()
         elif self.source_type == 'image':
             Image.objects.create(static_asset=self)
             # TODO(fsiddi) Background job to update the image info
