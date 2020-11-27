@@ -10,20 +10,6 @@
 {% javascript 'training' %}
 {% endblock scripts %}
 
-{% block breadcrumbs %}
-{% comment %} <nav class="navbar-secondary" aria-label="breadcrumbs">
-
-  <div class="container-xl">
-    <ol class="breadcrumb">
-      {% include 'common/components/navigation/breadcrumb.html' with label='Training' url='/training/' %}
-      {% include 'common/components/navigation/breadcrumb.html' with label=training.name %}
-    </ol>
-  </div>
-
-</nav> {% endcomment %}
-
-{% endblock breadcrumbs %}
-
 {% block nexted_content %}
 <section>
   <img src="{{ training.picture_header }}" class="img-fluid img-width-100 rounded mb-3" alt="{{ training.name }}">
@@ -55,7 +41,7 @@
               </a>
               {% endif %}
 
-              {% if training.admin_url %}
+              {% if user.is_staff %}
               <a href="{{ training.admin_url }}" class="btn btn-sm btn-icon btn-dark">
                 <i class="material-icons btn-material-icons">create</i>
               </a>

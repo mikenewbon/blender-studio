@@ -73,16 +73,8 @@
 
       <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
         <div class="training-toolbar-container">
-          {% comment %} <div class="training-toolbar-details">
-            <div class="text-muted x-small">
-              <p class="d-inline mr-3">{{ training.date_updated|date:"jS F Y" }}</p>
-            </div>
-          </div> {% endcomment %}
-
 
           <div class="training-toolbar">
-            {% comment %} <a class="btn btn-sm btn-dark"><i class="material-icons">favorite_border</i> Like</a>
-            {% endcomment %}
             {% if section.is_free or request.user|has_active_subscription %}
             {% if section.download_url %}
             <a href="{{ section.download_url }}" download class="btn btn-sm btn-dark">Download <span
@@ -90,7 +82,7 @@
             {% endif %}
             {% endif %}
 
-            {% if section.admin_url %}
+            {% if user.is_staff %}
             <a href="{{ section.admin_url }}" class="btn btn-sm btn-icon btn-dark">
               <i class="material-icons btn-material-icons">create</i>
             </a>
