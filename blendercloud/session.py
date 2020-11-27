@@ -15,7 +15,7 @@ import blender_id_oauth_client.signals as signals
 
 from .flask_login import open_remember_token
 from profiles.blender_id import BIDSession
-from profiles.queries import set_groups
+from profiles.queries import set_groups_from_roles
 
 bid = BIDSession()
 logger = logging.getLogger(__name__)
@@ -84,7 +84,7 @@ def _get_or_create_user(user_oauth: Dict[str, Any]) -> User:
 
     # In case this is a previously imported record, make sure the groups are set
     group_names = user_oauth.get('roles') or []
-    set_groups(user, group_names=group_names)
+    set_groups_from_roles(user, group_names=group_names)
 
     # Update the user with the info we just got
     if user.email != oauth_user_email or user.username != oauth_user_nickname:

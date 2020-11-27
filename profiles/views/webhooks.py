@@ -13,7 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from profiles.blender_id import BIDSession
-from profiles.queries import set_groups
+from profiles.queries import set_groups_from_roles
 
 bid = BIDSession()
 
@@ -107,4 +107,4 @@ def handle_user_modified(payload: Dict[Any, Any]) -> None:
 
     # Sync roles to groups
     group_names = payload.get('roles') or []
-    set_groups(user, group_names=group_names)
+    set_groups_from_roles(user, group_names=group_names)

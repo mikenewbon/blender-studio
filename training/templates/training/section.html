@@ -26,7 +26,7 @@
 <div class="row mb-3">
   {% if video is not none %}
   <div class="col training-video">
-    {% if request.user.is_authenticated and request.user|has_group:"subscriber" or section.is_free %}
+    {% if section.is_free or request.user|has_active_subscription %}
     {% include 'common/components/video_player.html' with url=video.url progress_url=video.progress_url start_position=video.start_position poster=section.thumbnail_m_url %}
     {% else %}
     {% include 'common/components/content_locked.html' with background=section.thumbnail_m_url %}
@@ -34,7 +34,7 @@
   </div>
   {% else %}
   <div class="col training-video">
-    {% if request.user.is_authenticated and request.user|has_group:"subscriber" or section.is_free %}
+    {% if section.is_free or request.user|has_active_subscription %}
     {% if section.thumbnail %}
     {% include "common/components/helpers/image_set.html" with alt=section.name classes="img-fluid img-width-100 rounded" img_source=section.thumbnail xsmall_width="600" small_width="800" medium_width="1000" large_width="1200" xlarge_width="1920" %}
     {% endif %}
@@ -83,7 +83,7 @@
           <div class="training-toolbar">
             {% comment %} <a class="btn btn-sm btn-dark"><i class="material-icons">favorite_border</i> Like</a>
             {% endcomment %}
-            {% if request.user.is_authenticated and request.user|has_group:"subscriber" or request.user|has_group:"demo" or section.is_free %}
+            {% if section.is_free or request.user|has_active_subscription %}
             {% if section.download_url %}
             <a href="{{ section.download_url }}" download class="btn btn-sm btn-dark">Download <span
                 class="subtitle">({{ section.download_size }})</span></a>

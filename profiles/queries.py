@@ -20,14 +20,16 @@ def clean_role_names(names: Union[List[str], Set[str]]) -> Set[str]:
     return {re_cloud_role_name_cleanup.sub('', name) for name in names}
 
 
-def set_groups(user: User, group_names: Union[List[str], Set[str]]) -> None:
+def set_groups_from_roles(user: User, group_names: Union[List[str], Set[str]]) -> None:
     """Set user groups to match the given list of `group_names`.
 
     If a group with a particular name doesn't exist, create one.
+    Ignores Blender Studio own internal groups that start with "_".
     """
     group_names = clean_role_names(group_names)
     current_groups = user.groups.all()
-    current_group_names = {group.name for group in current_groups}
+    # Blender ID role names map onto group names, with exception of group name starting with "_"
+    current_group_names = {group.name for group in current_groups if not group.name.startswith('_')}
 
     names_to_add_to = group_names - current_group_names
     # Look up all groups this user is now being added to and make sure they actually exist

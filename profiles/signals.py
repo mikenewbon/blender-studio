@@ -9,7 +9,7 @@ from django.dispatch import receiver
 from blender_id_oauth_client import signals as bid_signals
 
 from profiles.models import Profile, Notification
-from profiles.queries import set_groups
+from profiles.queries import set_groups_from_roles
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +43,7 @@ def fill_profile(
     instance.profile.save()
 
     group_names = oauth_info.get('roles') or []
-    set_groups(instance, group_names=group_names)
+    set_groups_from_roles(instance, group_names=group_names)
 
 
 @receiver(post_save, sender=User)

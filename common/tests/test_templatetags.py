@@ -22,14 +22,6 @@ class CommonExtrasTest(TestCase):
 
         self.assertFalse(has_group(user, 'doesnotexist'))
 
-    def test_has_group_in_group_subscriber_and_demo_are_equivalent(self):
-        user = UserFactory(email='mail@example.com')
-        group, _ = Group.objects.get_or_create(name='demo')
-        user.groups.add(group)
-
-        self.assertTrue(has_group(user, 'demo'))
-        self.assertTrue(has_group(user, 'subscriber'))
-
     def test_has_group_in_group(self):
         user = UserFactory(email='mail@example.com')
         for group_name in ('subscriber', 'has_subscription'):
@@ -54,14 +46,16 @@ class CommonExtrasTest(TestCase):
 
         template_text = """
         {% load common_extras %}{% spaceless %}
-        {% if user|has_group:"has_subscription" %}has subscription{% else %}{% endif %}
-        {% if user|has_group:"subscriber" %}{% else %}subscription not active{% endif %}
+        {% if user|has_group:"has_subscription" %}in group has subscription{% else %}{% endif %}
+        {% if user|has_group:"subscriber" %}{% else %}not in subscriber group{% endif %}
         {% endspaceless %}
         """
         template = template_engine.from_string(template_text)
         content = template.render({'user': user})
 
-        self.assertEqual(content.strip(), 'has subscription\n        subscription not active')
+        self.assertEqual(
+            content.strip(), 'in group has subscription\n        not in subscriber group'
+        )
 
     def test_template_with_shortcodes_require_subscriber_shows_nothing_for_anon(self):
         template_text = """
@@ -129,3 +123,48 @@ class CommonExtrasTest(TestCase):
             '</iframe></div>',
             content.strip(),
         )
+
+    def test_template_with_has_active_subscription_no_subscription(self):
+        user = UserFactory(email='mail@example.com')
+
+        template_text = """
+        {% load common_extras %}{% spaceless %}
+        {% if user|has_active_subscription %}{% else %}no active subscription{% endif %}
+        {% endspaceless %}
+        """
+        template = template_engine.from_string(template_text)
+        content = template.render({'user': user})
+
+        self.assertEqual(content.strip(), 'no active subscription')
+
+    def test_template_with_group_subscriber_has_active_subscription(self):
+        user = UserFactory(email='mail@example.com')
+        # `subscriber` group includes `can_view_content` permissions which is required for active subscription
+        group, _ = Group.objects.get_or_create(name='subscriber')
+        user.groups.add(group)
+
+        template_text = """
+        {% load common_extras %}{% spaceless %}
+        {% if user|has_active_subscription %}has active subscription{% else %}{% endif %}
+        {% endspaceless %}
+        """
+        template = template_engine.from_string(template_text)
+        content = template.render({'user': user})
+
+        self.assertEqual(content.strip(), 'has active subscription')
+
+    def test_template_with_group_demo_has_active_subscription(self):
+        user = UserFactory(email='mail@example.com')
+        # `demo` group includes `can_view_content` permissions which is required for active subscription
+        group, _ = Group.objects.get_or_create(name='demo')
+        user.groups.add(group)
+
+        template_text = """
+        {% load common_extras %}{% spaceless %}
+        {% if user|has_active_subscription %}has active subscription{% else %}{% endif %}
+        {% endspaceless %}
+        """
+        template = template_engine.from_string(template_text)
+        content = template.render({'user': user})
+
+        self.assertEqual(content.strip(), 'has active subscription')

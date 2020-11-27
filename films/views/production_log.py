@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.http.request import HttpRequest
 from django.shortcuts import get_object_or_404, render
 
-from common.queries import has_group
+from common.queries import has_active_subscription
 from films.models import Film
 from films.queries import get_production_logs_page
 
@@ -44,7 +44,7 @@ def production_log_list(request: HttpRequest, film_slug: str) -> HttpResponse:
         'production_logs_page': get_production_logs_page(film),
         'show_more_button': True,
         'user_can_view_asset': (
-            request.user.is_authenticated and has_group(request.user, 'subscriber')
+            request.user.is_authenticated and has_active_subscription(request.user)
         ),
         'user_can_edit_production_log': (
             request.user.is_staff and request.user.has_perm('films.change_production_log')

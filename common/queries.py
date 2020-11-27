@@ -12,10 +12,6 @@ from training.models import Training
 from blog.models import Post
 
 DEFAULT_FEED_PAGE_SIZE = 10
-# Certain permissions can be defined by multiple groups
-EQUIVALENT_GROUPS = {
-    'subscriber': ['demo'],
-}
 
 
 def get_activity_feed_page(
@@ -92,8 +88,21 @@ def get_activity_feed_page(
 
 
 def has_group(user: User, group_name: str) -> bool:
-    """Check if given user is assigned to a given group, or its equivalent."""
+    """Check if given user is assigned to a given group."""
     if not user or user.is_anonymous:
         return False
-    equivalent_groups = {group_name, *EQUIVALENT_GROUPS.get(group_name, [])}
-    return user.groups.filter(name__in=equivalent_groups).exists()
+    return user.groups.filter(name=group_name).exists()
+
+
+def has_active_subscription(user: User) -> bool:
+    """Check subscription status of the given user.
+
+    Currently active subscription means having a custom `can_view_content` permission,
+    given to users via different kinds of groups, for example:
+     * "demo"
+     * "subscriber"
+     * "_org_<name>" for organisation-level subscriptions.
+    """
+    if not user:
+        return False
+    return user.has_perm('profiles.can_view_content')

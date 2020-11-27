@@ -84,7 +84,11 @@ class group_check:
         group_name = kwargs.pop('group', kwargs.pop('cap', ''))
         if group_name:
             fallback = kwargs.pop('nogroup', kwargs.pop('nocap', ''))
-            if not queries.has_group(current_user, group_name):
+            if not current_user or not (
+                # consider `subscriber` group a special case, and check subscription status instead
+                (group_name == 'subscriber' and queries.has_active_subscription(current_user))
+                or queries.has_group(current_user, group_name)
+            ):
                 if not fallback:
                     return ''
                 html = html_module.escape(fallback)
@@ -129,7 +133,7 @@ class SubscribeBanner:
     ) -> str:
         """Display a subscribe banner for anonymous and subscription-less viewers."""
         user = getattr(context.get('request'), 'user', None) if context else None
-        if not user or user.is_anonymous or not queries.has_group(user, 'subscriber'):
+        if not user or not queries.has_active_subscription(user):
             subscribe_banner = render_to_string('blog/subscribe_jumbotron.html')
             return subscribe_banner
         return ''
@@ -277,7 +281,7 @@ class Attachment:
     ):
         """Render a generic attachment."""
         return render_to_string(
-            'common/components/attachments/file_generic.html', {'static_asset': static_asset},
+            'common/components/attachments/file_generic.html', {'static_asset': static_asset}
         )
 
     def render_image(

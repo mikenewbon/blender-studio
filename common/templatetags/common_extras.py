@@ -54,14 +54,14 @@ def markdown(text: str) -> Markup:
 
 @register.filter(name='has_group')
 def has_group(user: User, group_name: str) -> bool:
-    """Check if a given user is in a given group.
-
-    E.g. can be used to check subscription status in templates:
-
-    {% load common_extras %}
-    {% if request.user|has_group:"subscriber" %}{% endif %}
-    """
+    """Check if a given user is in a given group."""
     return queries.has_group(user, group_name)
+
+
+@register.filter(name='has_active_subscription')
+def has_active_subscription(user: User) -> bool:
+    """Check subscription status of the given user."""
+    return queries.has_active_subscription(user)
 
 
 @register.simple_tag(takes_context=True)

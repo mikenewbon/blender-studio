@@ -38,10 +38,10 @@ class ContextProcessorsTest(TestCase):
 
     def test_user_dict_authenticated_user_with_oauth_info(self):
         user = UserFactory(
-            email='mail@example.com', username='ⅉanedoe', oauth_info__oauth_user_id='2',
+            email='mail@example.com', username='ⅉanedoe', oauth_info__oauth_user_id='2'
         )
         user.profile.full_name = 'ⅉane Doe'
-        for group_name in ('has_subscription', 'subscriber'):
+        for group_name in ('subscriber', 'has_subscription'):
             group, _ = Group.objects.get_or_create(name=group_name)
             user.groups.add(group)
 
@@ -56,7 +56,7 @@ class ContextProcessorsTest(TestCase):
                 'is_authenticated': True,
                 'date_joined': ANY,
                 'last_login': ANY,
-                'groups': [{'name': 'has_subscription'}, {'name': 'subscriber'},],
+                'groups': [{'name': 'subscriber'}, {'name': 'has_subscription'}],
                 'is_active': True,
                 'is_staff': False,
                 'is_superuser': False,
@@ -85,7 +85,7 @@ class ContextProcessorsTest(TestCase):
                 'is_active': True,
                 'is_staff': False,
                 'is_superuser': False,
-                'profile': {'image_url': None, 'full_name': '',},
+                'profile': {'image_url': None, 'full_name': ''},
                 'username': 'ⅉanedoe',
             },
         )

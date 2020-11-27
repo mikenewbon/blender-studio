@@ -18,7 +18,7 @@
 {% if chapter.thumbnail %}
 <div class="row mb-3">
   <div class="col training-video">
-    {% if request.user.is_authenticated and request.user|has_group:"subscriber" or section.is_free %}
+    {% if section.is_free or request.user|has_active_subscription %}
 
     {% include "common/components/helpers/image_set.html" with alt=chapter.name classes="img-fluid img-width-100 rounded" img_source=chapter.thumbnail xsmall_width="600" small_width="800" medium_width="1000" large_width="1200" xlarge_width="1920" %}
 
