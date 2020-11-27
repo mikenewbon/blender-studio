@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'sorl.thumbnail',
     'taggit',
     'actstream',
+    'background_task',
 ]
 
 MIDDLEWARE = [
@@ -223,6 +224,7 @@ LOGGING = {
         'urllib3': {'level': 'WARNING'},
         'search': {'level': 'DEBUG'},
         'blendercloud': {'level': 'DEBUG'},
+        'static_assets': {'level': 'DEBUG'},
     },
     'root': {'level': 'WARNING', 'handlers': ['console']},
 }
@@ -304,6 +306,11 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_S3_REGION_NAME = 'eu-central-1'
 AWS_STORAGE_BUCKET_NAME = 'blender-studio'
 AWS_S3_CUSTOM_DOMAIN = 'ddz4ak4pa3d19.cloudfront.net'
+# Used for temporary storage when processing videos (and in the future
+# when performing direct-to-s3 uploads). Once the upload is completed
+# we take care of moving the file to AWS_STORAGE_BUCKET_NAME through a
+# background task.
+AWS_UPLOADS_BUCKET_NAME = 'blender-studio-uploads'
 
 THUMBNAIL_STORAGE = PUBLIC_FILE_STORAGE
 THUMBNAIL_CROP_MODE = 'center'

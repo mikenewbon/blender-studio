@@ -100,3 +100,10 @@ AWS_CLOUDFRONT_KEY = os.environ.get('AWS_CLOUDFRONT_KEY').encode('ascii')
 
 BLENDER_CLOUD_SECRET_KEY = 'CHANGE_ME'
 BLENDER_CLOUD_AUTH_ENABLED = True
+
+GOOGLE_ANALYTICS_TRACKING_ID = ''
+
+# Coconut API. See https://app.coconut.co/settings/api
+COCONUT_API_KEY = ''
+# The hostname used by Coconut to push updates to (via webhooks)
+COCONUT_DECLARED_HOSTNAME = ''
