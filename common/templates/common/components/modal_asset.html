@@ -36,7 +36,7 @@
             <i class="material-icons btn-material-icons">close</i>
           </button>
         </div>
-        {% if request.user.is_authenticated and request.user|has_group:"subscriber" or asset.is_free %}
+        {% if asset.is_free or request.user|has_active_subscription %}
         {% if asset.static_asset.source_type == "video" %}
         {% include 'common/components/video_player.html' with url=asset.static_asset.video.default_variation_url poster=asset.static_asset.thumbnail_m_url %}
         {% elif asset.static_asset.preview %}

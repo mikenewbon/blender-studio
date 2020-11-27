@@ -127,7 +127,8 @@ class WebhooksTest(TestCase):
         self.assertEquals(response.content, b'')
         user = User.objects.get(pk=self.user.pk)
         self.assertEquals(
-            sorted([g.name for g in user.groups.all()]), ['has_subscription', 'subscriber'],
+            sorted([g.name for g in user.groups.all()]),
+            ['has_subscription', 'subscriber'],
         )
 
         # One role removed
@@ -142,7 +143,8 @@ class WebhooksTest(TestCase):
         self.assertEquals(response.status_code, 204)
         user = User.objects.get(pk=self.user.pk)
         self.assertEquals(
-            sorted([g.name for g in user.groups.all()]), ['has_subscription',],
+            sorted([g.name for g in user.groups.all()]),
+            ['has_subscription'],
         )
         # Check that the group itself still exists
         self.assertEquals(Group.objects.filter(name='subscriber').count(), 1)
@@ -160,7 +162,67 @@ class WebhooksTest(TestCase):
         user = User.objects.get(pk=self.user.pk)
         self.assertEquals(
             sorted([g.name for g in user.groups.all()]),
-            ['dev_core', 'has_subscription', 'subscriber',],
+            ['dev_core', 'has_subscription', 'subscriber'],
+        )
+
+    @responses.activate
+    def test_user_modified_roles_added_removed_adds_removes_user_groups_keeps_internal_groups(self):
+        for group_name in ('_editor', '_org_someinc'):
+            group, _ = Group.objects.get_or_create(name=group_name)
+            self.user.groups.add(group)
+        self.assertEquals(self.user.groups.count(), 2)
+
+        # Two new roles added
+        body = {
+            **self.webhook_payload,
+            'roles': ['cloud_has_subscription', 'cloud_subscriber'],
+        }
+        response = self.client.post(
+            self.url, body, content_type='application/json', **prepare_hmac_header(body)
+        )
+
+        self.assertEquals(response.status_code, 204)
+        self.assertEquals(response.content, b'')
+        user = User.objects.get(pk=self.user.pk)
+        # Groups stating with an "_" are managed by Blender Studio, not Blender ID,
+        # and should not be affected by the webhook
+        self.assertEquals(
+            sorted([g.name for g in user.groups.all()]),
+            ['_editor', '_org_someinc', 'has_subscription', 'subscriber'],
+        )
+
+        # One role removed
+        body = {
+            **self.webhook_payload,
+            'roles': ['cloud_has_subscription'],
+        }
+        response = self.client.post(
+            self.url, body, content_type='application/json', **prepare_hmac_header(body)
+        )
+
+        self.assertEquals(response.status_code, 204)
+        user = User.objects.get(pk=self.user.pk)
+        self.assertEquals(
+            sorted([g.name for g in user.groups.all()]),
+            ['_editor', '_org_someinc', 'has_subscription'],
+        )
+        # Check that the group itself still exists
+        self.assertEquals(Group.objects.filter(name='subscriber').count(), 1)
+
+        # Two roles added, one already exists
+        body = {
+            **self.webhook_payload,
+            'roles': ['cloud_has_subscription', 'cloud_subscriber', 'dev_core'],
+        }
+        response = self.client.post(
+            self.url, body, content_type='application/json', **prepare_hmac_header(body)
+        )
+
+        self.assertEquals(response.status_code, 204)
+        user = User.objects.get(pk=self.user.pk)
+        self.assertEquals(
+            sorted([g.name for g in user.groups.all()]),
+            ['_editor', '_org_someinc', 'dev_core', 'has_subscription', 'subscriber'],
         )
 
     def test_user_modified_missing_oauth_info(self):

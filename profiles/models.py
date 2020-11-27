@@ -18,6 +18,9 @@ logger = logging.getLogger(__name__)
 class Profile(mixins.CreatedUpdatedMixin, models.Model):
     """Store additional Profile data, such as avatar and full name."""
 
+    class Meta:
+        permissions = [('can_view_content', 'Can view subscription-only content')]
+
     user = models.OneToOneField(
         User, primary_key=True, on_delete=models.CASCADE, related_name='profile'
     )

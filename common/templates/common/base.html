@@ -151,7 +151,7 @@
               {% endif %}
               {% if request.user|has_group:"demo"  %}
               <i class="profile-subscription-badge demo material-icons">favorite</i>
-              {% elif request.user|has_group:"subscriber" %}
+              {% elif request.user|has_active_subscription %}
               <i class="profile-subscription-badge subscriber material-icons">done</i>
               {% else %}
               <i class="profile-subscription-badge unsubscribed material-icons">priority_high</i>
@@ -176,7 +176,7 @@
                   <i class="material-icons">favorite</i>
                   <span>Free Account</span>
                 </a>
-                {% elif request.user|has_group:"subscriber" %}
+                {% elif request.user|has_active_subscription %}
                 <a href="/settings/billing" class="dropdown-item text-green">
                   <i class="material-icons">done</i>
                   <span>Subscription Active</span>
