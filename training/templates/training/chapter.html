@@ -41,6 +41,12 @@
       <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
         <div class="training-toolbar-container">
           <div class="training-toolbar">
+            {% if chapter.admin_url %}
+            <a href="{{ chapter.admin_url }}" class="btn btn-sm btn-icon btn-dark">
+              <i class="material-icons btn-material-icons">create</i>
+            </a>
+            {% endif %}
+
             <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
               <i class="material-icons">more_horiz</i>
             </button>

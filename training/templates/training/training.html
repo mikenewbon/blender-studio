@@ -55,6 +55,12 @@
               </a>
               {% endif %}
 
+              {% if training.admin_url %}
+              <a href="{{ training.admin_url }}" class="btn btn-sm btn-icon btn-dark">
+                <i class="material-icons btn-material-icons">create</i>
+              </a>
+              {% endif %}
+
               <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
                 <i class="material-icons btn-material-icons">more_horiz</i>
               </button>
