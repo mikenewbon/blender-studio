@@ -27,7 +27,7 @@ class AssetAdmin(admin.ModelAdmin):
         'slug',
         'static_asset__slug',
     ]
-    autocomplete_fields = ['static_asset', 'attachments']
+    autocomplete_fields = ['static_asset', 'attachments', 'collection']
 
     def get_queryset(self, request: HttpRequest) -> 'QuerySet[assets.Asset]':
         """Select extra related data in the default queryset."""
