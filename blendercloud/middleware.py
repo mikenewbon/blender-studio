@@ -30,7 +30,6 @@ class SessionMiddleware:
         """
         forwarded_host = request.META.get('HTTP_X_FORWARDED_HOST')
         host = request.META.get('HTTP_HOST')
-        logger.debug(f'blendercloud.middleware {request.META}')
         if settings.BLENDER_CLOUD_AUTH_ENABLED and (
             settings.BLENDER_CLOUD_DOMAIN is None
             or settings.BLENDER_CLOUD_DOMAIN in (host, forwarded_host)
