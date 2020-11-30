@@ -121,7 +121,7 @@
 
       {% if user_can_edit_production_log %}
 
-      <a href="/admin/films/productionlogentry/add/" class="btn btn-sm btn-secondary mb-3">Add Entry</a>
+      <a href="{% url 'admin:films_productionlog_add' %}?production_log={{ production_log.pk }}" class="btn btn-sm btn-secondary mb-3">Add Entry</a>
 
       {% endif %}
 
