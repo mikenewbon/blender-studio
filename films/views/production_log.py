@@ -1,3 +1,4 @@
+"""Displays production log pages."""
 from django.http import HttpResponse
 from django.http.request import HttpRequest
 from django.shortcuts import get_object_or_404, render

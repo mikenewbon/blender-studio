@@ -1,3 +1,4 @@
+"""Commonly used model and admin mixins."""
 from typing import Optional, Any, Union, List, Tuple
 import logging
 
@@ -14,6 +15,8 @@ log = logging.getLogger(__name__)
 
 
 class CreatedUpdatedMixin(models.Model):
+    """Add standard date fields to a model."""
+
     class Meta:
         abstract = True
 
@@ -24,7 +27,8 @@ class CreatedUpdatedMixin(models.Model):
 class AdminUserDefaultMixin:
     """On object creation, sets the 'user' field in the form in Admin to the current user.
 
-    The field value will be displayed as read-only in the form."""
+    The field value will be displayed as read-only in the form.
+    """
 
     def __init_subclass__(cls, **kwargs: Any):
         super().__init_subclass__(**kwargs)  # type: ignore[call-arg]
@@ -47,7 +51,10 @@ class AdminUserDefaultMixin:
 
 
 class ViewOnSiteMixin:
+    """Add `view_link` attribute to model admin."""
+
     def view_link(self, obj):
+        """Render a link to a given object."""
         return mark_safe('<a href="{0}">{1}</a>'.format(obj.get_absolute_url(), "View on site"))
 
     view_link.allow_tags = True
