@@ -116,6 +116,14 @@ function cardCarousel(element, slides) {
   }
 }
 
+$('.carousel-card-3 .carousel-item').each(function () {
+  cardCarousel(this, 3);
+});
+
+$('.carousel-card-4 .carousel-item').each(function () {
+  cardCarousel(this, 4);
+});
+
 let currentUser = '';
 document.addEventListener('DOMContentLoaded', () => {
   currentUser = JSON.parse(

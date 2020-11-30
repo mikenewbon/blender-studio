@@ -23,12 +23,12 @@
        <div class="carousel-inner w-100" role="listbox">
          <div class="carousel-item active">
            {% for section in recently_watched_sections|slice:':1' %}
-           {% include "training/components/card_section.html" with section=section card_sizes="col-md-3" %}
+           {% include "training/components/card_section.html" with section=section card_sizes="col-lg-3 col-6 col-md-4" %}
            {% endfor %}
          </div>
          {% for section in recently_watched_sections|slice:'1:' %}
          <div class="carousel-item">
-           {% include "training/components/card_section.html" with section=section card_sizes="col-md-3" %}
+           {% include "training/components/card_section.html" with section=section card_sizes="col-lg-3 col-6 col-md-4" %}
          </div>
          {% endfor %}
        </div>

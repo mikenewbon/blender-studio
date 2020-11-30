@@ -75,13 +75,13 @@
           {% endfor %} {% endcomment %}
           {% for training in favorited_trainings|slice:':1' %}
           <div class="carousel-item active">
-            {% include "training/components/card_training.html" with training=training card_sizes="col-md-4" %}
+            {% include "training/components/card_training.html" with training=training card_sizes="col-12 col-sm-6 col-lg-4" %}
           </div>
           {% endfor %}
 
           {% for training in favorited_trainings|slice:'1:6' %}
           <div class="carousel-item">
-            {% include "training/components/card_training.html" with training=training card_sizes="col-md-4" %}
+            {% include "training/components/card_training.html" with training=training card_sizes="col-12 col-sm-6 col-lg-4" %}
           </div>
           {% endfor %}
           {% else %}
@@ -163,13 +163,4 @@
 {% javascript 'training' %}
 {% javascript 'training_search' %}
 
-<script>
-  $('.carousel-card-3 .carousel-item').each(function () {
-    cardCarousel(this, 3);
-  });
-
-  $('.carousel-card-4 .carousel-item').each(function () {
-    cardCarousel(this, 4);
-  });
-</script>
 {% endblock scripts %}
