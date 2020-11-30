@@ -29,6 +29,7 @@ class AssetAdmin(mixins.ThumbnailMixin, admin.ModelAdmin):
         'static_asset__slug',
     ]
     autocomplete_fields = ['static_asset', 'attachments', 'collection']
+    ordering = ('-date_created',)
 
     def get_queryset(self, request: HttpRequest) -> 'QuerySet[assets.Asset]':
         """Select extra related data in the default queryset."""
