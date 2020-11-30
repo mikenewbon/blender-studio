@@ -1,0 +1,51 @@
+ <section class="mb-4">
+
+   <div class="row justify-content-center mb-2 mb-md-3">
+     <div class="col-md">
+       <h2 class="mb-0">Continue training</h2>
+       <p class="mb-0">Recently watched videos appear here! Continue watching where you left off.</p>
+     </div>
+     <div class="col-md-auto d-none d-md-block carousel-card-toolbar">
+       <a class="btn btn-lg btn-transparent btn-icon {% if recently_watched_sections|length <= 1 %}onlyOne{% elif recently_watched_sections|length <= 4 %} lessThanFour {% endif %}"
+         href="#continueTraining" role="button" data-slide="prev">
+         <i class="material-icons">arrow_back</i>
+       </a>
+       <a class="btn btn-lg btn-transparent btn-icon {% if recently_watched_sections|length <= 1 %}onlyOne{% elif recently_watched_sections|length <= 4 %} lessThanFour {% endif %}"
+         href="#continueTraining" role="button" data-slide="next">
+         <i class="material-icons">arrow_forward</i>
+       </a>
+     </div>
+   </div>
+
+   <div class="row">
+     <div id="continueTraining" class="carousel carousel-card-4 slide w-100" data-touch="true" data-ride="carousel"
+       data-interval="0">
+       <div class="carousel-inner w-100" role="listbox">
+         <div class="carousel-item active">
+           {% for section in recently_watched_sections|slice:':1' %}
+           {% include "training/components/card_section.html" with section=section card_sizes="col-md-3" %}
+           {% endfor %}
+         </div>
+         {% for section in recently_watched_sections|slice:'1:' %}
+         <div class="carousel-item">
+           {% include "training/components/card_section.html" with section=section card_sizes="col-md-3" %}
+         </div>
+         {% endfor %}
+       </div>
+     </div>
+   </div>
+
+   <div class="row d-block d-md-none">
+     <div class="col-md-auto carousel-card-toolbar">
+       <a class="btn btn-lg btn-transparent btn-icon {% if recently_watched_sections|length <= 1 %}onlyOne{% elif recently_watched_sections|length <= 4 %} lessThanFour {% endif %}"
+         href="#continueTraining" role="button" data-slide="prev">
+         <i class="material-icons">arrow_back</i>
+       </a>
+       <a class="btn btn-lg btn-transparent btn-icon {% if recently_watched_sections|length <= 1 %}onlyOne{% elif recently_watched_sections|length <= 4 %} lessThanFour {% endif %}"
+         href="#continueTraining" role="button" data-slide="next">
+         <i class="material-icons">arrow_forward</i>
+       </a>
+     </div>
+   </div>
+
+ </section>
