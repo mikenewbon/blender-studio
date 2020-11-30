@@ -1,8 +1,6 @@
 import datetime
 import json
 import logging
-import pathlib
-from urllib.parse import urlparse
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, SuspiciousOperation
@@ -13,13 +11,13 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 
 from static_assets.models.progress import UserVideoProgress
-from static_assets.models import Video, VideoVariation
-from static_assets.tasks import move_blob_from_upload_to_storage
+from static_assets.models import Video
 from training.queries.progress import (
     set_video_progress,
     set_section_progress_started,
     set_section_progress_finished,
 )
+from static_assets.coconut import events
 
 log = logging.getLogger(__name__)
 
@@ -60,62 +58,13 @@ def coconut_webhook(request, video_id):
     log.info('Updating video %i processing status to %s' % (video_id, job['event']))
     # On source.transferred
     if job['event'] == 'source.transferred':
-        # Set related static asset properties (size and content_type)
-        video.static_asset.size_bytes = job['metadata']['format']['size']
-        video.static_asset.content_type = job['metadata']['format']['mime_type']
-        video.static_asset.save()
-        # Set Video properties
-        video.duration = datetime.timedelta(seconds=job['metadata']['format']['duration'])
-        video.height = job['metadata']['streams']['video']['height']
-        video.width = job['metadata']['streams']['video']['width']
-        video.save()
+        events.source_transferred(job, video)
     # On output.processed (thumbnail)
     elif job['event'] == 'output.processed' and job['format'] == 'jpg:1280x':
-        # Images urls are provided in a list, because the 'image' format allows
-        # for the possibility of specifying more than one image.
-        # The current implementation of video processing expects there to be only
-        # one image, used as thumbnails. For this reason we get the first element
-        # of the 'urls' list.
-        if video.static_asset.thumbnail:
-            log.debug('Video %i already has a thumbnail, not updating' % video.id)
-            return JsonResponse({'status': 'ok'})
-        source_path = urlparse(job['urls'][0]).path.strip('/')
-        video.static_asset.thumbnail = source_path
-        video.static_asset.save()
-        move_blob_from_upload_to_storage(source_path)
+        events.output_processed_images(job, video)
     # On output.processed (video variation)
     elif job['event'] == 'output.processed' and 'mp4' in job['format']:
-        # If a video variation is found, simply return. Otherwise, create one.
-        source_path = urlparse(job['url']).path.strip('/')
-        if VideoVariation.objects.filter(video=video, source=source_path).exists():
-            log.debug('Video variation for video %i already exists' % video.id)
-            return JsonResponse({'status': 'ok'})
-
-        log.debug('Creating video variation for video %i' % video.id)
-
-        def get_resolution_label(height: int):
-            if height >= 1080:
-                return '1080p'
-            elif height >= 720:
-                return '720p'
-            elif height >= 540:
-                return '540p'
-            else:
-                return ''
-
-        video_variation = VideoVariation.objects.create(
-            video=video,
-            source=source_path,
-            height=job['metadata']['streams']['video']['height'],
-            width=job['metadata']['streams']['video']['width'],
-            resolution_label=get_resolution_label(job['metadata']['streams']['video']['height']),
-            size_bytes=job['metadata']['format']['size'],
-            content_type=job['metadata']['format']['mime_type'],
-        )
-        video.variations.add(video_variation)
-        log.debug('Created variation for video %i' % video.id)
-        # Move the encoded video to the final location
-        move_blob_from_upload_to_storage(source_path)
+        events.output_processed_video(job, video)
     # On job.completed (unused for now)
     elif job['event'] == 'job.completed':
         # TODO: Add publishing logic

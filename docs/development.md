@@ -52,7 +52,7 @@ and it must not be committed.
     it possible to immediately view objects created/edited via admin on site.
 12. Set up the [Blender ID server](#blender-id-authentication) for authentication
     and [MeiliSerach server](#search) for the search functionality.
-13. Setup for video processing jobs. Download ngrok.
+13. Setup for video processing jobs. Download ngrok (https://ngrok.com/).
     - Run `./ngrok http 8010`
     - Update `settings.py`:
         - Set `COCONUT_API_KEY` to a valid value (see `settings.example.py`)
