@@ -47,10 +47,10 @@ def production_log_list(request: HttpRequest, film_slug: str) -> HttpResponse:
             request.user.is_authenticated and has_active_subscription(request.user)
         ),
         'user_can_edit_production_log': (
-            request.user.is_staff and request.user.has_perm('films.change_production_log')
+            request.user.is_staff and request.user.has_perm('films.change_productionlog')
         ),
         'user_can_edit_production_log_entry': (
-            request.user.is_staff and request.user.has_perm('films.change_production_log_entry')
+            request.user.is_staff and request.user.has_perm('films.change_productionlogentry')
         ),
         'user_can_edit_asset': (
             request.user.is_staff and request.user.has_perm('films.change_asset')
