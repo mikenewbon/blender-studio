@@ -7,12 +7,13 @@ from common import mixins
 
 
 @admin.register(assets.Asset)
-class AssetAdmin(admin.ModelAdmin):
+class AssetAdmin(mixins.ThumbnailMixin, admin.ModelAdmin):
     # asset slugs aren't currently in use and were prepopulate
     # during import from previous version of Blender Cloud
     # prepopulated_fields = {'slug': ('name',)}
     readonly_fields = ['date_created', 'slug']
-    list_display = ['__str__', 'order', 'film', 'collection']
+    list_display = ['view_thumbnail', '__str__', 'order', 'film', 'collection']
+    list_display_links = ('view_thumbnail', '__str__')
     list_filter = [
         'film',
         'category',

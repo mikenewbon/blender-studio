@@ -87,3 +87,17 @@ class StaticThumbnailURLMixin:
     def thumbnail_s_url(self) -> Optional[str]:
         """Return a static URL to a small thumbnail."""
         return self._get_thumbnail(settings.THUMBNAIL_SIZE_S)
+
+
+class ThumbnailMixin:
+    """Display an asset thumbnail, if available."""
+
+    def view_thumbnail(self, obj):
+        """Return an img tag with an asset thumbnail, if available."""
+        static_asset = getattr(obj, 'static_asset', obj)
+        img_url = getattr(static_asset, 'thumbnail_s_url', None)
+        if img_url:
+            return mark_safe(f'<img width=100 src="{img_url}">')
+        return ''
+
+    view_thumbnail.allow_tags = True
