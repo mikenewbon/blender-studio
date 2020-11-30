@@ -50,7 +50,7 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
     is_featured = models.BooleanField(default=False)
     is_free = models.BooleanField(default=False)
     contains_blend_file = models.BooleanField(
-        default=False, help_text='Is the asset a .blend file or a package containing .blend files?',
+        default=False, help_text='Is the asset a .blend file or a package containing .blend files?'
     )
     attachments = models.ManyToManyField(
         models_static_assets.StaticAsset, blank=True, related_name='+'
@@ -68,7 +68,10 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
             raise ValidationError('Collection\'s film does not match the asset\'s film.')
 
     def __str__(self) -> str:
-        return self.name
+        return (
+            f'{self.film}: {self.name}'
+            f'{self.is_free and " 🆓" or ""}{self.is_featured and " ★" or ""}'
+        )
 
     # TODO(fsiddi, anna) Share this code with Sections
     @property
