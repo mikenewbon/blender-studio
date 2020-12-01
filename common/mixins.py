@@ -49,6 +49,13 @@ class AdminUserDefaultMixin:
             obj.user = request.user
         super().save_model(request, obj, form, change)
 
+    def save_formset(self, request: Any, form: Any, formset: Any, change: Any) -> None:
+        """Associate created object with the current user: handle inline forms."""
+        if not change:
+            for form in formset.forms:
+                form.instance.user = request.user
+        super().save_formset(request, form, formset, change)
+
 
 class ViewOnSiteMixin:
     """Add `view_link` attribute to model admin."""

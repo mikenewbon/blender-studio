@@ -126,6 +126,8 @@ class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
     author.description = 'The actual author of the assets in the production log entry.'
     legacy_id = models.SlugField(blank=True)
 
+    assets = models.ManyToManyField(Asset, through='ProductionLogEntryAsset')
+
     @property
     def author_role(self) -> str:
         """Find the role for the log entry author."""
@@ -144,9 +146,9 @@ class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
     @property
     def author_name(self) -> str:
         """Get the author's full name."""
-        if self.author:
-            return self.author.profile.full_name
-        return self.user.profile.full_name
+        author = self.author or self.user
+        if getattr(author, 'profile', None):
+            return author.profile.full_name
 
     @property
     def author_image_url(self) -> str:
@@ -154,9 +156,9 @@ class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
 
         Usually the author of the asset will be the same as the user who uploads the asset.
         """
-        if self.author:
-            return self.author.profile.image_url
-        return self.user.profile.image_url
+        author = self.author or self.user
+        if getattr(author, 'profile', None):
+            return author.profile.image_url
 
     def __str__(self):
         return (

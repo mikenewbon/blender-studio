@@ -87,9 +87,9 @@
         <div class="update-feed-individual-files">
           <div class="files">
             <div class="row row-cols-1 row-cols-md-3  row-cols-2">
-              {% for entry_asset in entry.assets|slice:':3' %}
+              {% for asset in entry.assets.all|slice:':3' %}
 
-              {% include "common/components/file.html" with asset=entry_asset.asset site_context="production_logs" %}
+              {% include "common/components/file.html" with asset=asset site_context="production_logs" %}
 
               {% endfor %}
             </div>
@@ -97,9 +97,9 @@
             {% if entry.assets|length > 3 %}
             <div class="collapse" id="entry-{{ entry.id }}">
               <div class="row row-cols-1 row-cols-md-3  row-cols-2">
-                {% for entry_asset in entry.assets|slice:'3:' %}
+                {% for asset in entry.assets.all|slice:'3:' %}
 
-                {% include "common/components/file.html" with asset=entry_asset.asset site_context="production_logs" %}
+                {% include "common/components/file.html" with asset=asset.asset site_context="production_logs" %}
 
                 {% endfor %}
               </div>
