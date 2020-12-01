@@ -80,7 +80,6 @@
     .carousel-item-prev {
       transform: translateX(-50%);
 
-
       @include media-breakpoint-up(md) {
         transform: translateX(-33.33%);
       }
@@ -122,8 +121,8 @@
 }
 
 .carousel-card-toolbar {
-  justify-content: flex-end;
   display: flex;
+  justify-content: flex-end;
   margin-top: $spacer / 2;
 
   @include media-breakpoint-up(md) {
