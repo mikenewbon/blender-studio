@@ -35,6 +35,8 @@ def show_breadcrumbs(context):
         key: context.get(key)
         for key in (
             'current_collection',
+            'featured_artwork',
+            'film',
             'user_can_edit_asset',
             'user_can_edit_collection',
             'user_can_edit_film',
