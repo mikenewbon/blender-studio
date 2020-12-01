@@ -51,7 +51,7 @@ class ProductionLog(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, 
 
     @property
     def url(self) -> str:
-        return reverse('film-production-logs', kwargs={'film_slug': self.film.slug})
+        return reverse('film-production-log', kwargs={'film_slug': self.film.slug, 'pk': self.pk})
 
     @property
     def author_name(self) -> str:

@@ -3,7 +3,6 @@ from django.urls import path, include
 from films.views import film, gallery, production_log
 from films.views.api.asset import asset as api_asset, asset_zoom, asset_like
 from films.views.api.comment import comment
-from films.views.api.production_log import production_logs_page
 
 urlpatterns = [
     path(
@@ -17,14 +16,23 @@ urlpatterns = [
             ]
         ),
     ),
-    path('api/films/<int:film_pk>/logs', production_logs_page, name='api-logs-page'),
     path('', film.film_list, name='film-list'),
     path('<slug:film_slug>', film.film_detail, name='film-detail'),
     path('<slug:film_slug>/gallery', gallery.collection_list, name='film-gallery'),
     path(
         '<slug:film_slug>/production-logs',
-        production_log.production_log_list,
+        production_log.ProductionLogView.as_view(),
         name='film-production-logs',
+    ),
+    path(
+        '<slug:film_slug>/production-logs/<int:year>/<str:month>',
+        production_log.ProductionLogMonthView.as_view(),
+        name='film-production-logs-month',
+    ),
+    path(
+        '<slug:film_slug>/production-log/<int:pk>',
+        production_log.ProductionLogDetailView.as_view(),
+        name='film-production-log',
     ),
     path('<slug:film_slug>/pages/<slug:page_slug>', film.flatpage, name='film-flatpage'),
     path(

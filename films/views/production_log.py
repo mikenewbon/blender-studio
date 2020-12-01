@@ -1,49 +1,18 @@
 """Displays production log pages."""
-from django.http import HttpResponse
-from django.http.request import HttpRequest
-from django.shortcuts import get_object_or_404, render
+from django.db.models.query import QuerySet
+from django.shortcuts import get_object_or_404
+from django.views.generic import dates, detail
 
 from common.queries import has_active_subscription
-from films.models import Film
-from films.queries import get_production_logs_page
+from films.models import Film, ProductionLog
+from films.queries import get_production_logs
 
 
-def production_log_list(request: HttpRequest, film_slug: str) -> HttpResponse:
-    """
-    Displays the latest production logs for the :model:`films.Film` with the given slug.
-
-    Also fetches the related log entries (:model:`films.ProductionLogEntry`), and
-    the assets (:model:`films.Asset`) they contain.
-
-    **Context:**
-
-    ``film``
-        An instance of :model:`films.Film`.
-    ``production_logs_page``
-        A single page of the latest production logs for the ``film``, sorted by their
-        descending ``date_created``.
-    ``show_more_button``
-        A bool set to True. Has to have a truthy value for the 'Load more weeks' button
-        to be displayed in the :template:`films/components/activity_feed.html` template.
-    ``user_can_edit_production_log``
-        A bool specifying whether the current user should be able to edit
-        :model:`films.ProductionLog` items displayed in the Weeklies section of the page.
-    ``user_can_edit_production_log_entry``
-        A bool specifying whether the current user should be able to edit
-        :model:`films.ProductionLogEntry` items in the production logs.
-    ``user_can_edit_asset``
-        A bool specifying whether the current user should be able to edit
-        :model:`films.Asset` items displayed in the production log entries.
-
-    **Template:**
-
-    :template:`films/production_logs.html`
-    """
+def _get_shared_context(request):
+    film_slug = request.resolver_match.kwargs['film_slug']
     film = get_object_or_404(Film, slug=film_slug, is_published=True)
-    context = {
+    return {
         'film': film,
-        'production_logs_page': get_production_logs_page(film),
-        'show_more_button': True,
         'user_can_view_asset': (
             request.user.is_authenticated and has_active_subscription(request.user)
         ),
@@ -58,4 +27,134 @@ def production_log_list(request: HttpRequest, film_slug: str) -> HttpResponse:
         ),
     }
 
-    return render(request, 'films/production_logs.html', context)
+
+class ProductionLogDetailView(detail.DetailView):
+    """Display a single production log."""
+
+    model = ProductionLog
+    context_object_name = 'production_log'
+
+    def get_context_data(self, **kwargs):
+        """Add film production logs context."""
+        context = super().get_context_data(**kwargs)
+        context.update(_get_shared_context(self.request))
+        production_log = context['production_log']
+        try:
+            context['previous'] = ProductionLog.get_previous_by_date_created(production_log)
+        except ProductionLog.DoesNotExist:
+            pass
+        try:
+            context['next'] = ProductionLog.get_next_by_date_created(production_log)
+        except ProductionLog.DoesNotExist:
+            pass
+        return context
+
+
+class _ProductionLogViewMixin:
+    allow_empty = True
+    allow_future = False
+    date_field = "start_date"
+    date_list_period = 'month'
+    make_object_list = True
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(_get_shared_context(self.request))
+        return context
+
+    def get_queryset(self) -> QuerySet:
+        """Return production log queryset based on request."""
+        film_slug = self.request.resolver_match.kwargs['film_slug']
+        film = get_object_or_404(Film, slug=film_slug, is_published=True)
+        return get_production_logs(film)
+
+
+class ProductionLogView(_ProductionLogViewMixin, dates.ArchiveIndexView):
+    """Displays the latest production logs for the :model:`films.Film` with the given slug.
+
+    Also fetches the related log entries (:model:`films.ProductionLogEntry`), and
+    the assets (:model:`films.Asset`) they contain.
+
+    **Context:**
+
+    ``film``
+        An instance of :model:`films.Film`.
+    ``object_list``
+        A list of all production logs
+    ``date_list``
+        A list of `datetime`s (one per month) that have logs available
+    ``user_can_edit_production_log``
+        A bool specifying whether the current user should be able to edit
+        :model:`films.ProductionLog` items displayed in the Weeklies section of the page.
+    ``user_can_edit_production_log_entry``
+        A bool specifying whether the current user should be able to edit
+        :model:`films.ProductionLogEntry` items in the production logs.
+    ``user_can_edit_asset``
+        A bool specifying whether the current user should be able to edit
+        :model:`films.Asset` items displayed in the production log entries.
+
+    **Template:**
+
+    :template:`films/productionlog.html`
+    """
+
+    template_name_suffix = ''
+
+    def get_context_data(self, **kwargs):
+        """Add logs from the latest (not necessarily the last) month to the template context."""
+        context = super().get_context_data(**kwargs)
+        queryset = context['object_list']
+        latest_month = []
+        latest = queryset[0] if queryset.count() else None
+        for log in queryset:
+            if log.start_date.strftime('%Y%m') != latest.start_date.strftime('%Y%m'):
+                break
+            latest_month.append(log)
+        context['latest_month'] = latest_month
+        return context
+
+
+class ProductionLogMonthView(_ProductionLogViewMixin, dates.MonthArchiveView):
+    """Display film production logs paginated by month.
+
+    Also fetches the related log entries (:model:`films.ProductionLogEntry`), and
+    the assets (:model:`films.Asset`) they contain.
+
+    **Context:**
+
+    ``film``
+        An instance of :model:`films.Film`.
+    ``object_list``
+        A list of logs for the given month
+    ``date_list``
+        A list of `datetime`s (one per month) that have logs available
+    ``next_month``
+        `datetime` representing a next month in which logs are available
+    ``previous_month``
+        `datetime` representing a previous month in which logs are available
+    ``user_can_edit_production_log``
+        A bool specifying whether the current user should be able to edit
+        :model:`films.ProductionLog` items displayed in the Weeklies section of the page.
+    ``user_can_edit_production_log_entry``
+        A bool specifying whether the current user should be able to edit
+        :model:`films.ProductionLogEntry` items in the production logs.
+    ``user_can_edit_asset``
+        A bool specifying whether the current user should be able to edit
+        :model:`films.Asset` items displayed in the production log entries.
+
+    **Template:**
+
+    :template:`films/productionlog_month.html`
+    """
+
+    template_name_suffix = '_month'
+
+    def get_context_data(self, **kwargs):
+        """Keep `date_list` exactly the same as in ProductionLogView.
+
+        By default, MonthArchiveView will only add `next_month`, `previous_month ` instead.
+        """
+        context = super().get_context_data(**kwargs)
+        date_list = self.get_date_list(self.get_dated_queryset(), ordering='DESC')
+        context['date_list'] = date_list
+        return context

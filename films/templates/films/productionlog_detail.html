@@ -1,0 +1,28 @@
+{% extends 'films/base_films.html' %}
+{% load static %}
+
+{% block title_append %} - {{ film.title }} Production Logs{% endblock title_append %}
+
+{% block content %}
+<div class="container-xl pt-4">
+  <section class="mb-5">
+    <!-- Latest Updates -->
+    <div class="row justify-content-center">
+      {% include 'films/components/admin/production_log_manage.html' %}
+      <div class="col-md-12 mb-3 text-center">
+        <p class="subtitle">{{ film.title }}</p>
+        <h1 class="mb-0">Production Log {{ production_log.name }}</h2>
+          <p>Follow the latest updates and progress on {{ film.title }} right here.</p>
+          {#% include 'common/components/navigation/pagination_dates.html' %#}
+          {% include 'films/components/production_log_pagination.html' %}
+      </div>
+    </div>
+
+    <div id="activity-feed">
+      {% include 'films/components/production_log.html' %}
+    </div>
+
+    {% include 'films/components/production_log_pagination.html' %}
+  </section>
+</div>
+{% endblock content %}

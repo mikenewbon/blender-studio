@@ -39,6 +39,10 @@ def _get_other_assets_in_collection(asset: Asset) -> QuerySet:
     return collection.assets.filter(is_published=True).order_by(*Asset._meta.ordering)
 
 
+def _get_assets_in_production_log_entry(asset: Asset) -> QuerySet:
+    return asset.entry_asset.production_log_entry.assets.order_by('order', 'date_created')
+
+
 def _get_previous_in_query(q: QuerySet, instance: Asset) -> Optional[Asset]:
     """Fetch a record previous from this one in the given query.
 
@@ -68,18 +72,12 @@ def _get_next_in_query(q: QuerySet, instance: Asset) -> Optional[Any]:
 
 
 def get_previous_asset_in_production_logs(asset: Asset) -> Optional[Asset]:  # noqa: D103
-    current_log_entry = asset.entry_asset.production_log_entry
-    current_log_entry_assets = Asset.objects.filter(
-        entry_asset__production_log_entry=current_log_entry
-    )
+    current_log_entry_assets = _get_assets_in_production_log_entry(asset)
     return _get_previous_in_query(current_log_entry_assets, asset)
 
 
 def get_next_asset_in_production_logs(asset: Asset) -> Optional[Asset]:  # noqa: D103
-    current_log_entry = asset.entry_asset.production_log_entry
-    current_log_entry_assets = Asset.objects.filter(
-        entry_asset__production_log_entry=current_log_entry
-    )
+    current_log_entry_assets = _get_assets_in_production_log_entry(asset)
     return _get_next_in_query(current_log_entry_assets, asset)
 
 
@@ -192,6 +190,36 @@ def get_asset(asset_pk: int, request: HttpRequest = None) -> Optional[Asset]:
     return asset
 
 
+def get_production_logs(film: Film) -> paginator.Page:
+    """Retrieves film production logs.
+
+    Args:
+        film: A Film model instance
+
+    Returns:
+        A queryset containing production logs and all their related objects used in templates:
+         - production log entries,
+         - entries' authors and users (used to get each entry's author_name),
+         - assets and static assets related to log entries. Note that entries' related
+            `entry_assets` are available under the `assets` attribute (set in Prefetch).
+            These objects are stored in a Python list, which is supposed to improve
+            performance (see the note in the docs:
+            https://docs.djangoproject.com/en/dev/ref/models/querysets/#django.db.models.Prefetch).
+    """
+    production_logs = film.production_logs.order_by('-start_date', '-name').prefetch_related(
+        'log_entries__author',
+        'log_entries__user',
+        Prefetch(
+            'log_entries__entry_assets',
+            queryset=ProductionLogEntryAsset.objects.select_related(
+                'asset__static_asset__video',
+            ).order_by('asset__order', 'asset__date_created'),
+            to_attr='assets',
+        ),
+    )
+    return production_logs
+
+
 def get_production_logs_page(
     film: Film,
     page_number: Optional[Union[int, str]] = 1,
@@ -218,17 +246,8 @@ def get_production_logs_page(
             performance (see the note in the docs:
             https://docs.djangoproject.com/en/dev/ref/models/querysets/#django.db.models.Prefetch).
     """
-    production_logs = film.production_logs.order_by('-start_date', '-name').prefetch_related(
-        'log_entries__author',
-        'log_entries__user',
-        Prefetch(
-            'log_entries__entry_assets',
-            queryset=ProductionLogEntryAsset.objects.select_related(
-                'asset__static_asset__video',
-            ).order_by('asset__order', 'asset__date_created'),
-            to_attr='assets',
-        ),
-    )
+    production_logs = get_production_logs(film)
+
     page_number = int(page_number) if page_number else 1
     per_page = int(per_page) if per_page else DEFAULT_LOGS_PAGE_SIZE
     p = paginator.Paginator(production_logs, per_page)

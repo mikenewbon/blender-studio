@@ -1,0 +1,7 @@
+{% if user.is_staff and user_can_edit_production_log %}
+<div>
+  <a href="{% url 'admin:films_productionlog_add' %}?film={{ film.id }}" class="btn btn-sm btn-secondary">Add Production Log</a>
+  <a href="{% url 'admin:films_productionlog_changelist' %}?film__id__exact={{ film.id }}"
+     class="btn btn-sm  btn-secondary">Manage Production Logs</a>
+</div>
+{% endif %}

@@ -1,0 +1,17 @@
+<nav aria-label="ProductionLog page navigation">
+  <ul class="pagination mb-0">
+    {% if next %}
+    <li class="page-item">
+      <a href="{% url 'film-production-log' film_slug=film.slug pk=next.pk %}" class="page-link">Next: {{ next.name }}</a>
+    </li>
+    {% endif %}
+    <li class="page-item active">
+      <span class="page-link">{{ production_log.name }}</span>
+    </li>
+    {% if previous %}
+    <li class="page-item">
+      <a href="{% url 'film-production-log' film_slug=film.slug pk=previous.pk %}" class="page-link">Previous: {{ previous.name }}</a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>

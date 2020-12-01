@@ -1,0 +1,121 @@
+{% load static %}
+{% load common_extras %}
+<div class="update-feed-week">
+  <div class="update-feed-week-column">
+    <div class="update-feed-week-header">
+      <h2>{{ production_log.name }}</h2>
+
+      {% if production_log.start_date.month == production_log.end_date.month %}
+      <p class="subtitle small mb-3"><i class="material-icons icon-inline small">calendar_today</i>
+      {{ production_log.start_date|date:'jS' }} - {{ production_log.end_date|date:'jS M' }}
+      {{ production_log.start_date|date:'Y' }}</p>
+      {% else %}
+
+      <p class="subtitle small mb-3"><i class="material-icons icon-inline small">calendar_today</i>
+      {{ production_log.start_date|date:'jS M' }} - {{ production_log.end_date|date:'jS M' }}
+      {{ production_log.start_date|date:'Y' }}</p>
+      {% endif %}
+
+      {% if user_can_edit_production_log %}
+
+      <a href="{{ production_log.admin_url }}" class="btn btn-ctrl-sm btn-sm btn-icon btn-secondary btn-float">
+        <i class="material-icons">create</i>
+      </a>
+
+      {% endif %}
+
+      <div class="update-feed-header-summary">
+        <div class="update-feed-header-summary-image">
+
+          {% if production_log.youtube_link != "" %}
+          <a class="video-modal-link video-preview" data-toggle="modal" data-target="#videoModal"
+                                                                        data-video="{{ production_log.youtube_link }}">
+            <img src="{{ production_log.thumbnail.url }}" alt="Video Preview">
+          </a>
+          {% elif production_log.thumbnail %}
+          <img src="{{ production_log.thumbnail.url }}" alt="production log preview">
+          {% endif %}
+
+        </div>
+
+        {% if production_log.summary %}
+        <div class="update-feed-header-summary-text">
+          <h3>This week on {{ film.title }}</h3>
+          {% with_shortcodes production_log.summary|markdown %}
+          {% if production_log.youtube_link != "" %}
+          <a href="{{ production_log.youtube_link }}" class="video-modal-link mb-0" data-toggle="modal"
+                                                                                    data-target="#videoModal" data-video="{{ production_log.youtube_link }}">Watch the video</a>
+          {% endif %}
+
+        </div>
+        {% endif %}
+
+      </div>
+
+    </div>
+
+    {% for entry in production_log.log_entries.all %}
+    <div class="update-feed-individual">
+      <div class="update-feed-individual-summary">
+
+        <div class="update-feed-individual-summary-profile row">
+          <div style="background-image:url('{{ entry.author_image_url }}');" class="profile-image profile ml-2">
+          </div>
+          <div class="col-auto">
+            <h4 class="profile-name">{{ entry.author_name }}</h4>
+            <p class="profile-title subtitle text-white-50 x-small">{{ entry.author_role }}</p>
+          </div>
+        </div>
+
+        <p class="small">{{ entry.description }}</p>
+        {% if user_can_edit_production_log_entry %}
+        <div class="admin-button">
+          <a href="{{ entry.admin_url }}" class="btn btn-sm btn-icon btn-secondary">
+            <i class="material-icons">create</i>
+          </a>
+        </div>
+        {% endif %}
+      </div>
+      <div class="update-feed-individual-files">
+        <div class="files">
+          <div class="row row-cols-1 row-cols-md-3  row-cols-2">
+            {% for asset in entry.assets.all|slice:':3' %}
+
+            {% include "common/components/file.html" with asset=asset site_context="production_logs" %}
+
+            {% endfor %}
+          </div>
+
+          {% if entry.assets.count > 3 %}
+          <div class="collapse" id="entry-{{ entry.id }}">
+            <div class="row row-cols-1 row-cols-md-3  row-cols-2">
+              {% for asset in entry.assets.all|slice:'3:' %}
+
+              {% include "common/components/file.html" with asset=asset site_context="production_logs" %}
+
+              {% endfor %}
+            </div>
+          </div>
+          <div class="row update-feed-individual-files-show-more">
+            <div class="col text-center">
+              <a data-toggle="collapse" data-objects-type="files" href="#entry-{{ entry.id }}" role="button"
+                                                                                               aria-expanded="false" aria-controls="entry-{{ entry.id }}"
+                                                                                                                     class="btn btn-sm btn-dark collapsed show-more-less">Show </a>
+            </div>
+          </div>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+
+    {% endfor %}
+
+    {% if user_can_edit_production_log %}
+
+    <a href="{% url 'admin:films_productionlog_add' %}?production_log={{ production_log.pk }}" class="btn btn-sm btn-secondary mb-3">Add Entry</a>
+
+    {% endif %}
+
+  </div>
+</div>
