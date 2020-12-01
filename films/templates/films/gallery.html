@@ -158,11 +158,6 @@ has-secondary-nav
               </span>
             </a>
             {% endif %}
-            {% comment %} {% if user_can_edit_collection %}
-            <a href="{{ collection.admin_url }}" class="btn btn-secondary btn-xs btn-icon btn-float">
-              <i class="material-icons btn-material-icons">create</i>
-            </a>
-            {% endif %} {% endcomment %}
           </div>
           {% if child_collections %}
           <div
@@ -179,12 +174,6 @@ has-secondary-nav
                   <h4 class="overflow-text">{{ child_collection.name }}</h4>
 
                 </a>
-                {% comment %} {% if user_can_edit_collection %}
-                <a href="{{ child_collection.admin_url }}" target="_blank"
-                  class="btn btn-secondary btn-xs btn-float btn-icon">
-                  <i class="material-icons btn-material-icons">create</i>
-                </a>
-                {% endif %} {% endcomment %}
               </li>
 
               {% endfor %}
@@ -276,16 +265,7 @@ has-secondary-nav
 {% block scripts %}
 
 <script>
-  var $grid = $('.grid').masonry({
-    itemSelector: '.grid-item',
-    columnWidth: '.grid-sizer',
-    percentPosition: true,
-    horizontalOrder: true,
-  });
-
-  $grid.imagesLoaded().progress(function () {
-    $grid.masonry('layout');
-  });
+  makeGrid();
 
 </script>
 
