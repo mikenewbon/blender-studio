@@ -25,7 +25,7 @@ def source_transferred(job: dict, video: Video):
 
 
 def output_processed_images(job: dict, video: Video):
-    """Handle aa output.processed event for image files."""
+    """Handle an output.processed event for image files."""
     # Images urls are provided in a list, because the 'image' format allows
     # for the possibility of specifying more than one image.
     # The current implementation of video processing expects there to be only
@@ -41,7 +41,7 @@ def output_processed_images(job: dict, video: Video):
 
 
 def output_processed_video(job: dict, video: Video):
-    """Handle aa output.processed event for a video file."""
+    """Handle an output.processed event for a video file."""
     # If a video variation is found, simply return. Otherwise, create one.
     source_path = urlparse(job['url']).path.strip('/')
     if VideoVariation.objects.filter(video=video, source=source_path).exists():
