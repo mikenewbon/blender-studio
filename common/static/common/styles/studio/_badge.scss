@@ -1,8 +1,3 @@
-// Base class
-//
-// Requires one of the contextual, color modifier classes for `color` and
-// `background-color`.
-
 .badge {
   @at-root a#{&} {
     @include hover-focus() {
@@ -28,10 +23,6 @@
       background: $highlight-white;
       color: $highlight-white-xstrong;
     }
-    // .badge {
-    //   background: $highlight-white;
-    //   color: $highlight-white-xstrong;
-    // }
   }
 }
 
@@ -47,4 +38,18 @@
     margin-bottom: $spacer / 4;
     margin-left: $spacer / 4;
   }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  .badge {
+    vertical-align: middle;
+  }
+}
+
+.badge-highlight {
+  color: $white;
 }
