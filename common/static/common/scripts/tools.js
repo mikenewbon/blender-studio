@@ -197,3 +197,21 @@ function hightlightAnchor(element) {
 document.addEventListener('DOMContentLoaded', () => {
   hightlightAnchor(document);
 });
+
+
+
+// Make Masonry Grid
+
+function makeGrid() {
+  var $grid = $('.grid').masonry({
+    itemSelector: '.grid-item',
+    columnWidth: '.grid-sizer',
+    percentPosition: true,
+    horizontalOrder: true,
+  });
+
+  $grid.imagesLoaded().progress(function () {
+    $grid.masonry('layout');
+  });
+
+}
