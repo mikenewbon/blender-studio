@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from common.mixins import AdminUserDefaultMixin
-from static_assets.models import static_assets, licenses, storages
+from static_assets.models import static_assets, licenses
 
 
 @admin.register(licenses.License)
@@ -86,6 +86,3 @@ class StaticAssetAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
         self.message_user(request, "%s processing." % message_bit)
 
     process_videos.short_description = "Process videos for selected assets"
-
-
-admin.site.register(storages.StorageLocation)
