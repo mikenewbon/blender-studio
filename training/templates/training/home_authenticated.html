@@ -43,73 +43,12 @@
 
   <!-- Recently watched -->
   {% if recently_watched_sections %}
-  {% include 'training/components/continue_training_carousel.html' %}
+
+  {% include 'common/components/cards/card_carousel.html' with title="Continue training" subtitle="Recently watched videos appear here! Continue watching where you left off." slides=4 card_set=recently_watched_sections media_type="section" id="continueTraining" %}
+
   {% endif %}
 
-  <section class="mb-4">
-
-    <div class="row justify-content-center mb-2 mb-md-3">
-      <div class="col-md">
-        <h2 class="mb-0">Your saved training</h2>
-        <p class="mb-0">You can add and remove items from this list by clicking the plus or the tick.</p>
-      </div>
-      <div class="col-md-auto d-none d-md-block carousel-card-toolbar">
-        <a class="btn btn-lg btn-transparent btn-icon {% if favorited_trainings|length <= 1 %}onlyOne{% elif favorited_trainings|length <= 3 %} lessThanThree {% endif %}"
-          href="#savedTraining" role="button" data-slide="prev">
-          <i class="material-icons">arrow_back</i>
-        </a>
-        <a class="btn btn-lg btn-transparent btn-icon {% if favorited_trainings|length <= 1 %}onlyOne{% elif favorited_trainings|length <= 3 %} lessThanThree {% endif %}"
-          href="#savedTraining" role="button" data-slide="next">
-          <i class="material-icons">arrow_forward</i>
-        </a>
-      </div>
-    </div>
-
-    <div class="row">
-      <div id="savedTraining" class="carousel carousel-card-3 carousel-card-saved slide w-100" data-ride="carousel"
-        data-interval="0">
-        <div class="carousel-inner w-100" role="listbox">
-          {% if favorited_trainings %}
-          {% comment %} {% for training in featured_trainings|slice:':1' %}
-          {% include "common/components/cards/card_training.html" with training=training card_sizes="col-md-4" %}
-          {% endfor %} {% endcomment %}
-          {% for training in favorited_trainings|slice:':1' %}
-          <div class="carousel-item active">
-            {% include "training/components/card_training.html" with training=training card_sizes="col-12 col-sm-6 col-lg-4" %}
-          </div>
-          {% endfor %}
-
-          {% for training in favorited_trainings|slice:'1:6' %}
-          <div class="carousel-item">
-            {% include "training/components/card_training.html" with training=training card_sizes="col-12 col-sm-6 col-lg-4" %}
-          </div>
-          {% endfor %}
-          {% else %}
-          <div class="col text-center empty-saved-training">
-            <div class="bg-secondary py-4 rounded">
-              <h3 class="mb-0">No saved training</h3>
-              <p class="mb-0">You can favorite a few below!</p>
-            </div>
-          </div>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-
-    <div class="row d-block d-md-none">
-      <div class="col-md-auto carousel-card-toolbar">
-        <a class="btn btn-lg btn-transparent btn-icon {% if favorited_trainings|length <= 1 %}onlyOne{% elif favorited_trainings|length <= 3 %} lessThanThree {% endif %}"
-          href="#savedTraining" role="button" data-slide="prev">
-          <i class="material-icons">arrow_back</i>
-        </a>
-        <a class="btn btn-lg btn-transparent btn-icon {% if favorited_trainings|length <= 1 %}onlyOne{% elif favorited_trainings|length <= 3 %} lessThanThree {% endif %}"
-          href="#savedTraining" role="button" data-slide="next">
-          <i class="material-icons">arrow_forward</i>
-        </a>
-      </div>
-    </div>
-  </section>
-
+  {% include 'common/components/cards/card_carousel.html' with title="Your Saved Training" subtitle="You can add and remove items from this list by clicking the plus or the tick." slides=3 card_set=favorited_trainings media_type="training" id="savedTraining" %}
 
   <!-- SEARCH -->
 

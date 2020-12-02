@@ -10,10 +10,10 @@
 
     <a class="card-body" href="{{ training.url }}">
       <div class="card-subtitle-group">
-        <p class="card-subtitle">{{ training.type.label }}</p>
+        <p class="card-subtitle">{% firstof training.type.label training.get_type_display %}</p>
         <p class="card-subtitle">
           <i class="material-icons icon-inline small">school</i>
-          {{ training.difficulty.label }}
+          {% firstof training.get_difficulty_display training.difficulty.label %}
         </p>
       </div>
       <h3 class="card-title">{{ training.name }}</h3>
@@ -22,7 +22,7 @@
 
     {% if training.tags.all %}
     <div class="card-footer">
-      <div class="pills {% comment %}{{ class|join(' ') }}{% endcomment %}">
+      <div class="pills">
         {% for tag in training.tags.all %}
         {% include 'common/components/cards/pill.html' with label=tag.name %}
         {% endfor %}

@@ -1,0 +1,68 @@
+{% comment %}
+{% include 'common/components/cards/card_carousel.html' with title="Title" subtitle="Subtitle" slides=3 card_set=recently_watched_sections media_type="sections" id="carouselId" %}
+{% endcomment %}
+
+<section class="mb-4">
+  <div class="row justify-content-center mb-2">
+    <div class="col">
+      <h2 class="mb-0">{{ title|default:"Title" }}</h2>
+      <p class="mb-0">{{ subtitle|default:"Subtitle" }}</p>
+    </div>
+    <div class="col-md-auto d-none d-md-block carousel-card-toolbar">
+      <a class="btn btn-lg btn-transparent btn-icon {% if card_set|length <= 1 %}onlyOne{% elif card_set|length <= slides %} lessThanSlides {% endif %}"
+        href="#{{ id }}" role="button" data-slide="prev">
+        <i class="material-icons">arrow_back</i>
+      </a>
+      <a class="btn btn-lg btn-transparent btn-icon {% if card_set|length <= 1 %}onlyOne{% elif card_set|length <= slides %} lessThanSlides {% endif %}"
+        href="#{{ id }}" role="button" data-slide="next">
+        <i class="material-icons">arrow_forward</i>
+      </a>
+    </div>
+  </div>
+  <div class="row">
+    <div id="{{ id }}" class="carousel carousel-card-{{ slides|default:"3" }} slide w-100" data-touch="true"
+      data-ride="carousel" data-interval="0">
+      <div class="carousel-inner w-100" role="listbox">
+        {% for card in card_set|slice:':1' %}
+        <div class="carousel-item active">
+          {% if media_type == "file" %}
+          {% include "common/components/file_carousel.html" with film_asset=card card_sizes="col-lg-3 col-6 col-md-4" %}
+          {% elif media_type == "section" %}
+          {% include "training/components/card_training_section.html" with section=card card_sizes="col-lg-3 col-6 col-md-4" %}
+          {% elif media_type == "blog" %}
+          {% include 'blog/card_blog.html' with post=card %}
+          {% elif media_type == "training" %}
+          {% include "training/components/card_training.html" with training=card card_sizes="col-12 col-sm-6 col-lg-4" %}
+          {% endif %}
+        </div>
+        {% endfor %}
+        {% for card in card_set|slice:'1:6' %}
+        <div class="carousel-item">
+          {% if media_type == "file" %}
+          {% include "common/components/file_carousel.html" with film_asset=card card_sizes="col-lg-3 col-6 col-md-4" %}
+          {% elif media_type == "section" %}
+          {% include "training/components/card_training_section.html" with section=card card_sizes="col-lg-3 col-6 col-md-4" %}
+          {% elif media_type == "blog" %}
+          {% include 'blog/card_blog.html' with post=card %}
+          {% elif media_type == "training" %}
+          {% include "training/components/card_training.html" with training=card card_sizes="col-12 col-sm-6 col-lg-4" %}
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="row d-block d-md-none">
+    <div class="col-md-auto carousel-card-toolbar">
+      <a class="btn btn-lg btn-transparent btn-icon {% if card_set|length <= 1 %}onlyOne{% elif card_set|length <= slides %} lessThanSlides {% endif %}"
+        href="#{{ id }}" role="button" data-slide="prev">
+        <i class="material-icons">arrow_back</i>
+      </a>
+      <a class="btn btn-lg btn-transparent btn-icon {% if card_set|length <= 1 %}onlyOne{% elif card_set|length <= slides %} lessThanSlides {% endif %}"
+        href="#{{ id }}" role="button" data-slide="next">
+        <i class="material-icons">arrow_forward</i>
+      </a>
+    </div>
+  </div>
+</section>

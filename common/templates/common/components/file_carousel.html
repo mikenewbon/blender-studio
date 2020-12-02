@@ -3,8 +3,8 @@
 <div class="{{ card_sizes|default:"col-12 col-sm-6 col-lg-3" }} card-grid-item">
   <div class="file">
     <div class="file-header">
-      <a href="{{ film_asset.url }}" data-asset-id="{{ asset.id }}"
-        data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
+      <a href="{{ film_asset.url }}" data-asset-id="{{ film_asset.id }}"
+        data-url="{% url 'api-asset' film_asset.id %}?site_context={{ site_context }}">
 
         {% if film_asset.static_asset.thumbnail_s_url %}
         <img class="file-image" src="{{ film_asset.static_asset.thumbnail_s_url }}" alt="{{ asset.name }}"/>
@@ -27,7 +27,7 @@
       {% endif %}
     </div>
     <a class="file-body" href="{{ film_asset.url }}" data-tooltip="tooltip-overflow" data-placement="top"
-      title="{{ asset.name }}" data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
+      title="{{ asset.name }}" data-url="{% url 'api-asset' film_asset.id %}?site_context={{ site_context }}">
       <h4 class="overflow-text">{{ asset.name }}</h4>
     </a>
 
