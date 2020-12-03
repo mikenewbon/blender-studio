@@ -1,0 +1,14 @@
+[Unit]
+Description=Studio Background tasks systemd service.
+After=syslog.target
+
+[Service]
+ExecStart=/var/www/venv/bin/python /var/www/blender-studio/manage.py process_tasks
+Restart=always
+KillSignal=SIGQUIT
+Type=idle
+StandardError=syslog
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,14 @@
+[Unit]
+Description=Blender Studio systemd service.
+After=syslog.target
+
+[Service]
+ExecStart=/usr/bin/uwsgi --ini /var/www/config/uwsgi_studio.ini
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+StandardError=syslog
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target
