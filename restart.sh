@@ -10,7 +10,7 @@ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     echo "Applying migrations"
-    ./manage.py migrate --plan
+    ./manage.py migrate
     echo "Collecting static"
     ./manage.py collectstatic --no-input
     deactivate
