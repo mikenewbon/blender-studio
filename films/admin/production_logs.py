@@ -192,6 +192,7 @@ class ProductionLogAdmin(
     inlines = [ProductionLogEntryInline]
     date_hierarchy = 'start_date'
     list_display = ['__str__', 'user', 'name', 'start_date', 'view_link']
+    list_editable = ['name', 'start_date']
     list_filter = ['film', 'start_date']
     search_fields = [
         'name',
