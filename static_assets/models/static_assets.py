@@ -1,6 +1,7 @@
-import datetime
 from typing import Optional
+import datetime
 import logging
+import mimetypes
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -170,6 +171,12 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
         if self.source:
             # The `if` prevents an unhandled exception if one tries to save without a source
             self.size_bytes = self.source.size
+            if not self.source_type:
+                content_type, _ = mimetypes.guess_type(self.original_filename)
+                if 'image' in content_type:
+                    self.source_type = StaticAssetFileTypeChoices.image
+                elif 'video' in content_type:
+                    self.source_type = StaticAssetFileTypeChoices.video
 
         if self.source_type == StaticAssetFileTypeChoices.file and not self.thumbnail:
             raise ValidationError(
@@ -178,6 +185,9 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
 
     def save(self, *args, **kwargs):
         created = self.pk is None
+        if created:
+            content_disposition = f'attachment; filename="{self.original_filename}"'
+            self.source.storage.object_parameters['ContentDisposition'] = content_disposition
         super().save(*args, **kwargs)
         if not created:
             return

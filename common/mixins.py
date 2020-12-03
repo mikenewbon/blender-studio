@@ -62,6 +62,8 @@ class ViewOnSiteMixin:
 
     def view_link(self, obj):
         """Render a link to a given object."""
+        if not obj:
+            return
         return mark_safe('<a href="{0}">{1}</a>'.format(obj.get_absolute_url(), "View on site"))
 
     view_link.allow_tags = True
