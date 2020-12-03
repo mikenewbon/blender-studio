@@ -1,6 +1,6 @@
 <nav aria-label="page navigation">
   {% with current=object_list|first %}
-  {% with current_month=current.start_date|date:"M"|lower %}
+  {% with current_month=current.start_date|date:"YM"|lower %}
   <ul class="pagination mb-0">
     {% comment %}
     {% if previous_month %}
@@ -11,7 +11,7 @@
     {% endcomment %}
 
     {% for date in date_list %}
-    {% with month=date|date:"M"|lower %}
+    {% with month=date|date:"YM"|lower %}
     <li class="page-item {% if current_month == month %}active{% endif %} ">
       <a class="page-link" href="{% url 'film-production-logs-month' film_slug=film.slug year=date.year month=date|date:"M"|lower %}">{{ date|date:"M Y" }}</a>
     </li>
