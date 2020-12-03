@@ -15,7 +15,9 @@
 
   <div class="row">
     {% for post in posts %}
+      {% if post.is_published or user.is_superuser %}
       {% include 'blog/card_blog.html' %}
+      {% endif %}
     {% endfor %}
 
   </div>

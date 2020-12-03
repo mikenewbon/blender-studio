@@ -15,7 +15,7 @@ class PostList(ListView):
     paginate_by = 12
 
     def get_queryset(self) -> QuerySet:
-        return Post.objects.filter(is_published=True)
+        return Post.objects.filter()
 
 
 class PostDetail(DetailView):

@@ -13,8 +13,11 @@
         <p class="card-subtitle">
           {{ post.category|title }}
         </p>
-
-        {% if post.is_new %}
+        {% if not post.is_published %}
+        <div class="badge badge-primary">
+          Unpublished
+        </div>
+        {% elif post.is_new %}
         <div class="badge badge-primary">
           New
         </div>
