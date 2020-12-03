@@ -22,8 +22,8 @@ class AssetAdmin(mixins.ThumbnailMixin, admin.ModelAdmin):
     # asset slugs aren't currently in use and were prepopulate
     # during import from previous version of Blender Cloud
     # prepopulated_fields = {'slug': ('name',)}
-    readonly_fields = ['date_created', 'slug']
-    list_display = ['view_thumbnail', '__str__', 'order', 'film', 'collection']
+    readonly_fields = ['slug']
+    list_display = ['view_thumbnail', '__str__', 'date_published', 'order', 'film', 'collection']
     list_display_links = ('view_thumbnail', '__str__')
     list_filter = [
         'film',
@@ -64,7 +64,7 @@ class AssetInline(admin.StackedInline):
     # asset slugs aren't currently in use and were prepopulate
     # during import from previous version of Blender Cloud
     # prepopulated_fields = {'slug': ('name',)}
-    readonly_fields = ['date_created', 'slug']
+    readonly_fields = ['slug']
     extra = 0
     autocomplete_fields = ['static_asset', 'attachments', 'film']
     fields = ['static_asset', 'order', 'name', 'description', 'category', 'slug']
@@ -135,11 +135,11 @@ class AssetFromFileInline(
         (None, {'fields': (('film', 'collection'),)}),
         (None, {'fields': (('is_published', 'is_featured', 'is_free'), 'contains_blend_file')}),
         (None, {'fields': (('category', 'tags'),)}),
-        (None, {'fields': ('date_created',)}),
+        (None, {'fields': ('date_published',)}),
     )
     extra = 1
     max_num = 1
-    readonly_fields = ('date_created', 'view_link')
+    readonly_fields = ('view_link',)
     autocomplete_fields = ('collection', 'film')
 
     def get_formset(self, request, obj=None, **kwargs):

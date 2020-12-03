@@ -1,9 +1,10 @@
-from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
-from django.urls.base import reverse
-from django.utils.text import slugify
 from django.template.defaultfilters import filesizeformat
+from django.urls.base import reverse
+from django.utils import timezone
+from django.utils.text import slugify
 from taggit.managers import TaggableManager
 
 from comments.models import Comment
@@ -28,6 +29,7 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
     class Meta:
         ordering = ['order', 'date_created']
 
+    date_published = models.DateTimeField(default=timezone.now)
     film = models.ForeignKey('Film', on_delete=models.CASCADE, related_name='assets')
     static_asset = models.ForeignKey(
         'static_assets.StaticAsset',
