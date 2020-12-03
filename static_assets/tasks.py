@@ -80,10 +80,11 @@ def create_video_processing_job(static_asset_id: int):
         outputs=outputs,
     )
 
-    if j['status'] == 'ok':
+    if j['status'] == 'processing':
         log.info('Started processing job %i' % j['id'])
     else:
-        log.error('Error %s - %s' % (j['error_code'], j['message']))
+        log.error('Error processing job %i' % (j['id']))
+
 
 @background()
 def move_blob_from_upload_to_storage(key):

@@ -27,6 +27,8 @@ class StaticAssetFactory(DjangoModelFactory):
     class Meta:
         model = StaticAsset
 
+    # TODO: Generate realistic names, based on file type
+    original_filename = f"original_name"
     source = factory.LazyFunction(generate_file_path)
     source_type = fuzzy.FuzzyChoice(StaticAssetFileTypeChoices, getter=lambda c: c.value)
     size_bytes = 100

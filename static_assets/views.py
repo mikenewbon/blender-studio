@@ -55,7 +55,7 @@ def coconut_webhook(request, video_id):
         raise SuspiciousOperation('Coconut webhook endpoint was sent non-JSON data')
     job = json.loads(request.body)
     video = get_object_or_404(Video, pk=video_id)
-    log.info('Updating video %i processing status to %s' % (video_id, job['event']))
+    log.info('Updating video %i processing status: %s' % (video_id, job['event']))
     # On source.transferred
     if job['event'] == 'source.transferred':
         events.source_transferred(job, video)

@@ -2,6 +2,7 @@
 
 import datetime
 import logging
+import mimetypes
 from urllib.parse import urlparse
 
 from django.http.response import JsonResponse
@@ -13,14 +14,20 @@ log = logging.getLogger(__name__)
 
 def source_transferred(job: dict, video: Video):
     """Handle a source.transferred event."""
+    # Get the first (and usually only) video stream
+    source_streams = job['metadata']['source']['streams']
+    video_stream = next(item for item in source_streams if item['codec_type'] == 'video')
+    source_format = job['metadata']['source']['format']
+    content_type = mimetypes.guess_type(video.static_asset.original_filename)[0] or ''
+
     # Set related static asset properties (size and content_type)
-    video.static_asset.size_bytes = job['metadata']['format']['size']
-    video.static_asset.content_type = job['metadata']['format']['mime_type']
+    video.static_asset.size_bytes = int(source_format['size'])
+    video.static_asset.content_type = content_type
     video.static_asset.save()
     # Set Video properties
-    video.duration = datetime.timedelta(seconds=job['metadata']['format']['duration'])
-    video.height = job['metadata']['streams']['video']['height']
-    video.width = job['metadata']['streams']['video']['width']
+    video.duration = datetime.timedelta(seconds=float(source_format['duration']))
+    video.height = video_stream['height']
+    video.width = video_stream['width']
     video.save()
 
 
@@ -60,14 +67,21 @@ def output_processed_video(job: dict, video: Video):
         else:
             return ''
 
+    # Get the first video stream
+    format_name = job['format']
+    processed_streams = job['metadata'][format_name]['streams']
+    video_stream = next(item for item in processed_streams if item['codec_type'] == 'video')
+    video_format = job['metadata'][format_name]['format']
+    content_type = mimetypes.guess_type(source_path)[0] or ''
+
     video_variation = VideoVariation.objects.create(
         video=video,
         source=source_path,
-        height=job['metadata']['streams']['video']['height'],
-        width=job['metadata']['streams']['video']['width'],
-        resolution_label=get_resolution_label(job['metadata']['streams']['video']['height']),
-        size_bytes=job['metadata']['format']['size'],
-        content_type=job['metadata']['format']['mime_type'],
+        height=video_stream['height'],
+        width=video_stream['width'],
+        resolution_label=get_resolution_label(video_stream['height']),
+        size_bytes=video_format['size'],
+        content_type=content_type,
     )
     video.variations.add(video_variation)
     log.debug('Created variation for video %i' % video.id)
