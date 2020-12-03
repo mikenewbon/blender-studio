@@ -40,7 +40,7 @@ def _get_other_assets_in_collection(asset: Asset) -> QuerySet:
 
 
 def _get_assets_in_production_log_entry(asset: Asset) -> QuerySet:
-    return asset.entry_asset.production_log_entry.assets.order_by('order', 'date_created')
+    return asset.entry_asset.production_log_entry.assets.order_by(*Asset._meta.ordering)
 
 
 def _get_previous_in_query(q: QuerySet, instance: Asset) -> Optional[Asset]:
@@ -113,11 +113,10 @@ def get_asset_context(
     The request's URL is expected to contain a query string 'site_context=...' with one
     of the following values (see the SiteContexts enum):
     - 'production_logs' - for assets inside production log entries in the 'Weeklies' website
-        section; they are sorted by their `date_created`,
-    - 'featured_artwork' - for featured assets in the 'Gallery' section; they are sorted by
-        their `date_created`,
-    - 'gallery' - for assets inside collections in the 'Gallery section; they are sorted by
-        their `order` and `date_created` (`order` may not define an unambiguous order).
+        section;
+    - 'featured_artwork' - for featured assets in the 'Gallery' section;
+    - 'gallery' - for assets inside collections in the 'Gallery section.
+    In every context, assets are sorted by their `order` and `date_published`.
     If 'site_context' parameter has another value, is not provided, or the current asset
     is the first one or the last one in the given context, the previous and next
     assets are set to None.
@@ -213,7 +212,7 @@ def get_production_logs(film: Film) -> paginator.Page:
             'log_entries__entry_assets',
             queryset=ProductionLogEntryAsset.objects.select_related(
                 'asset__static_asset__video',
-            ).order_by('asset__order', 'asset__date_created'),
+            ).order_by(*[f'asset__{field}' for field in Asset._meta.ordering]),
             to_attr='assets',
         ),
     )

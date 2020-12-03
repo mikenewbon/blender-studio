@@ -27,7 +27,7 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
     """
 
     class Meta:
-        ordering = ['order', 'date_created']
+        ordering = ['order', 'date_published']
 
     date_published = models.DateTimeField(default=timezone.now)
     film = models.ForeignKey('Film', on_delete=models.CASCADE, related_name='assets')
