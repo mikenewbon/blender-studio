@@ -17,12 +17,21 @@ from common import mixins
 logger = logging.getLogger(__name__)
 
 
+asset_fieldsets = (
+    (None, {'fields': (('name', 'view_link'), 'description')}),
+    (None, {'fields': (('film', 'collection'),)}),
+    (None, {'fields': (('is_published', 'is_featured', 'is_free'), 'contains_blend_file')}),
+    (None, {'fields': (('category', 'tags'),)}),
+    (None, {'fields': ('date_published',)}),
+)
+
+
 @admin.register(assets.Asset)
-class AssetAdmin(mixins.ThumbnailMixin, admin.ModelAdmin):
+class AssetAdmin(mixins.ThumbnailMixin, mixins.ViewOnSiteMixin, admin.ModelAdmin):
     # asset slugs aren't currently in use and were prepopulate
     # during import from previous version of Blender Cloud
     # prepopulated_fields = {'slug': ('name',)}
-    readonly_fields = ['slug']
+    readonly_fields = ['view_link', 'slug']
     list_display = ['view_thumbnail', '__str__', 'date_published', 'order', 'film', 'collection']
     list_display_links = ('view_thumbnail', '__str__')
     list_filter = [
@@ -39,6 +48,10 @@ class AssetAdmin(mixins.ThumbnailMixin, admin.ModelAdmin):
         'slug',
         'static_asset__slug',
     ]
+    fieldsets = (
+        (None, {'fields': ('static_asset',)}),
+        *asset_fieldsets,
+    )
     autocomplete_fields = ['static_asset', 'attachments', 'collection']
     ordering = ('-date_created',)
 
@@ -58,16 +71,18 @@ class AssetAdmin(mixins.ThumbnailMixin, admin.ModelAdmin):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
-class AssetInline(admin.StackedInline):
+class AssetInline(mixins.ViewOnSiteMixin, admin.StackedInline):
     model = assets.Asset
     show_change_link = True
     # asset slugs aren't currently in use and were prepopulate
-    # during import from previous version of Blender Cloud
-    # prepopulated_fields = {'slug': ('name',)}
-    readonly_fields = ['slug']
+    readonly_fields = ('view_link', 'slug')
     extra = 0
     autocomplete_fields = ['static_asset', 'attachments', 'film']
-    fields = ['static_asset', 'order', 'name', 'description', 'category', 'slug']
+    fieldsets = (
+        asset_fieldsets[0],
+        (None, {'fields': ('film',)}),  # hide collection, because this is inlined in the Collection
+        *asset_fieldsets[2:],
+    )
 
 
 @admin.register(collections.Collection)
@@ -130,13 +145,7 @@ class AssetFromFileInline(
     verbose_name_plural = 'Film asset details'
     # Changes title of each separate inline inside the inline formset
     verbose_name = 'Describe this film asset'
-    fieldsets = (
-        (None, {'fields': (('name', 'view_link'), 'description')}),
-        (None, {'fields': (('film', 'collection'),)}),
-        (None, {'fields': (('is_published', 'is_featured', 'is_free'), 'contains_blend_file')}),
-        (None, {'fields': (('category', 'tags'),)}),
-        (None, {'fields': ('date_published',)}),
-    )
+    fieldsets = asset_fieldsets
     extra = 1
     max_num = 1
     readonly_fields = ('view_link',)
