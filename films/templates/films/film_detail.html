@@ -29,8 +29,8 @@
     {# if `production_logs_page` is available here, Film.show_production_logs_as_featured is True #}
     <!-- Latest Updates -->
 
-    <div class="row justify-content-center mb-3">
-      <div class="col-md-6 text-center">
+    <div class="row mb-3">
+      <div class="col">
         <h2 class="mb-0">Latest Updates</h2>
         <p class="mb-0">Want to see more updates from {{ film.title }}?
           <a href="{% url 'film-production-logs' film.slug %}">See all production logs</a></p>
@@ -50,8 +50,8 @@
 
     {% else %}
 
-    <div class="row justify-content-center mb-3">
-      <div class="col-md-6 text-center">
+    <div class="row mb-3">
+      <div class="col">
         <h2 class="mb-0">Featured Content Gallery</h2>
         <p class="mb-0">Want to see more?
         <a href="{% url 'film-gallery' film.slug %}">Explore the Content Gallery</a></p>

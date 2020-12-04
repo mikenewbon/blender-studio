@@ -150,9 +150,11 @@
 .update-feed-individual-summary-profile {
   padding-top: $spacer;
   margin-bottom: $spacer / 2;
+  flex-wrap: nowrap;
 
   .profile-image {
     align-self: flex-start;
+    flex-shrink: 0;
   }
 
   .profile-name {

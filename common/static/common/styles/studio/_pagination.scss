@@ -1,0 +1,28 @@
+.page-link {
+  transition: $transition-base;
+}
+
+.production-logs-dates {
+  border-radius: $border-radius;
+  overflow: hidden;
+
+  .page-item {
+    // display: none;
+
+    &:first-of-type {
+      display: list-item;
+    }
+
+    &:last-of-type {
+      display: list-item;
+    }
+
+    &.active {
+      display: list-item;
+
+      &+.page-item {
+        display: list-item;
+      }
+    }
+  }
+}

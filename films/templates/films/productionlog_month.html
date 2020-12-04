@@ -8,12 +8,15 @@
   <section class="mb-5">
     <!-- Latest Updates -->
     <div class="row justify-content-center">
-      {% include 'films/components/admin/production_log_manage.html' %}
+
       <div class="col-md-12 mb-3 text-center">
         <p class="subtitle">{{ film.title }}</p>
         <h1 class="mb-0">Production Logs</h2>
           <p>Follow the latest updates and progress on {{ film.title }} right here.</p>
+          {% include 'films/components/admin/production_log_manage.html' %}
+
           {% include 'common/components/navigation/pagination_dates.html' %}
+
       </div>
     </div>
 
