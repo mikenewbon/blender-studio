@@ -51,9 +51,10 @@ class AdminUserDefaultMixin:
 
     def save_formset(self, request: Any, form: Any, formset: Any, change: Any) -> None:
         """Associate created object with the current user: handle inline forms."""
-        if not change:
-            for form in formset.forms:
-                form.instance.user = request.user
+        for form in formset.forms:
+            if getattr(form, 'instance', None):
+                if hasattr(form.instance, 'user_id') and not form.instance.user_id:
+                    form.instance.user = request.user
         super().save_formset(request, form, formset, change)
 
 
