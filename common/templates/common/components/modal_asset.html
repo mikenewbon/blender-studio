@@ -61,7 +61,7 @@
               <h2 class="">{{ asset.name }}</h2>
             </div>
             <div class="text-muted x-small">
-              <p class="d-inline mr-2">{{ asset.date_created|date:"jS F Y" }}</p>
+              <p class="d-inline mr-2">{{ asset.date_published|date:"jS F Y" }}</p>
               {% if asset.static_asset.license %}
               <a href="{{ asset.static_asset.license.url }}" target="_blank" class="d-inline mr-2 text-muted"
                 data-toggle="tooltip" data-placement="bottom" title="{{ asset.static_asset.license.description }}">
