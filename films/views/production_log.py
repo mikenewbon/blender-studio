@@ -60,6 +60,9 @@ class _ProductionLogViewMixin:
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(_get_shared_context(self.request))
+        # Make sure `date_list` is an actual list, not a QuerySet, otherwise `|last` won't work
+        if 'date_list' in context:
+            context['date_list'] = list(context['date_list'])
         return context
 
     def get_queryset(self) -> QuerySet:
@@ -158,5 +161,6 @@ class ProductionLogMonthView(_ProductionLogViewMixin, dates.MonthArchiveView):
         """
         context = super().get_context_data(**kwargs)
         date_list = self.get_date_list(self.get_dated_queryset(), ordering='DESC')
-        context['date_list'] = date_list
+        # Make sure `date_list` is an actual list, not a QuerySet, otherwise `|last` won't work
+        context['date_list'] = list(date_list)
         return context
