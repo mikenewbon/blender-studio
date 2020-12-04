@@ -27,6 +27,7 @@ class StaticAssetFactory(DjangoModelFactory):
     class Meta:
         model = StaticAsset
 
+    id = factory.Sequence(lambda n: n)
     # TODO: Generate realistic names, based on file type
     original_filename = f"original_name"
     source = factory.LazyFunction(generate_file_path)
