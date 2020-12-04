@@ -1,5 +1,6 @@
 """Displays production log pages."""
 from django.db.models.query import QuerySet
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic import dates, detail
 
@@ -33,6 +34,14 @@ class ProductionLogDetailView(detail.DetailView):
 
     model = ProductionLog
     context_object_name = 'production_log'
+
+    def get_object(self) -> ProductionLog:
+        """Check that retrieved log belongs to the right film, otherwise 404."""
+        object_ = super().get_object()
+        film_slug = self.request.resolver_match.kwargs['film_slug']
+        if object_.film.slug != film_slug:
+            raise Http404()
+        return object_
 
     def get_context_data(self, **kwargs):
         """Add film production logs context."""
