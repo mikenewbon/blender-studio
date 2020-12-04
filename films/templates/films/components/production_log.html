@@ -4,7 +4,11 @@
   <div class="update-feed-week">
     <div class="update-feed-week-column">
       <div class="update-feed-week-header">
+        {% if date_list %}
         <a href="{{ production_log.url }}" class="h2">{{ production_log.name }}</a>
+        {% else %}
+        <h2>{{ production_log.name }}</h2>
+        {% endif %}
 
         {% if production_log.start_date.month == production_log.end_date.month %}
         <p class="subtitle small mb-3"><i class="material-icons icon-inline small">calendar_today</i>
@@ -87,7 +91,7 @@
               {% endfor %}
             </div>
 
-            {% if entry.assets.count > 3 %}
+            {% if entry.assets.count > 4 %}
             <div class="collapse" id="entry-{{ entry.id }}">
               <div class="row row-cols-1 row-cols-md-3  row-cols-2">
                 {% for asset in entry.assets.all|slice:'4:' %}

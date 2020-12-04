@@ -27,6 +27,10 @@
       {% include 'films/components/production_log.html' %}
       {% endfor %}
     </div>
+
+    {% with previous_month=date_list.1 %}
+    {% include 'common/components/navigation/pagination_dates.html' %}
+    {% endwith %}
     {% else %}
     <div class="row">
       <div class="col text-center">

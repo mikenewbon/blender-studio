@@ -14,7 +14,7 @@
         <h1 class="mb-0">Production Log {{ production_log.name }}</h2>
           <p>Follow the latest updates and progress on {{ film.title }} right here.</p>
           {#% include 'common/components/navigation/pagination_dates.html' %#}
-          {% include 'films/components/admin/production_log_manage.html' %}
+          {% comment %} {% include 'films/components/admin/production_log_manage.html' %} {% endcomment %}
           {% include 'films/components/production_log_pagination.html' %}
       </div>
     </div>
