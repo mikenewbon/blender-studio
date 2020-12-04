@@ -51,7 +51,7 @@ class ProductionLogDetailView(detail.DetailView):
 
 
 class _ProductionLogViewMixin:
-    allow_empty = True
+    allow_empty = False
     allow_future = False
     date_field = "start_date"
     date_list_period = 'month'
