@@ -3,6 +3,7 @@ import datetime as dt
 import logging
 
 from django import forms
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple, RelatedFieldWidgetWrapper
 from django.contrib.auth.models import User
@@ -92,7 +93,7 @@ def get_film_assets_help_text(request, film: Optional[Film] = None) -> str:
         'Only recently created <b>published',
         "</b> assets that haven't been added to production logs show up here.",
         '<br>If nothing shows up, click on the '
-        '"Add" <img src="/static/admin/img/icon-addlink.svg"> button to upload a new film asset',
+        f'"Add" <img src="{settings.STATIC_URL}admin/img/icon-addlink.svg"> button to upload a new film asset',
     )
     if film:
         return f'{help_text_bits[0]} {film}{help_text_bits[1]}{help_text_bits[2]}'
