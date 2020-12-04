@@ -24,7 +24,7 @@ class ProductionLog(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, 
         help_text='If not provided, will be set to <em>"This week on [film title]"</em>.',
     )
     name.description = 'If not provided, will be set to "This week on <film title>".'
-    summary = models.TextField()
+    summary = models.TextField(blank=True)
     start_date = models.DateField(default=date.today)
     user = models.ForeignKey(
         User,
