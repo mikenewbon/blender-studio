@@ -79,6 +79,8 @@ class ProductionLogView(_ProductionLogViewMixin, dates.ArchiveIndexView):
 
     ``film``
         An instance of :model:`films.Film`.
+    ``latest_month``
+        A list of production logs available in the most recent month
     ``object_list``
         A list of all production logs
     ``date_list``
