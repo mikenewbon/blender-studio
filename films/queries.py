@@ -81,6 +81,14 @@ def get_next_asset_in_production_logs(asset: Asset) -> Optional[Asset]:  # noqa:
     return _get_next_in_query(current_log_entry_assets, asset)
 
 
+def get_previous_production_log(production_logs, production_log):  # noqa: D103
+    return _get_previous_in_query(production_logs, production_log)
+
+
+def get_next_production_log(production_logs, production_log):  # noqa: D103
+    return _get_next_in_query(production_logs, production_log)
+
+
 def get_previous_asset_in_featured_artwork(asset: Asset) -> Optional[Asset]:
     """Fetch asset previous from this one in featured film assets."""
     featured_assets = _get_other_featured_assets(asset)

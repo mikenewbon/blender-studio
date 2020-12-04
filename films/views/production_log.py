@@ -5,7 +5,7 @@ from django.views.generic import dates, detail
 
 from common.queries import has_active_subscription
 from films.models import Film, ProductionLog
-from films.queries import get_production_logs
+from films.queries import get_production_logs, get_previous_production_log, get_next_production_log
 
 
 def _get_shared_context(request):
@@ -39,14 +39,9 @@ class ProductionLogDetailView(detail.DetailView):
         context = super().get_context_data(**kwargs)
         context.update(_get_shared_context(self.request))
         production_log = context['production_log']
-        try:
-            context['previous'] = ProductionLog.get_previous_by_date_created(production_log)
-        except ProductionLog.DoesNotExist:
-            pass
-        try:
-            context['next'] = ProductionLog.get_next_by_date_created(production_log)
-        except ProductionLog.DoesNotExist:
-            pass
+        film_production_logs = list(production_log.film.production_logs.all())
+        context['previous'] = get_previous_production_log(film_production_logs, production_log)
+        context['next'] = get_next_production_log(film_production_logs, production_log)
         return context
 
 
