@@ -5,6 +5,7 @@ from django import forms
 from django.contrib import admin, messages
 from django.contrib.auth import get_permission_codename
 from django.db.models.query import QuerySet
+from django.http import HttpResponseRedirect
 from django.http.request import HttpRequest
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -243,16 +244,33 @@ class NewAssetAdmin(mixins.AdminUserDefaultMixin, admin.ModelAdmin):
 
         super().save_related(request, form, formsets, change)
 
-    def response_add(self, request, obj, post_url_continue=None):
+    def _preserve_initial_get_params(self, request, response):
+        url_params = request.GET.urlencode()
+        if url_params:
+            redirect_url = f'{response.url}?{url_params}'
+            if '?' in response.url:
+                redirect_url = f'{response.url}&{url_params}'
+            return HttpResponseRedirect(redirect_url)
+        return response
+
+    def response_add(self, request, obj, **kwargs):
         """Redirect to editing the newly uploaded asset in the same form."""
+        if "_addanother" in request.POST:
+            response = super().response_add(request, obj, **kwargs)
+            return self._preserve_initial_get_params(request, response)
+
         opts = assets.Asset._meta
         msg_dict = {'name': opts.verbose_name, 'obj': str(obj)}
         msg = 'The {name} “{obj}” was added successfully.'
         self.message_user(request, format_html(msg, **msg_dict), messages.SUCCESS)
         return redirect(reverse('admin:films_newasset_change', kwargs={'object_id': obj.pk}))
 
-    def response_change(self, request, obj, post_url_continue=None):
+    def response_change(self, request, obj, **kwargs):
         """Stay on the editing page and display a success message."""
+        if "_addanother" in request.POST:
+            response = super().response_change(request, obj, **kwargs)
+            return self._preserve_initial_get_params(request, response)
+
         opts = assets.Asset._meta
         msg_dict = {
             'name': opts.verbose_name,
