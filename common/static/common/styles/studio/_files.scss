@@ -177,35 +177,6 @@
   transition: $transition-base;
 }
 
-
-// UPDATE FEED ONLY
-
-.update-feed {
-  .files {
-    .col {
-      margin-bottom: $spacer;
-    }
-  }
-
-  // .file-header {
-
-
-  //   >* {
-  //     position: absolute;
-  //   }
-  // }
-
-  // .file-image {
-  //   height: 100%;
-  //   object-fit: cover;
-  //   width: 100%;
-
-  //   &.portrait {
-  //     object-fit: contain;
-  //   }
-  // }
-}
-
 // Gallery Loading overlay
 
 .gallery-load-overlay {
