@@ -60,6 +60,38 @@
   a {
     font-size: $font-size-lg;
   }
+
+  blockquote {
+    text-align: left;
+    border-left: 1px solid $input-gray;
+    padding-left: $spacer;
+    width: 100%;
+    max-width: calc(100% - #{$spacer * 2});
+    margin: $spacer 0;
+
+    @include media-breakpoint-up(md) {
+      max-width: fit-content;
+      margin: $spacer * 2 $spacer * 4 $spacer * 2 $spacer * 3;
+    }
+
+    p {
+      font-size: 1.25em;
+      margin-bottom: $spacer / 2;
+      font-style: italic;
+    }
+
+    .blockquote-footer {
+      border-top: 0;
+
+      &::before {
+        content: none;
+      }
+    }
+
+    footer{
+      text-align: left;
+    }
+  }
 }
 
 .blog-image {
