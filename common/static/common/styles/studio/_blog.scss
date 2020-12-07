@@ -5,6 +5,8 @@
   position: relative;
   margin-top: $spacer;
 
+
+
   @include media-breakpoint-up(lg) {
     margin-top: -$spacer * 6;
 
@@ -51,6 +53,14 @@
 }
 
 // Layout
+
+.editorial-text-area {
+
+  p,
+  a {
+    font-size: $font-size-lg;
+  }
+}
 
 .blog-image {
 
