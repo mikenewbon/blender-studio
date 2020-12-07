@@ -1,12 +1,12 @@
-.update-feed {
+.production-log {
   margin-bottom: $spacer;
 
-  .update-feed-week:last-of-type .update-feed-individual:last-of-type {
+  .production-log-week:last-of-type .production-log-individual:last-of-type {
     margin-bottom: 0;
   }
 }
 
-.update-feed-week {
+.production-log-week {
   background: $navigation-gray;
   border-radius: $border-radius;
   border: 1px solid $input-gray;
@@ -20,7 +20,7 @@
   }
 }
 
-.update-feed-week-column {
+.production-log-week-column {
   width: 100%;
 
   >*:last-child {
@@ -28,7 +28,7 @@
   }
 }
 
-.update-feed-week-header {
+.production-log-week-header {
   position: relative;
 
   h2 {
@@ -36,7 +36,7 @@
   }
 }
 
-.update-feed-week-icon {
+.production-log-week-icon {
   align-items: center;
   background: $input-gray;
   border-radius: 50%;
@@ -51,11 +51,11 @@
   }
 }
 
-.update-feed-header-summary {
+.production-log-header-summary {
   @extend .row;
 }
 
-.update-feed-individual {
+.production-log-individual {
   @extend .row;
   margin-bottom: $spacer;
   position: relative;
@@ -113,7 +113,7 @@
   }
 }
 
-.update-feed-individual-files {
+.production-log-individual-files {
   @extend .col-md-9;
 
   >a {
@@ -121,7 +121,7 @@
   }
 }
 
-.update-feed-header-summary-text {
+.production-log-header-summary-text {
   @extend .col-md-9;
   margin-bottom: $spacer / 2;
 
@@ -130,7 +130,7 @@
   }
 }
 
-.update-feed-header-summary-image {
+.production-log-header-summary-image {
   @extend .col-md-3;
 
   >*:last-child {
@@ -147,7 +147,7 @@
   }
 }
 
-.update-feed-individual-summary-profile {
+.production-log-individual-summary-profile {
   padding-top: $spacer;
   margin-bottom: $spacer / 2;
   flex-wrap: nowrap;

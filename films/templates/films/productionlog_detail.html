@@ -10,8 +10,8 @@
     <div class="row justify-content-center">
 
       <div class="col-md-12 mb-3 text-center">
-        <p class="subtitle">{{ film.title }}</p>
-        <h1 class="mb-0">Production Log {{ production_log.name }}</h2>
+        <p class="subtitle">{{ film.title }} - Production Logs</p>
+        <h1 class="mb-0">{{ production_log.name }}</h2>
           <p>Follow the latest updates and progress on {{ film.title }} right here.</p>
           {#% include 'common/components/navigation/pagination_dates.html' %#}
           {% comment %} {% include 'films/components/admin/production_log_manage.html' %} {% endcomment %}
@@ -20,7 +20,7 @@
     </div>
 
     <div id="activity-feed">
-      {% include 'films/components/production_log.html' %}
+      {% include 'films/components/production_log.html' with production_log_link="false" %}
     </div>
 
     {% include 'films/components/production_log_pagination.html' %}
