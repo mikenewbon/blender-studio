@@ -1,9 +1,10 @@
 """Implements utilities related to media uploads."""
+from pathlib import Path
+from time import time
 import hashlib
+import logging
 import typing
 import uuid
-from pathlib import Path
-import logging
 
 if typing.TYPE_CHECKING:
     import static_assets.models.StaticAsset
@@ -53,3 +54,8 @@ def get_upload_to_hashed_path(_: ModelWithFile, filename: str) -> Path:
     path = Path(hashed[:2], hashed, hashed).with_suffix(extension)
 
     return path
+
+
+def shortuid() -> str:
+    """Generate a 14-characters long string ID based on time."""
+    return hex(int(time() * 10000000))[2:]

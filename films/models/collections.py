@@ -4,7 +4,7 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 
 from common import mixins
-from common.upload_paths import get_upload_to_hashed_path
+from common.upload_paths import get_upload_to_hashed_path, shortuid
 from films.models import films
 import common.help_texts
 
@@ -19,9 +19,6 @@ class ThumbnailAspectRatioChoices(models.TextChoices):
 class Collection(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Model):
     class Meta:
         ordering = ['order', 'date_created']
-        constraints = [
-            models.UniqueConstraint(fields=['parent', 'slug'], name='unique_slug_per_collection'),
-        ]
 
     film = models.ForeignKey(films.Film, on_delete=models.CASCADE, related_name='collections')
     parent = models.ForeignKey(
@@ -30,7 +27,7 @@ class Collection(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mod
     order = models.IntegerField(null=True, blank=True)
 
     name = models.CharField(max_length=512)
-    slug = models.SlugField(blank=True)
+    slug = models.SlugField(blank=False, null=False, default=shortuid, unique=True)
     text = models.TextField(blank=True, help_text=common.help_texts.markdown)
     # TODO(fsiddi) Add text_html
 
