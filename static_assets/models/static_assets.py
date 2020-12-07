@@ -13,6 +13,7 @@ from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
 from static_assets.models import License
 from static_assets.tasks import create_video_processing_job
+import common.storage
 
 
 log = logging.getLogger(__name__)
@@ -32,7 +33,12 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
     class Meta:
         ordering = ['-date_created']
 
-    source = models.FileField(upload_to=get_upload_to_hashed_path, blank=True, max_length=256)
+    source = models.FileField(
+        upload_to=get_upload_to_hashed_path,
+        storage=common.storage.S3Boto3CustomStorage(),
+        blank=True,
+        max_length=256,
+    )
     source_type = models.CharField(choices=StaticAssetFileTypeChoices.choices, max_length=5)
     # TODO(Natalia): source type validation
     original_filename = models.CharField(max_length=128, editable=False)
@@ -149,9 +155,6 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
 
     def save(self, *args, **kwargs):
         created = self.pk is None
-        if created:
-            content_disposition = f'attachment; filename="{self.original_filename}"'
-            self.source.storage.object_parameters['ContentDisposition'] = content_disposition
         super().save(*args, **kwargs)
         if not created:
             return
