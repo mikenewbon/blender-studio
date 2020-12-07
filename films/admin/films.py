@@ -93,6 +93,7 @@ class CollectionAdmin(admin.ModelAdmin):
     list_filter = ['film']
     search_fields = ['name', 'film__title']
     autocomplete_fields = ['parent', 'user', 'film']
+    ordering = ('-date_created',)
 
 
 class FilmCrewInlineAdmin(admin.TabularInline):
