@@ -218,8 +218,7 @@ Preview pictures for all static assets are obligatory. However, for images and v
 generated automatically (e.g. by the `sorl-thumbnail` library).
 
 We want the entire `static_assets` app (i.e. file-representing models: `StaticAsset`, `Image`, `Video`)
-to be portable, and independent of the other apps. In particular, the `DynamicStorageFileField`
-should be left inside this app, even though it is used in other apps' models as well.
+to be portable, and independent of the other apps.
 
 ##### Licenses
 For now, licenses are only added to static assets (image, video, file).
