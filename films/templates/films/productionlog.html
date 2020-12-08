@@ -15,21 +15,22 @@
           <p>Follow the latest updates and progress on {{ film.title }} right here.</p>
           {% include 'films/components/admin/production_log_manage.html' %}
           {% with previous_month=date_list.1 %}
-          {% include 'common/components/navigation/pagination_dates.html' %}
+          {% include 'films/components/pagination_dates.html' %}
           {% endwith %}
 
       </div>
     </div>
 
     {% if latest_month|length %}
-    <div id="activity-feed">
+
+    <div class="production-logs">
       {% for production_log in latest_month %}
-      {% include 'films/components/production_log.html' %}
+      {% include 'films/components/production_log_entry.html' %}
       {% endfor %}
     </div>
 
     {% with previous_month=date_list.1 %}
-    {% include 'common/components/navigation/pagination_dates.html' %}
+    {% include 'films/components/pagination_dates.html' %}
     {% endwith %}
     {% else %}
     <div class="row">

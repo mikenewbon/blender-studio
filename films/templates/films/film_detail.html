@@ -37,8 +37,10 @@
       </div>
     </div>
 
-    <div id="activity-feed">
-      {% include "films/components/activity_feed.html" %}
+    <div class="production-logs">
+      {% for production_log in production_logs_page %}
+      {% include 'films/components/production_log_entry.html' %}
+      {% endfor %}
     </div>
 
     <div class="row">
@@ -54,7 +56,7 @@
       <div class="col">
         <h2 class="mb-0">Featured Content Gallery</h2>
         <p class="mb-0">Want to see more?
-        <a href="{% url 'film-gallery' film.slug %}">Explore the Content Gallery</a></p>
+          <a href="{% url 'film-gallery' film.slug %}">Explore the Content Gallery</a></p>
       </div>
     </div>
 
@@ -65,7 +67,7 @@
         <div class="grid-sizer col-12 col-sm-6 col-md-4 col-lg-3"></div>
         {% for asset in featured_artwork %}
         {% if asset.is_published or request.user.is_superuser %}
-        {% include "common/components/file.html" with asset=asset site_context="featured_artwork" card_sizes="col-12 col-sm-6 col-md-4 col-lg-3" %}
+        {% include "common/components/file.html" with asset=asset site_context="featured_artwork" card_sizes="col-6 col-sm-6 col-md-4 col-lg-3" %}
         {% endif %}
         {% endfor %}
 

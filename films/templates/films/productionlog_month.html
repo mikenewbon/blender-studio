@@ -12,20 +12,22 @@
       <div class="col-md-12 mb-3 text-center">
         <p class="subtitle">{{ film.title }}</p>
         <h1 class="mb-0">Production Logs</h1>
-          <p>Follow the latest updates and progress on {{ film.title }} right here.</p>
-          {% include 'films/components/admin/production_log_manage.html' %}
+        <p>Follow the latest updates and progress on {{ film.title }} right here.</p>
+        {% include 'films/components/admin/production_log_manage.html' %}
 
-          {% include 'common/components/navigation/pagination_dates.html' %}
+        {% include 'films/components/pagination_dates.html' %}
 
       </div>
     </div>
 
     {% if object_list|length %}
-    <div id="activity-feed">
+
+    <div class="production-logs">
       {% for production_log in object_list %}
-      {% include 'films/components/production_log.html' %}
+      {% include 'films/components/production_log_entry.html' %}
       {% endfor %}
     </div>
+
     {% else %}
     <div class="row">
       <div class="col text-center">
