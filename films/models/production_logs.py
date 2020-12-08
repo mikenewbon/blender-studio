@@ -128,6 +128,16 @@ class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
 
     assets = models.ManyToManyField(Asset, through='ProductionLogEntryAsset')
 
+    def get_absolute_url(self) -> str:
+        return self.url
+
+    @property
+    def url(self) -> str:
+        return reverse(
+            'film-production-log',
+            kwargs={'film_slug': self.production_log.film.slug, 'pk': self.production_log.pk},
+        )
+
     @property
     def author_role(self) -> str:
         """Find the role for the log entry author."""
