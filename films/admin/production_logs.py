@@ -84,7 +84,9 @@ def get_film_asset_queryset(
         asset_filters = asset_filters | Q(
             entry_asset__production_log_entry__production_log_id=log.pk
         )
-    return asset_queryset.filter(asset_filters)
+    return asset_queryset.filter(asset_filters).order_by(
+        'order', '-date_published', '-date_created'
+    )
 
 
 def get_film_assets_help_text(request, film: Optional[Film] = None) -> str:
@@ -93,7 +95,8 @@ def get_film_assets_help_text(request, film: Optional[Film] = None) -> str:
         'Only recently created <b>published',
         "</b> assets that haven't been added to production logs show up here.",
         '<br>If nothing shows up, click on the '
-        f'"Add" <img src="{settings.STATIC_URL}admin/img/icon-addlink.svg"> button to upload a new film asset',
+        f'"Add" <img src="{settings.STATIC_URL}admin/img/icon-addlink.svg"> '
+        'button to upload a new film asset',
     )
     if film:
         return f'{help_text_bits[0]} {film}{help_text_bits[1]}{help_text_bits[2]}'
