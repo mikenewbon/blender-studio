@@ -89,8 +89,8 @@ class TestSiteMetadata(TestCase):
             'name=.twitter:title.': 'Blender Cloud',
             'property=.og:description.': 'Blender Cloud is a web based service developed by Blender Institute that allows people to access the training videos and all the data from the open projects.',
             'name=.twitter:description.': 'Blender Cloud is a web based service developed by Blender Institute that allows people to access the training videos and all the data from the open projects.',
-            'property=.og:image.': 'http://testserver/static/common/images/blender-cloud-og.c39b3abab36d.jpg',
-            'name=.twitter:image.': 'http://testserver/static/common/images/blender-cloud-og.c39b3abab36d.jpg',
+            'property=.og:image.': 'http://testserver/static/common/images/blender-cloud-og.jpg',
+            'name=.twitter:image.': 'http://testserver/static/common/images/blender-cloud-og.jpg',
         }.items():
             self.assertMetaEquals(html, meta, value)
 
@@ -110,8 +110,8 @@ class TestSiteMetadata(TestCase):
             'name=.twitter:title.': 'Blender Cloud',
             'property=.og:description.': 'Blender Cloud is a web based service developed by Blender Institute that allows people to access the training videos and all the data from the open projects.',
             'name=.twitter:description.': 'Blender Cloud is a web based service developed by Blender Institute that allows people to access the training videos and all the data from the open projects.',
-            'property=.og:image.': 'http://testserver/static/common/images/blender-cloud-og.c39b3abab36d.jpg',
-            'name=.twitter:image.': 'http://testserver/static/common/images/blender-cloud-og.c39b3abab36d.jpg',
+            'property=.og:image.': 'http://testserver/static/common/images/blender-cloud-og.jpg',
+            'name=.twitter:image.': 'http://testserver/static/common/images/blender-cloud-og.jpg',
         }.items():
             self.assertMetaEquals(html, meta, value)
 

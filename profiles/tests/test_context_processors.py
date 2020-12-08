@@ -1,4 +1,4 @@
-from unittest.mock import ANY
+from unittest.mock import ANY, patch, Mock
 
 from django.contrib.auth.models import Group, AnonymousUser
 from django.template import engines
@@ -10,6 +10,7 @@ from profiles.context_processors import user_dict
 template_engine = engines['django']
 
 
+@patch('storages.backends.s3boto3.S3Boto3Storage.url', Mock(return_value='s3://file'))
 class ContextProcessorsTest(TestCase):
     maxDiff = None
 
@@ -41,6 +42,7 @@ class ContextProcessorsTest(TestCase):
             email='mail@example.com', username='ⅉanedoe', oauth_info__oauth_user_id='2'
         )
         user.profile.full_name = 'ⅉane Doe'
+        user.profile.image = 'path/to/file'
         for group_name in ('subscriber', 'has_subscription'):
             group, _ = Group.objects.get_or_create(name=group_name)
             user.groups.add(group)
@@ -61,7 +63,7 @@ class ContextProcessorsTest(TestCase):
                 'is_staff': False,
                 'is_superuser': False,
                 'profile': {
-                    'image_url': 'http://id.local:8000/api/user/2/avatar',
+                    'image_url': 's3://file',
                     'full_name': 'ⅉane Doe',
                 },
                 'username': 'ⅉanedoe',
@@ -85,7 +87,10 @@ class ContextProcessorsTest(TestCase):
                 'is_active': True,
                 'is_staff': False,
                 'is_superuser': False,
-                'profile': {'image_url': None, 'full_name': ''},
+                'profile': {
+                    'image_url': '/static/common/images/blank-profile-pic.png',
+                    'full_name': '',
+                },
                 'username': 'ⅉanedoe',
             },
         )

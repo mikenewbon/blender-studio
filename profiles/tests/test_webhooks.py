@@ -1,5 +1,5 @@
 from typing import Dict, Union
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 import hashlib
 import hmac
 import json
@@ -33,6 +33,7 @@ def prepare_hmac_header(body: Union[str, dict], secret: str = 'testsecret') -> D
         'WEBHOOK_USER_MODIFIED_SECRET': b'testsecret',
     }
 )
+@patch('storages.backends.s3boto3.S3Boto3Storage.url', Mock(return_value='s3://file'))
 class WebhooksTest(TestCase):
     webhook_payload = {
         'avatar_changed': False,
@@ -255,3 +256,21 @@ class WebhooksTest(TestCase):
             self.assertRegex(logs.output[0], 'Unable to update username for Profile')
 
         self.assertEquals(response.status_code, 204)
+
+    @responses.activate
+    def test_user_modified_avatar_changed(self):
+        body = {
+            **self.webhook_payload,
+            'avatar_changed': True,
+        }
+
+        with self.assertLogs('profiles.models', level='INFO') as logs:
+            response = self.client.post(
+                self.url, body, content_type='application/json', **prepare_hmac_header(body)
+            )
+            self.assertRegex(logs.output[0], 'Profile image updated for Profile ⅉanedoe')
+
+        self.assertEquals(response.status_code, 204)
+        self.assertEquals(response.content, b'')
+        profile = Profile.objects.get(user_id=self.user.pk)
+        self.assertTrue(profile.image_url, 's3://file')

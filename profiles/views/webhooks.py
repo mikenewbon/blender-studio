@@ -105,6 +105,9 @@ def handle_user_modified(payload: Dict[Any, Any]) -> None:
         profile.full_name = payload['full_name']
         profile.save()
 
+    if payload.get('avatar_changed') or not profile.image:
+        profile.copy_avatar_from_blender_id()
+
     # Sync roles to groups
     group_names = payload.get('roles') or []
     set_groups_from_roles(user, group_names=group_names)

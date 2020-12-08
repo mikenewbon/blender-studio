@@ -337,3 +337,8 @@ ACTSTREAM_SETTINGS = {
     'MANAGER': 'profiles.managers.CustomStreamManager',
     'FETCH_RELATIONS': True,
 }
+
+TESTS_IN_PROGRESS = 'test' in sys.argv
+if TESTS_IN_PROGRESS:
+    STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
+    AWS_STORAGE_BUCKET_NAME = 'blender-studio-test'

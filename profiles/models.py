@@ -1,14 +1,19 @@
 from typing import Optional
 import logging
 
+import botocore
+import requests
+
 from actstream.models import Action
 from django import urls
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Case, When, Value, IntegerField
+from django.templatetags.static import static
 from django.urls import reverse
 
 from common import mixins
+from common.upload_paths import get_upload_to_hashed_path
 from profiles.blender_id import BIDSession
 
 bid = BIDSession()
@@ -16,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 class Profile(mixins.CreatedUpdatedMixin, models.Model):
-    """Store additional Profile data, such as avatar and full name."""
+    """Store additional Profile data, such as image and full name."""
 
     class Meta:
         permissions = [('can_view_content', 'Can view subscription-only content')]
@@ -25,6 +30,7 @@ class Profile(mixins.CreatedUpdatedMixin, models.Model):
         User, primary_key=True, on_delete=models.CASCADE, related_name='profile'
     )
     full_name = models.CharField(max_length=255, blank=True, default='')
+    image = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
     is_subscribed_to_newsletter = models.BooleanField(default=False)
 
     def get_absolute_url(self):
@@ -37,13 +43,10 @@ class Profile(mixins.CreatedUpdatedMixin, models.Model):
     @property
     def image_url(self) -> Optional[str]:
         """Return a URL of the Profile image."""
-        if not getattr(self.user, 'oauth_info', None) or not getattr(
-            self.user.oauth_info, 'oauth_user_id'
-        ):
-            return None
+        if not self.image:
+            return static('common/images/blank-profile-pic.png')
 
-        oauth_info = self.user.oauth_info
-        return bid.get_avatar_url(oauth_info.oauth_user_id)
+        return self.image.url
 
     @property
     def notifications(self):
@@ -62,6 +65,30 @@ class Profile(mixins.CreatedUpdatedMixin, models.Model):
     @property
     def notifications_unread(self):
         return self.notifications.filter(date_read__isnull=True)
+
+    def copy_avatar_from_blender_id(self):
+        """
+        Attempt to retrieve an avatar from Blender ID and save it into our storage.
+
+        If either OAuth info or Blender ID service isn't available, log an error and return.
+        """
+        if not hasattr(self.user, 'oauth_info'):
+            logger.warning(f'Cannot copy avatar from Blender ID: {self} is missing OAuth info')
+            return
+        oauth_info = self.user.oauth_info
+        try:
+            name, content = bid.get_avatar(oauth_info.oauth_user_id)
+            if self.image:
+                # Delete the previous file
+                self.image.delete(save=False)
+            self.image.save(name, content, save=True)
+            logger.info(f'Profile image updated for {self}')
+        except requests.HTTPError:
+            logger.exception(f'Failed to retrieve an image for {self} from Blender ID')
+        except botocore.exceptions.BotoCoreError:
+            logger.exception(f'Failed to store an image for {self}')
+        except Exception:
+            logger.exception(f'Failed to copy an image for {self}')
 
 
 class Notification(models.Model):

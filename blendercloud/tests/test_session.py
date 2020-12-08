@@ -1,4 +1,4 @@
-from unittest.mock import patch, ANY
+from unittest.mock import patch, ANY, Mock
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -20,6 +20,8 @@ remember_token_value = '0rh4aUVwpT36dVnch9squIuYKcSRUI|82f757dc73a2a87ea43f0a985
 
 @override_settings(BLENDER_CLOUD_SECRET_KEY='supersecret', BLENDER_CLOUD_AUTH_ENABLED=True)
 @freeze_time('2020-10-14 11:41:11')  # test cookies contain fixed expiration times
+@patch('storages.backends.s3boto3.S3Boto3Storage.url', Mock(return_value='s3://file'))
+@patch('storages.backends.s3boto3.S3Boto3Storage._save', Mock(return_value='path/to/file'))
 class TestSession(TestCase):
     maxDiff = None
 
@@ -83,7 +85,7 @@ class TestSession(TestCase):
         self.assertEquals(user.email, 'jane@example.com')
         self.assertEquals(user.oauth_info.oauth_user_id, '2')
         self.assertEquals(user.profile.full_name, 'ⅉane ⅅoe')
-        self.assertEquals(user.profile.image_url, 'http://id.local:8000/api/user/2/avatar')
+        self.assertEquals(user.profile.image_url, 's3://file')
         self.assertEquals(
             sorted([g.name for g in user.groups.all()]),
             ['dev_core', 'has_subscription', 'subscriber'],

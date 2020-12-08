@@ -45,6 +45,8 @@ def fill_profile(
     group_names = oauth_info.get('roles') or []
     set_groups_from_roles(instance, group_names=group_names)
 
+    instance.profile.copy_avatar_from_blender_id()
+
 
 @receiver(post_save, sender=User)
 def create_profile(sender: object, instance: User, created: bool, **kwargs: object) -> None:

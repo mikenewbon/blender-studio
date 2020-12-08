@@ -9,7 +9,7 @@ class ProfileAdmin(admin.ModelAdmin):
     """Configure Profile admin."""
 
     search_fields = ['full_name', 'user__username', 'user__email']
-    list_display = ['__str__', 'user', 'full_name', 'image_url']
+    list_display = ['__str__', 'user', 'full_name']
     list_filter = ['is_subscribed_to_newsletter']
     raw_id_fields = ['user']
 
