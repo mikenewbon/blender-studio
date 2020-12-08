@@ -1,3 +1,4 @@
+from typing import Tuple
 from urllib.parse import quote as urlquote
 import logging
 
@@ -173,13 +174,19 @@ class NewAsset(static_assets.StaticAsset):
 
 @admin.register(NewAsset)
 class NewAssetAdmin(mixins.AdminUserDefaultMixin, admin.ModelAdmin):
-    def has_add_permission(self, request):
+    def has_view_permission(self, request, obj=None):
         """Inherit permission from the parent Asset model.
 
         Proxy models require new permissions to be created, they don't
         inherit parent model's permissions.
         See https://code.djangoproject.com/ticket/11154 for more details.
         """
+        opts = assets.Asset._meta
+        codename = get_permission_codename('view', opts)
+        return request.user.has_perm("%s.%s" % (opts.app_label, codename))
+
+    def has_add_permission(self, request):
+        """Inherit permission from the parent Asset model."""
         opts = assets.Asset._meta
         codename = get_permission_codename('add', opts)
         return request.user.has_perm("%s.%s" % (opts.app_label, codename))
@@ -253,29 +260,51 @@ class NewAssetAdmin(mixins.AdminUserDefaultMixin, admin.ModelAdmin):
             return HttpResponseRedirect(redirect_url)
         return response
 
+    def _get_redirect_url(self, obj) -> Tuple[str, bool]:
+        redirect_url = reverse('admin:films_newasset_change', kwargs={'object_id': obj.pk})
+        film_asset = obj.assets.first()
+        if film_asset and film_asset.is_published:
+            return film_asset.url, True
+        return redirect_url, False
+
     def response_add(self, request, obj, **kwargs):
         """Redirect to editing the newly uploaded asset in the same form."""
         if "_addanother" in request.POST:
             response = super().response_add(request, obj, **kwargs)
             return self._preserve_initial_get_params(request, response)
+        elif "_continue" in request.POST or (
+            # Redirecting after "Save as new".
+            "_saveasnew" in request.POST
+            and self.save_as_continue
+            and self.has_change_permission(request, obj)
+        ):
+            response = super().response_add(request, obj, **kwargs)
+            return self._preserve_initial_get_params(request, response)
 
-        opts = assets.Asset._meta
-        msg_dict = {'name': opts.verbose_name, 'obj': str(obj)}
-        msg = 'The {name} “{obj}” was added successfully.'
-        self.message_user(request, format_html(msg, **msg_dict), messages.SUCCESS)
-        return redirect(reverse('admin:films_newasset_change', kwargs={'object_id': obj.pk}))
+        redirect_url, back_to_site = self._get_redirect_url(obj)
+        if not back_to_site:
+            opts = assets.Asset._meta
+            msg_dict = {'name': opts.verbose_name, 'obj': str(obj)}
+            msg = 'The {name} “{obj}” was added successfully.'
+            self.message_user(request, format_html(msg, **msg_dict), messages.SUCCESS)
+        return redirect(redirect_url)
 
     def response_change(self, request, obj, **kwargs):
         """Stay on the editing page and display a success message."""
         if "_addanother" in request.POST:
             response = super().response_change(request, obj, **kwargs)
             return self._preserve_initial_get_params(request, response)
+        elif "_continue" in request.POST:
+            response = super().response_change(request, obj, **kwargs)
+            return self._preserve_initial_get_params(request, response)
 
-        opts = assets.Asset._meta
-        msg_dict = {
-            'name': opts.verbose_name,
-            'obj': format_html('<a href="{}">{}</a>', urlquote(request.path), obj),
-        }
-        msg = format_html('The {name} “{obj}” was changed successfully.', **msg_dict)
-        self.message_user(request, msg, messages.SUCCESS)
-        return redirect(reverse('admin:films_newasset_change', kwargs={'object_id': obj.pk}))
+        redirect_url, back_to_site = self._get_redirect_url(obj)
+        if not back_to_site:
+            opts = assets.Asset._meta
+            msg_dict = {
+                'name': opts.verbose_name,
+                'obj': format_html('<a href="{}">{}</a>', urlquote(request.path), obj),
+            }
+            msg = format_html('The {name} “{obj}” was changed successfully.', **msg_dict)
+            self.message_user(request, msg, messages.SUCCESS)
+        return redirect(redirect_url)
