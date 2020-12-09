@@ -48,7 +48,9 @@ class ProductionLogDetailView(detail.DetailView):
         context = super().get_context_data(**kwargs)
         context.update(_get_shared_context(self.request))
         production_log = context['production_log']
-        film_production_logs = list(production_log.film.production_logs.all())
+        film_production_logs = list(
+            production_log.film.production_logs.order_by(*ProductionLog._meta.ordering).all()
+        )
         context['previous'] = get_previous_production_log(film_production_logs, production_log)
         context['next'] = get_next_production_log(film_production_logs, production_log)
         return context

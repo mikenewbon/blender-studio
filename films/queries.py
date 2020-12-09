@@ -12,7 +12,7 @@ from comments import typed_templates
 from comments.models import Comment
 from comments.queries import get_annotated_comments
 from comments.views.common import comments_to_template_type
-from films.models import Asset, Collection, Film, ProductionLogEntryAsset, Like
+from films.models import Asset, Collection, Film, ProductionLogEntryAsset, Like, ProductionLog
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -214,7 +214,7 @@ def get_production_logs(film: Film) -> paginator.Page:
             performance (see the note in the docs:
             https://docs.djangoproject.com/en/dev/ref/models/querysets/#django.db.models.Prefetch).
     """
-    production_logs = film.production_logs.order_by('-start_date', '-name').prefetch_related(
+    production_logs = film.production_logs.order_by(*ProductionLog._meta.ordering).prefetch_related(
         'log_entries__author',
         'log_entries__user',
         Prefetch(

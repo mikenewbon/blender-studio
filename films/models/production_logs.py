@@ -17,6 +17,7 @@ class ProductionLog(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, 
     class Meta:
         verbose_name = 'production log'
         verbose_name_plural = 'production logs'
+        ordering = ('-start_date', '-name')
 
     film = models.ForeignKey(Film, on_delete=models.CASCADE, related_name='production_logs')
     name = models.CharField(
