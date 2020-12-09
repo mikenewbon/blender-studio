@@ -81,9 +81,9 @@
         <div class="files">
           <div class="row row-cols-1 row-cols-md-3  row-cols-2">
             {% for asset in entry.assets.all|slice:':4' %}
-
+            {% if asset.is_published %}
             {% include "common/components/file.html" with card_sizes="col-6 col-sm-6 col-md-6 col-lg-3" aspect_ratio="fourbythree" asset=asset site_context="production_logs" %}
-
+            {% endif %}
             {% endfor %}
           </div>
 
@@ -91,9 +91,9 @@
           <div class="collapse" id="entry-{{ entry.id }}">
             <div class="row row-cols-1 row-cols-md-3  row-cols-2">
               {% for asset in entry.assets.all|slice:'4:' %}
-
+              {% if asset.is_published %}
               {% include "common/components/file.html" with card_sizes="col-6 col-sm-6 col-md-6 col-lg-3" aspect_ratio="fourbythree" asset=asset site_context="production_logs" %}
-
+              {% endif %}
               {% endfor %}
             </div>
           </div>

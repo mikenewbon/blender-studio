@@ -28,11 +28,9 @@ class SiteContexts(Enum):
 
 
 def _get_other_featured_assets(asset: Asset) -> QuerySet:
-    return Asset.objects.filter(
-        film=asset.film,
-        is_published=True,
-        is_featured=True,
-    ).order_by(*Asset._meta.ordering)
+    return Asset.objects.filter(film=asset.film, is_published=True, is_featured=True).order_by(
+        *Asset._meta.ordering
+    )
 
 
 def _get_other_assets_in_collection(asset: Asset) -> QuerySet:
@@ -41,7 +39,9 @@ def _get_other_assets_in_collection(asset: Asset) -> QuerySet:
 
 
 def _get_assets_in_production_log_entry(asset: Asset) -> QuerySet:
-    return asset.entry_asset.production_log_entry.assets.order_by(*Asset._meta.ordering)
+    return asset.entry_asset.production_log_entry.assets.filter(is_published=True).order_by(
+        *Asset._meta.ordering
+    )
 
 
 def _get_previous_in_query(q: QuerySet, instance: Asset) -> Optional[Asset]:
