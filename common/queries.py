@@ -1,6 +1,6 @@
 from typing import Optional, Union, Dict, List
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core import paginator
 from django.db.models import QuerySet
 from django.db.models.base import Model
@@ -11,6 +11,7 @@ from films.models import ProductionLog
 from training.models import Training
 from blog.models import Post
 
+User = get_user_model()
 DEFAULT_FEED_PAGE_SIZE = 10
 
 

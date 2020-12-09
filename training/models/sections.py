@@ -1,15 +1,18 @@
 import uuid
-from typing import Optional
+
+from django.contrib.auth import get_user_model
 from django.db import models
-from django.urls.base import reverse
-from django.contrib.auth.models import User
-from taggit.managers import TaggableManager
 from django.template.defaultfilters import filesizeformat
+from django.urls.base import reverse
+from taggit.managers import TaggableManager
+from typing import Optional
 
 from comments.models import Comment
 from common import mixins
 from training.models import chapters
 import static_assets.models as models_static_assets
+
+User = get_user_model()
 
 
 class Section(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Model):
@@ -98,7 +101,7 @@ class Section(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models
 
     @property
     def comment_url(self) -> str:
-        return reverse('section-comment', kwargs={'section_pk': self.pk},)
+        return reverse('section-comment', kwargs={'section_pk': self.pk})
 
     @property
     def progress_url(self) -> str:

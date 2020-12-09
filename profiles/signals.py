@@ -2,7 +2,7 @@ from typing import Dict
 import logging
 
 from actstream.models import Action
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -11,6 +11,7 @@ from blender_id_oauth_client import signals as bid_signals
 from profiles.models import Profile, Notification
 from profiles.queries import set_groups_from_roles
 
+User = get_user_model()
 logger = logging.getLogger(__name__)
 
 

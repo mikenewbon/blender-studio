@@ -3,7 +3,7 @@ import logging
 import mimetypes
 
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls.base import reverse
@@ -15,7 +15,7 @@ from static_assets.models import License
 from static_assets.tasks import create_video_processing_job
 import common.storage
 
-
+User = get_user_model()
 log = logging.getLogger(__name__)
 
 

@@ -1,12 +1,14 @@
 from django.db import models
 from django.urls.base import reverse
 from django.utils.text import slugify
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path, shortuid
 from films.models import films
 import common.help_texts
+
+User = get_user_model()
 
 
 class ThumbnailAspectRatioChoices(models.TextChoices):

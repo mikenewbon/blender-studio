@@ -1,13 +1,10 @@
 """Profile activity pages, such as notifications and My activity."""
-from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.views.generic import ListView
 
 from actstream import models
 from profiles.models import Notification
-
-USER_MODEL = get_user_model()
 
 
 class Notifications(LoginRequiredMixin, ListView):

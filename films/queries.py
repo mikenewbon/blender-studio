@@ -3,7 +3,7 @@ from typing import List, Optional, cast, Dict, Union, Any
 import logging
 import random
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core import paginator
 from django.db.models.query import Prefetch, QuerySet
 from django.http.request import HttpRequest
@@ -14,6 +14,7 @@ from comments.queries import get_annotated_comments
 from comments.views.common import comments_to_template_type
 from films.models import Asset, Collection, Film, ProductionLogEntryAsset, Like
 
+User = get_user_model()
 logger = logging.getLogger(__name__)
 DEFAULT_LOGS_PAGE_SIZE = 3
 

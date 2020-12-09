@@ -1,12 +1,14 @@
 from typing import Optional, List, Dict, Any
 
 from actstream import action
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls.base import reverse
 from django.utils import timezone
 
 from common import mixins
+
+User = get_user_model()
 
 
 class Comment(mixins.CreatedUpdatedMixin, models.Model):
@@ -17,7 +19,7 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
     # Instead, we remove the reference to the User to honor the deletion request as much as
     # possible.
     user = models.ForeignKey(
-        User, null=True, blank=False, on_delete=models.SET_NULL, related_name='comments',
+        User, null=True, blank=False, on_delete=models.SET_NULL, related_name='comments'
     )
 
     # We want to enable moderators to permanently delete e.g. spam comments and their replies.

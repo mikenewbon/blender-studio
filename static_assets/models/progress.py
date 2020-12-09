@@ -1,8 +1,10 @@
-from django.contrib.auth.models import User
 from django.db import models
+from django.contrib.auth import get_user_model
 
 from common import mixins
 import static_assets.models as models_static_assets
+
+User = get_user_model()
 
 
 class UserVideoProgress(mixins.CreatedUpdatedMixin, models.Model):

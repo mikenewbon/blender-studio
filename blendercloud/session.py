@@ -5,7 +5,7 @@ import logging
 import uuid
 
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.http.request import HttpRequest
 from flask.sessions import SecureCookieSession, SecureCookieSessionInterface
 import django.db.utils
@@ -17,6 +17,7 @@ from .flask_login import open_remember_token
 from profiles.blender_id import BIDSession
 from profiles.queries import set_groups_from_roles
 
+User = get_user_model()
 bid = BIDSession()
 logger = logging.getLogger(__name__)
 
@@ -25,7 +26,7 @@ logger = logging.getLogger(__name__)
 # The attributes were chosen based on what Flask 1.0.3's `SecureCookieSessionInterface.open_session`
 # requires to work.
 FlaskApp = namedtuple(
-    'FlaskApp', ['session_cookie_name', 'permanent_session_lifetime', 'secret_key'],
+    'FlaskApp', ['session_cookie_name', 'permanent_session_lifetime', 'secret_key']
 )
 app = FlaskApp(
     session_cookie_name=settings.BLENDER_CLOUD_SESSION_COOKIE_NAME,
@@ -72,9 +73,7 @@ def _get_or_create_user(user_oauth: Dict[str, Any]) -> User:
                 'password': User.objects.make_random_password(),
             },
         )
-        models.OAuthUserInfo.objects.get_or_create(
-            user=user, oauth_user_id=str(oauth_user_id),
-        )
+        models.OAuthUserInfo.objects.get_or_create(user=user, oauth_user_id=str(oauth_user_id))
         if created:
             logger.debug('User also not found by email address, created new one.')
             signals.user_created.send(sender=user, instance=user, oauth_info=user_oauth)
@@ -155,6 +154,6 @@ def get_or_create_current_user(request: HttpRequest) -> Optional[User]:
     # There is no refresh token or expiration available from Blender Cloud session,
     # hence only the access token is stored
     models.OAuthToken.objects.create(
-        user=user, oauth_user_id=oauth_user_id, access_token=access_token,
+        user=user, oauth_user_id=oauth_user_id, access_token=access_token
     )
     return user

@@ -1,12 +1,16 @@
-from django.contrib.auth.models import User
+# noqa: D100
+from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
 from django.db.models.query_utils import Q
+
 from looper.models import Customer, Subscription
 
 from subscriptions.models import Organization, Subscriber
 
+User = get_user_model()
 
-def can_change_customer(user: User, customer: Customer) -> bool:
+
+def can_change_customer(user: User, customer: Customer) -> bool:  # noqa: D103
     if not user.is_authenticated:
         return False
 
@@ -27,7 +31,7 @@ def can_change_customer(user: User, customer: Customer) -> bool:
     return False
 
 
-def has_subscription(user: User) -> bool:
+def has_subscription(user: User) -> bool:  # noqa: D103
     if not user.is_authenticated:
         return False
 

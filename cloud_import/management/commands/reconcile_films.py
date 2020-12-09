@@ -5,17 +5,18 @@ import shutil
 import pytz
 from bson import json_util, ObjectId
 
-from django.core.management.base import BaseCommand
-from django.core.files import File
 from django.conf import settings
-from django.contrib.auth.models import User
-
+from django.contrib.auth import get_user_model
+from django.core.files import File
+from django.core.management.base import BaseCommand
 
 from cloud_import.management import mongo
 import comments.models as models_comments
 import films.models as models_films
 import static_assets.models as models_assets
 from cloud_import.management.mixins import ImportCommand
+
+User = get_user_model()
 
 
 class Command(ImportCommand):
@@ -26,9 +27,7 @@ class Command(ImportCommand):
             '-s', '--slug', dest='slugs', action='append', help="provides film slugs"
         )
 
-        parser.add_argument(
-            '--all', action='store_true', help='Reconcile all trainings',
-        )
+        parser.add_argument('--all', action='store_true', help='Reconcile all trainings')
 
     def assign_user(self, asset, node_doc):
 

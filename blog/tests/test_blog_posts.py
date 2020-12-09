@@ -1,5 +1,5 @@
 from actstream.models import Action
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
@@ -10,6 +10,8 @@ from common.tests.factories.comments import CommentUnderPostFactory
 from common.tests.factories.films import FilmFactory
 from common.tests.factories.helpers import create_test_image
 from common.tests.factories.users import UserFactory
+
+User = get_user_model()
 
 
 class TestPostCreation(TestCase):

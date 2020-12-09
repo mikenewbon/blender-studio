@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls.base import reverse
 from django.utils.text import slugify
@@ -6,6 +6,8 @@ from taggit.managers import TaggableManager
 
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
+
+User = get_user_model()
 
 
 class TrainingType(models.TextChoices):

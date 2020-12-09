@@ -1,10 +1,13 @@
-from django.contrib.auth.models import AnonymousUser, User
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AnonymousUser
 from django.test import RequestFactory, TestCase
 
 from common.tests.factories.training import TrainingFactory
 from training import context_processors
 from training.models import Training
 from training.queries.trainings import set_favorite
+
+User = get_user_model()
 
 
 class ContextProcessorsTest(TestCase):

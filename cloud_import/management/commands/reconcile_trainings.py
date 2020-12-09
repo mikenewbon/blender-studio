@@ -8,9 +8,7 @@ from bson import json_util, ObjectId
 
 from django.core.management.base import BaseCommand
 from django.core.files import File
-
-from django.contrib.auth.models import User
-
+from django.contrib.auth import get_user_model
 
 from cloud_import.management import mongo
 
@@ -18,6 +16,8 @@ import films.models as models_films
 import static_assets.models as models_assets
 from cloud_import.management.mixins import ImportCommand
 import training.models as models_training
+
+User = get_user_model()
 
 
 class Command(ImportCommand):
@@ -27,9 +27,7 @@ class Command(ImportCommand):
         parser.add_argument(
             '-s', '--slug', dest='slugs', action='append', help="provides training slugs"
         )
-        parser.add_argument(
-            '--all', action='store_true', help='Reconcile all trainings',
-        )
+        parser.add_argument('--all', action='store_true', help='Reconcile all trainings')
 
     def reconcile_training_section_comments(self, section: models_training.Section):
         # Fetch comments
@@ -131,7 +129,7 @@ class Command(ImportCommand):
         except models_training.Chapter.DoesNotExist:
             self.console_log(f"Not found, creating chapter {chapter_slug}")
             chapter = models_training.Chapter.objects.create(
-                index=1, training=training, name=chapter_doc['name'], slug=chapter_slug,
+                index=1, training=training, name=chapter_doc['name'], slug=chapter_slug
             )
         if 'order' in chapter_doc['properties']:
             chapter.index = chapter_doc['properties']['order']
@@ -220,7 +218,7 @@ class Command(ImportCommand):
 
         # Create chapter where we relocate top level content
         chapter, _ = models_training.Chapter.objects.get_or_create(
-            index=0, training=training, name="Top", slug=f"top-{training.slug}",
+            index=0, training=training, name="Top", slug=f"top-{training.slug}"
         )
         for section_doc in self.fetch_top_level_assets(training_doc):
             self.get_or_create_section(section_doc, chapter)

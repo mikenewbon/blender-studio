@@ -1,17 +1,19 @@
 import datetime
 from typing import Any
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
-from django.utils.text import slugify
 from django.utils import timezone
+from django.utils.text import slugify
 
 from comments.models import Comment
 from common import mixins, markdown
 from common.upload_paths import get_upload_to_hashed_path
 from films.models import Film
 import static_assets.models as models_static_assets
+
+User = get_user_model()
 
 
 class Post(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Model):

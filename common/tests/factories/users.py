@@ -1,8 +1,10 @@
-import factory
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from factory.django import DjangoModelFactory
+import factory
 
 from blender_id_oauth_client.models import OAuthUserInfo, OAuthToken
+
+User = get_user_model()
 
 
 class OAuthUserInfoFactory(DjangoModelFactory):

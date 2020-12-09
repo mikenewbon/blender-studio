@@ -1,7 +1,8 @@
+# noqa: D100
 import datetime
 from typing import Dict, List, Literal, Optional, Union
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 from common import markdown
 from common.types import assert_cast
@@ -11,10 +12,12 @@ from training.typed_templates.types import ChapterNavigation, Navigation, Sectio
 from training.typed_templates.home import RecentlyWatchedSection
 import static_assets.models as models_static_assets
 
+User = get_user_model()
+
 
 def training_model_to_template_type(
     training: trainings.Training, favorited: bool
-) -> typed_templates.types.Training:
+) -> typed_templates.types.Training:  # noqa: D103
     thumbnail_s_url = '' if not training.thumbnail_s_url else training.thumbnail_s_url
     thumbnail_m_url = '' if not training.thumbnail_m_url else training.thumbnail_m_url
     picture_header = '' if not training.picture_header else training.picture_header.url
@@ -40,7 +43,7 @@ def training_model_to_template_type(
 
 def video_model_to_template_type(
     video: models_static_assets.Video, start_position: Optional[datetime.timedelta]
-) -> typed_templates.types.Video:
+) -> typed_templates.types.Video:  # noqa: D103
     return typed_templates.types.Video(
         url=video.default_variation_url,
         progress_url=video.progress_url,
@@ -50,7 +53,7 @@ def video_model_to_template_type(
 
 def asset_model_to_template_type(
     asset: models_static_assets.StaticAsset,
-) -> typed_templates.types.StaticAsset:
+) -> typed_templates.types.StaticAsset:  # noqa: D103
     # TODO(fsiddi) Remove this
     return typed_templates.types.StaticAsset(name=asset.source.name, url=asset.source.url)
 
@@ -62,7 +65,7 @@ def navigation_to_template_type(
     *,
     user: User,
     current: Union[Literal['overview'], sections_models.Section],
-) -> Navigation:
+) -> Navigation:  # noqa: D103
     sections_per_chapter: Dict[int, List[sections_models.Section]] = {}
     for section in sections:
         sections_per_chapter.setdefault(section.chapter_id, []).append(section)

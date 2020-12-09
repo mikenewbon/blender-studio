@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.template.defaultfilters import filesizeformat
@@ -12,6 +12,8 @@ from common import mixins
 from films.models import Collection
 import common.help_texts
 import static_assets.models as models_static_assets
+
+User = get_user_model()
 
 
 class AssetCategory(models.TextChoices):

@@ -6,11 +6,9 @@ import shutil
 import pytz
 from bson import json_util, ObjectId
 
-from django.core.management.base import BaseCommand
+from django.contrib.auth import get_user_model
 from django.core.files import File
-
-from django.contrib.auth.models import User
-
+from django.core.management.base import BaseCommand
 
 from cloud_import.management import mongo
 
@@ -18,6 +16,8 @@ import films.models as models_films
 import static_assets.models as models_assets
 from cloud_import.management.mixins import ImportCommand
 import training.models as models_training
+
+User = get_user_model()
 
 
 class Command(ImportCommand):

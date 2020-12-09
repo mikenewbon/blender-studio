@@ -4,8 +4,8 @@ import pathlib
 import tempfile
 from typing import Optional
 from bson import ObjectId
-from django.contrib.auth.models import User
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from blender_id_oauth_client.models import OAuthUserInfo
 from cloud_import.management import mongo
@@ -13,6 +13,8 @@ import static_assets.models as models_static_assets
 import comments.models as models_comments
 from cloud_import.management import files
 import films.models as models_films
+
+User = get_user_model()
 
 
 class ImportCommand(BaseCommand):
@@ -153,8 +155,7 @@ class ImportCommand(BaseCommand):
             self.console_log(f"\tFile {file_uuid} does not exist, skipping")
             return
         file_path = (
-            file_doc.get('file_path')
-            if not variation_subdoc else variation_subdoc.get('file_path')
+            file_doc.get('file_path') if not variation_subdoc else variation_subdoc.get('file_path')
         )
         if not file_path:
             self.console_log(f'No file_path for {file_doc} or {variation_subdoc}')
@@ -393,7 +394,7 @@ class ImportCommand(BaseCommand):
         except models_films.Collection.DoesNotExist:
             self.console_log(f"Not found, creating collection {collection_slug}")
             collection = models_films.Collection.objects.create(
-                order=1, film=film, name=collection_doc['name'], slug=collection_slug,
+                order=1, film=film, name=collection_doc['name'], slug=collection_slug
             )
         if 'order' in collection_doc['properties']:
             collection.order = collection_doc['properties']['order']

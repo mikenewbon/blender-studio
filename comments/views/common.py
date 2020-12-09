@@ -1,7 +1,7 @@
 # noqa: D100
 from typing import Dict, List, Optional, Sequence
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.http import JsonResponse
 
 from comments import typed_templates
@@ -9,6 +9,8 @@ from comments.models import Comment
 from common import markdown
 from common.shortcodes import render as with_shortcodes
 from common.types import assert_cast
+
+User = get_user_model()
 
 
 def comments_to_template_type(

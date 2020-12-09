@@ -5,7 +5,8 @@ import hmac
 import json
 import responses
 
-from django.contrib.auth.models import User, Group
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
@@ -13,6 +14,7 @@ from common.tests.factories.users import UserFactory
 from profiles.models import Profile
 import profiles.tests.util as util
 
+User = get_user_model()
 BLENDER_ID_BASE_URL = 'http://id.local:8000/'
 
 

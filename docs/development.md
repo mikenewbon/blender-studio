@@ -42,7 +42,7 @@ and it must not be committed.
     ```poetry shell```
     - Configure your IDE to use the venv by default.
 7. In the project folder, run migrations: `./manage.py migrate`
-8. Create a superuser: `echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'password')" | python manage.py shell`
+8. Create a superuser: `echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@example.com', 'password')" | python manage.py shell`
 9. Run the server: `./manage.py runserver 8001`. The project will be available at
     `studio.local:8001`.
 10. (Optional) Install pre-commit hooks (see [pre-commit details](docs/development.md#before-commiting)):

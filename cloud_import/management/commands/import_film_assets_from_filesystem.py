@@ -10,11 +10,10 @@ import pytz
 from bson import json_util, ObjectId
 from typing import Optional
 import botocore.exceptions as botocore_exceptions
-from django.contrib.auth.models import User
-from django.core.management.base import BaseCommand
-from django.core.files import File
 from django.conf import settings
-
+from django.contrib.auth import get_user_model
+from django.core.files import File
+from django.core.management.base import BaseCommand
 
 from cloud_import.management import mongo
 import comments.models as models_comments
@@ -23,6 +22,8 @@ import static_assets.models as models_static_assets
 from cloud_import.management.mixins import ImportCommand
 from cloud_import.management import files
 import training.models as models_training
+
+User = get_user_model()
 
 USERNAME_TO_ID = {
     'fsiddi': 8,
@@ -191,11 +192,11 @@ class Command(ImportCommand):
                     if not parent_collection:
                         try:
                             parent_collection = models_films.Collection.objects.get(
-                                film=film, slug=f"{film.slug}-top",
+                                film=film, slug=f"{film.slug}-top"
                             )
                         except models_films.Collection.DoesNotExist:
                             parent_collection = models_films.Collection.objects.create(
-                                film=film, slug=f"{film.slug}-top", name='Top',
+                                film=film, slug=f"{film.slug}-top", name='Top'
                             )
                     print(f"Processing file {entry.name}")
                     self.create_asset_from_file(weekly_name, user_name, entry, parent_collection)
@@ -204,7 +205,7 @@ class Command(ImportCommand):
                     print(f"Collection {entry.name}")
                     try:
                         sub_collection = models_films.Collection.objects.get(
-                            film=film, slug=entry.name,
+                            film=film, slug=entry.name
                         )
                     except models_films.Collection.DoesNotExist:
                         sub_collection = models_films.Collection.objects.create(

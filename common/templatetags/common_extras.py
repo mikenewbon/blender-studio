@@ -1,6 +1,6 @@
 """Commonly used template tags and filters."""
 from django import template
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.template.defaultfilters import stringfilter
 from django.utils.html import mark_safe
 
@@ -9,6 +9,7 @@ from common.markdown import render as render_markdown
 from common.shortcodes import render
 from markupsafe import Markup
 
+User = get_user_model()
 register = template.Library()
 
 

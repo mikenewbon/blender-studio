@@ -6,7 +6,7 @@ import requests
 
 from actstream.models import Action
 from django import urls
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import Case, When, Value, IntegerField
 from django.templatetags.static import static
@@ -16,6 +16,7 @@ from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
 from profiles.blender_id import BIDSession
 
+User = get_user_model()
 bid = BIDSession()
 logger = logging.getLogger(__name__)
 

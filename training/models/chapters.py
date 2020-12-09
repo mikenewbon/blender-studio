@@ -1,11 +1,14 @@
 import uuid
+
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls.base import reverse
-from django.contrib.auth.models import User
 
 from common.upload_paths import get_upload_to_hashed_path
 from common import mixins
 from training.models import trainings
+
+User = get_user_model()
 
 
 class Chapter(mixins.CreatedUpdatedMixin, models.Model):

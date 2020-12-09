@@ -1,12 +1,14 @@
 from datetime import date, timedelta
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls.base import reverse
 
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
 from films.models import Asset, Film, FilmCrew
+
+User = get_user_model()
 
 
 class ProductionLog(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Model):

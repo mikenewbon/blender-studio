@@ -6,7 +6,7 @@ from django import forms
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple, RelatedFieldWidgetWrapper
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db.models import ForeignKey, Q
 from django.forms.models import ModelForm, ModelChoiceField
 from django.http.request import HttpRequest
@@ -17,6 +17,7 @@ from common.mixins import AdminUserDefaultMixin, ViewOnSiteMixin
 from films.admin.mixins import EditLinkMixin
 from films.models import production_logs, Asset, Film
 
+User = get_user_model()
 log = logging.getLogger(__name__)
 
 

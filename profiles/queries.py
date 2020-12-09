@@ -4,9 +4,11 @@ import re
 
 from actstream import action
 from actstream.models import Action
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 logger = logging.getLogger(__name__)
 re_cloud_role_name_cleanup = re.compile('^cloud_')
 
