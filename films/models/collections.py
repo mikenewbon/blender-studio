@@ -49,8 +49,14 @@ class Collection(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mod
             self.slug = slugify(self.name)
 
     def __str__(self):
-        order = self.order or '-'
-        return f'{self.film.title}: ({order}) {self.name}'
+        parents, depth = [self.film.title], 3
+        parent = self.parent
+        while parent and depth:
+            parents.append(parent.name)
+            parent = parent.parent
+            depth -= 1
+        path = ' / '.join((*parents, self.name))
+        return path
 
     def get_absolute_url(self) -> str:
         return self.url
