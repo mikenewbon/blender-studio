@@ -17,6 +17,7 @@
     {% if user_can_edit_collection %}
     {% url 'admin:films_asset_changelist' as list_url %}
     {% url 'admin:films_newasset_add' as add_url %}
+    {% url 'admin:films_collection_add' as add_collection_url %}
     <a href="{{ add_url }}?film={{ film.id }}&is_published=1{% if current_collection.admin_url %}&collection={{ current_collection.id }}{% elif featured_artwork %}&is_featured=1{% endif %}" class="btn btn-sm btn-dark" title="Add a new asset to {% firstof current_collection "featured" %}">
       <i class="material-icons">add</i>
       Add
@@ -24,6 +25,10 @@
     <a href="{% if current_collection.admin_url %}{{ current_collection.admin_url }}{% elif featured_artwork %}{{ list_url }}?film__id__exact={{ film.id }}&is_featured__exact=1{% endif %}" class="btn btn-sm btn-dark" title="Edit {% firstof current_collection "featured assets" %}">
       <i class="material-icons">edit</i>
       Edit
+    </a>
+    <a href="{{ add_collection_url }}?film={{ film.id }}{% if current_collection.admin_url %}&parent={{ current_collection.id }}{% endif %}" class="btn btn-sm btn-dark" title="Create a new collection{% if current_collection %} in {{current_collection}}{% endif %}">
+      <i class="material-icons">add</i>
+      Create
     </a>
     {% endif %}
 
