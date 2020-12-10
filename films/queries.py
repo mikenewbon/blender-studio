@@ -27,10 +27,9 @@ class SiteContexts(Enum):
     GALLERY = 'gallery'
 
 
-def _get_other_featured_assets(asset: Asset) -> QuerySet:
-    return Asset.objects.filter(film=asset.film, is_published=True, is_featured=True).order_by(
-        *Asset._meta.ordering
-    )
+def get_featured_assets(film: Film) -> QuerySet:
+    """Retrieve film's featured assets."""
+    return film.assets.filter(is_published=True, is_featured=True).order_by('-date_published')
 
 
 def _get_other_assets_in_collection(asset: Asset) -> QuerySet:
@@ -92,13 +91,13 @@ def get_next_production_log(production_logs, production_log):  # noqa: D103
 
 def get_previous_asset_in_featured_artwork(asset: Asset) -> Optional[Asset]:
     """Fetch asset previous from this one in featured film assets."""
-    featured_assets = _get_other_featured_assets(asset)
+    featured_assets = get_featured_assets(asset.film)
     return _get_previous_in_query(featured_assets, asset)
 
 
 def get_next_asset_in_featured_artwork(asset: Asset) -> Optional[Asset]:
     """Fetch asset next from this one in featured film assets."""
-    featured_assets = _get_other_featured_assets(asset)
+    featured_assets = get_featured_assets(asset.film)
     return _get_next_in_query(featured_assets, asset)
 
 
@@ -300,9 +299,7 @@ def get_gallery_drawer_context(film: Film, user: User) -> Dict[str, Any]:
 
     return {
         'collections': nested_collections,
-        'featured_artwork': film.assets.filter(is_featured=True, is_published=True).order_by(
-            *Asset._meta.ordering,
-        ),
+        'featured_artwork': get_featured_assets(film),
         'user_can_edit_collection': (user.is_staff and user.has_perm('films.change_collection')),
     }
 

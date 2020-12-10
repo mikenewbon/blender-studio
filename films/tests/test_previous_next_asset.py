@@ -40,9 +40,7 @@ class TestSiteContextResolution(TestCase):
 
     @patch('films.queries.get_next_asset_in_featured_artwork', return_value=None)
     @patch('films.queries.get_previous_asset_in_featured_artwork', return_value=None)
-    def test_featured_artwork_site_context(
-        self, get_previous_asset_mock, get_next_asset_mock,
-    ):
+    def test_featured_artwork_site_context(self, get_previous_asset_mock, get_next_asset_mock):
         query_string = f'site_context={SiteContexts.FEATURED_ARTWORK.value}'
         request = self.factory.get(f'{reverse("api-asset", args=(self.asset.pk,))}?{query_string}')
         request.user = self.user
@@ -53,9 +51,7 @@ class TestSiteContextResolution(TestCase):
 
     @patch('films.queries.get_next_asset_in_production_logs', return_value=None)
     @patch('films.queries.get_previous_asset_in_production_logs', return_value=None)
-    def test_production_logs_site_context(
-        self, get_previous_asset_mock, get_next_asset_mock,
-    ):
+    def test_production_logs_site_context(self, get_previous_asset_mock, get_next_asset_mock):
         query_string = f'site_context={SiteContexts.PRODUCTION_LOGS.value}'
         request = self.factory.get(f'{reverse("api-asset", args=(self.asset.pk,))}?{query_string}')
         request.user = self.user
@@ -108,10 +104,10 @@ class TestAssetOrderingInGallery(TestCase):
         cls.asset_a_1 = AssetFactory(film=film, collection=cls.collection_a, order=1, name='Cc')
 
         # Assets from other films and collections, should not be included in context:
-        asset_b_0 = AssetFactory(film=film, collection=collection_b, is_featured=True)
-        asset_c_0 = AssetFactory(film=film, collection=collection_c, is_featured=True)
-        other_asset_0 = AssetFactory(film=other_film, collection=other_collection)
-        other_asset_1 = AssetFactory(film=other_film, collection=other_collection, is_featured=True)
+        AssetFactory(film=film, collection=collection_b, is_featured=True)
+        AssetFactory(film=film, collection=collection_c, is_featured=True)
+        AssetFactory(film=other_film, collection=other_collection)
+        AssetFactory(film=other_film, collection=other_collection, is_featured=True)
 
     def test_previous_asset_for_first_asset_is_none(self):
         first_asset = self.asset_a_0
@@ -171,19 +167,19 @@ class TestAssetOrderingInFeaturedArtwork(TestCase):
         cls.featured_asset_0 = AssetFactory(
             film=film, collection=collection_a, order=2, is_featured=True
         )
-        asset_a_0 = AssetFactory(film=film, collection=collection_a, order=1)
-        asset_a_1 = AssetFactory(film=film, collection=collection_a, order=2)
+        AssetFactory(film=film, collection=collection_a, order=1)
+        AssetFactory(film=film, collection=collection_a, order=2)
         cls.featured_asset_1 = AssetFactory(film=film, collection=collection_b, is_featured=True)
         cls.featured_asset_2 = AssetFactory(film=film, collection=collection_c, is_featured=True)
-        asset_a_2 = AssetFactory(film=film, collection=collection_a, order=3)
+        AssetFactory(film=film, collection=collection_a, order=3)
         cls.featured_asset_3 = AssetFactory(film=film, collection=collection_a, is_featured=True)
 
         # Assets from the other film should not be included in context:
-        other_asset_0 = AssetFactory(film=other_film, collection=other_collection)
-        other_asset_1 = AssetFactory(film=other_film, collection=other_collection, is_featured=True)
+        AssetFactory(film=other_film, collection=other_collection)
+        AssetFactory(film=other_film, collection=other_collection, is_featured=True)
 
     def test_previous_asset_for_first_asset_is_none(self):
-        first_asset = self.featured_asset_0
+        first_asset = self.featured_asset_3  # featured are ordered latest published first
         request = self.factory.get(
             f'{reverse("api-asset", args=(first_asset.pk,))}?site_context={self.site_context}'
         )
@@ -195,7 +191,7 @@ class TestAssetOrderingInFeaturedArtwork(TestCase):
         self.assertEqual(context['site_context'], self.site_context)
 
     def test_next_asset_for_last_asset_is_none(self):
-        last_asset = self.featured_asset_3
+        last_asset = self.featured_asset_0
         request = self.factory.get(
             f'{reverse("api-asset", args=(last_asset.pk,))}?site_context={self.site_context}'
         )
@@ -206,12 +202,12 @@ class TestAssetOrderingInFeaturedArtwork(TestCase):
         self.assertEqual(context['next_asset'], None)
         self.assertEqual(context['site_context'], self.site_context)
 
-    def test_featured_assets_sorted_by_date_created(self):
+    def test_featured_assets_sorted_by_date_published(self):
         assets = [
-            self.featured_asset_0,
-            self.featured_asset_1,
-            self.featured_asset_2,
             self.featured_asset_3,
+            self.featured_asset_2,
+            self.featured_asset_1,
+            self.featured_asset_0,
         ]
         for previous_asset, asset, next_asset in zip(assets, assets[1:], assets[2:]):
             request = self.factory.get(
