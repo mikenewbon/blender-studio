@@ -28,7 +28,7 @@ has-secondary-nav
           Content Gallery
         </a>
         {% if film.show_production_logs_nav_link %}
-        <a class="list-group-item" href="{% url 'film-production-logs' film_slug=film.slug %}">
+        <a class="list-group-item {% if date_list or production_log.name %}active{% endif %}" href="{% url 'film-production-logs' film_slug=film.slug %}">
           Production Logs
 		</a>
         {% endif %}
