@@ -101,6 +101,7 @@ class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
     class Meta:
         verbose_name = 'production log entry'
         verbose_name_plural = 'production log entries'
+        ordering = ['id']
 
     production_log = models.ForeignKey(
         ProductionLog,
