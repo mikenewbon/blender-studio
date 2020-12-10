@@ -51,24 +51,24 @@
                 <span class="likes-count">{{ comment.likes }}</span>
               </button>
 
-              <button
-                class="btn btn-transparent btn-xs comment-action comment-reply {% if not user.is_authenticated %}disabled{% endif%}"
+              <button class="btn btn-transparent btn-xs comment-action comment-reply {% if not user.is_authenticated %}disabled{% endif%}"
                 {% if not user.is_authenticated %}disabled{% endif%}>Reply</button>
-              {% if user.is_authenticated and comment.edit_url is not None  %}
+
+              {% if comment.edit_url or comment.archive_tree_url %}
               <button class="btn btn-transparent btn-xs btn-icon comment-material-button comment-dropdown"
                 data-toggle="dropdown">
                 <i class="material-icons">more_horiz</i>
               </button>
               <div class="dropdown-menu">
 
-                {% if comment.edit_url is not None %}
+                {% if comment.edit_url %}
                 <button class="dropdown-item comment-edit">
                   <i class="material-icons">create</i>
                   <span>Edit</span>
                 </button>
                 {% endif %}
 
-                {% if comment.delete_url is not None %}
+                {% if comment.delete_url %}
                 <a href="" class="dropdown-item comment-delete">
                   <i class="material-icons">delete</i>
                   <span>Delete</span>
@@ -80,21 +80,21 @@
                   <span>Report</span>
                 </a> {% endcomment %}
 
-                {% if comment.delete_tree_url is not None %}
+                {% if comment.delete_tree_url %}
                 <a href="" class="dropdown-item comment-delete-tree">
                   <i class="material-icons">account_tree</i>
                   <span>Delete Tree</span>
                 </a>
                 {% endif %}
 
-                {% if comment.hard_delete_tree_url is not None %}
+                {% if comment.hard_delete_tree_url %}
                 <a href="" class="dropdown-item comment-hard-delete-tree">
                   <i class="material-icons">delete_forever</i>
                   <span>Hard Delete Tree</span>
                 </a>
                 {% endif %}
 
-                {% if comment.archive_tree_url is not None %}
+                {% if comment.archive_tree_url %}
 
                 <a href="" class="dropdown-item comment-archive">
                   {% if comment.is_archived and comment.is_top_level %}
@@ -108,8 +108,6 @@
                 {% endif %}
               </div>
               {% endif %}
-
-
 
               {% comment %} <a href="" class="btn btn-transparent btn-ctrl-xs comment-action comment-edit">Edit</a>
               <a href="" class="btn btn-transparent btn-ctrl-xs comment-action comment-delete">Delete</a> {% endcomment %}
