@@ -12,37 +12,51 @@ from django.forms.models import ModelForm, ModelChoiceField
 from django.http.request import HttpRequest
 from django.utils import timezone
 from django.utils.encoding import force_text
+import dateutil.tz
 
 from common.mixins import AdminUserDefaultMixin, ViewOnSiteMixin
 from films.admin.mixins import EditLinkMixin
 from films.models import production_logs, Asset, Film
 
 User = get_user_model()
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+TZ = dateutil.tz.gettz(settings.TIME_ZONE)
+MONDAY = 0
 
 
 class _ErrorLoggingForm(ModelForm):
     def is_valid(self):
-        log.info(force_text(self.errors))
+        logger.info(force_text(self.errors))
         return super().is_valid()
 
 
 def get_context(request: HttpRequest) -> Tuple[Any]:
     """Get film, log and entry from the given request, if available."""
+    film, log, entry = None, None, None
+    if request.resolver_match.url_name == 'films_productionlogentry_change':
+        object_id = request.resolver_match.kwargs['object_id']
+        entry = production_logs.ProductionLogEntry.objects.get(pk=object_id)
+    elif request.resolver_match.url_name == 'films_productionlog_change':
+        object_id = request.resolver_match.kwargs['object_id']
+        log = production_logs.ProductionLog.objects.get(pk=object_id)
+    if film and log and entry:
+        return film, log, entry
+
     try:
-        return Film.objects.get(id=int(request.GET.get('film'))), None, None
+        film = Film.objects.get(id=int(request.GET.get('film')))
     except TypeError:
-        try:
-            object_id = request.resolver_match.kwargs['object_id']
-            if request.resolver_match.url_name == 'films_productionlogentry_change':
-                _entry = production_logs.ProductionLogEntry.objects.get(pk=object_id)
-                return _entry.production_log.film, _entry.production_log, _entry
-            elif request.resolver_match.url_name == 'films_productionlog_change':
-                _log = production_logs.ProductionLog.objects.get(pk=object_id)
-                return _log.film, _log, None
-        except KeyError:
-            pass
-    return None, None, None
+        pass
+    try:
+        log = production_logs.ProductionLog.objects.get(id=int(request.GET.get('production_log')))
+    except TypeError:
+        pass
+
+    if entry:
+        log = entry.production_log
+    if log:
+        film = log.film
+    return film, log, entry
 
 
 def get_film_assset_widget(rel_model, col_name) -> RelatedFieldWidgetWrapper:
@@ -58,30 +72,68 @@ def get_film_assset_widget(rel_model, col_name) -> RelatedFieldWidgetWrapper:
     )
 
 
+def get_start_date(
+    entry: Optional[production_logs.ProductionLogEntry] = None,
+    log: Optional[production_logs.ProductionLog] = None,
+) -> dt.datetime:
+    """Figure out week's starting date and turn it into a timezone-aware datetime."""
+    start_date = timezone.now().date()
+    if log or entry:
+        start_date = (log or entry and entry.production_log).start_date or start_date
+    if start_date.weekday() != MONDAY:
+        start_date = start_date - dt.timedelta(days=start_date.weekday())
+    # Work around "Warning: DateTimeField Asset.date_published received a naive datetime"
+    return dt.datetime.fromordinal(start_date.toordinal()).replace(tzinfo=TZ)
+
+
 def get_film_asset_queryset(
     request,
     film: Optional[Film] = None,
     entry: Optional[production_logs.ProductionLogEntry] = None,
     log: Optional[production_logs.ProductionLog] = None,
+    start_date: Optional[dt.datetime] = None,
 ):
     """Limit film asset selection to relevant assets."""
     asset_queryset = Asset.objects.all()
     asset_filters = Q(
         is_published=True,
-        date_created__gte=timezone.now() - dt.timedelta(days=14),
         # Exclude assets already mentioned in production logs
         entry_asset__production_log_entry_id__isnull=True,
     )
     # Filter by film too, if possible
     if film:
         asset_filters = asset_filters & Q(film_id=film.id)
+
+    # Figure out asset author based on currently edited entry or current session
+    asset_author = entry and (entry.author or entry.user) or request.user
+
+    # Only show assets published the same week
+    if start_date:
+        logger.debug(
+            f'{request}, {request.user}: Filtering by week: '
+            f'{start_date} -> {start_date + dt.timedelta(days=7)}'
+        )
+        asset_filters = asset_filters & Q(
+            date_published__gte=start_date,
+            date_published__lt=start_date + dt.timedelta(days=7),
+        )
+    # Filter assets by a relevant author
+    if asset_author:
+        logger.debug('%s, %s: Filtering by asset author %s', request, request.user, asset_author)
+        asset_filters = asset_filters & Q(
+            Q(static_asset__author=asset_author) | Q(static_asset__user=asset_author)
+        )
+
+    # Include assets that might be excluded by filter above, but should be included nonetheless
     if entry:
         # If changing an existing log entry, always include already linked assets.
         # Otherwise they aren't displayed in the widget as selected
-        asset_filters = asset_filters | Q(id__in=entry.assets.all())
-    if log:
+        logger.debug('%s, %s: Including assets from entry %s', request, request.user, entry)
+        asset_filters = asset_filters | Q(entry_asset__production_log_entry_id=entry.pk)
+    elif log:
         # If changing an existing log with entries inlined, always include already linked assets.
         # Otherwise they aren't displayed in the widget as selected
+        logger.debug('%s, %s: Including assets from log %s', request, request.user, log)
         asset_filters = asset_filters | Q(
             entry_asset__production_log_entry__production_log_id=log.pk
         )
@@ -93,7 +145,7 @@ def get_film_asset_queryset(
 def get_film_assets_help_text(request, film: Optional[Film] = None) -> str:
     """Return a more detailed help test for film asset selection."""
     help_text_bits = (
-        'Only recently created <b>published',
+        'Only recently <b>published',
         "</b> assets that haven't been added to production logs show up here.",
         '<br>If nothing shows up, click on the '
         f'"Add" <img src="{settings.STATIC_URL}admin/img/icon-addlink.svg"> '
@@ -152,9 +204,11 @@ class ProductionLogEntryAdmin(AdminUserDefaultMixin, LimitSelectionMixin, admin.
         its queryset depending on `request` at the same time.
         """
         fields = super().get_fields(request, obj, **kwargs)
-        self._film, self._log, self._entry = get_context(request)
+        film, log, entry = get_context(request)
+        start_date = get_start_date(log=log, entry=entry)
+        assets = get_film_asset_queryset(request, film=film, entry=entry, start_date=start_date)
         asset_field = forms.ModelMultipleChoiceField(
-            queryset=get_film_asset_queryset(request, film=self._film, entry=self._entry),
+            queryset=assets,
             widget=get_film_assset_widget(self.model, 'assets'),
             help_text=get_film_assets_help_text(request, self._film),
             initial=obj and [_.pk for _ in obj.assets.all()] or None,
