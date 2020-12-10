@@ -58,7 +58,11 @@
 
   p,
   a {
-    font-size: $font-size-lg;
+    font-size: 1.1rem;
+
+    @include media-breakpoint-up(md) {
+      font-size: $font-size-lg;
+    }
   }
 
   blockquote {
