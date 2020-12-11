@@ -10,5 +10,5 @@
   {% endif %}
 
 {% else %}
-  <img class="img-fluid" src="{{ static_asset.thumbnail_m_url }}" alt="{{ static_asset.original_filename }}" />
+  <img class="img-fluid blog-image{% if class %} {{ class }}{% endif %}" src="{{ static_asset.thumbnail_m_url }}" alt="{{ static_asset.original_filename }}" />
 {% endif %}
