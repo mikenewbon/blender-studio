@@ -44,6 +44,10 @@ class Film(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Mo
         default=False,
         help_text='Display production logs instead of the featured gallery on the film page.',
     )
+    show_blog_posts = models.BooleanField(
+        default=False,
+        help_text='Display latest blog posts on the film page.',
+    )
 
     class Meta:
         ordering = ('-release_date',)

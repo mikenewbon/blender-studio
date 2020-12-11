@@ -25,6 +25,14 @@
 
 <div class="container-xl pt-4">
   <section class="mb-4">
+
+    {% if film.show_blog_posts %}
+    <!-- Latest Blog Posts -->
+    {% with subtitle="Hear the latest news about "|add:film.title %}
+    {% include 'common/components/cards/card_carousel.html' with title="Latest Blog Posts" subtitle=subtitle slides=3 card_set=film.posts.all|slice:":6" media_type="blog" id="latestPosts" %}
+    {% endwith %}
+    {% endif %}
+
     {% if production_logs_page %}
     {# if `production_logs_page` is available here, Film.show_production_logs_as_featured is True #}
     <!-- Latest Updates -->
