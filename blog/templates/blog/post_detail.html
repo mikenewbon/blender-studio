@@ -25,7 +25,7 @@
 
   <div class="row mb-3">
     <div class="col">
-      <p class="subtitle">{{ post.date_published|date:"jS M Y" }} | {{ post.category }}</p>
+      <p class="subtitle">{{ post.date_published|date:"jS M Y" }}{% if post.category %} | {{ post.category }}{% endif %}{% if post.film %} | <a href="{{ post.film.url }}">{{ post.film }}</a>{% endif %}</p>
       <h1 class="display-3 mb-0">{{ post.title|linebreaksbr }}</h1>
     </div>
   </div>
