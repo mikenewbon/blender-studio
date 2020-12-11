@@ -88,14 +88,21 @@ class AssetInline(mixins.ViewOnSiteMixin, admin.StackedInline):
 
 
 @admin.register(collections.Collection)
-class CollectionAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ('name',)}
+class CollectionAdmin(mixins.ViewOnSiteMixin, admin.ModelAdmin):
     inlines = [AssetInline]
     list_display = ['__str__', 'film', 'order', 'parent']
     list_filter = ['film']
     search_fields = ['name', 'film__title']
     autocomplete_fields = ['parent', 'user', 'film']
+    readonly_fields = ['slug']
     ordering = ('-date_created',)
+    fieldsets = (
+        (None, {'fields': (('film', 'parent'),)}),
+        (None, {'fields': (('name', 'thumbnail_aspect_ratio'), 'text')}),
+        (None, {'fields': ('thumbnail',)}),
+        (None, {'fields': (('user', 'order'),)}),
+        (None, {'fields': ('slug',)}),
+    )
 
 
 class FilmCrewInlineAdmin(admin.TabularInline):
