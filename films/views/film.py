@@ -80,6 +80,9 @@ def film_detail(request: HttpRequest, film_slug: str) -> HttpResponse:
         'user_can_edit_asset': (
             request.user.is_staff and request.user.has_perm('films.change_asset')
         ),
+        'film_blog_posts': film.posts.all()
+        if request.user.is_staff
+        else film.posts.filter(is_published=True),
         **get_current_asset(request),
     }
     if film.show_production_logs_as_featured:
