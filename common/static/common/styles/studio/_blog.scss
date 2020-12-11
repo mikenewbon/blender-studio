@@ -54,6 +54,11 @@
 
 // Layout
 
+hr {
+  display: inline-block;
+  width: 100%;
+}
+
 .editorial-text-area {
 
   p,
@@ -63,11 +68,6 @@
     @include media-breakpoint-up(md) {
       font-size: $font-size-lg;
     }
-  }
-
-  hr {
-    display: inline-block;
-    width: 100%;
   }
 
   blockquote {
