@@ -65,6 +65,11 @@
     }
   }
 
+  hr {
+    display: inline-block;
+    width: 100%;
+  }
+
   blockquote {
     text-align: left;
     border-left: 1px solid $input-gray;
@@ -92,7 +97,7 @@
       }
     }
 
-    footer{
+    footer {
       text-align: left;
     }
   }
