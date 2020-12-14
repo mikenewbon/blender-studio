@@ -143,7 +143,9 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
             self.size_bytes = self.source.size
             if not self.source_type:
                 content_type, _ = mimetypes.guess_type(self.original_filename)
-                if 'image' in content_type:
+                if not content_type:
+                    self.source_type = StaticAssetFileTypeChoices.file
+                elif 'image' in content_type:
                     self.source_type = StaticAssetFileTypeChoices.image
                 elif 'video' in content_type:
                     self.source_type = StaticAssetFileTypeChoices.video
