@@ -111,16 +111,13 @@ def get_film_asset_queryset(
     # Only show assets published the same week
     week = dt.timedelta(days=7)
     if start_date:
-        logger.debug(f'{request}, {request.user}: Filtering by week: ' f'{start_date - week} ->')
-        asset_filters = asset_filters & Q(
-            date_published__gte=start_date - week,
-        )
+        from_, to_ = start_date - week, start_date + dt.timedelta(days=16)
+        logger.debug(f'{request}, {request.user}: Filtering by week: {from_} -> {to_}')
+        asset_filters = asset_filters & Q(date_published__gte=from_, date_published__lt=to_)
     else:
-        _now = start_date = timezone.now().date()
-        logger.debug(f'{request}, {request.user}: Filtering by recent weeks: ' f'{_now - week} -> ')
-        asset_filters = asset_filters & Q(
-            date_published__gte=_now - week,
-        )
+        from_ = timezone.now().date() - week
+        logger.debug(f'{request}, {request.user}: Filtering by recent weeks: {from_} -> ')
+        asset_filters = asset_filters & Q(date_published__gte=from_)
     # Filter assets by a relevant author
     if asset_author:
         logger.debug('%s, %s: Filtering by asset author %s', request, request.user, asset_author)
