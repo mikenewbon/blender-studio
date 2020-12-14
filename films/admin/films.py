@@ -232,6 +232,10 @@ class NewAssetAdmin(mixins.AdminUserDefaultMixin, admin.ModelAdmin):
             'Upload a file',
             {'fields': ('source',)},
         ),
+        (
+            'Add a thumbnail (only required for production files)',
+            {'fields': ('thumbnail',)},
+        ),
     )
 
     def save_related(self, request, form, formsets, change):

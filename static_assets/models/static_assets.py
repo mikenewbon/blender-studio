@@ -152,7 +152,7 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
 
         if self.source_type == StaticAssetFileTypeChoices.file and not self.thumbnail:
             raise ValidationError(
-                f'Source preview has to be provided for `{self.source_type}` source type.'
+                f'A thumnbnail has to be provided for `{self.source_type}` source type.'
             )
 
     def save(self, *args, **kwargs):
