@@ -1,0 +1,42 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+<div class="container-xl pt-3">
+  <div class="row">
+    <div class="col-md-3 d-none d-md-block">
+      {% include 'profiles/settings/tabs.html' %}
+    </div>
+    <div class="col-md-9">
+      <p class="subtitle">Settings</p>
+      <h3 class="py-1">Profile</h3>
+      <div class="settings">
+        <div class="row mt-3">
+          <div class="col-md-9">
+            <div>
+              <label class="text-muted">Username</label>
+              <p>{{ user.username }}</p>
+            </div>
+            <div>
+              <label class="text-muted">Full name</label>
+              <p>{{ user.profile.full_name }}</p>
+            </div>
+            <div>
+              <label class="text-muted">E-mail</label>
+              <p>{{ user.email }}</p>
+            </div>
+            <div>Change your username, full name, email, avatar, and password at <a href="{{ BLENDER_ID.BASE_URL }}settings/profile" target="_blank">Blender ID</a>.</div>
+          </div>
+          <div class="col-md-3">
+            <a href="{{ BLENDER_ID.BASE_URL }}settings/profile" target="_blank">
+              <img src="{{ user.profile.image_url }}" alt="Your avatar" class="user-avatar">
+            </a>
+            <p>
+            <small>Your <a href="{{ BLENDER_ID.BASE_URL }}settings/profile" target="_blank">Blender ID</a> avatar</small>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

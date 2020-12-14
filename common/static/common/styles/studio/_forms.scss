@@ -51,3 +51,13 @@ input:checked+.slider {
     transform: translateX(17px);
   }
 }
+
+.settings-form {
+  .form-check-label {
+    line-height: 2.1rem !important;
+    input {
+      vertical-align: middle !important;
+      margin-right: 4px;
+    }
+  }
+}
