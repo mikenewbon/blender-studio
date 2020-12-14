@@ -20,7 +20,7 @@ from films.models import production_logs, Asset, Film
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+# logger.setLevel(logging.DEBUG)
 TZ = dateutil.tz.gettz(settings.TIME_ZONE)
 MONDAY = 0
 
@@ -75,11 +75,12 @@ def get_film_assset_widget(rel_model, col_name) -> RelatedFieldWidgetWrapper:
 def get_start_date(
     entry: Optional[production_logs.ProductionLogEntry] = None,
     log: Optional[production_logs.ProductionLog] = None,
-) -> dt.datetime:
+) -> Optional[dt.datetime]:
     """Figure out week's starting date and turn it into a timezone-aware datetime."""
-    start_date = timezone.now().date()
-    if log or entry:
-        start_date = (log or entry and entry.production_log).start_date or start_date
+    if not log and not entry:
+        return None
+
+    start_date = (log or entry and entry.production_log).start_date
     if start_date.weekday() != MONDAY:
         start_date = start_date - dt.timedelta(days=start_date.weekday())
     # Work around "Warning: DateTimeField Asset.date_published received a naive datetime"
@@ -108,14 +109,17 @@ def get_film_asset_queryset(
     asset_author = entry and (entry.author or entry.user) or request.user
 
     # Only show assets published the same week
+    week = dt.timedelta(days=7)
     if start_date:
-        logger.debug(
-            f'{request}, {request.user}: Filtering by week: '
-            f'{start_date} -> {start_date + dt.timedelta(days=7)}'
-        )
+        logger.debug(f'{request}, {request.user}: Filtering by week: ' f'{start_date - week} ->')
         asset_filters = asset_filters & Q(
-            date_published__gte=start_date,
-            date_published__lt=start_date + dt.timedelta(days=7),
+            date_published__gte=start_date - week,
+        )
+    else:
+        _now = start_date = timezone.now().date()
+        logger.debug(f'{request}, {request.user}: Filtering by recent weeks: ' f'{_now - week} -> ')
+        asset_filters = asset_filters & Q(
+            date_published__gte=_now - week,
         )
     # Filter assets by a relevant author
     if asset_author:
