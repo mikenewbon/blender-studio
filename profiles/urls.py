@@ -16,7 +16,6 @@ urlpatterns = [
                 path('profile', settings.ProfileView.as_view(), name='profile-settings'),
                 path('billing', settings.BillingView.as_view(), name='profile-settings-billing'),
                 path('emails', settings.EmailsView.as_view(), name='profile-settings-emails'),
-                # path('roles', settings.RolesView.as_view(), name='profile-settings-roles'),
             ]
         ),
     ),

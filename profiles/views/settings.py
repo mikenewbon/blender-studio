@@ -44,9 +44,3 @@ class EmailsView(LoginRequiredMixin, TemplateView):
         form = IsSubscribedToNewsletterForm(request.POST, instance=request.user.profile)
         form.save()
         return redirect(reverse('profile-settings-emails'))
-
-
-class RolesView(LoginRequiredMixin, TemplateView):
-    """Template view displaying profile roles settings."""
-
-    template_name = 'profiles/settings/roles.html'
