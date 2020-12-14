@@ -23,5 +23,8 @@ def settings_analytics_id(request: HttpRequest) -> Dict[str, Dict[str, str]]:
 def canonical_url(request: HttpRequest) -> Dict[str, str]:
     """Injects canonical URL of current request into template context."""
     return {
+        'BLENDER_ID': {
+            'BASE_URL': settings.BLENDER_ID['BASE_URL'],
+        },
         'canonical_url': request.build_absolute_uri(request.path),
     }
