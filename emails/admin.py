@@ -5,7 +5,7 @@ import anymail.exceptions
 
 from emails.models import Email
 
-iframe_template = Template('<iframe style="width: 100%" srcdoc="{{ body }}"></iframe>')
+iframe_template = Template('<iframe sandbox style="width: 100%" srcdoc="{{ body|safe }}"></iframe>')
 
 
 def send(modeladmin, request, queryset):
@@ -23,7 +23,9 @@ send.short_description = "Send selected emails"
 class EmailAdmin(admin.ModelAdmin):
     def rendered_html(self, obj) -> str:
         """Preview the HTML version of the email."""
-        context = Context({'body': obj.render_html()})
+        # Escape " and & to avoid breaking srcdoc. Order of escaping is important.
+        body = obj.render_html().replace('&', '&amp;').replace('"', '&quot;')
+        context = Context({'body': body})
         rendered: str = iframe_template.render(context)
         return mark_safe(rendered)
 

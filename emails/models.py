@@ -1,5 +1,6 @@
 from django.core.mail import EmailMultiAlternatives
 from django.db import models
+from django.template.loader import render_to_string
 from django.utils import timezone
 
 from common import mixins
@@ -29,9 +30,7 @@ class Email(mixins.CreatedUpdatedMixin, models.Model):
         return f'Email {self.subject} from {self.from_email}'
 
     def render_html(self):
-        # Here, a base template could be used, e.g.:
-        # return render_to_string('emails/email.html', {'email': self})
-        return self.html_message
+        return render_to_string('emails/email.html', {'email': self})
 
     def send(self):
         """Send this email."""

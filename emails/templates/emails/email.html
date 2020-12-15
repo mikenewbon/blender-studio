@@ -1,0 +1,85 @@
+<html style="
+	height: 100%;
+	width: 100%;
+	padding: 0;
+	margin: 0;">
+<head>
+<style>
+a {color: #68B3C8;}
+a:hover {color: #68B3C8}
+</style>
+</head>
+<body style="
+	height: 100%;
+	width: 100%;
+	padding: 0;
+	margin: 0;">
+	<div style="
+		background-color: #f8f8f8;
+		color: #202020;
+		text-align:center;
+		font-family: 'Lucida Grande', 'Helvetica Neue', 'Helvetica', 'Arial', 'Verdana', sans-serif;">
+
+		<div class="header" style="
+			width: 100%;
+			padding-top: 10px;
+			padding-bottom: 10px;
+			background-color: white;
+			border-bottom: thin solid #68B3C8;
+			">
+			<div class="container" style="
+				width: 90%;
+				max-width: 800px;
+				margin-left: auto; margin-right: auto;
+				font-family: 'Lucida Grande', 'Helvetica Neue', 'Helvetica', 'Arial', 'Verdana', sans-serif;
+				text-align: left;">
+				<a style="float: left; text-decoration: none" href="https://cloud.blender.org">
+					<img src="https://storage.googleapis.com/institute-storage/newsletter/blendercloud_header_small.png" alt="Blender Cloud" title="Blender Cloud"/>
+				</a>
+				<div style="clear:both"></div>
+			</div>
+		</div>
+		<div class="body" style="
+			width: 80%;
+			max-width: 800px;
+			background-color: #ffffff;
+			margin-top: 20px; margin-bottom: 20px;
+			margin-left: auto; margin-right: auto;
+			padding-top: 10px; padding-bottom: 10px;
+			padding-left: 20px; padding-right: 20px;
+			border: thin solid #eeeeee;
+			border-right: 2px solid #dddddd;
+			border-bottom: 2px solid #dddddd;
+			border-radius: 3px;
+			text-align: left;">
+
+			{{ email.html_message|safe }}
+
+		</div>
+		<div class="footer" style="
+			width: 100%;
+			color: #555555;
+			font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+			font-size: 0.7em;
+			font-weight: lighter;
+			padding-top: 20px; padding-bottom: 20px;
+			background-color: #F2F2F2;
+			">
+			<div class="container" style="
+				width: 80%;
+				max-width: 800px;
+				margin-left: auto; margin-right: auto;
+				text-align: left;">
+
+				Do you want to renew or check the status of your account? <a href="https://cloud.blender.org/settings/billing">https://cloud.blender.org/settings/billing</a><br />
+
+        <br/>
+
+				Don't want to receive these emails? <a href="%mailing_list_unsubscribe_url%">Unsubscribe</a><br />
+        <br/>
+
+			</div>
+		</div>
+	</div>
+</body>
+</html>
