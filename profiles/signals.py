@@ -3,7 +3,7 @@ import logging
 
 from actstream.models import Action
 from django.contrib.auth import get_user_model
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from blender_id_oauth_client import signals as bid_signals
@@ -47,6 +47,21 @@ def fill_profile(
     set_groups_from_roles(instance, group_names=group_names)
 
     instance.profile.copy_avatar_from_blender_id()
+
+
+@receiver(pre_save, sender=Profile)
+def _sync_is_subscribed_to_newsletter(sender: object, instance: Profile, **kwargs):
+    if not instance.pk:
+        return
+
+    try:
+        obj = sender.objects.get(pk=instance.pk)
+    except sender.DoesNotExist:
+        pass
+    else:
+        if obj.is_subscribed_to_newsletter != instance.is_subscribed_to_newsletter:
+            # State of newsletter subscription has changed
+            tasks.handle_is_subscribed_to_newsletter(pk=instance.pk)
 
 
 @receiver(post_save, sender=User)
@@ -111,3 +126,6 @@ def create_notification(sender: object, instance: Action, created: bool, **kwarg
             continue
         notification = Notification(user=user, action=instance)
         notification.save()
+
+
+import profiles.tasks as tasks  # noqa: E402

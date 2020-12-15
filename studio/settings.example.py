@@ -107,3 +107,15 @@ GOOGLE_ANALYTICS_TRACKING_ID = ''
 COCONUT_API_KEY = ''
 # The hostname used by Coconut to push updates to (via webhooks)
 COCONUT_DECLARED_HOSTNAME = ''
+
+# Mailgun API.
+# See https://documentation.mailgun.com/en/latest/api-intro.html#authentication
+NEWSLETTER_LIST = 'CHANGE_ME'
+MAILGUN_SENDER_DOMAIN = 'CHANGE_ME'
+MAILGUN_API_KEY = 'CHANGE_ME'
+MAILGUN_WEBHOOK_SIGNING_KEY = 'CHANGE_ME'
+# Uncomment this if you want to use an email backend
+# EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
+ANYMAIL = {
+    "MAILGUN_SENDER_DOMAIN": MAILGUN_SENDER_DOMAIN,
+}
