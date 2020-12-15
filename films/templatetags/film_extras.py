@@ -37,6 +37,8 @@ def show_breadcrumbs(context):
             'current_collection',
             'featured_artwork',
             'film',
+            'perms',
+            'request',
             'user_can_edit_asset',
             'user_can_edit_collection',
             'user_can_edit_film',

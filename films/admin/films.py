@@ -28,6 +28,10 @@ asset_fieldsets = (
 )
 
 
+def _clear_messages(request):
+    list(messages.get_messages(request))
+
+
 @admin.register(assets.Asset)
 class AssetAdmin(mixins.ThumbnailMixin, mixins.ViewOnSiteMixin, admin.ModelAdmin):
     # asset slugs aren't currently in use and were prepopulate
@@ -90,7 +94,7 @@ class AssetInline(mixins.ViewOnSiteMixin, admin.StackedInline):
 @admin.register(collections.Collection)
 class CollectionAdmin(mixins.ViewOnSiteMixin, admin.ModelAdmin):
     inlines = [AssetInline]
-    list_display = ['__str__', 'film', 'order', 'parent']
+    list_display = ['__str__', 'film', 'order', 'parent', 'view_link']
     list_filter = ['film']
     search_fields = ['name', 'film__title']
     autocomplete_fields = ['parent', 'user', 'film']
@@ -103,6 +107,22 @@ class CollectionAdmin(mixins.ViewOnSiteMixin, admin.ModelAdmin):
         (None, {'fields': (('user', 'order'),)}),
         (None, {'fields': ('slug',)}),
     )
+
+    def response_delete(self, request, obj_display, obj_id):
+        """Support ?next= redirect."""
+        response = super().response_delete(request, obj_display, obj_id)
+        if request.GET.get('next'):
+            _clear_messages(request)
+            return redirect(request.GET['next'])
+        return response
+
+    def response_add(self, request, obj, **kwargs):
+        """Allow redirecting to "view on site" URL of the newly added object."""
+        response = super().response_add(request, obj, **kwargs)
+        if request.GET.get('next-view-link'):
+            _clear_messages(request)
+            return redirect(obj.url)
+        return response
 
 
 class FilmCrewInlineAdmin(admin.TabularInline):

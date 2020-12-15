@@ -26,10 +26,19 @@
       <i class="material-icons">edit</i>
       Edit
     </a>
-    <a href="{{ add_collection_url }}?film={{ film.id }}{% if current_collection.admin_url %}&parent={{ current_collection.id }}{% endif %}" class="btn btn-sm btn-dark" title="Create a new collection{% if current_collection %} in {{current_collection}}{% endif %}">
+    <a href="{{ add_collection_url }}?next-view-link=1&film={{ film.id }}{% if current_collection.admin_url %}&parent={{ current_collection.id }}{% endif %}" class="btn btn-sm btn-dark" title="Create a new collection{% if current_collection %} in {{current_collection}}{% endif %}">
       <i class="material-icons">add</i>
       Create
     </a>
+    {# If collection is empty, display a Delete button #}
+    {% if perms.films.delete_collection and current_collection.assets.count == 0 and current_collection.child_collections.count == 0 %}
+    {% url 'admin:films_collection_delete' object_id=current_collection.id as delete_collection_url %}
+    {% url 'film-gallery' film_slug=film.slug as gallery_url %}
+    <a href="{{ delete_collection_url }}?next={% firstof current_collection.parent.url gallery_url %}" class="btn btn-sm btn-dark" title="Delete this empty collection">
+      <i class="material-icons">remove</i>
+      Delete
+    </a>
+    {% endif %}
     {% endif %}
 
     <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
