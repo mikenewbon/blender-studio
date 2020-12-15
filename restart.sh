@@ -9,6 +9,8 @@ read -p "Continue? [y|N]" -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+    echo "Installing dependencies"
+    poetry install
     echo "Applying migrations"
     ./manage.py migrate
     echo "Collecting static"
