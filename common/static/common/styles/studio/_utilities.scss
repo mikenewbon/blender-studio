@@ -29,3 +29,41 @@
     }
   }
 }
+
+.spoiler-alert {
+  @include border-radius($border-radius-sm);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.96;
+  z-index: 1070;
+  cursor: pointer;
+}
+.spoiler-alert-bg {
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+.spoiler-alert.revealed {
+  width: 0;
+  height: 0;
+  display: none;
+}
+.spoiler-alert-warning {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  line-height: 1em;
+  transform: translate(-50%, -50%);
+  font-size: 1.2em;
+  border: 2px solid;
+  border-radius: 8px;
+  padding: 11px;
+  font-weight: 300;
+}
+.spoiler-alert-text {
+  padding-left: 3px;
+}

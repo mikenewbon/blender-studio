@@ -177,6 +177,7 @@ window.asset = (function asset() {
       hightlightAnchor(modal);
       $('[data-toggle="tooltip"]').tooltip();
       resetProgress();
+      spoilerSetup(modal);
     });
   }
 

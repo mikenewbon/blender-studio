@@ -18,12 +18,18 @@
   <i class="material-icons btn-material-icons">close</i>
 </button>
 
-
+{% with user_has_active_subscription=request.user|has_active_subscription %}
 <div id="asset-{{ asset.id }}" data-asset-id="{{ asset.id }}" class="modal-inner-wrapper">
 
   <div class="modal-dialog" role="document">
 
     <div class="modal-content bg-dark">
+      {# show spoiler alert to subscribers, or if this a free spoiler #}
+      {% if not asset.is_spoiler or not asset.is_free and not user_has_active_subscription %}
+      {% else %}{# this "else" inverts the following clause: #}
+      {# if asset.is_spoiler and (asset.is_free or user_has_active_subscription) #}
+      {% include 'common/components/spoiler_alert.html' %}
+      {% endif %}
 
       <div class="modal-header p-0 bg-secondary">
 
@@ -36,7 +42,7 @@
             <i class="material-icons btn-material-icons">close</i>
           </button>
         </div>
-        {% if asset.is_free or request.user|has_active_subscription %}
+        {% if asset.is_free or user_has_active_subscription %}
         {% if asset.static_asset.source_type == "video" %}
         {% include 'common/components/video_player.html' with url=asset.static_asset.video.default_variation_url poster=asset.static_asset.thumbnail_m_url %}
         {% elif asset.static_asset.preview %}
@@ -139,13 +145,23 @@
           </div>
         </div>
         <div class="markdown-text">
+          {% if asset.is_spoiler and not asset.is_free and not user_has_active_subscription %}
+          {# do not show description to non-subscribers, if this is a subscription-only spoiler #}
+          <p class="mb-0">You need to subscribe to view this content.</p>
+          {% else %}
           {% with_shortcodes asset.description|markdown %}
+          {% endif %}
         </div>
 
+        {% if asset.is_spoiler and not asset.is_free and not user_has_active_subscription %}
+        {# do not show comments to non-subscribers, if this is a subscription-only spoiler #}
+        {% else %}
         <section>{% include 'comments/components/comment_section.html' %}</section>
+        {% endif %}
 
       </div>
     </div>
 
   </div>
 </div>
+{% endwith %}

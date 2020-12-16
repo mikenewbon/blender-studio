@@ -22,7 +22,15 @@ logger = logging.getLogger(__name__)
 asset_fieldsets = (
     (None, {'fields': (('name', 'view_link'), 'description')}),
     (None, {'fields': (('film', 'collection'),)}),
-    (None, {'fields': (('is_published', 'is_featured', 'is_free'), 'contains_blend_file')}),
+    (
+        None,
+        {
+            'fields': (
+                ('is_published', 'is_featured', 'is_free', 'is_spoiler'),
+                'contains_blend_file',
+            )
+        },
+    ),
     (None, {'fields': (('category', 'tags'),)}),
     (None, {'fields': ('date_published',)}),
 )
@@ -38,7 +46,15 @@ class AssetAdmin(mixins.ThumbnailMixin, mixins.ViewOnSiteMixin, admin.ModelAdmin
     # during import from previous version of Blender Cloud
     # prepopulated_fields = {'slug': ('name',)}
     readonly_fields = ['view_link', 'slug']
-    list_display = ['view_thumbnail', '__str__', 'date_published', 'order', 'film', 'collection']
+    list_display = [
+        'view_thumbnail',
+        '__str__',
+        'date_published',
+        'order',
+        'film',
+        'collection',
+        'view_link',
+    ]
     list_display_links = ('view_thumbnail', '__str__')
     list_filter = [
         'film',

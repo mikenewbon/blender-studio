@@ -149,7 +149,16 @@ $(function () {
 // Generic like button
 document.addEventListener('DOMContentLoaded', () => {
   likeButtonSetup(document);
+  spoilerSetup(document);
 });
+
+function spoilerSetup(element) {
+  element.querySelectorAll('.spoiler-alert').forEach((i) => {
+    i.addEventListener('click', (e) => {
+      i.classList.add('revealed');
+    })
+  });
+}
 
 function likeButtonSetup(element) {
   element.querySelectorAll('[data-like-url]').forEach((i) => {

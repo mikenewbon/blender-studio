@@ -53,6 +53,7 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
     is_published = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)
     is_free = models.BooleanField(default=False)
+    is_spoiler = models.BooleanField(default=False)
     contains_blend_file = models.BooleanField(
         default=False, help_text='Is the asset a .blend file or a package containing .blend files?'
     )
