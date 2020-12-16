@@ -14,4 +14,4 @@ class License(models.Model):
             self.slug = slugify(self.name)
 
     def __str__(self):
-        return f'License {self.name}'
+        return f'License: {self.name}'
