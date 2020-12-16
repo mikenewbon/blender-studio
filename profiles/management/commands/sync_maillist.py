@@ -4,6 +4,7 @@ import logging
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
+from django.db.models import F
 
 from common import mailgun
 
@@ -15,46 +16,49 @@ logger.setLevel(logging.INFO)
 class Command(BaseCommand):
     """Upsert users to a mail list depending on their is_subscribed_to_newsletter."""
 
-    def add_arguments(self, parser):
-        """Add mail list alias as a parameter."""
-        parser.add_argument('alias_address', type=str)
-
     def handle(self, *args, **options):  # noqa: D102
-        alias_address = options['alias_address']
+        alias_address = 'newsletter1@blender.cloud'
         logger.info(
             'Mailgun domain: %s, maillist: %s',
             settings.MAILGUN_SENDER_DOMAIN,
             alias_address,
         )
-        all_users = User.objects.select_related('profile')
-        # FIXME: remove test filters
-        all_users = all_users.filter(email__contains='@blender.org').filter(email__contains='anna+')
-        to_remove_from_maillist = all_users.filter(profile__is_subscribed_to_newsletter=False)
-        to_remove_from_maillist_total = to_remove_from_maillist.count()
+        all_users = User.objects.select_related('profile').prefetch_related('groups')
 
-        to_add_to_maillist = all_users.filter(profile__is_subscribed_to_newsletter=True)
+        to_add_to_maillist = all_users.filter(profile__is_subscribed_to_newsletter=True,).order_by(
+            F('groups__name').desc(nulls_last=True),
+            F('last_login').desc(nulls_last=True),
+        )
         to_add_to_maillist_total = to_add_to_maillist.count()
 
         logger.info(
-            '%s records to add, %s to remove',
+            '%s records to add, first %s, groups: %s',
             to_add_to_maillist_total,
-            to_remove_from_maillist_total,
+            to_add_to_maillist[0].last_login,
+            to_add_to_maillist[0].groups.all(),
         )
 
-        count = 0
-        for user in to_remove_from_maillist.all():
-            mailgun.delete_from_maillist(alias_address, user.email)
-            mailgun.create_unsubscribe_record(user.email)
-            count += 1
-            if not count % 1000:
-                logger.info('Removed %s/%s', count, to_remove_from_maillist_total)
-
-        offset, limit = 0, 250
+        offset, limit = 0, 500
+        offset_per_list = (
+            (15000, 'newsletter2@blender.cloud'),
+            (60000, 'newsletter3@blender.cloud'),
+        )
         users_q = to_add_to_maillist
+        seen_ids = set()
         while users_q.count():
             users_q = to_add_to_maillist[offset : offset + limit]
             mailgun.add_to_maillist(alias_address, users_q)
-            # There are no unsubscribes at the moment, so delete_unsubscribe_record is not needed
+            seen_ids.update(_.pk for _ in users_q)
             offset += limit
-            if not offset % 1000:
-                logger.info('Added %s/%s', count, to_remove_from_maillist_total)
+            if not offset % 5000:
+                logger.info(
+                    'Offset %s to %s (real count: %s)', offset, alias_address, len(seen_ids)
+                )
+            # Change the list
+            new_list = None
+            for k, l in offset_per_list:
+                if len(seen_ids) > k:
+                    new_list = l
+            if new_list and new_list != alias_address:
+                logger.info('Switching to from list %s to list %s', alias_address, new_list)
+                alias_address = new_list

@@ -74,7 +74,7 @@ def add_to_maillist(alias_address: str, users: Union[List[User], QuerySet]) -> O
                 [
                     {
                         'address': user.email,
-                        'name': user.profile.full_name or user.username,
+                        'name': user.profile.full_name,
                         'subscribed': user.profile.is_subscribed_to_newsletter,
                     }
                     for user in users
