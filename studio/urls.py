@@ -2,7 +2,7 @@ import blender_id_oauth_client.urls
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 
 import blog.urls
 import comments.urls
@@ -37,6 +37,7 @@ urlpatterns = [
     path('', include(static_assets.urls)),
     path('stats/', include('stats.urls')),
     path('activity/', include('actstream.urls')),
+    re_path(r'^webhooks/', include('anymail.urls')),
 ]
 
 handler400 = error_views.ErrorView.as_view(template_name='common/errors/400.html', status=400)

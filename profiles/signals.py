@@ -2,6 +2,7 @@ from typing import Dict
 import logging
 
 from actstream.models import Action
+from anymail.signals import tracking
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
@@ -10,6 +11,7 @@ from blender_id_oauth_client import signals as bid_signals
 
 from profiles.models import Profile, Notification
 from profiles.queries import set_groups_from_roles
+import profiles.tasks as tasks
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -62,6 +64,17 @@ def _sync_is_subscribed_to_newsletter(sender: object, instance: Profile, **kwarg
         if obj.is_subscribed_to_newsletter != instance.is_subscribed_to_newsletter:
             # State of newsletter subscription has changed
             tasks.handle_is_subscribed_to_newsletter(pk=instance.pk)
+
+
+@receiver(tracking)
+def _handle_subscribed_unsubscribed_event(sender, event, esp_name, **kwargs):
+    event_type = event.event_type
+    # Anymail doesn't recognize Mailgun's non-legacy Unsubscribed events for some reason
+    if event_type == 'unknown':
+        event_type = event.esp_event.get('event-data', {}).get('event', '').lower()
+    if event_type not in ('unsubscribed',):
+        return  # Only interested in the above mentioned events
+    tasks.handle_subscribed_unsubscribed_event(event_type, event.message_id, event.esp_event)
 
 
 @receiver(post_save, sender=User)
@@ -126,6 +139,3 @@ def create_notification(sender: object, instance: Action, created: bool, **kwarg
             continue
         notification = Notification(user=user, action=instance)
         notification.save()
-
-
-import profiles.tasks as tasks  # noqa: E402
