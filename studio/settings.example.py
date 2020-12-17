@@ -110,7 +110,6 @@ COCONUT_DECLARED_HOSTNAME = ''
 
 # Mailgun API.
 # See https://documentation.mailgun.com/en/latest/api-intro.html#authentication
-NEWSLETTER_LIST = 'CHANGE_ME'
 MAILGUN_SENDER_DOMAIN = 'CHANGE_ME'
 MAILGUN_API_KEY = 'CHANGE_ME'
 MAILGUN_WEBHOOK_SIGNING_KEY = 'CHANGE_ME'

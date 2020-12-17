@@ -6,6 +6,7 @@ from background_task import background
 from django.conf import settings
 
 from common import mailgun
+from common import queries
 from profiles.models import Profile
 
 logger = logging.getLogger(__name__)
@@ -24,15 +25,38 @@ def handle_is_subscribed_to_newsletter(pk: int):
     unsubscribe_record = mailgun.get_unsubscribe_record(email)
 
     if profile.is_subscribed_to_newsletter:
+        recipient = (email, profile.full_name)
         if unsubscribe_record:
             mailgun.delete_unsubscribe_record(email)
-        mailgun.add_to_maillist(settings.NEWSLETTER_LIST, [profile.user])
-        logger.info('Subscribed %s', profile)
+        if settings.NEWSLETTER_LIST:
+            mailgun.add_to_maillist(settings.NEWSLETTER_LIST, [recipient])
+
+        is_subscriber = queries.has_active_subscription(profile.user)
+        if is_subscriber:
+            # Also add to subscribers list and remove from non-subscribers one
+            add_to = settings.NEWSLETTER_SUBSCRIBER_LIST
+            remove_from = settings.NEWSLETTER_NONSUBSCRIBER_LIST
+        else:
+            # Remove from subscribers list and add to non-subscribers list
+            add_to = settings.NEWSLETTER_NONSUBSCRIBER_LIST
+            remove_from = settings.NEWSLETTER_SUBSCRIBER_LIST
+        if add_to:
+            mailgun.add_to_maillist(add_to, [recipient])
+        if remove_from:
+            mailgun.delete_from_maillist(remove_from, email)
+        logger.info('Updated newsletter subscription for profile %s', profile)
     else:
         if not unsubscribe_record:
             mailgun.create_unsubscribe_record(email)
-        mailgun.delete_from_maillist(settings.NEWSLETTER_LIST, email)
-        logger.info('Unsubscribed %s', profile)
+        for alias_address in (
+            settings.NEWSLETTER_LIST,
+            settings.NEWSLETTER_SUBSCRIBER_LIST,
+            settings.NEWSLETTER_NONSUBSCRIBER_LIST,
+        ):
+            if not alias_address:
+                continue
+            mailgun.delete_from_maillist(alias_address, email)
+        logger.info('Unsubscribed profile %s from all newsletters', profile)
 
 
 @background()

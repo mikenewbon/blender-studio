@@ -1,24 +1,21 @@
 """Mailgun API calls."""
-from typing import Optional, Dict, List, Union
+from typing import Optional, Dict, List, Tuple
 from urllib.parse import quote as urlquote
 import json
 import logging
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.db.models import QuerySet
 import requests
 
-User = get_user_model()
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+# logger.setLevel(logging.DEBUG)
 BASE_URL = 'https://api.mailgun.net/v3'
 DOMAIN_URL = f'{BASE_URL}/{settings.MAILGUN_SENDER_DOMAIN}'
 UNSUBSCRIBES_URL = f'{DOMAIN_URL}/unsubscribes'
 
 
 def _request_mailgun(url: str, method='GET', **kwargs) -> Optional[Dict]:
-    logger.warning(f'--> [{method}] {url} with {kwargs}')
+    logger.debug(f'--> [{method}] {url} with {kwargs}')
     response = requests.request(
         method=method,
         url=url,
@@ -60,8 +57,11 @@ def delete_unsubscribe_record(email: str):
     return _request_mailgun(url, method='DELETE')
 
 
-def add_to_maillist(alias_address: str, users: Union[List[User], QuerySet]) -> Optional[Dict]:
-    """Add given user to a mailing list with a given alias address."""
+def add_to_maillist(alias_address: str, recipients: List[Tuple[str]]) -> Optional[Dict]:
+    """Add given list of recipients to a mailing list with a given alias address.
+
+    The `recipients` is expected to contain tuples of `(email, full_name)`.
+    """
     url = f'{BASE_URL}/lists/{urlquote(alias_address)}/members.json'
     return _request_mailgun(
         url,
@@ -73,18 +73,39 @@ def add_to_maillist(alias_address: str, users: Union[List[User], QuerySet]) -> O
             'members': json.dumps(
                 [
                     {
-                        'address': user.email,
-                        'name': user.profile.full_name,
-                        'subscribed': user.profile.is_subscribed_to_newsletter,
+                        'address': email,
+                        'name': full_name,
+                        'subscribed': True,
                     }
-                    for user in users
+                    for email, full_name in recipients
                 ]
             ),
         },
     )
 
 
+def get_from_maillist(alias_address: str, email: str) -> Optional[Dict]:
+    """Retrieve a mailing list member.."""
+    url = f'{BASE_URL}/lists/{urlquote(alias_address)}/members/{urlquote(email)}'
+    return _request_mailgun(url, method='GET')
+
+
 def delete_from_maillist(alias_address: str, email: str) -> Optional[Dict]:
-    """Delete a given user from a mailing list with a given alias address."""
+    """Delete a given email from a mailing list with a given alias address."""
     url = f'{BASE_URL}/lists/{urlquote(alias_address)}/members/{urlquote(email)}'
     return _request_mailgun(url, method='DELETE')
+
+
+def download_maillist(alias_address: str, limit: int = 100) -> List[Tuple[str]]:
+    """Retrieve the full mailing list and write it down as a CSV."""
+    result = []
+    page_url = f'{BASE_URL}/lists/{urlquote(alias_address)}/members/pages?page=first&limit={limit}'
+    page = _request_mailgun(page_url, method='GET')
+    while page and page.get('items'):
+        result.extend([(_['name'], _['address']) for _ in page['items']])
+        page_url = page.get('paging', {}).get('next')
+        page = _request_mailgun(page_url, method='GET')
+    with open(f'mailgun_{alias_address}.csv', 'w+') as f:
+        for _ in result:
+            f.write(f'{_[0]}, {_[1]}\n')
+    return result

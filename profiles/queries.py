@@ -7,6 +7,7 @@ from actstream.models import Action
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_user_model
+import profiles.tasks as tasks
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -52,6 +53,10 @@ def set_groups_from_roles(user: User, group_names: Union[List[str], Set[str]]) -
     if groups_to_remove_from:
         logger.warning(f'Removing user #{user.pk} from the groups: {groups_to_remove_from}')
         user.groups.remove(*groups_to_remove_from)
+
+    subscriber_status_changed = 'subscriber' in (*names_to_add_to, *names_to_remove_from)
+    if subscriber_status_changed:
+        tasks.handle_is_subscribed_to_newsletter(pk=user.pk)
 
 
 def duplicate_action_exists(actor: User, target: Any, verb: str, action_object: Any = None) -> bool:
