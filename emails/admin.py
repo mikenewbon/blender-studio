@@ -1,6 +1,6 @@
+from django.conf import settings
 from django.contrib import admin, messages
 from django.template import Template, Context
-from django.templatetags.static import static
 from django.utils.safestring import mark_safe
 import anymail.exceptions
 
@@ -14,7 +14,7 @@ iframe_template = Template(
 @admin.register(Email)
 class EmailAdmin(admin.ModelAdmin):
     class Media:
-        css = {'all': (static('emails/admin/email.css'),)}
+        css = {'all': (f'{settings.STATIC_URL}/emails/admin/email.css',)}
 
     def rendered_html(self, obj) -> str:
         """Preview the HTML version of the email."""
