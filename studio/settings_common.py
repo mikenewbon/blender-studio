@@ -42,7 +42,10 @@ INSTALLED_APPS = [
     'taggit',
     'actstream',
     'background_task',
+    'users',
 ]
+
+AUTH_USER_MODEL = 'users.User'
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
