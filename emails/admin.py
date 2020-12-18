@@ -1,5 +1,6 @@
 from django.contrib import admin, messages
 from django.template import Template, Context
+from django.templatetags.static import static
 from django.utils.safestring import mark_safe
 import anymail.exceptions
 
@@ -9,13 +10,11 @@ iframe_template = Template(
     '<iframe sandbox style="width: 100%; height: 100vh;" srcdoc="{{ body|safe }}"></iframe>'
 )
 
-from django.templatetags.static import static
-
 
 @admin.register(Email)
 class EmailAdmin(admin.ModelAdmin):
     class Media:
-        css = {'all': (static('/emails/admin/email.css'),)}
+        css = {'all': (static('emails/admin/email.css'),)}
 
     def rendered_html(self, obj) -> str:
         """Preview the HTML version of the email."""
