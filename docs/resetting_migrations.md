@@ -84,14 +84,6 @@ def add_can_view_content_permission_to_groups(apps, schema_editor):
 ```
 At this point testsuite should complete without issues and a commit can be made.
 
-### rewrite content types
-
-Run this and **make sure to answer NO**:
-
-```bash
-./manage.py remove_stale_contenttypes
-```
-
 ## Deployment steps
 
 ```bash
@@ -99,6 +91,9 @@ echo 'TRUNCATE TABLE django_migrations;' | psql --dbname=postgresql://studio:PAS
 git pull
 ./manage.py migrate --fake
 ```
+
+### rewrite content types
+
 Now rewrite LogEntry to keep the admin history intact:
 ```python
 ./manage.py shell
@@ -107,10 +102,21 @@ Now rewrite LogEntry to keep the admin history intact:
 >>> from django.contrib.contenttypes.models import ContentType
 >>>
 >>> auth_user = ContentType.objects.get(app_label='auth', model='user')
->>> new_user = ContentType.objects.get(app_label='Accounts', model='user')
+>>> new_user = ContentType.objects.get(app_label='users', model='user')
 >>>
 >>> for le in LogEntry.objects.filter(content_type=auth_user):
 ...     le.content_type = new_user
 ...     le.save()
 ...
+>>> from actstream.models import Action  # same for Action
+
+>>> for le in Action.objects.filter(actor_content_type=auth_user):
+>>>     le.actor_content_type = new_user
+>>>     le.save()
+```
+
+Run this and **make sure to answer NO** to find more models that might need refer to `ContentType` that need updating:
+
+```bash
+./manage.py remove_stale_contenttypes
 ```
