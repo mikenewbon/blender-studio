@@ -5,7 +5,6 @@ import botocore
 import requests
 
 from actstream.models import Action
-from django import urls
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import Case, When, Value, IntegerField
@@ -33,10 +32,6 @@ class Profile(mixins.CreatedUpdatedMixin, models.Model):
     full_name = models.CharField(max_length=255, blank=True, default='')
     image = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
     is_subscribed_to_newsletter = models.BooleanField(default=False)
-
-    def get_absolute_url(self):
-        """Return absolute URL of a Profile."""
-        return urls.reverse('profile_detail', kwargs={'pk': self.pk})
 
     def __str__(self) -> str:
         return f'Profile {self.user}'

@@ -1,17 +1,7 @@
 from django.contrib import admin
 
-from profiles.models import Profile, Notification
+from profiles.models import Notification
 from blender_id_oauth_client.models import OAuthUserInfo, OAuthToken
-
-
-@admin.register(Profile)
-class ProfileAdmin(admin.ModelAdmin):
-    """Configure Profile admin."""
-
-    search_fields = ['full_name', 'user__username', 'user__email']
-    list_display = ['__str__', 'user', 'full_name']
-    list_filter = ['is_subscribed_to_newsletter']
-    raw_id_fields = ['user']
 
 
 @admin.register(Notification)
