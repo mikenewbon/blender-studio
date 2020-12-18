@@ -2,7 +2,7 @@ from unittest.mock import patch, ANY, Mock
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.test import RequestFactory, TestCase, override_settings
+from django.test import RequestFactory, TransactionTestCase, TestCase, override_settings
 from django.urls.base import reverse
 from freezegun import freeze_time
 import responses
@@ -107,20 +107,6 @@ class TestSession(TestCase):
         self.assertEquals(user.oauth_info.oauth_user_id, '2')
 
     @responses.activate
-    def test_get_or_create_current_user_allows_duplicate_email(self):
-        UserFactory(email='jane@example.com')
-        existing_user = UserFactory(email='somemail@example.com', oauth_info__oauth_user_id='2')
-        request = self.factory.get(self.test_url)
-        request.COOKIES[settings.BLENDER_CLOUD_SESSION_COOKIE_NAME] = session_cookie_value
-
-        user = get_or_create_current_user(request)
-
-        assert user is not None
-        self.assertEquals(user.oauth_info.oauth_user_id, '2')
-        self.assertEquals(user.pk, existing_user.pk)
-        self.assertEquals(user.email, 'jane@example.com')
-
-    @responses.activate
     def test_get_or_create_current_user_race_condition_in_oauth_info_creation(self):
         existing_user = UserFactory(
             # Same email and OAuth ID as in Blender ID user info
@@ -148,8 +134,7 @@ class TestSession(TestCase):
 
     @responses.activate
     def test_get_or_create_current_user_from_remember_token(self):
-        UserFactory(email='jane@example.com')
-        existing_user = UserFactory(email='somemail@example.com', oauth_info__oauth_user_id='2')
+        existing_user = UserFactory(oauth_info__oauth_user_id='2')
         request = self.factory.get(self.test_url)
         request.COOKIES[settings.BLENDER_CLOUD_REMEMBER_COOKIE_NAME] = remember_token_value
 
@@ -223,3 +208,36 @@ class TestSession(TestCase):
         self.assertEquals(user.oauth_info.oauth_user_id, '2')
         self.assertNotEquals(user.username, 'ⅉanedoe')
         self.assertTrue(user.username.startswith('ⅉanedoe#'), user.username)
+
+
+@override_settings(BLENDER_CLOUD_SECRET_KEY='supersecret', BLENDER_CLOUD_AUTH_ENABLED=True)
+@freeze_time('2020-10-14 11:41:11')  # test cookies contain fixed expiration times
+class TestIntegrityErrors(TransactionTestCase):
+    """Check that get_or_create_current_user handles cases that trigger `IntegrityError`s.
+
+    In order to do that, it has to handle database transactions commits and rollbacks the same way
+    "normal" code does, as opposed to how TestCase does it, otherwise it breaks test runs.
+    See https://docs.djangoproject.com/en/3.0/topics/testing/tools/#django.test.TransactionTestCase
+    """
+
+    maxDiff = None
+
+    def setUp(self):
+        self.factory = RequestFactory()
+        util.mock_blender_id_responses()
+        self.test_url = reverse('film-list')
+
+    @responses.activate
+    def test_get_or_create_current_user_does_not_allow_duplicate_email(self):
+        UserFactory(email='jane@example.com')
+        existing_user = UserFactory(email='somemail@example.com', oauth_info__oauth_user_id='2')
+        request = self.factory.get(self.test_url)
+        request.COOKIES[settings.BLENDER_CLOUD_SESSION_COOKIE_NAME] = session_cookie_value
+
+        user = get_or_create_current_user(request)
+
+        assert user is not None
+        self.assertEquals(user.oauth_info.oauth_user_id, '2')
+        self.assertEquals(user.pk, existing_user.pk)
+        # Email was not updated
+        self.assertEquals(user.email, existing_user.email)

@@ -30,6 +30,9 @@ class UserFactory(DjangoModelFactory):
     first_name = factory.Faker('first_name')
     last_name = factory.Faker('last_name')
     username = factory.LazyAttribute(lambda o: f'{o.first_name}_{o.last_name}')
+    email = factory.LazyAttribute(
+        lambda a: '{}.{}@example.com'.format(a.first_name, a.last_name).lower()
+    )
     password = 'pass'
 
     oauth_tokens = factory.RelatedFactory(OAuthUserTokenFactory, factory_related_name='user')
