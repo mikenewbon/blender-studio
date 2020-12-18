@@ -1,17 +1,16 @@
-"""Upserts users to a Mailgun mail list with a given alias."""
+"""Imports/exports email addresses to/from Mailgun lists/CSVs."""
 from collections import OrderedDict
 from typing import List, Tuple, Any
-import itertools
 import logging
+import time
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
 from django.core.management.base import BaseCommand
-from django.db.models import F
-from django.core.paginator import Paginator
+from django.db.models import Q
 
 from common import mailgun
-from common import queries
 from profiles.models import Profile
 
 User = get_user_model()
@@ -19,14 +18,10 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-def chunked(it, size):
-    """Iterate over it in chunks of size."""
-    it = iter(it)
-    while True:
-        p = tuple(itertools.islice(it, size))
-        if not p:
-            break
-        yield p
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i : i + n]
 
 
 class Command(BaseCommand):
@@ -58,17 +53,20 @@ class Command(BaseCommand):
             print(_)
         return unique_subscribers
 
-    def export_to_csvs(self, unique_subscribers: OrderedDict, csvs: List[Tuple[Any]]):
+    def export_to_csvs(self, unique_subscribers: dict, csvs: List[Tuple[Any]]):
         """Write CSVs."""
         count = 0
         write_to = None
-        for _, user in unique_subscribers.items():
+        users = unique_subscribers
+        if isinstance(unique_subscribers, dict):
+            users = unique_subscribers.values()
+        for user in users:
             # Switch the file, if necessary
             next_file = None
             for from_count, file_name in csvs:
-                if count >= from_count and file_name != write_to.name:
+                if count >= from_count:
                     next_file = file_name
-            if next_file:
+            if next_file and next_file != getattr(write_to, 'name', None):
                 if write_to:
                     write_to.close()
                     logger.info('Done with %s', write_to.name)
@@ -81,43 +79,53 @@ class Command(BaseCommand):
             count += 1
         write_to.close()
 
-    def get_unique_subscribers(self, **filters) -> OrderedDict:
+    def get_unique_subscribers(self, filters: Q = None, excludes: Q = None) -> OrderedDict:
         """Subj."""
         subscribed_users = (
             User.objects.filter(
                 profile__is_subscribed_to_newsletter=True,
-                **filters,
             )
             .select_related('profile')
             .prefetch_related('groups')
         )
+        if filters:
+            subscribed_users = subscribed_users.filter(filters)
+        if excludes:
+            subscribed_users = subscribed_users.exclude(excludes)
 
-        to_add_to_maillist = subscribed_users.order_by(
-            F('groups__name').desc(nulls_last=True),
-            F('last_login').desc(nulls_last=True),
-        )
+        max_id = subscribed_users.order_by('-id')[0].id
+        logger.info('Max ID: %s', max_id)
+        unique_subscribers_unordered = {}
+        for ids in chunks(range(1, max_id + 100), 1000):
+            logger.info('At %s', ids)
+            unique_subscribers_unordered.update(
+                {_.email: _ for _ in subscribed_users.filter(id__in=ids)}
+            )
 
         logger.info(
-            '%s records to add, first %s, groups: %s',
+            '%s records to add, %s',
             Profile.objects.filter(is_subscribed_to_newsletter=True).distinct().count(),
-            to_add_to_maillist[0].last_login,
-            to_add_to_maillist[0].groups.all(),
+            len(unique_subscribers_unordered),
         )
+        return unique_subscribers_unordered
 
-        unique_subscribers = OrderedDict()
+    def _sort(self, users: dict):
+        def _user_sorting_key(u):
+            has_groups = u.groups.count() != 0
+            date = u.last_login or u.date_joined
+            timestamp = int(time.mktime(date.timetuple())) if date else None
+            if has_groups:
+                return 10 * timestamp
+            return timestamp / 10
 
-        p = Paginator(to_add_to_maillist, 600, orphans=0, allow_empty_first_page=False)
-        for page_num in range(p.num_pages):
-            page = p.get_page(page_num)
-            unique_subscribers.update({_.email: _ for _ in page.object_list})
-            if page_num and not page_num % 10:
-                logger.info(
-                    'Page %s/%s (real count: %s)', page_num, p.num_pages, len(unique_subscribers)
-                )
-                break
-
-        logger.info('Total count: %s', len(unique_subscribers))
-        return unique_subscribers
+        users_sorted = sorted(users.values(), key=_user_sorting_key, reverse=True)
+        logger.info(
+            'Sorted %s: %s, first user groups: %s',
+            len(users_sorted),
+            users_sorted[:20],
+            users_sorted[0].groups.all(),
+        )
+        return users_sorted
 
     def _check_missing(self, alias_address):
         csvs = ('newsletter1.csv', 'newsletter2.csv', 'newsletter3.csv')
@@ -135,23 +143,45 @@ class Command(BaseCommand):
             settings.NEWSLETTER_SUBSCRIBER_LIST,
             settings.NEWSLETTER_NONSUBSCRIBER_LIST,
         )
+        self._export_non_subscribers_batches()
 
-        unique_subscribers = self.get_unique_subscribers()
-        subscribers, non_subscribers = set(), set()
-        for u in unique_subscribers.values():
-            if queries.has_active_subscription(u):
-                subscribers.add(u)
-            else:
-                non_subscribers.add(u)
+    def _export_non_subscribers_batches(self):
+        perm = Permission.objects.get(codename='can_view_content')
+        active_subsriber_q = Q(groups__permissions=perm) | Q(user_permissions=perm)
+        non_subscribers = self.get_unique_subscribers(excludes=active_subsriber_q)
+        logger.info(
+            'Found %s unique recipients non-subscribers list',
+            len(non_subscribers),
+        )
+
+        logger.info('Sorting..')
+        non_subscribers_sorted = self._sort(non_subscribers)
+        lists = [
+            (0, 'newsletter1.csv'),
+            (20000, 'newsletter2.csv'),
+            (55000, 'newsletter3.csv'),
+        ]
+        logger.info('Exporting..')
+        self.export_to_csvs(non_subscribers_sorted, lists)
+
+    def _export_subscribers_non_subscribers(self):
+        perm = Permission.objects.get(codename='can_view_content')
+        active_subsriber_q = Q(groups__permissions=perm) | Q(user_permissions=perm)
+        subscribers = self.get_unique_subscribers(filters=active_subsriber_q)
+        non_subscribers = self.get_unique_subscribers(excludes=active_subsriber_q)
         logger.info(
             'Found %s unique recipients for subscribers list, %s rest',
             len(subscribers),
             len(non_subscribers),
         )
 
+        self.export_to_csvs(subscribers, [(0, f'{settings.NEWSLETTER_SUBSCRIBER_LIST}.csv')])
+        self.export_to_csvs(non_subscribers, [(0, f'{settings.NEWSLETTER_NONSUBSCRIBER_LIST}.csv')])
+
+    def _add_to_maillists(self, subscribers, non_subscribers):
         # Fill in the subscribers list
         if settings.NEWSLETTER_SUBSCRIBER_LIST:
-            for chunk in chunked(subscribers, 500):
+            for chunk in chunks(subscribers, 500):
                 recipients = ((u.email, u.profile.full_name) for _, u in chunk)
                 mailgun.add_to_maillist(settings.NEWSLETTER_SUBSCRIBER_LIST, recipients)
         else:
@@ -159,7 +189,7 @@ class Command(BaseCommand):
 
         # Fill in the non-subscribers list
         if settings.NEWSLETTER_NONSUBSCRIBER_LIST:
-            for chunk in chunked(non_subscribers, 500):
+            for chunk in chunks(non_subscribers, 500):
                 recipients = ((u.email, u.profile.full_name) for _, u in chunk)
                 mailgun.add_to_maillist(settings.NEWSLETTER_NONSUBSCRIBER_LIST, recipients)
         else:
