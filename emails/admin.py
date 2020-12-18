@@ -5,7 +5,9 @@ import anymail.exceptions
 
 from emails.models import Email
 
-iframe_template = Template('<iframe sandbox style="width: 100%" srcdoc="{{ body|safe }}"></iframe>')
+iframe_template = Template(
+    '<iframe sandbox style="width: 100%; height: 100vh;" srcdoc="{{ body|safe }}"></iframe>'
+)
 
 
 def send(modeladmin, request, queryset):
