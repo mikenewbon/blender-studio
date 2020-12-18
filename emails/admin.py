@@ -10,17 +10,6 @@ iframe_template = Template(
 )
 
 
-def send(modeladmin, request, queryset):
-    for email in queryset:
-        try:
-            email.send()
-        except anymail.exceptions.AnymailRequestsAPIError as e:
-            messages.error(request, str(e))
-
-
-send.short_description = "Send selected emails"
-
-
 @admin.register(Email)
 class EmailAdmin(admin.ModelAdmin):
     def rendered_html(self, obj) -> str:
@@ -36,4 +25,16 @@ class EmailAdmin(admin.ModelAdmin):
 
     list_display = ['subject', 'from_email', 'to']
     readonly_fields = ['rendered_html', 'date_sent']
-    actions = [send]
+    actions = ['send']
+
+    def send(self, request, queryset):
+        """Custom action for sending an email."""
+        for email in queryset:
+            try:
+                email.send()
+                msg = f'Message "{email.subject}" sent to {email.to}'
+                self.message_user(request, msg, messages.SUCCESS)
+            except anymail.exceptions.AnymailRequestsAPIError as e:
+                self.message_user(request, str(e), messages.ERROR)
+
+    send.short_description = "Send selected emails"
