@@ -109,3 +109,15 @@ def download_maillist(alias_address: str, limit: int = 100) -> List[Tuple[str]]:
         for _ in result:
             f.write(f'{_[0]}, {_[1]}\n')
     return result
+
+
+def download_events(**params) -> List[Dict]:
+    """Retrieve all events of given type."""
+    result = []
+    page_url = f'{DOMAIN_URL}/events'
+    page = _request_mailgun(page_url, method='GET', params=params)
+    while page and page.get('items'):
+        result.extend(page['items'])
+        page_url = page.get('paging', {}).get('next')
+        page = _request_mailgun(page_url, method='GET')
+    return result
