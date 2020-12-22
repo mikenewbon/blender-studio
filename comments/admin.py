@@ -20,7 +20,6 @@ class CommentAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
         'post__slug',
         'user__username',
         'user__email',
-        'user__profile__full_name',
     ]
     readonly_fields = ['date_created', 'date_updated', 'date_deleted']
     raw_id_fields = ['reply_to']
@@ -60,7 +59,6 @@ class LikeAdmin(admin.ModelAdmin):
     search_fields = [
         'comment__message',
         'user__email',
-        'user__profile__full_name',
         'user__username',
     ]
     readonly_fields = ['date_created', 'date_updated', 'user', 'comment']
