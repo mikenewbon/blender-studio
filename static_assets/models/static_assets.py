@@ -25,10 +25,6 @@ class StaticAssetFileTypeChoices(models.TextChoices):
     video = 'video', 'Video'
 
 
-class DynamicStorageFileField(models.FileField):
-    pass  # kept because migrations refer to this field
-
-
 class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Model):
     class Meta:
         ordering = ['-date_created']

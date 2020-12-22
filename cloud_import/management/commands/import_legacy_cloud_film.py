@@ -20,9 +20,7 @@ class Command(BaseCommand):
         parser.add_argument(
             '-s', '--slug', dest='film_names', action='append', help="provides film slugs"
         )
-        parser.add_argument(
-            '--all', action='store_true', help='Import all films in the directory',
-        )
+        parser.add_argument('--all', action='store_true', help='Import all films in the directory')
 
     def load_doc(self, path: pathlib.Path):
         with open(str(path), "r") as read_file:
@@ -88,20 +86,12 @@ class Command(BaseCommand):
                 film = models_film.films.Film.objects.get(slug=film_doc['url'])
                 self.stdout.write(self.style.WARNING('Project %s already exists' % film_doc['url']))
             else:
-                # Create a GCS storage location (all films use this type of storage)
-                storage_location: models_assets.StorageLocation = models_assets.StorageLocation.objects.create(
-                    name=film_doc['url'],
-                    category=models_assets.StorageLocationCategoryChoices.gcs,
-                    bucket_name=film_doc['_id'],
-                )
-
                 film = models_film.films.Film.objects.create(
                     title=film_doc['name'],
                     slug=film_doc['url'],
                     description=film_doc['summary'],
                     summary=film_doc['description'],
                     status=models_film.FilmStatus.released,
-                    storage_location=storage_location,
                     picture_header='place/holder.jpg',
                     logo='place/holder.jpg',
                     poster='place/holder.jpg',
@@ -139,7 +129,6 @@ class Command(BaseCommand):
                     name=node_doc['name'],
                     text=description,
                     slug=node_id,
-                    storage_location=film.storage_location,
                 )[0]
                 if 'picture' in node_doc and node_doc['picture']:
                     file_doc = self.get_file_object(film_doc_path, str(node_doc['picture']))
@@ -182,7 +171,6 @@ class Command(BaseCommand):
                     original_filename=file_doc['name'],
                     size_bytes=file_doc['length'],
                     user_id=1,
-                    storage_location=film.storage_location,
                 )[0]
 
                 if 'picture' in node_doc and node_doc['picture']:
@@ -193,10 +181,10 @@ class Command(BaseCommand):
 
                 if node_doc['properties']['content_type'] == 'video':
                     models_assets.Video.objects.get_or_create(
-                        static_asset=static_asset, duration_seconds=datetime.timedelta(minutes=5),
+                        static_asset=static_asset, duration_seconds=datetime.timedelta(minutes=5)
                     )
                 elif node_doc['properties']['content_type'] == 'image':
-                    models_assets.Image.objects.get_or_create(static_asset=static_asset,)
+                    models_assets.Image.objects.get_or_create(static_asset=static_asset)
 
                 if 'parent' in node_doc and node_doc['parent']:
                     parent_node_doc = self.load_doc(
