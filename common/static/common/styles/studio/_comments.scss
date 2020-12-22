@@ -98,6 +98,10 @@
   text-align: left;
   font-size: $small-font-size;
   margin-bottom: $spacer / 4;
+  img {
+    max-height: 300px;
+    display: block;
+  }
 }
 
 .comment-toolbar {
