@@ -383,6 +383,13 @@ class ImportCommand(BaseCommand):
 
                 self.reconcile_file_field(file_doc['_id'], variation, 'source', variation_subdoc=v)
 
+        models_static_assets.StaticAsset.objects.filter(
+            slug=static_asset.slug, id=static_asset.pk
+        ).update(
+            date_created=pytz.utc.localize(file_doc['_created']),
+            date_updated=pytz.utc.localize(file_doc['_updated']),
+        )
+        static_asset.refresh_from_db()
         return static_asset
 
     def get_or_create_collection(self, collection_doc, film):
