@@ -37,8 +37,6 @@ class PostDetail(DetailView):
         context['user_can_edit_post'] = self.request.user.is_staff and self.request.user.has_perm(
             'blog.change_post'
         )
-        # Shorthand for Author profile
-        context['post_author_profile'] = getattr(post.author, 'profile', None)
 
         # Comment threads
         comments: List[Comment] = get_annotated_comments(post, self.request.user.pk)
