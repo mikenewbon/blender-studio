@@ -12,6 +12,7 @@ class UserAdmin(auth_admin.UserAdmin):
         """User records are managed by Blender ID, so no new user should be added here."""
         return False
 
+    list_display_links = ('full_name', 'username')
     list_filter = auth_admin.UserAdmin.list_filter + ('is_subscribed_to_newsletter',)
     list_display = ['full_name'] + [
         _ for _ in auth_admin.UserAdmin.list_display if _ not in ('first_name', 'last_name')
