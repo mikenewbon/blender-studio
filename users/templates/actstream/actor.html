@@ -1,0 +1,12 @@
+{% extends 'common/base.html' %}
+{# Page of someone else's activity #}
+
+{% block content %}
+{% include 'users/components/links.html' %}
+
+<div class="row">
+    <div class="col-3 mb-3">Viewing {% firstof actor.full_name actor %}'s activity</div>
+</div>
+
+{% include 'users/components/actions.html' %}
+{% endblock %}

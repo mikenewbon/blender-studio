@@ -14,8 +14,8 @@ import blender_id_oauth_client.models as models
 import blender_id_oauth_client.signals as signals
 
 from .flask_login import open_remember_token
-from profiles.blender_id import BIDSession
-from profiles.queries import set_groups_from_roles
+from users.queries import set_groups_from_roles
+from users.blender_id import BIDSession
 
 User = get_user_model()
 bid = BIDSession()

@@ -7,7 +7,7 @@ from common.tests.factories.comments import CommentUnderAssetFactory
 from common.tests.factories.films import AssetFactory
 from common.tests.factories.users import UserFactory
 
-from profiles.models import Notification
+from users.models import Notification
 
 
 class TestAssetComments(TestCase):

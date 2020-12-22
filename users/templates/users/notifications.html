@@ -1,0 +1,33 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+<div class="container-xl">
+  <section class="my-4 text-center">
+    {% include "common/components/simple_header.html" with title="Notifications" subtitle="All the latest likes and replies to your content are here." %}
+    <button class="btn btn-dark btn-sm mb-3" data-mark-all-read-url="{% url 'api-notifications-mark-read' %}">
+      <i
+        class="material-icons {% if user.notifications_unread.count >= 1 %}unread{% endif %}">markunread_mailbox</i>
+      <span>Mark all as read</span>
+    </button>
+    <ul class="list-group activity-list">
+
+      {% for notification in notifications %}
+      {% with action=notification.action %}
+      {% include 'users/components/action.html' %}
+      {% endwith %}
+      {% empty %}
+      <li class="activity-list-item">
+        No notifications yet
+      </li>
+      {% endfor %}
+    </ul>
+
+    <div class="row justify-content-center mt-3">
+      <div class="col-auto text-center">
+        {% include "common/components/navigation/pagination.html" %}
+      </div>
+    </div>
+
+  </section>
+</div>
+{% endblock %}

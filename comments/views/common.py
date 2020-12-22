@@ -91,7 +91,7 @@ def comments_to_template_type(
         comment_url=comment_url,
         number_of_comments=len(comments),
         comment_trees=[build_tree(comment) for comment in top_level_comments],
-        profile_image_url=user.profile.image_url if getattr(user, 'profile', None) else None,
+        profile_image_url=user.image_url if getattr(user, 'image', None) else None,
     )
 
 

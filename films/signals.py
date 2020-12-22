@@ -6,7 +6,7 @@ from django.dispatch import receiver
 from common import markdown
 from films.models.assets import Asset, AssetComment, Like
 from films.models.collections import Collection
-from profiles.queries import create_action_from_like
+from users.queries import create_action_from_like
 
 logger = logging.getLogger(__name__)
 

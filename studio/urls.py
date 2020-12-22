@@ -10,8 +10,8 @@ import films.urls
 import search.urls
 import subscriptions.urls
 import training.urls
-import profiles.urls
 import static_assets.urls
+import users.urls
 
 from common.views.home import home as home_view, welcome as welcome_view
 import common.views.errors as error_views
@@ -33,7 +33,7 @@ urlpatterns = [
     path('blog/', include(blog.urls)),
     path('search/', include(search.urls)),
     path('subscriptions/', include(subscriptions.urls)),
-    path('', include(profiles.urls)),
+    path('', include(users.urls)),
     path('', include(static_assets.urls)),
     path('stats/', include('stats.urls')),
     path('activity/', include('actstream.urls')),

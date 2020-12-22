@@ -94,11 +94,11 @@ class TestAssetLikeEndpoint(TestCase):
         asset_author = self.asset.static_asset.author or self.asset.static_asset.user
         # Asset's author should be notified about the like
         self.assertEqual(
-            [str(_.action) for _ in asset_author.profile.notifications],
+            [str(_.action) for _ in asset_author.notifications.all()],
             [f'{user} liked {self.asset} 0 minutes ago'],
         )
         self.assertEqual(
-            [str(_.action) for _ in asset_author.profile.notifications_unread],
+            [str(_.action) for _ in asset_author.notifications_unread],
             [f'{user} liked {self.asset} 0 minutes ago'],
         )
         # TODO(anna): check notification endpoint too
@@ -131,11 +131,11 @@ class TestAssetLikeEndpoint(TestCase):
             [f'{user} liked {self.asset} 0 minutes ago'],
         )
         self.assertEqual(
-            [str(_.action) for _ in asset_author.profile.notifications],
+            [str(_.action) for _ in asset_author.notifications.all()],
             [f'{user} liked {self.asset} 0 minutes ago'],
         )
         self.assertEqual(
-            [str(_.action) for _ in asset_author.profile.notifications_unread],
+            [str(_.action) for _ in asset_author.notifications_unread],
             [f'{user} liked {self.asset} 0 minutes ago'],
         )
 

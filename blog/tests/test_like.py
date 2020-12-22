@@ -97,11 +97,11 @@ class TestPostLikeEndpoint(TestCase):
             [f'{user} liked {self.post} 0 minutes ago'],
         )
         self.assertEqual(
-            [str(_.action) for _ in self.post.author.profile.notifications],
+            [str(_.action) for _ in self.post.author.notifications.all()],
             [f'{user} liked {self.post} 0 minutes ago'],
         )
         self.assertEqual(
-            [str(_.action) for _ in self.post.author.profile.notifications_unread],
+            [str(_.action) for _ in self.post.author.notifications_unread],
             [f'{user} liked {self.post} 0 minutes ago'],
         )
         # TODO(anna): check notification endpoint too
@@ -129,7 +129,7 @@ class TestPostLikeEndpoint(TestCase):
         action = Action.objects.first()
         # Post's author should be notified about the like
         self.assertEqual(
-            [str(_.action) for _ in self.post.author.profile.notifications_unread],
+            [str(_.action) for _ in self.post.author.notifications_unread],
             [f'{user} liked {self.post} 0 minutes ago'],
         )
 

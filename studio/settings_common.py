@@ -89,7 +89,7 @@ TEMPLATES = [
                 'training.context_processors.enums',
                 # TODO(anna) when Profile model is added, this should become a prop on it instead.
                 'training.context_processors.favorited',
-                'profiles.context_processors.user_dict',
+                'users.context_processors.user_dict',
             ]
         },
     },
@@ -338,7 +338,7 @@ BLENDER_CLOUD_DOMAIN = None
 CSRF_COOKIE_NAME = 'bstudiocsrftoken'
 
 ACTSTREAM_SETTINGS = {
-    'MANAGER': 'profiles.managers.CustomStreamManager',
+    'MANAGER': 'users.managers.CustomStreamManager',
     'FETCH_RELATIONS': True,
 }
 NEWSLETTER_LIST = None

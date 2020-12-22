@@ -33,8 +33,8 @@ class TestSectionComments(TestCase):
 
         # No notifications for the user who replied to the comment
         self.assertEqual(list(Action.objects.notifications(self.user)), [], self.user)
-        self.assertEqual(list(self.user.profile.notifications), [], self.user)
-        self.assertEqual(list(self.user.profile.notifications_unread), [], self.user)
+        self.assertEqual(list(self.user.notifications.all()), [], self.user)
+        self.assertEqual(list(self.user.notifications_unread), [], self.user)
         # A notification for the author of the comment they replied to
         self.assertEqual(
             [str(_) for _ in Action.objects.notifications(self.section_comment.user)],
@@ -48,7 +48,7 @@ class TestSectionComments(TestCase):
             [f'{self.user} commented {comment} on {self.section} 0 minutes ago'],
         )
         self.assertEqual(
-            [str(_.action) for _ in self.section.user.profile.notifications_unread],
+            [str(_.action) for _ in self.section.user.notifications_unread],
             [f'{self.user} commented {comment} on {self.section} 0 minutes ago'],
         )
 
@@ -96,7 +96,7 @@ class TestSectionComments(TestCase):
             [f'{self.user} liked {self.section_comment} on {self.section} 0 minutes ago'],
         )
         self.assertEqual(
-            [str(_.action) for _ in self.section_comment.user.profile.notifications_unread],
+            [str(_.action) for _ in self.section_comment.user.notifications_unread],
             [f'{self.user} liked {self.section_comment} on {self.section} 0 minutes ago'],
         )
         # but training section's author should not be notified

@@ -109,9 +109,8 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
 
         Usually the author of the asset will be the same as the user who uploads the asset.
         """
-        if self.author:
-            return self.author.profile.full_name
-        return self.user.profile.full_name
+        author = self.author or self.user
+        return author.full_name
 
     @property
     def author_image_url(self) -> str:
@@ -119,9 +118,8 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
 
         Usually the author of the asset will be the same as the user who uploads the asset.
         """
-        if self.author:
-            return self.author.profile.image_url
-        return self.user.profile.image_url
+        author = self.author or self.user
+        return author.image_url
 
     def process_video(self):
         """Create video processing task if asset has correct type."""

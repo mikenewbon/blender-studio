@@ -89,23 +89,23 @@
           </a>
 
           <div>
-            <button href="{% url 'profile-notifications' %}" data-toggle="dropdown"
+            <button href="{% url 'user-notification' %}" data-toggle="dropdown"
               class="btn btn-secondary btn-nav btn-icon notification-button mr-2">
               <i class="material-icons">notifications</i>
-              {% if user.profile.notifications_unread.count >= 1 %}
-              <span class="notifications-counter">{{ user.profile.notifications_unread.count }}</span>
+              {% if user.notifications_unread.count >= 1 %}
+              <span class="notifications-counter">{{ user.notifications_unread.count }}</span>
               {% endif %}
             </button>
             <div class="dropdown-menu dropdown-menu-right notification-dropdown">
 
               <div class="dropdown-double">
-                <a href="{% url 'profile-notifications' %}" class="dropdown-item">
+                <a href="{% url 'user-notification' %}" class="dropdown-item">
                   <i class="material-icons">notifications</i>
                   <span>Notifications</span>
                 </a>
 
                 <button
-                  class="dropdown-item icon {% if user.profile.notifications_unread.count >= 1 %}unread{% endif %}"
+                  class="dropdown-item icon {% if user.notifications_unread.count >= 1 %}unread{% endif %}"
                   data-toggle="tooltip" data-placement="top"
                   data-mark-all-read-url="{% url 'api-notifications-mark-read' %}" title="Mark all as read">
                   <i class="material-icons">markunread_mailbox</i>
@@ -114,9 +114,9 @@
 
               <div class="dropdown-menu-nested">
 
-                {% for notification in user.profile.notifications.all|slice:":10" %}
+                {% for notification in user.notifications.all|slice:":10" %}
                 {% with action=notification.action %}
-                {% include 'profiles/components/nav_action.html' %}
+                {% include 'users/components/nav_action.html' %}
                 {% endwith %}
                 {% empty %}
                 <p class="px-2 py-2 subtitle text-center">
@@ -126,7 +126,7 @@
 
               </div>
 
-              <a href="{% url 'profile-notifications' %}" class="dropdown-item small">
+              <a href="{% url 'user-notification' %}" class="dropdown-item small">
                 <span>See all notifications</span>
               </a>
 
@@ -143,8 +143,8 @@
           </div> {% endcomment %}
           <div>
             <button data-toggle="dropdown" class="btn btn-secondary btn-nav btn-profile">
-              {% if request.user.is_authenticated and request.user.profile.image_url %}
-              <div style="background-image:url('{{ request.user.profile.image_url }}');" class="profile"></div>
+              {% if request.user.is_authenticated and request.user.image_url %}
+              <div style="background-image:url('{{ request.user.image_url }}');" class="profile"></div>
               {% else %}
               <div style="background-image:url('{% static 'common/images/blank-profile-pic.png' %}');" class="profile">
               </div>
@@ -164,7 +164,7 @@
                 <span>My Cloud</span>
               </a>
 
-              <a href="{% url 'profile-activity' %}" class="dropdown-item">
+              <a href="{% url 'user-activity' %}" class="dropdown-item">
                 <i class="material-icons">timeline</i>
                 <span>My Activity</span>
               </a>
@@ -294,7 +294,7 @@
               </div>
 
               <div class="col-6 p-0">
-                <a class="h3 drawer-nav-dropdown" href="{% url 'profile-notifications' %}">Notifications</a>
+                <a class="h3 drawer-nav-dropdown" href="{% url 'user-notification' %}">Notifications</a>
               </div>
 
               {% if not request.user.is_authenticated %}

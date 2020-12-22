@@ -8,7 +8,7 @@ from cloud_import.management import mongo
 from cloud_import.management.mixins import ImportCommand
 
 # from static_assets.models.static_assets import StaticAsset
-from profiles.blender_id import BIDSession
+from users.blender_id import BIDSession
 
 
 bid = BIDSession()

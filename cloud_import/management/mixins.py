@@ -96,11 +96,11 @@ class ImportCommand(BaseCommand):
         self.console_log(f"\tReconciling user {user_doc['username']}")
         user.date_joined = pytz.utc.localize(user_doc['_created'])
         user.save()
-        user.profile.full_name = user_doc['full_name']
+        user.full_name = user_doc['full_name']
         if 'settings' in user_doc and 'email_communications' in user_doc['settings']:
             if user_doc['settings']['email_communications'] == 1:
-                user.profile.is_subscribed_to_newsletter = True
-        user.profile.save()
+                user.is_subscribed_to_newsletter = True
+        user.save()
 
         if 'auth' in user_doc and user_doc['auth']:
             OAuthUserInfo.objects.get_or_create(

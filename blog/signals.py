@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from blog.models import PostComment, Like
-from profiles.queries import create_action_from_like
+from users.queries import create_action_from_like
 
 
 logger = logging.getLogger(__name__)

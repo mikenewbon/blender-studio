@@ -10,7 +10,7 @@ import responses
 import blender_id_oauth_client.models as models
 from blendercloud.session import get_or_create_current_user, open_session
 from common.tests.factories.users import UserFactory
-import profiles.tests.util as util
+import users.tests.util as util
 
 User = get_user_model()
 
@@ -85,8 +85,8 @@ class TestSession(TestCase):
         self.assertEquals(user.username, 'ⅉanedoe')
         self.assertEquals(user.email, 'jane@example.com')
         self.assertEquals(user.oauth_info.oauth_user_id, '2')
-        self.assertEquals(user.profile.full_name, 'ⅉane ⅅoe')
-        self.assertEquals(user.profile.image_url, 's3://file')
+        self.assertEquals(user.full_name, 'ⅉane ⅅoe')
+        self.assertEquals(user.image_url, 's3://file')
         self.assertEquals(
             sorted([g.name for g in user.groups.all()]),
             ['dev_core', 'has_subscription', 'subscriber'],

@@ -62,9 +62,8 @@ class ProductionLog(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, 
 
         Usually the author of the log will be the same as the user who uploads it.
         """
-        if self.author:
-            return self.author.get_full_name()
-        return self.user.get_full_name()
+        author = self.author or self.user
+        return author.get_full_name()
 
     @property
     def author_image_url(self) -> str:
@@ -72,9 +71,8 @@ class ProductionLog(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, 
 
         Usually the author of the asset will be the same as the user who uploads the asset.
         """
-        if self.author:
-            return self.author.profile.image_url
-        return self.user.profile.image_url
+        author = self.author or self.user
+        return author.image_url
 
     @property
     def end_date(self):
@@ -161,8 +159,7 @@ class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
     def author_name(self) -> str:
         """Get the author's full name."""
         author = self.author or self.user
-        if getattr(author, 'profile', None):
-            return author.profile.full_name
+        return author.full_name
 
     @property
     def author_image_url(self) -> str:
@@ -171,8 +168,7 @@ class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
         Usually the author of the asset will be the same as the user who uploads the asset.
         """
         author = self.author or self.user
-        if getattr(author, 'profile', None):
-            return author.profile.image_url
+        return author.image_url
 
     def __str__(self):
         return (

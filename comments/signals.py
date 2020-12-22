@@ -6,7 +6,7 @@ from django.dispatch import receiver
 
 from comments.models import Comment, Like
 from common import markdown
-from profiles.queries import create_action_from_like
+from users.queries import create_action_from_like
 
 logger = logging.getLogger(__name__)
 

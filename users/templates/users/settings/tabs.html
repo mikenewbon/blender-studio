@@ -1,0 +1,35 @@
+<nav class="nav-drawer nested">
+  <div class="nav-drawer-body">
+    <div class="drawer-nav-header">
+      <h3>Settings</h3>
+    </div>
+    <div class="drawer-nav-list-wrapper">
+      <ol class="drawer-nav-list">
+        <li class="drawer-nav-section">
+          <a class="drawer-nav-section-link border-top" href="{% url 'user-settings'%}">
+            <i class="pr-3 pi-vcard"></i>
+            <span>Profile</span>
+          </a>
+        </li>
+        <li class="drawer-nav-section">
+          <a class="drawer-nav-section-link " href="{% url 'user-settings-emails' %}">
+            <i class="pr-3 pi-email"></i>
+            <span>Emails</span>
+          </a>
+        </li>
+        <li class="drawer-nav-section">
+          <a class="drawer-nav-section-link " href="{% url 'user-settings-billing' %}">
+            <i class="pr-3 pi-credit-card"></i>
+            <span>Subscription</span>
+          </a>
+        </li>
+        <li class="drawer-nav-section">
+          <a class="drawer-nav-section-link " href="/settings/roles">
+            <i class="pr-3 pi-cog"></i>
+            <span>Roles &amp; Capabilities</span>
+          </a>
+        </li>
+      </ol>
+    </div>
+  </div>
+</nav>

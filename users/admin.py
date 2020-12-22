@@ -1,51 +1,62 @@
 from django.contrib import admin
-from django.contrib.admin import SimpleListFilter
 from django.contrib.auth import get_user_model, admin as auth_admin
+from django.utils.translation import gettext_lazy as _
 
-import profiles.models as profiles_models
-
-
-class ProfileInlineAdmin(admin.StackedInline):
-    model = profiles_models.Profile
-
-    def has_delete_permission(self, request, obj=None):
-        """Fake delete permission to hide the Delete checkbox."""
-        return False
-
-
-class _IsSubscribedToNewsletterFilter(SimpleListFilter):
-    title = 'Is subscribed to newsletter'
-    parameter_name = 'is_subscribed_to_newsletter'
-
-    def lookups(self, request, model_admin):
-        return (
-            (None, 'All'),
-            (1, 'Yes'),
-            (0, 'No'),
-        )
-
-    def choices(self, changelist):
-        for lookup, title in self.lookup_choices:
-            yield {
-                'selected': self.value() == (str(lookup) if lookup is not None else lookup),
-                'query_string': changelist.get_query_string({self.parameter_name: lookup}, []),
-                'display': title,
-            }
-
-    def queryset(self, request, queryset):
-        if self.value() is not None:
-            return queryset.filter(profile__is_subscribed_to_newsletter=self.value())
-        return queryset
+from blender_id_oauth_client.models import OAuthUserInfo, OAuthToken
+from users.models import Notification
 
 
 @admin.register(get_user_model())
 class UserAdmin(auth_admin.UserAdmin):
-    inlines = [ProfileInlineAdmin]
-    list_filter = auth_admin.UserAdmin.list_filter + (_IsSubscribedToNewsletterFilter,)
+    def has_add_permission(self, request):
+        """User records are managed by Blender ID, so no new user should be added here."""
+        return False
+
+    list_filter = auth_admin.UserAdmin.list_filter + ('is_subscribed_to_newsletter',)
     list_display = ['full_name'] + [
         _ for _ in auth_admin.UserAdmin.list_display if _ not in ('first_name', 'last_name')
     ]
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        (
+            _('Personal info'),
+            {'fields': ('full_name', 'image', 'email', 'is_subscribed_to_newsletter')},
+        ),
+        (
+            _('Permissions'),
+            {
+                'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
+            },
+        ),
+        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+    )
 
-    def full_name(self, obj):
-        """Return profile's full name."""
-        return obj.profile.full_name if obj.profile else ''
+
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    """Configure Notification admin."""
+
+    search_fields = ['user__username', 'user__email', 'user__profile__full_name']
+    list_display = ['__str__', 'user', 'action']
+    raw_id_fields = ['user', 'action']
+
+
+@admin.register(OAuthUserInfo)
+class OAuthUserInfoAdmin(admin.ModelAdmin):
+    """Configure OAuthUserInfo admin, because blender_id_oauth_client doesn't."""
+
+    search_fields = ['user__email', 'user__username']
+    list_display = ['user', 'oauth_user_id']
+    raw_id_fields = ['user']
+
+
+admin.site.unregister(OAuthToken)
+
+
+@admin.register(OAuthToken)
+class OAuthTokenAdmin(admin.ModelAdmin):
+    """Configure OAuthToken admin, because otherwise it tried to load all users."""
+
+    search_fields = ['user__email', 'user__username']
+    list_display = ['user', 'oauth_user_id']
+    raw_id_fields = ['user']

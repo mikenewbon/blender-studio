@@ -6,7 +6,7 @@ from freezegun import freeze_time
 import responses
 
 from common.tests.factories.users import UserFactory
-import profiles.tests.util as util
+import users.tests.util as util
 
 User = get_user_model()
 

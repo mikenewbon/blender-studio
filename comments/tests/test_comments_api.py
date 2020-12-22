@@ -402,11 +402,11 @@ class TestCommentLikeEndpoint(TestCase):
             [f'{user} liked {self.comment} 0 minutes ago'],
         )
         self.assertEqual(
-            [str(_.action) for _ in self.comment.user.profile.notifications],
+            [str(_.action) for _ in self.comment.user.notifications.all()],
             [f'{user} liked {self.comment} 0 minutes ago'],
         )
         self.assertEqual(
-            [str(_.action) for _ in self.comment.user.profile.notifications_unread],
+            [str(_.action) for _ in self.comment.user.notifications_unread],
             [f'{user} liked {self.comment} 0 minutes ago'],
         )
         # TODO(anna): check notification endpoint too
