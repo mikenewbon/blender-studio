@@ -5,7 +5,9 @@ import logging
 from background_task import background
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.db import transaction
 
+from common import history
 from common import mailgun
 from common import queries
 
@@ -23,12 +25,9 @@ def handle_is_subscribed_to_newsletter(pk: int):
     user = User.objects.get(pk=pk)
     email = user.email
 
-    unsubscribe_record = mailgun.get_unsubscribe_record(email)
-
     if user.is_subscribed_to_newsletter:
         recipient = (email, user.full_name)
-        if unsubscribe_record:
-            mailgun.delete_unsubscribe_record(email)
+        mailgun.delete_unsubscribe_record(email)
         if settings.NEWSLETTER_LIST:
             mailgun.add_to_maillist(settings.NEWSLETTER_LIST, [recipient])
 
@@ -47,8 +46,7 @@ def handle_is_subscribed_to_newsletter(pk: int):
             mailgun.delete_from_maillist(remove_from, email)
         logger.info('Updated newsletter subscription for user %s', user)
     else:
-        if not unsubscribe_record:
-            mailgun.create_unsubscribe_record(email)
+        mailgun.create_unsubscribe_record(email)
         for alias_address in (
             settings.NEWSLETTER_LIST,
             settings.NEWSLETTER_SUBSCRIBER_LIST,
@@ -61,22 +59,39 @@ def handle_is_subscribed_to_newsletter(pk: int):
 
 
 @background()
-def handle_subscribed_unsubscribed_event(event_type: str, message_id: str, event: Dict[str, Any]):
-    """Update user settings in accordance with an unsubscribe event."""
-    if event_type not in ('unsubscribed',):
+def handle_tracking_event_unsubscribe(event_type: str, message_id: str, event: Dict[str, Any]):
+    """Unsubscribe a user from all mail, if one with a matching email is found."""
+    event_data = event.get('event-data', {})
+    should_unsubscribe = (
+        event_type in ('unsubscribed', 'complained')
+        or event_type in ('failed', 'bounced')
+        and event_data.get('severity') == 'permanent'
+    )
+    if not should_unsubscribe:
         logger.error('Received an event of an unknown type: id=%s, type=%s', message_id, event_type)
         return
 
     email = event['event-data']['recipient'].replace('mailto:', '')
 
-    if event_type == 'unsubscribed':
-        logger.debug('Unsubscribed %s, %s', message_id, email)
-        # Must look up emails case-insensitively
-        user = User.objects.filter(email__iexact=email).first()
-        if not user:
-            logger.error(
-                'Received an event for an uknown recipient: id=%s, type=%s', message_id, event_type
-            )
-            return
+    # Must look up emails case-insensitively
+    user = User.objects.filter(email__iexact=email).first()
+    if not user:
+        logger.error(
+            'Received an event for an uknown recipient: id=%s, type=%s', message_id, event_type
+        )
+        return
+
+    change_msg = f'is_subscribed_to_newsletter changed. Reason: {event_type} at Mailgun'
+    if 'delivery-status' in event_data:
+        delivery_status = event_data['delivery-status']
+        delivery_message = delivery_status['message']
+        reason = event_data.get('reason', event_type)
+        mailing_list = event.get('mailing-list', {}).get('address', '')
+        change_msg = (
+            'is_subscribed_to_newsletter changed due to permanently failed delivery at Mailgun.'
+            f' Reason: {reason}, message: {delivery_message}, list: {mailing_list}'
+        )
+    with transaction.atomic():
+        history.log_change(user, change_msg)
         user.is_subscribed_to_newsletter = False
         user.save(update_fields=['is_subscribed_to_newsletter'])

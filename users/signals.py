@@ -65,14 +65,19 @@ def _sync_is_subscribed_to_newsletter(sender: object, instance: User, **kwargs):
 
 
 @receiver(tracking)
-def _handle_subscribed_unsubscribed_event(sender, event, esp_name, **kwargs):
+def _handle_mailgun_tracking_event(sender, event, esp_name, **kwargs):
     event_type = event.event_type
+    event_data = event.esp_event.get('event-data', {})
     # Anymail doesn't recognize Mailgun's non-legacy Unsubscribed events for some reason
     if event_type == 'unknown':
-        event_type = event.esp_event.get('event-data', {}).get('event', '').lower()
-    if event_type not in ('unsubscribed',):
-        return  # Only interested in the above mentioned events
-    tasks.handle_subscribed_unsubscribed_event(event_type, event.message_id, event.esp_event)
+        event_type = event_data.get('event', '').lower()
+    should_unsubscribe = (
+        event_type in ('unsubscribed', 'complained')
+        or event_type in ('failed', 'bounced')
+        and event_data.get('severity') == 'permanent'
+    )
+    if should_unsubscribe:
+        tasks.handle_tracking_event_unsubscribe(event_type, event.message_id, event.esp_event)
 
 
 @receiver(post_save, sender=Action)

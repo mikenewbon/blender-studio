@@ -1,5 +1,8 @@
-import responses
+import json
+import re
+
 from django.conf import settings
+import responses
 
 
 def mock_blender_id_responses() -> None:
@@ -34,3 +37,78 @@ def mock_blender_id_responses() -> None:
             body=out,
             stream=True,
         )
+
+
+def mock_mailgun_responses() -> None:
+    """Set up mock responses of Mailgun API."""
+    base_url = 'https://api.mailgun.net/v3/'
+    responses.add_callback(
+        responses.GET,
+        re.compile(f'{base_url}.*/unsubscribes/mail1%40example.com'),
+        callback=lambda request: (404, {}, ''),
+    )
+    responses.add_callback(
+        responses.DELETE,
+        re.compile(f'{base_url}.*/unsubscribes/mail1%40example.com'),
+        callback=lambda request: (404, {}, ''),
+    )
+    responses.add_callback(
+        responses.GET,
+        re.compile(f'{base_url}.*/unsubscribes/mail2%40example.com'),
+        callback=lambda request: (
+            200,
+            {},
+            json.dumps(
+                {
+                    'address': 'mail2@example.com',
+                    'tags': ['*'],
+                    'created_at': 'Wed, 23 Dec 2020 16:05:53 UTC',
+                }
+            ),
+        ),
+    )
+    responses.add_callback(
+        responses.DELETE,
+        re.compile(f'{base_url}.*/unsubscribes/mail2%40example.com'),
+        callback=lambda request: (
+            200,
+            {},
+            json.dumps(
+                {
+                    'address': 'mail2@example.com',
+                    'message': 'Unsubscribe event has been removed',
+                }
+            ),
+        ),
+    )
+    responses.add_callback(
+        responses.POST,
+        re.compile(f'{base_url}.*/unsubscribes'),
+        callback=lambda request: (200, {}, ''),
+    )
+    responses.add(
+        responses.POST,
+        f'{base_url}lists/newsletter-test%40blender.cloud/members.json',
+        json={
+            'list': {
+                'access_level': 'readonly',
+                'address': 'newsletter-test@blender.cloud',
+                'created_at': 'Mon, 14 Dec 2020 15:14:27 -0000',
+                'description': 'For testing newsletters in Blender Cloud',
+                'members_count': 5,
+                'name': '',
+                'reply_preference': 'sender',
+            },
+            'message': 'Mailing list has been updated',
+            'task-id': 'fa9226b0453711eb83880242ac11000f',
+        },
+    )
+    responses.add(
+        responses.DELETE,
+        f'{base_url}lists/newsletter-test%40blender.cloud/members/mail1%40example.com',
+        status=200,
+        json={
+            'member': {'address': 'mail1@example.com'},
+            'message': 'Mailing list member has been deleted',
+        },
+    )
