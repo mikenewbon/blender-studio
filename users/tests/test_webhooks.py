@@ -14,6 +14,7 @@ from django.urls import reverse
 from common.tests.factories.users import UserFactory
 import users.tests.util as util
 import users.tasks as tasks
+import users.views.webhooks as webhooks
 
 User = get_user_model()
 BLENDER_ID_BASE_URL = 'http://id.local:8000/'
@@ -167,6 +168,11 @@ def prepare_hmac_header(body: Union[str, dict], secret: str = 'testsecret') -> D
     }
 )
 @patch('storages.backends.s3boto3.S3Boto3Storage.url', Mock(return_value='s3://file'))
+@patch(
+    # Make sure background task is executed as a normal function
+    'users.views.webhooks.handle_user_modified',
+    new=webhooks.handle_user_modified.task_function,
+)
 class TestBlenderIDWebhook(TestCase):
     webhook_payload = {
         'avatar_changed': False,

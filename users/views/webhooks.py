@@ -5,6 +5,7 @@ import hmac
 import json
 import logging
 
+from background_task import background
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -68,12 +69,12 @@ def user_modified_webhook(request: HttpRequest) -> HttpResponse:
         logger.exception('Malformed JSON received')
         return HttpResponseBadRequest('Malformed JSON')
 
-    # TODO(anna) move to a background task
     handle_user_modified(payload)
 
     return HttpResponse(status=204)
 
 
+@background()
 def handle_user_modified(payload: Dict[Any, Any]) -> None:
     """Handle payload of a user modified webhook, updating User when necessary."""
     oauth_user_id = str(payload['id'])
