@@ -2,7 +2,7 @@
 {% load thumbnail %}
 {% load common_extras %}
 
-<div class="file grid-item {{ aspect_ratio }} {{ card_sizes|default:"col-12 col-sm-6 col-md-6 col-lg-4" }} {% if aspect_ratio == "16:9" %}widescreen{% elif aspect_ratio == "4:3" %}fourbythree{% elif aspect_ratio == "1:1" %}square{% endif %} {% if user_can_view_asset or asset.is_free %}{% else %}locked{% endif%}">
+<div class="file grid-item {{ aspect_ratio }} {{ card_sizes|default:"col-12 col-sm-6 col-md-6 col-lg-4" }} {% if aspect_ratio == "16:9" %}widescreen{% elif aspect_ratio == "4:3" %}fourbythree{% elif aspect_ratio == "1:1" %}square{% endif %} {% if asset.is_spoiler or not user_can_view_asset and not asset.is_free  %}locked{% endif %}">
   <div class="file-header">
     <a href="?asset={{ asset.id }}" class="file-modal-link" data-asset-id="{{ asset.id }}"
       data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
@@ -11,7 +11,7 @@
       {% if user_can_view_asset or asset.is_free %}
       {% if asset.is_spoiler %}{# Spoiler alert #}
       <div class="file-lock-text">
-        <h4 class="mb-0"><i class="material-icons icon-inline small">warning</i>Spoiler</h4>
+        <h4 class="mb-0"><i class="material-icons icon-inline small text-danger">warning</i>Spoiler</h4>
       </div>
       {% include "common/components/helpers/image_set.html" with alt=asset.name classes="file-image locked" img_source=asset.static_asset.preview xsmall_width="200" small_width="200" medium_width="200" large_width="200" xlarge_width="200" %}
       {% else %}
