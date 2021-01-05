@@ -529,7 +529,7 @@ $input-font-size-lg: $input-btn-font-size-lg !default;
 $input-line-height-lg: 1.5 !default;
 
 $input-bg: $input-gray !default;
-$input-disabled-bg: lighten($input-gray, 50%) !default;
+$input-disabled-bg: $input-gray !default;
 
 $input-color: $white !default;
 $input-border-color: $input-gray !default;

@@ -55,9 +55,18 @@ input:checked+.slider {
 .settings-form {
   .form-check-label {
     line-height: 2.1rem !important;
+
     input {
       vertical-align: middle !important;
       margin-right: 4px;
     }
   }
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+  opacity: .5;
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: $spacer * 2;
 }

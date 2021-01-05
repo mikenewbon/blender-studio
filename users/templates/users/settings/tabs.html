@@ -1,35 +1,38 @@
 <nav class="nav-drawer nested">
-  <div class="nav-drawer-body">
+  <div class="nav-drawer-body font-weight-bold">
+
     <div class="drawer-nav-header">
-      <h3>Settings</h3>
+      <h2>Settings</h2>
     </div>
-    <div class="drawer-nav-list-wrapper">
-      <ol class="drawer-nav-list">
-        <li class="drawer-nav-section">
-          <a class="drawer-nav-section-link border-top" href="{% url 'user-settings'%}">
-            <i class="pr-3 pi-vcard"></i>
-            <span>Profile</span>
-          </a>
-        </li>
-        <li class="drawer-nav-section">
-          <a class="drawer-nav-section-link " href="{% url 'user-settings-emails' %}">
-            <i class="pr-3 pi-email"></i>
-            <span>Emails</span>
-          </a>
-        </li>
-        <li class="drawer-nav-section">
-          <a class="drawer-nav-section-link " href="{% url 'user-settings-billing' %}">
-            <i class="pr-3 pi-credit-card"></i>
-            <span>Subscription</span>
-          </a>
-        </li>
-        <li class="drawer-nav-section">
-          <a class="drawer-nav-section-link " href="/settings/roles">
-            <i class="pr-3 pi-cog"></i>
-            <span>Roles &amp; Capabilities</span>
-          </a>
-        </li>
-      </ol>
+
+    <div class="drawer-nav-dropdown-wrapper">
+      <a class="drawer-nav-dropdown" href="{% url 'user-settings'%}">
+        <i class="material-icons mr-2">person</i>
+        <span>Profile</span>
+      </a>
     </div>
+
+    <div class="drawer-nav-dropdown-wrapper">
+      <a class="drawer-nav-dropdown" href="{% url 'user-settings-emails' %}">
+        <i class="material-icons mr-2">email</i>
+        <span>Emails</span>
+      </a>
+    </div>
+
+    <div class="drawer-nav-dropdown-wrapper">
+      <a class="drawer-nav-dropdown" href="{% url 'user-settings-billing' %}">
+        <i class="material-icons mr-2">credit_card</i>
+        <span>Subscription</span>
+      </a>
+    </div>
+
+    <div class="drawer-nav-dropdown-wrapper">
+      <a class="drawer-nav-dropdown" href="/settings/roles">
+        <i class="material-icons mr-2">settings</i>
+        <span>Roles &amp; Capabilities</span>
+      </a>
+    </div>
+
+
   </div>
 </nav>
