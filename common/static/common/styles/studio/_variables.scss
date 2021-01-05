@@ -194,7 +194,7 @@ $sizes: map-merge((
 // Settings for the `<body>` element.
 
 $body-bg: $charcoal-gray !default;
-$body-color: $white !default;
+$body-color: $highlight-white-xxstrong !default;
 
 // Links
 //
@@ -345,7 +345,7 @@ $headings-margin-bottom: $spacer / 2 !default;
 $headings-font-family: null !default;
 $headings-font-weight: 700 !default;
 $headings-line-height: 1.25 !default;
-$headings-color: null !default;
+$headings-color: $white !default;
 
 $display1-size: 4.25rem !default;
 $display2-size: 3.75rem !default;
