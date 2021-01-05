@@ -1,58 +1,50 @@
-{% extends 'common/base.html' %}
+{% extends 'users/settings/base.html' %}
 
 {% load static %}
 
-{% block content %}
-<div class="container-xl pt-3">
-  <div class="row">
-    <div class="col-md-3 d-none d-md-block">
-      {% include 'users/settings/tabs.html' %}
-    </div>
-    <div class="col-md-9">
-      <p class="subtitle">Settings</p>
-      <h1 class="mb-3">Profile</h1>
-      <div class="settings">
-        <div class="row mb-2">
-          <div class="col">
-            <h2 class="mb-0">Blender ID Profile</h2>
-            <p>To change the details below, visit the <a href="{{ BLENDER_ID.BASE_URL }}settings/profile"
-                target="_blank">Blender ID</a> website.</p>
-          </div>
-        </div>
+{% block settings %}
 
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <h3 class="mb-0">Full Name</h3>
-            <p>This is displayed next to comments.</p>
-            <input disabled class="form-control" type="text" value="{{ user.full_name }}"
-              style="background-image:url({% static "common/images/icons/lock.svg" %});">
-          </div>
-          <div class="col-md-6">
-            <h3 class="mb-0">Email</h3>
-            <p>This is how we contact you.</p>
-            <input disabled class="form-control" type="text" value="{{ user.email }}"
-              style="background-image:url({% static "common/images/icons/lock.svg" %});">
-          </div>
-        </div>
-
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <h3 class="mb-0">Username</h3>
-            <p>This is used in comments.</p>
-            <input disabled class="form-control" type="text" value="{{ user.username }}"
-              style="background-image:url({% static "common/images/icons/lock.svg" %});">
-          </div>
-          <div class="col-md-6">
-            <h3 class="mb-0">Profile Picture</h3>
-            <p>This is displayed next to comments.</p>
-            <img src="{{ user.image_url }}" width="44" height="44" class="rounded" alt="Profile Image">
-          </div>
-        </div>
-
-
-      </div>
+<p class="subtitle">Settings</p>
+<h1 class="mb-3">Profile</h1>
+<div class="settings">
+  <div class="row mb-2">
+    <div class="col">
+      <h2 class="mb-0">Blender ID Profile</h2>
+      <p>To change the details below, visit the <a href="{{ BLENDER_ID.BASE_URL }}settings/profile"
+          target="_blank">Blender ID</a> website.</p>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <h3 class="mb-0">Full Name</h3>
+      <p>This is displayed next to comments.</p>
+      <input disabled class="form-control" type="text" value="{{ user.full_name }}"
+        style="background-image:url({% static "common/images/icons/lock.svg" %});">
+    </div>
+    <div class="col-md-6 mb-3">
+      <h3 class="mb-0">Email</h3>
+      <p>This is how we contact you.</p>
+      <input disabled class="form-control" type="text" value="{{ user.email }}"
+        style="background-image:url({% static "common/images/icons/lock.svg" %});">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <h3 class="mb-0">Username</h3>
+      <p>This is used in comments.</p>
+      <input disabled class="form-control" type="text" value="{{ user.username }}"
+        style="background-image:url({% static "common/images/icons/lock.svg" %});">
+    </div>
+    <div class="col-md-6 mb-3">
+      <h3 class="mb-0">Profile Picture</h3>
+      <p>This is displayed next to comments.</p>
+      <img src="{{ user.image_url }}" width="44" height="44" class="rounded" alt="Profile Image">
+    </div>
+  </div>
+
+
 </div>
 
-{% endblock content %}
+{% endblock settings %}

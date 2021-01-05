@@ -1,36 +1,29 @@
-{% extends 'common/base.html' %}
+{% extends 'users/settings/base.html' %}
 
-{% block content %}
-<div class="container-xl pt-3">
+{% block settings %}
+
+<p class="subtitle">Settings</p>
+<h1 class="mb-3">Emails</h1>
+<div class="settings-form">
   <div class="row">
-    <div class="col-md-3 d-none d-md-block">
-      {% include 'users/settings/tabs.html' %}
-    </div>
-    <div class="col-md-9">
-      <p class="subtitle">Settings</p>
-      <h1 class="mb-3">Emails</h1>
-      <div class="settings-form">
-        <div class="row">
-          <div class="col">
-            <h2 class="mb-0">Newsletter</h2>
-            <p>We occasionally send out emails with updates on whats new in the Blender Cloud.</p>
-          </div>
-        </div>
-        <form id="settings-form" method="POST" action="/settings/emails">
-          {% for field in form %}
-          <div class="form-group form-check pl-0 mb-3">
-            {% csrf_token %}
-            {{ field.errors }}
-            <label class="form-check-label">
-              {{ field }}
-              Keep me updated with Blender Cloud news.
-            </label>
-          </div>
-          {% endfor %}
-          <button type="submit" class="btn btn-primary">Save changes</button>
-        </form>
-      </div>
+    <div class="col">
+      <h2 class="mb-0">Newsletter</h2>
+      <p>We occasionally send out emails with updates on whats new in the Blender Cloud.</p>
     </div>
   </div>
+  <form id="settings-form" method="POST" action="/settings/emails">
+    {% for field in form %}
+    <div class="form-group form-check pl-0 mb-3">
+      {% csrf_token %}
+      {{ field.errors }}
+      <label class="form-check-label">
+        {{ field }}
+        Keep me updated with Blender Cloud news.
+      </label>
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Save changes</button>
+  </form>
 </div>
-{% endblock content %}
+
+{% endblock settings %}

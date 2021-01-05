@@ -1,75 +1,67 @@
-{% extends 'common/base.html' %}
+{% extends 'users/settings/base.html' %}
 {% load common_extras %}
 
-{% block content %}
-<div class="container-xl pt-3">
+
+{% block settings %}
+
+<p class="subtitle">Settings</p>
+<h1 class="mb-3">Subscription</h1>
+
+<div class="settings-billing">
+
   <div class="row">
-    <div class="col-md-3 d-none d-md-block">
-      {% include 'users/settings/tabs.html' %}
-    </div>
-    <div class="col-md-9">
-      <p class="subtitle">Settings</p>
-      <h1 class="mb-3">Subscription</h1>
-
-      <div class="settings-billing">
-
-        <div class="row">
-          <div class="col">
-            <h2 class="mb-0">Status</h2>
-            <p>The current status of your subscription:</p>
-          </div>
-        </div>
-
-        {% if user|has_group:"demo" %}
-        <h2 class="text-primary mb-3">
-          <i class="material-icons align-middle">favorite</i>
-          <span>You have a free account</span>
-        </h2>
-
-        <div class="row">
-          <div class="col">
-            <h2 class="mb-0">Manage Subscription</h2>
-            <p>
-              You have full access to the Blender Cloud, provided by the Blender Institute. This account is meant for
-              free evaluation of the service. Get in touch with <a
-                href="mailto:cloudsupport@blender.org">cloudsupport@blender.org</a> if you have any questions.
-            </p>
-          </div>
-        </div>
-
-
-        {#% elif user|has_group:"subscriber" %#}
-        {% elif user|has_active_subscription %}
-        <h2 class="text-success mb-3">
-          <i class="material-icons align-middle">done</i>
-          <span>Your subscription is active</span>
-        </h2>
-
-        <div class="row">
-          <div class="col">
-            <h2 class="mb-0">Manage Subscription</h2>
-            <p>If you want to change or cancel your billing, visit the <a target="_blank"
-                href="https://store.blender.org/my-account/subscriptions/">Blender Store</a>.</p>
-          </div>
-        </div>
-
-        {% else %}
-        <h2 class="text-danger mb-3">
-          <i class="material-icons align-middle">info</i>
-          <span>You do not have an active subscription</span>
-        </h2>
-
-        <div class="row">
-          <div class="col">
-            <h2 class="mb-0">Manage Subscription</h2>
-            <p>If you want to subscribe to Blender Cloud visit the <a target="_blank"
-                href="https://store.blender.org/product/membership/">Blender Store</a>.</p>
-          </div>
-        </div>
-
-        {% endif %}
-      </div>
+    <div class="col">
+      <h2 class="mb-0">Status</h2>
+      <p>The current status of your subscription:</p>
     </div>
   </div>
+
+  {% if user|has_group:"demo" %}
+  <h2 class="text-primary mb-3">
+    <i class="material-icons align-middle">favorite</i>
+    <span>You have a free account</span>
+  </h2>
+
+  <div class="row">
+    <div class="col">
+      <h2 class="mb-0">Manage Subscription</h2>
+      <p>
+        You have full access to the Blender Cloud, provided by the Blender Institute. This account is meant for
+        free evaluation of the service. Get in touch with <a
+          href="mailto:cloudsupport@blender.org">cloudsupport@blender.org</a> if you have any questions.
+      </p>
+    </div>
+  </div>
+
+  {#% elif user|has_group:"subscriber" %#}
+  {% elif user|has_active_subscription %}
+  <h2 class="text-success mb-3">
+    <i class="material-icons align-middle">done</i>
+    <span>Your subscription is active</span>
+  </h2>
+
+  <div class="row">
+    <div class="col">
+      <h2 class="mb-0">Manage Subscription</h2>
+      <p>If you want to change or cancel your billing, visit the <a target="_blank"
+          href="https://store.blender.org/my-account/subscriptions/">Blender Store</a>.</p>
+    </div>
+  </div>
+
+  {% else %}
+  <h2 class="text-danger mb-3">
+    <i class="material-icons align-middle">info</i>
+    <span>You do not have an active subscription</span>
+  </h2>
+
+  <div class="row">
+    <div class="col">
+      <h2 class="mb-0">Manage Subscription</h2>
+      <p>If you want to subscribe to Blender Cloud visit the <a target="_blank"
+          href="https://store.blender.org/product/membership/">Blender Store</a>.</p>
+    </div>
+  </div>
+
+  {% endif %}
 </div>
-{% endblock content %}
+{% endblock settings %}

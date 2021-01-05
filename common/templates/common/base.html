@@ -104,8 +104,7 @@
                   <span>Notifications</span>
                 </a>
 
-                <button
-                  class="dropdown-item icon {% if user.notifications_unread.count >= 1 %}unread{% endif %}"
+                <button class="dropdown-item icon {% if user.notifications_unread.count >= 1 %}unread{% endif %}"
                   data-toggle="tooltip" data-placement="top"
                   data-mark-all-read-url="{% url 'api-notifications-mark-read' %}" title="Mark all as read">
                   <i class="material-icons">markunread_mailbox</i>
@@ -293,10 +292,6 @@
                 <a class="h3 drawer-nav-dropdown" href="{% url 'search' %}">Search</a>
               </div>
 
-              <div class="col-6 p-0">
-                <a class="h3 drawer-nav-dropdown" href="{% url 'user-notification' %}">Notifications</a>
-              </div>
-
               {% if not request.user.is_authenticated %}
 
               <div class="col-6 p-0">
@@ -306,6 +301,13 @@
               <div class="col-6 p-0">
                 <a class="h3 drawer-nav-dropdown text-primary" href="{% url 'oauth:login' %}">Join</a>
               </div>
+
+              {% else %}
+
+              <div class="col-6 p-0">
+                <a class="h3 drawer-nav-dropdown" href="{% url 'user-notification' %}">Notifications</a>
+              </div>
+
               {% endif %}
 
             </div>
