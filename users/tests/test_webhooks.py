@@ -370,7 +370,7 @@ class TestBlenderIDWebhook(TestCase):
             **self.webhook_payload,
             'id': '999',
         }
-        with self.assertLogs('users.views.webhooks', level='ERROR') as logs:
+        with self.assertLogs('users.views.webhooks', level='WARNING') as logs:
             response = self.client.post(
                 self.url, body, content_type='application/json', **prepare_hmac_header(body)
             )

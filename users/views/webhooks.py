@@ -82,7 +82,7 @@ def handle_user_modified(payload: Dict[Any, Any]) -> None:
     try:
         oauth_user_info = bid.get_oauth_user_info(oauth_user_id)
     except ObjectDoesNotExist:
-        logger.error(f'Cannot update user: no OAuth info found for ID {oauth_user_id}')
+        logger.warning(f'Cannot update user: no OAuth info found for ID {oauth_user_id}')
         return
 
     user = oauth_user_info.user
