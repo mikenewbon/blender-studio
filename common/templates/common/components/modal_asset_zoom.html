@@ -3,7 +3,7 @@
     <div class="modal-header p-0">
       <div class="file-toolbar">
         <button data-like-url="{{ asset.like_url }}"
-          class="btn btn-transparent btn-sm btn-icon comment-material-button checkbox-like {% if not user.is_authenticated %}disabled{% endif%}"
+          class="btn btn-dark btn-sm btn-icon comment-material-button checkbox-like {% if not user.is_authenticated %}disabled{% endif%}"
           {% if not user.is_authenticated %}disabled{% endif%} {% if asset.liked %}data-checked="checked" {% endif %}>
           <i class="material-icons checkbox-like-icon-checked text-primary">favorite</i>
           <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
