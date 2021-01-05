@@ -8,7 +8,7 @@ import responses
 from django.contrib.admin.models import LogEntry, CHANGE
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from django.test import TestCase, override_settings
+from django.test import TestCase, override_settings, TransactionTestCase
 from django.urls import reverse
 
 from common.tests.factories.users import UserFactory
@@ -237,7 +237,7 @@ class TestBlenderIDWebhook(TestCase):
         self.assertEquals(response.content, b'Malformed JSON')
 
     @responses.activate
-    def test_user_modified_updates_profile_and_user(self):
+    def test_user_modified_updates_user(self):
         body = self.webhook_payload
         response = self.client.post(
             self.url, body, content_type='application/json', **prepare_hmac_header(body)
@@ -386,7 +386,7 @@ class TestBlenderIDWebhook(TestCase):
             responses.GET, f'{BLENDER_ID_BASE_URL}api/me', status=403, body='Unauthorized'
         )
 
-        with self.assertLogs('users.views.webhooks', level='ERROR') as logs:
+        with self.assertLogs('users.blender_id', level='ERROR') as logs:
             response = self.client.post(
                 self.url, body, content_type='application/json', **prepare_hmac_header(body)
             )
@@ -405,12 +405,79 @@ class TestBlenderIDWebhook(TestCase):
             response = self.client.post(
                 self.url, body, content_type='application/json', **prepare_hmac_header(body)
             )
-            self.assertRegex(logs.output[0], 'Profile image updated for ⅉanedoe')
+            self.assertRegex(logs.output[0], 'Profile image updated for')
 
         self.assertEquals(response.status_code, 204)
         self.assertEquals(response.content, b'')
         user = User.objects.get(id=self.user.pk)
         self.assertTrue(user.image_url, 's3://file')
+
+
+@override_settings(
+    BLENDER_ID={
+        'BASE_URL': BLENDER_ID_BASE_URL,
+        'OAUTH_CLIENT': 'testoauthclient',
+        'OAUTH_SECRET': 'testoathsecret',
+        'WEBHOOK_USER_MODIFIED_SECRET': b'testsecret',
+    }
+)
+@patch('storages.backends.s3boto3.S3Boto3Storage.url', Mock(return_value='s3://file'))
+@patch(
+    # Make sure background task is executed as a normal function
+    'users.views.webhooks.handle_user_modified',
+    new=webhooks.handle_user_modified.task_function,
+)
+class TestIntegrityErrors(TransactionTestCase):
+    """Check that webhook handles cases that trigger `IntegrityError`s.
+
+    In order to do that, it has to handle database transactions commits and rollbacks the same way
+    "normal" code does, as opposed to how TestCase does it, otherwise it breaks test runs.
+    See https://docs.djangoproject.com/en/3.0/topics/testing/tools/#django.test.TransactionTestCase
+    """
+
+    maxDiff = None
+    webhook_payload = {
+        'avatar_changed': False,
+        'email': 'newmail@example.com',
+        'full_name': 'Иван Васильевич Doe',
+        'id': 2,
+        'old_email': 'mail@example.com',
+        'roles': [],
+    }
+
+    def setUp(self):
+        self.url = reverse('webhook-user-modified')
+        util.mock_blender_id_responses()
+
+        # Prepare a user
+        self.user = UserFactory(
+            email='mail@example.com',
+            oauth_info__oauth_user_id='2',
+            oauth_tokens__oauth_user_id='2',
+            oauth_tokens__access_token='testaccesstoken',
+            oauth_tokens__refresh_token='testrefreshtoken',
+        )
+
+    @responses.activate
+    def test_user_modified_does_not_allow_duplicate_email(self):
+        # Same email as in the webhook payload for another user
+        another_user = UserFactory(email='jane@example.com')
+        body = {
+            **self.webhook_payload,
+            'email': 'jane@example.com',
+        }
+
+        with self.assertLogs('users.views.webhooks', level='ERROR') as logs:
+            response = self.client.post(
+                self.url, body, content_type='application/json', **prepare_hmac_header(body)
+            )
+            self.assertRegex(logs.output[0], 'Unable to update email for')
+
+        self.assertEquals(response.status_code, 204)
+        self.assertEquals(response.content, b'')
+        # Email was not updated
+        self.assertEquals(self.user.email, 'mail@example.com')
+        self.assertEquals(another_user.email, 'jane@example.com')
 
 
 @override_settings(

@@ -8,6 +8,7 @@ import logging
 from background_task import background
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.utils import IntegrityError
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.http.request import HttpRequest
 from django.views.decorators.csrf import csrf_exempt
@@ -86,24 +87,16 @@ def handle_user_modified(payload: Dict[Any, Any]) -> None:
 
     user = oauth_user_info.user
 
-    # FIXME(anna) payload doesn't have username/nickname in it
     try:
-        user_info = bid.get_user_info(oauth_user_id)
-        if user_info['nickname'] != user.username:
-            # TODO(anna) handle duplicate usernames
-            user.username = user_info['nickname']
-            user.save()
-    except Exception:
-        logger.exception(f'Unable to update username for {user}')
-
-    if payload['email'] != user.email:
-        # TODO(anna) handle duplicate emails
-        user.email = payload['email']
-        user.save()
+        if payload['email'] != user.email:
+            user.email = payload['email']
+            user.save(update_fields=['email'])
+    except IntegrityError:
+        logger.exception(f'Unable to update email for {user}: duplicate email')
 
     if payload['full_name'] != user.full_name:
         user.full_name = payload['full_name']
-        user.save()
+        user.save(update_fields=['full_name'])
 
     if payload.get('avatar_changed') or not user.image:
         bid.copy_avatar_from_blender_id(user=user)
@@ -111,3 +104,6 @@ def handle_user_modified(payload: Dict[Any, Any]) -> None:
     # Sync roles to groups
     group_names = payload.get('roles') or []
     set_groups_from_roles(user, group_names=group_names)
+
+    # Attempt to update the username
+    bid.update_username(user, oauth_user_id)

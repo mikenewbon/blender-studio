@@ -15,6 +15,10 @@ from blender_id_oauth_client.views import blender_id_oauth_settings
 logger = logging.getLogger(__name__)
 
 
+class BIDMissingAccessToken(Exception):
+    """Raise when user accesss token is not found in DB."""
+
+
 class BIDSession:
     """Wrap up interactions with Blender ID, such as fetching user info and avatar."""
 
@@ -73,7 +77,7 @@ class BIDSession:
         """
         token = self.get_oauth_token(oauth_user_id)
         if not token:
-            raise Exception(f'No access token found for {oauth_user_id}')
+            raise BIDMissingAccessToken(f'No access token found for {oauth_user_id}')
         session = self._make_session(access_token=token.access_token)
         resp = session.get(self.settings.url_userinfo)
         resp.raise_for_status()
@@ -120,3 +124,19 @@ class BIDSession:
             logger.exception(f'Failed to store an image for {user}')
         except Exception:
             logger.exception(f'Failed to copy an image for {user}')
+
+    def update_username(self, user, oauth_user_id):
+        """Update username of a given user, fetching it from Blender ID.
+
+        FIXME(anna): webhook payload doesn't include username, hence this separate method.
+        """
+        try:
+            user_info = self.get_user_info(oauth_user_id)
+            if user_info['nickname'] != user.username:
+                # TODO(anna) handle duplicate usernames
+                user.username = user_info['nickname']
+                user.save(update_fields=['username'])
+        except BIDMissingAccessToken:
+            logger.warning(f'Unable to retrieve username for {user}: no access token')
+        except Exception:
+            logger.exception(f'Unable to update username for {user}')
