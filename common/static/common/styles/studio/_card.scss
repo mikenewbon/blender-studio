@@ -48,7 +48,7 @@
         background-color: tint($navigation-gray, 10%);
 
         .card-body {
-          color: $white;
+          color: $body-color;
         }
       }
     }
@@ -113,7 +113,7 @@
   background-color: $navigation-gray;
 
   .card-body {
-    color: $white;
+    color: $body-color;
   }
 
   .card-subtitle {
