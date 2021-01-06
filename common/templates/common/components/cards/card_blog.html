@@ -2,9 +2,11 @@
   <div class="card card-dark card-hover card-media">
     <div class="card-header">
       <a class="card-header-link" href="{% url 'post-detail' slug=post.slug %}">
+        {% if post.thumbnail %}
         {% block image %}
         {% include "common/components/helpers/image_set.html" with alt=post.title classes="card-image" img_source=post.thumbnail xsmall_width="350" small_width="350" medium_width="350" large_width="350" xlarge_width="350" %}
         {% endblock image %}
+        {% endif %}
       </a>
     </div>
     <a href="{% url 'post-detail' slug=post.slug %}" class="card-body">
