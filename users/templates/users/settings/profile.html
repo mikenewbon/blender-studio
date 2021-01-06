@@ -45,8 +45,9 @@
   </div>
 
   <div class="row">
+    {% if user.badges %}
     <div class="col-md-6 mb-3">
-      {% if user.badges %}
+
       <h3 class="mb-0">Badges</h3>
       <p>These are displayed next to your name.</p>
       <div class="row">
@@ -56,10 +57,11 @@
           {% endwith %}
         </div>
       </div>
-      {% endif %}
+
     </div>
+    {% endif %}
     <div class="col-md-6 mb-3">
-      {% if user.badges %}
+
       <h3 class="mb-0">Preview</h3>
       <p>This is how your profile is displayed.</p>
       <div class="p-2 bg-secondary rounded">
@@ -77,7 +79,7 @@
       </div>
 
 
-      {% endif %}
+
     </div>
   </div>
 
