@@ -1,4 +1,4 @@
-"""Decorators for user-related things."""
+"""Commonly used decorators."""
 from functools import wraps
 from typing import Any, Callable
 

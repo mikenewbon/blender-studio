@@ -1,5 +1,6 @@
 from actstream.models import Action
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.test import TestCase
 from django.urls import reverse
 
@@ -65,11 +66,19 @@ class TestPostCreation(TestCase):
 
 class TestPostComments(TestCase):
     def setUp(self):
+        self.user_without_subscription = UserFactory()
         self.user = UserFactory()
         self.other_user = UserFactory()
+
         self.post = PostFactory()
         self.post_url = reverse('api-post-comment', kwargs={'post_pk': self.post.pk})
         self.post_comment = CommentUnderPostFactory(comment_post__post=self.post)
+
+        # Commenting without subscription is not allowed, so add these to the right group
+        subscribers, _ = Group.objects.get_or_create(name='subscriber')
+        self.user.groups.add(subscribers)
+        self.other_user.groups.add(subscribers)
+        self.post_comment.user.groups.add(subscribers)
 
     def test_reply_to_comment_creates_notifications(self):
         # No activity yet

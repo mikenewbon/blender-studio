@@ -1,15 +1,16 @@
+{% load common_extras %}
 {% load comment_extras %}
 
 <div class="comment-section" data-comment-url="{{ comments.comment_url }}">
   <h3>{{ comments.number_of_comments }} Comments</h3>
-  {% if user.is_authenticated %}
+  {% if user|has_active_subscription %}
   {% include 'comments/components/comment_input.html' with div_class='comment-main-input' %}
   {% comment %} {% comment_input button_label='Comment' div_class='comment-main-input'%} {% endcomment %}
   {% else %}
   <div class="comment-input row" onkeydown="event.stopPropagation()">
     <div class="col">
       <div class="comment-input-div disabled form-control" contenteditable="false">
-      <p class="mb-0"><a class="mb-0" href="{% url 'oauth:login' %}">Login</a> to comment publicly.</p>
+      <p class="mb-0"><a href="https://store.blender.org/product/membership/" target="_blank">Join</a> to comment publicly.</p>
       </div>
     </div>
     <div class="comment-send col-auto pl-0">

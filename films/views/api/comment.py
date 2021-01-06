@@ -1,3 +1,4 @@
+"""Comment API used in content gallery."""
 import json
 from typing import Optional
 
@@ -8,13 +9,16 @@ from django.http.response import JsonResponse
 from django.views.decorators.http import require_POST
 
 from comments.models import Comment
+from common.decorators import subscription_required
 from common.types import assert_cast
 from films.models import AssetComment
 
 
 @require_POST
 @login_required
+@subscription_required
 def comment(request: HttpRequest, *, asset_pk: int) -> JsonResponse:
+    """Add a top-level comment or a reply to another comment under an asset in content gallery."""
     parsed_body = json.loads(request.body)
 
     reply_to_pk = int(parsed_body['reply_to']) if parsed_body.get('reply_to') else None

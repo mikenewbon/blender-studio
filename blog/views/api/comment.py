@@ -10,11 +10,13 @@ from django.views.decorators.http import require_POST
 
 from blog.models import PostComment
 from comments.models import Comment
+from common.decorators import subscription_required
 from common.types import assert_cast
 
 
 @require_POST
 @login_required
+@subscription_required
 def comment(request: HttpRequest, *, post_pk: int) -> JsonResponse:
     """Add a top-level comment under a blog post or a reply to another comment."""
     parsed_body = json.loads(request.body)

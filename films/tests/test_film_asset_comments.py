@@ -6,17 +6,46 @@ from comments.models import Comment
 from common.tests.factories.comments import CommentUnderAssetFactory
 from common.tests.factories.films import AssetFactory
 from common.tests.factories.users import UserFactory
+from django.contrib.auth.models import Group
 
 from users.models import Notification
 
 
 class TestAssetComments(TestCase):
     def setUp(self):
+        self.user_without_subscription = UserFactory()
         self.user = UserFactory()
         self.other_user = UserFactory()
+
         self.asset = AssetFactory()
         self.asset_comment_url = reverse('api-asset-comment', kwargs={'asset_pk': self.asset.pk})
         self.asset_comment = CommentUnderAssetFactory(comment_asset__asset=self.asset)
+
+        # Commenting without subscription is not allowed, so add these to the right group
+        subscribers, _ = Group.objects.get_or_create(name='subscriber')
+        self.user.groups.add(subscribers)
+        self.other_user.groups.add(subscribers)
+        self.asset_comment.user.groups.add(subscribers)
+
+    def test_comment_not_allowed_without_subscription(self):
+        # No activity yet
+        self.assertEqual(Action.objects.count(), 0)
+
+        self.client.force_login(self.user_without_subscription)
+        data = {'message': 'Comment message'}
+        response = self.client.post(self.asset_comment_url, data, content_type='application/json')
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_reply_to_comment_not_allowed_without_subscription(self):
+        # No activity yet
+        self.assertEqual(Action.objects.count(), 0)
+
+        self.client.force_login(self.user_without_subscription)
+        data = {'message': 'Comment message', 'reply_to': self.asset_comment.pk}
+        response = self.client.post(self.asset_comment_url, data, content_type='application/json')
+
+        self.assertEqual(response.status_code, 403)
 
     def test_reply_to_comment_creates_notifications(self):
         # No activity yet

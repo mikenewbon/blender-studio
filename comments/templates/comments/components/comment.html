@@ -57,7 +57,7 @@
               </button>
 
               <button class="btn btn-transparent btn-xs comment-action comment-reply {% if not user.is_authenticated %}disabled{% endif%}"
-                {% if not user.is_authenticated %}disabled{% endif%}>Reply</button>
+                {% if not user|has_active_subscription %}disabled{% endif%}>Reply</button>
 
               {% if comment.edit_url or comment.archive_tree_url %}
               <button class="btn btn-transparent btn-xs btn-icon comment-material-button comment-dropdown"
