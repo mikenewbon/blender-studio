@@ -18,7 +18,7 @@
   <div class="row">
     <div class="col-md-6 mb-3">
       <h3 class="mb-0">Full Name</h3>
-      <p>This is displayed next to comments.</p>
+      <p>This is displayed in comments.</p>
       <input disabled class="form-control" type="text" value="{{ user.full_name }}"
         style="background-image:url({% static "common/images/icons/lock.svg" %});">
     </div>
@@ -39,7 +39,7 @@
     </div>
     <div class="col-md-6 mb-3">
       <h3 class="mb-0">Profile Picture</h3>
-      <p>This is displayed next to comments.</p>
+      <p>This is displayed in comments.</p>
       <img src="{{ user.image_url }}" width="44" height="44" class="rounded" alt="Profile Image">
     </div>
   </div>
@@ -48,10 +48,10 @@
     <div class="col-md-6 mb-3">
       {% if user.badges %}
       <h3 class="mb-0">Badges</h3>
-      {#<p>This is displayed next to comments.</p>#}
+      <p>These are displayed next to your name.</p>
       <div class="row">
-          <div class="col-md-12 mt-2 mb-3">
-          {% with width=64 badges=user.badges %}
+          <div class="col-md-12 mb-3">
+          {% with width=44 badges=user.badges %}
           {% include 'users/components/badges.html' %}
           {% endwith %}
           </div>

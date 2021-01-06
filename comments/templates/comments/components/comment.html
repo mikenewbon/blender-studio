@@ -19,8 +19,8 @@
       style="background-image:url('{{ profile_image_url }}');"
       class="profile col-profile"></div>
     <h4 class="comment-name">{{ comment.full_name }}</h4>
-    <p class="badge badge-secondary">
-    {% with width=24 badges=comment.badges %}
+    <p class="badge">
+    {% with width=16 badges=comment.badges %}
     {% include 'users/components/badges.html' %}
     {% endwith %}
     </p>
