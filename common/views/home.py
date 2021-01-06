@@ -40,9 +40,7 @@ def home(request: HttpRequest) -> HttpResponse:
         'featured_films': Film.objects.filter(is_featured=True),
         'featured_trainings': Training.objects.filter(),
         'featured_film_assets': get_random_featured_assets(limit=8),
-        'latest_posts': models_blog.Post.objects.filter(is_published=True).order_by(
-            '-date_created'
-        )[:6],
+        'latest_posts': models_blog.Post.objects.filter(is_published=True)[:6],
         'recently_watched_sections': [],
     }
     if request.user.is_authenticated:
