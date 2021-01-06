@@ -109,7 +109,7 @@ class BIDSession:
         """Retrieve badges from Blender ID service using a user-specific OAuth2 session."""
         token = self.get_oauth_token(oauth_user_id)
         if not token:
-            raise Exception(f'No access token found for {oauth_user_id}')
+            raise BIDMissingAccessToken(f'No access token found for {oauth_user_id}')
         session = self._make_session(access_token=token.access_token)
         resp = session.get(self.get_badges_url(oauth_user_id))
         resp.raise_for_status()
@@ -176,5 +176,7 @@ class BIDSession:
             logger.info(f'Badges updated for {user}')
         except requests.HTTPError:
             logger.exception(f'Failed to retrieve badges of {user} from Blender ID')
+        except BIDMissingAccessToken:
+            logger.warning(f'Unable to retrieve badges for {user}: no access token')
         except Exception:
             logger.exception(f'Failed to copy an image for {user}')
