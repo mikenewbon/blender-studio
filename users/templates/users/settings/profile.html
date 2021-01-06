@@ -50,12 +50,34 @@
       <h3 class="mb-0">Badges</h3>
       <p>These are displayed next to your name.</p>
       <div class="row">
-          <div class="col-md-12 mb-3">
+        <div class="col-md-12 mb-3">
           {% with width=44 badges=user.badges %}
           {% include 'users/components/badges.html' %}
           {% endwith %}
-          </div>
+        </div>
       </div>
+      {% endif %}
+    </div>
+    <div class="col-md-6 mb-3">
+      {% if user.badges %}
+      <h3 class="mb-0">Preview</h3>
+      <p>This is how your profile is displayed.</p>
+      <div class="p-2 bg-secondary rounded">
+
+        <div class="comment-name-date-wrapper mb-0">
+          <div style="background-image:url('{{ user.image_url }}');" class="profile col-profile"></div>
+          <h4 class="comment-name">{{ user.full_name }}</h4>
+          <p class="badge">
+            {% with width=16 badges=user.badges %}
+            {% include 'users/components/badges.html' %}
+            {% endwith %}
+          </p>
+          <p class="comment-date">1st January 2021 - 12:00</p>
+        </div>
+
+      </div>
+
+
       {% endif %}
     </div>
   </div>
