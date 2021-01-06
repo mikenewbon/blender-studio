@@ -106,4 +106,4 @@ def has_active_subscription(user: User) -> bool:
     """
     if not user:
         return False
-    return user.has_perm('profiles.can_view_content')
+    return user.has_perm('users.can_view_content')
