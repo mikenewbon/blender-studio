@@ -70,6 +70,10 @@ hr {
     }
   }
 
+  .figure-caption {
+    font-size: .9rem;
+  }
+
   p {
     margin-bottom: $spacer * .75;
     color: $highlight-white-xxstrong;
@@ -130,5 +134,22 @@ hr {
     @include media-breakpoint-up(lg) {
       margin-right: -#{$spacer * 5};
     }
+  }
+}
+
+figure {
+  margin-bottom: $spacer / 2;
+}
+
+a {
+  .figure-caption {
+    color: $link-color;
+  }
+
+  &:hover {
+    .figure-caption {
+      color: $link-hover-color;
+    }
+
   }
 }

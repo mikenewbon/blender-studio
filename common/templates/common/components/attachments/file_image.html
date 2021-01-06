@@ -1,7 +1,34 @@
+{% if caption %}
+{% if link %}
+{% if link == 'self' %}
+<a class="expand-image-links" href="{{ static_asset.source.url }}">
+  <figure class="figure blog-image {{ class }}">
+    {% include "common/components/helpers/image_set.html" with alt=static_asset.original_filename classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="740" xlarge_width="740" %}
+
+    <figcaption class="figure-caption">{{ caption }}</figcaption>
+  </figure>
+</a>
+{% else %}
+<a href="{{ link }}" target="_blank">
+  <figure class="figure blog-image {{ class }}">
+    {% include "common/components/helpers/image_set.html" with alt=static_asset.original_filename classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="740" xlarge_width="740" %}
+    <figcaption class="figure-caption">{{ caption }}</figcaption>
+  </figure>
+</a>
+{% endif %}
+
+{% else %}
+<figure class="figure blog-image {{ class }}">
+  {% include "common/components/helpers/image_set.html" with alt=static_asset.original_filename classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="740" xlarge_width="740" %}
+  <figcaption class="figure-caption">{{ caption }}</figcaption>
+</figure>
+{% endif %}
+{% else %}
+
 {% firstof class|default:""|add:" img-fluid blog-image" as classes %}
 {% if link %}
 {% if link == 'self' %}
-<a class="expand-image-links" href="{{ static_asset.thumbnail_m_url }}">
+<a class="expand-image-links" href="{{ static_asset.source.url }}">
   {% include "common/components/helpers/image_set.html" with alt=static_asset.original_filename classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="740" xlarge_width="740" %}
 </a>
 {% else %}
@@ -13,4 +40,6 @@
 {% else %}
 
 {% include "common/components/helpers/image_set.html" with alt=static_asset.original_filename classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="740" xlarge_width="740" %}
+{% endif %}
+
 {% endif %}

@@ -50,7 +50,9 @@ class Post(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Mo
         """Generates the html version of the content and saves the object."""
         if not self.slug:
             self.slug = slugify(self.title)
-        self.content_html = markdown.render(self.content)
+        # Clean but preserve some of the HTML tags
+        self.content = markdown.clean(self.content)
+        self.content_html = markdown.render_unsafe(self.content)
         super().save(*args, **kwargs)
 
     @property

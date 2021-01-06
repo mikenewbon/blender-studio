@@ -296,7 +296,12 @@ class Attachment:
         link = None if 'link' not in kwargs else kwargs['link']
         return render_to_string(
             'common/components/attachments/file_image.html',
-            {'static_asset': static_asset, 'link': link, 'class': kwargs.get('class')},
+            {
+                'static_asset': static_asset,
+                'link': link,
+                'class': kwargs.get('class'),
+                'caption': kwargs.get('caption'),
+            },
         )
 
     def render_video(
