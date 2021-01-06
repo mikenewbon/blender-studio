@@ -16,6 +16,23 @@ def mock_blender_id_responses() -> None:
     )
     responses.add(
         responses.GET,
+        f'{base_url}api/badges/2',
+        status=200,
+        json={
+            'user_id': 2,
+            'badges': {
+                'cloud_demo': {
+                    'label': 'Blender Cloud',
+                    'description': 'Blender Cloud free account',
+                    'image': f'{base_url}media/badges/badge_cloud.png',
+                    'image_width': 256,
+                    'image_height': 256,
+                },
+            },
+        },
+    )
+    responses.add(
+        responses.GET,
         f'{base_url}api/me',
         json={
             'id': 2,

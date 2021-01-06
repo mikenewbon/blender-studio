@@ -21,7 +21,7 @@ class UserAdmin(auth_admin.UserAdmin):
         (None, {'fields': ('username', 'password')}),
         (
             _('Personal info'),
-            {'fields': ('full_name', 'image', 'email', 'is_subscribed_to_newsletter')},
+            {'fields': ('full_name', 'image', 'email', 'is_subscribed_to_newsletter', 'badges')},
         ),
         (
             _('Permissions'),

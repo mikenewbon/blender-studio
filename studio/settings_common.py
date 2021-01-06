@@ -12,6 +12,7 @@ ADMIN_SITE_TITLE = 'Blender Studio'
 # Application definition
 
 INSTALLED_APPS = [
+    'django_jsonfield_backport',
     'emails',
     'blog',
     'comments',

@@ -8,6 +8,7 @@ from django.db.models import Case, When, Value, IntegerField
 from django.templatetags.static import static
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django_jsonfield_backport.models import JSONField
 
 from common.upload_paths import get_upload_to_hashed_path
 
@@ -23,6 +24,7 @@ class User(AbstractUser):
     full_name = models.CharField(max_length=255, blank=True, default='')
     image = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
     is_subscribed_to_newsletter = models.BooleanField(default=False)
+    badges = JSONField(null=True, blank=True)
 
     @property
     def image_url(self) -> Optional[str]:

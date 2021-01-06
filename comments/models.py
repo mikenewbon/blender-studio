@@ -66,6 +66,12 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
         return self.user.image_url
 
     @property
+    def badges(self) -> Dict:
+        if not self.user:
+            return None
+        return self.user.badges
+
+    @property
     def is_deleted(self) -> bool:
         """Checks if a comment with replies has been deleted."""
         return self.date_deleted is not None

@@ -107,3 +107,6 @@ def handle_user_modified(payload: Dict[Any, Any]) -> None:
 
     # Attempt to update the username
     bid.update_username(user, oauth_user_id)
+
+    # Attempt to update the badges
+    bid.copy_badges_from_blender_id(user=user)

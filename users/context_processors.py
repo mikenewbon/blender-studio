@@ -23,6 +23,7 @@ def user_dict(request: HttpRequest) -> Dict[str, User]:
             groups=[Group(name=group.name) for group in user.groups.all()],
             full_name=user.full_name,
             image_url=user.image_url,
+            badges=user.badges,
         )
     else:
         user_data = User(is_anonymous=True, is_authenticated=False)

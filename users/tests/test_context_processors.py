@@ -35,12 +35,24 @@ class ContextProcessorsTest(TestCase):
                 'image_url': None,
                 'full_name': None,
                 'username': None,
+                'badges': None,
             },
         )
 
     def test_user_dict_authenticated_user_with_oauth_info(self):
         user = UserFactory(
-            email='mail@example.com', username='ⅉanedoe', oauth_info__oauth_user_id='2'
+            email='mail@example.com',
+            username='ⅉanedoe',
+            oauth_info__oauth_user_id='2',
+            badges={
+                'cloud_demo': {
+                    'label': 'Blender Cloud',
+                    'description': 'Blender Cloud free account',
+                    'image': 'http://id.local:8000/media/badges/badge_cloud.png',
+                    'image_width': 256,
+                    'image_height': 256,
+                },
+            },
         )
         user.full_name = 'ⅉane Doe'
         user.image = 'path/to/file'
@@ -66,6 +78,15 @@ class ContextProcessorsTest(TestCase):
                 'image_url': 's3://file',
                 'full_name': 'ⅉane Doe',
                 'username': 'ⅉanedoe',
+                'badges': {
+                    'cloud_demo': {
+                        'label': 'Blender Cloud',
+                        'description': 'Blender Cloud free account',
+                        'image': 'http://id.local:8000/media/badges/badge_cloud.png',
+                        'image_width': 256,
+                        'image_height': 256,
+                    },
+                },
             },
         )
 
@@ -89,5 +110,6 @@ class ContextProcessorsTest(TestCase):
                 'image_url': '/static/common/images/blank-profile-pic.png',
                 'full_name': '',
                 'username': 'ⅉanedoe',
+                'badges': None,
             },
         )

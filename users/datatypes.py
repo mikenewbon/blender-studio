@@ -1,7 +1,7 @@
 """Describe authentication-related data types, used in templates."""
 from __future__ import annotations
 
-from typing import List
+from typing import List, Dict
 import dataclasses as dc
 import datetime
 
@@ -17,6 +17,7 @@ class User:
     image_url: str = None
     username: str = None
     groups: List[Group] = None
+    badges: Dict[Dict] = None
 
     is_active: bool = None
     is_staff: bool = None

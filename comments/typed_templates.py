@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import dataclasses as dc
 import datetime
-from typing import List, Optional, Literal
+from typing import List, Optional, Literal, Dict
 
 
 @dc.dataclass
@@ -23,6 +23,7 @@ class CommentTree:
     is_top_level: bool
     full_name: str
     profile_image_url: str
+    badges: Optional[Dict]
     message: str
     message_html: str
     like_url: Optional[str]
@@ -44,6 +45,7 @@ class DeletedCommentTree(CommentTree):
     message: Literal['[deleted]'] = '[deleted]'
     message_html: Literal['[deleted]'] = '[deleted]'
     profile_image_url: Literal[None] = None
+    badges: Literal[None] = None
     like_url: Literal[None] = None
     liked: Literal[False] = False
     likes: Literal[0] = 0

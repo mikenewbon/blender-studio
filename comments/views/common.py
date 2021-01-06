@@ -44,6 +44,7 @@ def comments_to_template_type(
             likes=assert_cast(int, getattr(comment, 'number_of_likes')),
             replies=[build_tree(reply) for reply in lookup.get(comment.pk, [])],
             profile_image_url=comment.profile_image_url,
+            badges=comment.badges,
             edit_url=(
                 comment.edit_url
                 if assert_cast(bool, getattr(comment, 'owned_by_current_user'))

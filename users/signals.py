@@ -47,6 +47,7 @@ def update_user(
     set_groups_from_roles(instance, group_names=group_names)
 
     bid.copy_avatar_from_blender_id(user=instance)
+    bid.copy_badges_from_blender_id(user=instance)
 
 
 @receiver(pre_save, sender=User)

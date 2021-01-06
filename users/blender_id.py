@@ -90,6 +90,10 @@ class BIDSession:
         """Return a Blender ID URL to the avatar for a given OAuth ID."""
         return urljoin(self.settings.url_base, f'api/user/{oauth_user_id}/avatar')
 
+    def get_badges_url(self, oauth_user_id: str) -> str:
+        """Return a Blender ID URL to the avatar for a given OAuth ID."""
+        return urljoin(self.settings.url_base, f'api/badges/{oauth_user_id}')
+
     def get_avatar(self, oauth_user_id: str) -> Tuple[str, io.BytesIO]:
         """Retrieve an avatar from Blender ID service using an OAuth2 session.
 
@@ -100,6 +104,19 @@ class BIDSession:
 
         name = pathlib.Path(urlparse(resp.url).path).name
         return name, io.BytesIO(resp.content)
+
+    def get_badges(self, oauth_user_id: str) -> Dict[str, Any]:
+        """Retrieve badges from Blender ID service using a user-specific OAuth2 session."""
+        token = self.get_oauth_token(oauth_user_id)
+        if not token:
+            raise Exception(f'No access token found for {oauth_user_id}')
+        session = self._make_session(access_token=token.access_token)
+        resp = session.get(self.get_badges_url(oauth_user_id))
+        resp.raise_for_status()
+        badges = resp.json().get('badges', {})
+        assert isinstance(badges, dict)
+
+        return badges
 
     def copy_avatar_from_blender_id(self, user):
         """
@@ -140,3 +157,24 @@ class BIDSession:
             logger.warning(f'Unable to retrieve username for {user}: no access token')
         except Exception:
             logger.exception(f'Unable to update username for {user}')
+
+    def copy_badges_from_blender_id(self, user):
+        """
+        Attempt to retrieve badges from Blender ID and save them in the user record.
+
+        If either OAuth info or Blender ID service isn't available, log an error and return.
+        """
+        if not hasattr(user, 'oauth_info'):
+            logger.warning(f'Cannot copy badges from Blender ID: {user} is missing OAuth info')
+            return
+        oauth_info = user.oauth_info
+        try:
+            badges = self.get_badges(oauth_info.oauth_user_id)
+            if badges:
+                user.badges = badges
+                user.save(update_fields=['badges'])
+            logger.info(f'Badges updated for {user}')
+        except requests.HTTPError:
+            logger.exception(f'Failed to retrieve badges of {user} from Blender ID')
+        except Exception:
+            logger.exception(f'Failed to copy an image for {user}')

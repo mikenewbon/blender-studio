@@ -314,6 +314,17 @@ Django = ">=1.11"
 sqlparse = ">=0.2.0"
 
 [[package]]
+name = "django-jsonfield-backport"
+version = "1.0.2"
+description = "Backport of the cross-DB JSONField model and form fields from Django 3.1."
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[package.dependencies]
+Django = ">=2.2"
+
+[[package]]
 name = "django-pipeline"
 version = "2.0.5"
 description = "Pipeline is an asset packaging library for Django."
@@ -323,7 +334,7 @@ python-versions = "*"
 
 [[package]]
 name = "django-storages"
-version = "1.10.1"
+version = "1.11.1"
 description = "Support for many storage backends in Django"
 category = "main"
 optional = false
@@ -1312,7 +1323,7 @@ watchdog = ["watchdog"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "7fca6ff8eb171d6898b8135109a359978b990345723878701484b73b87ded817"
+content-hash = "a1830002b1336205ee7e6088ba22afc2a053a95a4ab636e7036c16b22fddee37"
 
 [metadata.files]
 appdirs = [
@@ -1448,13 +1459,17 @@ django-debug-toolbar = [
     {file = "django-debug-toolbar-2.2.tar.gz", hash = "sha256:eabbefe89881bbe4ca7c980ff102e3c35c8e8ad6eb725041f538988f2f39a943"},
     {file = "django_debug_toolbar-2.2-py3-none-any.whl", hash = "sha256:ff94725e7aae74b133d0599b9bf89bd4eb8f5d2c964106e61d11750228c8774c"},
 ]
+django-jsonfield-backport = [
+    {file = "django-jsonfield-backport-1.0.2.tar.gz", hash = "sha256:0286dcc1c112389d52096f269eed83a77364ea2b349fe1777f5e4464c3c36fa9"},
+    {file = "django_jsonfield_backport-1.0.2-py3-none-any.whl", hash = "sha256:5574505967f6d7ada8c9269a5f873cfdca9812dc9502eee2b7a86be5c3798c76"},
+]
 django-pipeline = [
     {file = "django-pipeline-2.0.5.tar.gz", hash = "sha256:6c7bd5c2a922ddb7e989a1c5a6852f3a8bffcf6e14d9f228261c8ba04b5b79a7"},
     {file = "django_pipeline-2.0.5-py2.py3-none-any.whl", hash = "sha256:7bf3d304c655ca20f77d66a4f4f3511a7b2f317768110967828aa5088806d4ce"},
 ]
 django-storages = [
-    {file = "django-storages-1.10.1.tar.gz", hash = "sha256:652275ab7844538c462b62810276c0244866f345878256a9e0e86f5b1283ae18"},
-    {file = "django_storages-1.10.1-py3-none-any.whl", hash = "sha256:12de8fb2605b9b57bfaf54b075280d7cbb3b3ee1ca4bc9b9add147af87fe3a2c"},
+    {file = "django-storages-1.11.1.tar.gz", hash = "sha256:c823dbf56c9e35b0999a13d7e05062b837bae36c518a40255d522fbe3750fbb4"},
+    {file = "django_storages-1.11.1-py3-none-any.whl", hash = "sha256:f28765826d507a0309cfaa849bd084894bc71d81bf0d09479168d44785396f80"},
 ]
 django-stubs = [
     {file = "django-stubs-1.5.0.tar.gz", hash = "sha256:b4c9042f2c2fcb89dc0fb37df070cce0f9bf93b39ae193847b6e5a392b13c430"},

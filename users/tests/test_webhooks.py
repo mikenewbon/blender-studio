@@ -248,6 +248,18 @@ class TestBlenderIDWebhook(TestCase):
         user = User.objects.get(id=self.user.pk)
         self.assertEquals(user.full_name, 'Иван Васильевич Doe')
         self.assertEquals(user.email, 'newmail@example.com')
+        self.assertEquals(
+            user.badges,
+            {
+                'cloud_demo': {
+                    'description': 'Blender Cloud free account',
+                    'image': 'http://id.local:8000/media/badges/badge_cloud.png',
+                    'image_height': 256,
+                    'image_width': 256,
+                    'label': 'Blender Cloud',
+                }
+            },
+        )
 
     @responses.activate
     def test_user_modified_roles_added_removed_adds_removes_user_groups(self):
