@@ -2,12 +2,10 @@ import datetime
 import logging
 import mimetypes
 
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls.base import reverse
-from sorl.thumbnail import get_thumbnail
 
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
@@ -67,37 +65,6 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
     slug = models.SlugField(blank=True)
 
     content_type = models.CharField(max_length=256, blank=True)
-
-    # TODO(Natalia): generate preview if thumbnail not uploaded.
-    @property
-    def preview(self):
-        if self.thumbnail:
-            return self.thumbnail
-        if self.source_type == StaticAssetFileTypeChoices.image:
-            return self.source
-        # TODO(Natalia): Update this once we have auto-generated thumbnails.
-
-    @property
-    def thumbnail_m_url(self) -> str:
-        """Return a static URL to a medium-sizes thumbnail."""
-        # TODO(anna): use StaticThumbnailURLMixin once thumbnails are generated
-        preview = self.preview
-        if not preview:
-            return ''
-        return get_thumbnail(
-            preview, settings.THUMBNAIL_SIZE_M, crop=settings.THUMBNAIL_CROP_MODE
-        ).url
-
-    @property
-    def thumbnail_s_url(self) -> str:
-        """Return a static URL to a small thumbnail."""
-        # TODO(anna): use StaticThumbnailURLMixin once thumbnails are generated
-        preview = self.preview
-        if not preview:
-            return ''
-        return get_thumbnail(
-            preview, settings.THUMBNAIL_SIZE_S, crop=settings.THUMBNAIL_CROP_MODE
-        ).url
 
     @property
     def author_name(self) -> str:
@@ -159,6 +126,10 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
             Video.objects.create(static_asset=self, duration=datetime.timedelta(seconds=0))
             self.process_video()
         elif self.source_type == 'image':
+            # Use source image as a thumbnail
+            if not self.thumbnail:
+                self.thumbnail.name = self.source.name
+                self.save(update_fields=['thumbnail'])
             Image.objects.create(static_asset=self)
             # TODO(fsiddi) Background job to update the image info
 

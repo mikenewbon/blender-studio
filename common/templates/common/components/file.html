@@ -7,21 +7,21 @@
     <a href="?asset={{ asset.id }}" class="file-modal-link" data-asset-id="{{ asset.id }}"
       data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
 
-      {% if asset.static_asset.preview %}
+      {% if asset.static_asset.thumbnail %}
       {% if user_can_view_asset or asset.is_free %}
       {% if asset.is_spoiler %}{# Spoiler alert #}
       <div class="file-lock-text">
         <h4 class="mb-0"><i class="material-icons icon-inline small text-danger">warning</i>Spoiler</h4>
       </div>
-      {% include "common/components/helpers/image_set.html" with alt=asset.name classes="file-image locked" img_source=asset.static_asset.preview xsmall_width="200" small_width="200" medium_width="200" large_width="200" xlarge_width="200" %}
+      {% include "common/components/helpers/image_set.html" with alt=asset.name classes="file-image locked" img_source=asset.static_asset.thumbnail xsmall_width="200" small_width="200" medium_width="200" large_width="200" xlarge_width="200" %}
       {% else %}
-      {% include "common/components/helpers/image_set.html" with alt=asset.name classes="file-image" img_source=asset.static_asset.preview xsmall_width="350" small_width="350" medium_width="350" large_width="350" xlarge_width="350" %}
+      {% include "common/components/helpers/image_set.html" with alt=asset.name classes="file-image" img_source=asset.static_asset.thumbnail xsmall_width="350" small_width="350" medium_width="350" large_width="350" xlarge_width="350" %}
       {% endif %}
       {% else %}
       <div class="file-lock-text">
         <h4 class="mb-0"><i class="material-icons icon-inline small">lock</i>Subscribe to view</h4>
       </div>
-      {% include "common/components/helpers/image_set.html" with alt=asset.name classes="file-image locked" img_source=asset.static_asset.preview xsmall_width="200" small_width="200" medium_width="200" large_width="200" xlarge_width="200" %}
+      {% include "common/components/helpers/image_set.html" with alt=asset.name classes="file-image locked" img_source=asset.static_asset.thumbnail xsmall_width="200" small_width="200" medium_width="200" large_width="200" xlarge_width="200" %}
       {% endif %}
       {% if asset.contains_blend_file %}
       <img class="file-icon" src="{% static "common/images/icons/blend.svg" %}" alt="asset preview">

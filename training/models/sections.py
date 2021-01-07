@@ -62,8 +62,8 @@ class Section(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models
     @property
     def thumbnail(self) -> Optional[str]:
         # Try to use asset thumbnail
-        if self.static_asset and self.static_asset.preview:
-            return self.static_asset.preview
+        if self.static_asset and self.static_asset.thumbnail:
+            return self.static_asset.thumbnail
         # Try to use chapter thumbnail
         if self.chapter.thumbnail:
             return None
