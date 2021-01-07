@@ -64,6 +64,8 @@ def section(
 @require_safe
 def chapter(request: HttpRequest, training_slug: str, chapter_slug: str) -> HttpResponse:
     """Display a training chapter."""
+    if chapter_slug == 'browse':  # redurect another old Cloud's page
+        return redirect('training', training_slug=training_slug)
     try:
         training, training_favorited, chapter = queries.chapters.from_slug(
             user_pk=request.user.pk, training_slug=training_slug, slug=chapter_slug
