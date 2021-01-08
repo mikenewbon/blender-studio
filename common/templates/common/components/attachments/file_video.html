@@ -2,7 +2,4 @@
 <p>Content is processing</p>
 {% else %}
 {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url  poster=static_asset.video.default_variation_url.thumbnail.url rounded=True %}
-{% comment %} <div class="embed-responsive embed-responsive-16by9">
-  <video src="{{ static_asset.video.default_variation_url }}"  controls="controls"></video>
-</div> {% endcomment %}
 {% endif %}
