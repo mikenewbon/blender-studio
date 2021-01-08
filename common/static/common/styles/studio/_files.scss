@@ -16,6 +16,10 @@
     .file-body {
       color: $white;
       text-decoration: none;
+
+      h4 {
+        color: white;
+      }
     }
 
     .subtitle {
@@ -35,6 +39,11 @@
   .subtitle {
     color: $highlight-white-xstrong;
     font-size: $x-small-font-size;
+    transition: $transition-base;
+  }
+
+  h4 {
+    color: $highlight-white-xstrong;
     transition: $transition-base;
   }
 
