@@ -30,6 +30,11 @@
   }
 }
 
+.plyr__video--wrapper,
+.plyr video {
+  height: 100%;
+}
+
 .spoiler-alert {
   @include border-radius($border-radius-sm);
   position: absolute;
