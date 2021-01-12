@@ -8,13 +8,13 @@
   srcset="
     {% thumbnail img_source xsmall_width as im %}{{ im.url }} {{ xsmall_width }}w{% endthumbnail %},
     {% thumbnail img_source small_width as im %}{{ im.url }} {{ small_width }}w{% endthumbnail %},
-    {% comment %} {% thumbnail img_source medium_width as im %}{{ im.url }} {{ medium_width }}w{% endthumbnail %}, {% endcomment %}
+    {% thumbnail img_source medium_width as im %}{{ im.url }} {{ medium_width }}w{% endthumbnail %},
     {% thumbnail img_source large_width as im %}{{ im.url }} {{ large_width }}w{% endthumbnail %},
     {% thumbnail img_source xlarge_width as im %}{{ im.url }} {{ xlarge_width }}w{% endthumbnail %}"
   sizes="
   (max-width: 575px) {{ xsmall_width }}px,
   (max-width: 767px) {{ small_width }}px,
-  {% comment %} (max-width: 991px) {{ medium_width }}px, {% endcomment %}
+  (max-width: 991px) {{ medium_width }}px,
   (max-width: 1199px) {{ large_width }}px,
   {{ xlarge_width }}px"
   class="{{ classes }} {% if img_source and img_source|is_portrait %}portrait{% endif %}"
