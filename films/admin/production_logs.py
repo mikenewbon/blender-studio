@@ -227,6 +227,11 @@ class ProductionLogEntryInline(
             widget=get_film_assset_widget(production_logs.ProductionLogEntry, 'assets'),
         )
 
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            # Make individual descriptions optional in the log change form
+            self.fields['description'].required = False
+
     def get_formset(self, request, obj=None, *args, **kwargs):
         """Overrides form field attributes of the production log entry assets."""
         formset = super().get_formset(request, obj, *args, **kwargs)
