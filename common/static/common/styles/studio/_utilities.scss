@@ -23,6 +23,9 @@
 }
 
 .video-player {
+  video {
+    width: 100%;
+  }
   &.rounded {
     .plyr--video {
       border-radius: $border-radius;
