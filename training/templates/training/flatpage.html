@@ -1,5 +1,6 @@
 {% extends 'training/base_training.html' %}
 {% load common_extras %}
+{% load pipeline %}
 
 {% block title_append %} - {{ training.title }} {{ flatpage.title }}{% endblock title_append %}
 
@@ -29,7 +30,7 @@
 {% endif %}
 
 <div class="container-fluid pt-4">
-  <section class="flat-page-content mb-4">
+  <section class="flat-page-content editorial-text-area mb-4">
     {% if user_can_edit_flatpage %}
     <div class="admin-button">
       <a href="{{ flatpage.admin_url }}" class="btn btn-sm btn-secondary btn-icon btn-float">
@@ -48,3 +49,7 @@
 </div>
 
 {% endblock content %}
+
+{% block scripts %}
+{% javascript 'training' %}
+{% endblock scripts %}

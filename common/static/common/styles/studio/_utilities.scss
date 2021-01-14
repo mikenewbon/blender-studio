@@ -26,7 +26,12 @@
   video {
     width: 100%;
   }
+
   &.rounded {
+    >video {
+      border-radius: $border-radius;
+    }
+
     .plyr--video {
       border-radius: $border-radius;
     }
@@ -35,7 +40,7 @@
 
 .plyr__video-wrapper,
 .plyr video {
-  height: 100%!important;
+  height: 100% !important;
 }
 
 .spoiler-alert {
