@@ -93,23 +93,8 @@ class AssetAdmin(mixins.ThumbnailMixin, mixins.ViewOnSiteMixin, admin.ModelAdmin
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
-class AssetInline(mixins.ViewOnSiteMixin, admin.StackedInline):
-    model = assets.Asset
-    show_change_link = True
-    # asset slugs aren't currently in use and were prepopulate
-    readonly_fields = ('view_link', 'slug')
-    extra = 0
-    autocomplete_fields = ['static_asset', 'attachments', 'film']
-    fieldsets = (
-        asset_fieldsets[0],
-        (None, {'fields': ('film',)}),  # hide collection, because this is inlined in the Collection
-        *asset_fieldsets[2:],
-    )
-
-
 @admin.register(collections.Collection)
 class CollectionAdmin(mixins.ViewOnSiteMixin, admin.ModelAdmin):
-    inlines = [AssetInline]
     list_display = ['__str__', 'film', 'order', 'parent', 'view_link']
     list_filter = ['film']
     search_fields = ['name', 'film__title']
