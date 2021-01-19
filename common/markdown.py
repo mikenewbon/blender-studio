@@ -9,7 +9,7 @@ import mistune
 
 _markdown: Optional[mistune.Markdown] = None
 _markdown_with_html: Optional[mistune.Markdown] = None
-SHORTCODE_WITH_LINK_PATTERN = r'{(?:attachment\s+|iframe\s+).*(?:\s*link|\s*src)=.*'
+SHORTCODE_PATTERN = r'{(?:attachment|iframe|youtube|subscribe_banner)\s+[^}]*}'
 ALLOWED_TAGS_EXTRA = {
     # <a> is already allowed by bleach, but we want more allowed attributes for it
     'a': ['href', 'title', 'download', 'class'],
@@ -41,24 +41,25 @@ def clean(text: str) -> str:
     )
 
 
-def parse_shortcode_link(self, match: re.Match, state) -> Tuple[str]:
+def parse_shortcode(self, match: re.Match, state) -> Tuple[str]:
     """Define how to parse a shortcode with link."""
-    return 'shortcode_link', match.group()
+    return 'shortcode', match.group()
 
 
-def keep_shortcode_link(matched_text: str) -> str:
+def keep_shortcode_as_is(matched_text: str) -> str:
     """Leave shortcode link as is."""
     return matched_text
 
 
-def plugin_shortcode_with_link(md):
-    """Define a plugin that will keep shortcode links intact.
+def plugin_shortcode(md):
+    """Define a plugin that will keep shortcodes intact.
 
-    This is necessary because by default mistune "urlises" (wraps into "a href") all links.
+    This is necessary because by all links are wrapped into "a href" tag
+    and double quotes are escaped in the rest of the markdown.
     """
-    md.inline.register_rule('shortcode_link', SHORTCODE_WITH_LINK_PATTERN, parse_shortcode_link)
-    md.inline.rules.append('shortcode_link')
-    md.renderer.register('shortcode_link', keep_shortcode_link)
+    md.inline.register_rule('shortcode', SHORTCODE_PATTERN, parse_shortcode)
+    md.inline.rules.append('shortcode')
+    md.renderer.register('shortcode', keep_shortcode_as_is)
 
 
 def render(text: str) -> Markup:
@@ -67,8 +68,7 @@ def render(text: str) -> Markup:
 
     if _markdown is None:
         _markdown = mistune.create_markdown(
-            escape=True,
-            plugins=[plugin_shortcode_with_link, mistune.plugins.extra.plugin_url],
+            escape=True, plugins=[plugin_shortcode, mistune.plugins.extra.plugin_url],
         )
 
     return Markup(_markdown(text))
@@ -85,7 +85,7 @@ def render_unsafe(text: str) -> Markup:
         _markdown_with_html = mistune.create_markdown(
             # An unsafe Markdown renderer that doesn't escape remaining HTML
             escape=False,
-            plugins=[plugin_shortcode_with_link, mistune.plugins.extra.plugin_url],
+            plugins=[plugin_shortcode, mistune.plugins.extra.plugin_url],
         )
 
     return Markup(_markdown_with_html(text))

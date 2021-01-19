@@ -60,6 +60,18 @@ class RenderMarkdownTest(TestCase):
         text = 'blah blah {iframe src=http://example.com} more blah blah'
         self.assertEqual(f'<p>{text}</p>\n', str(render_markdown(text)))
 
+    def test_attachment_caption_quotes_are_interchangeable_single(self):
+        text = """{attachment 123 link='http://example.com' caption='Test "quoted" caption'}"""
+        self.assertEqual(f'<p>{text}</p>\n', str(render_markdown(text)))
+
+    def test_attachment_caption_quotes_are_interchangeable_double(self):
+        text = """{attachment 123 caption="This is Bob's quote"}"""
+        self.assertEqual(f'<p>{text}</p>\n', str(render_markdown(text)))
+
+    def test_attachment_caption_quotes_are_interchangeable_double_with_link(self):
+        text = """{attachment 123 caption="This is Bob's quote" link='http://example.com'}"""
+        self.assertEqual(f'<p>{text}</p>\n', str(render_markdown(text)))
+
     def test_linkify_urlize_a_link(self):
         text = '**bold** https://example.com'
         self.assertEqual(
