@@ -1,0 +1,7 @@
+[Unit]
+Description=Clear expired sessions by calling a management command
+
+[Service]
+Type=oneshot
+ExecStart=/var/www/venv/bin/python /var/www/blender-studio/manage.py clearsessions
+StandardError=syslog
