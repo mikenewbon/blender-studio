@@ -13,10 +13,15 @@ class UserAdmin(auth_admin.UserAdmin):
         return False
 
     list_display_links = ('full_name', 'username')
-    list_filter = auth_admin.UserAdmin.list_filter + ('is_subscribed_to_newsletter',)
-    list_display = ['full_name'] + [
-        _ for _ in auth_admin.UserAdmin.list_display if _ not in ('first_name', 'last_name')
-    ]
+    list_filter = auth_admin.UserAdmin.list_filter + (
+        'is_subscribed_to_newsletter',
+        'date_deletion_requested',
+    )
+    list_display = (
+        ['full_name']
+        + [_ for _ in auth_admin.UserAdmin.list_display if _ not in ('first_name', 'last_name')]
+        + ['is_active', 'deletion_requested']
+    )
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         (
@@ -31,6 +36,12 @@ class UserAdmin(auth_admin.UserAdmin):
         ),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
+
+    def deletion_requested(self, obj):
+        """Display yes/no icon status of deletion request."""
+        return obj.date_deletion_requested is not None
+
+    deletion_requested.boolean = True
 
 
 @admin.register(Notification)
