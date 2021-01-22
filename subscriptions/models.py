@@ -9,6 +9,7 @@ User = get_user_model()
 
 
 class Subscriber(mixins.CreatedUpdatedMixin, models.Model):
+    # TODO(anna): set to SET_NULL to make sure all looper data remains intact when user is deleted
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='subscriber')
     customer = models.OneToOneField(
         looper.models.Customer, on_delete=models.CASCADE, related_name='subscriber'
@@ -32,6 +33,7 @@ class OrganizationUsers(mixins.CreatedUpdatedMixin, models.Model):
         verbose_name = 'Organization Users'
         verbose_name_plural = 'Organization Users'
 
+    # TODO(anna): set to SET_NULL to make sure all looper data remains intact when user is deleted
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='organization_users')
     organization = models.ForeignKey(
         Organization, on_delete=models.CASCADE, related_name='organization_users'

@@ -63,6 +63,13 @@ class TestPostCreation(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Post.objects.count(), initial_post_count)
 
+    def test_blog_author_cannot_be_deleted(self):
+        post = PostFactory()
+
+        self.assertFalse(post.author.is_staff)
+        self.assertFalse(post.author.is_superuser)
+        self.assertFalse(post.author.can_be_deleted)
+
 
 class TestPostComments(TestCase):
     def setUp(self):

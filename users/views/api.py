@@ -2,11 +2,14 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseForbidden
 from django.http.response import JsonResponse
+from django.utils import timezone
 from django.views import View
 from django.views.generic.detail import SingleObjectMixin
-from django.utils import timezone
+from django.contrib.auth import get_user_model
 
 from users.models import Notification
+
+User = get_user_model()
 
 
 class NotificationMarkReadView(LoginRequiredMixin, SingleObjectMixin, View):

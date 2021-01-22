@@ -41,7 +41,13 @@ class EmailsView(LoginRequiredMixin, TemplateView):
         return context
 
     def post(self, request):
-        """Change Profile.is_subscribed_to_newsletter flag of logged in user."""
+        """Change User.is_subscribed_to_newsletter flag of logged in user."""
         form = IsSubscribedToNewsletterForm(request.POST, instance=request.user)
         form.save()
         return redirect(reverse('user-settings-emails'))
+
+
+class DeleteView(LoginRequiredMixin, TemplateView):
+    """Template view where account deletion can be requested."""
+
+    template_name = 'users/settings/delete.html'

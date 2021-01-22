@@ -87,6 +87,10 @@ def handle_user_modified(payload: Dict[Any, Any]) -> None:
 
     user = oauth_user_info.user
 
+    if payload.get('date_deletion_requested'):
+        user.request_deletion(payload['date_deletion_requested'])
+        return
+
     try:
         if payload['email'] != user.email:
             user.email = payload['email']

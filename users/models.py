@@ -2,8 +2,9 @@ from typing import Optional
 import logging
 
 from actstream.models import Action
+from django.contrib.admin.utils import NestedObjects
 from django.contrib.auth.models import AbstractUser
-from django.db import models
+from django.db import models, DEFAULT_DB_ALIAS
 from django.db.models import Case, When, Value, IntegerField
 from django.templatetags.static import static
 from django.urls import reverse
@@ -25,6 +26,8 @@ class User(AbstractUser):
     image = models.ImageField(upload_to=get_upload_to_hashed_path, blank=True, null=True)
     is_subscribed_to_newsletter = models.BooleanField(default=False)
     badges = JSONField(null=True, blank=True)
+
+    date_deletion_requested = models.DateTimeField(null=True, blank=True)
 
     @property
     def image_url(self) -> Optional[str]:
@@ -51,6 +54,38 @@ class User(AbstractUser):
     @property
     def notifications_unread(self):
         return self.notifications.filter(date_read__isnull=True)
+
+    def _get_nested_objects_collector(self) -> NestedObjects:
+        collector = NestedObjects(using=DEFAULT_DB_ALIAS)
+        collector.collect([self])
+        return collector
+
+    @property
+    def can_be_deleted(self) -> bool:
+        """Fetch objects referencing this profile and determine if it can be deleted."""
+        if self.is_staff or self.is_superuser:
+            return False
+        collector = self._get_nested_objects_collector()
+        if collector.protected:
+            return False
+        return True
+
+    def request_deletion(self, date_deletion_requested):
+        """Store date of the deletion request and deactivate the user."""
+        if not self.can_be_deleted:
+            logger.error('Deletion requested for a protected account pk=%s, ignoring', self.pk)
+            return
+        logger.warning(
+            'Deletion of pk=%s requested on %s, deactivating this account',
+            self.pk,
+            date_deletion_requested,
+        )
+        self.is_active = False
+        self.date_deletion_requested = date_deletion_requested
+        self.is_subscribed_to_newsletter = False
+        self.save(
+            update_fields=['is_active', 'date_deletion_requested', 'is_subscribed_to_newsletter']
+        )
 
 
 class Notification(models.Model):

@@ -1,4 +1,5 @@
 """Background tasks for user-related things."""
+from datetime import timedelta
 from typing import Dict, Any
 import logging
 
@@ -6,6 +7,7 @@ from background_task import background
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import transaction
+from django.utils import timezone
 
 from common import history
 from common import mailgun
@@ -14,6 +16,7 @@ from common import queries
 User = get_user_model()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+DELETION_DELTA = timedelta(weeks=2)
 
 
 @background()
@@ -95,3 +98,21 @@ def handle_tracking_event_unsubscribe(event_type: str, message_id: str, event: D
         history.log_change(user, change_msg)
         user.is_subscribed_to_newsletter = False
         user.save(update_fields=['is_subscribed_to_newsletter'])
+
+
+@background()
+def handle_deletion_request(pk: int) -> bool:
+    """Delete user account and all data related to it."""
+    prior_to = timezone.now() - DELETION_DELTA
+    user = User.objects.get(
+        date_deletion_requested__isnull=False,
+        date_deletion_requested__lt=prior_to,
+        pk=pk,
+    )
+    if not user.can_be_deleted:
+        logger.error('Cannot delete user pk=%s', pk)
+        return False
+
+    user.delete()
+    logger.warning('Deleted user pk=%s', pk)
+    return True

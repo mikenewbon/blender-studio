@@ -1,0 +1,28 @@
+{% extends 'users/settings/base.html' %}
+
+{% block settings %}
+{% with can_be_deleted=user.can_be_deleted %}
+
+<p class="subtitle">Settings</p>
+<h1 class="mb-3">Delete account</h1>
+<div class="settings-form">
+  <div class="row">
+    <div class="col">
+      <!--h2 class="mb-0">Delete my account and all data linked to it</h2-->
+      <div>
+          <p>
+          You can request deletion of your account in <a href="{{ BLENDER_ID.BASE_URL }}">Blender ID</a>.
+          </p>
+          {% if not can_be_deleted %}
+          <div class="alert alert-dark" role="alert">
+              <i class="material-icons align-middle mr-1">info</i>
+              <span>Note that your account has publicly visible content, such as blog posts or assets, that cannot be deleted from Blender Cloud.</span>
+          </div>
+          {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endwith %}
+{% endblock settings %}

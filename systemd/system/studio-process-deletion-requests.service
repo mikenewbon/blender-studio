@@ -1,0 +1,6 @@
+[Unit]
+Description=queue deletion requests by calling a management command
+
+[Service]
+Type=oneshot
+ExecStart=/var/www/venv/bin/python /var/www/blender-studio/manage.py queue_deletion_requests

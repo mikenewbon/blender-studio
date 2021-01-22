@@ -10,6 +10,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.test import TestCase, override_settings, TransactionTestCase
 from django.urls import reverse
+import dateutil
 
 from common.tests.factories.users import UserFactory
 import users.tests.util as util
@@ -423,6 +424,32 @@ class TestBlenderIDWebhook(TestCase):
         self.assertEquals(response.content, b'')
         user = User.objects.get(id=self.user.pk)
         self.assertTrue(user.image_url, 's3://file')
+
+    @responses.activate
+    def test_user_modified_date_deletion_requested_is_set(self):
+        date_deletion_requested = '2020-12-31T23:02:03+00:00'
+        body = {
+            **self.webhook_payload,
+            'date_deletion_requested': date_deletion_requested,
+        }
+
+        with self.assertLogs('users.models', level='WARNING') as logs:
+            response = self.client.post(
+                self.url, body, content_type='application/json', **prepare_hmac_header(body)
+            )
+            self.assertEquals(
+                logs.output[0],
+                f'WARNING:users.models:Deletion of pk={self.user.pk}'
+                f' requested on {date_deletion_requested}, deactivating this account',
+            )
+
+        self.assertEquals(response.status_code, 204)
+        self.assertEquals(response.content, b'')
+        user = User.objects.get(id=self.user.pk)
+        self.assertEquals(
+            user.date_deletion_requested, dateutil.parser.parse(date_deletion_requested)
+        )
+        self.assertFalse(user.is_active)
 
 
 @override_settings(
