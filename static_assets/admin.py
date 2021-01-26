@@ -69,6 +69,7 @@ class StaticAssetAdmin(AdminUserDefaultMixin, nested_admin.NestedModelAdmin):
         'source_type',
     ]
     search_fields = [
+        'source',
         'original_filename',
         'user__first_name',
         'user__last_name',

@@ -98,7 +98,13 @@ class SectionAdmin(admin.ModelAdmin):
         'is_featured',
     ]
     list_per_page = 20
-    search_fields = ['name', 'chapter__name', 'chapter__training__name', 'slug']
+    search_fields = [
+        'name',
+        'chapter__name',
+        'chapter__training__name',
+        'slug',
+        'static_asset__source',
+    ]
     autocomplete_fields = ['chapter', 'static_asset', 'user', 'attachments']
 
 
