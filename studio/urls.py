@@ -38,6 +38,7 @@ urlpatterns = [
     path('stats/', include('stats.urls')),
     path('activity/', include('actstream.urls')),
     re_path(r'^webhooks/', include('anymail.urls')),
+    path('_nested_admin/', include('nested_admin.urls')),
 ]
 
 handler400 = error_views.ErrorView.as_view(template_name='common/errors/400.html', status=400)

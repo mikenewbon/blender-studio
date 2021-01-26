@@ -1,4 +1,5 @@
 from django.contrib import admin
+import nested_admin
 
 from common.mixins import AdminUserDefaultMixin
 from static_assets.models import static_assets, licenses
@@ -9,23 +10,29 @@ class LicenseAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
 
-class ImageInline(admin.TabularInline):
+class ImageInline(nested_admin.NestedTabularInline):
     model = static_assets.Image
     show_change_link = True
     extra = 0
     max_num = 1
 
 
-class VideoInline(admin.TabularInline):
-    model = static_assets.Video
+class VideoVariationInline(nested_admin.NestedTabularInline):
+    model = static_assets.VideoVariation
     show_change_link = True
     extra = 0
-    max_num = 1
+
+
+class VideoInline(nested_admin.NestedTabularInline):
+    model = static_assets.Video
+    inlines = [VideoVariationInline]
+    show_change_link = True
+    extra = 0
     readonly_fields = ['play_count']
 
 
 @admin.register(static_assets.StaticAsset)
-class StaticAssetAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
+class StaticAssetAdmin(AdminUserDefaultMixin, nested_admin.NestedModelAdmin):
     actions = ['process_videos']
     inlines = [ImageInline, VideoInline]
     autocomplete_fields = ['user', 'author']
@@ -72,8 +79,8 @@ class StaticAssetAdmin(AdminUserDefaultMixin, admin.ModelAdmin):
     readonly_fields = ['original_filename', 'size_bytes', 'date_created', 'id']
 
     def process_videos(self, request, queryset):
+        """For each asset, process all videos attached if available."""
         videos_processing_count = 0
-        # For each asset, process all videos attached if available
         for a in queryset:
             a.process_video()
             videos_processing_count += 1

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'actstream',
     'background_task',
     'users',
+    'nested_admin',
 ]
 
 AUTH_USER_MODEL = 'users.User'
