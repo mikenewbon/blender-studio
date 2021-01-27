@@ -12,6 +12,7 @@ ADMIN_SITE_TITLE = 'Blender Studio'
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.flatpages',
     'django_jsonfield_backport',
     'emails',
     'blog',
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'users.User'
 
 MIDDLEWARE = [
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

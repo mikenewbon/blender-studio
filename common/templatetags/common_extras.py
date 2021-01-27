@@ -5,7 +5,10 @@ from django.template.defaultfilters import stringfilter
 from django.utils.html import mark_safe
 
 from common import queries
-from common.markdown import render as render_markdown
+from common.markdown import (
+    render as render_markdown,
+    render_unsafe as render_markdown_unsafe,
+)
 from common.shortcodes import render
 from markupsafe import Markup
 
@@ -51,6 +54,12 @@ def with_shortcodes(context, text: str) -> str:
 def markdown(text: str) -> Markup:
     """Render markdown."""
     return render_markdown(text)
+
+
+@register.filter(name='markdown_unsafe')
+def markdown_unsafe(text: str) -> Markup:
+    """Render unsafe markdown with HTML tags."""
+    return render_markdown_unsafe(text)
 
 
 @register.filter(name='has_group')

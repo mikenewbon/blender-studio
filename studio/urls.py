@@ -1,8 +1,9 @@
-import blender_id_oauth_client.urls
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.flatpages import views
 from django.urls import path, include, re_path
+import blender_id_oauth_client.urls
 
 import blog.urls
 import comments.urls
@@ -54,3 +55,8 @@ if settings.DEBUG:
     import debug_toolbar
 
     urlpatterns = [path('__debug__/', include(debug_toolbar.urls))] + urlpatterns
+
+# Flatpages catch-all
+urlpatterns += [
+    re_path(r'^(?P<url>.*/)$', views.flatpage),
+]
