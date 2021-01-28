@@ -1,3 +1,5 @@
+from pathlib import PurePosixPath
+from typing import Optional
 import datetime
 import logging
 import mimetypes
@@ -6,6 +8,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls.base import reverse
+from django.utils.text import slugify
 
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
@@ -202,6 +205,23 @@ class VideoVariation(models.Model):
 
     def __str__(self) -> str:
         return f"Video variation for {self.video.static_asset.original_filename}"
+
+    @property
+    def content_disposition(self) -> Optional[str]:
+        """Try to get a human-readable file name for Content-Disposition header."""
+        path = PurePosixPath(self.source.name)
+        # Falling back to the `original_filename` doesn't make much sense for converted videos
+        filename = None
+
+        section = getattr(self.video.static_asset, 'section', None)
+        # This is a training section video, use its name as a file name
+        if section:
+            ext = path.suffix
+            resolution_label = f'-{self.resolution_label}' if self.resolution_label else ''
+            filename = f'{slugify(section.name)}{resolution_label}{ext}'
+
+        if filename:
+            return f'attachment; filename="{filename}"'
 
 
 class Image(models.Model):

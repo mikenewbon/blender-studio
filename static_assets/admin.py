@@ -67,6 +67,8 @@ class StaticAssetAdmin(AdminUserDefaultMixin, nested_admin.NestedModelAdmin):
     )
     list_filter = [
         'source_type',
+        'section__chapter__training',
+        'assets__film',
     ]
     search_fields = [
         'source',

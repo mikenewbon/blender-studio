@@ -39,13 +39,12 @@ class Command(BaseCommand):
 
     help = 'Fix Content headers on existing trainings to make them downloadable.'
 
-    def _handle_video_source(self, source, content_type):
+    def _handle_video_source(self, source, content_type, content_disposition):
         if not source:
             # logger.error('No source file: %s, nothing to do', source)
             return
         _path = source.name
         original_mimetype, _ = mimetypes.guess_type(_path)
-        original_name = _path.split('/')[-1]
         assert (
             content_type == original_mimetype
         ), f'Wrong stored content type: {content_type} != {original_mimetype} of {_path}'
@@ -57,20 +56,17 @@ class Command(BaseCommand):
         if content_type != _file.content_type:
             self.wrong_mimetype += 1
             need_fix = True
-        if (
-            not _file.content_disposition
-            or content_type.split('/')[-1] not in _file.content_disposition
-        ):
+        if _file.content_disposition != content_disposition:
             self.wrong_disposition += 1
             need_fix = True
-        content_disposition = f'attachment; filename="{original_name}"'
         if need_fix:
+            metadata = {'ContentType': content_type}
+            if content_disposition:
+                metadata['ContentDisposition'] = content_disposition
             logger.warning(
                 f'Updating: ContentDisposition "{_file.content_disposition}"'
-                f' -> "{content_disposition}",'
-                f' ContentType "{_file.content_type}" -> "{content_type}"'
+                f' ContentType "{_file.content_type}" -> "{metadata.values()}"'
             )
-            return  # FIXME here
             _file.copy_from(
                 CopySource={
                     'Bucket': BUCKET_NAME,
@@ -78,15 +74,14 @@ class Command(BaseCommand):
                 },
                 # This is the only way to update metadata, apparently
                 MetadataDirective='REPLACE',
-                ContentType=content_type,
-                ContentDisposition=content_disposition,
+                **metadata,
             )
 
     def _handle_video(self, asset):
         video = asset.video
         variations = video.variations.all()
         for var in variations:
-            self._handle_video_source(var.source, var.content_type)
+            self._handle_video_source(var.source, var.content_type, var.content_disposition)
         return
 
     def handle(self, *args, **options):

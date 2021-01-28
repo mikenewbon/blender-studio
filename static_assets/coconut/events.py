@@ -1,5 +1,4 @@
-# Collection of functions used when the coconut_webhook is called
-
+"""Collection of functions used when the coconut_webhook is called."""
 import datetime
 import logging
 import mimetypes
@@ -86,4 +85,8 @@ def output_processed_video(job: dict, video: Video):
     video.variations.add(video_variation)
     log.debug('Created variation for video %i' % video.id)
     # Move the encoded video to the final location
-    move_blob_from_upload_to_storage(source_path)
+    metadata = {}
+    content_disposition = video_variation.content_disposition
+    if content_disposition:
+        metadata['ContentDisposition'] = video_variation.content_disposition
+    move_blob_from_upload_to_storage(source_path, **metadata)

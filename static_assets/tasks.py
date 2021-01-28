@@ -1,11 +1,12 @@
+"""Background processing of assets."""
 import logging
+import mimetypes
 import pathlib
-import boto3
-import botocore.exceptions as botocore_exceptions
 
 from background_task import background
 from django.conf import settings
 from django.urls import reverse
+import boto3
 
 import static_assets.coconut.job
 from static_assets.models import static_assets as models_static_assets
@@ -87,18 +88,25 @@ def create_video_processing_job(static_asset_id: int):
 
 
 @background()
-def move_blob_from_upload_to_storage(key):
+def move_blob_from_upload_to_storage(key, **metadata):
     """Move a blob from the upload bucket to the permanent location."""
     try:
+        content_type, _ = mimetypes.guess_type(key)
         log.info(
-            'Copying %s%s to %s'
-            % (settings.AWS_UPLOADS_BUCKET_NAME, key, settings.AWS_STORAGE_BUCKET_NAME)
+            'Copying %s%s to %s, Content-Type: %s, additional metadata: %s',
+            settings.AWS_UPLOADS_BUCKET_NAME,
+            key,
+            settings.AWS_STORAGE_BUCKET_NAME,
+            content_type,
+            metadata,
         )
         s3_client.copy_object(
             Bucket=settings.AWS_STORAGE_BUCKET_NAME,
             Key=key,
             CopySource={'Bucket': settings.AWS_UPLOADS_BUCKET_NAME, 'Key': key},
-            MetadataDirective="REPLACE",
+            MetadataDirective='REPLACE',
+            ContentType=content_type,
+            **metadata,
         )
     except Exception as e:
         log.error('Generic exception on %s' % key)
@@ -107,5 +115,6 @@ def move_blob_from_upload_to_storage(key):
 
     log.debug('Deleting %s from upload bucket' % key)
     s3_client.delete_object(
-        Bucket=settings.AWS_UPLOADS_BUCKET_NAME, Key=key,
+        Bucket=settings.AWS_UPLOADS_BUCKET_NAME,
+        Key=key,
     )
