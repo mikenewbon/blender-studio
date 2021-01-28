@@ -1,5 +1,5 @@
 # noqa: D100
-from django.http import Http404, HttpResponse
+from django.http import HttpResponse
 from django.http.request import HttpRequest
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_safe
@@ -9,7 +9,6 @@ from common.typed_templates.types import TypeSafeTemplateResponse
 
 from training import queries, typed_templates
 from training.models.progress import UserSectionProgress
-from training.models.chapters import Chapter
 from training.typed_templates.types import SectionProgressReportingData
 from training.views.common import (
     navigation_to_template_type,
@@ -64,14 +63,13 @@ def section(
 @require_safe
 def chapter(request: HttpRequest, training_slug: str, chapter_slug: str) -> HttpResponse:
     """Display a training chapter."""
-    if chapter_slug == 'browse':  # redurect another old Cloud's page
+    result = queries.chapters.from_slug(
+        user_pk=request.user.pk, training_slug=training_slug, slug=chapter_slug
+    )
+    if not result:
         return redirect('training', training_slug=training_slug)
-    try:
-        training, training_favorited, chapter = queries.chapters.from_slug(
-            user_pk=request.user.pk, training_slug=training_slug, slug=chapter_slug
-        )
-    except Chapter.DoesNotExist:
-        raise Http404("Content does not exist")
+
+    training, training_favorited, chapter = result
 
     navigation = queries.trainings.navigation(user_pk=request.user.pk, training_pk=training.pk)
     context = {
