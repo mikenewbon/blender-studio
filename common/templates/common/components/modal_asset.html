@@ -44,7 +44,12 @@
         </div>
         {% if asset.is_free or user_has_active_subscription %}
         {% if asset.static_asset.source_type == "video" %}
+        {# **N.B.**: video thumbnail might be missing if video processing hadn't caught up yet #}
+        {% if asset.static_asset.thumbnail %}
         {% include 'common/components/video_player.html' with url=asset.static_asset.video.default_variation_url poster=asset.static_asset.thumbnail.url %}
+        {% else %}
+        {% include 'common/components/video_player.html' with url=asset.static_asset.video.default_variation_url %}
+        {% endif %}
         {% elif asset.static_asset.thumbnail %}
         <a data-toggle="modal" data-target="#file-zoom-modal" class="modal-asset-image-wrapper"
           data-url="{% url 'api-asset-zoom' asset.id %}">
