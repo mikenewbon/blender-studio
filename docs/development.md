@@ -206,3 +206,52 @@ entire project (so it's slower and more likely to error out).
 2. `develop` is the working branch. In order to work on a task, create a new branch off `develop`.
 It is technically possible to `git push --force` to `develop`, however please consider at least warning
 other developers if you plan to do it.
+
+## Deployments
+
+Studio doesn't use Docker, only a clone of its own repository and a few systemd units.
+Currently, `master` is considered the release branch, and a deployment to production works as follows:
+
+```bash
+ssh root@studiobeta.blender.org
+cd /var/www/blender-studio/
+./restart.sh
+```
+
+This will
+
+* pull latest `master`;
+* do `poetry install`;
+* display and run database migrations, after asking for confirmation;
+* do `collectstatic`;
+* restart `studio-background.service` and `studio-background.service`.
+
+### Setting up timers for periodic tasks
+
+Production Studio uses systemd timers intead of `crontab`.
+The following periodic services exist at the moment:
+
+* `studio-clearsessions.timer`: calls [clearsessions](https://docs.djangoproject.com/en/3.0/ref/django-admin/#clearsessions);
+* `studio-process-deletion-requests.timer`: processes outstanding deletion requests;
+* `studio-background-restart.timer`: takes care of a heisenbug that causes background process to hang on rare occasion.
+
+In order to set them up in production, the following commands were used:
+
+```bash
+ssh root@studiobeta.blender.org
+cd /var/www/blender-studio/
+cp systemd/system/*.{service,timer} /lib/systemd/system/
+systemctl enable studio-process-deletion-requests.timer
+systemctl enable studio-clearsessions.timer
+systemctl enable studio-background-restart.timer
+systemctl start studio-process-deletion-requests.timer
+systemctl start studio-clearsessions.timer
+systemctl start studio-background-restart.timer
+```
+
+To view existing timers and details about when they were called last and other usefull info:
+```bash
+systemctl list-timers --all
+```
+
+All the units and timers can be found in [systemd/system/](systemd/system/) of this repository.
