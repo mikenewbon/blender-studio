@@ -136,7 +136,7 @@ class BIDSession:
             user.image.save(name, content, save=True)
             logger.info(f'Profile image updated for {user}')
         except requests.HTTPError:
-            logger.exception(f'Failed to retrieve an image for {user} from Blender ID')
+            logger.warning(f'Failed to retrieve an image for {user} from Blender ID')
         except botocore.exceptions.BotoCoreError:
             logger.exception(f'Failed to store an image for {user}')
         except Exception:
