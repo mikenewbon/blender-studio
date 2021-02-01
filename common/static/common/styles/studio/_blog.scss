@@ -62,7 +62,9 @@ hr {
 .editorial-text-area {
 
   p,
-  a {
+  a,
+  ul,
+  ol {
     font-size: 1.1rem;
 
     @include media-breakpoint-up(md) {
