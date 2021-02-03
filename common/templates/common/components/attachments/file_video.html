@@ -1,5 +1,12 @@
 {% if is_processing %}
 <p>Content is processing</p>
 {% else %}
+{% if caption %}
+<figure class="figure blog-video {{ class }}">
+  {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url  poster=static_asset.video.default_variation_url.thumbnail.url rounded=True %}
+  <figcaption class="figure-caption">{{ caption }}</figcaption>
+</figure>
+{% else %}
 {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url  poster=static_asset.video.default_variation_url.thumbnail.url rounded=True %}
+{% endif %}
 {% endif %}

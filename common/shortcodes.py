@@ -317,7 +317,10 @@ class Attachment:
 
         return render_to_string(
             'common/components/attachments/file_video.html',
-            {'static_asset': static_asset, 'is_processing': is_processing},
+            {'static_asset': static_asset,
+            'is_processing': is_processing,
+            'caption': kwargs.get('caption')
+            },
         )
 
 

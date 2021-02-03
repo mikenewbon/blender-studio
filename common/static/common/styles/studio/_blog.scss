@@ -143,6 +143,12 @@ hr {
   }
 }
 
+.blog-video {
+  .video-player {
+    margin: $spacer / 2 0;
+  }
+}
+
 figure {
   margin-bottom: $spacer / 2;
 }
