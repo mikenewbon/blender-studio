@@ -38,15 +38,15 @@
     <!-- Latest Updates -->
 
     <div class="row mb-3">
-      <div class="col">
-        <h2 class="mb-0">Latest Updates</h2>
-        <p class="mb-0">Want to see more updates from {{ film.title }}?
+      <div class="col text-center">
+        <h2 class="mb-0">This week in Production</h2>
+        <p class="mb-0">Check out what the teams been working on this week on {{ film.title }}.
           <a href="{% url 'film-production-logs' film.slug %}">See all production logs</a></p>
       </div>
     </div>
 
     <div class="production-logs">
-      {% for production_log in production_logs_page %}
+      {% for production_log in production_logs_page|slice:":1" %}
       {% include 'films/components/production_log_entry.html' %}
       {% endfor %}
     </div>
