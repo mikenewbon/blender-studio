@@ -23,6 +23,8 @@
     }
 
     .badge {
+      margin-left: $spacer / 2;
+      background: $highlight-white;
       color: $highlight-white-xstrong;
     }
 
@@ -74,14 +76,13 @@
 .comment-name-date-wrapper {
   align-items: center;
   display: flex;
-  margin-bottom: $spacer / 4;
   // margin-top: $spacer / 4;
 
   >* {
     margin-bottom: 0;
   }
 
-  .badge {
+  .badges {
     margin-left: $spacer / 4;
     padding: 0;
   }
@@ -89,7 +90,7 @@
   .profile {
     border-radius: $border-radius-sm;
     height: $font-size-md;
-    margin-right: $spacer / 4;
+    margin-right: $spacer / 2.5;
     padding: 0;
     width: $font-size-md;
   }
@@ -99,6 +100,7 @@
   text-align: left;
   font-size: $small-font-size;
   margin-bottom: $spacer / 4;
+
   img {
     max-height: 300px;
     display: block;
@@ -127,6 +129,10 @@
 
 .comment-dropdown {
   padding: 4px;
+}
+
+.comment-content-inner {
+  margin-top: $spacer / 4;
 }
 
 .comment-name {}
