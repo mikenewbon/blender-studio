@@ -1,5 +1,7 @@
 .page-link {
   transition: $transition-base;
+  margin: 0 $spacer / 4;
+  border-radius: $border-radius;
 }
 
 .production-logs-dates {
@@ -8,6 +10,12 @@
 
   .page-item {
     // display: none;
+
+    &.disabled {
+      .page-link {
+        margin: 0;
+      }
+    }
 
     &:first-of-type {
       display: list-item;
