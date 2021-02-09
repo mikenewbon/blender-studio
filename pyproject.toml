@@ -34,6 +34,7 @@ django-background-tasks = "^1.2.5"
 django-anymail = {extras = ["mailgun"], version = "^8.1"}
 django-jsonfield-backport = "^1.0.2"
 django-nested-admin = "^3.3.3"
+cryptography = "3.3.2"
 
 [tool.poetry.dev-dependencies]
 black = {version = "*", allow-prereleases = true}
