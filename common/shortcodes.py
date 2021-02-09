@@ -311,6 +311,9 @@ class Attachment:
         kwargs: typing.Dict[str, str],
     ):
         """Render a video file."""
+        if 'link' in pargs:
+            kwargs['link'] = 'self'
+        link = None if 'link' not in kwargs else kwargs['link']
         # TODO(fsiddi) Handle processing video
         is_processing = False
         # TODO(fsiddi) Support looping and other options
@@ -319,6 +322,7 @@ class Attachment:
             'common/components/attachments/file_video.html',
             {
                 'static_asset': static_asset,
+                'link': link,
                 'is_processing': is_processing,
                 'caption': kwargs.get('caption'),
             },

@@ -153,6 +153,12 @@ figure {
   margin-bottom: $spacer / 2;
 }
 
+.figure-caption {
+  a {
+    font-size: 100%;
+  }
+}
+
 a {
   .figure-caption {
     color: $link-color;
