@@ -3,10 +3,10 @@
 {% else %}
 {% if caption %}
 <figure class="figure blog-video {{ class }}">
-  {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url  poster=static_asset.video.default_variation_url.thumbnail.url rounded=True %}
+  {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=static_asset.video.default_variation_url.thumbnail.url rounded=True %}
   <figcaption class="figure-caption">{{ caption }}</figcaption>
 </figure>
 {% else %}
-{% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url  poster=static_asset.video.default_variation_url.thumbnail.url rounded=True %}
+{% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=static_asset.video.thumbnail_m_url rounded=True %}
 {% endif %}
 {% endif %}
