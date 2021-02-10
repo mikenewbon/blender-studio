@@ -210,19 +210,16 @@ other developers if you plan to do it.
 ## Deployments
 
 Studio doesn't use Docker, only a clone of its own repository and a few systemd units.
-Currently, `master` is considered the release branch, and a deployment to production works as follows:
+To deploy latest `develop` to production, use the following script:
 
 ```bash
-ssh root@studiobeta.blender.org
-cd /var/www/blender-studio/
-./restart.sh
+./deploy.sh studiobeta.blender.org
 ```
-
 This will
 
-* pull latest `master`;
+* pull latest `develop`;
 * do `poetry install`;
-* display and run database migrations, after asking for confirmation;
+* display and run database migrations;
 * do `collectstatic`;
 * restart `studio-background.service` and `studio-background.service`.
 
