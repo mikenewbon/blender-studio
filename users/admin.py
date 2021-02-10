@@ -34,8 +34,12 @@ class UserAdmin(auth_admin.UserAdmin):
                 'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
             },
         ),
-        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+        (
+            _('Important dates'),
+            {'fields': ('last_login', 'date_joined', 'date_deletion_requested')},
+        ),
     )
+    readonly_fields = ('date_deletion_requested',)
 
     def deletion_requested(self, obj):
         """Display yes/no icon status of deletion request."""
