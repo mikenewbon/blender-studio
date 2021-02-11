@@ -1,12 +1,12 @@
 """Render film asset gallery and collections."""
 from django.http import HttpResponse, HttpRequest
 from django.http import Http404
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.views.decorators.http import require_safe
 
 from common.queries import has_active_subscription
 from films.models import Film, Collection, Asset
-from films.queries import get_gallery_drawer_context, get_current_asset
+from films.queries import get_gallery_drawer_context, get_current_asset, get_asset_by_slug
 
 
 @require_safe
@@ -108,7 +108,13 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
     film = get_object_or_404(Film, slug=film_slug)
     if not request.user.is_superuser and not film.is_published:
         raise Http404("Film does not exist")
-    collection = get_object_or_404(Collection, slug=collection_slug, film_id=film.id)
+    try:
+        collection = get_object_or_404(Collection, slug=collection_slug, film_id=film.id)
+    except Exception:
+        asset = get_asset_by_slug(slug=collection_slug, film_id=film.id, request=request)
+        if not asset:
+            raise
+        return redirect(asset.url)
     child_collections = collection.child_collections.order_by(*Collection._meta.ordering)
     drawer_menu_context = get_gallery_drawer_context(film, request.user)
 

@@ -176,6 +176,33 @@ def get_asset_context(
     return context
 
 
+def _get_asset_liked(asset: Asset = None, request: HttpRequest = None) -> Optional[Asset]:
+    if not asset:
+        return asset
+
+    if request and request.user.is_authenticated:
+        asset.liked = Like.objects.filter(asset_id=asset.pk, user_id=request.user.pk).exists()
+    return asset
+
+
+def get_asset_by_slug(slug: str, film_id: int, request: HttpRequest = None) -> Optional[Asset]:
+    """Retrieve a published film asset by a given asset slug."""
+    asset = (
+        Asset.objects.filter(film_id=film_id, is_published=True, slug=slug)
+        .select_related(
+            'film',
+            'collection',
+            'static_asset',
+            'static_asset__license',
+            'static_asset__author',
+            'static_asset__user',
+            'entry_asset__production_log_entry',
+        )
+        .get()
+    )
+    return _get_asset_liked(asset, request)
+
+
 def get_asset(asset_pk: int, request: HttpRequest = None) -> Optional[Asset]:
     """Retrieve a published film asset by a given asset ID."""
     asset = (
@@ -192,9 +219,7 @@ def get_asset(asset_pk: int, request: HttpRequest = None) -> Optional[Asset]:
         .get()
     )
 
-    if request and request.user.is_authenticated:
-        asset.liked = Like.objects.filter(asset_id=asset.pk, user_id=request.user.pk).exists()
-    return asset
+    return _get_asset_liked(asset, request)
 
 
 def get_production_logs(film: Film) -> paginator.Page:
