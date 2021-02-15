@@ -246,7 +246,7 @@ function initVideo(container) {
 
     element.elements.controls.querySelector('[data-plyr="loop"]').addEventListener('click', event => {
       event.target.classList.toggle("plyr__control--pressed");
-      element.media.loop = !videoPlayer.media.loop;
+      element.media.loop = !element.media.loop;
     })
   }));
 }
