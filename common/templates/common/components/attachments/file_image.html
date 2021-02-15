@@ -3,7 +3,7 @@
 {% if link == 'self' %}
 
 <figure class="figure blog-image {{ class }}">
-  <a href="{{ static_asset.source.url }}">
+  <a href="{{ static_asset.source.url }}" target="_blank">
     {% include "common/components/helpers/image_set.html" with alt=caption classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="740" xlarge_width="740" %}
   </a>
   <figcaption class="figure-caption">{{ caption }}</figcaption>
@@ -31,7 +31,7 @@
 {% firstof class|default:""|add:" img-fluid blog-image" as classes %}
 {% if link %}
 {% if link == 'self' %}
-<a class="expand-image-links" href="{{ static_asset.source.url }}">
+<a class="expand-image-links" href="{{ static_asset.source.url }}" target="_blank">
   {% include "common/components/helpers/image_set.html" with alt=static_asset.original_filename classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="740" xlarge_width="740" %}
 </a>
 {% else %}
