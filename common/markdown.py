@@ -12,7 +12,7 @@ _markdown_with_html: Optional[mistune.Markdown] = None
 SHORTCODE_PATTERN = r'{(?:attachment|iframe|youtube|subscribe_banner)\s+[^}]*}'
 ALLOWED_TAGS_EXTRA = {
     # <a> is already allowed by bleach, but we want more allowed attributes for it
-    'a': ['href', 'title', 'download', 'class'],
+    'a': ['href', 'title', 'download', 'class', 'target'],
     'audio': ['controls'],
     'cite': ['title'],
     'figcaption': ['class'],
