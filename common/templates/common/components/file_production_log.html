@@ -17,7 +17,15 @@
 
       {% else %}
 
+      {% if large_thumbnail %}
+
+      <img alt="{{ asset.name }}" class="file-image" src="{{ asset.static_asset.thumbnail_m_url }}">
+
+      {% else %}
+
       <img alt="{{ asset.name }}" class="file-image" src="{{ asset.static_asset.thumbnail_s_url }}">
+
+      {% endif %}
 
       {% endif %}
       {% else %}

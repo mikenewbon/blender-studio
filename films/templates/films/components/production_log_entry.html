@@ -95,7 +95,7 @@
             {% else %}
               {% for asset in entry.assets.all %}
               {% if asset.is_published %}
-              {% include "common/components/file_production_log.html" with card_sizes="col-6 col-sm-6 col-md-6 col-lg-6" aspect_ratio="fourbythree" asset=asset site_context="production_logs" image_size="500" %}
+              {% include "common/components/file_production_log.html" with card_sizes="col-6 col-sm-6 col-md-6 col-lg-6" aspect_ratio="fourbythree" asset=asset site_context="production_logs" large_thumbnail="true" %}
               {% endif %}
               {% endfor %}
             {% endif %}
