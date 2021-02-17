@@ -4,7 +4,7 @@
 
 <figure class="figure blog-image {{ class }}">
   <a href="{{ static_asset.source.url }}" target="_blank">
-    {% include "common/components/helpers/image_set.html" with alt=caption classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="740" xlarge_width="740" %}
+    {% include "common/components/helpers/image_set.html" with alt=caption classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="940" xlarge_width="940" %}
   </a>
   <figcaption class="figure-caption">{{ caption }}</figcaption>
 </figure>
@@ -13,7 +13,7 @@
 
 <figure class="figure blog-image {{ class }}">
   <a href="{{ link }}" target="_blank">
-    {% include "common/components/helpers/image_set.html" with alt=caption classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="740" xlarge_width="740" %}
+    {% include "common/components/helpers/image_set.html" with alt=caption classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="940" xlarge_width="940" %}
   </a>
   <figcaption class="figure-caption">{{ caption }}</figcaption>
 </figure>
@@ -22,7 +22,7 @@
 
 {% else %}
 <figure class="figure blog-image {{ class }}">
-  {% include "common/components/helpers/image_set.html" with alt=caption classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="740" xlarge_width="740" %}
+  {% include "common/components/helpers/image_set.html" with alt=caption classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="940" xlarge_width="940" %}
   <figcaption class="figure-caption">{{ caption }}</figcaption>
 </figure>
 {% endif %}
@@ -32,17 +32,17 @@
 {% if link %}
 {% if link == 'self' %}
 <a class="expand-image-links" href="{{ static_asset.source.url }}" target="_blank">
-  {% include "common/components/helpers/image_set.html" with alt=static_asset.original_filename classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="740" xlarge_width="740" %}
+  {% include "common/components/helpers/image_set.html" with alt=static_asset.original_filename classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="940" xlarge_width="940" %}
 </a>
 {% else %}
 <a href="{{ link }}" target="_blank">
-  {% include "common/components/helpers/image_set.html" with alt=static_asset.original_filename classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="740" xlarge_width="740" %}
+  {% include "common/components/helpers/image_set.html" with alt=static_asset.original_filename classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="940" xlarge_width="940" %}
 </a>
 {% endif %}
 
 {% else %}
 
-{% include "common/components/helpers/image_set.html" with alt=static_asset.original_filename classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="740" xlarge_width="740" %}
+{% include "common/components/helpers/image_set.html" with alt=static_asset.original_filename classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="940" xlarge_width="940" %}
 {% endif %}
 
 {% endif %}
