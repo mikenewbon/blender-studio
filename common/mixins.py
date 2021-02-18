@@ -1,4 +1,5 @@
 """Commonly used model and admin mixins."""
+from functools import lru_cache
 from typing import Optional, Any, Union, List, Tuple
 import logging
 
@@ -75,6 +76,11 @@ class ViewOnSiteMixin:
     view_link.short_description = "View on site"
 
 
+@lru_cache(maxsize=1024)
+def _cacheable_get_thumnbnail(thumbnail, size_settings):
+    return get_thumbnail(thumbnail, size_settings, crop=settings.THUMBNAIL_CROP_MODE).url
+
+
 class StaticThumbnailURLMixin:
     """Add `thumbnail_<size>_url` properties generating static cacheable thumbnail URLs."""
 
@@ -84,9 +90,7 @@ class StaticThumbnailURLMixin:
         if not self.thumbnail:
             return None
         try:
-            return get_thumbnail(
-                self.thumbnail, size_settings, crop=settings.THUMBNAIL_CROP_MODE
-            ).url
+            return _cacheable_get_thumnbnail(self.thumbnail, size_settings)
         except OSError as e:
             # Handle the classic 'cannot write mode RGBA as JPEG'
             log.error(e.strerror)
