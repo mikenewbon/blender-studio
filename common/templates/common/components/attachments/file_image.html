@@ -2,10 +2,10 @@
   <figure class="figure blog-image {% if zoom %}image-zoom-wrapper{% endif %} {{ class }}">
     {% if link %}
       <a href="{% if link == 'self'%}{{ static_asset.source.url }}{% else %}{{ link }}{% endif%}" target="_blank">
-        <img src="{{ static_asset.thumbnail_m_url}}" alt="{{ caption }}">
+        {% include "common/components/helpers/image_set.html" with alt=caption classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="940" xlarge_width="940" %}
       </a>
     {% else %}
-      <img src="{{ static_asset.thumbnail_m_url}}" alt="{{ caption }}">
+      {% include "common/components/helpers/image_set.html" with alt=caption classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="940" xlarge_width="940" %}
     {% endif %}
     {% if zoom %}
       <button class="btn btn-darkhighlight-xstrong btn-sm btn-icon image-zoom" data-image="{{ static_asset.source.url }}">
@@ -18,7 +18,7 @@
   {% if link %}
     <div class="image-zoom-wrapper blog-image {{ class }}">
       <a href="{% if link == 'self'%}{{ static_asset.source.url }}{% else %}{{ link }}{% endif%}" target="_blank">
-        <img src="{{ static_asset.thumbnail_m_url}}" alt="{{ caption }}">
+        {% include "common/components/helpers/image_set.html" with alt=static_asset.original_filename classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="940" xlarge_width="940" %}
       </a>
 
       {% if zoom %}
@@ -29,7 +29,7 @@
     </div>
   {% else %}
     <div class="image-zoom-wrapper blog-image {{ class }}">
-      <img src="{{ static_asset.thumbnail_m_url}}" alt="{{ caption }}">
+      {% include "common/components/helpers/image_set.html" with alt=static_asset.original_filename classes=classes img_source=static_asset.source xsmall_width="600" small_width="740" medium_width="740" large_width="940" xlarge_width="940" %}
       {% if zoom %}
         <button class="btn btn-darkhighlight-xstrong btn-sm btn-icon image-zoom" data-image="{{ static_asset.source.url }}">
           <i class="material-icons btn-material-icons">zoom_in</i>
