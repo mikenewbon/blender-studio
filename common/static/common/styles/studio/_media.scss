@@ -34,3 +34,17 @@
   border-radius: $border-radius;
   background-size: cover;
 }
+
+.image-zoom-wrapper {
+  position: relative;
+}
+
+.image-zoom {
+  position: absolute;
+  top: $spacer;
+  right: $spacer / 2;
+}
+
+#image-zoom-modal{
+  padding-right: 0!important;
+}

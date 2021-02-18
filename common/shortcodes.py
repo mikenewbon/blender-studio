@@ -301,6 +301,7 @@ class Attachment:
                 'link': link,
                 'class': kwargs.get('class'),
                 'caption': kwargs.get('caption'),
+                'zoom': kwargs.get('zoom'),
             },
         )
 
