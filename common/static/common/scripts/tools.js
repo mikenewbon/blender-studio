@@ -261,8 +261,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.image-zoom').forEach(element => {
 
     const imageURL = element.dataset.image;
-    console.log(element)
-    const imageHTML = `<img src="${imageURL}">`
+    const imageHTML = `<img src="${imageURL}">`;
+
     element.addEventListener('click', (event) => {
       imageWrapper.innerHTML = imageHTML;
       $(imageZoomModalID).modal('show');
