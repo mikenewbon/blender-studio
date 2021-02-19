@@ -43,12 +43,39 @@
 
   <!-- Recently watched -->
   {% if recently_watched_sections %}
-
   {% include 'common/components/cards/card_carousel.html' with title="Continue training" subtitle="Recently watched videos appear here! Continue watching where you left off." slides=4 card_set=recently_watched_sections media_type="section" id="continueTraining" %}
-
   {% endif %}
 
+  {% if favorited_trainings %}
   {% include 'common/components/cards/card_carousel.html' with title="Your Saved Training" subtitle="You can add and remove items from this list by clicking the plus or the tick." slides=3 card_set=favorited_trainings media_type="training" id="savedTraining" %}
+  {% else %}
+  <section class="mb-4">
+    <div class="row justify-content-center mb-2">
+      <div class="col">
+        <h2 class="mb-0">Your Saved Training</h2>
+        <p class="mb-0">You can add and remove items from this list by clicking the plus or the tick.</p>
+      </div>
+      <div class="col-md-auto d-none d-md-block carousel-card-toolbar">
+      <a class="btn btn-lg btn-transparent btn-icon onlyOne"
+        href="#{{ id }}" role="button" data-slide="prev">
+        <i class="material-icons">arrow_back</i>
+      </a>
+      <a class="btn btn-lg btn-transparent btn-icon onlyOne"
+        href="#{{ id }}" role="button" data-slide="next">
+        <i class="material-icons">arrow_forward</i>
+      </a>
+    </div>
+    </div>
+    <div class="row">
+      <div class="col text-center empty-saved-training">
+        <div class="bg-secondary py-4 rounded">
+          <h3 class="mb-0">No saved training</h3>
+          <p class="mb-0">You can favorite a few below!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endif %}
 
   <!-- SEARCH -->
 
