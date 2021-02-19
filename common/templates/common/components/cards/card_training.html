@@ -3,7 +3,7 @@
 
     <div class="card-header">
       <a href="{{ training.url }}" class="card-header-link">
-      {% include "common/components/helpers/image_set.html" with alt=training.title classes="card-image" img_source=training.thumbnail xsmall_width="350" small_width="350" medium_width="350" large_width="350" xlarge_width="350" %}
+        <img class="card-image" alt="{{ training.title }}" src="{{ training.thumbnail_s_url }}">
       </a>
       {% if request.user.is_authenticated %}
       {% include 'training/components/card_button_favorite.html' with class='btn-save-media card-training-favorite' checked=training.favorited %}
