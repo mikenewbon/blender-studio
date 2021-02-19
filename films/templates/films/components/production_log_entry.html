@@ -66,38 +66,77 @@
             <h4 class="profile-name">{{ entry.author_name }}</h4>
             <p class="profile-title subtitle text-white-50 x-small">{{ entry.author_role }}</p>
           </div>
+          {% if user_can_edit_production_log_entry %}
+          <div class="admin-button mt-2 btn-float">
+            <a href="{{ entry.admin_url }}" class="btn btn-xs btn-icon btn-secondary">
+              <i class="material-icons">create</i>
+            </a>
+          </div>
+          {% endif %}
         </div>
 
+
+        {% if entry.assets.count > 4 and entry.description|length < 225 %}
         <p class="small">{{ entry.description }}</p>
-        {% if user_can_edit_production_log_entry %}
-        <div class="admin-button">
-          <a href="{{ entry.admin_url }}" class="btn btn-sm btn-icon btn-secondary">
-            <i class="material-icons">create</i>
-          </a>
-        </div>
+        {% elif entry.assets.count > 4 and entry.description|length > 225 %}
+        <p id="read-more-{{ entry.id }}" class="small mb-0 read-more">{{ entry.description|slice:":225"}}<span
+            class="read-more-elip">...</span><span
+            class="read-more-text d-none">{{ entry.description|slice:"225:"}}</span></p>
+        <a class="small read-more-link" href="#read-more-{{ entry.id}}">Show <span
+            class="read-more-less">more</span></a>
+        {% elif entry.assets.count == 4 and entry.description|length < 150 %}
+        <p class="small">{{ entry.description }}</p>
+        {% elif entry.assets.count == 4 and entry.description|length > 150 %}
+        <p id="read-more-{{ entry.id }}" class="small mb-0 read-more">{{ entry.description|slice:":150"}}<span
+            class="read-more-elip">...</span><span
+            class="read-more-text d-none">{{ entry.description|slice:"150:"}}</span></p>
+        <a class="small read-more-link" href="#read-more-{{ entry.id}}">Show <span
+            class="read-more-less">more</span></a>
+        {% elif entry.assets.count == 3 and entry.description|length < 225 %}
+        <p class="small">{{ entry.description }}</p>
+
+        {% elif entry.assets.count == 3 and entry.description|length > 225 %}
+        <p id="read-more-{{ entry.id }}" class="small mb-0 read-more">{{ entry.description|slice:":225"}}<span
+            class="read-more-elip">...</span><span
+            class="read-more-text d-none">{{ entry.description|slice:"225:"}}</span></p>
+        <a class="small read-more-link" href="#read-more-{{ entry.id}}">Show <span
+            class="read-more-less">more</span></a>
+        {% elif entry.assets.count < 3 and entry.description|length < 390 %}
+        <p class="small">{{ entry.description }}</p>
+        {% elif entry.assets.count < 3 and entry.description|length > 390 %}
+        <p id="read-more-{{ entry.id }}" class="small mb-0 read-more">{{ entry.description|slice:":390"}}<span
+            class="read-more-elip">...</span><span
+            class="read-more-text d-none">{{ entry.description|slice:"390:"}}</span></p>
+        <a class="small read-more-link" href="#read-more-{{ entry.id}}">Show <span
+            class="read-more-less">more</span></a>
+        {% else %}
+        <p class="small">{{ entry.description }}</p>
         {% endif %}
+
+
+
       </div>
       <div class="production-log-individual-files">
         <div class="files">
           <div class="row row-cols-1 row-cols-md-3  row-cols-2">
             {% if entry.assets.count >= 4 %}
-              {% for asset in entry.assets.all|slice:':4' %}
-              {% if asset.is_published %}
-              {% include "common/components/file_production_log.html" with card_sizes="col-6 col-sm-6 col-md-6 col-lg-3" aspect_ratio="fourbythree" asset=asset site_context="production_logs" %}
-              {% endif %}
-              {% endfor %}
+            {% for asset in entry.assets.all|slice:':4' %}
+            {% if asset.is_published %}
+            {% include "common/components/file_production_log.html" with card_sizes="col-6 col-sm-6 col-md-6 col-lg-3" aspect_ratio="fourbythree" asset=asset site_context="production_logs" %}
+            {% endif %}
+            {% endfor %}
             {% elif entry.assets.count >= 3 %}
-              {% for asset in entry.assets.all %}
-              {% if asset.is_published %}
-              {% include "common/components/file_production_log.html" with card_sizes="col-6 col-sm-6 col-md-6 col-lg-4" aspect_ratio="fourbythree" asset=asset site_context="production_logs" %}
-              {% endif %}
-              {% endfor %}
+            {% for asset in entry.assets.all %}
+            {% if asset.is_published %}
+            {% include "common/components/file_production_log.html" with card_sizes="col-6 col-sm-6 col-md-6 col-lg-4" aspect_ratio="fourbythree" asset=asset site_context="production_logs" %}
+            {% endif %}
+            {% endfor %}
             {% else %}
-              {% for asset in entry.assets.all %}
-              {% if asset.is_published %}
-              {% include "common/components/file_production_log.html" with card_sizes="col-6 col-sm-6 col-md-6 col-lg-6" aspect_ratio="fourbythree" asset=asset site_context="production_logs" large_thumbnail="true" %}
-              {% endif %}
-              {% endfor %}
+            {% for asset in entry.assets.all %}
+            {% if asset.is_published %}
+            {% include "common/components/file_production_log.html" with card_sizes="col-6 col-sm-6 col-md-6 col-lg-6" aspect_ratio="fourbythree" asset=asset site_context="production_logs" large_thumbnail="true" %}
+            {% endif %}
+            {% endfor %}
             {% endif %}
           </div>
 

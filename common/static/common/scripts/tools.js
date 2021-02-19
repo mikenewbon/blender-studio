@@ -269,3 +269,22 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   })
 });
+
+//readmore link
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.read-more-link').forEach(element => {
+
+    const id = element.hash;
+    element.addEventListener('click', (event) => {
+      event.preventDefault();
+      document.querySelector(id + ' .read-more-elip').classList.toggle('d-none');
+      document.querySelector(id + ' .read-more-text').classList.toggle('d-none');
+      if (element.querySelector('.read-more-less').innerText == 'more') {
+        element.querySelector('.read-more-less').innerText = 'less';
+      } else {
+        element.querySelector('.read-more-less').innerText = 'more';
+      }
+    });
+  });
+});
