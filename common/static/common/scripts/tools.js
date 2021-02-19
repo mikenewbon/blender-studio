@@ -259,6 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const imageWrapper = imageZoomModal.querySelector('.modal-body');
 
   document.querySelectorAll('.image-zoom').forEach(element => {
+
     const imageURL = element.dataset.image;
     console.log(element)
     const imageHTML = `<img src="${imageURL}">`
