@@ -5,7 +5,7 @@
   margin-bottom: 0;
   position: relative;
   border: 1px solid $input-gray;
-  padding: 20px;
+  padding: $spacer * 2;
 
   .card-pills {
     margin-top: $spacer;
