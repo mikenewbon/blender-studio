@@ -85,6 +85,7 @@
   right: $spacer / 2;
   top: $spacer / 2;
   transition: $transition-base;
+  z-index: 1;
 }
 
 .likes-count {
