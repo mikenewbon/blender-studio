@@ -202,10 +202,10 @@ has-secondary-nav
 
         <div class="files row grid">
           {% if featured_artwork %}
-          <div class="grid-sizer col-12 col-sm-6 col-md-6 col-lg-4"></div>
+          <div class="grid-sizer col-6 col-sm-6 col-md-6 col-lg-4"></div>
           {% for asset in featured_artwork %}
           {% if asset.is_published or user_can_edit_collection %}
-          {% include "common/components/file.html" with asset=asset site_context="featured_artwork" %}
+          {% include "common/components/file.html" with asset=asset site_context="featured_artwork" card_sizes="col-6 col-sm-6 col-md-6 col-lg-4" %}
           {% endif %}
           {% endfor %}
 

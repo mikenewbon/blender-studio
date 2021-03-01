@@ -10,17 +10,17 @@
   <p>{% with_shortcodes current_collection.text|markdown %}</p>
   <div class="">
     <div class="files row grid">
-      <div class="grid-sizer col-12 col-sm-6 col-md-6 col-lg-4"></div>
+      <div class="grid-sizer col-6 col-sm-6 col-md-6 col-lg-4"></div>
       {% if child_collections %}
       {% for child_collection in child_collections %}
-      {% include "common/components/folder.html" with aspect_ratio=current_collection.thumbnail_aspect_ratio %}
+      {% include "common/components/folder.html" with aspect_ratio=current_collection.thumbnail_aspect_ratio card_sizes="col-6 col-sm-6 col-md-6 col-lg-4" %}
       {% endfor %}
       {% endif %}
 
       {% if current_assets %}
       {% for asset in current_assets %}
       {% if asset.is_published or user_can_edit_asset %}
-      {% include "common/components/file.html" with asset=asset site_context="gallery" aspect_ratio=current_collection.thumbnail_aspect_ratio %}
+      {% include "common/components/file.html" with asset=asset site_context="gallery" aspect_ratio=current_collection.thumbnail_aspect_ratio card_sizes="col-6 col-sm-6 col-md-6 col-lg-4" %}
       {% endif %}
       {% endfor %}
       {% endif %}
