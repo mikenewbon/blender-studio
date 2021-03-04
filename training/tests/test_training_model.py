@@ -1,7 +1,7 @@
 from django.test import TestCase
 from unittest.mock import patch, call
 
-from common.tests.factories.training import TrainingFactory
+from common.tests.factories.training import TrainingFactory, ChapterFactory, SectionFactory
 from training.models import Training
 
 
@@ -20,3 +20,19 @@ class TestTrainingModel(TestCase):
         mock_storage_url.assert_has_calls(
             (call(training.picture_header.name), call(training.thumbnail.name))
         )
+
+    def test_training_is_free_if_all_sections_are_free(self):
+        chapter = ChapterFactory()
+        for _ in range(2):
+            SectionFactory(chapter=chapter, is_free=True)
+
+        self.assertTrue(chapter.training.is_free)
+
+    def test_training_is_not_free_if_some_sections_are_not_free(self):
+        chapter = ChapterFactory()
+        for _ in range(2):
+            SectionFactory(chapter=chapter, is_free=True)
+        for _ in range(2):
+            SectionFactory(chapter=chapter, is_free=False)
+
+        self.assertFalse(chapter.training.is_free)

@@ -70,6 +70,11 @@ class Training(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, model
     def admin_url(self) -> str:
         return reverse('admin:training_training_change', args=[self.pk])
 
+    @property
+    def is_free(self) -> bool:
+        """Indicate that the training is free, if all of its sections are."""
+        return not self.chapters.filter(sections__is_free=False).exists()
+
 
 class Favorite(mixins.CreatedUpdatedMixin, models.Model):
     class Meta:
