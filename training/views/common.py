@@ -38,6 +38,7 @@ def training_model_to_template_type(
         thumbnail_s_url=thumbnail_s_url,
         thumbnail_m_url=thumbnail_m_url,
         picture_header=picture_header,
+        is_free=training.is_free,
     )
 
 

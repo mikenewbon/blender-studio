@@ -28,6 +28,7 @@ class Training:
     thumbnail_s_url: str
     thumbnail_m_url: str
     picture_header: str
+    is_free: bool
 
 
 @dc.dataclass
