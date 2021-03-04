@@ -1,6 +1,6 @@
 from abc import ABC
-import bleach
 from html.parser import HTMLParser
+from html import unescape
 from io import StringIO
 from typing import Optional, Any, Type, Dict, Union, Callable, List, TYPE_CHECKING
 import json
@@ -137,7 +137,7 @@ class BaseSearchSerializer(ABC):
         if not text:
             return text
         s = HTMLText()
-        s.feed(s.unescape(text))
+        s.feed(unescape(text))
         return s.get_data()
 
     @classmethod
