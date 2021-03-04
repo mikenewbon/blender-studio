@@ -147,9 +147,9 @@ def update_training_search_index_on_section_update(
     training = instance.chapter.training
 
     indexer = TrainingPostSaveSearchIndexer()
-    indexer.handle(sender=sender, instance=training)
+    indexer.handle(sender=Training, instance=training)
     indexer = MainPostSaveSearchIndexer()
-    indexer.handle(sender=sender, instance=training)
+    indexer.handle(sender=Training, instance=training)
 
 
 @receiver(pre_delete, sender=Film)
