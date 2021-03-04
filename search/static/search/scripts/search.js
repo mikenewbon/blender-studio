@@ -126,7 +126,8 @@ const renderHits = (renderOptions, isFirstRender) => {
               <a href="${item.url}" class="card-body">
                 <div class="card-subtitle-group">
                   <p class="card-subtitle content-type">
-                  ${item.model == "section" ? item.project : item.model}
+                  ${item.is_free == true ? `<i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top"
+                  title="Free">lock_open</i>` :''} ${item.model == "section" ? item.project : item.model}
                   </p>
 
                   <p class="card-subtitle">
@@ -167,6 +168,10 @@ const renderHits = (renderOptions, isFirstRender) => {
 
     return;
   }
+
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  });
 
 };
 

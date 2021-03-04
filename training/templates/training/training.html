@@ -18,7 +18,13 @@
 
       <div class="row align-items-start">
         <div class="col-12 col-md mb-2 mb-md-3">
-          <p class="subtitle">{{ training.type.label }}</p>
+          <p class="subtitle">
+            {% if training.is_free %}
+            <i class="material-icons icon-inline text-success" data-toggle="tooltip" data-placement="top"
+              title="Free">lock_open</i>
+            {% endif %}
+            {{ training.type.label }}
+          </p>
           <h2 class="mb-0">{{ training.name }}</h2>
         </div>
         <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">

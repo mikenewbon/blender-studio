@@ -4,7 +4,13 @@
 <div class="nav-drawer-inner">
 
   <div class="drawer-nav-header">
-    <p class="subtitle">{{ training.type.label }}</p>
+    <p class="subtitle">
+      {% if training.is_free %}
+      <i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top"
+        title="Free">lock_open</i>
+      {% endif %}
+      {{ training.type.label }}
+    </p>
     <h2 class="mb-">{{ training.name }}</h2>
   </div>
 
@@ -53,7 +59,13 @@
 
 {% block nested_nav_drawer_header %}
 <div class="drawer-nav-header">
-  <p class="subtitle">{{ training.type.label }}</p>
+  <p class="subtitle">
+    {% if training.is_free %}
+    <i class="material-icons icon-inline text-success" data-toggle="tooltip" data-placement="top"
+      title="Free">lock_open</i>
+    {% endif %}
+    {{ training.type.label }}
+  </p>
   <h3>{{ training.name }}</h3>
 </div>
 
@@ -73,7 +85,8 @@
 {% if chapter_navigation.is_published or request.user.is_superuser %}
 
 <div class="drawer-nav-dropdown-wrapper ">
-  <a href="{{ chapter_navigation.url }}" class="drawer-nav-dropdown dropdown font-weight-bold {% if chapter_navigation.current %} active {% else %}collapsed{% endif %}"
+  <a href="{{ chapter_navigation.url }}"
+    class="drawer-nav-dropdown dropdown font-weight-bold {% if chapter_navigation.current %} active {% else %}collapsed{% endif %}"
     data-tooltip="tooltip-overflow" data-placement="top" title="{{ chapter_navigation.name }}">
     <span class="drawer-nav-dropdown-text overflow-text">{{ chapter_navigation.name }}</span>
     {% comment %} <i class="material-icons">keyboard_arrow_down</i> {% endcomment %}
