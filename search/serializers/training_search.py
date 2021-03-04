@@ -36,6 +36,7 @@ class TrainingSearchSerializer(BaseSearchSerializer):
                 for tag in Tag.objects.filter(section__chapter__training__pk=instance.pk).distinct()
             ],
             'favorite_url': lambda instance: instance.favorite_url,
+            'is_free': lambda instance: instance.is_free,
         },
         Asset: {'tags': lambda instance: [clean_tag(tag.name) for tag in instance.tags.all()]},
     }

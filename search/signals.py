@@ -136,6 +136,22 @@ def update_training_search_index(
     indexer.handle(sender=sender, instance=instance)
 
 
+@receiver(post_save, sender=Section)
+def update_training_search_index_on_section_update(
+    sender: Type[Section], instance: Section, **kwargs: Any
+) -> None:
+    """Add or update Training when its Section is updated.
+
+    Some properties of Training depend on its Sections, hence this separate signal.
+    """
+    training = instance.chapter.training
+
+    indexer = TrainingPostSaveSearchIndexer()
+    indexer.handle(sender=sender, instance=training)
+    indexer = MainPostSaveSearchIndexer()
+    indexer.handle(sender=sender, instance=training)
+
+
 @receiver(pre_delete, sender=Film)
 @receiver(pre_delete, sender=Asset)
 @receiver(pre_delete, sender=Training)
