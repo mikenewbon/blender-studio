@@ -127,7 +127,7 @@ const renderHits = (renderOptions, isFirstRender) => {
                 <div class="card-subtitle-group">
                   <p class="card-subtitle content-type">
                   ${item.is_free == true ? `<i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top"
-                  title="Free">lock_open</i>` :''} ${item.model == "section" ? item.project : item.model}
+                  title="Free">lock_open</i>` :''}&nbsp;${item.model == "section" ? item.project : item.model}
                   </p>
 
                   <p class="card-subtitle">
