@@ -18,5 +18,5 @@ class TestTrainingModel(TestCase):
         self.assertEqual(training.thumbnail.url, 's3://file')
 
         mock_storage_url.assert_has_calls(
-            (call(training.picture_header.name,), call(training.thumbnail.name,),)
+            (call(training.picture_header.name), call(training.thumbnail.name))
         )
