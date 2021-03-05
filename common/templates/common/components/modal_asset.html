@@ -109,9 +109,12 @@
                 {% if user.is_anonymous and not asset.is_free %}
                 <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to
                   Download</button>
-                {% else %}
+                {% elif user_has_active_subscription %}
                 <a href="{{ asset.download_url }}" download class="btn btn-sm btn-dark">Download <span
                     class="subtitle">({{ asset.download_size }})</span></a>
+                {% else %}
+                <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Subscribe to
+                  Download</button>
                 {% endif %}
 
                 <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
