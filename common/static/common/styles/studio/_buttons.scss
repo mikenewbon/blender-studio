@@ -27,7 +27,7 @@
 //This button has special text colours
 .btn-nav {
   color: $highlight-white-xstrong;
-  // font-weight: $font-weight-normal;
+  font-weight: $font-weight-normal;
 
   @include hover-focus {
     color: $white;
