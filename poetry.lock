@@ -766,9 +766,10 @@ description = ""
 category = "main"
 optional = false
 python-versions = "^3.6"
-develop = true
+develop = false
 
 [package.dependencies]
+attrs = "^19.3.0"
 babel = "^2.6"
 braintree = "^3.49"
 django = "^2.2.0 || 3.0 || 3.0.*"
@@ -780,7 +781,8 @@ requests = "^2.22"
 [package.source]
 type = "git"
 url = "git://git.blender.org/looper.git"
-reference = "master"
+reference = "6449a2840f5c"
+resolved_reference = "6449a2840f5cce870df2d5a2b70f99b90252664e"
 
 [[package]]
 name = "markupsafe"
@@ -1365,7 +1367,7 @@ watchdog = ["watchdog"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "6f72e4bd44f46226f54f69d497327607c7ce0eb1caa6bfb1707d671257c44c50"
+content-hash = "80c525d3ebc90c59d78a303ff10d923a19b655d896590f7d2dd3849153224bb6"
 
 [metadata.files]
 appdirs = [
