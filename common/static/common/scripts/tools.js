@@ -242,12 +242,54 @@ function initVideo(container) {
     `;
 
   players.forEach(element => element.elements.container.addEventListener('ready', () => {
+
+    dataElement = element.elements.container.parentElement;
+    startPosition = Number(dataElement.dataset.startPosition);
+    progressPostMinWait = 2000;
+    progressUrl = dataElement.dataset.progressUrl;
+    _postingProgress = 0;
+    _lastPostProgress = null;
+
     element.elements.controls.querySelector('.plyr__menu').insertAdjacentHTML('afterend', loopButton)
 
     element.elements.controls.querySelector('[data-plyr="loop"]').addEventListener('click', event => {
       event.target.classList.toggle("plyr__control--pressed");
       element.media.loop = !element.media.loop;
     })
+
+    if (dataElement.dataset.progressUrl) {
+      console.log('prog');
+      element.on('loadeddata', () => {
+        // Setting a start position doesn't appear to work on "ready", only on "loaddata"
+        // See https://github.com/sampotts/plyr/issues/208#issuecomment-400539990
+        if (startPosition <= element.duration) {
+          element.currentTime = startPosition;
+        }
+      });
+
+      element.on('timeupdate', () => {
+        if (
+          _postingProgress === 0 &&
+          (_lastPostProgress == null ||
+            Date.now() - _lastPostProgress >= progressPostMinWait)
+        ) {
+          postProgress();
+        }
+      });
+    }
+
+    function postProgress(){
+
+      _lastPostProgress = Date.now();
+      _postingProgress += 1;
+      ajax
+        .jsonRequest('POST', this.progressUrl, {
+          position: element.currentTime
+        })
+        .finally(() => {
+          _postingProgress -= 1;
+        });
+    }
   }));
 }
 

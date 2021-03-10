@@ -149,7 +149,6 @@ PIPELINE = {
                 'training/scripts/section.js',
                 'training/scripts/training.js',
                 'training/scripts/components/card_training.js',
-                'training/scripts/components/video_player.js',
             ],
             'output_filename': 'js/training.js',
             'extra_context': {'async': False, 'defer': False},
