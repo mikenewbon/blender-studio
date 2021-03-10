@@ -258,7 +258,6 @@ function initVideo(container) {
     })
 
     if (dataElement.dataset.progressUrl) {
-      console.log('prog');
       element.on('loadeddata', () => {
         // Setting a start position doesn't appear to work on "ready", only on "loaddata"
         // See https://github.com/sampotts/plyr/issues/208#issuecomment-400539990
