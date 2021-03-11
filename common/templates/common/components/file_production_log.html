@@ -65,7 +65,7 @@
     </a>
     {% endif %}
   </div>
-  <a class="file-body" href="?asset={{ asset.id }}"
+  <a class="file-body file-modal-link" href="?asset={{ asset.id }}" data-asset-id="{{ asset.id }}"
     data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
 
     {% if asset.is_free %}
