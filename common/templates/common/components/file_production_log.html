@@ -7,55 +7,55 @@
       data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
 
       {% if asset.static_asset.thumbnail %}
-      {% if user_can_view_asset or asset.is_free %}
-      {% if asset.is_spoiler %}{# Spoiler alert #}
-      <div class="file-lock-text">
-        <h4 class="mb-0"><i class="material-icons icon-inline small text-danger">warning</i>Spoiler</h4>
-      </div>
+        {% if user_can_view_asset or asset.is_free %}
+          {% if asset.is_spoiler %}{# Spoiler alert #}
+            <div class="file-lock-text">
+              <h4 class="mb-0"><i class="material-icons icon-inline small text-danger">warning</i>Spoiler</h4>
+            </div>
 
-      <img alt="{{ asset.name }}" class="file-image locked" src="{{ asset.static_asset.thumbnail_s_url }}">
+            <img alt="{{ asset.name }}" class="file-image locked" src="{{ asset.static_asset.thumbnail_s_url }}">
 
+          {% else %}
+
+            {% if large_thumbnail %}
+
+              <img alt="{{ asset.name }}" class="file-image" src="{{ asset.static_asset.thumbnail_m_url }}">
+
+            {% else %}
+
+              <img alt="{{ asset.name }}" class="file-image" src="{{ asset.static_asset.thumbnail_s_url }}">
+
+            {% endif %}
+
+          {% endif %}
+        {% else %}
+          <div class="file-lock-text">
+            <h4 class="mb-0"><i class="material-icons icon-inline small">lock</i>Subscribe to view</h4>
+          </div>
+
+          <img alt="{{ asset.name }}" class="file-image locked" src="{{ asset.static_asset.thumbnail_s_url }}">
+
+        {% endif %}
+        {% if asset.contains_blend_file %}
+          <img class="file-icon" src="{% static "common/images/icons/blend.svg" %}" alt="asset preview">
+        {% elif asset.static_asset.source_type == "file" %}
+          <img class="file-icon" src="{% static "common/images/icons/file.svg" %}" alt="asset preview">
+        {% elif asset.static_asset.source_type == "video" %}
+          <div class="badge badge-video-duration badge-darkhighlight-xstrong">
+            {{ asset.static_asset.video.duration_label }}
+          </div>
+        {% endif %}
       {% else %}
-
-      {% if large_thumbnail %}
-
-      <img alt="{{ asset.name }}" class="file-image" src="{{ asset.static_asset.thumbnail_m_url }}">
-
-      {% else %}
-
-      <img alt="{{ asset.name }}" class="file-image" src="{{ asset.static_asset.thumbnail_s_url }}">
-
-      {% endif %}
-
-      {% endif %}
-      {% else %}
-      <div class="file-lock-text">
-        <h4 class="mb-0"><i class="material-icons icon-inline small">lock</i>Subscribe to view</h4>
-      </div>
-
-      <img alt="{{ asset.name }}" class="file-image locked" src="{{ asset.static_asset.thumbnail_s_url }}">
-
-      {% endif %}
-      {% if asset.contains_blend_file %}
-      <img class="file-icon" src="{% static "common/images/icons/blend.svg" %}" alt="asset preview">
-      {% elif asset.static_asset.source_type == "file" %}
-      <img class="file-icon" src="{% static "common/images/icons/file.svg" %}" alt="asset preview">
-      {% elif asset.static_asset.source_type == "video" %}
-      <div class="badge badge-video-duration badge-darkhighlight-xstrong">
-        {{ asset.static_asset.video.duration_label }}
-      </div>
-      {% endif %}
-      {% else %}
-      {% if asset.contains_blend_file %}
-      <img class="file-icon" src="{% static "common/images/icons/blend.svg" %}" alt="asset preview">
-      {% elif asset.static_asset.source_type == "file" %}
-      <img class="file-icon" src="{% static "common/images/icons/file.svg" %}" alt="asset preview">
-      {% elif asset.static_asset.source_type == "video" %}
-      <img class="file-icon" src="{% static "common/images/icons/video.svg" %}" alt="asset preview">
-      <div class="badge badge-video-duration badge-darkhighlight-xstrong">
-        {{ asset.static_asset.video.duration }}
-      </div>
-      {% endif %}
+        {% if asset.contains_blend_file %}
+          <img class="file-icon" src="{% static "common/images/icons/blend.svg" %}" alt="asset preview">
+        {% elif asset.static_asset.source_type == "video" %}
+          <img class="file-icon" src="{% static "common/images/icons/video.svg" %}" alt="asset preview">
+          <div class="badge badge-video-duration badge-darkhighlight-xstrong">
+            {{ asset.static_asset.video.duration }}
+          </div>
+        {% else %}
+          <img class="file-icon" src="{% static "common/images/icons/file.svg" %}" alt="asset preview">
+        {% endif %}
       {% endif %}
 
     </a>
