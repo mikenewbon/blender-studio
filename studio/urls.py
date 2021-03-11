@@ -9,7 +9,8 @@ import blog.urls
 import comments.urls
 import films.urls
 import search.urls
-import subscriptions.urls
+
+# import subscriptions.urls
 import training.urls
 import static_assets.urls
 import users.urls
@@ -33,7 +34,7 @@ urlpatterns = [
     path('training/', include(training.urls)),
     path('blog/', include(blog.urls)),
     path('search/', include(search.urls)),
-    path('subscriptions/', include(subscriptions.urls)),
+    # path('subscriptions/', include(subscriptions.urls)),
     path('', include(users.urls)),
     path('', include(static_assets.urls)),
     path('stats/', include('stats.urls')),
