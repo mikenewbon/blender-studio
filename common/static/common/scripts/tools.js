@@ -1,13 +1,18 @@
+/* eslint-disable prefer-destructuring */
+/* eslint-disable no-undef */
+// eslint-disable-next-line no-unused-vars
 function epochToDate(epoch) {
-  if (epoch < 10000000000)
-    epoch *= 1000; // convert to milliseconds (Epoch is usually expressed in seconds, but Javascript uses Milliseconds)
-  var epoch = epoch + (new Date().getTimezoneOffset() * -1); //for timeZone
-  return new Date(epoch);
+  let epochValue = epoch;
+  if (epochValue < 10000000000) {
+    epochValue *= 1000; // convert to milliseconds (Epoch is usually expressed in seconds, but Javascript uses Milliseconds)
+  }
+  epochValue += new Date().getTimezoneOffset() * -1; // for timeZone
+  return new Date(epochValue);
 }
 
+// eslint-disable-next-line no-unused-vars
 function timeDifference(datetime) {
-
-  let now = new Date();
+  const now = new Date();
 
   const msPerMinute = 60 * 1000;
   const msPerHour = msPerMinute * 60;
@@ -15,72 +20,60 @@ function timeDifference(datetime) {
   const msPerMonth = msPerDay * 30;
   const msPerYear = msPerDay * 365;
 
-  let elapsed = now - datetime;
+  const elapsed = now - datetime;
 
   if (elapsed < msPerMinute) {
-    let value = Math.round(elapsed / 1000);
-    if (value == 1) {
-      return value + ' sec ago'
+    const value = Math.round(elapsed / 1000);
+    if (value === 1) {
+      return `${value} sec ago`;
     } else {
-      return value + ' secs ago';
+      return `${value} secs ago`;
     }
-  }
-
-  else if (elapsed < msPerHour) {
-    let value = Math.round(elapsed / msPerMinute);
-    if (value == 1) {
-      return value + ' min ago'
+  } else if (elapsed < msPerHour) {
+    const value = Math.round(elapsed / msPerMinute);
+    if (value === 1) {
+      return `${value} min ago`;
     } else {
-      return value + ' mins ago';
+      return `${value} mins ago`;
     }
-  }
-
-  else if (elapsed < msPerDay) {
-
-    let value = Math.round(elapsed / msPerHour);
-    if (value == 1) {
-      return value + ' hour ago'
+  } else if (elapsed < msPerDay) {
+    const value = Math.round(elapsed / msPerHour);
+    if (value === 1) {
+      return `${value} hour ago`;
     } else {
-      return value + ' hours ago';
+      return `${value} hours ago`;
     }
-  }
-
-  else if (elapsed < msPerMonth) {
-    let value = Math.round(elapsed / msPerDay);
-    if (value == 1) {
-      return value + ' day ago'
+  } else if (elapsed < msPerMonth) {
+    const value = Math.round(elapsed / msPerDay);
+    if (value === 1) {
+      return `${value} day ago`;
     } else {
-      return value + ' days ago';
+      return `${value} days ago`;
     }
-  }
-
-  else if (elapsed < msPerYear) {
-    let value = Math.round(elapsed / msPerMonth);
-    if (value == 1) {
-      return value + ' month ago'
+  } else if (elapsed < msPerYear) {
+    const value = Math.round(elapsed / msPerMonth);
+    if (value === 1) {
+      return `${value} month ago`;
     } else {
-      return value + ' months ago';
+      return `${value} months ago`;
     }
-  }
-
-  else {
-    let value = Math.round(elapsed / msPerYear);
-    if (value == 1) {
-      return value + ' year ago'
+  } else {
+    const value = Math.round(elapsed / msPerYear);
+    if (value === 1) {
+      return `${value} year ago`;
     } else {
-      return value + ' years ago';
+      return `${value} years ago`;
     }
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 function titleCase(str) {
   if (str == null) {
     return null;
   } else {
-
-
-    var splitStr = str.toLowerCase().split(' ');
-    for (var i = 0; i < splitStr.length; i++) {
+    const splitStr = str.toLowerCase().split(' ');
+    for (let i = 0; i < splitStr.length; i += 1) {
       // You do not need to check if i is larger than splitStr length, as your for does that for you
       // Assign it back to the array
       splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
@@ -90,6 +83,7 @@ function titleCase(str) {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 function authCheck() {
   if (document.querySelector('body[data-authenticated="true"]')) {
     return true;
@@ -98,15 +92,15 @@ function authCheck() {
   }
 }
 
-function cardCarousel(element, slides) {
-  var totalCards = element.parentElement.childElementCount;
-  var next = $(element).next();
+function cardCarousel(element) {
+  const totalCards = element.parentElement.childElementCount;
+  let next = $(element).next();
   if (!next.length) {
     next = $(element).siblings(':first');
   }
   next.children(':first-child').clone().appendTo($(element));
 
-  for (var i = 2; i < totalCards; i++) {
+  for (let i = 2; i < totalCards; i += 1) {
     next = next.next();
     if (!next.length) {
       next = $(element).siblings(':first');
@@ -116,35 +110,70 @@ function cardCarousel(element, slides) {
   }
 }
 
-$('.carousel-card-3 .carousel-item').each(function () {
-  cardCarousel(this, 3);
-});
-
-$('.carousel-card-4 .carousel-item').each(function () {
-  cardCarousel(this, 4);
-});
-
-let currentUser = '';
 document.addEventListener('DOMContentLoaded', () => {
-  currentUser = JSON.parse(
-    document.getElementById('current-user').textContent
-  );
+  document
+    .querySelectorAll('.carousel-card-3 .carousel-item, .carousel-card-4 .carousel-item')
+    .forEach((item) => {
+      cardCarousel(item);
+    });
+});
+
+let currentUser = null;
+document.addEventListener('DOMContentLoaded', () => {
+  // eslint-disable-next-line no-unused-vars
+  currentUser = JSON.parse(document.getElementById('current-user').textContent);
 });
 
 // Adds tooltips if text overflows.
-$(function () {
+$(() => {
   $('[data-tooltip="tooltip-overflow"]').each(function () {
-    $(this).tooltip()
-    $(this).tooltip('disable')
+    $(this).tooltip();
+    $(this).tooltip('disable');
     const text = this.querySelector('.overflow-text');
-    $(this).mouseenter(function () {
+    $(this).mouseenter(() => {
       if (text.scrollWidth > text.clientWidth) {
         $(this).tooltip('enable');
         $(this).tooltip('show');
       }
-    })
+    });
   });
 });
+
+function spoilerSetup(element) {
+  element.querySelectorAll('.spoiler-alert').forEach((i) => {
+    i.addEventListener('click', () => {
+      i.classList.add('revealed');
+    });
+  });
+}
+
+function likeButtonSetup(element) {
+  element.querySelectorAll('[data-like-url]').forEach((i) => {
+    i.addEventListener('click', (e) => {
+      const likeButton = e.target;
+      const likeUrl = likeButton.dataset.likeUrl;
+      const liked = likeButton.dataset.checked;
+
+      // eslint-disable-next-line no-undef
+      ajax
+        .jsonRequest('POST', likeUrl, {
+          like: !liked,
+        })
+        .then((data) => {
+          document.querySelectorAll(`[data-like-url="${likeUrl}"]`).forEach((i) => {
+            const item = i;
+            if (data.like) {
+              item.dataset.checked = 'checked';
+            } else {
+              delete item.dataset.checked;
+            }
+            // eslint-disable-next-line no-param-reassign
+            i.querySelector('.likes-count').innerText = data.number_of_likes;
+          });
+        });
+    });
+  });
+}
 
 // Generic like button
 document.addEventListener('DOMContentLoaded', () => {
@@ -152,54 +181,21 @@ document.addEventListener('DOMContentLoaded', () => {
   spoilerSetup(document);
 });
 
-function spoilerSetup(element) {
-  element.querySelectorAll('.spoiler-alert').forEach((i) => {
-    i.addEventListener('click', (e) => {
-      i.classList.add('revealed');
-    })
-  });
-}
-
-function likeButtonSetup(element) {
-  element.querySelectorAll('[data-like-url]').forEach((i) => {
-    i.addEventListener('click', (e) => {
-      likeButton = e.target;
-      likeUrl = likeButton.dataset.likeUrl;
-      liked = likeButton.dataset.checked;
-
-      ajax.jsonRequest('POST', likeUrl, {
-        like: !liked
-      }).then((data) => {
-        document.querySelectorAll('[data-like-url="' + likeUrl + '"]').forEach((i) => {
-          if (data.like) {
-            i.dataset.checked = 'checked';
-          } else {
-            delete i.dataset.checked;
-          }
-          i.querySelector('.likes-count').innerText = data.number_of_likes;
-        });
-      });
-    });
-  });
-}
-
-
-//Notification highlighting
+// Notification highlighting
 function getAnchor() {
-  var currentUrl = document.URL,
-    urlParts = currentUrl.split('#');
+  const currentUrl = document.URL;
+  const urlParts = currentUrl.split('#');
 
-  return (urlParts.length > 1) ? urlParts[1] : null;
+  return urlParts.length > 1 ? urlParts[1] : null;
 }
 
 function hightlightAnchor(element) {
-
-  id = getAnchor();
-  anchor = element.querySelector('#' + id)
+  const id = getAnchor();
+  const anchor = element.querySelector(`#${id}`);
 
   if (id != null && anchor != null) {
-    anchor.classList.add('highlight')
-    anchor.scrollIntoView({ behavior: "smooth", block: "center" });
+    anchor.classList.add('highlight');
+    anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 }
 
@@ -207,26 +203,28 @@ document.addEventListener('DOMContentLoaded', () => {
   hightlightAnchor(document);
 });
 
-
-
 // Make Masonry Grid
 
+// eslint-disable-next-line no-unused-vars
 function makeGrid() {
-  var $grid = $('.grid').masonry({
+  const $grid = $('.grid').masonry({
     itemSelector: '.grid-item',
     columnWidth: '.grid-sizer',
     percentPosition: true,
     horizontalOrder: true,
   });
 
-  $grid.imagesLoaded().progress(function () {
+  $grid.imagesLoaded().progress(() => {
     $grid.masonry('layout');
   });
-
 }
 
+// eslint-disable-next-line no-unused-vars
 function initVideo(container) {
-  const players = Array.from(container.querySelectorAll('.video-player video')).map(p => new Plyr(p));
+  const players = Array.from(container.querySelectorAll('.video-player video')).map(
+    // eslint-disable-next-line no-undef
+    (p) => new Plyr(p)
+  );
 
   const loopButton = `
     <button class="plyr__controls__item plyr__control" type="button" data-plyr="loop">
@@ -241,89 +239,94 @@ function initVideo(container) {
     </button>
     `;
 
-  players.forEach(element => element.elements.container.addEventListener('ready', () => {
+  players.forEach((element) =>
+    element.elements.container.addEventListener('ready', () => {
+      const dataElement = element.elements.container.parentElement;
+      const startPosition = Number(dataElement.dataset.startPosition);
+      const progressPostMinWait = 2000;
+      const progressUrl = dataElement.dataset.progressUrl;
+      let _postingProgress = 0;
+      let _lastPostProgress = null;
 
-    dataElement = element.elements.container.parentElement;
-    startPosition = Number(dataElement.dataset.startPosition);
-    progressPostMinWait = 2000;
-    progressUrl = dataElement.dataset.progressUrl;
-    _postingProgress = 0;
-    _lastPostProgress = null;
+      element.elements.controls
+        .querySelector('.plyr__menu')
+        .insertAdjacentHTML('afterend', loopButton);
 
-    element.elements.controls.querySelector('.plyr__menu').insertAdjacentHTML('afterend', loopButton)
-
-    element.elements.controls.querySelector('[data-plyr="loop"]').addEventListener('click', event => {
-      event.target.classList.toggle("plyr__control--pressed");
-      element.media.loop = !element.media.loop;
-    })
-
-    if (dataElement.dataset.progressUrl) {
-      element.on('loadeddata', () => {
-        // Setting a start position doesn't appear to work on "ready", only on "loaddata"
-        // See https://github.com/sampotts/plyr/issues/208#issuecomment-400539990
-        if (startPosition <= element.duration) {
-          element.currentTime = startPosition;
-        }
-      });
-
-      element.on('timeupdate', () => {
-        if (
-          _postingProgress === 0 &&
-          (_lastPostProgress == null ||
-            Date.now() - _lastPostProgress >= progressPostMinWait)
-        ) {
-          postProgress();
-        }
-      });
-    }
-
-    function postProgress(){
-
-      _lastPostProgress = Date.now();
-      _postingProgress += 1;
-      ajax
-        .jsonRequest('POST', this.progressUrl, {
-          position: element.currentTime
-        })
-        .finally(() => {
-          _postingProgress -= 1;
+      element.elements.controls
+        .querySelector('[data-plyr="loop"]')
+        .addEventListener('click', (event) => {
+          event.target.classList.toggle('plyr__control--pressed');
+          // eslint-disable-next-line no-param-reassign
+          element.media.loop = !element.media.loop;
         });
-    }
-  }));
+
+      function postProgress() {
+        _lastPostProgress = Date.now();
+        _postingProgress += 1;
+        // eslint-disable-next-line no-undef
+        ajax
+          .jsonRequest('POST', progressUrl, {
+            position: element.currentTime,
+          })
+          .finally(() => {
+            _postingProgress -= 1;
+          });
+      }
+
+      if (progressUrl) {
+        element.on('loadeddata', () => {
+          // Setting a start position doesn't appear to work on "ready", only on "loaddata"
+          // See https://github.com/sampotts/plyr/issues/208#issuecomment-400539990
+          if (startPosition <= element.duration) {
+            // eslint-disable-next-line no-param-reassign
+            element.currentTime = startPosition;
+          }
+        });
+
+        element.on('timeupdate', () => {
+          if (
+            _postingProgress === 0 &&
+            (_lastPostProgress == null || Date.now() - _lastPostProgress >= progressPostMinWait)
+          ) {
+            postProgress();
+          }
+        });
+      }
+    })
+  );
 }
 
-
-//Lightbox in blogs
+// Lightbox in blogs
 document.addEventListener('DOMContentLoaded', () => {
   const imageZoomModalID = '#image-zoom-modal';
   const imageZoomModal = document.querySelector(imageZoomModalID);
   const imageWrapper = imageZoomModal.querySelector('.modal-body');
 
-  document.querySelectorAll('.image-zoom').forEach(element => {
-
+  document.querySelectorAll('.image-zoom').forEach((element) => {
     const imageURL = element.dataset.image;
     const imageHTML = `<img src="${imageURL}">`;
 
-    element.addEventListener('click', (event) => {
+    element.addEventListener('click', () => {
       imageWrapper.innerHTML = imageHTML;
+      // eslint-disable-next-line no-undef
       $(imageZoomModalID).modal('show');
-    })
-  })
+    });
+  });
 });
 
-//readmore link
-
+// Readmore link
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.read-more-link').forEach(element => {
-
+  document.querySelectorAll('.read-more-link').forEach((element) => {
     const id = element.hash;
     element.addEventListener('click', (event) => {
       event.preventDefault();
-      document.querySelector(id + ' .read-more-elip').classList.toggle('d-none');
-      document.querySelector(id + ' .read-more-text').classList.toggle('d-none');
-      if (element.querySelector('.read-more-less').innerText == 'more') {
+      document.querySelector(`${id} .read-more-elip`).classList.toggle('d-none');
+      document.querySelector(`${id} .read-more-text`).classList.toggle('d-none');
+      if (element.querySelector('.read-more-less').innerText === 'more') {
+        // eslint-disable-next-line no-param-reassign
         element.querySelector('.read-more-less').innerText = 'less';
       } else {
+        // eslint-disable-next-line no-param-reassign
         element.querySelector('.read-more-less').innerText = 'more';
       }
     });
