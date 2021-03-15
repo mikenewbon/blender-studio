@@ -25,44 +25,44 @@ function timeDifference(datetime) {
   if (elapsed < msPerMinute) {
     const value = Math.round(elapsed / 1000);
     if (value === 1) {
-      return `${value} sec ago`;
+      return `${value}\xa0sec ago`;
     } else {
-      return `${value} secs ago`;
+      return `${value}\xa0secs ago`;
     }
   } else if (elapsed < msPerHour) {
     const value = Math.round(elapsed / msPerMinute);
     if (value === 1) {
-      return `${value} min ago`;
+      return `${value}\xa0min ago`;
     } else {
-      return `${value} mins ago`;
+      return `${value}\xa0mins ago`;
     }
   } else if (elapsed < msPerDay) {
     const value = Math.round(elapsed / msPerHour);
     if (value === 1) {
-      return `${value} hour ago`;
+      return `${value}\xa0hour ago`;
     } else {
-      return `${value} hours ago`;
+      return `${value}\xa0hours ago`;
     }
   } else if (elapsed < msPerMonth) {
     const value = Math.round(elapsed / msPerDay);
     if (value === 1) {
-      return `${value} day ago`;
+      return `${value}\xa0day ago`;
     } else {
-      return `${value} days ago`;
+      return `${value}\xa0days ago`;
     }
   } else if (elapsed < msPerYear) {
     const value = Math.round(elapsed / msPerMonth);
     if (value === 1) {
-      return `${value} month ago`;
+      return `${value}\xa0month ago`;
     } else {
-      return `${value} months ago`;
+      return `${value}\xa0months ago`;
     }
   } else {
     const value = Math.round(elapsed / msPerYear);
     if (value === 1) {
-      return `${value} year ago`;
+      return `${value}\xa0year ago`;
     } else {
-      return `${value} years ago`;
+      return `${value}\xa0years ago`;
     }
   }
 }
