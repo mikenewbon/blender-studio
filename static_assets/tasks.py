@@ -63,12 +63,12 @@ def create_video_processing_job(static_asset_id: int):
 
     # The mp4:1080p version of the path if the width is >= 1920px wide
     outputs[
-        'mp4:1080p'
+        'mp4:0x1080'
     ] = f"{job_storage_base_out}{source_path.with_suffix('.1080p.mp4')}, if=$source_width >= 1920"
 
     # The mp4:720p version of the path if the width is < 1920px wide
     outputs[
-        'mp4:720p'
+        'mp4:0x720'
     ] = f"{job_storage_base_out}{source_path.with_suffix('.720p.mp4')}, if=$source_width < 1920"
 
     # Webhook for encoding updates
