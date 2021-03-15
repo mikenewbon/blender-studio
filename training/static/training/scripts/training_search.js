@@ -133,7 +133,7 @@ const renderHits = (renderOptions, isFirstRender) => {
               <a class="card-body" href="${ item.url }">
                 <div class="card-subtitle-group">
                   <p class="card-subtitle">${item.is_free == true ? `<i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top"
-                  title="Free">lock_open</i>` :''}&nbsp;${ titleCase(item.type) }</p>
+                  title="Free">lock_open</i>&nbsp;` :''}${ titleCase(item.type) }</p>
                   <p class="card-subtitle">
                   ${ !!(item.difficulty) ? `<i class="material-icons icon-inline small">school</i>&nbsp;${ titleCase(item.difficulty) }` : ''}
                   </p>
