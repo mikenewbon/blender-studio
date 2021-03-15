@@ -57,19 +57,24 @@ def create_video_processing_job(static_asset_id: int):
 
     static_asset = models_static_assets.StaticAsset.objects.get(pk=static_asset_id)
     source_path = pathlib.PurePath(static_asset.source.name)
+    # keep original bitrates
+    keep_parameters = 'keep=video_bitrate,audio_bitrate'
 
     # The jpg:1280x thumbnail
     outputs['jpg:1280x'] = f"{job_storage_base_out}{source_path.with_suffix('.thumbnail.jpg')}"
 
     # The mp4:1080p version of the path if the width is >= 1920px wide
-    outputs[
-        'mp4:0x1080'
-    ] = f"{job_storage_base_out}{source_path.with_suffix('.1080p.mp4')}, if=$source_width >= 1920"
+    # 0x instead of *p to keep the original aspect ratio
+    outputs['mp4:0x1080'] = (
+        f"{job_storage_base_out}{source_path.with_suffix('.1080p.mp4')}, {keep_parameters},"
+        " if=$source_width >= 1920"
+    )
 
     # The mp4:720p version of the path if the width is < 1920px wide
-    outputs[
-        'mp4:0x720'
-    ] = f"{job_storage_base_out}{source_path.with_suffix('.720p.mp4')}, if=$source_width < 1920"
+    outputs['mp4:0x720'] = (
+        f"{job_storage_base_out}{source_path.with_suffix('.720p.mp4')}, {keep_parameters},"
+        " if=$source_width < 1920"
+    )
 
     # Webhook for encoding updates
     job_webhook = reverse('coconut-webhook', kwargs={'video_id': static_asset.video.id})
