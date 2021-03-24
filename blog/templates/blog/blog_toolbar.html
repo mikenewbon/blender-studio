@@ -17,7 +17,7 @@
       {% if not user.is_authenticated %}disabled{% endif%} {% if post.liked %}data-checked="checked" {% endif %}>
       <i class="material-icons checkbox-like-icon-checked text-primary">favorite</i>
       <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
-      <span class="likes-count">{{ post.likes.count }}</span>
+      {% if post.likes.count != 0 %}<span class="likes-count">{{ post.likes.count }}</span>{% endif %}
     </button>
 
     {% comment %} <a href="http://www.facebook.com/share.php?u=cloud.blender.org/blog/{{ post.post.slug }}"

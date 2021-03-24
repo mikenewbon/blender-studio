@@ -212,14 +212,20 @@ window.comments = (function comments() {
         .jsonRequest('POST', this.likeUrl, {
           like: !likeButton.dataset.checked
         })
-        .then(data => {
+        .then((data) => {
           if (data.like) {
             likeButton.dataset.checked = 'checked';
           } else {
             delete likeButton.dataset.checked;
           }
 
-          commentLikesCountElement.innerText = data.number_of_likes;
+          if (likeButton.querySelector('.likes-count')) {
+            // eslint-disable-next-line no-param-reassign
+            likeButton.querySelector('.likes-count').innerText = data.number_of_likes;
+          } else {
+            const likeCountHTML = `<span class="likes-count">${data.number_of_likes}</span>`;
+            likeButton.insertAdjacentHTML('beforeend', likeCountHTML);
+          }
         });
     }
 

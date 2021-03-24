@@ -167,8 +167,13 @@ function likeButtonSetup(element) {
             } else {
               delete item.dataset.checked;
             }
-            // eslint-disable-next-line no-param-reassign
-            i.querySelector('.likes-count').innerText = data.number_of_likes;
+            if (i.querySelector('.likes-count')) {
+              // eslint-disable-next-line no-param-reassign
+              i.querySelector('.likes-count').innerText = data.number_of_likes;
+            } else {
+              const likeCountHTML = `<span class="likes-count">${data.number_of_likes}</span>`;
+              i.insertAdjacentHTML('beforeend', likeCountHTML);
+            }
           });
         });
     });

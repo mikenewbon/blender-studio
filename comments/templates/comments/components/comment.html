@@ -55,7 +55,7 @@
                 {% endif %}>
                 <i class="material-icons checkbox-like-icon-checked text-primary">favorite</i>
                 <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
-                <span class="likes-count">{{ comment.likes }}</span>
+                {% if comment.likes != 0 %}<span class="likes-count">{{ comment.likes }}</span>{% endif %}
               </button>
 
               <button class="btn btn-transparent btn-xs comment-action comment-reply {% if not user.is_authenticated %}disabled{% endif%}"
