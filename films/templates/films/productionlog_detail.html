@@ -10,13 +10,9 @@
     <div class="row justify-content-center">
 
       <div class="col-md-12 mb-3 text-center">
-        <p class="subtitle">{{ film.title }}</p>
-        <h1 class="">{{ production_log.name }}</h2>
-          {% if production_log.start_date %}
-          <p class="mb-3"><i class="material-icons icon-inline small">calendar_today</i>
-            {{ production_log.start_date|date:'M jS Y' }}</p>
-          {% endif %}
-          {% include 'films/components/production_log_pagination.html' %}
+        <p class="subtitle">
+            {% if production_log.start_date %}{{ production_log.start_date|date:'M jS Y' }} | {% endif %}{{ film.title }}</p>
+        <h1 class="mb-0">{{ production_log.name }}</h1>
       </div>
     </div>
 
