@@ -77,7 +77,7 @@
           <div class="training-toolbar">
             {% if section.is_free or request.user|has_active_subscription %}
             {% if section.download_url %}
-            <a href="{{ section.download_url }}" download class="btn btn-sm btn-dark">Download <span
+            <a href="{{ section.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span
                 class="subtitle">({{ section.download_size }})</span></a>
             {% endif %}
             {% endif %}

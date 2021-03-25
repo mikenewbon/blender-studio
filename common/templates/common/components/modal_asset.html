@@ -110,7 +110,7 @@
                 <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to
                   Download</button>
                 {% elif user_has_active_subscription %}
-                <a href="{{ asset.download_url }}" download class="btn btn-sm btn-dark">Download <span
+                <a href="{{ asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span
                     class="subtitle">({{ asset.download_size }})</span></a>
                 {% else %}
                 <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Subscribe to
