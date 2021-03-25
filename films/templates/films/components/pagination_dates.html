@@ -3,7 +3,7 @@
     <nav aria-label="page navigation">
       {% with current=object_list|first %}
       {% with current_month=current.start_date|date:"YM"|lower %}
-      <ul class="pagination production-logs-dates mb-0">
+      <ul class="pagination production-logs-dates">
 
         {% if next_month %}
         <li class="page-item">

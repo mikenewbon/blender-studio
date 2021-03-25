@@ -7,9 +7,13 @@
 .production-logs-dates {
   border-radius: $border-radius;
   overflow: hidden;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: -$spacer / 2;
 
   .page-item {
     // display: none;
+    margin-bottom: $spacer / 2;
 
     &.disabled {
       .page-link {
