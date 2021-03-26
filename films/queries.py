@@ -332,7 +332,7 @@ def get_gallery_drawer_context(film: Film, user: User) -> Dict[str, Any]:
 def get_random_featured_assets(limit=8) -> List[Asset]:
     """Select a desired number of random featured film assets."""
     query = Asset.objects.filter(is_featured=True, is_published=True)
-    featured_ids = {row['id'] for row in query.values('id')}
+    featured_ids = tuple({row['id'] for row in query.values('id')})
     featured_ids_sample = random.sample(featured_ids, min(limit, len(featured_ids)))
     return list(query.filter(id__in=featured_ids_sample))
 
