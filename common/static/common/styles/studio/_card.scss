@@ -118,6 +118,9 @@
 
   .card-subtitle {
     color: $highlight-white-xstrong;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
@@ -126,6 +129,11 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: $spacer / 2;
+
+  .card-subtitle:first-child {
+    overflow: visible;
+    margin-right: $spacer;
+  }
 
   p {
     margin-bottom: 0;
