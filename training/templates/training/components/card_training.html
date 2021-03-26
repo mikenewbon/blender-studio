@@ -19,8 +19,13 @@
           {% firstof training.type.label training.get_type_display %}
         </p>
         <p class="card-subtitle">
+          {% if training.get_difficulty_display or training.difficulty.label %}
           <i class="material-icons icon-inline small">school</i>
           {% firstof training.get_difficulty_display training.difficulty.label %}
+          {% elif training.project %}
+          <i class="material-icons icon-inline small">school</i>
+          {{ training.project}}
+          {% endif %}
         </p>
       </div>
       <h3 class="card-title">{{ training.name }}</h3>
