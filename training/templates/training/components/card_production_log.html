@@ -2,10 +2,8 @@
   <div class="card card-dark card-training card-media card-hover" {% if training.favorited %}data-checked="checked"
     {% endif %} data-favorite-url="{{ training.favorite_url }}" data-training-id="{{ training.id }}">
 
-    <div class="card-header">
-      <a href="{{ training.url }}" class="card-header-link">
-        <img src="{% firstof training.static_asset.thumbnail_s_url training.thumbnail_s_url %}" class="card-image">
-      </a>
+    <div class="card-header" style='background-image: url("{{ training.thumbnail_s_url }}")'>
+      <a href="{{ training.url }}" class="card-header-link"></a>
       {% if request.user.is_authenticated %}
       {% include 'training/components/card_button_favorite.html' with class='btn-save-media card-training-favorite' checked=training.favorited %}
       {% endif %}
@@ -18,19 +16,11 @@
           <i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top"
             title="Free">lock_open</i>
           {% endif %}
-          {% firstof training.type.label training.get_type_display training.get_category_display %}
+          {% firstof training.type.label training.get_type_display %}
         </p>
         <p class="card-subtitle">
-          {% if training.get_difficulty_display or training.difficulty.label %}
-          <i class="material-icons icon-inline small">school</i>
-          {% firstof training.get_difficulty_display training.difficulty.label %}
-          {% elif training.project %}
-          <i class="material-icons icon-inline small">school</i>
-          {{ training.project}}
-          {% elif training.film %}
           <i class="material-icons icon-inline small">movie</i>
-          {{ training.film }}
-          {% endif %}
+          {% firstof training.get_difficulty_display training.difficulty.label %}
         </p>
       </div>
       <h3 class="card-title">{{ training.name }}</h3>

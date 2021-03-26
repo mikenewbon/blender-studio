@@ -15,15 +15,6 @@
 }
 
 #hits {
-  .card-text {
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    /* number of lines to show */
-    display: -webkit-box;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
   .content-type {
     text-transform: capitalize;
   }
