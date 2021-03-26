@@ -52,10 +52,10 @@ class TestTasks(TestCase):
             set_comment_like(comment_pk=CommentFactory().pk, user_pk=user.pk, like=True)
         user_likes = user.like_set.all()
         # which means that this user also has some activity
-        self.assertEquals(user.actor_actions.count(), len(user_likes))
+        self.assertEqual(user.actor_actions.count(), len(user_likes))
         # and other comment authors still have notifications about their likes
         for like in user_likes:
-            self.assertEquals(like.comment.user.notifications.count(), 1)
+            self.assertEqual(like.comment.user.notifications.count(), 1)
 
         with self.assertLogs('users.tasks', level='WARNING') as log:
             tasks.handle_deletion_request.task_function(pk=user.pk)
@@ -68,11 +68,11 @@ class TestTasks(TestCase):
         for comment in user_comments:
             comment.refresh_from_db()
             self.assertIsNone(comment.user)
-            self.assertEquals(comment.username, '<deleted>')
+            self.assertEqual(comment.username, '<deleted>')
         # same with the likes
         for like in user_likes:
             like.refresh_from_db()
             self.assertIsNone(like.user)
-            self.assertEquals(like.username, '<deleted>')
+            self.assertEqual(like.username, '<deleted>')
             # the notification, however, is also deleted
-            self.assertEquals(like.comment.user.notifications.count(), 0)
+            self.assertEqual(like.comment.user.notifications.count(), 0)

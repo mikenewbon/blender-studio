@@ -15,7 +15,7 @@ class QueueDeletionRequestsCommandTest(TestCase):
         out = StringIO()
         call_command('queue_deletion_requests', stdout=out)
 
-        self.assertEquals(out.getvalue(), '')
+        self.assertEqual(out.getvalue(), '')
         mock_handle_deletion_request.assert_not_called()
 
     @patch('users.tasks.handle_deletion_request')
@@ -39,8 +39,8 @@ class QueueDeletionRequestsCommandTest(TestCase):
             self.assertRegex(logs.output[0], 'Found 4 deletion requests that need handling')
 
         mock_handle_deletion_request.assert_called()
-        self.assertEquals(mock_handle_deletion_request.call_count, 4)
-        self.assertEquals(
+        self.assertEqual(mock_handle_deletion_request.call_count, 4)
+        self.assertEqual(
             sorted(mock_handle_deletion_request.mock_calls),
             [call(user.pk) for user in users_to_delete],
         )

@@ -65,10 +65,10 @@ class TestSiteMetadata(TestCase):
             return found_meta[0]
 
     def assertMetaEquals(self, html: bytes, prop: str, value: str):
-        self.assertEquals(self._find_meta(html, prop), value, prop)
+        self.assertEqual(self._find_meta(html, prop), value, prop)
 
     def assertCanonicalLinkEquals(self, html: bytes, value: str):
-        self.assertEquals(self._find_link(html), value)
+        self.assertEqual(self._find_link(html), value)
 
     def test_homepage(self):
         # Login to avoid being redirected to the welcome page

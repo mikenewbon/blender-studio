@@ -200,16 +200,16 @@ class TestBlenderIDWebhook(TestCase):
     def test_user_modified_missing_hmac(self):
         response = self.client.post(self.url, {}, content_type='application/json')
 
-        self.assertEquals(response.status_code, 400)
-        self.assertEquals(response.content, b'Invalid HMAC')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.content, b'Invalid HMAC')
 
     def test_user_modified_invalid_hmac(self):
         url = reverse('webhook-user-modified')
         headers = {'HTTP_X-Webhook-HMAC': 'deadbeef'}
         response = self.client.post(url, {}, content_type='application/json', **headers)
 
-        self.assertEquals(response.status_code, 400)
-        self.assertEquals(response.content, b'Invalid HMAC')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.content, b'Invalid HMAC')
 
     @patch('users.views.webhooks.WEBHOOK_MAX_BODY_SIZE', 1)
     def test_user_modified_request_body_too_large(self):
@@ -218,15 +218,15 @@ class TestBlenderIDWebhook(TestCase):
             self.url, body, content_type='application/json', **prepare_hmac_header(body)
         )
 
-        self.assertEquals(response.status_code, 413)
+        self.assertEqual(response.status_code, 413)
 
     def test_user_modified_unexpected_content_type(self):
         response = self.client.post(
             self.url, 'text', content_type='text/plain', **prepare_hmac_header(b'text')
         )
 
-        self.assertEquals(response.status_code, 400)
-        self.assertEquals(response.content, b'Unsupported Content-Type')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.content, b'Unsupported Content-Type')
 
     def test_user_modified_malformed_json(self):
         body = b'{"":"",}'
@@ -234,8 +234,8 @@ class TestBlenderIDWebhook(TestCase):
             self.url, body, content_type='application/json', **prepare_hmac_header(body)
         )
 
-        self.assertEquals(response.status_code, 400)
-        self.assertEquals(response.content, b'Malformed JSON')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.content, b'Malformed JSON')
 
     @responses.activate
     def test_user_modified_updates_user(self):
@@ -244,12 +244,12 @@ class TestBlenderIDWebhook(TestCase):
             self.url, body, content_type='application/json', **prepare_hmac_header(body)
         )
 
-        self.assertEquals(response.status_code, 204)
-        self.assertEquals(response.content, b'')
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.content, b'')
         user = User.objects.get(id=self.user.pk)
-        self.assertEquals(user.full_name, 'Иван Васильевич Doe')
-        self.assertEquals(user.email, 'newmail@example.com')
-        self.assertEquals(
+        self.assertEqual(user.full_name, 'Иван Васильевич Doe')
+        self.assertEqual(user.email, 'newmail@example.com')
+        self.assertEqual(
             user.badges,
             {
                 'cloud_demo': {
@@ -265,7 +265,7 @@ class TestBlenderIDWebhook(TestCase):
     @responses.activate
     def test_user_modified_roles_added_removed_adds_removes_user_groups(self):
         # No groups ("roles") assigned yet
-        self.assertEquals(list(self.user.groups.all()), [])
+        self.assertEqual(list(self.user.groups.all()), [])
 
         # Two new roles added
         body = {
@@ -276,10 +276,10 @@ class TestBlenderIDWebhook(TestCase):
             self.url, body, content_type='application/json', **prepare_hmac_header(body)
         )
 
-        self.assertEquals(response.status_code, 204)
-        self.assertEquals(response.content, b'')
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.content, b'')
         user = User.objects.get(pk=self.user.pk)
-        self.assertEquals(
+        self.assertEqual(
             sorted([g.name for g in user.groups.all()]),
             ['has_subscription', 'subscriber'],
         )
@@ -293,14 +293,14 @@ class TestBlenderIDWebhook(TestCase):
             self.url, body, content_type='application/json', **prepare_hmac_header(body)
         )
 
-        self.assertEquals(response.status_code, 204)
+        self.assertEqual(response.status_code, 204)
         user = User.objects.get(pk=self.user.pk)
-        self.assertEquals(
+        self.assertEqual(
             sorted([g.name for g in user.groups.all()]),
             ['has_subscription'],
         )
         # Check that the group itself still exists
-        self.assertEquals(Group.objects.filter(name='subscriber').count(), 1)
+        self.assertEqual(Group.objects.filter(name='subscriber').count(), 1)
 
         # Two roles added, one already exists
         body = {
@@ -311,9 +311,9 @@ class TestBlenderIDWebhook(TestCase):
             self.url, body, content_type='application/json', **prepare_hmac_header(body)
         )
 
-        self.assertEquals(response.status_code, 204)
+        self.assertEqual(response.status_code, 204)
         user = User.objects.get(pk=self.user.pk)
-        self.assertEquals(
+        self.assertEqual(
             sorted([g.name for g in user.groups.all()]),
             ['dev_core', 'has_subscription', 'subscriber'],
         )
@@ -323,7 +323,7 @@ class TestBlenderIDWebhook(TestCase):
         for group_name in ('_editor', '_org_someinc'):
             group, _ = Group.objects.get_or_create(name=group_name)
             self.user.groups.add(group)
-        self.assertEquals(self.user.groups.count(), 2)
+        self.assertEqual(self.user.groups.count(), 2)
 
         # Two new roles added
         body = {
@@ -334,12 +334,12 @@ class TestBlenderIDWebhook(TestCase):
             self.url, body, content_type='application/json', **prepare_hmac_header(body)
         )
 
-        self.assertEquals(response.status_code, 204)
-        self.assertEquals(response.content, b'')
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.content, b'')
         user = User.objects.get(pk=self.user.pk)
         # Groups stating with an "_" are managed by Blender Studio, not Blender ID,
         # and should not be affected by the webhook
-        self.assertEquals(
+        self.assertEqual(
             sorted([g.name for g in user.groups.all()]),
             ['_editor', '_org_someinc', 'has_subscription', 'subscriber'],
         )
@@ -353,14 +353,14 @@ class TestBlenderIDWebhook(TestCase):
             self.url, body, content_type='application/json', **prepare_hmac_header(body)
         )
 
-        self.assertEquals(response.status_code, 204)
+        self.assertEqual(response.status_code, 204)
         user = User.objects.get(pk=self.user.pk)
-        self.assertEquals(
+        self.assertEqual(
             sorted([g.name for g in user.groups.all()]),
             ['_editor', '_org_someinc', 'has_subscription'],
         )
         # Check that the group itself still exists
-        self.assertEquals(Group.objects.filter(name='subscriber').count(), 1)
+        self.assertEqual(Group.objects.filter(name='subscriber').count(), 1)
 
         # Two roles added, one already exists
         body = {
@@ -371,9 +371,9 @@ class TestBlenderIDWebhook(TestCase):
             self.url, body, content_type='application/json', **prepare_hmac_header(body)
         )
 
-        self.assertEquals(response.status_code, 204)
+        self.assertEqual(response.status_code, 204)
         user = User.objects.get(pk=self.user.pk)
-        self.assertEquals(
+        self.assertEqual(
             sorted([g.name for g in user.groups.all()]),
             ['_editor', '_org_someinc', 'dev_core', 'has_subscription', 'subscriber'],
         )
@@ -389,7 +389,7 @@ class TestBlenderIDWebhook(TestCase):
             )
             self.assertRegex(logs.output[0], 'Cannot update user: no OAuth info found for ID 999')
 
-        self.assertEquals(response.status_code, 204)
+        self.assertEqual(response.status_code, 204)
 
     @responses.activate
     def test_user_modified_logs_errors_when_blender_id_user_info_broken(self):
@@ -405,7 +405,7 @@ class TestBlenderIDWebhook(TestCase):
             )
             self.assertRegex(logs.output[0], 'Unable to update username for ')
 
-        self.assertEquals(response.status_code, 204)
+        self.assertEqual(response.status_code, 204)
 
     @responses.activate
     def test_user_modified_avatar_changed(self):
@@ -420,8 +420,8 @@ class TestBlenderIDWebhook(TestCase):
             )
             self.assertRegex(logs.output[0], 'Profile image updated for')
 
-        self.assertEquals(response.status_code, 204)
-        self.assertEquals(response.content, b'')
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.content, b'')
         user = User.objects.get(id=self.user.pk)
         self.assertTrue(user.image_url, 's3://file')
 
@@ -437,16 +437,16 @@ class TestBlenderIDWebhook(TestCase):
             response = self.client.post(
                 self.url, body, content_type='application/json', **prepare_hmac_header(body)
             )
-            self.assertEquals(
+            self.assertEqual(
                 logs.output[0],
                 f'WARNING:users.models:Deletion of pk={self.user.pk}'
                 f' requested on {date_deletion_requested}, deactivating this account',
             )
 
-        self.assertEquals(response.status_code, 204)
-        self.assertEquals(response.content, b'')
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.content, b'')
         user = User.objects.get(id=self.user.pk)
-        self.assertEquals(
+        self.assertEqual(
             user.date_deletion_requested, dateutil.parser.parse(date_deletion_requested)
         )
         self.assertFalse(user.is_active)
@@ -512,11 +512,11 @@ class TestIntegrityErrors(TransactionTestCase):
             )
             self.assertRegex(logs.output[0], 'Unable to update email for')
 
-        self.assertEquals(response.status_code, 204)
-        self.assertEquals(response.content, b'')
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.content, b'')
         # Email was not updated
-        self.assertEquals(self.user.email, 'mail@example.com')
-        self.assertEquals(another_user.email, 'jane@example.com')
+        self.assertEqual(self.user.email, 'mail@example.com')
+        self.assertEqual(another_user.email, 'jane@example.com')
 
 
 @override_settings(

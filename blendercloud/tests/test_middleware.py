@@ -30,7 +30,7 @@ class TestSessionMiddleware(TestCase):
 
         response = self.client.get(self.test_url)
 
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertNotIn('_auth_user_id', self.client.session)
 
     @responses.activate
@@ -40,12 +40,12 @@ class TestSessionMiddleware(TestCase):
 
         response = self.client.get(self.test_url)
 
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertTrue(User.objects.filter(email='jane@example.com').exists())
         user = User.objects.get(email='jane@example.com')
         self.assertIn('_auth_user_id', self.client.session)
-        self.assertEquals(int(self.client.session['_auth_user_id']), user.pk)
-        self.assertEquals(
+        self.assertEqual(int(self.client.session['_auth_user_id']), user.pk)
+        self.assertEqual(
             {g.name for g in user.groups.all()},
             {'dev_core', 'has_subscription', 'subscriber'},
         )
@@ -57,11 +57,11 @@ class TestSessionMiddleware(TestCase):
 
         response = self.client.get(self.test_url)
 
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         user = User.objects.get(pk=existing_user.pk)
         self.assertIn('_auth_user_id', self.client.session)
-        self.assertEquals(int(self.client.session['_auth_user_id']), user.pk)
-        self.assertEquals(
+        self.assertEqual(int(self.client.session['_auth_user_id']), user.pk)
+        self.assertEqual(
             {g.name for g in user.groups.all()},
             {'dev_core', 'has_subscription', 'subscriber'},
         )

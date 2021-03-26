@@ -33,7 +33,7 @@ class TestQueries(TestCase):
         self.assertEqual(len(random_assets), len(set(asset_ids)))
 
     def test_get_random_featured_assets_empty_assets(self):
-        self.assertEquals(Asset.objects.count(), 0)
+        self.assertEqual(Asset.objects.count(), 0)
 
         random_assets = get_random_featured_assets(limit=3)
 

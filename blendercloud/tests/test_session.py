@@ -82,12 +82,12 @@ class TestSession(TestCase):
         user = get_or_create_current_user(request)
 
         assert user is not None
-        self.assertEquals(user.username, 'ⅉanedoe')
-        self.assertEquals(user.email, 'jane@example.com')
-        self.assertEquals(user.oauth_info.oauth_user_id, '2')
-        self.assertEquals(user.full_name, 'ⅉane ⅅoe')
-        self.assertEquals(user.image_url, 's3://file')
-        self.assertEquals(
+        self.assertEqual(user.username, 'ⅉanedoe')
+        self.assertEqual(user.email, 'jane@example.com')
+        self.assertEqual(user.oauth_info.oauth_user_id, '2')
+        self.assertEqual(user.full_name, 'ⅉane ⅅoe')
+        self.assertEqual(user.image_url, 's3://file')
+        self.assertEqual(
             sorted([g.name for g in user.groups.all()]),
             ['dev_core', 'has_subscription', 'subscriber'],
         )
@@ -101,10 +101,10 @@ class TestSession(TestCase):
         user = get_or_create_current_user(request)
 
         assert user is not None
-        self.assertEquals(user.pk, existing_user.pk)
-        self.assertEquals(user.username, 'ⅉanedoe')
-        self.assertEquals(user.email, 'jane@example.com')
-        self.assertEquals(user.oauth_info.oauth_user_id, '2')
+        self.assertEqual(user.pk, existing_user.pk)
+        self.assertEqual(user.username, 'ⅉanedoe')
+        self.assertEqual(user.email, 'jane@example.com')
+        self.assertEqual(user.oauth_info.oauth_user_id, '2')
 
     @responses.activate
     def test_get_or_create_current_user_race_condition_in_oauth_info_creation(self):
@@ -125,12 +125,12 @@ class TestSession(TestCase):
             user = get_or_create_current_user(request)
 
         assert user is not None
-        self.assertEquals(models.OAuthUserInfo.objects.filter(oauth_user_id='2').count(), 1)
-        self.assertEquals(User.objects.filter(email='jane@example.com').count(), 1)
-        self.assertEquals(user.oauth_info.oauth_user_id, '2')
-        self.assertEquals(user.pk, existing_user.pk)
-        self.assertEquals(user.username, 'ⅉanedoe')
-        self.assertEquals(user.email, 'jane@example.com')
+        self.assertEqual(models.OAuthUserInfo.objects.filter(oauth_user_id='2').count(), 1)
+        self.assertEqual(User.objects.filter(email='jane@example.com').count(), 1)
+        self.assertEqual(user.oauth_info.oauth_user_id, '2')
+        self.assertEqual(user.pk, existing_user.pk)
+        self.assertEqual(user.username, 'ⅉanedoe')
+        self.assertEqual(user.email, 'jane@example.com')
 
     @responses.activate
     def test_get_or_create_current_user_from_remember_token(self):
@@ -141,9 +141,9 @@ class TestSession(TestCase):
         user = get_or_create_current_user(request)
 
         assert user is not None
-        self.assertEquals(user.oauth_info.oauth_user_id, '2')
-        self.assertEquals(user.pk, existing_user.pk)
-        self.assertEquals(user.email, 'jane@example.com')
+        self.assertEqual(user.oauth_info.oauth_user_id, '2')
+        self.assertEqual(user.pk, existing_user.pk)
+        self.assertEqual(user.email, 'jane@example.com')
 
     @responses.activate
     def test_get_or_create_current_user_missing_session_cookie(self):
@@ -191,10 +191,10 @@ class TestSession(TestCase):
         user = get_or_create_current_user(request)
 
         assert user is not None
-        self.assertEquals(user.oauth_info.oauth_user_id, '2')
-        self.assertEquals(user.pk, existing_user.pk)
-        self.assertNotEquals(user.username, 'ⅉanedoe')
-        self.assertEquals(user.username, existing_user.username)
+        self.assertEqual(user.oauth_info.oauth_user_id, '2')
+        self.assertEqual(user.pk, existing_user.pk)
+        self.assertNotEqual(user.username, 'ⅉanedoe')
+        self.assertEqual(user.username, existing_user.username)
 
     @responses.activate
     def test_get_or_create_current_user_handles_duplicate_username_new_user(self):
@@ -205,8 +205,8 @@ class TestSession(TestCase):
         user = get_or_create_current_user(request)
 
         assert user is not None
-        self.assertEquals(user.oauth_info.oauth_user_id, '2')
-        self.assertNotEquals(user.username, 'ⅉanedoe')
+        self.assertEqual(user.oauth_info.oauth_user_id, '2')
+        self.assertNotEqual(user.username, 'ⅉanedoe')
         self.assertTrue(user.username.startswith('ⅉanedoe#'), user.username)
 
 
@@ -237,7 +237,7 @@ class TestIntegrityErrors(TransactionTestCase):
         user = get_or_create_current_user(request)
 
         assert user is not None
-        self.assertEquals(user.oauth_info.oauth_user_id, '2')
-        self.assertEquals(user.pk, existing_user.pk)
+        self.assertEqual(user.oauth_info.oauth_user_id, '2')
+        self.assertEqual(user.pk, existing_user.pk)
         # Email was not updated
-        self.assertEquals(user.email, existing_user.email)
+        self.assertEqual(user.email, existing_user.email)
