@@ -16,7 +16,7 @@
           {{ post.category|title }}
         </p>
         {% if not post.is_published %}
-        <div class="badge badge-primary">
+        <div class="badge badge-danger">
           Unpublished
         </div>
         {% elif post.is_new %}
