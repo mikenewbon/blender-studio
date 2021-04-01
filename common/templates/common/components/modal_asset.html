@@ -19,7 +19,7 @@
 </button>
 
 {% with user_has_active_subscription=request.user|has_active_subscription %}
-<div id="asset-{{ asset.id }}" data-asset-id="{{ asset.id }}" class="modal-inner-wrapper">
+<div id="asset-{{ asset.id }}" data-asset-id="{{ asset.id }}" class="modal-inner-wrapper{% if asset.is_spoiler %} spoiler{% endif %}">
 
   <div class="modal-dialog" role="document">
 

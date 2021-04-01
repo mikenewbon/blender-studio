@@ -143,6 +143,9 @@ function spoilerSetup(element) {
   element.querySelectorAll('.spoiler-alert').forEach((i) => {
     i.addEventListener('click', () => {
       i.classList.add('revealed');
+      element.querySelectorAll('.spoiler').forEach((i) => {
+        i.classList.remove('spoiler');
+      });
     });
   });
 }
