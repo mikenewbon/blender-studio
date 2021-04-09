@@ -6,7 +6,7 @@ StartLimitBurst=5
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/meilisearch --http-addr 127.0.0.1:7700 --env production --master-key <CHANGE_ME>
+ExecStart=/usr/bin/meilisearch --no-analytics true --http-addr 127.0.0.1:7700 --env production --master-key <CHANGE_ME>
 Restart=on-failure
 RestartSec=5s
 
