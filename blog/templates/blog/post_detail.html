@@ -11,15 +11,14 @@
 {% endblock %}
 
 {% block content %}
-<div class="jumbotron jumbotron-fluid jumbotron-blog mb-0">
+{% if post.header %}
+<div class="jumbotron jumbotron-fluid jumbotron-blog">
   <div class="jumbotron-bg-wrapper">
-    {% if post.header %}
     {% include "common/components/helpers/image_set.html" with alt=asset.name classes="jumbotron-bg" img_source=post.header xsmall_width="600" small_width="800" medium_width="1000" large_width="1200" xlarge_width="1920" %}
-    {% endif %}
   </div>
 
 </div>
-
+{% endif %}
 
 <section class="container-blog">
 

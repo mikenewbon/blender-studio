@@ -178,3 +178,11 @@ a.jumbotron-body {
     margin-right: $spacer / 2;
   }
 }
+
+.jumbotron-blog {
+
+
+  @include media-breakpoint-up(lg) {
+    margin-bottom: -$spacer * 7;
+  }
+}
