@@ -11,8 +11,6 @@ that poetry takes care of -- there's no need to install anything manually.
 
 ## Set up instructions
 1. Clone the repo: `git clone git@git.blender.org:blender-studio.git`
-2. Checkout the develop branch (master may be considerably outdated):
-    `git checkout develop`
 2. Run `poetry install`
    - if the installation of psycopg2 fails, make sure that you have the required
    apt packages installed ([more details](https://www.psycopg.org/docs/install.html#build-prerequisites)).
@@ -203,25 +201,28 @@ entire project (so it's slower and more likely to error out).
 
 #### Git workflow
 1. Rebase, don't merge.
-2. `develop` is the working branch. In order to work on a task, create a new branch off `develop`.
-It is technically possible to `git push --force` to `develop`, however please consider at least warning
+2. `master` is the working branch. In order to work on a task, create a new branch off `master`.
+It is technically possible to `git push --force` to `master`, however please consider at least warning
 other developers if you plan to do it.
 
 ## Deployments
 
 Studio doesn't use Docker, only a clone of its own repository and a few systemd units.
-To deploy latest `develop` to production, use the following script:
+To deploy latest `production`, use the following script:
 
 ```bash
 ./deploy.sh studiobeta.blender.org
 ```
 This will
 
-* pull latest `develop`;
-* do `poetry install`;
-* display and run database migrations;
-* do `collectstatic`;
-* restart `studio-background.service` and `studio-background.service`.
+* pull latest `master` and `production`;
+* fast-forward `production` to `master`;
+* SSH into `studiobeta.blender.org` and there:
+    * pull latest `production`;
+    * do `poetry install`;
+    * run database migrations;
+    * do `collectstatic`;
+    * restart `studio-background.service` and `studio-background.service`.
 
 ### Setting up timers for periodic tasks
 

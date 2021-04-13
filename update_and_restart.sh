@@ -23,7 +23,9 @@ then
     echo "Restarting services"
     systemctl restart studio.service
     systemctl restart studio-background.service
+    systemctl restart meilisearch.service
 
     systemctl status --no-pager studio.service
     systemctl status --no-pager studio-background.service
+    systemctl status --no-pager meilisearch.service
 fi
