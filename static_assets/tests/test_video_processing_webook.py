@@ -2,11 +2,12 @@ import datetime
 import json
 from django.test import TestCase
 from django.urls import reverse
-from unittest.mock import patch, call
+from unittest.mock import patch
 
-from background_task.models import Task
-from common.tests.factories.static_assets import StaticAssetFactory, VideoFactory
-from static_assets.models import StaticAsset, Video, VideoVariation
+from common.tests.factories.static_assets import VideoFactory
+from common.tests.factories.training import SectionFactory
+from static_assets.models import Video, VideoVariation
+import static_assets.tasks
 
 # Predefined values, used across the 3 webhook bodies below
 
@@ -195,7 +196,7 @@ WEBHOOK_VIDEO_PROCESSED = {
 WEBHOOK_JOB_COMPLETED = {
     "id": 68126909,
     "errors": {},
-    "output_urls": {"jpg:1280x": VIDEO_THUMBNAIL_URLS, "mp4:0x720": PROCESSED_VIDEO_URL,},
+    "output_urls": {"jpg:1280x": VIDEO_THUMBNAIL_URLS, "mp4:0x720": PROCESSED_VIDEO_URL},
     "event": "job.completed",
 }
 
@@ -252,3 +253,44 @@ class TestVideoProcessingWebhook(TestCase):
             page_url, json.dumps(WEBHOOK_JOB_COMPLETED), content_type='application/json'
         )
         self.assertEqual(response.status_code, 200)
+
+    @patch('static_assets.tasks.s3_client')
+    @patch(
+        # Make sure background task is executed as a normal function
+        'static_assets.coconut.events.move_blob_from_upload_to_storage',
+        new=static_assets.tasks.move_blob_from_upload_to_storage.task_function,
+    )
+    def test_training_video_variation_file_has_content_disposition(self, mock_s3_client):
+        video: Video = VideoFactory(
+            static_asset__original_filename='video.mp4',
+            static_asset__thumbnail='',
+        )
+        # Attach this video to a training section
+        SectionFactory(
+            name='001. Test training section.',
+            static_asset=video.static_asset,
+        )
+
+        # Simulate a finished processing job
+        page_url = reverse('coconut-webhook', kwargs={'video_id': video.id})
+        response = self.client.post(
+            page_url, json.dumps(WEBHOOK_VIDEO_PROCESSED), content_type='application/json'
+        )
+
+        self.assertEqual(response.status_code, 200)
+        # Check that appropriate calls to the storage has been made, with all the right metadata:
+        mock_s3_client.copy_object.assert_called_once_with(
+            Bucket='blender-studio-test',
+            Key='<url-to>/44460d5146b3feaacb22f3bf9902d7c5.720p.mp4',
+            CopySource={
+                'Bucket': 'blender-studio-uploads',
+                'Key': '<url-to>/44460d5146b3feaacb22f3bf9902d7c5.720p.mp4',
+            },
+            MetadataDirective='REPLACE',
+            ContentType='video/mp4',
+            ContentDisposition='attachment; filename="001-test-training-section-720p.mp4"',
+        )
+        mock_s3_client.delete_object.assert_called_once_with(
+            Bucket='blender-studio-uploads',
+            Key='<url-to>/44460d5146b3feaacb22f3bf9902d7c5.720p.mp4',
+        )
