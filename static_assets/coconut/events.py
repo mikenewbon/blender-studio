@@ -88,5 +88,5 @@ def output_processed_video(job: dict, video: Video):
     metadata = {}
     content_disposition = video_variation.content_disposition
     if content_disposition:
-        metadata['ContentDisposition'] = video_variation.content_disposition
+        metadata['ContentDisposition'] = content_disposition
     move_blob_from_upload_to_storage(source_path, **metadata)

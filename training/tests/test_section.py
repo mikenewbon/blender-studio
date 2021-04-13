@@ -4,8 +4,25 @@ from django.urls import reverse
 from actstream.models import Action
 from comments.models import Comment
 from common.tests.factories.comments import CommentUnderSectionFactory
+from common.tests.factories.static_assets import VideoVariationFactory
 from common.tests.factories.training import SectionFactory
 from common.tests.factories.users import UserFactory
+
+
+class TestSection(TestCase):
+    def test_section_video_variation_has_content_disposition(self):
+        video_variation = VideoVariationFactory(source='ts/testvideo/testvideo.mp4')
+        # Attach this video to a training section
+        SectionFactory(
+            name='001. Test training section',
+            static_asset=video_variation.video.static_asset,
+        )
+        self.assertIsNotNone(video_variation.video.static_asset.section)
+
+        self.assertEqual(
+            'attachment; filename="001-test-training-section-720p.mp4"',
+            video_variation.content_disposition,
+        )
 
 
 class TestSectionComments(TestCase):
