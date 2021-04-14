@@ -48,3 +48,6 @@ set -e
 cd $REMOTE_DIR
 echo "Y" | ./update_and_restart.sh
 EOT
+
+echo "Done, switching back to ${NEXT_RELEASE_BRANCH}"
+git checkout ${NEXT_RELEASE_BRANCH}
