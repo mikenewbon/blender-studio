@@ -68,7 +68,8 @@ def render(text: str) -> Markup:
 
     if _markdown is None:
         _markdown = mistune.create_markdown(
-            escape=True, plugins=[plugin_shortcode, mistune.plugins.extra.plugin_url],
+            escape=True,
+            plugins=[plugin_shortcode, mistune.plugins.extra.plugin_url, 'table'],
         )
 
     return Markup(_markdown(text))
@@ -85,7 +86,7 @@ def render_unsafe(text: str) -> Markup:
         _markdown_with_html = mistune.create_markdown(
             # An unsafe Markdown renderer that doesn't escape remaining HTML
             escape=False,
-            plugins=[plugin_shortcode, mistune.plugins.extra.plugin_url],
+            plugins=[plugin_shortcode, mistune.plugins.extra.plugin_url, 'table'],
         )
 
     return Markup(_markdown_with_html(text))
