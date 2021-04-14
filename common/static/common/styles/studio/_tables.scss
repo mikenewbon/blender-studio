@@ -9,3 +9,9 @@
 .table-sm {
   font-size: $small-font-size;
 }
+
+.markdown-text {
+  table {
+    @extend .table;
+  }
+}
