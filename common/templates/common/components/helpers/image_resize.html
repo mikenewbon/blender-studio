@@ -2,10 +2,14 @@
 {% load thumbnail %}
 
 {% cache 500 thumbnails img_source classes width %}
-
-<img
-  src="{% thumbnail img_source width as im %}{{ im.url }}{% endthumbnail %}"
-  class="{{ classes }} {% if img_source and img_source|is_portrait %}portrait{% endif %}"
-  alt="{{ alt }}"
->
+<picture>
+  {% thumbnail img_source width format="WEBP" as im %}
+  <source srcset="{{ im.url }}" type="image/webp">
+  {% endthumbnail %}
+  {% thumbnail img_source width as im %}
+  <source srcset="{{ im.url }}" type="image/jpeg">
+  <img src="{{ im.url }}" class="{{ classes }} {% if img_source and img_source|is_portrait %}portrait{% endif %}"
+    alt="{{ alt }}">
+  {% endthumbnail %}
+</picture>
 {% endcache %}

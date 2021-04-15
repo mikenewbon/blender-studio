@@ -1,23 +1,17 @@
 {% load cache %}
 {% load thumbnail %}
 
-{% cache 500 thumbnails img_source classes small_width xsmall_width medium_width large_width xsmall_width %}
+{% cache 500 thumbnails img_source classes small_width xlarge_width %}
+<picture>
 
-<img
-  src="{% thumbnail img_source small_width as im %}{{ im.url }}{% endthumbnail %}"
-  srcset="
-    {% thumbnail img_source xsmall_width as im %}{{ im.url }} {{ xsmall_width }}w{% endthumbnail %},
-    {% thumbnail img_source small_width as im %}{{ im.url }} {{ small_width }}w{% endthumbnail %},
-    {% thumbnail img_source medium_width as im %}{{ im.url }} {{ medium_width }}w{% endthumbnail %},
-    {% thumbnail img_source large_width as im %}{{ im.url }} {{ large_width }}w{% endthumbnail %},
-    {% thumbnail img_source xlarge_width as im %}{{ im.url }} {{ xlarge_width }}w{% endthumbnail %}"
-  sizes="
-  (max-width: 575px) {{ xsmall_width }}px,
-  (max-width: 767px) {{ small_width }}px,
-  (max-width: 991px) {{ medium_width }}px,
-  (max-width: 1199px) {{ large_width }}px,
-  {{ xlarge_width }}px"
-  class="{{ classes }} {% if img_source and img_source|is_portrait %}portrait{% endif %}"
-  alt="{{ alt }}"
->
+  <source sizes="(max-width: 767px) {{ small_width }}px, {{ xlarge_width }}px" srcset="
+    {% thumbnail img_source small_width format='WEBP' as im %}{{ im.url }} {{ small_width }}w{% endthumbnail %},
+		{% thumbnail img_source xlarge_width format='WEBP' as im %}{{ im.url }} {{ xlarge_width }}w{% endthumbnail %}"
+    type="image/webp">
+
+  <img src="{% thumbnail img_source xlarge_width as im %}{{ im.url }}{% endthumbnail %}" alt="{{ alt }}"
+    sizes="(max-width: 767px) {{ small_width }}px, {{ xlarge_width }}px" srcset="{% thumbnail img_source small_width as im %}{{ im.url }} {{ small_width }}w{% endthumbnail %},
+		{% thumbnail img_source xlarge_width as im %}{{ im.url }} {{ xlarge_width }}w{% endthumbnail %}">
+</picture>
+
 {% endcache %}
