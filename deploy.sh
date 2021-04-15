@@ -26,6 +26,7 @@ press [ENTER] to continue, Ctrl+C to abort.
 EOT
 read dummy
 
+git fetch --all
 echo "The following commits will be pushed to ${RELEASE_BRANCH} and deployed:"
 git log  --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --graph  --decorate --date=relative --abbrev-commit "origin/${RELEASE_BRANCH}".."origin/${NEXT_RELEASE_BRANCH}"
 
