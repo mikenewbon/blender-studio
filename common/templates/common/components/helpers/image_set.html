@@ -11,7 +11,8 @@
 
   <img src="{% thumbnail img_source xlarge_width as im %}{{ im.url }}{% endthumbnail %}" alt="{{ alt }}"
     sizes="(max-width: 767px) {{ small_width }}px, {{ xlarge_width }}px" srcset="{% thumbnail img_source small_width as im %}{{ im.url }} {{ small_width }}w{% endthumbnail %},
-		{% thumbnail img_source xlarge_width as im %}{{ im.url }} {{ xlarge_width }}w{% endthumbnail %}">
+		{% thumbnail img_source xlarge_width as im %}{{ im.url }} {{ xlarge_width }}w{% endthumbnail %}"
+    class="{{ classes }} {% if img_source and img_source|is_portrait %}portrait{% endif %}">
 </picture>
 
 {% endcache %}
