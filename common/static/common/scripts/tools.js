@@ -199,6 +199,7 @@ function getAnchor() {
 
 function hightlightAnchor(element) {
   const id = getAnchor();
+  if (id != null) return;
   const anchor = element.querySelector(`#${id}`);
 
   if (id != null && anchor != null) {
