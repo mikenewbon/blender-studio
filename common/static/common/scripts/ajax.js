@@ -18,7 +18,7 @@ window.ajax = (function ajax() {
   function jsonRequest(method, url, data = null) {
     const csrfToken = getCookie('bstudiocsrftoken');
     return fetch(url, {
-      method: 'POST',
+      method: method,
       mode: 'same-origin',
       cache: 'no-cache',
       credentials: 'same-origin',
