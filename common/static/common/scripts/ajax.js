@@ -37,5 +37,26 @@ window.ajax = (function ajax() {
       .then(response => response.json());
   }
 
-  return { jsonRequest };
+  function post(url, data = null) {
+    const csrfToken = getCookie('bstudiocsrftoken');
+    return fetch(url, {
+      method: 'POST',
+      mode: 'same-origin',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'X-CSRFToken': csrfToken
+      },
+      body: data
+    })
+      .then(response => {
+        if (response.status >= 200 && response.status < 300) {
+          return Promise.resolve(response);
+        }
+        return Promise.reject(new Error(response.statusText));
+      })
+      .then(response => response);
+  }
+
+  return { jsonRequest, post };
 })();
