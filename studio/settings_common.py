@@ -89,7 +89,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'common.context_processors.search_client_config',
                 'common.context_processors.settings_analytics_id',
-                'common.context_processors.canonical_url',
+                'common.context_processors.extra_context',
                 'training.context_processors.enums',
                 # TODO(anna) when Profile model is added, this should become a prop on it instead.
                 'training.context_processors.favorited',
@@ -348,6 +348,10 @@ NEWSLETTER_LIST = None
 NEWSLETTER_NONSUBSCRIBER_LIST = None
 NEWSLETTER_SUBSCRIBER_LIST = None
 MAILGUN_SENDER_DOMAIN = 'sandboxf44696c342d9425abae785deb255717e.mailgun.org'
+
+ADMIN_MAIL = 'cloudsupport@blender.org'
+STORE_PRODUCT_URL = 'https://store.blender.org/product/membership/'
+STORE_MANAGE_URL = 'https://store.blender.org/my-account/subscriptions/'
 
 TESTS_IN_PROGRESS = 'test' in sys.argv
 if TESTS_IN_PROGRESS:

@@ -20,11 +20,14 @@ def settings_analytics_id(request: HttpRequest) -> Dict[str, Dict[str, str]]:
     return {'settings_analytics_id': settings.GOOGLE_ANALYTICS_TRACKING_ID}
 
 
-def canonical_url(request: HttpRequest) -> Dict[str, str]:
-    """Injects canonical URL of current request into template context."""
+def extra_context(request: HttpRequest) -> Dict[str, str]:
+    """Injects some configuration values into template context."""
     return {
         'BLENDER_ID': {
             'BASE_URL': settings.BLENDER_ID['BASE_URL'],
         },
         'canonical_url': request.build_absolute_uri(request.path),
+        'ADMIN_MAIL': settings.ADMIN_MAIL,
+        'STORE_PRODUCT_URL': settings.STORE_PRODUCT_URL,
+        'STORE_MANAGE_URL': settings.STORE_MANAGE_URL,
     }

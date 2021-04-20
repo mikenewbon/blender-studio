@@ -27,8 +27,7 @@
       <h2 class="mb-0">Manage Subscription</h2>
       <p>
         You have full access to the Blender Cloud, provided by the Blender Institute. This account is meant for
-        free evaluation of the service. Get in touch with <a
-          href="mailto:cloudsupport@blender.org">cloudsupport@blender.org</a> if you have any questions.
+        free evaluation of the service. Get in touch with <a href="mailto:{{ ADMIN_MAIL }}">{{ ADMIN_MAIL}}</a> if you have any questions.
       </p>
     </div>
   </div>
@@ -43,8 +42,7 @@
   <div class="row">
     <div class="col">
       <h2 class="mb-0">Manage Subscription</h2>
-      <p>If you want to change or cancel your billing, visit the <a target="_blank"
-          href="https://store.blender.org/my-account/subscriptions/">Blender Store</a>.</p>
+      <p>If you want to change or cancel your billing, visit the <a target="_blank" href="{{ STORE_MANAGE_URL }}">Blender Store</a>.</p>
     </div>
   </div>
 
@@ -57,11 +55,9 @@
   <div class="row">
     <div class="col">
       <h2 class="mb-0">Manage Subscription</h2>
-      <p>If you want to subscribe to Blender Cloud visit the <a target="_blank"
-          href="https://store.blender.org/product/membership/">Blender Store</a>.</p>
+      <p>If you want to subscribe to Blender Cloud visit the <a target="_blank" href="{{ STORE_PRODUCT_URL }}">Blender Store</a>.</p>
     </div>
   </div>
-
   {% endif %}
 </div>
 {% endblock settings %}
