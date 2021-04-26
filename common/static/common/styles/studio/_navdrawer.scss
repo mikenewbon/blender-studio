@@ -37,15 +37,17 @@
     display: block;
     border-radius: $border-radius;
     border-right: 0;
+    max-height: calc(100vh - #{$navbar-height + $spacer + $spacer});
     height: auto;
-    max-height: none;
     overflow: auto;
     padding: $spacer / 4 0;
-    position: relative;
+    position: sticky;
+    top: calc(#{$navbar-height + $spacer});
     width: auto;
     z-index: auto;
     border: 1px solid $input-gray;
-    top: 0;
+
+    @include scroll-bar($navigation-gray);
 
     .nav-drawer-body {
       height: auto;
@@ -74,8 +76,11 @@
 }
 
 .has-secondary-nav {
-  .nav-drawer-spacer {
-    height: auto;
+  .nav-drawer {
+    &.nested {
+      max-height: calc(100vh - #{$navbar-height + $secondary-navbar-height + $spacer + $spacer});
+      top: calc(#{$navbar-height + $secondary-navbar-height + $spacer});
+    }
   }
 }
 

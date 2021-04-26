@@ -128,7 +128,7 @@
 
 .notification-dropdown {
   flex-direction: column;
-  max-height: calc(100vh - 64px);
+  max-height: calc(100vh - $navbar-height);
   width: 350px;
 
   &.show {
