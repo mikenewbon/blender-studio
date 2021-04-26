@@ -47,7 +47,7 @@
     z-index: auto;
     border: 1px solid $input-gray;
 
-    @include scroll-bar($navigation-gray);
+    @include scroll-bar($navigation-gray, $input-gray);
 
     .nav-drawer-body {
       height: auto;
