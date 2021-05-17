@@ -1,0 +1,9 @@
+.alert {
+  border-left-width: $border-radius-sm;
+}
+
+.alert-warning {
+  background: rgba($warning, .1);
+  color: $warning;
+  border-color: $warning;
+}
