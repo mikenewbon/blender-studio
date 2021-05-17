@@ -3,6 +3,7 @@
 }
 
 .alert-warning {
+  border-radius: $border-radius-sm;
   background: rgba($warning, .1);
   color: $warning;
   border-color: $warning;
