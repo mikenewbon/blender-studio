@@ -114,8 +114,8 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
         on the website, and the url property returns an empty string.
         """
         if self.is_featured:
-            film_url = reverse('film-detail', kwargs={'film_slug': self.film.slug})
-            return f'{film_url}?asset={self.pk}'
+            gallery_url = reverse('film-gallery', kwargs={'film_slug': self.film.slug})
+            return f'{gallery_url}?asset={self.pk}'
         if self.collection:
             collection_url = reverse(
                 'collection-detail',

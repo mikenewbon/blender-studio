@@ -165,22 +165,22 @@ class TestSiteMetadata(TestCase):
         }.items():
             self.assertMetaEquals(html, meta, value)
 
-    def test_film_featured_asset_links_to_film_page(self):
+    def test_film_featured_asset_links_to_film_gallery_page(self):
         film_slug = 'coffee-run'
         film = FilmFactory(slug=film_slug)
         asset = AssetFactory(film=film, is_featured=True, static_asset=StaticAssetFactory())
-        page_url = reverse('film-gallery', kwargs={'film_slug': film_slug})
 
-        response = self.client.get(page_url + f'?asset={asset.pk}&foo=bar')
+        self.assertEqual(asset.url, f'/films/coffee-run/gallery?asset={asset.pk}')
+        response = self.client.get(f'http://testserver{asset.url}&foo=bar')
 
         self.assertEqual(response.status_code, 200)
         html = response.content
 
         self.assertCanonicalLinkEquals(
-            html, f'http://testserver/films/{film_slug}?asset={asset.pk}'
+            html, f'http://testserver/films/{film_slug}/gallery?asset={asset.pk}'
         )
         for meta, value in {
-            'property=.og:url.': f'http://testserver/films/{film_slug}?asset={asset.pk}',
+            'property=.og:url.': f'http://testserver/films/{film_slug}/gallery?asset={asset.pk}',
             **shared_meta,
             'property=.og:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
             'name=.twitter:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
