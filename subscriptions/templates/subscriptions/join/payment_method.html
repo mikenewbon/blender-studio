@@ -19,7 +19,7 @@
         <section class="checkout-form-fields mb-3" style="opacity: .5;">
           <a href="{% url 'subscriptions:join' %}" class="btn btn-sm btn-dark float-right"><i
               class="material-icons">arrow_back</i> Go back</a>
-          <a href="{% url 'subscriptions:join' %}" class="mb-0 h3">1. Billing Details</a>
+          <a href="{% url 'subscriptions:join' %}" class="mb-0 h3">Billing Details</a>
           <p class="subtitle mb-2">Check your details below are correct before paying.</p>
           <fieldset class="checkout-form-billing-address-readonly">
             {% include "subscriptions/components/billing_address_form_readonly.html"%}
@@ -27,7 +27,7 @@
         </section>
 
         <section>
-          <h2 class="mb-0">2. Payment Method</h2>
+          <h2 class="mb-0">Payment Method</h2>
           <p class="subtitle mb-2">Select a payment method.</p>
 
           {% comment %} <div class="payment-method-toggle btn-group mb-3 w-100">
