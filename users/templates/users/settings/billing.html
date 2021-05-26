@@ -20,12 +20,12 @@
         <span>You have a free account</span>
       </div>
       {% elif user|has_active_subscription %}
-      <div class="alert alert-success" role="alert">
+      <div class="alert {% if subscription.status == "active" %}alert-success{% else %}alert-warning{% endif %}" role="alert">
         <i class="material-icons align-middle">done</i>
         {% flag "SUBSCRIPTIONS_ENABLED" %}
         {% with subscription=user.subscription_set.first %}
         {% with order=subscription.latest_order %}
-        <span>Your {% include 'subscriptions/components/info.html' %}</span>
+        <span>Your {{ subscription.plan.name }} subscription is currently <span class="font-weight-bolder">{{ subscription.get_status_display|lower }}</span>.</span>
         {% endwith %}
         {% endwith %}
         {% else %}
