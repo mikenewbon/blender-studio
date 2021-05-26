@@ -13,6 +13,15 @@ document.addEventListener('DOMContentLoaded', () => {
       AddRemoveText(element);
     });
   });
+
+  // When hiding collapsed inputs, empty them.
+  document.querySelectorAll('.collapse').forEach((element) => {
+    $(element).on('hidden.bs.collapse', () => {
+      element.querySelectorAll('input').forEach((input) => {
+        input.value = '';
+      });
+    });
+  });
 });
 
 function teamTabSetup() {

@@ -17,35 +17,22 @@
   </div>
 </div>
 
-
-
 <div class="row mb-2">
   <div class="col-12">
     {% with field=form.street_address %}
-    {% include "common/components/field_label_wrapped.html" %}
+    {% include "common/components/field_label_wrapped.html" with collapse_link=True collapse_link_target="collapseExtendedAddress" collapse_link_text="extended address" %}
     {% endwith %}
   </div>
 </div>
 
-{% with field=form.extended_address %}
-<div class="row">
-  <div class="col-12 mb-2 x-extended-address">
-    {% include "common/components/field_label_wrapped.html" %}
+<div class="collapse" id="collapseExtendedAddress">
+  {% with field=form.extended_address %}
+  <div class="row">
+    <div class="col-12 mb-2 x-extended-address">
+      {% include "common/components/field_label_wrapped.html" %}
+    </div>
   </div>
-</div>
-{% endwith %}
-
-<div class="row mb-2">
-  <div class="col">
-    {% with field=form.postal_code %}
-    {% include "common/components/field_label_wrapped.html" %}
-    {% endwith %}
-  </div>
-  <div class="col">
-    {% with field=form.country %}
-    {% include "common/components/field_label_wrapped.html" %}
-    {% endwith %}
-  </div>
+  {% endwith %}
 </div>
 
 <div class="row mb-2">
@@ -63,13 +50,38 @@
 
 <div class="row mb-2">
   <div class="col">
-    {% with field=form.vat_number %}
+    {% with field=form.postal_code %}
     {% include "common/components/field_label_wrapped.html" %}
     {% endwith %}
   </div>
   <div class="col">
-    {% with field=form.company %}
+    {% with field=form.country %}
     {% include "common/components/field_label_wrapped.html" %}
     {% endwith %}
   </div>
+</div>
+
+<div class="row">
+  <div class="col text-center">
+    <a class="subtitle small text-decoration-underline" data-toggle="collapse" href="#collapseCompany"
+      role="button" aria-expanded="false" aria-controls="collapseCompany"><span class="add-remove">Add</span>
+      VAT details</a>
+  </div>
+</div>
+
+<div class="collapse" id="collapseCompany">
+
+  <div class="row mb-2">
+    <div class="col">
+      {% with field=form.vat_number %}
+      {% include "common/components/field_label_wrapped.html" %}
+      {% endwith %}
+    </div>
+    <div class="col">
+      {% with field=form.company %}
+      {% include "common/components/field_label_wrapped.html" %}
+      {% endwith %}
+    </div>
+  </div>
+
 </div>

@@ -1,6 +1,8 @@
 {% load pipeline %}
 {% load static %}
 {% load common_extras %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,6 +38,10 @@
   </nav>
 
   {% block content %}{% endblock content %}
+
+  {{ user_dict|json_script:"current-user" }}
+  {% javascript 'vendor' %}
+
 
   {% block scripts %}{% endblock scripts %}
 </body>
