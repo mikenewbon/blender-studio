@@ -20,7 +20,7 @@
         <span>You have a free account</span>
       </div>
       {% elif user|has_active_subscription %}
-      <div class="alert {% if subscription.status == "active" %}alert-success{% else %}alert-warning{% endif %}" role="alert">
+      <div class="alert {% if user.subscription_set.first.status == "active" %}alert-success{% else %}alert-warning{% endif %}" role="alert">
         <i class="material-icons align-middle">done</i>
         {% flag "SUBSCRIPTIONS_ENABLED" %}
         {% with subscription=user.subscription_set.first %}
