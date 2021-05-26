@@ -20,20 +20,20 @@
 <div class="row mb-2">
   <div class="col-12">
     {% with field=form.street_address %}
-    {% include "common/components/field_label_wrapped.html" with collapse_link=True collapse_link_target="collapseExtendedAddress" collapse_link_text="extended address" %}
+    {% include "common/components/field_label_wrapped.html" with collapse_link=True collapse_link_target="collapseExtendedAddress" collapse_link_text="extended address" collapse_field=form.extended_address %}
     {% endwith %}
   </div>
 </div>
 
-<div class="collapse" id="collapseExtendedAddress">
-  {% with field=form.extended_address %}
+{% with field=form.extended_address %}
+<div class="collapse {% if field.value %}show{% endif %}" id="collapseExtendedAddress">
   <div class="row">
     <div class="col-12 mb-2 x-extended-address">
       {% include "common/components/field_label_wrapped.html" %}
     </div>
   </div>
-  {% endwith %}
 </div>
+{% endwith %}
 
 <div class="row mb-2">
   <div class="col">
@@ -61,15 +61,20 @@
   </div>
 </div>
 
+{% with field=form.vat_number%}
 <div class="row">
   <div class="col text-center">
-    <a class="subtitle small text-decoration-underline" data-toggle="collapse" href="#collapseCompany"
-      role="button" aria-expanded="false" aria-controls="collapseCompany"><span class="add-remove">Add</span>
+    <a class="subtitle small text-decoration-underline" data-toggle="collapse" href="#collapseCompany" role="button"
+      aria-expanded="false" aria-controls="collapseCompany"><span
+        class="add-remove">{% if field.value %}Remove{% else %}Add{% endif %}</span>
       VAT details</a>
   </div>
 </div>
+{% endwith %}
 
-<div class="collapse" id="collapseCompany">
+{% with field=form.vat_number %}
+<div class="collapse {% if field.value %}show{% endif %}" id="collapseCompany">
+  {% endwith %}
 
   <div class="row mb-2">
     <div class="col">
