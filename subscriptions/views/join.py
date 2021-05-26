@@ -186,14 +186,17 @@ class JoinView(_JoinMixin, FormView):
             return response
 
         product_type = self.plan_variation.plan.product.type
-        old_tax = self.customer.get_tax(product_type=product_type)
+        # Get the tax the same way the template does,
+        # to detect if it was affected by changes to the billing details
+        old_taxable = looper.taxes.Taxable.from_request(
+            self.request, price=self.plan_variation.price, product_type=product_type
+        )
         # Save the billing address
         if form.has_changed():
             form.save()
 
         # Compare tax before and after the billing address is updated
         new_tax = self.customer.get_tax(product_type=product_type)
-        old_taxable = looper.taxes.Taxable(self.plan_variation.price, *old_tax)
         new_taxable = looper.taxes.Taxable(self.plan_variation.price, *new_tax)
         if old_taxable != new_taxable:
             # If price has changed, stay on the same page and display a notification

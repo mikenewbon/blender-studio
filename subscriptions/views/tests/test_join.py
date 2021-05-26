@@ -65,6 +65,14 @@ class _SharedAssertsMixin:
             html=True,
         )
 
+    def _assert_plan_selector_with_sign_in_cta_displayed(self, response):
+        self._assert_plan_selector_displayed(response)
+
+        self.assertContains(response, 'Sign in with Blender ID')
+        self.assertNotContains(response, 'Continue to payment')
+        self.assertNotContains(response, 'id_street_address')
+        self.assertNotContains(response, 'id_full_name')
+
     def _assert_default_variation_selected_no_tax_usd(self, response):
         self._assert_no_tax(response)
         self.assertContains(
@@ -107,6 +115,11 @@ class _SharedAssertsMixin:
         self.assertContains(
             response,
             '<span class="x-price-recurring-tax">Inc. 21% VAT (€&nbsp;2.08)</span>',
+            html=True,
+        )
+        self.assertContains(
+            response,
+            'Renews <span class="x-first-renewal">June 19, 2021</span>',
             html=True,
         )
 
@@ -173,26 +186,19 @@ class _SharedAssertsMixin:
 class TestGETJoinView(_CreateCustomerAndBillingAddressMixin, _SharedAssertsMixin, TestCase):
     url = reverse('subscriptions:join')
 
-    def test_get_displays_plan_selection_to_anonymous(self):
+    def test_get_displays_plan_selection_with_tax_to_anonymous_nl(self):
         response = self.client.get(self.url, REMOTE_ADDR=EURO_IPV4)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Sign in with Blender ID')
-        self.assertNotContains(response, 'Continue to payment')
-        self.assertNotContains(response, 'id_street_address')
-        self.assertNotContains(response, 'id_full_name')
+        self._assert_plan_selector_with_sign_in_cta_displayed(response)
+        self._assert_default_variation_selected_tax_21_eur(response)
 
-        self._assert_plan_selector_displayed(response)
-        self.assertContains(
-            response,
-            '<option selected data-first-renewal="June 19, 2021" data-currency-symbol="€" data-plan-id="1" data-price-recurring="€&nbsp;9.90&nbsp;/&nbsp;month" data-price="9.90" value="2">Every 1 month</option>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            'Renews <span class="x-first-renewal">June 19, 2021</span>',
-            html=True,
-        )
+    def test_get_displays_plan_selection_without_tax_to_anonymous_us(self):
+        response = self.client.get(self.url, REMOTE_ADDR=USA_IPV4)
+
+        self.assertEqual(response.status_code, 200)
+        self._assert_plan_selector_with_sign_in_cta_displayed(response)
+        self._assert_default_variation_selected_no_tax_usd(response)
 
     def test_get_prefills_full_name_and_billing_email_from_user(self):
         user = UserFactory(full_name="Jane До", email='jane.doe@example.com')
