@@ -6,11 +6,10 @@
 }
 
 .alert {
-  border-left-width: $border-radius-sm;
+  border-left-width: $border-radius;
 }
 
 .alert-warning {
-  border-radius: $border-radius-sm;
   background: rgba($warning, .1);
   color: $warning;
   border-color: $warning;
