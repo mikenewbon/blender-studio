@@ -13,7 +13,7 @@
     <dt class="col">Payment received on</dt>
     <dd class="col">{{ order.paid_at|default:order.created_at }}</dd>
   </dl>
-  <h4>Subscription</h4>
+  <h2>Subscription</h2>
   <dl class="row">
     <dt class="col">Renewal type</dt>
     <dd class="col">{{ order.subscription.collection_method|capfirst}}</dd>
@@ -22,7 +22,7 @@
     <dt class="col">Renewal period</dt>
     <dd class="col">{{ order.subscription|renewal_period|capfirst }}</dd>
   </dl>
-  <h4>Billing Address</h4>
+  <h2>Billing Address</h2>
   <dl class="row">
     <dt class="col">Address</dt>
     <dd class="col">{{ order.billing_address|linebreaks }}</dd>
@@ -37,7 +37,7 @@
     <dt class="col">E-mail</dt>
     <dd class="col">{{ order.email }}</dd>
   </dl>
-  <h4>Payment Information</h4>
+  <h2>Payment Information</h2>
   <dl class="row">
     <dt class="col">Amount paid</dt>
     <dd class="col">{{ order.price.with_currency_symbol_nonocents }}</dd>
