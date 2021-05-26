@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = option.dataset;
     if (data.taxDisplayName) {
       const formattedAmount = formatPriceAmount(amount, data.currencySymbol);
-      return `Inc. ${data.taxRate}% ${data.taxDisplayName} (${formattedAmount})`;
+      return `Inc.\xa0${data.taxRate}%\xa0${data.taxDisplayName}\xa0(${formattedAmount})`;
     } else {
       return '';
     }
