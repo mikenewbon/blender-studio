@@ -10,7 +10,12 @@ from waffle.mixins import WaffleFlagMixin
 import looper.models
 import looper.views.settings
 
-from subscriptions.forms import BillingAddressForm, CancelSubscriptionForm, ChangePaymentMethodForm
+from subscriptions.forms import (
+    BillingAddressForm,
+    CancelSubscriptionForm,
+    ChangePaymentMethodForm,
+    PayExistingOrderForm,
+)
 from subscriptions.views.mixins import SingleSubscriptionMixin
 
 logger = logging.getLogger(__name__)
@@ -75,3 +80,13 @@ class PaymentMethodChangeView(WaffleFlagMixin, looper.views.settings.PaymentMeth
     success_url = '/settings/billing'
 
     subscription: looper.models.Subscription
+
+
+class PayExistingOrderView(WaffleFlagMixin, looper.views.checkout.CheckoutExistingOrderView):
+    """Override looper's view with our forms."""
+
+    waffle_flag = "SUBSCRIPTIONS_ENABLED"
+
+    template_name = 'subscriptions/pay_existing_order.html'
+    form_class = PayExistingOrderForm
+    success_url = '/settings/billing'

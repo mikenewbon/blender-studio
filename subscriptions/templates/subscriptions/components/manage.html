@@ -56,7 +56,7 @@
         </p>
       </div>
       <div class="col-auto">
-        <a class="btn btn-sm btn-danger" href="{% url 'looper:checkout_existing_order' order_id=order.pk %}">Pay
+        <a class="btn btn-sm btn-danger" href="{% url 'subscriptions:pay-existing-order' order_id=order.pk %}">Pay
           subscription</a>
       </div>
 

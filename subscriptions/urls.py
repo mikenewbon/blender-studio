@@ -22,6 +22,11 @@ urlpatterns = [
         name='payment-method-change',
     ),
     path(
+        'subscription/order/<int:order_id>/pay',
+        settings.PayExistingOrderView.as_view(),
+        name='pay-existing-order',
+    ),
+    path(
         'settings/billing-address/',
         settings.BillingAddressView.as_view(),
         name='billing-address',

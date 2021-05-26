@@ -254,3 +254,15 @@ class CancelSubscriptionForm(forms.Form):
     """Confirm cancellation of a subscription."""
 
     confirm = forms.BooleanField(label='Confirm Subscription Cancellation')
+
+
+class PayExistingOrderForm(AutomaticPaymentForm):
+    """Form for paying for an outstanding order."""
+
+    def __init__(self, *args, **kwargs):
+        """Work around Django's `exclude` bug by removing unused fields manually.
+
+        See https://code.djangoproject.com/ticket/8620
+        """
+        super().__init__(*args, **kwargs)
+        self.fields.pop('plan_variation_id')

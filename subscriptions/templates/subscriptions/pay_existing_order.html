@@ -1,0 +1,47 @@
+{% extends "checkout/checkout_base_empty.html" %}
+{% load looper %}
+{% load pipeline %}
+{% load common_extras %}
+
+{% block content %}
+<div class="checkout-container">
+  <section class="checkout">
+    <div class="col-md-7 mx-auto">
+      <a class="text-muted" class="float-right" href="{% url 'user-settings-billing' %}"><i class="fa fa-angle-left pr-3"></i>back to subscription settings</a>
+      <section class="plan-info">
+        <h1>Paying for Order #{{ order.pk }}</h1>
+        <small>billed on {{ order.created_at|date }}</small>
+        {% comment %}{# not sure what should be displayed here #}
+        <h2 class="ml-auto my-0 pt-4"><span>{{ order.price.with_currency_symbol }} for {{ subscription.interval_length }} {{ subscription.interval_unit }}</span></h2>
+        <h3 class="my-0 pt-4">{{ plan.description }}</h3>
+        {% endcomment %}
+        <h4 class="my-0 pt-4">Your {% include "subscriptions/components/info.html" %}. It will be activated as soon as the outstanding amount is paid:</h4>
+      </section>
+      <hr/>
+      <form class="checkout-form" id="payment-form" method="post"
+        data-looper-payment-form="true"
+        data-braintree-client-token="{{ client_token }}">{% csrf_token %}
+        <div class="payment-content-inner">
+          <section class="checkout-form-fields mb-n2">
+            {% with form|add_form_classes as form %}
+            <fieldset class="checkout-form-billing-address-readonly mb-2">
+              {% include "subscriptions/components/billing_address_form_readonly.html" %}
+            </fieldset>
+            <fieldset class="payment-form-payment-method">
+              {% include "subscriptions/components/payment_form.html" %}
+            </fieldset>
+            {% endwith %}
+          </section>
+        </div>
+        {# will be enabled when payment gateways are initialized successfully #}
+        <button id="submit-button" class="btn btn-payment-confirm" type="submit"
+          aria-disabled="true"
+          disabled>Pay {{ order.price.with_currency_symbol }}
+        </button>
+      </form>
+    </div>
+  </section>
+</div>
+{% javascript "subscriptions" %}
+{% include "looper/scripts.html" %}
+{% endblock %}
