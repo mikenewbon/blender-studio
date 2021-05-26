@@ -10,8 +10,9 @@ from django.shortcuts import redirect, render
 from django.views.generic import FormView
 import waffle
 
-from looper.views.checkout import AbstractPaymentView, CheckoutView
 from looper.middleware import COUNTRY_CODE_SESSION_KEY
+from looper.utils import clean_ip_address
+from looper.views.checkout import AbstractPaymentView, CheckoutView
 import looper.gateways
 import looper.models
 import looper.money
@@ -64,6 +65,7 @@ class _JoinMixin:
         }
         # Only preset country when it's not already selected by the customer
         geoip_country = self.request.session.get(COUNTRY_CODE_SESSION_KEY)
+        logger.warning('IP "%s", geoip_country "%s"', clean_ip_address(self.request), geoip_country)
         if geoip_country and (not self.customer or not self.customer.billing_address.country):
             initial['country'] = geoip_country
         plan_variation_id = self.request.session.get('plan_variation_id', None)
