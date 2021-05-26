@@ -102,3 +102,9 @@ a {
     font-size: $h1-font-size;
   }
 }
+
+.font-weight-bold-child {
+  >* {
+    font-weight: $font-weight-bold;
+  }
+}

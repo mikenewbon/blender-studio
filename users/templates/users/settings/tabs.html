@@ -1,3 +1,4 @@
+{% load waffle_tags %}
 <div class="drawer-nav-dropdown-wrapper font-weight-bold">
   <a class="drawer-nav-dropdown" href="{% url 'user-settings'%}">
     <i class="material-icons mr-2">person</i>
@@ -18,6 +19,31 @@
     <span>Subscription</span>
   </a>
 </div>
+
+{% flag "SUBSCRIPTIONS_ENABLED" and user.subscription_set.count %}
+<div class="drawer-nav-list-wrapper collapse show">
+  <ol class="drawer-nav-list">
+
+    <li class="drawer-nav-section">
+      <a href="{% url 'subscriptions:billing-address' %}" class="drawer-nav-section-link " data-tooltip="tooltip-overflow" data-placement="top" title="" data-original-title="">
+        <h4 class="overflow-text">Billing addresss</h4>
+      </a>
+    </li>
+
+    <li class="drawer-nav-section">
+      <a href="{% url 'subscriptions:receipts' %}" class="drawer-nav-section-link " data-tooltip="tooltip-overflow" data-placement="top" title="" data-original-title="">
+        <h4 class="overflow-text">Receipts</h4>
+      </a>
+    </li>
+
+    <li class="drawer-nav-section">
+      <a href="{% url 'looper:payment_methods' %}" class="drawer-nav-section-link " data-tooltip="tooltip-overflow" data-placement="top" title="" data-original-title="">
+        <h4 class="overflow-text">Payment methods</h4>
+      </a>
+    </li>
+  </ol>
+</div>
+{% endflag %}
 
 <div class="drawer-nav-dropdown-wrapper font-weight-bold">
   <a class="drawer-nav-dropdown" href="/settings/roles">

@@ -1,0 +1,16 @@
+{% extends 'users/settings/base.html' %}
+{% load common_extras %}
+
+{% block settings %}
+<p class="subtitle">Settings: Subscription</p>
+<h1 class="mb-3">Billing Address</h1>
+
+<form class="" id="billing-address-form" method="post">
+  {% with form|add_form_classes as form %}
+  <div class="form">{% csrf_token %}
+    {% include "subscriptions/components/billing_address_form.html" %}
+  </div>
+  <button class="btn btn-primary mt-3" id="submit-billing-info" type="submit">Save Changes</button>
+  {% endwith %}
+</form>
+{% endblock settings %}

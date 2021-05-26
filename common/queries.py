@@ -104,6 +104,14 @@ def has_active_subscription(user: User) -> bool:
      * "subscriber"
      * "_org_<name>" for organisation-level subscriptions.
     """
+    import subscriptions.queries
+
     if not user:
         return False
-    return user.has_perm('users.can_view_content')
+
+    # The old way, that supports Store-based and manual team subscriptions
+    if user.has_perm('users.can_view_content'):
+        return True
+
+    # The new way, with subscriptions managed by Cloud itself
+    return subscriptions.queries.has_active_subscription(user)

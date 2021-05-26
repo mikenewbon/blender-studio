@@ -1,5 +1,13 @@
-.list-group-item {
-  a {
-    color: $list-group-color;
+.list-group-account {
+  .list-group-item {
+    border-bottom: 1px solid $highlight-white;
+    padding: $spacer 0;
+  }
+
+  .col,
+  .col-auto {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 }

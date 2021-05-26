@@ -1,0 +1,45 @@
+{# If a subscription already exists, require to confirm #}
+<div class="row">
+  <div class="col">
+    {% with field=form.approve_new_subscription %}
+    {% if field.required %}
+    {% include "common/components/field_label_wrapped.html" %}
+    {% endif %}
+    {% endwith %}
+  </div>
+</div>
+
+{# Payment process specific form fields, most of them a hidden and don't require special templating. #}
+<div class="row">
+  {{ form.next_url_after_done }}
+  {{ form.payment_method_nonce }}
+  {{ form.device_data }}
+  {{ form.price }}
+  <div class="col">
+    <ul class="looper-select" id="id_gateway">
+      {% with field=form.gateway %}
+      {% for radio in field %}
+      <li class="looper-select-option looper-select-option-{{ forloop.counter0 }}">
+        {{ radio }}
+      </li>
+      {% endfor %}
+      {% endwith %}
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <div id="gateway-errors"></div>
+  </div>
+</div>
+{# The content of below script must be valid JSON, as type suggests. #}
+<script id="bt-dropin-styles" type="application/json">
+  {
+    "input": {
+      "color": "white"
+    },
+    ":focus": {
+      "color": "white"
+    }
+  }
+</script>

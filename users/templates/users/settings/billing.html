@@ -1,6 +1,7 @@
 {% extends 'users/settings/base.html' %}
 {% load common_extras %}
-
+{% load waffle_tags %}
+{% load looper %}
 
 {% block settings %}
 
@@ -9,55 +10,81 @@
 
 <div class="settings-billing">
 
-  <div class="row">
+  <div class="row mb-3">
     <div class="col">
       <h2 class="mb-0">Status</h2>
       <p>The current status of your subscription:</p>
+      {% if user|has_group:"demo" %}
+      <div class="alert alert-primary" role="alert">
+        <i class="material-icons align-middle">favorite</i>
+        <span>You have a free account</span>
+      </div>
+      {% elif user|has_active_subscription %}
+      <div class="alert alert-success" role="alert">
+        <i class="material-icons align-middle">done</i>
+        {% flag "SUBSCRIPTIONS_ENABLED" %}
+        {% with subscription=user.subscription_set.first %}
+        {% with order=subscription.latest_order %}
+        <span>Your {% include 'subscriptions/components/info.html' %}</span>
+        {% endwith %}
+        {% endwith %}
+        {% else %}
+        <span>You have an active subscription</span>
+
+        {% endflag %}
+      </div>
+      {% else %}
+      <div class="alert alert-success" role="alert">
+        <i class="material-icons align-middle">info</i>
+        <span>You do not have an active subscription</span>
+      </div>
+      {% endif %}
     </div>
   </div>
 
   {% if user|has_group:"demo" %}
-  <h2 class="text-primary mb-3">
-    <i class="material-icons align-middle">favorite</i>
-    <span>You have a free account</span>
-  </h2>
 
-  <div class="row">
+  <div class="row mb-3">
     <div class="col">
       <h2 class="mb-0">Manage Subscription</h2>
       <p>
         You have full access to the Blender Cloud, provided by the Blender Institute. This account is meant for
-        free evaluation of the service. Get in touch with <a href="mailto:{{ ADMIN_MAIL }}">{{ ADMIN_MAIL}}</a> if you have any questions.
+        free evaluation of the service. Get in touch with <a href="mailto:{{ ADMIN_MAIL }}">{{ ADMIN_MAIL}}</a> if you
+        have any questions.
       </p>
     </div>
   </div>
+  {% endif %}{# end of Subscription Status section #}
 
-  {#% elif user|has_group:"subscriber" %#}
-  {% elif user|has_active_subscription %}
-  <h2 class="text-success mb-3">
-    <i class="material-icons align-middle">done</i>
-    <span>Your subscription is active</span>
-  </h2>
-
+  {# Now, Manage subscription section, without having to nest it twice #}
+  {% if not user|has_group:"demo" %}{# for everyone except demo #}
   <div class="row">
     <div class="col">
       <h2 class="mb-0">Manage Subscription</h2>
-      <p>If you want to change or cancel your billing, visit the <a target="_blank" href="{{ STORE_MANAGE_URL }}">Blender Store</a>.</p>
-    </div>
-  </div>
+      <p>If you have any problems with billing, contact the team directly on <a href="mailto:cloudsupport@blender.org">cloudsupport@blender.org</a>.</p>
+      {# **Do not** rearrange the ifs, unless the logic is obviously broken. #}
 
-  {% else %}
-  <h2 class="text-danger mb-3">
-    <i class="material-icons align-middle">info</i>
-    <span>You do not have an active subscription</span>
-  </h2>
+      {% if user.subscription_set.count %}
+      {# they have new-kind-of-subscription already, we cannot send them to the store #}
+      {% include "subscriptions/components/manage.html" %}
 
-  <div class="row">
-    <div class="col">
-      <h2 class="mb-0">Manage Subscription</h2>
-      <p>If you want to subscribe to Blender Cloud visit the <a target="_blank" href="{{ STORE_PRODUCT_URL }}">Blender Store</a>.</p>
+      {% elif user|has_active_subscription %}
+      {# they don't have new-kind-of-subscription, this must be coming from Store #}
+      <p>If you want to change or cancel your billing, visit the <a target="_blank"
+          href="{{ STORE_MANAGE_URL }}">Blender Store</a>.</p>
+
+      {% else %}
+      {# send them to the new subscription flow or to the Store, depending on the flag #}
+      {% flag "SUBSCRIPTIONS_ENABLED" %}
+      {% include "subscriptions/components/manage.html" %}
+      {% else %}
+      <p>If you want to subscribe to Blender Cloud visit the <a target="_blank" href="{{ STORE_PRODUCT_URL }}">Blender
+          Store</a>.</p>
+      {% endflag %}
+      {% endif %}
     </div>
   </div>
   {% endif %}
+
 </div>
 {% endblock settings %}

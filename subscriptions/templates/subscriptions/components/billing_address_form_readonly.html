@@ -1,0 +1,47 @@
+<div class="">
+  <div>
+    <span class="font-weight-bold-child">{{ form.full_name }}</span>
+    {% with field=form.company %}
+    <div class="{% if not field.value %}d-none{% endif %}">
+      {{ field }}
+    </div>
+    {% endwith %}
+  </div>
+  <div class="font-weight-bold">
+  {{ form.email }}
+  </div>
+
+
+
+  <div>
+    {{ form.street_address }}
+
+    {% with field=form.extended_address %}
+    <div class="{% if not field.value %}d-none{% endif %}">
+      {{ field }}
+    </div>
+    {% endwith %}
+  </div>
+
+  <div>
+    {{ form.postal_code }}
+    {% with field=form.region %}
+    <span class="{% if not field.value %}d-none{% endif %}">
+      {{ field }}
+    </span>
+    {% endwith %}
+    {{ form.locality }}
+  </div>
+
+  <div>
+    {{ form.country }}
+  </div>
+
+  <div>
+    {% with field=form.vat_number %}
+    <div class="{% if not field.value %}d-none{% endif %}">
+      VATIN: {{ field }}
+    </div>
+    {% endwith %}
+  </div>
+</div>

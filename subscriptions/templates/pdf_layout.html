@@ -1,0 +1,56 @@
+{% load static %}<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}{{ title }}{% endblock %}</title>
+    <style>
+      html, body {
+      	background-color: white;
+      	color: black;
+      	font-family: 'Roboto', 'Noto Sans', sans-serif;
+      	font-size: 8pt;
+      }
+
+      p {
+      	line-height: 150%;
+      }
+
+      th {
+      	width: 200px;
+      	text-align: right;
+      }
+      th, td {
+      	padding: 3px 6px;
+      	vertical-align: top;
+      }
+      h4 {
+      	border-bottom: 1px solid black;
+      	padding-top: 3em;
+      }
+
+      @page {
+      	size: a4 portrait;
+      	@frame header_frame {           /* Static Frame */
+      		-pdf-frame-content: header_content;
+      		left: 50pt; width: 512pt; top: 20pt; height: 40pt;
+      	}
+      	@frame content_frame {          /* Content Frame */
+      		left: 50pt; width: 512pt; top: 60pt; height: 632pt;
+      	}
+      	@frame footer_frame {           /* Another static Frame */
+      		-pdf-frame-content: footer_content;
+      		left: 50pt; width: 512pt; bottom: 30pt; height: 50pt;
+      	}
+      }
+    </style>
+  </head>
+  <body>
+    <div id="header_content">{% block header_content %}<img class="header" src="{% static 'example_app/images/bf-logo-text.png' %}" align="right" width="200" style="float: right">{% endblock %}</div>
+    <div id="footer_content">{% block footer_content %}
+      <p><strong>Stichting Blender Foundation</strong><br>
+        Buikslotermeerplein 161<br>
+        1025 ET Amsterdam, the Netherlands<br>
+        Tax number NL 8111.66.223
+      </p>{% endblock %}
+    </div>{% block main_content %}{% endblock %}
+  </body>
+</html>

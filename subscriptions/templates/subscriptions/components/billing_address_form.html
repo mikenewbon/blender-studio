@@ -1,0 +1,75 @@
+<div class="row">
+  <div class="col text-danger">
+    {{ form.non_field_errors }}
+  </div>
+</div>
+
+<div class="row mb-2">
+  <div class="col">
+    {% with field=form.full_name %}
+    {% include "common/components/field_label_wrapped.html" %}
+    {% endwith %}
+  </div>
+  <div class="col">
+    {% with field=form.email %}
+    {% include "common/components/field_label_wrapped.html" %}
+    {% endwith %}
+  </div>
+</div>
+
+
+
+<div class="row mb-2">
+  <div class="col-12">
+    {% with field=form.street_address %}
+    {% include "common/components/field_label_wrapped.html" %}
+    {% endwith %}
+  </div>
+</div>
+
+{% with field=form.extended_address %}
+<div class="row">
+  <div class="col-12 mb-2 x-extended-address">
+    {% include "common/components/field_label_wrapped.html" %}
+  </div>
+</div>
+{% endwith %}
+
+<div class="row mb-2">
+  <div class="col">
+    {% with field=form.postal_code %}
+    {% include "common/components/field_label_wrapped.html" %}
+    {% endwith %}
+  </div>
+  <div class="col">
+    {% with field=form.country %}
+    {% include "common/components/field_label_wrapped.html" %}
+    {% endwith %}
+  </div>
+</div>
+
+<div class="row mb-2">
+  {% with field=form.region %}
+  <div class="col {% if not field.value %}d-none{% endif %}">
+    {% include "common/components/field_label_wrapped.html" %}
+  </div>
+  {% endwith %}
+  <div class="col">
+    {% with field=form.locality %}
+    {% include "common/components/field_label_wrapped.html" %}
+    {% endwith %}
+  </div>
+</div>
+
+<div class="row mb-2">
+  <div class="col">
+    {% with field=form.vat_number %}
+    {% include "common/components/field_label_wrapped.html" %}
+    {% endwith %}
+  </div>
+  <div class="col">
+    {% with field=form.company %}
+    {% include "common/components/field_label_wrapped.html" %}
+    {% endwith %}
+  </div>
+</div>

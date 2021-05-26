@@ -88,3 +88,26 @@ def absolute_url(context, path: str) -> str:
 def endswith(value: str, suffix: str) -> bool:
     """Check if a string ends with a given suffix."""
     return value.endswith(suffix)
+
+
+@register.filter(name='add_form_classes')
+def add_form_classes(form, size_class=""):
+    """Add Bootstrap classes and our custom classes to the form fields."""
+    for field_name, field in form.fields.items():
+        if getattr(field.widget, 'input_type', None) in ('radio', 'checkbox'):
+            continue
+        classes = {'form-control'}
+        if size_class:
+            classes.add(f'form-control-{size_class}')
+        if field.widget.input_type == 'select':
+            classes.add('custom-select')
+            if size_class:
+                classes.add(f'custom-select-{size_class}')
+        field.widget.attrs.update({'class': ' '.join(classes)})
+
+    # Add error class to all the fields with errors
+    invalid_fields = form.fields if '__all__' in form.errors else form.errors
+    for field_name in invalid_fields:
+        attrs = form.fields[field_name].widget.attrs
+        attrs.update({'class': attrs.get('class', '') + ' is-invalid'})
+    return form

@@ -1,0 +1,5 @@
+Blender Institute BV
+Bank: ING Bank
+Account number: 5296212
+IBAN: NL22 INGB 0005296212
+BIC/Swift: INGB NL2A

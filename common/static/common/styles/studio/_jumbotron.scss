@@ -106,6 +106,12 @@ a.jumbotron {
     width: 100%;
   }
 
+  &.overlay-solid {
+    .jumbotron-bg-wrapper::before {
+      background: $highlight-black-xstrong !important;
+    }
+  }
+
   &.overlay-flipped {
     .jumbotron-bg-wrapper::before {
       background: radial-gradient(95.13% 205.95% at 27.8% 43.3%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, .5325) 100%);

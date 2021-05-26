@@ -1,0 +1,1 @@
+{% load waffle_tags %}{% flag "SUBSCRIPTIONS_ENABLED" %}href="{% url 'subscriptions:join' %}"{% else %}href="{{ STORE_PRODUCT_URL }}" target="_blank"{% endflag %}

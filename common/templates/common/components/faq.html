@@ -1,0 +1,157 @@
+{% load waffle_tags %}
+  <section class="{{ classes }}">
+    <div class="row justify-content-center mb-3">
+      <div class="col-md-6 text-center">
+        <h2 class="mb-1">Frequently Asked Questions</h2>
+        <p class="mb-0">If you have questions about the Cloud, please contact one of the team on
+          <a href="https://blender.chat/channel/blender-cloud">Blender Chat</a> by logging in with your Blender ID.</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <h3 class="text-center">General</h3>
+        <div class="accordion mb-3" id="faqGeneral">
+          <div class="card card-dark">
+            <div class="card-header" id="faqHeadingWhatIsBlenderStudio">
+              <h5 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse"
+                  data-target="#faqCollapseWhatIsBlenderStudio" aria-expanded="false"
+                  aria-controls="faqCollapseWhatIsBlenderStudio">
+                  <span>What is Blender Cloud?</span>
+                  <i class="material-icons">keyboard_arrow_down</i>
+                </button>
+              </h5>
+            </div>
+            <div id="faqCollapseWhatIsBlenderStudio" class="collapse" aria-labelledby="faqHeadingWhatIsBlenderStudio"
+              data-parent="#faqGeneral">
+              <div class="card-body small">
+                Blender Cloud is a Film and Training publishing platform for everything produced by the Studio team in
+                the Blender Institute.
+              </div>
+            </div>
+          </div>
+          <div class="card card-dark">
+            <div class="card-header" id="faqHeadingHowIsMyMoneySpent">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                  data-target="#faqCollapseHowIsMyMoneySpent" aria-expanded="false"
+                  aria-controls="faqCollapseHowIsMyMoneySpent">
+                  <span>How is my money spent?</span> <i class="material-icons">keyboard_arrow_down</i>
+                </button>
+              </h5>
+            </div>
+            <div id="faqCollapseHowIsMyMoneySpent" class="collapse" aria-labelledby="faqHeadingHowIsMyMoneySpent"
+              data-parent="#faqGeneral">
+              <div class="card-body small">
+                The money Blender Cloud makes through subscriptions is used to keep our services running, and to make
+                open source and open content productions possible. Throughout the production cycle our team produce
+                training, rigs and assets for publishing to Blender Cloud subscribers.
+              </div>
+            </div>
+          </div>
+          <div class="card card-dark">
+            <div class="card-header" id="faqHeadingHowSupportBlender">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                  data-target="#faqCollapseHowSupportBlender" aria-expanded="false"
+                  aria-controls="faqCollapseHowSupportBlender">
+                  <span>How does Blender Cloud support Blender?</span> <i class="material-icons">keyboard_arrow_down</i>
+                </button>
+              </h5>
+            </div>
+            <div id="faqCollapseHowSupportBlender" class="collapse" aria-labelledby="faqHeadingHowSupportBlender"
+              data-parent="#faqGeneral">
+              <div class="card-body small">
+                The Blender Cloud funds the Blender Studio team, who rigorously test and use Blender in the Open Movie
+                productions. The team work with core Blender Developers at the Blender Institute to plan, design and
+                test core Blender features.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <h3 class="text-center">Payment & Billing</h3>
+        <div class="accordion mb-3" id="faqPayment">
+          <div class="card card-dark">
+            <div class="card-header" id="faqHeadingPaymentMethod">
+              <h5 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse"
+                  data-target="#faqCollapsePaymentMethod" aria-expanded="false"
+                  aria-controls="faqCollapsePaymentMethod">
+                  <span>What payment methods do you accept?</span> <i class="material-icons">keyboard_arrow_down</i>
+                </button>
+              </h5>
+            </div>
+            <div id="faqCollapsePaymentMethod" class="collapse" aria-labelledby="faqHeadingPaymentMethod"
+              data-parent="#faqPayment">
+              <div class="card-body small">
+                {% flag "SUBSCRIPTIONS_ENABLED" %}
+                Blender Cloud offers payment through major credit cards, PayPal or direct bank transfer.
+                {% else %}
+                Blender Cloud subscriptions are available for purchase through the <a href="https://store.blender.org/"
+                  target="_blank">Blender Store</a>.<br><br>
+
+                The Blender Store offers payment through major credit cards, PayPal or direct bank transfer.
+                {% endflag %}
+              </div>
+            </div>
+          </div>
+          <div class="card card-dark">
+            <div class="card-header" id="faqHeadingCancelSubscription">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                  data-target="#faqColapseCancelSubscription" aria-expanded="false"
+                  aria-controls="faqColapseCancelSubscription">
+                  <span>How easy is it to cancel my subscription?</span> <i
+                    class="material-icons">keyboard_arrow_down</i>
+                </button>
+              </h5>
+            </div>
+            <div id="faqColapseCancelSubscription" class="collapse" aria-labelledby="faqHeadingCancelSubscription"
+              data-parent="#faqPayment">
+              <div class="card-body small">
+                You may cancel your subscription at any time via your personal account page, or by contacting us at
+                <a href="mailto:{{ ADMIN_MAIL }}">{{ ADMIN_MAIL }}</a>.<br><br>
+
+                In case of suspected fraud or abuse of the service after registration and membership payment, the
+                account owner will be contacted and asked for clarification. Failure to alleviate charges of fraud may
+                result in the termination of the member’s account.<br><br>
+
+                Upon termination, all licenses granted by the Blender Cloud will terminate. In the event of account
+                deletion for any reason, content that you submitted may no longer be available. The Blender Cloud shall
+                not be responsible for the loss of such content.
+              </div>
+            </div>
+          </div>
+          <div class="card card-dark">
+            <div class="card-header" id="faqHeadingRefund">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                  data-target="#faqColapseRefund" aria-expanded="false" aria-controls="faqColapseRefund">
+                  <span>Can I get a refund?</span> <i class="material-icons">keyboard_arrow_down</i>
+                </button>
+              </h5>
+            </div>
+            <div id="faqColapseRefund" class="collapse" aria-labelledby="faqHeadingRefund" data-parent="#faqPayment">
+              <div class="card-body small">
+                Membership fees and supporter contributions are non-refundable. That money keeps our services running,
+                and is used to make open source and open content productions possible.<br><br>
+
+                We really care about our members and supporters though — in case you are really not happy with
+                our Blender Cloud we will kindly respond to your comments and try to settle a dispute with you in
+                harmony.<br><br>
+
+                Refunds will happen without delay when we get a report of fraud, abuse or non-authorised usage of
+                funds.<br><br>
+
+                Contact: <a href="mailto:{{ ADMIN_MAIL }}">{{ ADMIN_MAIL }}</a>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>

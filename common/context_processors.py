@@ -30,4 +30,5 @@ def extra_context(request: HttpRequest) -> Dict[str, str]:
         'ADMIN_MAIL': settings.ADMIN_MAIL,
         'STORE_PRODUCT_URL': settings.STORE_PRODUCT_URL,
         'STORE_MANAGE_URL': settings.STORE_MANAGE_URL,
+        'GOOGLE_RECAPTCHA_SITE_KEY': settings.GOOGLE_RECAPTCHA_SITE_KEY,
     }

@@ -55,6 +55,21 @@ and it must not be committed.
     - Update `settings.py`:
         - Set `COCONUT_API_KEY` to a valid value (see `settings.example.py`)
         - Set `COCONUT_DECLARED_HOSTNAME` to `https://<random-value>.ngrok.io`
+14. In order to be able to work on subscriptions and payments, you have to access the devservier over HTTPS:
+    - make sure your `settings.py` has the following lines:
+    ```python
+    INSTALLED_APPS += [
+        'sslserver',
+    ]
+    ```
+    - create a `SUBSCRIPTIONS_ENABLED` flag in the `Flags` admin:
+        * check `Testing`;
+        * visit https://studio.local:8001/join/?dwft_SUBSCRIPTIONS_ENABLED=1 to enable it in the current user session;
+        * or set `Everyone: Yes` option to enable it unconditionally to be able to test the full flow.
+    - make sure to set `GOOGLE_RECAPTCHA_SECRET_KEY` and `GOOGLE_RECAPTCHA_SITE_KEY` in you `settings.py`;
+    - start the devserver with `./manage.py runsslserver 8001`;
+    - access it at https://studio.local:8001/;
+    - add an HTTPS version of the redirect URL (`https://studio.local:8001/oauth/authorized`) for Studio's OAuth application in your Blender ID admin.
 
 ## Data import
 You can add objects to the database manually via the Django's Admin panel.

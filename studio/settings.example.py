@@ -5,7 +5,6 @@ from typing import List
 import braintree
 import meilisearch
 from dateutil.relativedelta import relativedelta
-from google.oauth2 import service_account
 
 from studio.settings_common import *
 
@@ -42,7 +41,10 @@ GATEWAYS = {
         'private_key': 'CHANGE_ME',
         # Merchant Account IDs for different currencies.
         # Configured in Braintree: Account → Merchant Account Info.
-        'merchant_account_ids': {'EUR': 'CHANGE_ME', 'USD': 'CHANGE_ME',},
+        'merchant_account_ids': {
+            'EUR': 'CHANGE_ME',
+            'USD': 'CHANGE_ME',
+        },
     },
     # No settings, but a key is required here to activate the gateway.
     'bank': {},
@@ -74,8 +76,6 @@ LOOPER_CONVERTION_RATES_FROM_EURO = {
 
 LOOPER_MONEY_LOCALE = 'en_US.UTF-8'
 
-LOOPER_CAN_CHANGE_CUSTOMER_FUNCTION = 'subscriptions.permissions.can_change_customer'
-
 SUPPORTED_CURRENCIES = {'EUR', 'USD'}
 
 # Get the latest from https://dev.maxmind.com/geoip/geoip2/geolite2/. Note that you should check
@@ -102,6 +102,8 @@ BLENDER_CLOUD_SECRET_KEY = 'CHANGE_ME'
 BLENDER_CLOUD_AUTH_ENABLED = True
 
 GOOGLE_ANALYTICS_TRACKING_ID = ''
+GOOGLE_RECAPTCHA_SITE_KEY = ''
+GOOGLE_RECAPTCHA_SECRET_KEY = ''
 
 # Coconut API. See https://app.coconut.co/settings/api
 COCONUT_API_KEY = ''
@@ -120,3 +122,7 @@ ANYMAIL = {
     'MAILGUN_WEBHOOK_SIGNING_KEY': 'CHANGE_ME',
     'WEBHOOK_SECRET': 'CHANGE_ME:CHANGE_ME',
 }
+
+INSTALLED_APPS += [
+    'sslserver',
+]

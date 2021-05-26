@@ -1,0 +1,500 @@
+.checkout {
+  position: sticky;
+  top: 84px;
+}
+
+.payment-tabs {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.payment-header {
+  border: 1px solid $input-gray;
+  border-bottom-width: 0;
+  border-radius: $border-radius $border-radius 0 0;
+  padding: $spacer $spacer 0;
+  background: $dark;
+}
+
+.payment-header-title {
+  margin-bottom: 0;
+}
+
+.payment-tab {
+  background: $navigation-gray;
+  padding: $spacer;
+  cursor: pointer;
+  border: 1px solid $input-gray;
+  border-bottom-width: 0;
+  width: 50%;
+  text-align: center;
+  border-radius: $border-radius $border-radius 0 0;
+  position: relative;
+
+  &.active {
+    cursor: auto;
+    background: $dark;
+
+    &::after {
+      content: none;
+    }
+  }
+
+  &:first-child {
+    &::after {
+      border-bottom-left-radius: 0;
+    }
+
+    &.active {
+      margin-right: -1px;
+    }
+  }
+
+  &:last-child {
+    &::after {
+      border-bottom-right-radius: 0;
+    }
+
+    &.active {
+      margin-left: -1px;
+    }
+  }
+
+  &::after {
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    content: '';
+    background: $navigation-gray;
+    display: block;
+    width: calc(100% + 2px);
+    height: $border-radius;
+    border: 1px solid $input-gray;
+    border-top-width: 0;
+    border-radius: 0 0 $border-radius $border-radius;
+    margin: 0 -1px;
+  }
+}
+
+.payment-tab-title {
+  margin-bottom: -$border-radius;
+  pointer-events: none;
+}
+
+.payment-content {
+  // padding-top: $border-radius; TODO(Mike): This is for tabs when re-added
+  background: $dark;
+  border: 1px solid $input-gray;
+  border-top-width: 0;
+  border-radius: 0 0 $border-radius $border-radius;
+  // margin-right: 1px; TODO(Mike): This is for tabs when re-added
+  overflow: hidden;
+}
+
+.payment-content-inner {
+  padding: $spacer / 2 $spacer $spacer $spacer;
+}
+
+.checkout-form {
+  &-billing-address-readonly {
+    [readonly] {
+      background-color: $transparent;
+      padding: 0;
+      width: auto;
+      height: unset;
+      display: inline;
+      border: none;
+      // Dropdown still works even with readonly attribute set.
+      pointer-events: none;
+      // opacity: .5;
+    }
+
+    .font-weight-bold-child {
+      >* {
+        // opacity: .75;
+      }
+    }
+
+    select[readonly] {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background: none;
+    }
+  }
+}
+
+.checkout {
+  [readonly] {
+    pointer-events: none;
+  }
+}
+
+.payment-tabs-footer {
+  background: $navigation-gray;
+  padding: $spacer;
+}
+
+.payment-input-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacer / 4;
+
+  label {
+    text-transform: capitalize;
+  }
+
+  >* {
+    margin-bottom: 0
+  }
+}
+
+// This is to over-write the default btn-success thats added from looper.
+.col .btn-payment-confirm {
+  @extend .btn-primary;
+
+  &:disabled {
+    @extend .btn-input;
+  }
+
+  &.btn-success {
+    @extend .btn-primary;
+  }
+}
+
+.expand {
+  height: 0;
+
+  overflow: hidden;
+
+  &.show {
+    height: 100%;
+  }
+}
+
+// BRAINTREE CUSTOMIZATION
+
+#id_gateway {
+  @extend .list-unstyled;
+}
+
+.braintree-option {
+  background: $dark;
+  border-color: $input-gray;
+
+  &:first-child {
+    border-radius: 0;
+  }
+
+  &:last-child {
+    border-radius: 0 0 $border-radius $border-radius;
+  }
+
+  .braintree-option__label {
+    color: $highlight-white-xxstrong;
+  }
+
+  &:hover {
+    background: $input-gray;
+
+    .braintree-option__label {
+      font-weight: $font-weight-normal;
+    }
+  }
+}
+
+.braintree-sheet__container {
+  margin-bottom: $spacer / 2;
+}
+
+.braintree-upper-container {
+  &::before {
+    background-color: $transparent;
+    border-color: $input-gray;
+    border-radius: 0;
+    bottom: 0;
+  }
+}
+
+.looper-select-option-0 {
+  // .looper-select-option-label {
+  //   display: none;
+  // }
+
+  .gateway-options-label {
+    display: none;
+  }
+}
+
+.braintree-placeholder {
+  display: none;
+}
+
+.choose-a-way-to-pay,
+.braintree-heading {
+  display: none;
+}
+
+.looper-select-option {
+  .gateway-options-label {
+    @extend .subtitle;
+    @extend .small;
+  }
+
+  input {
+    display: none;
+  }
+
+  .looper-select-option-label {
+    width: 100%;
+    margin-bottom: 0;
+
+    :checked+span {
+      background: $input-gray;
+      color: $headings-color;
+    }
+
+    span {
+      background: $dark;
+      border: 1px solid $input-gray;
+      border-radius: $border-radius;
+      padding: $spacer * .75 $spacer / 2 $spacer * .75 #{$spacer * 1.5 + 24px};
+      width: 100%;
+      position: relative;
+      display: block;
+      font-weight: $headings-font-weight;
+
+      &:hover {
+        background: $input-gray;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.looper-select-option-0 {
+  :checked+span {
+    border-radius: $border-radius $border-radius 0 0;
+  }
+
+  .looper-select-option-label {
+    span {
+      &::before {
+        @extend .material-icons;
+        content: 'payment';
+        display: block;
+        position: absolute;
+        left: $spacer;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+}
+
+.looper-select-option-1 {
+  margin-top: $spacer / 2;
+
+  .looper-select-option-label {
+    span {
+      &::before {
+        @extend .material-icons;
+        content: 'account_balance';
+        display: block;
+        position: absolute;
+        left: $spacer;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+}
+
+.braintree-sheet {
+  background: $navigation-gray;
+  border: 1px solid $input-gray;
+  border-radius: 0;
+}
+
+.braintree-sheet__header {
+  border-color: $input-gray;
+
+  .braintree-sheet__text {
+    color: $body-color;
+
+  }
+}
+
+
+.braintree-sheet__content--form {
+  background: $dark;
+  padding: $spacer $spacer / 2;
+
+  .braintree-form__field-group {
+    padding: 0 $spacer / 2;
+    margin-bottom: $spacer / 4;
+
+    &.braintree-form__field-group--has-error {
+      margin-bottom: $spacer / 4;
+
+      .braintree-form__field {
+        border-color: $danger;
+
+        &:hover {
+          border-color: darken($danger, 7.5%);
+        }
+      }
+    }
+
+    .braintree-form__field {
+      .braintree-form__hosted-field {
+        background-color: $input-gray;
+        border-color: $input-gray;
+        border-radius: $border-radius;
+        border-width: 2px;
+        color: $headings-color;
+
+        &:hover {
+          border-color: $input-gray;
+        }
+      }
+
+      &-error {
+        color: $danger;
+        margin: 0;
+      }
+    }
+
+    .braintree-form__label {
+      color: $headings-color;
+      font-weight: $headings-font-weight;
+    }
+  }
+}
+
+.braintree-heading {
+  font-weight: $headings-font-weight;
+  color: $headings-color;
+}
+
+// Choose another way to pay button
+[data-braintree-id='toggle'] {
+  @extend .btn;
+  @extend .btn-input;
+
+  // color: $headings-color;
+  // background: $input-gray;
+  margin-bottom: $spacer / 2 0;
+  border-radius: 0 0 $border-radius $border-radius;
+  font-weight: normal;
+  color: $body-color;
+
+  &:hover {
+    font-weight: $font-weight-normal;
+  }
+
+  span {
+    border-width: 0;
+    padding: 0;
+  }
+}
+
+[data-braintree-id='methods'] {
+  margin-bottom: 0;
+  border: 1px solid $input-gray;
+  border-width: 0 1px;
+}
+
+[data-braintree-id='methods-container'] {
+  padding: $spacer / 2;
+}
+
+.braintree-method {
+  background-color: $dark;
+  border-radius: $border-radius !important;
+  border: 1px solid $input-gray;
+  color: $body-color;
+  margin: 0 0 $spacer / 2 0;
+  width: 100%;
+
+  .braintree-method__label {
+    color: $body-color;
+  }
+
+  &:hover {
+    background: $input-gray;
+
+
+    .braintree-method__label {
+      font-weight: $font-weight-normal;
+    }
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &--active {
+    margin-bottom: $spacer / 2;
+  }
+}
+
+.braintree-methods--active:not(.braintree-methods--edit) .braintree-method--active {
+  margin-bottom: $spacer / 2;
+}
+
+
+
+[data-braintree-id="other-ways-to-pay"] {
+  margin: 0;
+  padding: $spacer;
+  border: 1px solid $input-gray;
+  border-bottom-width: 0;
+}
+
+[data-braintree-id='payment-options-container'] {
+  padding-bottom: 0;
+}
+
+[data-braintree-id="sheet-container"] {
+  margin-bottom: 0;
+}
+
+[data-braintree-id='save-card-field-group'] {
+  margin-bottom: 0 !important;
+}
+
+
+.braintree-sheet--has-error .braintree-sheet {
+  border: 1px solid $danger;
+  border-radius: 0;
+  border-bottom-width: 0;
+}
+
+.braintree-sheet--has-error .braintree-sheet__error {
+  margin-top: 0;
+  padding-top: 0;
+  padding-bottom: $spacer;
+  border: 1px solid $danger;
+  border-top-width: 0;
+  color: $danger;
+
+  .braintree-sheet__error-icon use {
+    fill: $danger;
+  }
+
+  .braintree-sheet__error-text {
+    color: $danger;
+  }
+}
+
+.braintree-sheet__content--form .braintree-form__field-group .braintree-form__field-error-icon use {
+  fill: $danger;
+}
+
+.braintree-sheet__content--form .braintree-form__field-group.braintree-form__field-group--has-error .braintree-form__field .braintree-form__hosted-field {
+  border-color: $danger;
+}
+
+// BRAINTREE END

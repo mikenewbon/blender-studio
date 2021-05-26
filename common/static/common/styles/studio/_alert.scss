@@ -1,3 +1,10 @@
+.alert-sm {
+  border-radius: $border-radius-sm;
+  font-size: $font-size-sm;
+  padding: $alert-padding-sm-y $alert-padding-sm-x;
+  border-left-width: $border-radius-sm!important;
+}
+
 .alert {
   border-left-width: $border-radius-sm;
 }
@@ -7,4 +14,22 @@
   background: rgba($warning, .1);
   color: $warning;
   border-color: $warning;
+}
+
+.alert-success {
+  background: rgba($success, .1);
+  color: $success;
+  border-color: $success;
+}
+
+.alert-danger {
+  background: rgba($danger, .1);
+  color: $danger;
+  border-color: $danger;
+}
+
+.alert-primary {
+  background: rgba($primary, .1);
+  color: $primary;
+  border-color: $primary;
 }

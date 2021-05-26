@@ -112,6 +112,8 @@ $theme-colors: map-merge(("primary": $primary,
     "darkhighlight-strong": $highlight-black-strong,
     "highlight-xstrong": $highlight-white-xstrong,
     "darkhighlight-xstrong": $highlight-black-xstrong,
+    "highlight-xxstrong": $highlight-white-xxstrong,
+    "darkhighlight-xxstrong": $highlight-black-xxstrong,
     "light": $light,
     "dark": $dark,
     "transparent": $transparent,
@@ -396,8 +398,8 @@ $profile-nav-padding: .3125rem;
 //
 // Customizes the `.table` component with basic values, each used across all table variations.
 
-$table-cell-padding: 0.75rem !default;
-$table-cell-padding-sm: 0.625rem 0 !default;
+$table-cell-padding: $spacer !default;
+$table-cell-padding-sm: $spacer / 2 0 !default;
 
 $table-color: $body-color !default;
 $table-bg: null !default;
@@ -640,9 +642,9 @@ $custom-select-indicator-padding: 1.5rem !default; // Extra padding to account f
 $custom-select-font-weight: $input-font-weight !default;
 $custom-select-line-height: $input-line-height !default;
 $custom-select-color: $input-color !default;
-$custom-select-disabled-color: $gray-600 !default;
+$custom-select-disabled-color: $input-color !default;
 $custom-select-bg: $input-bg !default;
-$custom-select-disabled-bg: rgba($input-bg, .5) !default;
+$custom-select-disabled-bg: $input-bg !default;
 $custom-select-bg-size: 1.5rem !default; // In pixels because image dimensions
 $custom-select-indicator-color: $body-color !default;
 $custom-select-indicator: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path fill='#{$custom-select-indicator-color}' d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>") !default;
@@ -1043,6 +1045,9 @@ $alert-margin-bottom: $spacer / 2 !default;
 $alert-border-radius: $border-radius !default;
 $alert-link-font-weight: $font-weight-bold !default;
 $alert-border-width: $border-width !default;
+
+$alert-padding-sm-y: .5rem;
+$alert-padding-sm-x: .75rem;
 
 $alert-bg-level: -10 !default;
 $alert-border-level: -9 !default;

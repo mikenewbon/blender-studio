@@ -213,7 +213,7 @@
             <i class="material-icons">search</i>
           </a>
           <a href="{% url 'oauth:login' %}" class="btn btn-transparent btn-nav login-button">Login</a>
-          <a href="https://store.blender.org/product/membership/" target="_blank" class="btn btn-primary ">Join
+          <a {% include "subscriptions/components/join_url" %} class="btn btn-primary ">Join
             <span class="d-none d-lg-inline-block">Blender Cloud</span></a>
 
         </div>

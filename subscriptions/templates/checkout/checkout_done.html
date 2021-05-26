@@ -1,0 +1,73 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block content %}
+{% with subscription=order.subscription %}
+
+<div class="jumbotron jumbotron-fluid header jumbotron-overlay overlay-solid">
+  <div class="jumbotron-bg-wrapper">
+    <img class="jumbotron-bg" src="{% static 'common/images/join/join-header.png' %}"
+      alt="Cartoon dog eating tasty treats">
+  </div>
+  <div class="container flat-page-content">
+    <div class="row">
+      <div class="col">
+        <div class="jumbotron-body">
+          <h1 class="thanks">Thanks for subscribing to Blender Cloud!</h1>
+          <p>Make sure to explore everything the Cloud has to offer.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container flat-page-content mt-3">
+
+  <div class="row">
+    <div class="col">
+      <div class="alert alert-success mb-3" role="alert">
+        Your {% include 'subscriptions/components/info.html' %}
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <h2>Welcome!</h2>
+      <p>You're now a proud owner of a Blender Cloud subscription! You have access to <a
+          href="{% url "film-list" %}">films</a>, <a href="{% url "training-home" %}">training</a> and assets from the
+        Blender Studio team.</p>
+      <p class="text-muted">
+        Manage subscription in <a href="{% url 'user-settings-billing' %}">your billing settings</a>.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="container-xl my-4">
+
+  <div class="row justify-content-center mb-3">
+    <div class="col-md-6 text-center">
+      <h2 class="mb-1">Check out our latest training!</h2>
+      <p class="mb-0">With courses covering every major topic in Blender, you get the tools to learn, explore
+        and grow as an artist with the Blender Cloud.</p>
+    </div>
+  </div>
+  <div class="row">
+    {% for training in featured_trainings|slice:':3' %}
+    {% include "common/components/cards/card_training.html" with training=training %}
+    {% endfor %}
+  </div>
+  <div class="row justify-content-center mb-0">
+    <div class="col-md-6 text-center">
+      <p class="mb-0">Want to see more? <a href="/training">Explore all Blender Cloud Training</a>.</p>
+    </div>
+  </div>
+
+</div>
+
+
+{% endwith %}
+{% endblock %}

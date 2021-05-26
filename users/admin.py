@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model, admin as auth_admin
 from django.utils.translation import gettext_lazy as _
 
+import looper.admin
+
 from blender_id_oauth_client.models import OAuthUserInfo, OAuthToken
 from users.models import Notification
 
@@ -40,6 +42,7 @@ class UserAdmin(auth_admin.UserAdmin):
         ),
     )
     readonly_fields = ('date_deletion_requested',)
+    inlines = [looper.admin.AddressInline, looper.admin.CustomerInline]
 
     def deletion_requested(self, obj):
         """Display yes/no icon status of deletion request."""

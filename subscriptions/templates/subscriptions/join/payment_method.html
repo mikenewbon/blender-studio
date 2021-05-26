@@ -1,0 +1,64 @@
+{% extends 'checkout/checkout_base.html' %}
+{% load common_extras %}
+{% load looper %}
+{% load pipeline %}
+
+{% block content %}
+
+
+<form id="payment-form" class="checkout-form" method="post" action="{% url 'subscriptions:join-confirm-and-pay' %}"
+  data-looper-payment-form="true" data-braintree-client-token="{{ client_token }}">
+
+  {% include "subscriptions/components/header_jumbotron.html" %}
+
+  {% with form|add_form_classes as form %}
+  <div class="container-xl my-4">
+    <div class="row">
+      <div class="col-md-7">
+
+        <section class="checkout-form-fields mb-3" style="opacity: .5;">
+          <a href="{% url 'subscriptions:join' %}" class="btn btn-sm btn-dark float-right"><i
+              class="material-icons">arrow_back</i> Go back</a>
+          <a href="{% url 'subscriptions:join' %}" class="mb-0 h3">1. Billing Details</a>
+          <p class="subtitle mb-2">Check your details below are correct before paying.</p>
+          <fieldset class="checkout-form-billing-address-readonly">
+            {% include "subscriptions/components/billing_address_form_readonly.html"%}
+          </fieldset>
+        </section>
+
+        <section>
+          <h2 class="mb-0">2. Payment Method</h2>
+          <p class="subtitle mb-2">Select a payment method.</p>
+
+          {% comment %} <div class="payment-method-toggle btn-group mb-3 w-100">
+            <button class="btn btn-outline-input"><i class="material-icons">payment</i> Pay by Card or Paypal</button>
+            <button class="btn btn-outline-input"><i class="material-icons">account_balance</i> Pay by Bank
+              Transfer</button>
+          </div> {% endcomment %}
+
+          <fieldset class="payment-form-payment-method">
+            {{ form.non_field_errors }}
+            {% include "subscriptions/components/payment_form.html" %}
+          </fieldset>
+        </section>
+      </div>
+
+      <div class="col-md-5 col-lg-4 offset-lg-1">
+        {% if GOOGLE_RECAPTCHA_SITE_KEY %}
+        <div id="recaptcha" class="g-recaptcha" data-sitekey="{{ GOOGLE_RECAPTCHA_SITE_KEY }}" data-size="invisible">
+        </div>
+        {% endif %}
+        {% include "subscriptions/components/plan_selector.html" with disabled=True %}
+      </div>
+    </div>
+  </div>
+  {% endwith %}
+  {% include 'subscriptions/components/footer_currency.html' %}
+</form>
+{% endblock content %}
+
+{% block scripts %}
+{% javascript "subscriptions" %}
+
+{% include "looper/scripts.html" with with_recaptcha=True %}
+{% endblock scripts %}

@@ -4,7 +4,8 @@
 {% block content %}
 <div class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content jumbotron header">
   <div class="jumbotron-bg-wrapper">
-    <img class="jumbotron-bg" src="{% static "common/images/welcome/welcome-header-sprite.jpg" %}" alt="3D Render of the latest Blender Open Movie">
+    <img class="jumbotron-bg" src="{% static "common/images/welcome/welcome-header-sprite.jpg" %}"
+      alt="3D Render of the latest Blender Open Movie">
     <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
     {% comment %}
     {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
@@ -35,7 +36,7 @@
             </div>
           </div> {% endcomment %}
           <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center">
-            <a href="https://store.blender.org/product/membership/" target="_blank"
+            <a {% include "subscriptions/components/join_url" %}
               class="btn btn-lg btn-primary mr-md-4 mb-2 mb-md-0">Join the Blender Cloud</a>
             <div class="d-inline-block">
               <p class="mb-0">Access to all training, assets<br>and films for €9.90/month</p>
@@ -83,7 +84,8 @@
           training from the people in Blender.</p>
         <p>Ask questions and receive replies from the Author, download resources and join the discussion.</p>
         <div class="button-group">
-          <a href="https://store.blender.org/product/membership/" target="_blank" class="btn btn-primary">Subscribe for 9.90/mo</a>
+          <a {% include "subscriptions/components/join_url" %} class="btn btn-primary">Subscribe for
+            9.90/mo</a>
           <a href="/training" class="btn btn-transparent">Explore Training</a>
         </div>
       </div>
@@ -95,7 +97,8 @@
       <div class="col">
         <div class="jumbotron jumbotron-overlay overlay-wide-content jumbotron-inline header">
           <div class="jumbotron-bg-wrapper">
-            <img class="jumbotron-bg" src="{% static "common/images/home/sf-background.jpg" %}" alt="3D Render of the latest Blender Open Movie">
+            <img class="jumbotron-bg" src="{% static "common/images/home/sf-background.jpg" %}"
+              alt="3D Render of the latest Blender Open Movie">
             <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
             {% comment %}
             {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
@@ -104,10 +107,13 @@
           <div class="row">
             <div class="col-md-7 col-lg-6">
               <div class="jumbotron-body">
-                <img class="mb-3 film-logo" src="{% static "common/images/home/sf-logo.png" %}" alt="Sprite Fright Logo">
+                <img class="mb-3 film-logo" src="{% static "common/images/home/sf-logo.png" %}"
+                  alt="Sprite Fright Logo">
                 {% comment %} <h1>Coffee Run</h1> {% endcomment %}
-                <p class="mb-4">Blender Studio’s 13th open movie will be an 80’s-inspired horror comedy, set in Britain: When a group of rowdy teenagers trek into an isolated forest, they discover peaceful mushroom creatures that turn out to be an unexpected force of nature.</p>
-                <a href="https://store.blender.org/product/membership/" target="_blank"
+                <p class="mb-4">Blender Studio’s 13th open movie will be an 80’s-inspired horror comedy, set in Britain:
+                  When a group of rowdy teenagers trek into an isolated forest, they discover peaceful mushroom
+                  creatures that turn out to be an unexpected force of nature.</p>
+                <a {% include "subscriptions/components/join_url" %}
                   class="btn btn-primary mb-2 mb-md-0">Subscribe for €9.90/month</a>
                 <a href="/films/sprite-fright" class="btn btn-transparent">Explore the Film</a>
               </div>
@@ -133,7 +139,8 @@
     </div>
     <div class="row justify-content-center mb-0">
       <div class="col-md-6 text-center">
-        <p class="mb-0">Learn more about our other <a href="/films">open movies</a> and <a href="#faqHeadingHowIsMyMoneySpent">how your
+        <p class="mb-0">Learn more about our other <a href="/films">open movies</a> and <a
+            href="#faqHeadingHowIsMyMoneySpent">how your
             contribution is used</a>.</p>
       </div>
     </div>
@@ -141,15 +148,13 @@
 
   {% include 'common/components/cards/card_carousel.html' with title="Access all our production assets!" subtitle="You can access all the production files from our films with a Blender Cloud subscription." slides=4 card_set=featured_film_assets media_type="file" id="fromTheArchives" %}
 
-</div>
-
-<div class="container-xl mt-4">
-  <section class="mb-5">
+  <section class="my-5">
     <div class="row mb-3">
       <div class="col">
         <div class="jumbotron jumbotron-overlay jumbotron-inline overlay-flipped header">
           <div class="jumbotron-bg-wrapper">
-            <img class="jumbotron-bg" src="{% static "common/images/welcome/dweebs-bg.png" %}" alt="A 3D cartoon dog enjoying tasty treats">
+            <img class="jumbotron-bg" src="{% static "common/images/welcome/dweebs-bg.png" %}"
+              alt="A 3D cartoon dog enjoying tasty treats">
             <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
             {% comment %}
             {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
@@ -162,7 +167,7 @@
                 <p class="mb-4">Join Blender Cloud and get access to hundreds of hours of training,
                   production assets and files from the Open Movies as well as a platform to learn at
                   your own pace, in your own time.</p>
-                <a href="https://store.blender.org/product/membership/" target="_blank"
+                <a {% include "subscriptions/components/join_url" %}
                   class="btn btn-lg btn-primary">Subscribe for €9.90/month</a>
               </div>
             </div>
@@ -172,159 +177,7 @@
     </div>
   </section>
 
-
-  <section class="mb-5">
-    <div class="row justify-content-center mb-3">
-      <div class="col-md-6 text-center">
-        <h2 class="mb-1">Frequently Asked Questions</h2>
-        <p class="mb-0">If you have questions about the Cloud, please contact one of the team on
-          <a href="https://blender.chat/channel/blender-cloud">Blender Chat</a> by logging in with your Blender ID.</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6">
-        <h3 class="text-center">General</h3>
-        <div class="accordion mb-3" id="faqGeneral">
-          <div class="card card-dark">
-            <div class="card-header" id="faqHeadingWhatIsBlenderStudio">
-              <h5 class="mb-0">
-                <button class="btn btn-link" type="button" data-toggle="collapse"
-                  data-target="#faqCollapseWhatIsBlenderStudio" aria-expanded="false"
-                  aria-controls="faqCollapseWhatIsBlenderStudio">
-                  <span>What is Blender Cloud?</span>
-                  <i class="material-icons">keyboard_arrow_down</i>
-                </button>
-              </h5>
-            </div>
-            <div id="faqCollapseWhatIsBlenderStudio" class="collapse" aria-labelledby="faqHeadingWhatIsBlenderStudio"
-              data-parent="#faqGeneral">
-              <div class="card-body small">
-                Blender Cloud is a Film and Training publishing platform for everything produced by the Studio team in
-                the Blender Institute.
-              </div>
-            </div>
-          </div>
-          <div class="card card-dark">
-            <div class="card-header" id="faqHeadingHowIsMyMoneySpent">
-              <h5 class="mb-0">
-                <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                  data-target="#faqCollapseHowIsMyMoneySpent" aria-expanded="false"
-                  aria-controls="faqCollapseHowIsMyMoneySpent">
-                  <span>How is my money spent?</span> <i class="material-icons">keyboard_arrow_down</i>
-                </button>
-              </h5>
-            </div>
-            <div id="faqCollapseHowIsMyMoneySpent" class="collapse" aria-labelledby="faqHeadingHowIsMyMoneySpent"
-              data-parent="#faqGeneral">
-              <div class="card-body small">
-                The money Blender Cloud makes through subscriptions is used to keep our services running, and to make
-                open source and open content productions possible. Throughout the production cycle our team produce
-                training, rigs and assets for publishing to Blender Cloud subscribers.
-              </div>
-            </div>
-          </div>
-          <div class="card card-dark">
-            <div class="card-header" id="faqHeadingHowSupportBlender">
-              <h5 class="mb-0">
-                <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                  data-target="#faqCollapseHowSupportBlender" aria-expanded="false"
-                  aria-controls="faqCollapseHowSupportBlender">
-                  <span>How does Blender Cloud support Blender?</span> <i class="material-icons">keyboard_arrow_down</i>
-                </button>
-              </h5>
-            </div>
-            <div id="faqCollapseHowSupportBlender" class="collapse" aria-labelledby="faqHeadingHowSupportBlender"
-              data-parent="#faqGeneral">
-              <div class="card-body small">
-                The Blender Cloud funds the Blender Studio team, who rigorously test and use Blender in the Open Movie
-                productions. The team work with core Blender Developers at the Blender Institute to plan, design and
-                test core Blender features.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6">
-        <h3 class="text-center">Payment & Billing</h3>
-        <div class="accordion mb-3" id="faqPayment">
-          <div class="card card-dark">
-            <div class="card-header" id="faqHeadingPaymentMethod">
-              <h5 class="mb-0">
-                <button class="btn btn-link" type="button" data-toggle="collapse"
-                  data-target="#faqCollapsePaymentMethod" aria-expanded="false"
-                  aria-controls="faqCollapsePaymentMethod">
-                  <span>What payment methods do you accept?</span> <i class="material-icons">keyboard_arrow_down</i>
-                </button>
-              </h5>
-            </div>
-            <div id="faqCollapsePaymentMethod" class="collapse" aria-labelledby="faqHeadingPaymentMethod"
-              data-parent="#faqPayment">
-              <div class="card-body small">
-                Blender Cloud subscriptions are available for purchase through the <a href="https://store.blender.org/"
-                  target="_blank">Blender Store</a>.<br><br>
-
-                The Blender Store offers payment through major credit cards, PayPal or direct bank transfer.
-              </div>
-            </div>
-          </div>
-          <div class="card card-dark">
-            <div class="card-header" id="faqHeadingCancelSubscription">
-              <h5 class="mb-0">
-                <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                  data-target="#faqColapseCancelSubscription" aria-expanded="false"
-                  aria-controls="faqColapseCancelSubscription">
-                  <span>How easy is it to cancel my subscription?</span> <i
-                    class="material-icons">keyboard_arrow_down</i>
-                </button>
-              </h5>
-            </div>
-            <div id="faqColapseCancelSubscription" class="collapse" aria-labelledby="faqHeadingCancelSubscription"
-              data-parent="#faqPayment">
-              <div class="card-body small">
-                You may cancel your subscription at any time via your personal account page, or by contacting us at
-                <a href="mailto:{{ ADMIN_MAIL }}">{{ ADMIN_MAIL }}</a>.<br><br>
-
-                In case of suspected fraud or abuse of the service after registration and membership payment, the
-                account owner will be contacted and asked for clarification. Failure to alleviate charges of fraud may
-                result in the termination of the member’s account.<br><br>
-
-                Upon termination, all licenses granted by the Blender Cloud will terminate. In the event of account
-                deletion for any reason, content that you submitted may no longer be available. The Blender Cloud shall
-                not be responsible for the loss of such content.
-              </div>
-            </div>
-          </div>
-          <div class="card card-dark">
-            <div class="card-header" id="faqHeadingRefund">
-              <h5 class="mb-0">
-                <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                  data-target="#faqColapseRefund" aria-expanded="false" aria-controls="faqColapseRefund">
-                  <span>Can I get a refund?</span> <i class="material-icons">keyboard_arrow_down</i>
-                </button>
-              </h5>
-            </div>
-            <div id="faqColapseRefund" class="collapse" aria-labelledby="faqHeadingRefund" data-parent="#faqPayment">
-              <div class="card-body small">
-                Membership fees and supporter contributions are non-refundable. That money keeps our services running,
-                and is used to make open source and open content productions possible.<br><br>
-
-                We really care about our members and supporters though — in case you are really not happy with
-                our Blender Cloud we will kindly respond to your comments and try to settle a dispute with you in
-                harmony.<br><br>
-
-                Refunds will happen without delay when we get a report of fraud, abuse or non-authorised usage of
-                funds.<br><br>
-
-                Contact: <a href="mailto:{{ ADMIN_MAIL }}">{{ ADMIN_MAIL }}</a>.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </section>
+  {% include 'common/components/faq.html' with classes="mb-5" %}
 
 </div>
 

@@ -1,5 +1,6 @@
 # noqa: D100
 from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 import os  # noqa: F401
 import pathlib
 import sys
@@ -21,7 +22,7 @@ INSTALLED_APPS = [
     'films',
     'search',
     'static_assets',
-    # 'subscriptions',
+    'subscriptions',
     'training',
     'cloud_import',
     'stats',
@@ -39,7 +40,7 @@ INSTALLED_APPS = [
     'blendercloud',
     'profiles',
     'debug_toolbar',
-    # 'looper',
+    'looper',
     'pipeline',
     'sorl.thumbnail',
     'taggit',
@@ -62,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'blendercloud.middleware.SessionMiddleware',
+    'looper.middleware.PreferredCurrencyMiddleware',
     'waffle.middleware.WaffleMiddleware',
 ]
 
@@ -96,6 +98,7 @@ TEMPLATES = [
                 # TODO(anna) when Profile model is added, this should become a prop on it instead.
                 'training.context_processors.favorited',
                 'users.context_processors.user_dict',
+                'looper.context_processors.preferred_currency',
             ]
         },
     },
@@ -189,6 +192,21 @@ PIPELINE = {
         'vendor_chartjs': {
             'source_filenames': ['common/scripts/vendor/chart.bundle.min.js'],
             'output_filename': 'js/vendor_chartjs.js',
+            'extra_context': {'async': False, 'defer': False},
+        },
+        'looper': {
+            'source_filenames': [
+                'looper/scripts/*.js',
+            ],
+            'output_filename': 'js/looper.js',
+            'extra_context': {'async': False, 'defer': False},
+        },
+        'subscriptions': {
+            'source_filenames': [
+                'common/scripts/ajax.js',
+                'subscriptions/scripts/*.js',
+            ],
+            'output_filename': 'js/subscriptions.js',
             'extra_context': {'async': False, 'defer': False},
         },
     },
@@ -306,6 +324,8 @@ TRAINING_SEARCH = {
 TAGGIT_CASE_INSENSITIVE = True
 
 GOOGLE_ANALYTICS_TRACKING_ID = ''
+GOOGLE_RECAPTCHA_SITE_KEY = ''
+GOOGLE_RECAPTCHA_SECRET_KEY = ''
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 PUBLIC_FILE_STORAGE = 'common.storage.S3PublicStorage'
@@ -354,6 +374,34 @@ MAILGUN_SENDER_DOMAIN = 'sandboxf44696c342d9425abae785deb255717e.mailgun.org'
 ADMIN_MAIL = 'cloudsupport@blender.org'
 STORE_PRODUCT_URL = 'https://store.blender.org/product/membership/'
 STORE_MANAGE_URL = 'https://store.blender.org/my-account/subscriptions/'
+
+# Collection of automatically renewing subscriptions will be attempted this
+# many times before giving up and setting the subscription status to 'on-hold'.
+#
+# This value is only used when automatic renewal fails, so setting it < 1 will
+# be treated the same as 1 (one attempt is made, and failure is immediate, no
+# retries).
+LOOPER_CLOCK_MAX_AUTO_ATTEMPTS = 3
+
+# Only retry collection of automatic renewals this long after the last failure.
+# This separates the frequency of retrials from the frequency of the clock.
+LOOPER_ORDER_RETRY_AFTER = relativedelta(days=2)
+
+# This user is required for logging things in the admin history
+# (those log entries always need to have a non-NULL user ID).
+LOOPER_SYSTEM_USER_ID = 1
+
+# Convertion rates from the given rate to euros.
+# This allows us to express the foreign currency in €.
+LOOPER_CONVERTION_RATES_FROM_EURO = {
+    'EUR': 1.0,
+    'USD': 1.15,
+}
+LOOPER_SUBSCRIPTION_CREATION_WARNING_THRESHOLD = relativedelta(days=1)
+LOOPER_ORDER_RECEIPT_PDF_URL = 'subscriptions:receipt-pdf'
+
+# By default, dump emails to the console instead of trying to actually send them.
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 TESTS_IN_PROGRESS = 'test' in sys.argv
 if TESTS_IN_PROGRESS:

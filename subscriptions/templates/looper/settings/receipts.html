@@ -1,0 +1,47 @@
+{% extends 'users/settings/base.html' %}
+{% load common_extras %}
+
+{% block settings %}
+<p class="subtitle">Settings: Subscription</p>
+<h1 class="mb-3">Receipts</h1>
+
+{% if orders %}
+<table class="table table-sm text-center table-receipts">
+  <thead>
+    <tr>
+      <th class="text-left">Date</th>
+      <th class="text-left">Description</th>
+      <th>Receipt</th>
+      <th class="text-right">Amount</th>
+      {% if can_woosh %}
+      <th></th>
+      {% endif %}
+
+    </tr>
+  </thead>
+  <tbody>
+    {% for o in orders %}
+    <tr>
+      {% comment %} <td>{{ o.id }}</td> {% endcomment %}
+      <td class="text-left">{{ o.paid_at|date|default:'unknown' }}</td>
+      <td class="text-left">{{ o.name }}</td>
+      <td class="">
+        <a href="{% url 'subscriptions:receipt' order_id=o.pk %}">View</a>
+        |
+        <a href="{% url 'subscriptions:receipt-pdf' order_id=o.pk %}">Download</a>
+      </td>
+      <td class="text-right">{{ o.price.with_currency_symbol_nonocents }}</td>
+      {% if can_woosh %}
+      <td class="text-center pl-3">
+        <a class="" href="{% url 'admin:looper_order_change' object_id=o.pk %}">🚀</a>
+      </td>
+      {% endif %}
+
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>You have no receipts.</p>
+{% endif %}
+{% endblock settings %}

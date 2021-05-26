@@ -1,0 +1,68 @@
+{% extends 'users/settings/base.html' %}
+{% load common_extras %}
+{% load subscriptions %}
+{% block settings %}
+<p class="subtitle">Receipts</p>
+<h1 class="mb-3">Receipt #{{ order.id }}</h1>
+<div class="receipt mt-2">
+  <dl class="row">
+    <dt class="col">Receipt ID</dt>
+    <dd class="col">{{ order.id }}</dd>
+  </dl>
+  <dl class="row">
+    <dt class="col">Payment received on</dt>
+    <dd class="col">{{ order.paid_at|default:order.created_at }}</dd>
+  </dl>
+  <h4>Subscription</h4>
+  <dl class="row">
+    <dt class="col">Renewal type</dt>
+    <dd class="col">{{ order.subscription.collection_method|capfirst}}</dd>
+  </dl>
+  <dl class="row">
+    <dt class="col">Renewal period</dt>
+    <dd class="col">{{ order.subscription|renewal_period|capfirst }}</dd>
+  </dl>
+  <h4>Billing Address</h4>
+  <dl class="row">
+    <dt class="col">Address</dt>
+    <dd class="col">{{ order.billing_address|linebreaks }}</dd>
+  </dl>
+  {% if order.vat_number %}
+  <dl class="row">
+    <dt class="col">VATIN</dt>
+    <dd class="col">{{ order.vat_number }}</dd>
+  </dl>
+  {% endif %}
+  <dl class="row">
+    <dt class="col">E-mail</dt>
+    <dd class="col">{{ order.email }}</dd>
+  </dl>
+  <h4>Payment Information</h4>
+  <dl class="row">
+    <dt class="col">Amount paid</dt>
+    <dd class="col">{{ order.price.with_currency_symbol_nonocents }}</dd>
+  </dl>
+  {% with taxable=order.taxable %}
+  {% if taxable.tax_is_charged %}
+  <dl class="row">
+    <dt class="col"></dt>
+    <dd class="col">{{ taxable.format_tax_amount }}</dd>
+  </dl>
+  {% endif %}
+  {% endwith %}
+  {% with refunded=order.total_refunded %}
+  {% if refunded %}
+  <dl class="row">
+    <dt class="col">Amount refunded</dt>
+    <dd class="col">{{ refunded.with_currency_symbol_nonocents }}</dd>
+  </dl>
+  {% endif %}
+  {% endwith %}
+  <dl class="row">
+    <dt class="col">Payment method</dt>
+    <dd class="col">{{ order.payment_method.recognisable_name }}</dd>
+  </dl>
+</div>
+<hr/>
+<a class="btn" href="{% url 'subscriptions:receipts' %}">← back to receipts</a>
+{% endblock settings %}

@@ -1,0 +1,217 @@
+{% load looper %}
+{% load humanize %}
+
+{% comment %} <ul class="list-group list-group-flush">
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col">
+        <p class="h4">Payment method</p>
+      </div>
+      <div class="col">
+        <p>Mastercard ending in 20212</p>
+      </div>
+      <div class="col">
+        <a href="#">Update</a>
+      </div>
+    </div>
+  </li>
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col">
+        <p class="h4 mb-0">Payment method</p>
+        <p class="subtitle x-small mb-0">Your Blender Cloud plan will renew on TODO</p>
+      </div>
+      <div class="col">
+        <p class=" mb-0">Mastercard ending in 20212</p>
+      </div>
+      <div class="col">
+        <a href="#" class=" mb-0">Update</a>
+      </div>
+    </div>
+  </li>
+</ul> {% endcomment %}
+
+
+<ul class="list-group list-group-flush list-group-account">
+  {% if not user.subscription_set.count %}
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col">
+        <a class="btn btn-primary btn-lg mt-3" href="{% url 'subscriptions:join' %}">Subscribe</a>
+      </div>
+    </div>
+  </li>
+  {% else %}
+
+  {# Blender Cloud only allows one subscriptin per account #}
+  {% with subscription=user.subscription_set.first %}
+  {% with order=subscription.latest_order %}
+
+  {% if subscription.status == 'on-hold' %}
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col">
+        <p class="h4 mb-0 text-danger">Subscription On Hold</p>
+        <p class="x-small subtitle">Your subscription hasn't been paid for and is currently <strong>on-hold</strong>.
+        </p>
+      </div>
+      <div class="col-auto">
+        <a class="btn btn-sm btn-danger" href="{% url 'looper:checkout_existing_order' order_id=order.pk %}">Pay
+          subscription</a>
+      </div>
+
+    </div>
+  </li>
+  {% endif %}
+
+  {% if subscription.status %}
+  <li class="list-group-item">
+    <div class=row>
+      <div class="col">
+        <p class="h4 mb-0">Billing Period</p>
+
+        {% if subscription.next_payment %}
+        {% if subscription.status == 'active' or subscription.status == 'on-hold' %}
+        {% if subscription.next_payment_in_future %}
+        <p class="x-small subtitle">Your subscription will renew
+          {{ subscription.collection_method }}{% if subscription.collection_method == 'automatic' %}ally{% else %}ly{% endif %}
+          on
+          {{ subscription.next_payment|date }} for {{ subscription | pricing }}.</p>
+        {% else %}
+        <p class="x-small subtitle">Your last {{ subscription.collection_method }} payment is due on
+          {{ subscription.next_payment|date }} for {{ subscription | pricing }}.</p>
+        {% endif %}
+        {% elif subscription.status == 'pending-cancellation' %}
+        <p class="x-small subtitle">Your subscription is pending cancellation. It will be deactivated on
+          {{ subscription.next_payment|date }}.</p>
+        {% endif %}
+        {% endif %}
+      </div>
+      <div class="col-auto">
+        <p class="mb-0 small">{{ subscription | pricing }}</p>
+      </div>
+
+    </div>
+  </li>
+  {% endif %}
+
+  {% if subscription.collection_method != 'managed' %}
+  {% with subscription.payment_method as pay_meth %}
+  <li class="list-group-item">
+
+    <div class=row>
+      <div class="col">
+        <p class="h4 mb-0">Payment method</p>
+      </div>
+      <div class="col-auto small">
+        {% if not pay_meth %}
+        Unknown
+        {% elif pay_meth.is_deleted %}
+        The payment method previously used for this subscription was removed.
+        {% else %}
+        {{ pay_meth.recognisable_name }}
+        {% endif %}
+      </div>
+
+      <div class="col-auto">
+        <a class=" small"
+          href="{% url 'subscriptions:payment-method-change' subscription_id=subscription.id %}">Change</a>
+      </div>
+    </div>
+  </li>
+  {% endwith %}
+  {% endif %}
+
+  {% comment %} {% if subscription and subscription.collection_method == 'automatic' and 'cancel' not in subscription.status %}
+  <li class="list-group-item">
+    <h3>Automatic Payment</h3>
+    {% if order %}
+    {% if order.status == 'created' %}
+    {% elif order.status == 'soft-failed' %}
+    <p>
+      Automatic payment failed on {{ transaction.recorded_at }}, but we will automatically try again soon.
+      We have made {{ order.collection_attempts }} of a maximum of {{ settings.LOOPER_CLOCK_MAX_AUTO_ATTEMPTS }}
+      collection attemps.
+      In the mean time, your subscription will remain active.
+    </p>
+    <p>
+      The last error we received was: <span class="transaction-error">{{ transaction.failure_message }}</span>
+    </p>
+    {% elif order.status == 'failed' %}
+    <p>
+      Automatic payment failed multiple times, even after trying {{ order.collection_attempts }} times.
+      As a result, your subscription has been deactivated.
+    </p>
+    <p>
+      The error we received was: <span class="transaction-error">{{ transaction.failure_message }}</span>
+    </p>
+    {% elif order.status == 'paid' or order.status == 'fulfilled' %}
+    {% with transaction=order.latest_transaction %}
+    <p>
+      Payment was successful <abbr
+        title="{{ transaction.created_at }}">{{ transaction.created_at | naturaltime }}</abbr>.
+    </p>
+    {% endwith %}
+    {% elif order.status == 'cancelled' %}
+    <p>Automatic payment cancelled and will not be retried.</p>
+    {% endif %}
+    {% endif %}
+    {% if subscription.next_payment %}
+    <p>The next automatic payment is scheduled for {{ subscription.next_payment }}.</p>
+    {% else %}
+    <p>
+      There is no next automatic payment scheduled.
+      Please contact <a
+        href="mailto:{{ ADMIN_MAIL }}?subject=No next payment for subscription {{ subscription.id }}">{{ ADMIN_MAIL }}</a>
+      about this.
+    </p>
+    {% endif %}
+  </li>
+  {% endif %} {% endcomment %}
+
+  {% comment %} FIXME(anna): implement Extend your subscription or remove this block
+  {% if may_be_charged %}
+  <hr />
+  <div class="row">
+    <h3>Extend your Subscription</h3>
+    <p>You can arbitrarily extend your subscription by paying any amount. <a
+        href="{% url 'subscriptions:extend' subscription_id=subscription.id %}">Extend my subscription now!</a></p>
+  </div>
+  {% endif %}{% endcomment %}
+
+
+  <li class="list-group-item">
+    <div class="row">
+      {% if subscription and subscription.status == 'cancelled' %}
+      <div class="col">
+        <p class="h4 mb-0">Subscription Cancelled</p>
+        <p class="x-small subtitle">This subscription has been cancelled. :(</p>
+      </div>
+      {% else %}
+      <div class="col">
+        <p class="h4 mb-0">Cancel Subscription</p>
+        <p class="x-small subtitle">You will still have the reaminder of the billing period to access content.</p>
+      </div>
+      <div class="col-auto">
+        <form id="payment-form" method="post" enctype="multipart/form-data"
+          action="{% url 'subscriptions:cancel' subscription.id %}">
+          {% csrf_token %}
+          <div class="d-flex justify-content-center">
+            {% if subscription.status != 'pending-cancellation' and subscription.status != 'cancelled' %}
+            <a class="ml-auto small text-danger" href="{% url 'subscriptions:cancel' subscription.id %}"><span>Cancel
+                subscription</span></a>
+            {% endif %}
+          </div>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+  </li>
+
+
+  {% endwith %}
+  {% endwith %}
+
+  {% endif %}
+
+</ul>

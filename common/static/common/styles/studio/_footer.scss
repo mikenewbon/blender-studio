@@ -30,7 +30,8 @@ footer {
 }
 
 // Pushes the footer down the the bottom of the page using margin-top auto on footer
-body {
+body,
+.checkout-form {
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - #{$navbar-height});

@@ -63,10 +63,38 @@ input:checked+.slider {
   }
 }
 
-.form-control:disabled,
-.form-control[readonly] {
-  opacity: .5;
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  padding-right: $spacer * 2;
+.form-control {
+
+  &:disabled,
+  &[readonly] {
+
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: $spacer * 2;
+  }
+
+  &:disabled {
+    opacity: .5;
+  }
+
+  &[readonly] {
+    opacity: .75;
+  }
+}
+
+.form-control {
+
+  &.is-valid,
+  &.is-invalid {
+    border-width: 2px;
+
+  }
+}
+
+.invalid-feedback {
+  ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 0;
+  }
 }

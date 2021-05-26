@@ -1,0 +1,66 @@
+{% extends 'checkout/checkout_base.html' %}
+{% load common_extras %}
+{% load looper %}
+{% load pipeline %}
+
+{% block content %}
+<form id="payment-form" class="checkout-form" method="post">
+
+  {% include "subscriptions/components/header_jumbotron.html" %}
+
+
+  {% with form|add_form_classes as form %}
+  <div class="container-xl mt-4 mb-3">
+    <div class="row">
+      <div class="col-md-7 mb-3">
+        <section class="checkout-form-fields mb-n2">
+          <h2 class="mb-0">1. Billing Details</h2>
+          <p class="subtitle">Fill in your billing address.</p>
+          <fieldset class="payment-form-billing-address mt-2">
+            {% include "subscriptions/components/billing_address_form.html" %}
+          </fieldset>
+        </section>
+      </div>
+
+      <div class="col-md-5 col-lg-4 offset-lg-1 mb-3">
+        {% if messages %}
+        {% for message in messages %}
+        <p {% if message.tags %} class="alert alert-sm alert-success alert-{{ message.tags }}" {% endif %}>
+          {{ message }}
+        </p>
+        {% endfor %}
+        {% endif %}
+        {% include "subscriptions/components/plan_selector.html" with submit_button_text="Continue to payment" %}
+
+      </div>
+    </div>
+  </div>
+  {% endwith %}
+
+  {% include 'subscriptions/components/footer_currency.html' %}
+</form>
+{% endblock content %}
+
+{% block scripts %}
+{% javascript "subscriptions" %}
+<script>
+  const form = document.querySelector('form');
+  const submitButton = document.getElementById('submit-button');
+
+  function enableSubmitButton() {
+    submitButton.disabled = false;
+    submitButton.setAttribute('aria-disabled', 'false');
+    submitButton.classList.remove('disabled');
+    submitButton.classList.add('btn-success');
+  }
+
+  function allowSubmit() {
+    if (form.checkValidity()) {
+      enableSubmitButton();
+    }
+  }
+  form.addEventListener('change', allowSubmit);
+  allowSubmit();
+
+</script>
+{% endblock scripts %}

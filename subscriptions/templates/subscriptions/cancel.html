@@ -1,0 +1,20 @@
+{% extends 'users/settings/base.html' %}
+
+{% block settings %}
+<p class="subtitle">Settings: Subscription</p>
+<h1 class="mb-3">Cancellation</h1>
+<p>Your {% include 'subscriptions/components/info.html' %}</p>
+<p>Are you sure you want to cancel your Blender Cloud subscription?</p>{% if subscription.status == 'active' and subscription.next_payment_in_future %}
+<p>
+  Your subscription will remain active until {{ subscription.next_payment|date }}, since you have
+  paid for your subscription until then.
+</p>{% endif %}
+<form class="form" method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <hr/>
+  {# TODO(anna): should instead link to a specific subscription in your settings, if we allow multiple #}
+  <a class="btn" href="{% url 'user-settings-billing' %}"><span>← Keep Subscription and Go Back</span></a>
+  <button class="btn btn-danger" id="submit-button" type="submit"><span>Confirm Cancellation of Subscription</span></button>
+</form>
+{% endblock settings %}
