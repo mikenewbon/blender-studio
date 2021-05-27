@@ -19,22 +19,36 @@
         <i class="material-icons align-middle">favorite</i>
         <span>You have a free account</span>
       </div>
+      {% elif user.subscription_set.first.status == "pending-cancellation" %}
+      <div class="alert alert-warning" role="alert">
+        <i class="material-icons align-middle">hourglass_top</i>
+        {% flag "SUBSCRIPTIONS_ENABLED" %}
+        {% with subscription=user.subscription_set.first %}
+        {% with order=subscription.latest_order %}
+        <span>Your {{ subscription.plan.name }} subscription is currently <span
+            class="font-weight-bolder">{{ subscription.get_status_display|lower }}</span>.</span>
+        {% endwith %}
+        {% endwith %}
+        {% else %}
+        <span>Your subscription is currently <span class="font-weight-bolder">pending cancellation</span></span>
+        {% endflag %}
+      </div>
       {% elif user|has_active_subscription %}
-      <div class="alert {% if user.subscription_set.first.status == "active" %}alert-success{% else %}alert-warning{% endif %}" role="alert">
+      <div class="alert alert-success" role="alert">
         <i class="material-icons align-middle">done</i>
         {% flag "SUBSCRIPTIONS_ENABLED" %}
         {% with subscription=user.subscription_set.first %}
         {% with order=subscription.latest_order %}
-        <span>Your {{ subscription.plan.name }} subscription is currently <span class="font-weight-bolder">{{ subscription.get_status_display|lower }}</span>.</span>
+        <span>Your {{ subscription.plan.name }} subscription is currently <span
+            class="font-weight-bolder">{{ subscription.get_status_display|lower }}</span>.</span>
         {% endwith %}
         {% endwith %}
         {% else %}
         <span>You have an active subscription</span>
-
         {% endflag %}
       </div>
       {% else %}
-      <div class="alert alert-success" role="alert">
+      <div class="alert alert-danger" role="alert">
         <i class="material-icons align-middle">info</i>
         <span>You do not have an active subscription</span>
       </div>
@@ -61,7 +75,8 @@
   <div class="row">
     <div class="col">
       <h2 class="mb-0">Manage Subscription</h2>
-      <p>If you have any problems with billing, contact the team directly on <a href="mailto:cloudsupport@blender.org">cloudsupport@blender.org</a>.</p>
+      <p>If you have any problems with billing, contact the team directly on <a
+          href="mailto:cloudsupport@blender.org">cloudsupport@blender.org</a>.</p>
       {# **Do not** rearrange the ifs, unless the logic is obviously broken. #}
 
       {% if user.subscription_set.count %}
