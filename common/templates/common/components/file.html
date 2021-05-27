@@ -12,7 +12,9 @@
             {# Spoiler alert #}
             <div class="file-lock-text">
               <h4 class="mb-0">
-                <i class="material-icons icon-inline small text-danger">warning</i>Spoiler</h4>
+                <i class="material-icons icon-inline small text-danger">warning</i>
+                Spoiler
+              </h4>
             </div>
             {% include "common/components/helpers/image_resize.html" with alt=asset.name classes="file-image locked" img_source=asset.static_asset.thumbnail width="200" %}
           {% else %}
@@ -25,7 +27,9 @@
         {% else %}
           <div class="file-lock-text">
             <h4 class="mb-0">
-              <i class="material-icons icon-inline small">lock</i>Subscribe to view</h4>
+              <i class="material-icons icon-inline small">lock</i>
+              Subscribe to view
+            </h4>
           </div>
           {% include "common/components/helpers/image_resize.html" with alt=asset.name classes="file-image locked" img_source=asset.static_asset.thumbnail width="200" %}
         {% endif %}
@@ -67,5 +71,4 @@
     </span>
 
   </a>
-
 </div>
