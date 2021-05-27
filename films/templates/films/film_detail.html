@@ -28,8 +28,9 @@
 
     {% if film.show_blog_posts %}
     <!-- Latest Blog Posts -->
-    {% with subtitle="Hear the latest news about "|add:film.title %}
-    {% include 'common/components/cards/card_carousel.html' with title="Latest Blog Posts" subtitle=subtitle slides=3 card_set=film_blog_posts|slice:":6" media_type="blog" id="latestPosts" %}
+    {% with subtitle="Read the latest news about "|add:film.title|add:"." %}
+    {% url 'post-list' as blog_url %}
+    {% include 'common/components/cards/card_carousel.html' with title="Latest Blog Posts" title_link=blog_url subtitle=subtitle slides=3 card_set=film_blog_posts|slice:":6" media_type="blog" id="latestPosts" %}
     {% endwith %}
     {% endif %}
 
