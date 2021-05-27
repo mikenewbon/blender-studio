@@ -42,7 +42,10 @@
         <div class="col py-3">
           <h2 class="h3">Instructions:</h2>
           <ol>
-            <li>Use the adjasent bank details to pay the full amount with the following order number as a reference: <strong>{{ order.id }}</strong></li>
+            <li>
+              Use the adjasent bank details to pay the full amount with the following as a payment reference:</br>
+              <strong>{% include "subscriptions/components/bank_transfer_reference.txt" %}</strong>
+            </li>
             <li>You may need to wait a few days until the payment clears before one of our team members activates your account.</li>
             <li>Once you receive an email to let you know it's been actived, you can start using Blender Cloud immedately!</li>
           </ol>
@@ -57,10 +60,9 @@
           <div class="card card-dark">
             <div class="card-body">
               <h2 class="h3">Bank details:</h2>
-              <pre class="text-left">Order number: {{ order.id }}
-
-{% include "subscriptions/components/bank_transfer_details.txt" %}
-          </pre>
+              <pre class="text-left">{% include "subscriptions/components/bank_transfer_details.txt" %}</pre>
+              <h3 class="h3">Payment reference:</h3>
+              <pre>{% include "subscriptions/components/bank_transfer_reference.txt" %}</pre>
             </div>
           </div>
         </div>
