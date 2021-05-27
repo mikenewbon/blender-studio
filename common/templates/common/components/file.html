@@ -2,16 +2,17 @@
 {% load thumbnail %}
 {% load common_extras %}
 
-<div class="file grid-item {{ aspect_ratio }} {{ card_sizes|default:"col-12 col-sm-6 col-md-6 col-lg-4" }} {% if aspect_ratio == "16:9" %}widescreen{% elif aspect_ratio == "4:3" %}fourbythree{% elif aspect_ratio == "1:1" %}square{% endif %} {% if asset.is_spoiler or not user_can_view_asset and not asset.is_free  %}locked{% endif %}">
+<div class="file grid-item {{ aspect_ratio }} {{ card_sizes|default:'col-12 col-sm-6 col-md-6 col-lg-4' }} {% if aspect_ratio == '16:9' %}widescreen{% elif aspect_ratio == '4:3' %}fourbythree{% elif aspect_ratio == '1:1' %}square{% endif %} {% if asset.is_spoiler or not user_can_view_asset and not asset.is_free  %}locked{% endif %}">
   <div class="file-header">
-    <a href="?asset={{ asset.id }}" class="file-modal-link" data-asset-id="{{ asset.id }}"
-      data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
+    <a href="?asset={{ asset.id }}" class="file-modal-link" data-asset-id="{{ asset.id }}" data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
 
       {% if asset.static_asset.thumbnail %}
         {% if user_can_view_asset or asset.is_free %}
-          {% if asset.is_spoiler %}{# Spoiler alert #}
+          {% if asset.is_spoiler %}
+            {# Spoiler alert #}
             <div class="file-lock-text">
-              <h4 class="mb-0"><i class="material-icons icon-inline small text-danger">warning</i>Spoiler</h4>
+              <h4 class="mb-0">
+                <i class="material-icons icon-inline small text-danger">warning</i>Spoiler</h4>
             </div>
             {% include "common/components/helpers/image_resize.html" with alt=asset.name classes="file-image locked" img_source=asset.static_asset.thumbnail width="200" %}
           {% else %}
@@ -23,7 +24,8 @@
           {% endif %}
         {% else %}
           <div class="file-lock-text">
-            <h4 class="mb-0"><i class="material-icons icon-inline small">lock</i>Subscribe to view</h4>
+            <h4 class="mb-0">
+              <i class="material-icons icon-inline small">lock</i>Subscribe to view</h4>
           </div>
           {% include "common/components/helpers/image_resize.html" with alt=asset.name classes="file-image locked" img_source=asset.static_asset.thumbnail width="200" %}
         {% endif %}
@@ -55,12 +57,10 @@
       </a>
     {% endif %}
   </div>
-  <a class="file-body file-modal-link" href="?asset={{ asset.id }}" data-asset-id="{{ asset.id }}"
-    data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
+  <a class="file-body file-modal-link" href="?asset={{ asset.id }}" data-asset-id="{{ asset.id }}" data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
 
     {% if asset.is_free %}
-      <i class="material-icons icon-inline small text-success mr-1" data-toggle="tooltip" data-placement="top"
-        title="Free">lock_open</i>
+      <i class="material-icons icon-inline small text-success mr-1" data-toggle="tooltip" data-placement="top" title="Free">lock_open</i>
     {% endif %}
     <span data-tooltip="tooltip-overflow" data-placement="top" title="{{ asset.name }}" class="overflow-text">
       <h4 class="overflow-text">{{ asset.name }}</h4>
