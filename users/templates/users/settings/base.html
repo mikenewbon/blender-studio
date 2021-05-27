@@ -1,28 +1,28 @@
 {% extends 'common/base.html' %}
 
 {% block nav_drawer_inner %}
-{% include 'users/settings/tabs.html' %}
+  {% include 'users/settings/tabs.html' %}
 {% endblock nav_drawer_inner %}
 
 {% block content %}
-<div class="container-xl my-3">
-  <div class="row">
-    <div class="d-none d-md-block col-md-3">
-      <nav class="nav-drawer nested">
-        <div class="nav-drawer-body font-weight-bold">
+  <div class="container-xl my-3">
+    <div class="row">
+      <div class="d-none d-md-block col-md-3">
+        <nav class="nav-drawer nested">
+          <div class="nav-drawer-body font-weight-bold">
 
-          <div class="drawer-nav-header">
-            <h2>Settings</h2>
+            <div class="drawer-nav-header">
+              <h2>Settings</h2>
+            </div>
+
+            {% include 'users/settings/tabs.html' %}
           </div>
-
-          {% include 'users/settings/tabs.html' %}
-        </div>
-      </nav>
-    </div>
-    <div class="col-md-9">
-      {% block settings%}
-      {% endblock settings %}
+        </nav>
+      </div>
+      <div class="col-md-9">
+        {% block settings%}
+        {% endblock settings %}
+      </div>
     </div>
   </div>
-</div>
 {% endblock content %}

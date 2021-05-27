@@ -2,38 +2,38 @@
 {% load common_extras %}
 
 {% block meta %}
-{% with title=flatpage.title %}
-{% include 'common/components/meta.html'  %}
-{% endwith %}
+  {% with title=flatpage.title %}
+    {% include 'common/components/meta.html'  %}
+  {% endwith %}
 {% endblock %}
 
 {% block content %}
-<div class="content-holder navdrawer-offset">
-  <div class="container-fluid pt-4">
-    {% if user.is_staff and perms.flatpages.change_flatpage %}
-    <section class="flat-page-content mb-4">
-      <a class="btn btn-secondary btn-sm admin-float"
-        href="{% url 'admin:flatpages_flatpage_change' flatpage.id %}">Edit Page</a>
-    </section>
-    {% endif %}
+  <div class="content-holder navdrawer-offset">
+    <div class="container-fluid pt-4">
+      {% if user.is_staff and perms.flatpages.change_flatpage %}
+        <section class="flat-page-content mb-4">
+          <a class="btn btn-secondary btn-sm admin-float"
+            href="{% url 'admin:flatpages_flatpage_change' flatpage.id %}">Edit Page</a>
+        </section>
+      {% endif %}
 
-    {% block flatpage_content %}
-    <section class="flat-page-content mb-4">
+      {% block flatpage_content %}
+        <section class="flat-page-content mb-4">
 
-      <div class="row justify-content-center mb-3">
-        <div class="col-md-6 text-center">
-          <h1 class="mb-0">{{ flatpage.title }}</h1>
-        </div>
-      </div>
+          <div class="row justify-content-center mb-3">
+            <div class="col-md-6 text-center">
+              <h1 class="mb-0">{{ flatpage.title }}</h1>
+            </div>
+          </div>
 
-      <div class="row">
-        <div class="col">
-          {% with_shortcodes flatpage.content|markdown_unsafe %}
-        </div>
-      </div>
+          <div class="row">
+            <div class="col">
+              {% with_shortcodes flatpage.content|markdown_unsafe %}
+            </div>
+          </div>
 
-    </section>
-    {% endblock flatpage_content %}
+        </section>
+      {% endblock flatpage_content %}
+    </div>
   </div>
-</div>
 {% endblock content %}

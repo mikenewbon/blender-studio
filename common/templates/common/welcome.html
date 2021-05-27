@@ -2,183 +2,185 @@
 {% load static %}
 
 {% block content %}
-<div class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content jumbotron header">
-  <div class="jumbotron-bg-wrapper">
-    <img class="jumbotron-bg" src="{% static "common/images/welcome/welcome-header-sprite.jpg" %}"
-      alt="3D Render of the latest Blender Open Movie">
-    <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
-    {% comment %}
-    {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
-    {% endcomment %}
-  </div>
-  <div class="container-xl">
-    <div class="row">
-      <div class="col-lg-6 col-md-8">
-        <div class="jumbotron-body">
-          <h1 class="mb-2">Learn to make Movies from the Blender Animation Team</h1>
-          <p>Follow along with our expert team at your own pace — on every subject from Animation to UV
-            unwrapping.</p>
-          <p class="mb-4">With <strong>hundreds of hours of training</strong> and <strong>1000's of production
+  <div class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content jumbotron header">
+    <div class="jumbotron-bg-wrapper">
+      <img class="jumbotron-bg" src="{% static "common/images/welcome/welcome-header-sprite.jpg" %}"
+        alt="3D Render of the latest Blender Open Movie">
+      <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
+      {% comment %}
+        {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
+      {% endcomment %}
+    </div>
+    <div class="container-xl">
+      <div class="row">
+        <div class="col-lg-6 col-md-8">
+          <div class="jumbotron-body">
+            <h1 class="mb-2">Learn to make Movies from the Blender Animation Team</h1>
+            <p>Follow along with our expert team at your own pace — on every subject from Animation to UV
+              unwrapping.</p>
+            <p class="mb-4">With <strong>hundreds of hours of training</strong> and <strong>1000's of production
               files</strong>, you're getting the best resources Blender has to offer.</p>
-          {% comment %} <div class="row mb-4 justify-content-stretch">
-            <div class="col-md-4 d-flex flex-column justify-content-between">
-              <h3>Learn from our expert team</h3>
-              <p class="small">Courses, workshops and production lessons with .blend files included.
-              </p>
-            </div>
-            <div class="col-md-4 d-flex flex-column justify-content-between">
-              <h3>Download 1000s of files and assets</h3>
-              <p class="small">Production quality HDRI’s, textures and fully rigged characters.</p>
-            </div>
-            <div class="col-md-4 d-flex flex-column justify-content-between">
-              <h3>Use our production software</h3>
-              <p class="small">Featuring task tracking, render management and asset libraries.</p>
-            </div>
-          </div> {% endcomment %}
-          <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center">
-            <a {% include "subscriptions/components/join_url" %}
-              class="btn btn-lg btn-primary mr-md-4 mb-2 mb-md-0">Join the Blender Cloud</a>
-            <div class="d-inline-block">
-              <p class="mb-0">Access to all training, assets<br>and films for €9.90/month</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="container-xl mt-4 mt-md-5">
-  <section class="mb-4 mb-md-5">
-    <div class="row justify-content-center mb-3">
-      <div class="col-md-6 text-center">
-        <h2 class="mb-1">From A to UV, we’ve got it covered.</h2>
-        <p class="mb-0">With courses covering every major topic in Blender, you get the tools to learn, explore
-          and grow as an artist with the Blender Cloud.</p>
-      </div>
-    </div>
-    <div class="row">
-      {% for training in featured_trainings|slice:':3' %}
-      {% include "common/components/cards/card_training.html" with training=training %}
-      {% endfor %}
-    </div>
-    <div class="row justify-content-center mb-0">
-      <div class="col-md-6 text-center">
-        <p class="mb-0">Want to see more? <a href="/training">Explore all Blender Cloud Training</a>.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="mb-4 mb-md-5">
-    <div class="row">
-      {% for section in featured_sections|slice:':1' %}
-      {% if section.static_asset.source_type == 'video' %}
-      {% include "common/components/video_player.html" with url=section.static_asset.source.url poster=section.thumbnail_m_url classes="col-12 col-md-6 mb-3 mb-md-0 rounded"%}
-      {% endif %}
-      {% endfor %}
-      <div class="col-12 col-md-6 col-lg-5 offset-lg-1 d-flex flex-column justify-content-center">
-        <h2 class="mb-1">Learn from the Blender Team</h2>
-        <p>Whether it’s Blender Develop Dr. Sybren teaching <a href="/training/scripting-for-artists/">Scripting for
-            Artists</a>, or Animation Director Hjalti teaching
-          <a href="/training/animation-fundamentals/">Animation Fundamentals</a> — you’re getting industry leading
-          training from the people in Blender.</p>
-        <p>Ask questions and receive replies from the Author, download resources and join the discussion.</p>
-        <div class="button-group">
-          <a {% include "subscriptions/components/join_url" %} class="btn btn-primary">Subscribe for
-            9.90/mo</a>
-          <a href="/training" class="btn btn-transparent">Explore Training</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="mb-5">
-    <div class="row mb-3">
-      <div class="col">
-        <div class="jumbotron jumbotron-overlay overlay-wide-content jumbotron-inline header">
-          <div class="jumbotron-bg-wrapper">
-            <img class="jumbotron-bg" src="{% static "common/images/home/sf-background.jpg" %}"
-              alt="3D Render of the latest Blender Open Movie">
-            <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
             {% comment %}
-            {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
+              <div class="row mb-4 justify-content-stretch">
+                <div class="col-md-4 d-flex flex-column justify-content-between">
+                  <h3>Learn from our expert team</h3>
+                  <p class="small">Courses, workshops and production lessons with .blend files included.
+                  </p>
+                </div>
+                <div class="col-md-4 d-flex flex-column justify-content-between">
+                  <h3>Download 1000s of files and assets</h3>
+                  <p class="small">Production quality HDRI’s, textures and fully rigged characters.</p>
+                </div>
+                <div class="col-md-4 d-flex flex-column justify-content-between">
+                  <h3>Use our production software</h3>
+                  <p class="small">Featuring task tracking, render management and asset libraries.</p>
+                </div>
+              </div>
             {% endcomment %}
-          </div>
-          <div class="row">
-            <div class="col-md-7 col-lg-6">
-              <div class="jumbotron-body">
-                <img class="mb-3 film-logo" src="{% static "common/images/home/sf-logo.png" %}"
-                  alt="Sprite Fright Logo">
-                {% comment %} <h1>Coffee Run</h1> {% endcomment %}
-                <p class="mb-4">Blender Studio’s 13th open movie will be an 80’s-inspired horror comedy, set in Britain:
-                  When a group of rowdy teenagers trek into an isolated forest, they discover peaceful mushroom
-                  creatures that turn out to be an unexpected force of nature.</p>
-                <a {% include "subscriptions/components/join_url" %}
-                  class="btn btn-primary mb-2 mb-md-0">Subscribe for €9.90/month</a>
-                <a href="/films/sprite-fright" class="btn btn-transparent">Explore the Film</a>
+            <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center">
+              <a {% include "subscriptions/components/join_url" %}
+                class="btn btn-lg btn-primary mr-md-4 mb-2 mb-md-0">Join the Blender Cloud</a>
+              <div class="d-inline-block">
+                <p class="mb-0">Access to all training, assets<br>and films for €9.90/month</p>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <section class="mb-4 mb-md-5">
-    <div class="row justify-content-center mb-3">
-      <div class="col-md-6 text-center">
-        <h2 class="mb-1">Support Blender Open Movies</h2>
-        <p class="mb-0">The Blender Open Movie projects are made possible by subscriptions to the Blender
-          Studio.</p>
+  <div class="container-xl mt-4 mt-md-5">
+    <section class="mb-4 mb-md-5">
+      <div class="row justify-content-center mb-3">
+        <div class="col-md-6 text-center">
+          <h2 class="mb-1">From A to UV, we’ve got it covered.</h2>
+          <p class="mb-0">With courses covering every major topic in Blender, you get the tools to learn, explore
+            and grow as an artist with the Blender Cloud.</p>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      {% for film in featured_films|slice:':3' %}
-      {% include "films/components/card_film.html" with film=film %}
-      {% endfor %}
-    </div>
-    <div class="row justify-content-center mb-0">
-      <div class="col-md-6 text-center">
-        <p class="mb-0">Learn more about our other <a href="/films">open movies</a> and <a
+      <div class="row">
+        {% for training in featured_trainings|slice:':3' %}
+          {% include "common/components/cards/card_training.html" with training=training %}
+        {% endfor %}
+      </div>
+      <div class="row justify-content-center mb-0">
+        <div class="col-md-6 text-center">
+          <p class="mb-0">Want to see more? <a href="/training">Explore all Blender Cloud Training</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-4 mb-md-5">
+      <div class="row">
+        {% for section in featured_sections|slice:':1' %}
+          {% if section.static_asset.source_type == 'video' %}
+            {% include "common/components/video_player.html" with url=section.static_asset.source.url poster=section.thumbnail_m_url classes="col-12 col-md-6 mb-3 mb-md-0 rounded"%}
+          {% endif %}
+        {% endfor %}
+        <div class="col-12 col-md-6 col-lg-5 offset-lg-1 d-flex flex-column justify-content-center">
+          <h2 class="mb-1">Learn from the Blender Team</h2>
+          <p>Whether it’s Blender Develop Dr. Sybren teaching <a href="/training/scripting-for-artists/">Scripting for
+            Artists</a>, or Animation Director Hjalti teaching
+            <a href="/training/animation-fundamentals/">Animation Fundamentals</a> — you’re getting industry leading
+            training from the people in Blender.</p>
+          <p>Ask questions and receive replies from the Author, download resources and join the discussion.</p>
+          <div class="button-group">
+            <a {% include "subscriptions/components/join_url" %} class="btn btn-primary">Subscribe for
+              9.90/mo</a>
+            <a href="/training" class="btn btn-transparent">Explore Training</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-5">
+      <div class="row mb-3">
+        <div class="col">
+          <div class="jumbotron jumbotron-overlay overlay-wide-content jumbotron-inline header">
+            <div class="jumbotron-bg-wrapper">
+              <img class="jumbotron-bg" src="{% static "common/images/home/sf-background.jpg" %}"
+                alt="3D Render of the latest Blender Open Movie">
+              <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
+              {% comment %}
+                {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
+              {% endcomment %}
+            </div>
+            <div class="row">
+              <div class="col-md-7 col-lg-6">
+                <div class="jumbotron-body">
+                  <img class="mb-3 film-logo" src="{% static "common/images/home/sf-logo.png" %}"
+                    alt="Sprite Fright Logo">
+                  {% comment %} <h1>Coffee Run</h1> {% endcomment %}
+                  <p class="mb-4">Blender Studio’s 13th open movie will be an 80’s-inspired horror comedy, set in Britain:
+                    When a group of rowdy teenagers trek into an isolated forest, they discover peaceful mushroom
+                    creatures that turn out to be an unexpected force of nature.</p>
+                  <a {% include "subscriptions/components/join_url" %}
+                    class="btn btn-primary mb-2 mb-md-0">Subscribe for €9.90/month</a>
+                  <a href="/films/sprite-fright" class="btn btn-transparent">Explore the Film</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-4 mb-md-5">
+      <div class="row justify-content-center mb-3">
+        <div class="col-md-6 text-center">
+          <h2 class="mb-1">Support Blender Open Movies</h2>
+          <p class="mb-0">The Blender Open Movie projects are made possible by subscriptions to the Blender
+            Studio.</p>
+        </div>
+      </div>
+      <div class="row">
+        {% for film in featured_films|slice:':3' %}
+          {% include "films/components/card_film.html" with film=film %}
+        {% endfor %}
+      </div>
+      <div class="row justify-content-center mb-0">
+        <div class="col-md-6 text-center">
+          <p class="mb-0">Learn more about our other <a href="/films">open movies</a> and <a
             href="#faqHeadingHowIsMyMoneySpent">how your
             contribution is used</a>.</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  {% include 'common/components/cards/card_carousel.html' with title="Access all our production assets!" subtitle="You can access all the production files from our films with a Blender Cloud subscription." slides=4 card_set=featured_film_assets media_type="file" id="fromTheArchives" %}
+    {% include 'common/components/cards/card_carousel.html' with title="Access all our production assets!" subtitle="You can access all the production files from our films with a Blender Cloud subscription." slides=4 card_set=featured_film_assets media_type="file" id="fromTheArchives" %}
 
-  <section class="my-5">
-    <div class="row mb-3">
-      <div class="col">
-        <div class="jumbotron jumbotron-overlay jumbotron-inline overlay-flipped header">
-          <div class="jumbotron-bg-wrapper">
-            <img class="jumbotron-bg" src="{% static "common/images/welcome/dweebs-bg.png" %}"
-              alt="A 3D cartoon dog enjoying tasty treats">
-            <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
-            {% comment %}
-            {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
-            {% endcomment %}
-          </div>
-          <div class="row">
-            <div class="col-md-7 col-lg-6 offset-md-5 offset-lg-6">
-              <div class="jumbotron-body py-4">
-                <h2 class="h1">Subscribe to Blender Cloud today</h2>
-                <p class="mb-4">Join Blender Cloud and get access to hundreds of hours of training,
-                  production assets and files from the Open Movies as well as a platform to learn at
-                  your own pace, in your own time.</p>
-                <a {% include "subscriptions/components/join_url" %}
-                  class="btn btn-lg btn-primary">Subscribe for €9.90/month</a>
+    <section class="my-5">
+      <div class="row mb-3">
+        <div class="col">
+          <div class="jumbotron jumbotron-overlay jumbotron-inline overlay-flipped header">
+            <div class="jumbotron-bg-wrapper">
+              <img class="jumbotron-bg" src="{% static "common/images/welcome/dweebs-bg.png" %}"
+                alt="A 3D cartoon dog enjoying tasty treats">
+              <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
+              {% comment %}
+                {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
+              {% endcomment %}
+            </div>
+            <div class="row">
+              <div class="col-md-7 col-lg-6 offset-md-5 offset-lg-6">
+                <div class="jumbotron-body py-4">
+                  <h2 class="h1">Subscribe to Blender Cloud today</h2>
+                  <p class="mb-4">Join Blender Cloud and get access to hundreds of hours of training,
+                    production assets and files from the Open Movies as well as a platform to learn at
+                    your own pace, in your own time.</p>
+                  <a {% include "subscriptions/components/join_url" %}
+                    class="btn btn-lg btn-primary">Subscribe for €9.90/month</a>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  {% include 'common/components/faq.html' with classes="mb-5" %}
+    {% include 'common/components/faq.html' with classes="mb-5" %}
 
-</div>
+  </div>
 
 {% endblock content %}

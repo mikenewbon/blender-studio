@@ -8,18 +8,18 @@
 
   <div class="content-locked-text">
     {% if not request.user.is_authenticated %}
-    <h3>You need to login to view this content</h3>
-    <p class="mb-3">You can join Blender Cloud for €9.90/month and get access to all of our training & film content
-      instantly!</p>
-    <a href="{% url 'oauth:login' %}" class="btn btn-transparent btn-nav login-button">Login</a>
-    <a {% include "subscriptions/components/join_url" %} class="btn btn-primary">Join Blender
-      Cloud</a>
+      <h3>You need to login to view this content</h3>
+      <p class="mb-3">You can join Blender Cloud for €9.90/month and get access to all of our training & film content
+        instantly!</p>
+      <a href="{% url 'oauth:login' %}" class="btn btn-transparent btn-nav login-button">Login</a>
+      <a {% include "subscriptions/components/join_url" %} class="btn btn-primary">Join Blender
+        Cloud</a>
     {% else %}
-    <h3>You need to subscribe to view this content</h3>
-    <p class="mb-3">You can join Blender Cloud for €9.90/month and get access to all of our training & film content
-      instantly!</p>
-    <a {% include "subscriptions/components/join_url" %} class="btn btn-primary">Join Blender
-      Cloud</a>
+      <h3>You need to subscribe to view this content</h3>
+      <p class="mb-3">You can join Blender Cloud for €9.90/month and get access to all of our training & film content
+        instantly!</p>
+      <a {% include "subscriptions/components/join_url" %} class="btn btn-primary">Join Blender
+        Cloud</a>
     {% endif %}
   </div>
 

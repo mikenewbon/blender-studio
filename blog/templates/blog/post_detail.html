@@ -5,39 +5,39 @@
 {% block title_append %} - {{ post.title }}{% endblock title_append %}
 
 {% block meta %}
-{% with title=post.title description=post.excerpt image_url=post.thumbnail_m_url %}
-{% include 'common/components/meta.html' %}
-{% endwith %}
+  {% with title=post.title description=post.excerpt image_url=post.thumbnail_m_url %}
+    {% include 'common/components/meta.html' %}
+  {% endwith %}
 {% endblock %}
 
 {% block content %}
-{% if post.header %}
-<div class="jumbotron jumbotron-fluid jumbotron-blog">
-  <div class="jumbotron-bg-wrapper">
-    {% include "common/components/helpers/image_set.html" with alt=asset.name classes="jumbotron-bg" img_source=post.header xsmall_width="600" small_width="800" medium_width="1000" large_width="1200" xlarge_width="1920" %}
-  </div>
+  {% if post.header %}
+    <div class="jumbotron jumbotron-fluid jumbotron-blog">
+      <div class="jumbotron-bg-wrapper">
+        {% include "common/components/helpers/image_set.html" with alt=asset.name classes="jumbotron-bg" img_source=post.header xsmall_width="600" small_width="800" medium_width="1000" large_width="1200" xlarge_width="1920" %}
+      </div>
 
-</div>
-{% endif %}
-
-<section class="container-blog">
-
-  <div class="row mb-3">
-    <div class="col">
-      <p class="subtitle">{{ post.date_published|date:"jS M Y" }}{% if post.category %} |
-        {{ post.category }}{% endif %}{% if post.film %} | <a href="{{ post.film.url }}">{{ post.film }}</a>{% endif %}
-      </p>
-      <h1 class="display-3 mb-0">{{ post.title|linebreaksbr }}</h1>
     </div>
-  </div>
-  {% include "blog/blog_toolbar.html" %}
+  {% endif %}
 
-  <div class="markdown-text editorial-text-area mb-4">{% with_shortcodes post.content_html %}</div>
+  <section class="container-blog">
 
-  {% include "blog/blog_toolbar.html" %}
+    <div class="row mb-3">
+      <div class="col">
+        <p class="subtitle">{{ post.date_published|date:"jS M Y" }}{% if post.category %} |
+          {{ post.category }}{% endif %}{% if post.film %} | <a href="{{ post.film.url }}">{{ post.film }}</a>{% endif %}
+        </p>
+        <h1 class="display-3 mb-0">{{ post.title|linebreaksbr }}</h1>
+      </div>
+    </div>
+    {% include "blog/blog_toolbar.html" %}
 
-  <section class="my-4">{% include 'comments/components/comment_section.html' %}</section>
+    <div class="markdown-text editorial-text-area mb-4">{% with_shortcodes post.content_html %}</div>
 
-</section>
+    {% include "blog/blog_toolbar.html" %}
+
+    <section class="my-4">{% include 'comments/components/comment_section.html' %}</section>
+
+  </section>
 
 {% endblock %}

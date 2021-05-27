@@ -1,5 +1,5 @@
 <div class="video-player {% if rounded %}rounded{% endif %} {% if classes %}{{ classes}}{% endif %}" {% if progress_url is not none %}data-progress-url="{{ progress_url }}"{% endif %} {% if start_position is not none %}data-start-position="{{ start_position }}"{% endif %}>
-	<video playsinline controls data-poster="{{ poster }}">
-		<source src="{{ url }}">
-	</video>
+  <video playsinline controls data-poster="{{ poster }}">
+    <source src="{{ url }}">
+  </video>
 </div>

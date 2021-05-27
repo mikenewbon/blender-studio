@@ -5,23 +5,23 @@
 
   <div class="production-log-week-header">
     {% if header != "false" %}
-    {% if production_log_link != "false" %}
-    <a href="{{ production_log.url }}" class="h2">{{ production_log.name }}</a>
-    {% else %}
-    <h2>{{ production_log.name }}</h2>
-    {% endif %}
+      {% if production_log_link != "false" %}
+        <a href="{{ production_log.url }}" class="h2">{{ production_log.name }}</a>
+      {% else %}
+        <h2>{{ production_log.name }}</h2>
+      {% endif %}
 
-    {% if production_log.start_date %}
-    <p class="subtitle small mb-3"><i class="material-icons icon-inline small">calendar_today</i>
-      {{ production_log.start_date|date:'M jS Y' }}</p>
-    {% endif %}
+      {% if production_log.start_date %}
+        <p class="subtitle small mb-3"><i class="material-icons icon-inline small">calendar_today</i>
+          {{ production_log.start_date|date:'M jS Y' }}</p>
+      {% endif %}
     {% endif %}
 
     {% if user_can_edit_production_log %}
 
-    <a href="{{ production_log.admin_url }}" class="btn btn-ctrl-sm btn-sm btn-icon btn-secondary btn-float top-0 right-0">
-      <i class="material-icons">create</i>
-    </a>
+      <a href="{{ production_log.admin_url }}" class="btn btn-ctrl-sm btn-sm btn-icon btn-secondary btn-float top-0 right-0">
+        <i class="material-icons">create</i>
+      </a>
 
     {% endif %}
 
@@ -29,26 +29,26 @@
       <div class="production-log-header-summary-image">
 
         {% if production_log.youtube_link != "" %}
-        <a class="video-modal-link video-preview" data-toggle="modal" data-target="#videoModal"
-          data-video="{{ production_log.youtube_link }}">
-          <img src="{{ production_log.thumbnail_s_url }}" alt="Video Preview">
-        </a>
+          <a class="video-modal-link video-preview" data-toggle="modal" data-target="#videoModal"
+            data-video="{{ production_log.youtube_link }}">
+            <img src="{{ production_log.thumbnail_s_url }}" alt="Video Preview">
+          </a>
         {% elif production_log.thumbnail %}
-        <img src="{{ production_log.thumbnail_s_url }}" alt="production log preview">
+          <img src="{{ production_log.thumbnail_s_url }}" alt="production log preview">
         {% endif %}
 
       </div>
 
       {% if production_log.summary %}
-      <div class="production-log-header-summary-text">
-        <h3>This week on {{ film.title }}</h3>
-        {% with_shortcodes production_log.summary|markdown %}
-        {% if production_log.youtube_link != "" %}
-        <a href="{{ production_log.youtube_link }}" class="video-modal-link mb-0" data-toggle="modal"
-          data-target="#videoModal" data-video="{{ production_log.youtube_link }}">Watch the video</a>
-        {% endif %}
+        <div class="production-log-header-summary-text">
+          <h3>This week on {{ film.title }}</h3>
+          {% with_shortcodes production_log.summary|markdown %}
+          {% if production_log.youtube_link != "" %}
+            <a href="{{ production_log.youtube_link }}" class="video-modal-link mb-0" data-toggle="modal"
+              data-target="#videoModal" data-video="{{ production_log.youtube_link }}">Watch the video</a>
+          {% endif %}
 
-      </div>
+        </div>
       {% endif %}
 
     </div>
@@ -57,121 +57,121 @@
 
   <div class="production-log-individual-wrapper">
     {% for entry in production_log.log_entries.all %}
-    <div class="production-log-individual">
-      <div class="production-log-individual-summary">
+      <div class="production-log-individual">
+        <div class="production-log-individual-summary">
 
-        <div class="production-log-individual-summary-profile row">
-          <div style="background-image:url('{{ entry.author_image_url }}');" class="profile-image profile ml-2">
+          <div class="production-log-individual-summary-profile row">
+            <div style="background-image:url('{{ entry.author_image_url }}');" class="profile-image profile ml-2">
+            </div>
+            <div class="col-auto flex-shrink-1">
+              <h4 class="profile-name">{{ entry.author_name }}</h4>
+              <p class="profile-title subtitle text-white-50 x-small">{{ entry.author_role }}</p>
+            </div>
+            {% if user_can_edit_production_log_entry %}
+              <div class="admin-button mt-2 btn-float">
+                <a href="{{ entry.admin_url }}" class="btn btn-xs btn-icon btn-secondary">
+                  <i class="material-icons">create</i>
+                </a>
+              </div>
+            {% endif %}
           </div>
-          <div class="col-auto flex-shrink-1">
-            <h4 class="profile-name">{{ entry.author_name }}</h4>
-            <p class="profile-title subtitle text-white-50 x-small">{{ entry.author_role }}</p>
-          </div>
-          {% if user_can_edit_production_log_entry %}
-          <div class="admin-button mt-2 btn-float">
-            <a href="{{ entry.admin_url }}" class="btn btn-xs btn-icon btn-secondary">
-              <i class="material-icons">create</i>
-            </a>
-          </div>
+
+
+          {% if entry.assets.count > 4 and entry.description|length < 225 %}
+            <p class="small">{{ entry.description }}</p>
+          {% elif entry.assets.count > 4 and entry.description|length > 225 %}
+            <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":215"}}<span
+              class="read-more-elip">...</span><span
+                class="read-more-text d-none">{{ entry.description|slice:"215:"}}</span> <a class="small read-more-link"
+                  href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
+
+          {% elif entry.assets.count == 4 and entry.description|length < 150 %}
+            <p class="small">{{ entry.description }}</p>
+          {% elif entry.assets.count == 4 and entry.description|length > 150 %}
+            <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":150"}}<span
+              class="read-more-elip">...</span><span
+                class="read-more-text d-none">{{ entry.description|slice:"150:"}}</span> <a class="small read-more-link"
+                  href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
+
+          {% elif entry.assets.count == 3 and entry.description|length < 225 %}
+            <p class="small">{{ entry.description }}</p>
+
+          {% elif entry.assets.count == 3 and entry.description|length > 225 %}
+            <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":225"}}<span
+              class="read-more-elip">...</span><span
+                class="read-more-text d-none">{{ entry.description|slice:"225:"}}</span> <a class="small read-more-link"
+                  href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
+
+          {% elif entry.assets.count < 3 and entry.description|length < 390 %}
+            <p class="small">{{ entry.description }}</p>
+          {% elif entry.assets.count < 3 and entry.description|length > 390 %}
+            <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":390"}}<span
+              class="read-more-elip">...</span><span
+                class="read-more-text d-none">{{ entry.description|slice:"390:"}}</span> <a class="small read-more-link"
+                  href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
+
+          {% else %}
+            <p class="small">{{ entry.description }}</p>
           {% endif %}
+
+
+
         </div>
-
-
-        {% if entry.assets.count > 4 and entry.description|length < 225 %}
-        <p class="small">{{ entry.description }}</p>
-        {% elif entry.assets.count > 4 and entry.description|length > 225 %}
-        <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":215"}}<span
-            class="read-more-elip">...</span><span
-            class="read-more-text d-none">{{ entry.description|slice:"215:"}}</span> <a class="small read-more-link"
-            href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
-
-        {% elif entry.assets.count == 4 and entry.description|length < 150 %}
-        <p class="small">{{ entry.description }}</p>
-        {% elif entry.assets.count == 4 and entry.description|length > 150 %}
-        <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":150"}}<span
-            class="read-more-elip">...</span><span
-            class="read-more-text d-none">{{ entry.description|slice:"150:"}}</span> <a class="small read-more-link"
-            href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
-
-        {% elif entry.assets.count == 3 and entry.description|length < 225 %}
-        <p class="small">{{ entry.description }}</p>
-
-        {% elif entry.assets.count == 3 and entry.description|length > 225 %}
-        <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":225"}}<span
-            class="read-more-elip">...</span><span
-            class="read-more-text d-none">{{ entry.description|slice:"225:"}}</span> <a class="small read-more-link"
-            href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
-
-        {% elif entry.assets.count < 3 and entry.description|length < 390 %}
-        <p class="small">{{ entry.description }}</p>
-        {% elif entry.assets.count < 3 and entry.description|length > 390 %}
-        <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":390"}}<span
-            class="read-more-elip">...</span><span
-            class="read-more-text d-none">{{ entry.description|slice:"390:"}}</span> <a class="small read-more-link"
-            href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
-
-        {% else %}
-        <p class="small">{{ entry.description }}</p>
-        {% endif %}
-
-
-
-      </div>
-      <div class="production-log-individual-files">
-        <div class="files">
-          <div class="row row-cols-1 row-cols-md-3  row-cols-2">
-            {% if entry.assets.count >= 4 %}
-            {% for asset in entry.assets.all|slice:':4' %}
-            {% if asset.is_published %}
-            {% include "common/components/file_production_log.html" with card_sizes="col-6 col-sm-6 col-md-6 col-lg-3" aspect_ratio="fourbythree" asset=asset site_context="production_logs" %}
-            {% endif %}
-            {% endfor %}
-            {% elif entry.assets.count >= 3 %}
-            {% for asset in entry.assets.all %}
-            {% if asset.is_published %}
-            {% include "common/components/file_production_log.html" with card_sizes="col-6 col-sm-6 col-md-6 col-lg-4" aspect_ratio="fourbythree" asset=asset site_context="production_logs" %}
-            {% endif %}
-            {% endfor %}
-            {% else %}
-            {% for asset in entry.assets.all %}
-            {% if asset.is_published %}
-            {% include "common/components/file_production_log.html" with card_sizes="col-6 col-sm-6 col-md-6 col-lg-6" aspect_ratio="fourbythree" asset=asset site_context="production_logs" large_thumbnail="true" %}
-            {% endif %}
-            {% endfor %}
-            {% endif %}
-          </div>
-
-          {% if entry.assets.count > 4 %}
-          <div class="collapse" id="entry-{{ entry.id }}">
+        <div class="production-log-individual-files">
+          <div class="files">
             <div class="row row-cols-1 row-cols-md-3  row-cols-2">
-              {% for asset in entry.assets.all|slice:'4:' %}
-              {% if asset.is_published %}
-              {% include "common/components/file_production_log.html" with card_sizes="col-6 col-sm-6 col-md-6 col-lg-3" aspect_ratio="fourbythree" asset=asset site_context="production_logs" %}
+              {% if entry.assets.count >= 4 %}
+                {% for asset in entry.assets.all|slice:':4' %}
+                  {% if asset.is_published %}
+                    {% include "common/components/file_production_log.html" with card_sizes="col-6 col-sm-6 col-md-6 col-lg-3" aspect_ratio="fourbythree" asset=asset site_context="production_logs" %}
+                  {% endif %}
+                {% endfor %}
+              {% elif entry.assets.count >= 3 %}
+                {% for asset in entry.assets.all %}
+                  {% if asset.is_published %}
+                    {% include "common/components/file_production_log.html" with card_sizes="col-6 col-sm-6 col-md-6 col-lg-4" aspect_ratio="fourbythree" asset=asset site_context="production_logs" %}
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+                {% for asset in entry.assets.all %}
+                  {% if asset.is_published %}
+                    {% include "common/components/file_production_log.html" with card_sizes="col-6 col-sm-6 col-md-6 col-lg-6" aspect_ratio="fourbythree" asset=asset site_context="production_logs" large_thumbnail="true" %}
+                  {% endif %}
+                {% endfor %}
               {% endif %}
-              {% endfor %}
             </div>
-          </div>
-          <div class="row production-log-individual-files-show-more">
-            <div class="col text-center">
-              <a data-toggle="collapse" data-objects-type="files" href="#entry-{{ entry.id }}" role="button"
-                aria-expanded="false" aria-controls="entry-{{ entry.id }}"
-                class="btn btn-sm btn-dark collapsed show-more-less">Show </a>
-            </div>
-          </div>
-          {% endif %}
 
+            {% if entry.assets.count > 4 %}
+              <div class="collapse" id="entry-{{ entry.id }}">
+                <div class="row row-cols-1 row-cols-md-3  row-cols-2">
+                  {% for asset in entry.assets.all|slice:'4:' %}
+                    {% if asset.is_published %}
+                      {% include "common/components/file_production_log.html" with card_sizes="col-6 col-sm-6 col-md-6 col-lg-3" aspect_ratio="fourbythree" asset=asset site_context="production_logs" %}
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+              <div class="row production-log-individual-files-show-more">
+                <div class="col text-center">
+                  <a data-toggle="collapse" data-objects-type="files" href="#entry-{{ entry.id }}" role="button"
+                    aria-expanded="false" aria-controls="entry-{{ entry.id }}"
+                    class="btn btn-sm btn-dark collapsed show-more-less">Show </a>
+                </div>
+              </div>
+            {% endif %}
+
+          </div>
         </div>
       </div>
-    </div>
 
     {% endfor %}
   </div>
 
   {% if user_can_edit_production_log %}
-  <div class="add-entry">
-    <a href="{% url 'admin:films_productionlogentry_add' %}?production_log={{ production_log.pk }}"
-      class="btn btn-sm btn-darkhighlight-strong">Add Entry</a>
-  </div>
+    <div class="add-entry">
+      <a href="{% url 'admin:films_productionlogentry_add' %}?production_log={{ production_log.pk }}"
+        class="btn btn-sm btn-darkhighlight-strong">Add Entry</a>
+    </div>
   {% endif %}
 
 </div>

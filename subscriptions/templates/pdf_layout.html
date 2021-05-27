@@ -4,42 +4,42 @@
     <title>{% block title %}{{ title }}{% endblock %}</title>
     <style>
       html, body {
-      	background-color: white;
-      	color: black;
-      	font-family: 'Roboto', 'Noto Sans', sans-serif;
-      	font-size: 8pt;
+        background-color: white;
+        color: black;
+        font-family: 'Roboto', 'Noto Sans', sans-serif;
+        font-size: 8pt;
       }
 
       p {
-      	line-height: 150%;
+        line-height: 150%;
       }
 
       th {
-      	width: 200px;
-      	text-align: right;
+        width: 200px;
+        text-align: right;
       }
       th, td {
-      	padding: 3px 6px;
-      	vertical-align: top;
+        padding: 3px 6px;
+        vertical-align: top;
       }
       h4 {
-      	border-bottom: 1px solid black;
-      	padding-top: 3em;
+        border-bottom: 1px solid black;
+        padding-top: 3em;
       }
 
       @page {
-      	size: a4 portrait;
-      	@frame header_frame {           /* Static Frame */
-      		-pdf-frame-content: header_content;
-      		left: 50pt; width: 512pt; top: 20pt; height: 40pt;
-      	}
-      	@frame content_frame {          /* Content Frame */
-      		left: 50pt; width: 512pt; top: 60pt; height: 632pt;
-      	}
-      	@frame footer_frame {           /* Another static Frame */
-      		-pdf-frame-content: footer_content;
-      		left: 50pt; width: 512pt; bottom: 30pt; height: 50pt;
-      	}
+        size: a4 portrait;
+        @frame header_frame {           /* Static Frame */
+          -pdf-frame-content: header_content;
+          left: 50pt; width: 512pt; top: 20pt; height: 40pt;
+        }
+        @frame content_frame {          /* Content Frame */
+          left: 50pt; width: 512pt; top: 60pt; height: 632pt;
+        }
+        @frame footer_frame {           /* Another static Frame */
+          -pdf-frame-content: footer_content;
+          left: 50pt; width: 512pt; bottom: 30pt; height: 50pt;
+        }
       }
     </style>
   </head>

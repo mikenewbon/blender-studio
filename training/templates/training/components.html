@@ -1,70 +1,70 @@
 {% import 'common/components.html' as components %}
 
 {% macro progressbar(fraction) %}
-    <div class="progress">
-        <div class="progress-bar" role="progressbar" style="width:{{ fraction*100 }}%;"></div>
-    </div>
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" style="width:{{ fraction*100 }}%;"></div>
+  </div>
 {% endmacro %}
 
 {% macro badge_difficulty(label, color='blue') %}
-    <div class="badge badge-difficulty badge-{{ color }}">
-        <i class="material-icons btn-material-icons">extension</i>
-        {{ label }}
-    </div>
+  <div class="badge badge-difficulty badge-{{ color }}">
+    <i class="material-icons btn-material-icons">extension</i>
+    {{ label }}
+  </div>
 {% endmacro %}
 
 {% macro card_training_checkbox_favorite(checked, class=[]) %}
-    <button class="btn btn-ctrl-xs checkbox-favorite {{ class|join(' ') }}"
-            {% if checked %}data-checked="checked"{% endif %} data-toggle="tooltip" data-placement="left" title="Save for later">
-        <i class="material-icons btn-material-icons checkbox-favorite-icon-checked">check</i>
-        <i class="material-icons btn-material-icons checkbox-favorite-icon-unchecked">add</i>
-    </button>
+  <button class="btn btn-ctrl-xs checkbox-favorite {{ class|join(' ') }}"
+    {% if checked %}data-checked="checked"{% endif %} data-toggle="tooltip" data-placement="left" title="Save for later">
+    <i class="material-icons btn-material-icons checkbox-favorite-icon-checked">check</i>
+    <i class="material-icons btn-material-icons checkbox-favorite-icon-unchecked">add</i>
+  </button>
 {% endmacro %}
 
 {% macro card_section(section) %}
-    {% set image_placeholder = static('training/images/placeholders/card.jpg') %}
-    <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
-        <div class="card card-media">
+  {% set image_placeholder = static('training/images/placeholders/card.jpg') %}
+  <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
+    <div class="card card-media">
 
-            <div class="card-header" style='background-image: url("{{ image_placeholder }}")'>
-				{{ progressbar(section.progress_fraction) }}
+      <div class="card-header" style='background-image: url("{{ image_placeholder }}")'>
+        {{ progressbar(section.progress_fraction) }}
 
-            </div>
+      </div>
 
-            <a class="card-body" href="{{ section.url }}">
-                <p class="card-subtitle">{{ section.training_name }}</p>
-                <p class="card-subtitle">{{ section.chapter_name_with_index }}</p>
-                <h2 class="card-title">{{ section.name_with_index }}</h2>
-            </a>
-        </div>
+      <a class="card-body" href="{{ section.url }}">
+        <p class="card-subtitle">{{ section.training_name }}</p>
+        <p class="card-subtitle">{{ section.chapter_name_with_index }}</p>
+        <h2 class="card-title">{{ section.name_with_index }}</h2>
+      </a>
     </div>
+  </div>
 {% endmacro %}
 
 {% macro card_training(training) %}
-    {% set difficulty_color = {'beginner': 'green', 'intermediate': 'blue', 'advanced': 'red'}.get(training.difficulty, 'blue') %}
-    <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
-        <div class="card card-media card-training" data-favorite-url="{{ training.favorite_url }}">
+  {% set difficulty_color = {'beginner': 'green', 'intermediate': 'blue', 'advanced': 'red'}.get(training.difficulty, 'blue') %}
+  <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
+    <div class="card card-media card-training" data-favorite-url="{{ training.favorite_url }}">
 
-			<div class="card-header" style='background-image: url("{{ training.thumbnail }}")'>
-				<a href="{{ training.url }}" class="card-header-link"></a>
-                {{ badge_difficulty(label=training.difficulty.label, color=difficulty_color) }}
-				{{ card_training_checkbox_favorite(checked=training.favorited, class=['btn-save-media', 'card-training-favorite']) }}
-            </div>
+      <div class="card-header" style='background-image: url("{{ training.thumbnail }}")'>
+        <a href="{{ training.url }}" class="card-header-link"></a>
+        {{ badge_difficulty(label=training.difficulty.label, color=difficulty_color) }}
+        {{ card_training_checkbox_favorite(checked=training.favorited, class=['btn-save-media', 'card-training-favorite']) }}
+      </div>
 
-            <a class="card-body" href="{{ training.url }}">
-                <p class="card-subtitle">{{ training.type.label }}</p>
-                <h2 class="card-title">{{ training.name }}</h2>
-                <p class="card-text">{{ training.description }}</p>
-            </a>
+      <a class="card-body" href="{{ training.url }}">
+        <p class="card-subtitle">{{ training.type.label }}</p>
+        <h2 class="card-title">{{ training.name }}</h2>
+        <p class="card-text">{{ training.description }}</p>
+      </a>
 
-            <div class="card-footer">
-                {% call components.pills() %}
-                    {% for tag in training.tags %}
-                        {{ components.pill(label=tag) }}
-                    {% endfor %}
-                {% endcall %}
-            </div>
+      <div class="card-footer">
+        {% call components.pills() %}
+          {% for tag in training.tags %}
+            {{ components.pill(label=tag) }}
+          {% endfor %}
+        {% endcall %}
+      </div>
 
-        </div>
     </div>
+  </div>
 {% endmacro %}

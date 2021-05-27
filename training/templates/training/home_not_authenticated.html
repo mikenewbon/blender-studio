@@ -7,106 +7,110 @@
 {% block title_prepend %}Training - {% endblock title_prepend %}
 
 {% block meta %}
-{% static 'training/images/placeholders/opengraph.jpg' as image_path %}
-{% absolute_url image_path as image_url %}
-{% with title="Training" description="Learn from our expert team. Courses, workshops and production lessons with .blend files included." %}
-{% include 'common/components/meta.html' %}
-{% endwith %}
+  {% static 'training/images/placeholders/opengraph.jpg' as image_path %}
+  {% absolute_url image_path as image_url %}
+  {% with title="Training" description="Learn from our expert team. Courses, workshops and production lessons with .blend files included." %}
+    {% include 'common/components/meta.html' %}
+  {% endwith %}
 {% endblock %}
 
 {% block jumbotron %}
-<div class="jumbotron jumbotron-fluid jumbotron-overlay header">
-  <div class="jumbotron-bg-wrapper">
-    <img class="jumbotron-bg" src="{% static "training/images/training-header-primitive.jpg" %}">
-    <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
-    {% comment %}
-    {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
-    {% endcomment %}
-  </div>
-  <div class="container-xl">
-    <div class="row">
-      <div class="col-lg-5 col-xl-4">
-        <div class="jumbotron-body">
-          <h1>Training</h1>
-          <p class="mb-0">
-            Learn from our expert team. Courses, workshops and production lessons with .blend files included.
-          </p>
+  <div class="jumbotron jumbotron-fluid jumbotron-overlay header">
+    <div class="jumbotron-bg-wrapper">
+      <img class="jumbotron-bg" src="{% static "training/images/training-header-primitive.jpg" %}">
+      <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
+      {% comment %}
+        {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
+      {% endcomment %}
+    </div>
+    <div class="container-xl">
+      <div class="row">
+        <div class="col-lg-5 col-xl-4">
+          <div class="jumbotron-body">
+            <h1>Training</h1>
+            <p class="mb-0">
+              Learn from our expert team. Courses, workshops and production lessons with .blend files included.
+            </p>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 {% endblock jumbotron %}
 
 {% block content %}
-<div class="container-xl pt-3">
+  <div class="container-xl pt-3">
 
-  {% comment %} <section>
-    <div class="row">
-      <div class="col text-center">
-        <div class="bg-secondary py-4 rounded">
-          <h3 class="mb-0">You need to login to view Training</h3>
-          <p class="mb-3">You can join Blender Cloud for €9.90/month and get access to all of our training instantly!</p>
-          <a href="/join" class="btn btn-primary">Join Blender Cloud</a>
-        </div>
-      </div>
-    </div>
-  </section> {% endcomment %}
-
-  <section>
-    <div class="row">
-      <div class="col mb-3">
-        <h2 class="mb-0">All Training</h2>
-      </div>
-      <div class="col-auto mb-3">
-
-        <div class="input-group input-group-sm" id="sorting">
-          <div class="input-group-prepend">
-            <label class="input-group-text" for="searchLicence">Sort by:</label>
+    {% comment %}
+      <section>
+        <div class="row">
+          <div class="col text-center">
+            <div class="bg-secondary py-4 rounded">
+              <h3 class="mb-0">You need to login to view Training</h3>
+              <p class="mb-3">You can join Blender Cloud for €9.90/month and get access to all of our training instantly!</p>
+              <a href="/join" class="btn btn-primary">Join Blender Cloud</a>
+            </div>
           </div>
         </div>
+      </section>
+    {% endcomment %}
 
-      </div>
-    </div>
+    <section>
+      <div class="row">
+        <div class="col mb-3">
+          <h2 class="mb-0">All Training</h2>
+        </div>
+        <div class="col-auto mb-3">
 
-    <div id="search" class="row">
-
-      <div class="col-md-6 mb-3">
-        <div id="search_input" class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">
-              <i class="material-icons">search</i>
-            </span>
+          <div class="input-group input-group-sm" id="sorting">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="searchLicence">Sort by:</label>
+            </div>
           </div>
 
         </div>
       </div>
 
-      <div id="search_type" class="col-md-3 col-6 mb-3">
+      <div id="search" class="row">
 
+        <div class="col-md-6 mb-3">
+          <div id="search_input" class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                <i class="material-icons">search</i>
+              </span>
+            </div>
+
+          </div>
+        </div>
+
+        <div id="search_type" class="col-md-3 col-6 mb-3">
+
+        </div>
+
+        <div id="search_difficulty" class="col-md-3 col-6 mb-3">
+
+        </div>
       </div>
 
-      <div id="search_difficulty" class="col-md-3 col-6 mb-3">
-
+      <div class="row" id="hits">
+        {% comment %}
+          {% for training in all_trainings %}
+            {% include "training/components/card_training.html" with training=training %}
+          {% endfor %}
+        {% endcomment %}
       </div>
-    </div>
-
-    <div class="row" id="hits">
-      {% comment %} {% for training in all_trainings %}
-      {% include "training/components/card_training.html" with training=training %}
-      {% endfor %} {% endcomment %}
-    </div>
-  </section>
-</div>
+    </section>
+  </div>
 
 {% endblock content %}
 
 {% block scripts %}
 
-{% javascript 'vendor_instantsearch' %}
-{{ favorited_training_ids|json_script:"training-favorited-ids" }}
-{{ search_client_config|json_script:"training-search-client-config" }}
-{% javascript 'training' %}
-{% javascript 'training_search' %}
+  {% javascript 'vendor_instantsearch' %}
+  {{ favorited_training_ids|json_script:"training-favorited-ids" }}
+  {{ search_client_config|json_script:"training-search-client-config" }}
+  {% javascript 'training' %}
+  {% javascript 'training_search' %}
 
 {% endblock scripts %}

@@ -441,6 +441,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "djhtml"
+version = "1.4.0"
+description = "Django template indenter"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "docutils"
 version = "0.15.2"
 description = "Docutils -- Python Documentation Utilities"
@@ -831,7 +839,7 @@ six = ">=1.11.0"
 
 [[package]]
 name = "looper"
-version = "1.4.3"
+version = "1.4.4"
 description = ""
 category = "main"
 optional = false
@@ -855,7 +863,7 @@ xhtml2pdf = "^0.2"
 type = "git"
 url = "git://git.blender.org/looper.git"
 reference = "master"
-resolved_reference = "514570bb8c3787e2a6875cc075c7f11beccf9b0a"
+resolved_reference = "45d4399c9ebb18ba0bcead242fee791d7dbf7d30"
 
 [[package]]
 name = "markupsafe"
@@ -1005,7 +1013,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "pre-commit"
-version = "2.6.0"
+version = "2.9.0"
 description = "A framework for managing and maintaining multi-language pre-commit hooks."
 category = "dev"
 optional = false
@@ -1523,7 +1531,7 @@ six = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "4afdd8d95d18fd722ddc624c168c5d257524cb520b904b89cbc5ec1ae4c5b9a6"
+content-hash = "4deb92710aa99eaff75ab4f07bd631819ac80084c22d484e62d409ff7cb0ed94"
 
 [metadata.files]
 appdirs = [
@@ -1710,6 +1718,9 @@ django-taggit = [
 django-waffle = [
     {file = "django-waffle-2.1.0.tar.gz", hash = "sha256:a96b52ed6256238b7e0dda8c5c18b6f00e38008fae380f9ff22e12fd1a702c7f"},
     {file = "django_waffle-2.1.0-py2.py3-none-any.whl", hash = "sha256:a39f294f8c4e026b9e441d0e4d35ff3b26d1eb2da1d52196ba4bc04ba78b1db1"},
+]
+djhtml = [
+    {file = "djhtml-1.4.0.tar.gz", hash = "sha256:1d4727bda74d573610da1b2ba16f47810835bdd0c72a73a00e38dcc9a9199182"},
 ]
 docutils = [
     {file = "docutils-0.15.2-py2-none-any.whl", hash = "sha256:9e4d7ecfc600058e07ba661411a2b7de2fd0fafa17d1a7f7361cd47b1175c827"},
@@ -1986,8 +1997,8 @@ pillow = [
     {file = "Pillow-7.2.0.tar.gz", hash = "sha256:97f9e7953a77d5a70f49b9a48da7776dc51e9b738151b22dacf101641594a626"},
 ]
 pre-commit = [
-    {file = "pre_commit-2.6.0-py2.py3-none-any.whl", hash = "sha256:e8b1315c585052e729ab7e99dcca5698266bedce9067d21dc909c23e3ceed626"},
-    {file = "pre_commit-2.6.0.tar.gz", hash = "sha256:1657663fdd63a321a4a739915d7d03baedd555b25054449090f97bb0cb30a915"},
+    {file = "pre_commit-2.9.0-py2.py3-none-any.whl", hash = "sha256:4aee0db4808fa48d2458cedd5b9a084ef24dda1a0fa504432a11977a4d1cfd0a"},
+    {file = "pre_commit-2.9.0.tar.gz", hash = "sha256:b2d106d51c6ba6217e859d81774aae33fd825fe7de0dcf0c46e2586333d7a92e"},
 ]
 prompt-toolkit = [
     {file = "prompt_toolkit-3.0.6-py3-none-any.whl", hash = "sha256:683397077a64cd1f750b71c05afcfc6612a7300cb6932666531e5a54f38ea564"},

@@ -3,24 +3,24 @@
 {% block title_append %} - Films{% endblock title_append %}
 
 {% block meta %}
-{% with title="Films" description="The iconic Blender Open Movies. Featuring all the production files, assets, artwork, and never-seen-before content." %}
-{% include 'common/components/meta.html'  %}
-{% endwith %}
+  {% with title="Films" description="The iconic Blender Open Movies. Featuring all the production files, assets, artwork, and never-seen-before content." %}
+    {% include 'common/components/meta.html'  %}
+  {% endwith %}
 {% endblock %}
 
 {% block content %}
 
-<div class="container-xl pt-4">
-  {% include "common/components/simple_header.html" with title="Films" subtitle="The iconic Blender Open Movies. Featuring all the production files, assets, artwork, and never-seen-before content." %}
+  <div class="container-xl pt-4">
+    {% include "common/components/simple_header.html" with title="Films" subtitle="The iconic Blender Open Movies. Featuring all the production files, assets, artwork, and never-seen-before content." %}
 
-  <div class="row">
-    {% for film in films %}
-    {% if film.is_published or request.user.is_superuser %}
-    {% include "films/components/card_film.html" with film=film %}
-    {% endif %}
-    {% endfor %}
+    <div class="row">
+      {% for film in films %}
+        {% if film.is_published or request.user.is_superuser %}
+          {% include "films/components/card_film.html" with film=film %}
+        {% endif %}
+      {% endfor %}
+    </div>
+
   </div>
-
-</div>
 
 {% endblock %}

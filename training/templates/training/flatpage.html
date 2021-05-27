@@ -5,51 +5,51 @@
 {% block title_append %} - {{ training.title }} {{ flatpage.title }}{% endblock title_append %}
 
 {% block meta %}
-{% firstof flatpage.title as title %}
-{% firstof flatpage.thumbnail_m_url training.thumbnail_m_url as image_url %}
-{% with description=flatpage.content|truncatewords:25 %}
-{% include 'common/components/meta.html'  %}
-{% endwith %}
+  {% firstof flatpage.title as title %}
+  {% firstof flatpage.thumbnail_m_url training.thumbnail_m_url as image_url %}
+  {% with description=flatpage.content|truncatewords:25 %}
+    {% include 'common/components/meta.html'  %}
+  {% endwith %}
 {% endblock %}
 
 {% block content %}
-{% if flatpage.header %}
-<div class="jumbotron jumbotron-fluid jumbotron-blog jumbotron-overlay overlay-blog mb-3">
-  <div class="container py-5 px-5">
-    <div class="row">
-      <div class="col-md-5">
-        <p class="subtitle">{{ training.title }}</p>
-        <h1 class="display-3 text-uppercase font-weight-bold">{{ flatpage.title }}</h1>
+  {% if flatpage.header %}
+    <div class="jumbotron jumbotron-fluid jumbotron-blog jumbotron-overlay overlay-blog mb-3">
+      <div class="container py-5 px-5">
+        <div class="row">
+          <div class="col-md-5">
+            <p class="subtitle">{{ training.title }}</p>
+            <h1 class="display-3 text-uppercase font-weight-bold">{{ flatpage.title }}</h1>
+          </div>
+        </div>
+      </div>
+      <div class="jumbotron-bg-wrapper">
+        {% include "common/components/helpers/image_set.html" with alt=asset.name classes="jumbotron-bg" img_source=flatpage.header xsmall_width="600" small_width="800" medium_width="1000" large_width="1200" xlarge_width="1920" %}
       </div>
     </div>
-  </div>
-  <div class="jumbotron-bg-wrapper">
-    {% include "common/components/helpers/image_set.html" with alt=asset.name classes="jumbotron-bg" img_source=flatpage.header xsmall_width="600" small_width="800" medium_width="1000" large_width="1200" xlarge_width="1920" %}
-  </div>
-</div>
-{% endif %}
+  {% endif %}
 
-<div class="container-fluid pt-4">
-  <section class="flat-page-content editorial-text-area mb-4">
-    {% if user_can_edit_flatpage %}
-    <div class="admin-button">
-      <a href="{{ flatpage.admin_url }}" class="btn btn-sm btn-secondary btn-icon btn-float">
-        <i class="material-icons">create</i>
-      </a>
-    </div>
-    {% endif %}
-    {% if not flatpage.header %}
-    <div class="text-center mb-3">
-      <p class="subtitle">{{ training.title }}</p>
-      <h1 class="mb-0">{{ flatpage.title }}</h1>
-    </div>
-    {% endif %}
-    <div>{% with_shortcodes flatpage.html_content %}</div>
-  </section>
-</div>
+  <div class="container-fluid pt-4">
+    <section class="flat-page-content editorial-text-area mb-4">
+      {% if user_can_edit_flatpage %}
+        <div class="admin-button">
+          <a href="{{ flatpage.admin_url }}" class="btn btn-sm btn-secondary btn-icon btn-float">
+            <i class="material-icons">create</i>
+          </a>
+        </div>
+      {% endif %}
+      {% if not flatpage.header %}
+        <div class="text-center mb-3">
+          <p class="subtitle">{{ training.title }}</p>
+          <h1 class="mb-0">{{ flatpage.title }}</h1>
+        </div>
+      {% endif %}
+      <div>{% with_shortcodes flatpage.html_content %}</div>
+    </section>
+  </div>
 
 {% endblock content %}
 
 {% block scripts %}
-{% javascript 'training' %}
+  {% javascript 'training' %}
 {% endblock scripts %}

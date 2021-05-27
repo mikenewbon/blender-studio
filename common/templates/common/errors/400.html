@@ -1,6 +1,6 @@
 {% extends 'common/errors/base.html' %} {% block page_title %}Bad Request{% endblock %} {% block errorbody %}
-<h1>Bad Request</h1>
-<p>Your HTTP client sent a request that we did not understand.</p>
-<p>Try <a href="{% url 'home' %}">the frontpage</a> instead.</p>
-{% if request.sentry.id %}<hr/>
-<p>If you need assistance, you may reference this error as <strong>{{ request.sentry.id }}</strong>.</p>{% endif %} {% endblock %}
+  <h1>Bad Request</h1>
+  <p>Your HTTP client sent a request that we did not understand.</p>
+  <p>Try <a href="{% url 'home' %}">the frontpage</a> instead.</p>
+  {% if request.sentry.id %}<hr/>
+    <p>If you need assistance, you may reference this error as <strong>{{ request.sentry.id }}</strong>.</p>{% endif %} {% endblock %}

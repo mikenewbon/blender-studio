@@ -6,123 +6,127 @@
 {% block title_prepend %}{{ training.name }} - {% endblock title_prepend %}
 
 {% block scripts %}
-{{ block.super }}
-{% javascript 'training' %}
+  {{ block.super }}
+  {% javascript 'training' %}
 {% endblock scripts %}
 
 {% block nexted_content %}
-<section>
-  <img src="{{ training.picture_header }}" class="img-fluid img-width-100 rounded mb-3" alt="{{ training.name }}">
-  <div class="row">
-    <div class="col">
+  <section>
+    <img src="{{ training.picture_header }}" class="img-fluid img-width-100 rounded mb-3" alt="{{ training.name }}">
+    <div class="row">
+      <div class="col">
 
-      <div class="row align-items-start">
-        <div class="col-12 col-md mb-2 mb-md-3">
-          <p class="subtitle">
-            {% if training.is_free %}
-            <i class="material-icons icon-inline text-success" data-toggle="tooltip" data-placement="top"
-              title="Free">lock_open</i>
-            {% endif %}
-            {{ training.type.label }}
-          </p>
-          <h2 class="mb-0">{{ training.name }}</h2>
-        </div>
-        <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
-          <div class="training-toolbar-container">
-
-            <div class="pills training-toolbar-pills">
-              {% for tag in training.tags %}
-              {% include 'common/components/cards/pill.html' with label=tag %}
-              {% endfor %}
-            </div>
-
-            <div class="training-toolbar">
-              {% if request.user.is_authenticated %}
-              <a class="btn btn-sm save-button {% if not training.favorited %}btn-dark{% else %}btn-primary{% endif %}"
-                data-favorite-url="{{ training.favorite_url }}" {% if training.favorited %}data-checked="checked"
-                {% endif %} data-toggle="tooltip" {% if training.favorited %}title="Save for later"
-                {% else %}title=" Remove from saved for later" {% endif %}>
-                <i class="material-icons">{% if not training.favorited %}add{% else %}check{% endif %}</i>
-                <span>{% if not training.favorited %}Save{% else %}Saved{% endif %}</span>
-              </a>
+        <div class="row align-items-start">
+          <div class="col-12 col-md mb-2 mb-md-3">
+            <p class="subtitle">
+              {% if training.is_free %}
+                <i class="material-icons icon-inline text-success" data-toggle="tooltip" data-placement="top"
+                  title="Free">lock_open</i>
               {% endif %}
+              {{ training.type.label }}
+            </p>
+            <h2 class="mb-0">{{ training.name }}</h2>
+          </div>
+          <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
+            <div class="training-toolbar-container">
 
-              {% if user.is_staff %}
-              <a href="{{ training.admin_url }}" class="btn btn-sm btn-icon btn-dark">
-                <i class="material-icons btn-material-icons">create</i>
-              </a>
-              {% endif %}
-
-              <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
-                <i class="material-icons btn-material-icons">more_horiz</i>
-              </button>
-              <div class="dropdown-menu dropdown-menu-right">
-                <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank"
-                  class="dropdown-item">
-                  <i class="material-icons">flag</i>
-                  <span>Report Problem</span>
-                </a>
+              <div class="pills training-toolbar-pills">
+                {% for tag in training.tags %}
+                  {% include 'common/components/cards/pill.html' with label=tag %}
+                {% endfor %}
               </div>
 
+              <div class="training-toolbar">
+                {% if request.user.is_authenticated %}
+                  <a class="btn btn-sm save-button {% if not training.favorited %}btn-dark{% else %}btn-primary{% endif %}"
+                    data-favorite-url="{{ training.favorite_url }}" {% if training.favorited %}data-checked="checked"
+                    {% endif %} data-toggle="tooltip" {% if training.favorited %}title="Save for later"
+                    {% else %}title=" Remove from saved for later" {% endif %}>
+                    <i class="material-icons">{% if not training.favorited %}add{% else %}check{% endif %}</i>
+                    <span>{% if not training.favorited %}Save{% else %}Saved{% endif %}</span>
+                  </a>
+                {% endif %}
+
+                {% if user.is_staff %}
+                  <a href="{{ training.admin_url }}" class="btn btn-sm btn-icon btn-dark">
+                    <i class="material-icons btn-material-icons">create</i>
+                  </a>
+                {% endif %}
+
+                <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
+                  <i class="material-icons btn-material-icons">more_horiz</i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank"
+                    class="dropdown-item">
+                    <i class="material-icons">flag</i>
+                    <span>Report Problem</span>
+                  </a>
+                </div>
+
+              </div>
             </div>
           </div>
         </div>
+
+        <section class="mb-3 markdown-text">{% with_shortcodes training.summary %}</section>
       </div>
 
-      <section class="mb-3 markdown-text">{% with_shortcodes training.summary %}</section>
+
     </div>
-
-
-  </div>
-  {% comment %} <div class="row">
-    <div class="col">
-      <div class="card card-dark">
-        <div class="card-body">
-          <h3 class="mb-3">About this {{ training.type.label }}</h3>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="row mb-2">
-                <div class="col-auto pr-0">
-                  <img src="{% static 'common/images/blank-profile-pic.jpg' %}" class="profile">
-                </div>
-                <div class="col-auto">
-                  <h4 class="comment-name mb-0">Mike Newbon</h4>
-                  <p class="subtitle x-small">Author</p>
-                </div>
-              </div>
+    {% comment %}
+      <div class="row">
+        <div class="col">
+          <div class="card card-dark">
+            <div class="card-body">
+              <h3 class="mb-3">About this {{ training.type.label }}</h3>
               <div class="row">
-                <div class="col">
-                  <p class="mb-0">Blender Artist. Co-Founder of blendFX. Shading, Pipeline, Tracking, Python Scripting.
-                    Also: Knitting.</p>
+                <div class="col-md-6">
+                  <div class="row mb-2">
+                    <div class="col-auto pr-0">
+                      <img src="{% static 'common/images/blank-profile-pic.jpg' %}" class="profile">
+                    </div>
+                    <div class="col-auto">
+                      <h4 class="comment-name mb-0">Mike Newbon</h4>
+                      <p class="subtitle x-small">Author</p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <p class="mb-0">Blender Artist. Co-Founder of blendFX. Shading, Pipeline, Tracking, Python Scripting.
+                        Also: Knitting.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <table class="table table-sm mb-0">
+                    <tbody>
+                      <tr>
+                        <td class="font-weight-bold">Difficulty</td>
+                        <td class="text-right">
+                          <div class="badge badge-difficulty badge-{{ training.difficulty.value }}">
+                            <i class="material-icons btn-material-icons">extension</i>
+                            {{ training.difficulty.label }}
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="font-weight-bold">Last updated</td>
+                        <td class="text-right">{{ training.date_updated|date:"jS F Y" }}</td>
+                      </tr>
+                      <tr>
+                        <td class="font-weight-bold">Estimated duration</td>
+                        <td class="text-right">4h 32m</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
-            </div>
-            <div class="col-md-6">
-              <table class="table table-sm mb-0">
-                <tbody>
-                  <tr>
-                    <td class="font-weight-bold">Difficulty</td>
-                    <td class="text-right">
-                      <div class="badge badge-difficulty badge-{{ training.difficulty.value }}">
-                        <i class="material-icons btn-material-icons">extension</i>
-                        {{ training.difficulty.label }}
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="font-weight-bold">Last updated</td>
-                    <td class="text-right">{{ training.date_updated|date:"jS F Y" }}</td>
-                  </tr>
-                  <tr>
-                    <td class="font-weight-bold">Estimated duration</td>
-                    <td class="text-right">4h 32m</td>
-                  </tr>
-                </tbody>
-              </table>
             </div>
           </div>
         </div>
       </div>
-    </div> {% endcomment %}
-</section>
+    {% endcomment %}
+  </section>
 {% endblock nexted_content %}

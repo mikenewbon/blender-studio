@@ -8,25 +8,25 @@
       <a href="{{ section.url }}" class="file-folder-link">
 
         {% if section.thumbnail_s_url %}
-        <img class="file-image" src="{{ section.thumbnail_s_url }}" alt="{{ section.name }}" />
+          <img class="file-image" src="{{ section.thumbnail_s_url }}" alt="{{ section.name }}" />
         {% endif %}
 
         {% if section.static_asset.source|endswith:".blend" %}
-        <img class="file-icon" src="{% static "common/images/icons/blend.svg" %}" alt="asset preview">
+          <img class="file-icon" src="{% static "common/images/icons/blend.svg" %}" alt="asset preview">
         {% elif section.static_asset.source_type == "file" %}
-        <img class="file-icon" src="{% static "common/images/icons/file.svg" %}" alt="asset preview">
+          <img class="file-icon" src="{% static "common/images/icons/file.svg" %}" alt="asset preview">
         {% elif section.static_asset.source_type == "video" %}
-        <div class="badge badge-video-duration badge-darkhighlight-xstrong">
-          {% firstof section.duration_label section.static_asset.video.duration_label %}
-        </div>
+          <div class="badge badge-video-duration badge-darkhighlight-xstrong">
+            {% firstof section.duration_label section.static_asset.video.duration_label %}
+          </div>
         {% endif %}
       </a>
     </div>
     <a class="file-body" href="{{ section.url }}" data-tooltip="tooltip-overflow" data-placement="top"
       title="{{ section.name }}">
       {% if section.is_free %}
-      <i class="material-icons icon-inline small text-success mr-1" data-toggle="tooltip" data-placement="top"
-        title="Free">lock_open</i>
+        <i class="material-icons icon-inline small text-success mr-1" data-toggle="tooltip" data-placement="top"
+          title="Free">lock_open</i>
       {% endif %}
       <h4 class="overflow-text">{{ section.name }}</h4>
     </a>

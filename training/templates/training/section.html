@@ -7,175 +7,179 @@
 {% block title_append %} - {{ training.name }}: {{ section.name }}{% endblock title_append %}
 
 {% block meta %}
-{% capture title %}{{ training.name }}: {{ section.name }}{% endcapture %}
-{% firstof section.thumbnail_m_url training.thumbnail_m_url as image_url %}
-{% with description=training.description image_url=section.thumbnail_m_url %}
-{% include 'common/components/meta.html'  %}
-{% endwith %}
+  {% capture title %}{{ training.name }}: {{ section.name }}{% endcapture %}
+  {% firstof section.thumbnail_m_url training.thumbnail_m_url as image_url %}
+  {% with description=training.description image_url=section.thumbnail_m_url %}
+    {% include 'common/components/meta.html'  %}
+  {% endwith %}
 {% endblock %}
 
 {% block scripts %}
-{{ block.super }}
-{% if request.user.is_authenticated %}
-{{ section_progress_reporting_data|json_script:"sectionProgressReportingData" }}
-{% endif %}
-{% javascript 'training' %}
+  {{ block.super }}
+  {% if request.user.is_authenticated %}
+    {{ section_progress_reporting_data|json_script:"sectionProgressReportingData" }}
+  {% endif %}
+  {% javascript 'training' %}
 {% endblock scripts %}
 
 {% block nexted_content %}
-<div class="row mb-3">
-  {% if video is not none %}
-  <div class="col training-video">
-    {% if section.is_free or request.user|has_active_subscription %}
-    {% include 'common/components/video_player.html' with url=video.url progress_url=video.progress_url start_position=video.start_position poster=section.thumbnail_m_url %}
-    {% else %}
-    {% include 'common/components/content_locked.html' with background=section.thumbnail_m_url %}
-    {% endif %}
-  </div>
-  {% else %}
-  <div class="col training-video">
-    {% if section.is_free or request.user|has_active_subscription %}
-    {% if section.thumbnail %}
-    {% include "common/components/helpers/image_set.html" with alt=section.name classes="img-fluid img-width-100 rounded" img_source=section.thumbnail xsmall_width="600" small_width="800" medium_width="1000" large_width="1200" xlarge_width="1920" %}
-    {% endif %}
-    {% else %}
-    {% include 'common/components/content_locked.html' with background=training.picture_header %}
-    {% endif %}
-  </div>
-  {% endif %}
-</div>
-<div class="row">
-  <div class="col">
-    <div class="row align-items-start">
-      <div class="col-12 col-md mb-2 mb-md-3">
-        <div class="d-none d-md-block">
-          <p class="subtitle small">{{ chapter.name }}</p>
-          <h2 class="">{{ section.name }}</h2>
-        </div>
-        <div class="text-muted x-small">
-          <p class="d-inline mr-2">{{ section.date_created|date:"jS F Y" }}</p>
-          {% if section.static_asset.license %}
-          <a href="{{ section.static_asset.license.url }}" target="_blank" class="d-inline mr-2 text-muted"
-            data-toggle="tooltip" data-placement="bottom" title="{{ section.static_asset.license.description }}">
-            <i class="material-icons icon-inline x-small">info</i>
-            {{ section.static_asset.license }}
-          </a>
-          {% endif %}
-          {% if section.is_free %}
-          <p class="d-inline mr-2 text-success">
-            <i class="material-icons icon-inline x-small">lock_open</i>
-            Free
-          </p>
-          {% endif %}
-        </div>
+  <div class="row mb-3">
+    {% if video is not none %}
+      <div class="col training-video">
+        {% if section.is_free or request.user|has_active_subscription %}
+          {% include 'common/components/video_player.html' with url=video.url progress_url=video.progress_url start_position=video.start_position poster=section.thumbnail_m_url %}
+        {% else %}
+          {% include 'common/components/content_locked.html' with background=section.thumbnail_m_url %}
+        {% endif %}
       </div>
-
-
-      <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
-        <div class="training-toolbar-container">
-
-          <div class="training-toolbar">
-            {% if section.is_free or request.user|has_active_subscription %}
-            {% if section.download_url %}
-            <a href="{{ section.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span
-                class="subtitle">({{ section.download_size }})</span></a>
-            {% endif %}
-            {% endif %}
-
-            {% if user.is_staff %}
-            <a href="{{ section.admin_url }}" class="btn btn-sm btn-icon btn-dark">
-              <i class="material-icons btn-material-icons">create</i>
-            </a>
-            {% endif %}
-
-            <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
-              <i class="material-icons">more_horiz</i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right">
-              <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank"
-                class="dropdown-item">
-                <i class="material-icons">flag</i>
-                <span>Report Problem</span>
+    {% else %}
+      <div class="col training-video">
+        {% if section.is_free or request.user|has_active_subscription %}
+          {% if section.thumbnail %}
+            {% include "common/components/helpers/image_set.html" with alt=section.name classes="img-fluid img-width-100 rounded" img_source=section.thumbnail xsmall_width="600" small_width="800" medium_width="1000" large_width="1200" xlarge_width="1920" %}
+          {% endif %}
+        {% else %}
+          {% include 'common/components/content_locked.html' with background=training.picture_header %}
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="row align-items-start">
+        <div class="col-12 col-md mb-2 mb-md-3">
+          <div class="d-none d-md-block">
+            <p class="subtitle small">{{ chapter.name }}</p>
+            <h2 class="">{{ section.name }}</h2>
+          </div>
+          <div class="text-muted x-small">
+            <p class="d-inline mr-2">{{ section.date_created|date:"jS F Y" }}</p>
+            {% if section.static_asset.license %}
+              <a href="{{ section.static_asset.license.url }}" target="_blank" class="d-inline mr-2 text-muted"
+                data-toggle="tooltip" data-placement="bottom" title="{{ section.static_asset.license.description }}">
+                <i class="material-icons icon-inline x-small">info</i>
+                {{ section.static_asset.license }}
               </a>
+            {% endif %}
+            {% if section.is_free %}
+              <p class="d-inline mr-2 text-success">
+                <i class="material-icons icon-inline x-small">lock_open</i>
+                Free
+              </p>
+            {% endif %}
+          </div>
+        </div>
+
+
+        <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
+          <div class="training-toolbar-container">
+
+            <div class="training-toolbar">
+              {% if section.is_free or request.user|has_active_subscription %}
+                {% if section.download_url %}
+                  <a href="{{ section.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span
+                    class="subtitle">({{ section.download_size }})</span></a>
+                {% endif %}
+              {% endif %}
+
+              {% if user.is_staff %}
+                <a href="{{ section.admin_url }}" class="btn btn-sm btn-icon btn-dark">
+                  <i class="material-icons btn-material-icons">create</i>
+                </a>
+              {% endif %}
+
+              <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
+                <i class="material-icons">more_horiz</i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-right">
+                <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank"
+                  class="dropdown-item">
+                  <i class="material-icons">flag</i>
+                  <span>Report Problem</span>
+                </a>
+              </div>
+
             </div>
-
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="row mb-2">
-      {% if section.static_asset.author_image_url  %}
-      <div style="background-image:url('{{ section.static_asset.author_image_url }}');" class="profile ml-2"></div>
-      {% else %}
-      <div style="background-image:url('{% static 'common/images/blank-profile-pic.png' %}');" class="profile ml-2">
-      </div>
-      {% endif %}
-
-      <div class="col-auto">
-        <p class="subtitle text-white-50 x-small">Author</p>
-        <h4 class="comment-name">{{ section.static_asset.author_name }}</h4>
-      </div>
-    </div>
-
-    <section class="mb-3 markdown-text">{% with_shortcodes section.text|markdown %}</section>
-
-    {% comment %} <div class="card card-dark d-md-none">
-      <div class="card-body">
-        <!-- TODO(Mike): Get next training -->
-        {% if video is not none %}
-        <div class="row mb-2 justify-content-between">
-          <div class="col-auto">
-            <p class="subtitle small">Autoplay Next Section</p>
-            <h3 class="mb-0">02. Point Tracking - Part 2</h3>
-          </div>
-          {% include 'common/components/checkbox_toggle.html' with checked=False %}
-        </div>
+      <div class="row mb-2">
+        {% if section.static_asset.author_image_url  %}
+          <div style="background-image:url('{{ section.static_asset.author_image_url }}');" class="profile ml-2"></div>
         {% else %}
-        <div class="row mb-2 justify-content-between">
-          <div class="col-md-auto">
-            <p class="subtitle small">Next Section</p>
-            <h3 class="mb-0">02. Point Tracking - Part 2</h3>
+          <div style="background-image:url('{% static 'common/images/blank-profile-pic.png' %}');" class="profile ml-2">
           </div>
-        </div>
         {% endif %}
 
-        <a href="#" class="video-preview">
-          <img src="{% static 'training/images/placeholders/video.jpg' %}" class="img-fluid">
-        </a>
-
+        <div class="col-auto">
+          <p class="subtitle text-white-50 x-small">Author</p>
+          <h4 class="comment-name">{{ section.static_asset.author_name }}</h4>
+        </div>
       </div>
-    </div> {% endcomment %}
 
-    <section class="mb-3">{% include 'comments/components/comment_section.html' %}</section>
+      <section class="mb-3 markdown-text">{% with_shortcodes section.text|markdown %}</section>
 
+      {% comment %}
+        <div class="card card-dark d-md-none">
+          <div class="card-body">
+            <!-- TODO(Mike): Get next training -->
+            {% if video is not none %}
+              <div class="row mb-2 justify-content-between">
+                <div class="col-auto">
+                  <p class="subtitle small">Autoplay Next Section</p>
+                  <h3 class="mb-0">02. Point Tracking - Part 2</h3>
+                </div>
+                {% include 'common/components/checkbox_toggle.html' with checked=False %}
+              </div>
+            {% else %}
+              <div class="row mb-2 justify-content-between">
+                <div class="col-md-auto">
+                  <p class="subtitle small">Next Section</p>
+                  <h3 class="mb-0">02. Point Tracking - Part 2</h3>
+                </div>
+              </div>
+            {% endif %}
+
+            <a href="#" class="video-preview">
+              <img src="{% static 'training/images/placeholders/video.jpg' %}" class="img-fluid">
+            </a>
+
+          </div>
+        </div>
+      {% endcomment %}
+
+      <section class="mb-3">{% include 'comments/components/comment_section.html' %}</section>
+
+    </div>
+    {% comment %}
+      <div class="col-md-4">
+        <div class="card card-dark d-none d-md-block">
+          <div class="card-body">
+            {% if video is not none %}
+              <div class="row mb-2 justify-content-between">
+                <div class="col-md-auto">
+                  <p class="subtitle small">Autoplay Next Section</p>
+                  <h3 class="mb-0">02. Point Tracking - Part 2</h3>
+                </div>
+                {% include 'common/components/checkbox_toggle.html' with checked=False %}
+              </div>
+            {% else %}
+              <div class="row mb-2 justify-content-between">
+                <div class="col-md-auto">
+                  <p class="subtitle small">Next Section</p>
+                  <h3 class="mb-0">02. Point Tracking - Part 2</h3>
+                </div>
+              </div>
+            {% endif %}
+            <a href="#" class="video-preview">
+              <img src="{% static 'training/images/placeholders/video.jpg' %}" class="img-fluid">
+            </a>
+
+          </div>
+        </div>
+      </div>
+    {% endcomment %}
   </div>
-  {% comment %} <div class="col-md-4">
-    <div class="card card-dark d-none d-md-block">
-      <div class="card-body">
-        {% if video is not none %}
-        <div class="row mb-2 justify-content-between">
-          <div class="col-md-auto">
-            <p class="subtitle small">Autoplay Next Section</p>
-            <h3 class="mb-0">02. Point Tracking - Part 2</h3>
-          </div>
-          {% include 'common/components/checkbox_toggle.html' with checked=False %}
-        </div>
-        {% else %}
-        <div class="row mb-2 justify-content-between">
-          <div class="col-md-auto">
-            <p class="subtitle small">Next Section</p>
-            <h3 class="mb-0">02. Point Tracking - Part 2</h3>
-          </div>
-        </div>
-        {% endif %}
-        <a href="#" class="video-preview">
-          <img src="{% static 'training/images/placeholders/video.jpg' %}" class="img-fluid">
-        </a>
-
-      </div>
-    </div>
-  </div> {% endcomment %}
-</div>
 
 {% endblock nexted_content %}

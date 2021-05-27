@@ -3,36 +3,36 @@
 {% block title_prepend %}Blog - {% endblock title_prepend %}
 
 {% block meta %}
-{% with title="Blog" description="Follow the latest updates from the Blender Cloud." %}
-{% include 'common/components/meta.html' %}
-{% endwith %}
+  {% with title="Blog" description="Follow the latest updates from the Blender Cloud." %}
+    {% include 'common/components/meta.html' %}
+  {% endwith %}
 {% endblock %}
 
 {% block content %}
 
-<div class="container-xl pt-4">
-  {% include "common/components/simple_header.html" with title="Blog" subtitle="Follow the latest updates from the Blender Cloud." %}
+  <div class="container-xl pt-4">
+    {% include "common/components/simple_header.html" with title="Blog" subtitle="Follow the latest updates from the Blender Cloud." %}
 
-  <div class="row justify-content-center mb-3">
-    <div class="col-auto text-center">
-      {% include "common/components/navigation/pagination.html" %}
+    <div class="row justify-content-center mb-3">
+      <div class="col-auto text-center">
+        {% include "common/components/navigation/pagination.html" %}
+      </div>
+    </div>
+
+    <div class="row">
+      {% for post in posts %}
+        {% if post.is_published or user.is_superuser %}
+          {% include 'blog/card_blog.html' %}
+        {% endif %}
+      {% endfor %}
+
+    </div>
+
+    <div class="row justify-content-center mb-4">
+      <div class="col-auto text-center">
+        {% include "common/components/navigation/pagination.html" %}
+      </div>
     </div>
   </div>
-
-  <div class="row">
-    {% for post in posts %}
-    {% if post.is_published or user.is_superuser %}
-    {% include 'blog/card_blog.html' %}
-    {% endif %}
-    {% endfor %}
-
-  </div>
-
-  <div class="row justify-content-center mb-4">
-    <div class="col-auto text-center">
-      {% include "common/components/navigation/pagination.html" %}
-    </div>
-  </div>
-</div>
 
 {% endblock content %}

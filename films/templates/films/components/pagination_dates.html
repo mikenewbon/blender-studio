@@ -2,59 +2,59 @@
   <div class="col-auto text-center">
     <nav aria-label="page navigation">
       {% with current=object_list|first %}
-      {% with current_month=current.start_date|date:"YM"|lower %}
-      <ul class="pagination production-logs-dates">
+        {% with current_month=current.start_date|date:"YM"|lower %}
+          <ul class="pagination production-logs-dates">
 
-        {% if next_month %}
-        <li class="page-item">
-          <a class="page-link"
-            href="{% url 'film-production-logs-month' film_slug=film.slug year=next_month.year month=next_month|date:"M"|lower %}">Previous</a>
-        </li>
-        {% if next_month != date_list|first %}
-        <li class="page-item">
-          <a class="page-link"
-            href="{% url 'film-production-logs-month' film_slug=film.slug year=date_list|first|date:"Y"|lower month=date_list|first|date:"M"|lower %}">{{ date_list|first|date:"M Y" }}</a>
-        </li>
-        <li class="page-item disabled">
-          <span class="page-link">...</span>
-        </li>
-        {% endif %}
+            {% if next_month %}
+              <li class="page-item">
+                <a class="page-link"
+                  href="{% url 'film-production-logs-month' film_slug=film.slug year=next_month.year month=next_month|date:"M"|lower %}">Previous</a>
+              </li>
+              {% if next_month != date_list|first %}
+                <li class="page-item">
+                  <a class="page-link"
+                    href="{% url 'film-production-logs-month' film_slug=film.slug year=date_list|first|date:"Y"|lower month=date_list|first|date:"M"|lower %}">{{ date_list|first|date:"M Y" }}</a>
+                </li>
+                <li class="page-item disabled">
+                  <span class="page-link">...</span>
+                </li>
+              {% endif %}
 
-        {% endif %}
+            {% endif %}
 
-        {% for date in date_list %}
-        {% with month=date|date:"YM"|lower %}
-        {% if current_month == month or date == previous_month or date == next_month %}
-        <li class="page-item {% if current_month == month %}active{% endif %} ">
-          <a class="page-link"
-            href="{% url 'film-production-logs-month' film_slug=film.slug year=date.year month=date|date:"M"|lower %}">{{ date|date:"M Y" }}</a>
-        </li>
-        {% endif %}
+            {% for date in date_list %}
+              {% with month=date|date:"YM"|lower %}
+                {% if current_month == month or date == previous_month or date == next_month %}
+                  <li class="page-item {% if current_month == month %}active{% endif %} ">
+                    <a class="page-link"
+                      href="{% url 'film-production-logs-month' film_slug=film.slug year=date.year month=date|date:"M"|lower %}">{{ date|date:"M Y" }}</a>
+                  </li>
+                {% endif %}
+              {% endwith %}
+            {% endfor %}
+
+
+            {% if previous_month %}
+
+              {% if previous_month != date_list|last %}
+                <li class="page-item disabled">
+                  <span class="page-link">...</span>
+                </li>
+                <li class="page-item">
+                  <a class="page-link"
+                    href="{% url 'film-production-logs-month' film_slug=film.slug year=date_list|last|date:"Y"|lower month=date_list|last|date:"M"|lower %}">{{ date_list|last|date:"M Y" }}</a>
+                </li>
+
+              {% endif %}
+
+              <li class="page-item">
+                <a class="page-link"
+                  href="{% url 'film-production-logs-month' film_slug=film.slug year=previous_month.year month=previous_month|date:"M"|lower %}">Next</a>
+              </li>
+            {% endif %}
+
+          </ul>
         {% endwith %}
-        {% endfor %}
-
-
-        {% if previous_month %}
-
-        {% if previous_month != date_list|last %}
-        <li class="page-item disabled">
-          <span class="page-link">...</span>
-        </li>
-        <li class="page-item">
-          <a class="page-link"
-            href="{% url 'film-production-logs-month' film_slug=film.slug year=date_list|last|date:"Y"|lower month=date_list|last|date:"M"|lower %}">{{ date_list|last|date:"M Y" }}</a>
-        </li>
-
-        {% endif %}
-
-        <li class="page-item">
-          <a class="page-link"
-            href="{% url 'film-production-logs-month' film_slug=film.slug year=previous_month.year month=previous_month|date:"M"|lower %}">Next</a>
-        </li>
-        {% endif %}
-
-      </ul>
-      {% endwith %}
       {% endwith %}
     </nav>
   </div>

@@ -2,72 +2,72 @@
 {% load static %}
 
 {% block content %}
-{% with subscription=order.subscription %}
+  {% with subscription=order.subscription %}
 
-<div class="jumbotron jumbotron-fluid header jumbotron-overlay overlay-solid">
+    <div class="jumbotron jumbotron-fluid header jumbotron-overlay overlay-solid">
 
-  <div class="jumbotron-bg-wrapper">
-    <img class="jumbotron-bg" src="{% static 'common/images/join/join-header.png' %}"
-      alt="Cartoon dog eating tasty treats">
-  </div>
+      <div class="jumbotron-bg-wrapper">
+        <img class="jumbotron-bg" src="{% static 'common/images/join/join-header.png' %}"
+          alt="Cartoon dog eating tasty treats">
+      </div>
 
-  <div class="container flat-page-content">
-    <div class="row">
-      <div class="col">
-        <div class="jumbotron-body">
-        <h1 class="thanks">Thanks for subscribing to Blender Cloud!</h1>
-        <p>Make sure to follow the instructions below to activate your account.</p>
+      <div class="container flat-page-content">
+        <div class="row">
+          <div class="col">
+            <div class="jumbotron-body">
+              <h1 class="thanks">Thanks for subscribing to Blender Cloud!</h1>
+              <p>Make sure to follow the instructions below to activate your account.</p>
+            </div>
+          </div>
         </div>
       </div>
+
     </div>
-  </div>
 
-</div>
+    <div class="container flat-page-content my-3">
 
-<div class="container flat-page-content my-3">
+      <div class="row">
 
-  <div class="row">
+        <div class="col">
 
-    <div class="col">
+          <div class="alert alert-warning" role="alert">
+            Your {% include 'subscriptions/components/info.html' %} and will be activated as soon as we have received and handled your bank transfer.
+          </div>
+        </div>
 
-      <div class="alert alert-warning" role="alert">
-        Your {% include 'subscriptions/components/info.html' %} and will be activated as soon as we have received and handled your bank transfer.
       </div>
-    </div>
 
-  </div>
+      <div class="row">
 
-  <div class="row">
+        <div class="col py-3">
+          <h2 class="h3">Instructions:</h2>
+          <ol>
+            <li>Use the adjasent bank details to pay the full amount with the following order number as a reference: <strong>{{ order.id }}</strong></li>
+            <li>You may need to wait a few days until the payment clears before one of our team members activates your account.</li>
+            <li>Once you receive an email to let you know it's been actived, you can start using Blender Cloud immedately!</li>
+          </ol>
 
-    <div class="col py-3">
-      <h2 class="h3">Instructions:</h2>
-      <ol>
-      <li>Use the adjasent bank details to pay the full amount with the following order number as a reference: <strong>{{ order.id }}</strong></li>
-      <li>You may need to wait a few days until the payment clears before one of our team members activates your account.</li>
-      <li>Once you receive an email to let you know it's been actived, you can start using Blender Cloud immedately!</li>
-      </ol>
+          <p>This information is also sent to you by email.</p>
+          <p class="text-muted">
+            Manage subscription in <a href="{% url 'user-settings-billing' %}">your billing settings</a>.
+          </p>
+        </div>
 
-      <p>This information is also sent to you by email.</p>
-      <p class="text-muted">
-        Manage subscription in <a href="{% url 'user-settings-billing' %}">your billing settings</a>.
-      </p>
-    </div>
-
-    <div class="col-md-6">
-      <div class="card card-dark">
-        <div class="card-body">
-          <h2 class="h3">Bank details:</h2>
-          <pre class="text-left">Order number: {{ order.id }}
+        <div class="col-md-6">
+          <div class="card card-dark">
+            <div class="card-body">
+              <h2 class="h3">Bank details:</h2>
+              <pre class="text-left">Order number: {{ order.id }}
 
 {% include "subscriptions/components/bank_transfer_details.txt" %}
           </pre>
+            </div>
+          </div>
         </div>
+
       </div>
+
     </div>
 
-  </div>
-
-</div>
-
-{% endwith %}
+  {% endwith %}
 {% endblock %}

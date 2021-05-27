@@ -7,23 +7,23 @@
         data-url="{% url 'api-asset' film_asset.id %}?site_context={{ site_context }}">
 
         {% if film_asset.static_asset.thumbnail_s_url %}
-        <img class="file-image" src="{{ film_asset.static_asset.thumbnail_s_url }}" alt="{{ asset.name }}"/>
+          <img class="file-image" src="{{ film_asset.static_asset.thumbnail_s_url }}" alt="{{ asset.name }}"/>
         {% endif %}
 
         {% if asset.contains_blend_file %}
-        <img class="file-icon" src="{% static "common/images/icons/blend.svg" %}" alt="asset preview">
+          <img class="file-icon" src="{% static "common/images/icons/blend.svg" %}" alt="asset preview">
         {% elif asset.static_asset.source_type == "file" %}
-        <img class="file-icon" src="{% static "common/images/icons/file.svg" %}" alt="asset preview">
+          <img class="file-icon" src="{% static "common/images/icons/file.svg" %}" alt="asset preview">
         {% elif asset.static_asset.source_type == "video" %}
-        <div class="badge badge-video-duration badge-darkhighlight-xstrong">
-          {{ asset.static_asset.video.duration_label }}
-        </div>
+          <div class="badge badge-video-duration badge-darkhighlight-xstrong">
+            {{ asset.static_asset.video.duration_label }}
+          </div>
         {% endif %}
       </a>
       {% if user_can_edit_asset %}
-      <a href="{{ asset.admin_url }}" target="_blank" class="btn btn-secondary btn-xs btn-icon btn-float">
-        <i class="material-icons btn-material-icons">create</i>
-      </a>
+        <a href="{{ asset.admin_url }}" target="_blank" class="btn btn-secondary btn-xs btn-icon btn-float">
+          <i class="material-icons btn-material-icons">create</i>
+        </a>
       {% endif %}
     </div>
     <a class="file-body" href="{{ film_asset.url }}" data-tooltip="tooltip-overflow" data-placement="top"

@@ -4,86 +4,86 @@
 
 {% block settings %}
 
-<p class="subtitle">Settings</p>
-<h1 class="mb-3">Profile</h1>
-<div class="settings">
-  <div class="row mb-2">
-    <div class="col">
-      <h2 class="mb-0">Blender ID Profile</h2>
-      <p>To change the details below, visit the <a href="{{ BLENDER_ID.BASE_URL }}settings/profile"
+  <p class="subtitle">Settings</p>
+  <h1 class="mb-3">Profile</h1>
+  <div class="settings">
+    <div class="row mb-2">
+      <div class="col">
+        <h2 class="mb-0">Blender ID Profile</h2>
+        <p>To change the details below, visit the <a href="{{ BLENDER_ID.BASE_URL }}settings/profile"
           target="_blank">Blender ID</a> website.</p>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-6 mb-3">
-      <h3 class="mb-0">Full Name</h3>
-      <p>This is displayed in comments.</p>
-      <input disabled class="form-control" type="text" value="{{ user.full_name }}"
-        style="background-image:url({% static "common/images/icons/lock.svg" %});">
-    </div>
-    <div class="col-md-6 mb-3">
-      <h3 class="mb-0">Email</h3>
-      <p>This is how we contact you.</p>
-      <input disabled class="form-control" type="text" value="{{ user.email }}"
-        style="background-image:url({% static "common/images/icons/lock.svg" %});">
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-6 mb-3">
-      <h3 class="mb-0">Username</h3>
-      <p>This is used in comments.</p>
-      <input disabled class="form-control" type="text" value="{{ user.username }}"
-        style="background-image:url({% static "common/images/icons/lock.svg" %});">
-    </div>
-    <div class="col-md-6 mb-3">
-      <h3 class="mb-0">Profile Picture</h3>
-      <p>This is displayed in comments.</p>
-      <img src="{{ user.image_url }}" width="44" height="44" class="rounded" alt="Profile Image">
-    </div>
-  </div>
-
-  <div class="row">
-    {% if user.badges %}
-    <div class="col-md-6 mb-3">
-
-      <h3 class="mb-0">Badges</h3>
-      <p>These are displayed next to your name.</p>
-      <div class="row">
-        <div class="col-md-12 mb-3">
-          {% with width=44 badges=user.badges %}
-          {% include 'users/components/badges.html' %}
-          {% endwith %}
-        </div>
       </div>
-
     </div>
-    {% endif %}
-    <div class="col-md-6 mb-3">
 
-      <h3 class="mb-0">Preview</h3>
-      <p>This is how your profile is displayed.</p>
-      <div class="p-2 bg-secondary rounded">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <h3 class="mb-0">Full Name</h3>
+        <p>This is displayed in comments.</p>
+        <input disabled class="form-control" type="text" value="{{ user.full_name }}"
+          style="background-image:url({% static "common/images/icons/lock.svg" %});">
+      </div>
+      <div class="col-md-6 mb-3">
+        <h3 class="mb-0">Email</h3>
+        <p>This is how we contact you.</p>
+        <input disabled class="form-control" type="text" value="{{ user.email }}"
+          style="background-image:url({% static "common/images/icons/lock.svg" %});">
+      </div>
+    </div>
 
-        <div class="comment-name-date-wrapper mb-0">
-          <div style="background-image:url('{{ user.image_url }}');" class="profile col-profile"></div>
-          <h4 class="comment-name">{{ user.full_name }}</h4>
-          <p class="badge">
-            {% with width=16 badges=user.badges %}
-            {% include 'users/components/badges.html' %}
-            {% endwith %}
-          </p>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <h3 class="mb-0">Username</h3>
+        <p>This is used in comments.</p>
+        <input disabled class="form-control" type="text" value="{{ user.username }}"
+          style="background-image:url({% static "common/images/icons/lock.svg" %});">
+      </div>
+      <div class="col-md-6 mb-3">
+        <h3 class="mb-0">Profile Picture</h3>
+        <p>This is displayed in comments.</p>
+        <img src="{{ user.image_url }}" width="44" height="44" class="rounded" alt="Profile Image">
+      </div>
+    </div>
+
+    <div class="row">
+      {% if user.badges %}
+        <div class="col-md-6 mb-3">
+
+          <h3 class="mb-0">Badges</h3>
+          <p>These are displayed next to your name.</p>
+          <div class="row">
+            <div class="col-md-12 mb-3">
+              {% with width=44 badges=user.badges %}
+                {% include 'users/components/badges.html' %}
+              {% endwith %}
+            </div>
+          </div>
+
+        </div>
+      {% endif %}
+      <div class="col-md-6 mb-3">
+
+        <h3 class="mb-0">Preview</h3>
+        <p>This is how your profile is displayed.</p>
+        <div class="p-2 bg-secondary rounded">
+
+          <div class="comment-name-date-wrapper mb-0">
+            <div style="background-image:url('{{ user.image_url }}');" class="profile col-profile"></div>
+            <h4 class="comment-name">{{ user.full_name }}</h4>
+            <p class="badge">
+              {% with width=16 badges=user.badges %}
+                {% include 'users/components/badges.html' %}
+              {% endwith %}
+            </p>
+          </div>
+
         </div>
 
+
+
       </div>
-
-
-
     </div>
+
+
   </div>
-
-
-</div>
 
 {% endblock settings %}

@@ -5,105 +5,105 @@
 {% block title_append %} - {{ film.title }}{% endblock title_append %}
 
 {% block jumbotron %}
-{% include "films/components/jumbotron_film.html" with film=film %}
+  {% include "films/components/jumbotron_film.html" with film=film %}
 {% endblock jumbotron %}
 
 {% block meta %}
-{% firstof asset.url as url %}
-{% firstof asset.description film.description as description %}
-{% firstof asset.static_asset.thumbnail_m_url film.thumbnail_m_url as image_url %}
-{% if asset and asset.collection.name %}
-{% capture title %}{{ film.title }} - {{ asset.collection.name }}: {{ asset.name }}{% endcapture %}
-{% elif asset %}
-{% capture title %}{{ film.title }} - {{ asset.name }}{% endcapture %}
-{% endif %}
-{% firstof title film.title as title %}
-{% include 'common/components/meta.html' %}
+  {% firstof asset.url as url %}
+  {% firstof asset.description film.description as description %}
+  {% firstof asset.static_asset.thumbnail_m_url film.thumbnail_m_url as image_url %}
+  {% if asset and asset.collection.name %}
+    {% capture title %}{{ film.title }} - {{ asset.collection.name }}: {{ asset.name }}{% endcapture %}
+  {% elif asset %}
+    {% capture title %}{{ film.title }} - {{ asset.name }}{% endcapture %}
+  {% endif %}
+  {% firstof title film.title as title %}
+  {% include 'common/components/meta.html' %}
 {% endblock %}
 
 {% block content %}
 
-<div class="container-xl pt-4">
-  <section class="mb-4">
+  <div class="container-xl pt-4">
+    <section class="mb-4">
 
-    {% if film.show_blog_posts %}
-    <!-- Latest Blog Posts -->
-    {% with subtitle="Read the latest news about "|add:film.title|add:"." %}
-    {% url 'post-list' as blog_url %}
-    {% include 'common/components/cards/card_carousel.html' with title="Latest Blog Posts" title_link=blog_url subtitle=subtitle slides=3 card_set=film_blog_posts|slice:":6" media_type="blog" id="latestPosts" %}
-    {% endwith %}
-    {% endif %}
+      {% if film.show_blog_posts %}
+        <!-- Latest Blog Posts -->
+        {% with subtitle="Read the latest news about "|add:film.title|add:"." %}
+          {% url 'post-list' as blog_url %}
+          {% include 'common/components/cards/card_carousel.html' with title="Latest Blog Posts" title_link=blog_url subtitle=subtitle slides=3 card_set=film_blog_posts|slice:":6" media_type="blog" id="latestPosts" %}
+        {% endwith %}
+      {% endif %}
 
-    {% if production_logs_page %}
-    {# if `production_logs_page` is available here, Film.show_production_logs_as_featured is True #}
-    <!-- Latest Updates -->
+      {% if production_logs_page %}
+        {# if `production_logs_page` is available here, Film.show_production_logs_as_featured is True #}
+        <!-- Latest Updates -->
 
-    <div class="row mb-3">
-      <div class="col text-center">
-        <h2 class="mb-0">This week in Production</h2>
-        <p class="mb-0">Check out what the teams been working on this week on {{ film.title }}.
-          <a href="{% url 'film-production-logs' film.slug %}">See all production logs</a></p>
-      </div>
-    </div>
-
-    <div class="production-logs">
-      {% for production_log in production_logs_page|slice:":1" %}
-      {% include 'films/components/production_log_entry.html' %}
-      {% endfor %}
-    </div>
-
-    <div class="row">
-      <div class="col text-center">
-        <p class="mb-0">Want to see more updates from {{ film.title }}?
-          <a href="{% url 'film-production-logs' film.slug %}">See all production logs</a></p>
-      </div>
-    </div>
-
-    {% else %}
-
-    <div class="row mb-3">
-      <div class="col">
-        <h2 class="mb-0">Featured Content Gallery</h2>
-        <p class="mb-0">Want to see more?
-          <a href="{% url 'film-gallery' film.slug %}">Explore the Content Gallery</a></p>
-      </div>
-    </div>
-
-    {% if featured_artwork %}
-
-    <div class="">
-      <div class="files row grid">
-        <div class="grid-sizer col-6 col-sm-6 col-md-4 col-lg-3"></div>
-        {% for asset in featured_artwork %}
-        {% if asset.is_published or request.user.is_superuser %}
-        {% include "common/components/file.html" with asset=asset site_context="featured_artwork" card_sizes="col-6 col-sm-6 col-md-4 col-lg-3" %}
-        {% endif %}
-        {% endfor %}
-
-      </div>
-    </div>
-    {% else %}
-    <div class="row">
-      <div class="col text-center">
-        <div class="bg-secondary py-4 rounded">
-          <h3 class="mb-0">No Featured Artwork to display</h3>
+        <div class="row mb-3">
+          <div class="col text-center">
+            <h2 class="mb-0">This week in Production</h2>
+            <p class="mb-0">Check out what the teams been working on this week on {{ film.title }}.
+              <a href="{% url 'film-production-logs' film.slug %}">See all production logs</a></p>
+          </div>
         </div>
-      </div>
-    </div>
 
-    {% endif %}
+        <div class="production-logs">
+          {% for production_log in production_logs_page|slice:":1" %}
+            {% include 'films/components/production_log_entry.html' %}
+          {% endfor %}
+        </div>
 
-    {% endif %}
-  </section>
-</div>
+        <div class="row">
+          <div class="col text-center">
+            <p class="mb-0">Want to see more updates from {{ film.title }}?
+              <a href="{% url 'film-production-logs' film.slug %}">See all production logs</a></p>
+          </div>
+        </div>
+
+      {% else %}
+
+        <div class="row mb-3">
+          <div class="col">
+            <h2 class="mb-0">Featured Content Gallery</h2>
+            <p class="mb-0">Want to see more?
+              <a href="{% url 'film-gallery' film.slug %}">Explore the Content Gallery</a></p>
+          </div>
+        </div>
+
+        {% if featured_artwork %}
+
+          <div class="">
+            <div class="files row grid">
+              <div class="grid-sizer col-6 col-sm-6 col-md-4 col-lg-3"></div>
+              {% for asset in featured_artwork %}
+                {% if asset.is_published or request.user.is_superuser %}
+                  {% include "common/components/file.html" with asset=asset site_context="featured_artwork" card_sizes="col-6 col-sm-6 col-md-4 col-lg-3" %}
+                {% endif %}
+              {% endfor %}
+
+            </div>
+          </div>
+        {% else %}
+          <div class="row">
+            <div class="col text-center">
+              <div class="bg-secondary py-4 rounded">
+                <h3 class="mb-0">No Featured Artwork to display</h3>
+              </div>
+            </div>
+          </div>
+
+        {% endif %}
+
+      {% endif %}
+    </section>
+  </div>
 
 {% endblock %}
 
 {% block scripts %}
 
-<script>
-  makeGrid();
+  <script>
+    makeGrid();
 
-</script>
+  </script>
 
 {% endblock scripts %}

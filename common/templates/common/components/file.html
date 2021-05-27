@@ -33,7 +33,7 @@
           <img class="file-icon" src="{% static "common/images/icons/file.svg" %}" alt="asset preview">
         {% elif asset.static_asset.source_type == "video" %}
           <div class="badge badge-video-duration badge-darkhighlight-xstrong">
-              {{ asset.static_asset.video.duration_label }}
+            {{ asset.static_asset.video.duration_label }}
           </div>
         {% endif %}
       {% else %}
@@ -50,17 +50,17 @@
       {% endif %}
     </a>
     {% if user_can_edit_asset %}
-    <a href="{{ asset.admin_url }}" target="_blank" class="btn btn-secondary btn-xs btn-icon btn-float">
-      <i class="material-icons btn-material-icons">create</i>
-    </a>
+      <a href="{{ asset.admin_url }}" target="_blank" class="btn btn-secondary btn-xs btn-icon btn-float">
+        <i class="material-icons btn-material-icons">create</i>
+      </a>
     {% endif %}
   </div>
   <a class="file-body file-modal-link" href="?asset={{ asset.id }}" data-asset-id="{{ asset.id }}"
     data-url="{% url 'api-asset' asset.id %}?site_context={{ site_context }}">
 
     {% if asset.is_free %}
-    <i class="material-icons icon-inline small text-success mr-1" data-toggle="tooltip" data-placement="top"
-      title="Free">lock_open</i>
+      <i class="material-icons icon-inline small text-success mr-1" data-toggle="tooltip" data-placement="top"
+        title="Free">lock_open</i>
     {% endif %}
     <span data-tooltip="tooltip-overflow" data-placement="top" title="{{ asset.name }}" class="overflow-text">
       <h4 class="overflow-text">{{ asset.name }}</h4>

@@ -2,11 +2,11 @@
 {# Page of someone else's activity #}
 
 {% block content %}
-{% include 'users/components/links.html' %}
+  {% include 'users/components/links.html' %}
 
-<div class="row">
+  <div class="row">
     <div class="col-3 mb-3">Viewing {% firstof actor.full_name actor %}'s activity</div>
-</div>
+  </div>
 
-{% include 'users/components/actions.html' %}
+  {% include 'users/components/actions.html' %}
 {% endblock %}

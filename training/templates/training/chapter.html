@@ -7,88 +7,88 @@
 {% block title_append %} - {{ training.name }}: {{ chapter.name }}{% endblock title_append %}
 
 {% block meta %}
-{% capture title %}{{ training.name }}: {{ chapter.name }}{% endcapture %}
-{% firstof chapter.thumbnail_m_url training.thumbnail_m_url as image_url %}
-{% with description=training.description image_url=chapter.thumbnail_m_url %}
-{% include 'common/components/meta.html'  %}
-{% endwith %}
+  {% capture title %}{{ training.name }}: {{ chapter.name }}{% endcapture %}
+  {% firstof chapter.thumbnail_m_url training.thumbnail_m_url as image_url %}
+  {% with description=training.description image_url=chapter.thumbnail_m_url %}
+    {% include 'common/components/meta.html'  %}
+  {% endwith %}
 {% endblock %}
 
 {% block nexted_content %}
-{% if chapter.thumbnail %}
-<div class="row mb-3">
-  <div class="col training-video">
-    {% if section.is_free or request.user|has_active_subscription %}
+  {% if chapter.thumbnail %}
+    <div class="row mb-3">
+      <div class="col training-video">
+        {% if section.is_free or request.user|has_active_subscription %}
 
-    {% include "common/components/helpers/image_set.html" with alt=chapter.name classes="img-fluid img-width-100 rounded" img_source=chapter.thumbnail xsmall_width="600" small_width="800" medium_width="1000" large_width="1200" xlarge_width="1920" %}
+          {% include "common/components/helpers/image_set.html" with alt=chapter.name classes="img-fluid img-width-100 rounded" img_source=chapter.thumbnail xsmall_width="600" small_width="800" medium_width="1000" large_width="1200" xlarge_width="1920" %}
 
-    {% else %}
-    {% include 'common/components/content_locked.html' with background=training.picture_header %}
-    {% endif %}
-  </div>
-</div>
-{% endif %}
-<div class="row mb-3">
-  <div class="col">
-    <div class="row align-items-start">
-      <div class="col-12 col-md mb-3">
-        <div class="d-none d-md-block">
-          <p class="subtitle small">{{ training.name }}</p>
-          <h2 class="mb-0">{{ chapter.name }}</h2>
-        </div>
+        {% else %}
+          {% include 'common/components/content_locked.html' with background=training.picture_header %}
+        {% endif %}
       </div>
+    </div>
+  {% endif %}
+  <div class="row mb-3">
+    <div class="col">
+      <div class="row align-items-start">
+        <div class="col-12 col-md mb-3">
+          <div class="d-none d-md-block">
+            <p class="subtitle small">{{ training.name }}</p>
+            <h2 class="mb-0">{{ chapter.name }}</h2>
+          </div>
+        </div>
 
-      <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
-        <div class="training-toolbar-container">
-          <div class="training-toolbar">
-            {% if user.is_staff %}
-            <a href="{{ chapter.admin_url }}" class="btn btn-sm btn-icon btn-dark">
-              <i class="material-icons btn-material-icons">create</i>
-            </a>
-            {% endif %}
+        <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
+          <div class="training-toolbar-container">
+            <div class="training-toolbar">
+              {% if user.is_staff %}
+                <a href="{{ chapter.admin_url }}" class="btn btn-sm btn-icon btn-dark">
+                  <i class="material-icons btn-material-icons">create</i>
+                </a>
+              {% endif %}
 
-            <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
-              <i class="material-icons">more_horiz</i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right">
-              <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank"
-                class="dropdown-item">
-                <i class="material-icons">flag</i>
-                <span>Report Problem</span>
-              </a>
+              <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
+                <i class="material-icons">more_horiz</i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-right">
+                <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank"
+                  class="dropdown-item">
+                  <i class="material-icons">flag</i>
+                  <span>Report Problem</span>
+                </a>
+              </div>
+
             </div>
-
           </div>
         </div>
       </div>
-    </div>
 
-    {% if chapter.description %}
-    <section class="mb-3 markdown-text">{% with_shortcodes chapter.description|markdown %}</section>
-    {% endif %}
-
-    <div class="files row grid">
-      <div class="grid-sizer col-12 col-sm-6 col-md-6 col-lg-4"></div>
-      {% for section in chapter.sections.all %}
-      {% if section.is_published  %}
-      {% include "common/components/file_section.html" with section=section %}
+      {% if chapter.description %}
+        <section class="mb-3 markdown-text">{% with_shortcodes chapter.description|markdown %}</section>
       {% endif %}
-      {% endfor %}
-    </div>
 
+      <div class="files row grid">
+        <div class="grid-sizer col-12 col-sm-6 col-md-6 col-lg-4"></div>
+        {% for section in chapter.sections.all %}
+          {% if section.is_published  %}
+            {% include "common/components/file_section.html" with section=section %}
+          {% endif %}
+        {% endfor %}
+      </div>
+
+    </div>
   </div>
-</div>
 
 {% endblock nexted_content %}
 
 {% block scripts %}
-{{ block.super }}
+  {{ block.super }}
 
-{% javascript 'training' %}
+  {% javascript 'training' %}
 
-<script>
-  makeGrid();
+  <script>
+    makeGrid();
 
-</script>
+  </script>
 
 {% endblock scripts %}

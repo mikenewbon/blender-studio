@@ -1,133 +1,135 @@
 {% spaceless %}
-{% load looper %}
-{% load subscriptions %}
-<section class="checkout md-5">
-  {% if not plans %}
-  <p>No subscription plans available.</p>
-  {% else %}
+  {% load looper %}
+  {% load subscriptions %}
+  <section class="checkout md-5">
+    {% if not plans %}
+      <p>No subscription plans available.</p>
+    {% else %}
 
 
-  {# On page load this template determines what is selected #}
-  {% firstof form.plan_variation_id.value form.plan_variation_id.initial as current_plan_variation_id %}
-  {% with current_plan_variation=current_plan_variation_id|get_plan_variation %}
-  <div class="payment-tabs-container">
-    <div class="payment-header">
-      <h3 class="payment-header-title">Your Plan</h3>
-      <p class="mb-0 subtitle small">Choose your plan below. <strong>Automatic</strong> payments are cheaper.</p>
-    </div>
-    {% comment %} <div class="payment-tabs">
-      <div class="payment-tab active" data-tab='individual'>
-        <h3 class="payment-tab-title">Individual</h3>
-      </div>
-      <div class="payment-tab" data-tab='team'>
-        <h3 class="payment-tab-title">Team</h3>
-      </div>
-    </div> {% endcomment %}
-    <div class="payment-content">
-
-
-      <div class="payment-content-inner">
-        {% csrf_token %}
-
-        <div class="row mb-2">
-          {# Collection method dropdown #}
-          <div class="col">
-            <label class="h4 mb-1 {% if disabled == True %} subtitle {% endif %}" for="renewal-type">Renewal
-              Type</label>
-            <select id="renewal-type" class="select-plan custom-select form-control" autocomplete="off"
-              {% if disabled == True %} readonly {% endif %}>
-              {% for plan in plans %}
-              <option {% if current_plan_variation.plan_id == plan.pk %}selected{% endif %} value="{{ plan.pk }}"
-                title="{{ plan.description }}">{{ plan.name }}
-              </option>
-              {% endfor %}
-            </select>
+      {# On page load this template determines what is selected #}
+      {% firstof form.plan_variation_id.value form.plan_variation_id.initial as current_plan_variation_id %}
+      {% with current_plan_variation=current_plan_variation_id|get_plan_variation %}
+        <div class="payment-tabs-container">
+          <div class="payment-header">
+            <h3 class="payment-header-title">Your Plan</h3>
+            <p class="mb-0 subtitle small">Choose your plan below. <strong>Automatic</strong> payments are cheaper.</p>
           </div>
-        </div>
-        <div class="row">
-          {# Renewal interval dropdown: selected option is submitted with the form #}
-          {% if plans.count and plans.first.variations.count %}
-          <div class="col">
-            <label class="h4 mb-1 {% if disabled == True %} subtitle {% endif %}" for="renewal-period">Renewal
-              Period</label>
-            <select id="renewal-period" name="plan_variation_id"
-              class="select-plan-variation custom-select form-control" autocomplete="off" {% if disabled == True %}
-              readonly {% endif %}>
-              {% for plan in plans %}
-              {% for variation in plan.variations.active %}
-              {% if variation.currency == preferred_currency %}
-              {% get_taxable variation.price plan.product.type as taxable %}
-              <option {% if current_plan_variation.id == variation.pk %}selected{% endif %}
-                data-first-renewal="{{ variation.first_renewal|date }}"
-                data-currency-symbol="{{ variation.price.currency_symbol }}" data-plan-id="{{ variation.plan_id }}"
-                data-price-recurring="{{ variation|recurring_pricing:taxable.price }}"
-                data-price="{{ taxable.price.decimals_string }}" {% if taxable.tax_is_charged %}
-                data-price-tax="{{ taxable.tax.decimals_string }}"
-                data-price-recurring-tax="{{ taxable.tax.decimals_string }}" data-tax-rate="{{ taxable.tax_rate }}"
-                data-tax-display-name="{{ taxable.tax_type.display_name }}" {% endif %} value="{{ variation.pk }}"
-                {% if current_plan_variation.plan_id != plan.id %} aria-disabled="true" disabled="true" hidden="true"
-                {% endif %}>Every {{ variation.interval_length }} {{ variation.interval_unit }}
-              </option>
-              {% endif %}
-              {% endfor %}
-              {% endfor %}
-            </select>
-          </div>
-          {% endif %}
-        </div>
-
-      </div>
-
-      <div class="payment-tabs-footer">
-        {% get_taxable current_plan_variation.price current_plan_variation.plan.product.type as current_price %}
-        <div class="selected-plan-variation-details">
-          <div class="row mb-3">
-            <div class="col text-bold due-today">
-              <h4 class="mb-0">Due today</h4>
+          {% comment %}
+            <div class="payment-tabs">
+              <div class="payment-tab active" data-tab='individual'>
+                <h3 class="payment-tab-title">Individual</h3>
+              </div>
+              <div class="payment-tab" data-tab='team'>
+                <h3 class="payment-tab-title">Team</h3>
+              </div>
             </div>
-            <div class="col text-right">
-              <h4 class="mb-0"><span class="x-price">{{ current_price.price.with_currency_symbol }}</span></h4>
-              <p class="subtitle x-small"><span class="x-price-tax">{{ current_price.format_tax_amount }}</span></p>
+          {% endcomment %}
+          <div class="payment-content">
+
+
+            <div class="payment-content-inner">
+              {% csrf_token %}
+
+              <div class="row mb-2">
+                {# Collection method dropdown #}
+                <div class="col">
+                  <label class="h4 mb-1 {% if disabled == True %} subtitle {% endif %}" for="renewal-type">Renewal
+                    Type</label>
+                  <select id="renewal-type" class="select-plan custom-select form-control" autocomplete="off"
+                    {% if disabled == True %} readonly {% endif %}>
+                    {% for plan in plans %}
+                      <option {% if current_plan_variation.plan_id == plan.pk %}selected{% endif %} value="{{ plan.pk }}"
+                        title="{{ plan.description }}">{{ plan.name }}
+                      </option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                {# Renewal interval dropdown: selected option is submitted with the form #}
+                {% if plans.count and plans.first.variations.count %}
+                  <div class="col">
+                    <label class="h4 mb-1 {% if disabled == True %} subtitle {% endif %}" for="renewal-period">Renewal
+                      Period</label>
+                    <select id="renewal-period" name="plan_variation_id"
+                      class="select-plan-variation custom-select form-control" autocomplete="off" {% if disabled == True %}
+                        readonly {% endif %}>
+                      {% for plan in plans %}
+                        {% for variation in plan.variations.active %}
+                          {% if variation.currency == preferred_currency %}
+                            {% get_taxable variation.price plan.product.type as taxable %}
+                            <option {% if current_plan_variation.id == variation.pk %}selected{% endif %}
+                              data-first-renewal="{{ variation.first_renewal|date }}"
+                              data-currency-symbol="{{ variation.price.currency_symbol }}" data-plan-id="{{ variation.plan_id }}"
+                              data-price-recurring="{{ variation|recurring_pricing:taxable.price }}"
+                              data-price="{{ taxable.price.decimals_string }}" {% if taxable.tax_is_charged %}
+                                data-price-tax="{{ taxable.tax.decimals_string }}"
+                                data-price-recurring-tax="{{ taxable.tax.decimals_string }}" data-tax-rate="{{ taxable.tax_rate }}"
+                                data-tax-display-name="{{ taxable.tax_type.display_name }}" {% endif %} value="{{ variation.pk }}"
+                              {% if current_plan_variation.plan_id != plan.id %} aria-disabled="true" disabled="true" hidden="true"
+                              {% endif %}>Every {{ variation.interval_length }} {{ variation.interval_unit }}
+                            </option>
+                          {% endif %}
+                        {% endfor %}
+                      {% endfor %}
+                    </select>
+                  </div>
+                {% endif %}
+              </div>
+
             </div>
+
+            <div class="payment-tabs-footer">
+              {% get_taxable current_plan_variation.price current_plan_variation.plan.product.type as current_price %}
+              <div class="selected-plan-variation-details">
+                <div class="row mb-3">
+                  <div class="col text-bold due-today">
+                    <h4 class="mb-0">Due today</h4>
+                  </div>
+                  <div class="col text-right">
+                    <h4 class="mb-0"><span class="x-price">{{ current_price.price.with_currency_symbol }}</span></h4>
+                    <p class="subtitle x-small"><span class="x-price-tax">{{ current_price.format_tax_amount }}</span></p>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col">
+                    <h4 class="mb-0">Recurring total</h4>
+                    <p class="text-muted x-small">Renews <span
+                      class="x-first-renewal">{{ current_plan_variation.first_renewal|date }}</span></p>
+                  </div>
+                  <div class="col text-right">
+                    <h4 class="mb-0">
+                      <span
+                        class="x-price-recurring">{{ current_plan_variation|recurring_pricing:current_price.price }}</span>
+                    </h4>
+                    <p class="subtitle x-small"><span
+                      class="x-price-recurring-tax">{{ current_price.format_tax_amount }}</span></p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mt-3">
+                <div class="col text-right">
+                  {% if user.is_authenticated %}
+                    {# will be enabled when payment gateways are initialized successfully #}
+                    <button id="submit-button" class="btn btn-payment-confirm" type="submit" aria-disabled="true"
+                      disabled>{% firstof submit_button_text "Confirm and pay" %}
+                    </button>
+
+                  {% else %}
+                    <a class="btn btn-success" href="{% url 'oauth:login' %}">Sign in with Blender ID</a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
           </div>
 
-          <div class="row">
-            <div class="col">
-              <h4 class="mb-0">Recurring total</h4>
-              <p class="text-muted x-small">Renews <span
-                  class="x-first-renewal">{{ current_plan_variation.first_renewal|date }}</span></p>
-            </div>
-            <div class="col text-right">
-              <h4 class="mb-0">
-                <span
-                  class="x-price-recurring">{{ current_plan_variation|recurring_pricing:current_price.price }}</span>
-              </h4>
-              <p class="subtitle x-small"><span
-                  class="x-price-recurring-tax">{{ current_price.format_tax_amount }}</span></p>
-            </div>
-          </div>
         </div>
 
-        <div class="row mt-3">
-          <div class="col text-right">
-            {% if user.is_authenticated %}
-            {# will be enabled when payment gateways are initialized successfully #}
-            <button id="submit-button" class="btn btn-payment-confirm" type="submit" aria-disabled="true"
-              disabled>{% firstof submit_button_text "Confirm and pay" %}
-            </button>
-
-            {% else %}
-            <a class="btn btn-success" href="{% url 'oauth:login' %}">Sign in with Blender ID</a>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-
-  {% endwith %}
-  {% endif %}
-</section>
+      {% endwith %}
+    {% endif %}
+  </section>
 {% endspaceless %}

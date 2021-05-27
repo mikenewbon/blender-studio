@@ -2,47 +2,47 @@
 {% load common_extras %}
 
 {% block settings %}
-<p class="subtitle">Settings: Subscription</p>
-<h1 class="mb-3">Billing Address</h1>
+  <p class="subtitle">Settings: Subscription</p>
+  <h1 class="mb-3">Billing Address</h1>
 
-<form class="" id="billing-address-form" method="post">
-  {% with form|add_form_classes as form %}
-  <div class="form">{% csrf_token %}
-    {% include "subscriptions/components/billing_address_form.html" %}
-  </div>
-  <button class="btn btn-primary mt-3" id="submit-billing-info" type="submit">Save Changes</button>
-  {% endwith %}
-</form>
+  <form class="" id="billing-address-form" method="post">
+    {% with form|add_form_classes as form %}
+      <div class="form">{% csrf_token %}
+        {% include "subscriptions/components/billing_address_form.html" %}
+      </div>
+      <button class="btn btn-primary mt-3" id="submit-billing-info" type="submit">Save Changes</button>
+    {% endwith %}
+  </form>
 {% endblock settings %}
 
 {% block scripts %}
-<script>
-  function AddRemoveText(element) {
-    const el = element;
-    if (el.innerText === 'Add') {
-      el.innerText = 'Remove';
-    } else if (el.innerText === 'Remove') {
-      el.innerText = 'Add';
+  <script>
+    function AddRemoveText(element) {
+      const el = element;
+      if (el.innerText === 'Add') {
+        el.innerText = 'Remove';
+      } else if (el.innerText === 'Remove') {
+        el.innerText = 'Add';
+      }
     }
-  }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.add-remove').forEach((element) => {
-      element.parentElement.addEventListener('click', () => {
-        AddRemoveText(element);
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.add-remove').forEach((element) => {
+        element.parentElement.addEventListener('click', () => {
+          AddRemoveText(element);
+        });
       });
-    });
 
-    // When hiding collapsed inputs, empty them.
-    document.querySelectorAll('.collapse').forEach((element) => {
-      $(element).on('hidden.bs.collapse', () => {
-        element.querySelectorAll('input').forEach((input) => {
-          input.value = '';
+      // When hiding collapsed inputs, empty them.
+      document.querySelectorAll('.collapse').forEach((element) => {
+        $(element).on('hidden.bs.collapse', () => {
+          element.querySelectorAll('input').forEach((input) => {
+            input.value = '';
+          });
         });
       });
     });
-  });
 
-</script>
+  </script>
 
 {% endblock scripts %}

@@ -13,13 +13,13 @@
         {{ film.title }}
 
         {% if film.status == "2_released" %}
-        <span class="badge badge-production badge-highlight">
-          {{ film.release_date|date:"Y" }}
-        </span>
+          <span class="badge badge-production badge-highlight">
+            {{ film.release_date|date:"Y" }}
+          </span>
         {% else %}
-        <span class="badge badge-production badge-primary">
-          {{ film.get_status_display }}
-        </span>
+          <span class="badge badge-production badge-primary">
+            {{ film.get_status_display }}
+          </span>
         {% endif %}
 
       </h2>

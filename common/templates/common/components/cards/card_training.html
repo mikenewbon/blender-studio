@@ -6,7 +6,7 @@
         <img class="card-image" alt="{{ training.title }}" src="{{ training.thumbnail_s_url }}">
       </a>
       {% if request.user.is_authenticated %}
-      {% include 'training/components/card_button_favorite.html' with class='btn-save-media card-training-favorite' checked=training.favorited %}
+        {% include 'training/components/card_button_favorite.html' with class='btn-save-media card-training-favorite' checked=training.favorited %}
       {% endif %}
     </div>
 
@@ -23,13 +23,13 @@
     </a>
 
     {% if training.tags.all %}
-    <div class="card-footer">
-      <div class="pills {% comment %}{{ class|join(' ') }}{% endcomment %}">
-        {% for tag in training.tags.all %}
-        {% include 'common/components/cards/pill.html' with label=tag.name %}
-        {% endfor %}
+      <div class="card-footer">
+        <div class="pills {% comment %}{{ class|join(' ') }}{% endcomment %}">
+          {% for tag in training.tags.all %}
+            {% include 'common/components/cards/pill.html' with label=tag.name %}
+          {% endfor %}
+        </div>
       </div>
-    </div>
     {% endif %}
 
   </div>

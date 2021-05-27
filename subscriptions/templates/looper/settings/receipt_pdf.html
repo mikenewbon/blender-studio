@@ -2,77 +2,77 @@
 {% load subscriptions %}
 {% block title %}Blender Cloud Receipt #{{ order.id }}{% endblock %}
 {% block main_content %}
-<table style="width: 40em">
-  <tr>
-    <td colspan="2">
-      <h4>Blender Cloud Receipt</h4>
-    </td>
-  </tr>
-  <tr>
-    <th>Receipt ID</th>
-    <td>{{ order.id }}</td>
-  </tr>
-  <tr>
-    <th>Payment received on</th>
-    <td>{{ order.paid_at|default:order.created_at }}</td>
-  </tr>
-  <tr>
-    <th>Renewal type</th>
-    <td>{{ order.subscription.collection_method|capfirst }}</td>
-  </tr>
-  <tr>
-    <th>Renewal period</th>
-    <td>{{ order.subscription|renewal_period|capfirst }}</td>
-  </tr>
-  <tr>
-    <td colspan="2">
-      <h4>Billing Address</h4>
-    </td>
-  </tr>
-  <tr>
-    <th>Address</th>
-    <td>{{ order.billing_address|linebreaksbr }}</td>
-  </tr>
-  {% if order.vat_number %}
-  <tr>
-    <th>VATIN</th>
-    <td>{{ order.vat_number }}</td>
-  </tr>
-  {% endif %}
-  <tr>
-    <th>E-mail</th>
-    <td>{{ order.email }}</td>
-  </tr>
-  <tr>
-    <td colspan="2">
-      <h4>Payment Information</h4>
-    </td>
-  </tr>
-  <tr>
-    <th>Amount paid</th>
-    <td>
-      {{ order.price.with_currency_symbol_nonocents }}
-      {% with taxable=order.taxable %}
-      {% if taxable.tax_is_charged %}
-      {{ taxable.format_tax_amount }}
-      {% endif %}
-      {% endwith %}
-    </td>
-    {% with refunded=order.total_refunded %}
-    {% if refunded %}
-  </tr>
-  <tr>
-    <th>Amount refunded</th>
-    <td>{{ refunded.with_currency_symbol_nonocents }}</td>
+  <table style="width: 40em">
+    <tr>
+      <td colspan="2">
+        <h4>Blender Cloud Receipt</h4>
+      </td>
+    </tr>
+    <tr>
+      <th>Receipt ID</th>
+      <td>{{ order.id }}</td>
+    </tr>
+    <tr>
+      <th>Payment received on</th>
+      <td>{{ order.paid_at|default:order.created_at }}</td>
+    </tr>
+    <tr>
+      <th>Renewal type</th>
+      <td>{{ order.subscription.collection_method|capfirst }}</td>
+    </tr>
+    <tr>
+      <th>Renewal period</th>
+      <td>{{ order.subscription|renewal_period|capfirst }}</td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <h4>Billing Address</h4>
+      </td>
+    </tr>
+    <tr>
+      <th>Address</th>
+      <td>{{ order.billing_address|linebreaksbr }}</td>
+    </tr>
+    {% if order.vat_number %}
+      <tr>
+        <th>VATIN</th>
+        <td>{{ order.vat_number }}</td>
+      </tr>
     {% endif %}
-    {% endwith %}
-  </tr>
-  <tr>
-    <th>Payment method</th>
-    <td>{{ order.payment_method.recognisable_name }}</td>
-  </tr>{% if order.payment_method.method_type == 'ba' %}
-  <tr>
-    <th>Bank details</th>
-    <td><pre>{% include "subscriptions/components/bank_transfer_details.txt" %}</pre></td>
-  </tr>{% endif %}
-</table>{% endblock %}
+    <tr>
+      <th>E-mail</th>
+      <td>{{ order.email }}</td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <h4>Payment Information</h4>
+      </td>
+    </tr>
+    <tr>
+      <th>Amount paid</th>
+      <td>
+        {{ order.price.with_currency_symbol_nonocents }}
+        {% with taxable=order.taxable %}
+          {% if taxable.tax_is_charged %}
+            {{ taxable.format_tax_amount }}
+          {% endif %}
+        {% endwith %}
+      </td>
+      {% with refunded=order.total_refunded %}
+        {% if refunded %}
+          </tr>
+          <tr>
+            <th>Amount refunded</th>
+            <td>{{ refunded.with_currency_symbol_nonocents }}</td>
+        {% endif %}
+      {% endwith %}
+    </tr>
+    <tr>
+      <th>Payment method</th>
+      <td>{{ order.payment_method.recognisable_name }}</td>
+    </tr>{% if order.payment_method.method_type == 'ba' %}
+      <tr>
+        <th>Bank details</th>
+        <td><pre>{% include "subscriptions/components/bank_transfer_details.txt" %}</pre></td>
+      </tr>{% endif %}
+  </table>{% endblock %}

@@ -5,50 +5,50 @@
 
 {% block content %}
 
-<div class="container-xl pt-4">
-  {% include "common/components/simple_header.html" with title="Stats" subtitle="The latest Blender Cloud numbers." %}
+  <div class="container-xl pt-4">
+    {% include "common/components/simple_header.html" with title="Stats" subtitle="The latest Blender Cloud numbers." %}
 
-  <div class="row">
-    <canvas id="myChart" ></canvas>
+    <div class="row">
+      <canvas id="myChart" ></canvas>
+    </div>
+
   </div>
-
-</div>
 
 
 
 {% endblock content %}
 
 {% block scripts %}
-{% javascript 'vendor_chartjs' %}
-{{ subscribers_by_month_series|json_script:"subscribers_by_month_series" }}
-<script>
-  const subscribersByMonthSeries = JSON.parse(
-    document.getElementById('subscribers_by_month_series').textContent
-  );
-  console.log(subscribersByMonthSeries);
-  var ctx = document.getElementById('myChart');
-  var myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      datasets: [{
+  {% javascript 'vendor_chartjs' %}
+  {{ subscribers_by_month_series|json_script:"subscribers_by_month_series" }}
+  <script>
+    const subscribersByMonthSeries = JSON.parse(
+      document.getElementById('subscribers_by_month_series').textContent
+    );
+    console.log(subscribersByMonthSeries);
+    var ctx = document.getElementById('myChart');
+    var myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        datasets: [{
           borderColor: 'rgb(0,183,255)',
           data: subscribersByMonthSeries
-      }]
-   },
-    options: {
-      legend: {
-        display: false,
+        }]
       },
-      scales: {
-        xAxes: [{
-          type: 'time',
-          time: {
-            unit: 'month'
-          }
-        }],
+      options: {
+        legend: {
+          display: false,
+        },
+        scales: {
+          xAxes: [{
+            type: 'time',
+            time: {
+              unit: 'month'
+            }
+          }],
+        }
       }
-    }
-  });
-</script>
+    });
+  </script>
 
 {% endblock scripts %}

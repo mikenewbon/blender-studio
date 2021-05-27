@@ -6,44 +6,44 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="{% static 'common/images/favicon/favicon.ico' %}">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <title>{% block title_prepend %}{% endblock title_prepend %}Blender
-    Cloud Subscription{% block title_append %}{% endblock title_append %}</title>
-  <meta name="google-site-verification" content="r-8DuUEYwMyb14SRVj0I4mSUSEPmdRRMrT-zMSbFkas">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'common/images/favicon/favicon.ico' %}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>{% block title_prepend %}{% endblock title_prepend %}Blender
+      Cloud Subscription{% block title_append %}{% endblock title_append %}</title>
+    <meta name="google-site-verification" content="r-8DuUEYwMyb14SRVj0I4mSUSEPmdRRMrT-zMSbFkas">
 
-  {% block meta %}
-  {% include 'common/components/meta.html' %}
-  {% endblock meta %}
+    {% block meta %}
+      {% include 'common/components/meta.html' %}
+    {% endblock meta %}
 
-  {% stylesheet 'studio' %}
-</head>
+    {% stylesheet 'studio' %}
+  </head>
 
-<body class="{% block bodyclasses %}{% endblock bodyclasses %}"
-  data-authenticated="{% if request.user.is_authenticated %}true{% else%}false{% endif %}">
+  <body class="{% block bodyclasses %}{% endblock bodyclasses %}"
+    data-authenticated="{% if request.user.is_authenticated %}true{% else%}false{% endif %}">
 
-  <nav class="navbar">
-    <div class="navdrawer-offset">
-      <div class="container-xl flex-nowrap">
+    <nav class="navbar">
+      <div class="navdrawer-offset">
+        <div class="container-xl flex-nowrap">
 
-        <a href="/" class="navbar-brand">
-          <img src="{% static 'common/images/blender_cloud_logo.svg' %}" alt="Blender Cloud">
-        </a>
+          <a href="/" class="navbar-brand">
+            <img src="{% static 'common/images/blender_cloud_logo.svg' %}" alt="Blender Cloud">
+          </a>
 
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
 
-  {% block content %}{% endblock content %}
+    {% block content %}{% endblock content %}
 
-  {{ user_dict|json_script:"current-user" }}
-  {% javascript 'vendor' %}
+    {{ user_dict|json_script:"current-user" }}
+    {% javascript 'vendor' %}
 
 
-  {% block scripts %}{% endblock scripts %}
-</body>
+    {% block scripts %}{% endblock scripts %}
+  </body>
 
 </html>

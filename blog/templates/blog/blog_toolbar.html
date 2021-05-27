@@ -20,31 +20,35 @@
       {% if post.likes.count != 0 %}<span class="likes-count">{{ post.likes.count }}</span>{% endif %}
     </button>
 
-    {% comment %} <a href="http://www.facebook.com/share.php?u=cloud.blender.org/blog/{{ post.post.slug }}"
-      class="btn btn-sm btn-icon btn-dark">
-      <i class="material-icons">facebook</i>
-    </a> {% endcomment %}
-
-    {% comment %} <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
-      <i class="material-icons">share</i>
-    </button>
-
-    <div class="dropdown-menu dropdown-menu-right">
-      <button class="dropdown-item copy-url-clipboard">
-        <i class="material-icons">link</i>
-        <span>Copy link</span>
-      </button>
-      <a href="http://www.facebook.com/share.php?u=cloud.blender.org/blog/{{ post.post.slug }}" target="_blank"
-        class="dropdown-item">
+    {% comment %}
+      <a href="http://www.facebook.com/share.php?u=cloud.blender.org/blog/{{ post.post.slug }}"
+        class="btn btn-sm btn-icon btn-dark">
         <i class="material-icons">facebook</i>
-        <span>Share to Facebook</span>
       </a>
-    </div> {% endcomment %}
+    {% endcomment %}
+
+    {% comment %}
+      <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
+        <i class="material-icons">share</i>
+      </button>
+
+      <div class="dropdown-menu dropdown-menu-right">
+        <button class="dropdown-item copy-url-clipboard">
+          <i class="material-icons">link</i>
+          <span>Copy link</span>
+        </button>
+        <a href="http://www.facebook.com/share.php?u=cloud.blender.org/blog/{{ post.post.slug }}" target="_blank"
+          class="dropdown-item">
+          <i class="material-icons">facebook</i>
+          <span>Share to Facebook</span>
+        </a>
+      </div>
+    {% endcomment %}
 
     {% if user_can_edit_post %}
-    <a href="{{ post.admin_url }}" class="btn btn-sm btn-icon btn-dark">
-      <i class="material-icons">edit</i>
-    </a>
+      <a href="{{ post.admin_url }}" class="btn btn-sm btn-icon btn-dark">
+        <i class="material-icons">edit</i>
+      </a>
     {% endif %}
 
     <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">

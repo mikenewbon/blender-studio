@@ -6,9 +6,9 @@
   <div class="row justify-content-center mb-2">
     <div class="col">
       {% if title_link %}
-      <a href="{{ title_link }}" class="mb-0 h2">{{ title|default:"Title" }}</a>
+        <a href="{{ title_link }}" class="mb-0 h2">{{ title|default:"Title" }}</a>
       {% else %}
-      <h2 class="mb-0">{{ title|default:"Title" }}</h2>
+        <h2 class="mb-0">{{ title|default:"Title" }}</h2>
       {% endif %}
       <p class="mb-0">{{ subtitle|default:"Subtitle" }}</p>
     </div>
@@ -28,30 +28,30 @@
       data-ride="carousel" data-interval="0">
       <div class="carousel-inner w-100" role="listbox">
         {% for card in card_set|slice:':1' %}
-        <div class="carousel-item active">
-          {% if media_type == "file" %}
-          {% include "common/components/file_carousel.html" with film_asset=card card_sizes="col-lg-3 col-6 col-md-4" %}
-          {% elif media_type == "section" %}
-          {% include "training/components/card_training_section.html" with section=card card_sizes="col-lg-3 col-6 col-md-4" %}
-          {% elif media_type == "blog" %}
-          {% include 'blog/card_blog.html' with post=card %}
-          {% elif media_type == "training" %}
-          {% include "training/components/card_training.html" with training=card card_sizes="col-12 col-sm-6 col-lg-4" %}
-          {% endif %}
-        </div>
+          <div class="carousel-item active">
+            {% if media_type == "file" %}
+              {% include "common/components/file_carousel.html" with film_asset=card card_sizes="col-lg-3 col-6 col-md-4" %}
+            {% elif media_type == "section" %}
+              {% include "training/components/card_training_section.html" with section=card card_sizes="col-lg-3 col-6 col-md-4" %}
+            {% elif media_type == "blog" %}
+              {% include 'blog/card_blog.html' with post=card %}
+            {% elif media_type == "training" %}
+              {% include "training/components/card_training.html" with training=card card_sizes="col-12 col-sm-6 col-lg-4" %}
+            {% endif %}
+          </div>
         {% endfor %}
         {% for card in card_set|slice:'1:6' %}
-        <div class="carousel-item">
-          {% if media_type == "file" %}
-          {% include "common/components/file_carousel.html" with film_asset=card card_sizes="col-lg-3 col-6 col-md-4" %}
-          {% elif media_type == "section" %}
-          {% include "training/components/card_training_section.html" with section=card card_sizes="col-lg-3 col-6 col-md-4" %}
-          {% elif media_type == "blog" %}
-          {% include 'blog/card_blog.html' with post=card %}
-          {% elif media_type == "training" %}
-          {% include "training/components/card_training.html" with training=card card_sizes="col-12 col-sm-6 col-lg-4" %}
-          {% endif %}
-        </div>
+          <div class="carousel-item">
+            {% if media_type == "file" %}
+              {% include "common/components/file_carousel.html" with film_asset=card card_sizes="col-lg-3 col-6 col-md-4" %}
+            {% elif media_type == "section" %}
+              {% include "training/components/card_training_section.html" with section=card card_sizes="col-lg-3 col-6 col-md-4" %}
+            {% elif media_type == "blog" %}
+              {% include 'blog/card_blog.html' with post=card %}
+            {% elif media_type == "training" %}
+              {% include "training/components/card_training.html" with training=card card_sizes="col-12 col-sm-6 col-lg-4" %}
+            {% endif %}
+          </div>
         {% endfor %}
       </div>
     </div>

@@ -3,9 +3,9 @@
     <div class="card-header">
       <a class="card-header-link" href="{% url 'post-detail' slug=post.slug %}">
         {% if post.thumbnail %}
-        {% block image %}
-        <img alt="{{ post.title }}" class="card-image" src="{{ post.thumbnail_s_url }}">
-        {% endblock image %}
+          {% block image %}
+            <img alt="{{ post.title }}" class="card-image" src="{{ post.thumbnail_s_url }}">
+          {% endblock image %}
         {% endif %}
       </a>
     </div>
@@ -16,20 +16,20 @@
           {{ post.category|title }}
         </p>
         {% if not post.is_published %}
-        <div class="badge badge-danger">
-          Unpublished
-        </div>
+          <div class="badge badge-danger">
+            Unpublished
+          </div>
         {% elif post.is_new %}
-        <div class="badge badge-primary">
-          New
-        </div>
+          <div class="badge badge-primary">
+            New
+          </div>
         {% else %}
-        <p class="card-subtitle">
-          <i class="material-icons icon-inline small">schedule</i>
-          <span class="date">
-          {{ post.date_published|date:"U" }}
-          </span>
-        </p>
+          <p class="card-subtitle">
+            <i class="material-icons icon-inline small">schedule</i>
+            <span class="date">
+              {{ post.date_published|date:"U" }}
+            </span>
+          </p>
         {% endif %}
 
       </div>

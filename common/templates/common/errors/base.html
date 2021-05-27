@@ -1,10 +1,10 @@
 {% extends 'common/base.html' %}
 {% block content %}
-{% block content_card %}
-<div class="container-xl mt-3">
-  <div class="card card-dark text-center">
-    <div class="card-body">{% block errorbody %} {% endblock %}</div>
-  </div>
-</div>
-{% endblock content_card %}
+  {% block content_card %}
+    <div class="container-xl mt-3">
+      <div class="card card-dark text-center">
+        <div class="card-body">{% block errorbody %} {% endblock %}</div>
+      </div>
+    </div>
+  {% endblock content_card %}
 {% endblock content %}

@@ -5,511 +5,515 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="{% static 'common/images/favicon/favicon.ico' %}">
-  {% comment %}
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet"> {% endcomment %}
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <title>{% block title_prepend %}{% endblock title_prepend %}Blender
-    Cloud{% block title_append %}{% endblock title_append %}</title>
-  <meta name="google-site-verification" content="r-8DuUEYwMyb14SRVj0I4mSUSEPmdRRMrT-zMSbFkas">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'common/images/favicon/favicon.ico' %}">
+    {#<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">#}
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>{% block title_prepend %}{% endblock title_prepend %}Blender
+      Cloud{% block title_append %}{% endblock title_append %}</title>
+    <meta name="google-site-verification" content="r-8DuUEYwMyb14SRVj0I4mSUSEPmdRRMrT-zMSbFkas">
 
-  {% block meta %}
-  {% include 'common/components/meta.html' %}
-  {% endblock meta %}
+    {% block meta %}
+      {% include 'common/components/meta.html' %}
+    {% endblock meta %}
 
-  {% stylesheet 'studio' %}
+    {% stylesheet 'studio' %}
 
-  {% block html_templates %}
-  <template id="comment-template">
-    {% include 'comments/components/comment.html' %}
-  </template>
+    {% block html_templates %}
+      <template id="comment-template">
+        {% include 'comments/components/comment.html' %}
+      </template>
 
-  <template id="comment-reply-input-template">
-    {% comment_input div_class='comment-reply-input' %}
-  </template>
+      <template id="comment-reply-input-template">
+        {% comment_input div_class='comment-reply-input' %}
+      </template>
 
-  <template id="comment-edit-input-template">
-    {% comment_input div_class='comment-edit-input' %}
-  </template>
-  {% endblock %}
-</head>
+      <template id="comment-edit-input-template">
+        {% comment_input div_class='comment-edit-input' %}
+      </template>
+    {% endblock %}
+  </head>
 
-<body class="{% block bodyclasses %}{% endblock bodyclasses %}"
-  data-authenticated="{% if request.user.is_authenticated %}true{% else%}false{% endif %}">
-  <!-- When the body has a nav-drawer, it should have the class 'has-nav-drawer' and when it's wide, 'has-nav-drawer nav-drawer-wide' -->
-  <div class="progress global-progress">
-    <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
-      aria-valuemax="100"></div>
-  </div>
-  <nav class="navbar">
-    <div class="navdrawer-offset">
-      <div class="container-xl flex-nowrap">
+  <body class="{% block bodyclasses %}{% endblock bodyclasses %}"
+    data-authenticated="{% if request.user.is_authenticated %}true{% else%}false{% endif %}">
+    <!-- When the body has a nav-drawer, it should have the class 'has-nav-drawer' and when it's wide, 'has-nav-drawer nav-drawer-wide' -->
+    <div class="progress global-progress">
+      <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
+        aria-valuemax="100"></div>
+    </div>
+    <nav class="navbar">
+      <div class="navdrawer-offset">
+        <div class="container-xl flex-nowrap">
 
-        <div class="navbar-main-mobile">
-          <button class="btn btn-secondary btn-nav btn-icon navdrawertoggle">
-            <i class="material-icons">menu</i>
-          </button>
-        </div>
-
-        <a href="/" class="navbar-brand">
-          <img src="{% static 'common/images/blender_cloud_logo.svg' %}" alt="Blender Cloud">
-        </a>
-
-        <div class="navbar-main-nav">
-          <a href="{% url 'film-list' %}" class="btn btn-secondary btn-nav">
-            <span>Films</span>
-          </a>
-          <a href="{% url 'training-home' %}" class="btn btn-secondary btn-nav">
-            <span>Training</span>
-          </a>
-          {% comment %} <a href="/services/" class="list-group-item">
-            <span>Services</span>
-          </a> {% endcomment %}
-          <a href="{% url 'post-list' %}" class="btn btn-secondary btn-nav">
-            <span>Blog</span>
-          </a>
-
-          <a href="/libraries" class="btn btn-secondary btn-nav">
-            <span>Libraries</span>
-          </a>
-
-          <a href="/services" class="btn btn-secondary btn-nav">
-            <span>Services</span>
-          </a>
-        </div>
-        {% if request.user.is_authenticated %}
-
-        <div class="navbar-main-nav-toolbar">
-
-          <a href="{% url 'search' %}" class="btn btn-secondary btn-nav btn-icon search-button">
-            <i class="material-icons">search</i>
-          </a>
-
-          <div>
-            <button href="{% url 'user-notification' %}" data-toggle="dropdown"
-              class="btn btn-secondary btn-nav btn-icon notification-button mr-2">
-              <i class="material-icons">notifications</i>
-              {% if user.notifications_unread.count >= 1 %}
-              <span class="notifications-counter">{{ user.notifications_unread.count }}</span>
-              {% endif %}
+          <div class="navbar-main-mobile">
+            <button class="btn btn-secondary btn-nav btn-icon navdrawertoggle">
+              <i class="material-icons">menu</i>
             </button>
-            <div class="dropdown-menu dropdown-menu-right notification-dropdown">
-
-              <div class="dropdown-double">
-                <a href="{% url 'user-notification' %}" class="dropdown-item">
-                  <i class="material-icons">notifications</i>
-                  <span>Notifications</span>
-                </a>
-
-                <button class="dropdown-item icon {% if user.notifications_unread.count >= 1 %}unread{% endif %}"
-                  data-toggle="tooltip" data-placement="top"
-                  data-mark-all-read-url="{% url 'api-notifications-mark-read' %}" title="Mark all as read">
-                  <i class="material-icons">markunread_mailbox</i>
-                </button>
-              </div>
-
-              <div class="dropdown-menu-nested">
-
-                {% for notification in user.notifications.all|slice:":10" %}
-                {% with action=notification.action %}
-                {% include 'users/components/nav_action.html' %}
-                {% endwith %}
-                {% empty %}
-                <p class="px-2 py-2 subtitle text-center">
-                  No notifications yet
-                </p>
-                {% endfor %}
-
-              </div>
-
-              <a href="{% url 'user-notification' %}" class="dropdown-item small">
-                <span>See all notifications</span>
-              </a>
-
-            </div>
           </div>
 
-          <div>
-            <button data-toggle="dropdown" class="btn btn-secondary btn-nav btn-profile">
-              {% if request.user.is_authenticated and request.user.image_url %}
-              <div style="background-image:url('{{ request.user.image_url }}');" class="profile"></div>
-              {% else %}
-              <div style="background-image:url('{% static 'common/images/blank-profile-pic.png' %}');" class="profile">
-              </div>
-              {% endif %}
-              {% if request.user|has_group:"demo"  %}
-              <i class="profile-subscription-badge demo material-icons">favorite</i>
-              {% elif request.user|has_active_subscription %}
-              <i class="profile-subscription-badge subscriber material-icons">done</i>
-              {% else %}
-              <i class="profile-subscription-badge unsubscribed material-icons">priority_high</i>
-              {% endif %}
-            </button>
-            <div class="dropdown-menu dropdown-menu-right">
-
-              <a href="/p/home/" class="dropdown-item">
-                <i class="material-icons">home</i>
-                <span>My Cloud</span>
-              </a>
-
-              <a href="{% url 'user-activity' %}" class="dropdown-item">
-                <i class="material-icons">timeline</i>
-                <span>My Activity</span>
-              </a>
-
-              <div class="dropdown-menu-nested">
-                {% if request.user.is_authenticated %}
-                {% if request.user|has_group:"demo" %}
-                <a href="/settings/billing" class="dropdown-item text-blue">
-                  <i class="material-icons">favorite</i>
-                  <span>Free Account</span>
-                </a>
-                {% elif request.user|has_active_subscription %}
-                <a href="/settings/billing" class="dropdown-item text-green">
-                  <i class="material-icons">done</i>
-                  <span>Subscription Active</span>
-                </a>
-                {% else %}
-                <a href="/settings/billing" class="dropdown-item text-red">
-                  <i class="material-icons">error</i>
-                  <span>Subscription Inactive</span>
-                </a>
-                {% endif %}
-                {% endif %}
-
-                <a href="/settings/profile" class="dropdown-item">
-                  <i class="material-icons">settings</i>
-                  <span>Settings</span>
-                </a>
-
-                <a href="/settings/billing" class="dropdown-item">
-                  <i class="material-icons">credit_card</i>
-                  <span>Subscription</span>
-                </a>
-              </div>
-
-              {% if user.is_superuser %}
-              <a href="/admin" class="dropdown-item">
-                <i class="material-icons">security</i>
-                <span>Admin</span>
-              </a>
-              {% endif %}
-
-              <a href="{% url 'oauth:logout' %}" class="dropdown-item">
-                <i class="material-icons">exit_to_app</i>
-                <span>Sign Out</span>
-              </a>
-
-            </div>
-          </div>
-
-        </div>
-        {% else %}
-        <div class="navbar-login-wrapper">
-          <a href="{% url 'search' %}" class="btn mr-2 btn-secondary btn-nav btn-icon search-button">
-            <i class="material-icons">search</i>
+          <a href="/" class="navbar-brand">
+            <img src="{% static 'common/images/blender_cloud_logo.svg' %}" alt="Blender Cloud">
           </a>
-          <a href="{% url 'oauth:login' %}" class="btn btn-transparent btn-nav login-button">Login</a>
-          <a {% include "subscriptions/components/join_url" %} class="btn btn-primary ">Join
-            <span class="d-none d-lg-inline-block">Blender Cloud</span></a>
 
-        </div>
-        {% endif %}
-      </div>
-    </div>
-  </nav>
-
-
-
-
-  {% block jumbotron %}{% endblock jumbotron %}
-
-
-  {% block secondary_nav %}{% endblock secondary_nav %}
-  {% comment %} <div class="navbar-secondary">
-    <div class="content-holder">
-      <div class="container-xl">
-        <div class="list-group list-group-flush list-group-horizontal small">
-
-        </div>
-      </div>
-    </div>
-  </div> {% endcomment %}
-
-  {% block nav_drawer %}
-
-  <nav class="nav-drawer">
-    <div class="nav-drawer-body">
-      {% comment %} <div class="px-2 py-2 d-block d-md-none">
-        <div class="input-group mb-0">
-          <div class="input-group-prepend">
-            <span class="input-group-text">
-              <i class="material-icons">search</i></span>
-          </div><input class="form-control" type="text" placeholder="Search tags and keywords" />
-        </div>
-      </div> {% endcomment %}
-      <div class="navbar-secondary d-md-none">
-        <div class="navdrawer-offset">
-          <div class="container-fluid px-2 py-1">
-            <div class="row ">
-
-              <div class="col-6 p-0">
-                <a class="h3 drawer-nav-dropdown" href="{% url 'film-list' %}">
-                  <span>Films</span>
-                </a>
-              </div>
-
-              <div class="col-6 p-0">
-                <a class="h3 drawer-nav-dropdown" href="{% url 'training-home' %}">
-                  <span>Training</span>
-                </a>
-              </div>
-
-              <div class="col-6 p-0">
-                <a class="h3 drawer-nav-dropdown" href="{% url 'post-list' %}">Blog</a>
-              </div>
-
-              <div class="col-6 p-0">
-                <a class="h3 drawer-nav-dropdown" href="/libraries">Libraries</a>
-              </div>
-
-              <div class="col-6 p-0">
-                <a class="h3 drawer-nav-dropdown" href="/services">Services</a>
-              </div>
-
-              <div class="col-6 p-0">
-                <a class="h3 drawer-nav-dropdown" href="{% url 'search' %}">Search</a>
-              </div>
-
-              {% if not request.user.is_authenticated %}
-
-              <div class="col-6 p-0">
-                <a class="h3 drawer-nav-dropdown" href="{% url 'oauth:login' %}">Login</a>
-              </div>
-
-              <div class="col-6 p-0">
-                <a class="h3 drawer-nav-dropdown text-primary" href="{% url 'oauth:login' %}">Join</a>
-              </div>
-
-              {% else %}
-
-              <div class="col-6 p-0">
-                <a class="h3 drawer-nav-dropdown" href="{% url 'user-notification' %}">Notifications</a>
-              </div>
-
-              {% endif %}
-
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {% block nav_drawer_inner %}
-      {% endblock nav_drawer_inner %}
-    </div>
-  </nav>
-
-  {% endblock nav_drawer %}
-
-  <div class="content-holder navdrawer-offset">
-    {% block breadcrumbs %}{% endblock breadcrumbs %}
-    {% comment %} <nav class="navbar-secondary" aria-label="breadcrumbs">
-      <div class="content-holder">
-        <div class="container-xl">
-
-        </div>
-      </div>
-    </nav> {% endcomment %}
-
-    {% block content %}{% endblock content %}
-  </div>
-  {% block footer %}
-  <footer class="bg-navigation py-4">
-    <div class="navdrawer-offset">
-      <div class="container-xl">
-        <div class="row">
-          <div class="col-lg-3 col-md-4 mb-4 mb-md-0">
-            <a href="/">
-              <img src="{% static 'common/images/blender_cloud_logo.svg' %}" alt="Blender Cloud" class="mb-2">
+          <div class="navbar-main-nav">
+            <a href="{% url 'film-list' %}" class="btn btn-secondary btn-nav">
+              <span>Films</span>
             </a>
-            <p class="text-muted x-small">Blender Cloud is the creative hub for your projects, powered by
-              Free
-              and Open Source Software.</p>
-            <div class="footer-social-media">
-              <a href="https://www.facebook.com/BlenderCloudOfficial" target="_blank" class="mr-3">
-                <img alt="Facebook Logo" src="{% static 'common/images/icons/facebook.svg' %}">
+            <a href="{% url 'training-home' %}" class="btn btn-secondary btn-nav">
+              <span>Training</span>
+            </a>
+            {% comment %} <a href="/services/" class="list-group-item">
+                <span>Services</span>
               </a>
-              <a href="https://twitter.com/Blender_Cloud" target="_blank" class="mr-3">
-                <img alt="Twitter Logo" src="{% static 'common/images/icons/twitter.svg' %}">
+            {% endcomment %}
+            <a href="{% url 'post-list' %}" class="btn btn-secondary btn-nav">
+              <span>Blog</span>
+            </a>
+
+            <a href="/libraries" class="btn btn-secondary btn-nav">
+              <span>Libraries</span>
+            </a>
+
+            <a href="/services" class="btn btn-secondary btn-nav">
+              <span>Services</span>
+            </a>
+          </div>
+          {% if request.user.is_authenticated %}
+
+            <div class="navbar-main-nav-toolbar">
+
+              <a href="{% url 'search' %}" class="btn btn-secondary btn-nav btn-icon search-button">
+                <i class="material-icons">search</i>
               </a>
-              <a href="https://www.youtube.com/channel/UC5qvW9fotdsSJkCguB_t-kQ" target="_blank">
-                <img alt="YouTube Logo" src="{% static 'common/images/icons/youtube.svg' %}">
+
+              <div>
+                <button href="{% url 'user-notification' %}" data-toggle="dropdown"
+                  class="btn btn-secondary btn-nav btn-icon notification-button mr-2">
+                  <i class="material-icons">notifications</i>
+                  {% if user.notifications_unread.count >= 1 %}
+                    <span class="notifications-counter">{{ user.notifications_unread.count }}</span>
+                  {% endif %}
+                </button>
+                <div class="dropdown-menu dropdown-menu-right notification-dropdown">
+
+                  <div class="dropdown-double">
+                    <a href="{% url 'user-notification' %}" class="dropdown-item">
+                      <i class="material-icons">notifications</i>
+                      <span>Notifications</span>
+                    </a>
+
+                    <button class="dropdown-item icon {% if user.notifications_unread.count >= 1 %}unread{% endif %}"
+                      data-toggle="tooltip" data-placement="top"
+                      data-mark-all-read-url="{% url 'api-notifications-mark-read' %}" title="Mark all as read">
+                      <i class="material-icons">markunread_mailbox</i>
+                    </button>
+                  </div>
+
+                  <div class="dropdown-menu-nested">
+
+                    {% for notification in user.notifications.all|slice:":10" %}
+                      {% with action=notification.action %}
+                        {% include 'users/components/nav_action.html' %}
+                      {% endwith %}
+                    {% empty %}
+                      <p class="px-2 py-2 subtitle text-center">
+                        No notifications yet
+                      </p>
+                    {% endfor %}
+
+                  </div>
+
+                  <a href="{% url 'user-notification' %}" class="dropdown-item small">
+                    <span>See all notifications</span>
+                  </a>
+
+                </div>
+              </div>
+
+              <div>
+                <button data-toggle="dropdown" class="btn btn-secondary btn-nav btn-profile">
+                  {% if request.user.is_authenticated and request.user.image_url %}
+                    <div style="background-image:url('{{ request.user.image_url }}');" class="profile"></div>
+                  {% else %}
+                    <div style="background-image:url('{% static 'common/images/blank-profile-pic.png' %}');" class="profile">
+                    </div>
+                  {% endif %}
+                  {% if request.user|has_group:"demo"  %}
+                    <i class="profile-subscription-badge demo material-icons">favorite</i>
+                  {% elif request.user|has_active_subscription %}
+                    <i class="profile-subscription-badge subscriber material-icons">done</i>
+                  {% else %}
+                    <i class="profile-subscription-badge unsubscribed material-icons">priority_high</i>
+                  {% endif %}
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+
+                  <a href="/p/home/" class="dropdown-item">
+                    <i class="material-icons">home</i>
+                    <span>My Cloud</span>
+                  </a>
+
+                  <a href="{% url 'user-activity' %}" class="dropdown-item">
+                    <i class="material-icons">timeline</i>
+                    <span>My Activity</span>
+                  </a>
+
+                  <div class="dropdown-menu-nested">
+                    {% if request.user.is_authenticated %}
+                      {% if request.user|has_group:"demo" %}
+                        <a href="/settings/billing" class="dropdown-item text-blue">
+                          <i class="material-icons">favorite</i>
+                          <span>Free Account</span>
+                        </a>
+                      {% elif request.user|has_active_subscription %}
+                        <a href="/settings/billing" class="dropdown-item text-green">
+                          <i class="material-icons">done</i>
+                          <span>Subscription Active</span>
+                        </a>
+                      {% else %}
+                        <a href="/settings/billing" class="dropdown-item text-red">
+                          <i class="material-icons">error</i>
+                          <span>Subscription Inactive</span>
+                        </a>
+                      {% endif %}
+                    {% endif %}
+
+                    <a href="/settings/profile" class="dropdown-item">
+                      <i class="material-icons">settings</i>
+                      <span>Settings</span>
+                    </a>
+
+                    <a href="/settings/billing" class="dropdown-item">
+                      <i class="material-icons">credit_card</i>
+                      <span>Subscription</span>
+                    </a>
+                  </div>
+
+                  {% if user.is_superuser %}
+                    <a href="/admin" class="dropdown-item">
+                      <i class="material-icons">security</i>
+                      <span>Admin</span>
+                    </a>
+                  {% endif %}
+
+                  <a href="{% url 'oauth:logout' %}" class="dropdown-item">
+                    <i class="material-icons">exit_to_app</i>
+                    <span>Sign Out</span>
+                  </a>
+
+                </div>
+              </div>
+
+            </div>
+          {% else %}
+            <div class="navbar-login-wrapper">
+              <a href="{% url 'search' %}" class="btn mr-2 btn-secondary btn-nav btn-icon search-button">
+                <i class="material-icons">search</i>
               </a>
+              <a href="{% url 'oauth:login' %}" class="btn btn-transparent btn-nav login-button">Login</a>
+              <a {% include "subscriptions/components/join_url" %} class="btn btn-primary ">Join
+                <span class="d-none d-lg-inline-block">Blender Cloud</span></a>
+
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+
+
+
+
+    {% block jumbotron %}{% endblock jumbotron %}
+
+
+    {% block secondary_nav %}{% endblock secondary_nav %}
+    {% comment %}
+      <div class="navbar-secondary">
+        <div class="content-holder">
+          <div class="container-xl">
+            <div class="list-group list-group-flush list-group-horizontal small">
+
             </div>
           </div>
-          <div class="col-md-8 offset-lg-1">
-            <div class="row text-white">
-              <div class="col-md-3 col-6">
-                <ul>
-                  <li class="mb-2"><a href="{% url 'film-list' %}" class="h3 text-white">Films</a></li>
-                  <li class="mb-2"><a href="{% url 'training-home' %}" class="h3 text-white">Training</a></li>
-                  <li class="mb-2"><a href="{% url 'post-list' %}" class="h3 text-white">Blog</a></li>
-                  {% comment %} <li class="mb-2"><a href="/services" class="h3 text-white">Services</a></li>
-                  {% endcomment %}
-                </ul>
+        </div>
+      </div>
+    {% endcomment %}
 
-                {% comment %} <ul>
-                  <li>
-                    <a href="#" class="small text-white">Courses</a>
-                  </li>
-                  <li>
-                    <a href="#" class="small text-white">Workshops</a>
-                  </li>
-                  <li>
-                    <a href="#" class="small text-white">Production Lessons</a>
-                  </li>
-                </ul> {% endcomment %}
+    {% block nav_drawer %}
 
+      <nav class="nav-drawer">
+        <div class="nav-drawer-body">
+          {% comment %}
+            <div class="px-2 py-2 d-block d-md-none">
+              <div class="input-group mb-0">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="material-icons">search</i></span>
+                </div><input class="form-control" type="text" placeholder="Search tags and keywords" />
               </div>
-              <div class="col-md-3 col-6">
-                <a href="/services" class="h3 text-white">Services</a>
-                <ul>
-                  <li>
-                    <a href="/services#blender-cloud-add-on" class="small text-white">Add-on</a>
-                  </li>
-                  <li>
-                    <a href="/p/home/" class="small text-white">Blender Sync</a>
-                  </li>
-                  <li>
-                    <a href="/attract" class="small text-white">Attract</a>
-                  </li>
-                  <li>
-                    <a href="/flamenco" class="small text-white">Flamenco</a>
-                  </li>
-                  <li>
-                    <a href="/p/home/images" class="small text-white">Image Sharing</a>
-                  </li>
-                </ul>
-              </div>
-              <div class="col-md-3 col-6">
-                <a href="/libraries" class="h3 text-white">Libraries</a>
-                <ul>
-                  <li>
-                    <a href="/p/hdri/" class="small text-white">HDRIs</a>
-                  </li>
-                  <li>
-                    <a href="/p/textures/" class="small text-white">Textures</a>
-                  </li>
-                  <li>
-                    <a href="/p/characters/" class="small text-white">Characters</a>
-                  </li>
-                  <li>
-                    <a href="/p/gallery/" class="small text-white">Art Gallery</a>
-                  </li>
-                </ul>
-              </div>
+            </div>
+          {% endcomment %}
+          <div class="navbar-secondary d-md-none">
+            <div class="navdrawer-offset">
+              <div class="container-fluid px-2 py-1">
+                <div class="row ">
 
-              <div class="col-md-3 col-6">
-                <a href="/" class="h3 text-white">Cloud</a>
-                <ul>
-                  <li>
-                    <a href="/terms-and-conditions" class="small text-white">Terms &amp; Conditions</a>
-                  </li>
-                  <li>
-                    <a href="/privacy" class="small text-white">Privacy Policy</a>
-                  </li>
-                  <li>
-                    <a href="/contact" class="small text-white">Contact</a>
-                  </li>
-                </ul>
-                <a href="https://www.blender.org/" target="_blank" class="small text-white">Blender.org</a>
+                  <div class="col-6 p-0">
+                    <a class="h3 drawer-nav-dropdown" href="{% url 'film-list' %}">
+                      <span>Films</span>
+                    </a>
+                  </div>
+
+                  <div class="col-6 p-0">
+                    <a class="h3 drawer-nav-dropdown" href="{% url 'training-home' %}">
+                      <span>Training</span>
+                    </a>
+                  </div>
+
+                  <div class="col-6 p-0">
+                    <a class="h3 drawer-nav-dropdown" href="{% url 'post-list' %}">Blog</a>
+                  </div>
+
+                  <div class="col-6 p-0">
+                    <a class="h3 drawer-nav-dropdown" href="/libraries">Libraries</a>
+                  </div>
+
+                  <div class="col-6 p-0">
+                    <a class="h3 drawer-nav-dropdown" href="/services">Services</a>
+                  </div>
+
+                  <div class="col-6 p-0">
+                    <a class="h3 drawer-nav-dropdown" href="{% url 'search' %}">Search</a>
+                  </div>
+
+                  {% if not request.user.is_authenticated %}
+
+                    <div class="col-6 p-0">
+                      <a class="h3 drawer-nav-dropdown" href="{% url 'oauth:login' %}">Login</a>
+                    </div>
+
+                    <div class="col-6 p-0">
+                      <a class="h3 drawer-nav-dropdown text-primary" href="{% url 'oauth:login' %}">Join</a>
+                    </div>
+
+                  {% else %}
+
+                    <div class="col-6 p-0">
+                      <a class="h3 drawer-nav-dropdown" href="{% url 'user-notification' %}">Notifications</a>
+                    </div>
+
+                  {% endif %}
+
+                </div>
               </div>
+            </div>
+          </div>
+
+          {% block nav_drawer_inner %}
+          {% endblock nav_drawer_inner %}
+        </div>
+      </nav>
+
+    {% endblock nav_drawer %}
+
+    <div class="content-holder navdrawer-offset">
+      {% block breadcrumbs %}{% endblock breadcrumbs %}
+      {% comment %}
+        <nav class="navbar-secondary" aria-label="breadcrumbs">
+          <div class="content-holder">
+            <div class="container-xl">
+
+            </div>
+          </div>
+        </nav>
+      {% endcomment %}
+
+      {% block content %}{% endblock content %}
+    </div>
+    {% block footer %}
+      <footer class="bg-navigation py-4">
+        <div class="navdrawer-offset">
+          <div class="container-xl">
+            <div class="row">
+              <div class="col-lg-3 col-md-4 mb-4 mb-md-0">
+                <a href="/">
+                  <img src="{% static 'common/images/blender_cloud_logo.svg' %}" alt="Blender Cloud" class="mb-2">
+                </a>
+                <p class="text-muted x-small">Blender Cloud is the creative hub for your projects, powered by
+                  Free
+                  and Open Source Software.</p>
+                <div class="footer-social-media">
+                  <a href="https://www.facebook.com/BlenderCloudOfficial" target="_blank" class="mr-3">
+                    <img alt="Facebook Logo" src="{% static 'common/images/icons/facebook.svg' %}">
+                  </a>
+                  <a href="https://twitter.com/Blender_Cloud" target="_blank" class="mr-3">
+                    <img alt="Twitter Logo" src="{% static 'common/images/icons/twitter.svg' %}">
+                  </a>
+                  <a href="https://www.youtube.com/channel/UC5qvW9fotdsSJkCguB_t-kQ" target="_blank">
+                    <img alt="YouTube Logo" src="{% static 'common/images/icons/youtube.svg' %}">
+                  </a>
+                </div>
+              </div>
+              <div class="col-md-8 offset-lg-1">
+                <div class="row text-white">
+                  <div class="col-md-3 col-6">
+                    <ul>
+                      <li class="mb-2"><a href="{% url 'film-list' %}" class="h3 text-white">Films</a></li>
+                      <li class="mb-2"><a href="{% url 'training-home' %}" class="h3 text-white">Training</a></li>
+                      <li class="mb-2"><a href="{% url 'post-list' %}" class="h3 text-white">Blog</a></li>
+                      {#<li class="mb-2"><a href="/services" class="h3 text-white">Services</a></li>#}
+                    </ul>
+
+                    {% comment %}
+                      <ul>
+                        <li>
+                          <a href="#" class="small text-white">Courses</a>
+                        </li>
+                        <li>
+                          <a href="#" class="small text-white">Workshops</a>
+                        </li>
+                        <li>
+                          <a href="#" class="small text-white">Production Lessons</a>
+                        </li>
+                      </ul>
+                    {% endcomment %}
+
+                  </div>
+                  <div class="col-md-3 col-6">
+                    <a href="/services" class="h3 text-white">Services</a>
+                    <ul>
+                      <li>
+                        <a href="/services#blender-cloud-add-on" class="small text-white">Add-on</a>
+                      </li>
+                      <li>
+                        <a href="/p/home/" class="small text-white">Blender Sync</a>
+                      </li>
+                      <li>
+                        <a href="/attract" class="small text-white">Attract</a>
+                      </li>
+                      <li>
+                        <a href="/flamenco" class="small text-white">Flamenco</a>
+                      </li>
+                      <li>
+                        <a href="/p/home/images" class="small text-white">Image Sharing</a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-md-3 col-6">
+                    <a href="/libraries" class="h3 text-white">Libraries</a>
+                    <ul>
+                      <li>
+                        <a href="/p/hdri/" class="small text-white">HDRIs</a>
+                      </li>
+                      <li>
+                        <a href="/p/textures/" class="small text-white">Textures</a>
+                      </li>
+                      <li>
+                        <a href="/p/characters/" class="small text-white">Characters</a>
+                      </li>
+                      <li>
+                        <a href="/p/gallery/" class="small text-white">Art Gallery</a>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="col-md-3 col-6">
+                    <a href="/" class="h3 text-white">Cloud</a>
+                    <ul>
+                      <li>
+                        <a href="/terms-and-conditions" class="small text-white">Terms &amp; Conditions</a>
+                      </li>
+                      <li>
+                        <a href="/privacy" class="small text-white">Privacy Policy</a>
+                      </li>
+                      <li>
+                        <a href="/contact" class="small text-white">Contact</a>
+                      </li>
+                    </ul>
+                    <a href="https://www.blender.org/" target="_blank" class="small text-white">Blender.org</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    {% endblock footer %}
+
+    <div id="file-modal" class="modal modal-asset" tabindex="-1" role="dialog" aria-hidden="true">
+      {# This is the modal div, the contents from "modal_asset.html" are inserted here. #}
+      <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+
+    <div id="file-zoom-modal" class="modal modal-asset-zoom" tabindex="-1" role="dialog" aria-hidden="true">
+      {# This is the zoom modal div, the contents from "modal_asset_zoom.html" are inserted here. #}
+    </div>
+
+    <div id="videoModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+      <button class="modal-navigation modal-close btn btn-icon btn-lg" data-dismiss="modal">
+        <i class="material-icons btn-material-icons">close</i>
+      </button>
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content bg-dark">
+          <div class="modal-body p-0">
+            <div class="embed-responsive embed-responsive-16by9 js-youtube-embed">
+
             </div>
           </div>
         </div>
       </div>
     </div>
-  </footer>
-  {% endblock footer %}
 
-  <div id="file-modal" class="modal modal-asset" tabindex="-1" role="dialog" aria-hidden="true">
-    {# This is the modal div, the contents from "modal_asset.html" are inserted here. #}
-    <div class="spinner-border text-primary" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>
-  </div>
-
-  <div id="file-zoom-modal" class="modal modal-asset-zoom" tabindex="-1" role="dialog" aria-hidden="true">
-    {# This is the zoom modal div, the contents from "modal_asset_zoom.html" are inserted here. #}
-  </div>
-
-  <div id="videoModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <button class="modal-navigation modal-close btn btn-icon btn-lg" data-dismiss="modal">
-      <i class="material-icons btn-material-icons">close</i>
-    </button>
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content bg-dark">
-        <div class="modal-body p-0">
-          <div class="embed-responsive embed-responsive-16by9 js-youtube-embed">
+    <div id="image-zoom-modal" class="modal modal-asset-zoom" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content bg-dark">
+          <div class="modal-header p-0">
+            <div class="file-toolbar">
+              <button data-dismiss="modal" class="btn btn-sm btn-icon btn-dark">
+                <i class="material-icons">close</i>
+              </button>
+            </div>
+          </div>
+          <div class="modal-body">
 
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <div id="image-zoom-modal" class="modal modal-asset-zoom" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content bg-dark">
-        <div class="modal-header p-0">
-          <div class="file-toolbar">
-            <button data-dismiss="modal" class="btn btn-sm btn-icon btn-dark">
-              <i class="material-icons">close</i>
-            </button>
-          </div>
-        </div>
-        <div class="modal-body">
-
-        </div>
-      </div>
     </div>
 
-  </div>
+    {{ user_dict|json_script:"current-user" }}
+    {% javascript 'vendor' %}
+    {% javascript 'studio' %}
 
-  {{ user_dict|json_script:"current-user" }}
-  {% javascript 'vendor' %}
-  {% javascript 'studio' %}
+    {% block scripts %}{% endblock scripts %}
 
-  {% block scripts %}{% endblock scripts %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ settings_analytics_id }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id={{ settings_analytics_id }}"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
 
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag('js', new Date());
+      gtag('config', '{{ settings_analytics_id }}');
 
-    gtag('config', '{{ settings_analytics_id }}');
+    </script>
 
-  </script>
+    <script>
+      // Humanizes dates
+      document.querySelectorAll('.date').forEach(i => {
+        i.textContent = timeDifference(epochToDate(i.textContent));
+      });
+    </script>
 
-  <script>
-    // Humanizes dates
-    document.querySelectorAll('.date').forEach(i => {
-      i.textContent = timeDifference(epochToDate(i.textContent));
-    });
-
-  </script>
-
-  <script>
-    initVideo(document);
-
-  </script>
-</body>
-
+    <script>
+      initVideo(document);
+    </script>
+  </body>
 </html>

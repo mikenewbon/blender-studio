@@ -2,9 +2,9 @@
 <div class="row">
   <div class="col">
     {% with field=form.approve_new_subscription %}
-    {% if field.required %}
-    {% include "common/components/field_label_wrapped.html" %}
-    {% endif %}
+      {% if field.required %}
+        {% include "common/components/field_label_wrapped.html" %}
+      {% endif %}
     {% endwith %}
   </div>
 </div>
@@ -18,11 +18,11 @@
   <div class="col">
     <ul class="looper-select" id="id_gateway">
       {% with field=form.gateway %}
-      {% for radio in field %}
-      <li class="looper-select-option looper-select-option-{{ forloop.counter0 }}">
-        {{ radio }}
-      </li>
-      {% endfor %}
+        {% for radio in field %}
+          <li class="looper-select-option looper-select-option-{{ forloop.counter0 }}">
+            {{ radio }}
+          </li>
+        {% endfor %}
       {% endwith %}
     </ul>
   </div>

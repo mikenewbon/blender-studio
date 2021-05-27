@@ -4,43 +4,43 @@
 {% block title_append %} - {{ film.title }} Production Logs{% endblock title_append %}
 
 {% block content %}
-<div class="container-xl pt-4">
-  <section class="mb-5">
-    <!-- Latest Updates -->
-    <div class="row justify-content-center">
+  <div class="container-xl pt-4">
+    <section class="mb-5">
+      <!-- Latest Updates -->
+      <div class="row justify-content-center">
 
-      <div class="col-md-12 mb-3 text-center">
-        <p class="subtitle">{{ film.title }}</p>
-        <h1 class="mb-0">Production Logs</h1>
-        <p>Follow the latest updates and progress on {{ film.title }} right here.</p>
-        {% include 'films/components/admin/production_log_manage.html' %}
+        <div class="col-md-12 mb-3 text-center">
+          <p class="subtitle">{{ film.title }}</p>
+          <h1 class="mb-0">Production Logs</h1>
+          <p>Follow the latest updates and progress on {{ film.title }} right here.</p>
+          {% include 'films/components/admin/production_log_manage.html' %}
+
+          {% include 'films/components/pagination_dates.html' %}
+
+        </div>
+      </div>
+
+      {% if object_list|length %}
+
+        <div class="production-logs">
+          {% for production_log in object_list %}
+            {% include 'films/components/production_log_entry.html' %}
+          {% endfor %}
+        </div>
 
         {% include 'films/components/pagination_dates.html' %}
 
-      </div>
-    </div>
-
-    {% if object_list|length %}
-
-    <div class="production-logs">
-      {% for production_log in object_list %}
-      {% include 'films/components/production_log_entry.html' %}
-      {% endfor %}
-    </div>
-
-    {% include 'films/components/pagination_dates.html' %}
-
-    {% else %}
-    <div class="row">
-      <div class="col text-center">
-        <div class="bg-secondary py-4 rounded">
-          <h3 class="mb-0">No Weeklies to show</h3>
+      {% else %}
+        <div class="row">
+          <div class="col text-center">
+            <div class="bg-secondary py-4 rounded">
+              <h3 class="mb-0">No Weeklies to show</h3>
+            </div>
+          </div>
         </div>
-      </div>
+      {% endif %}
     </div>
-    {% endif %}
-</div>
 
-</section>
-</div>
+  </section>
+  </div>
 {% endblock content %}

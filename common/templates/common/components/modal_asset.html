@@ -2,174 +2,174 @@
 {% load common_extras %}
 
 {% if next_asset %}
-<button class="modal-navigation next btn btn-lg btn-icon"
-  data-url="{% url 'api-asset' next_asset.id %}?site_context={{ site_context }}" data-asset-id="{{ next_asset.id }}">
-  <i class="material-icons btn-material-icons">navigate_next</i>
-</button>
+  <button class="modal-navigation next btn btn-lg btn-icon"
+    data-url="{% url 'api-asset' next_asset.id %}?site_context={{ site_context }}" data-asset-id="{{ next_asset.id }}">
+    <i class="material-icons btn-material-icons">navigate_next</i>
+  </button>
 {% endif %}
 {% if previous_asset %}
-<button class="modal-navigation previous btn btn-lg btn-icon"
-  data-url="{% url 'api-asset' previous_asset.id %}?site_context={{ site_context }}"
-  data-asset-id="{{ previous_asset.id }}">
-  <i class="material-icons btn-material-icons">navigate_before</i>
-</button>
+  <button class="modal-navigation previous btn btn-lg btn-icon"
+    data-url="{% url 'api-asset' previous_asset.id %}?site_context={{ site_context }}"
+    data-asset-id="{{ previous_asset.id }}">
+    <i class="material-icons btn-material-icons">navigate_before</i>
+  </button>
 {% endif %}
 <button class="modal-navigation modal-close btn btn-lg btn-icon d-none d-md-block" data-dismiss="modal">
   <i class="material-icons btn-material-icons">close</i>
 </button>
 
 {% with user_has_active_subscription=request.user|has_active_subscription %}
-<div id="asset-{{ asset.id }}" data-asset-id="{{ asset.id }}" class="modal-inner-wrapper{% if asset.is_spoiler %} spoiler{% endif %}">
+  <div id="asset-{{ asset.id }}" data-asset-id="{{ asset.id }}" class="modal-inner-wrapper{% if asset.is_spoiler %} spoiler{% endif %}">
 
-  <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document">
 
-    <div class="modal-content bg-dark">
-      {# show spoiler alert to subscribers, or if this a free spoiler #}
-      {% if not asset.is_spoiler or not asset.is_free and not user_has_active_subscription %}
-      {% else %}{# this "else" inverts the following clause: #}
-      {# if asset.is_spoiler and (asset.is_free or user_has_active_subscription) #}
-      {% include 'common/components/spoiler_alert.html' %}
-      {% endif %}
-
-      <div class="modal-header p-0 bg-secondary">
-
-        <div class="modal-mobile-header d-md-none bg-dark">
-          <div class="modal-mobile-header-text  d-block d-md-none">
-            <p class="subtitle x-small">{{ asset.static_asset.get_source_type_display }}</p>
-            <h3 class="mb-0">{{ asset.name }}</h3>
-          </div>
-          <button class="modal-navigation modal-close btn btn-lg btn-icon" data-dismiss="modal">
-            <i class="material-icons btn-material-icons">close</i>
-          </button>
-        </div>
-        {% if asset.is_free or user_has_active_subscription %}
-        {% if asset.static_asset.source_type == "video" %}
-        {# **N.B.**: video thumbnail might be missing if video processing hadn't caught up yet #}
-        {% if asset.static_asset.thumbnail %}
-        {% include 'common/components/video_player.html' with url=asset.static_asset.video.default_variation_url poster=asset.static_asset.thumbnail.url %}
-        {% else %}
-        {% include 'common/components/video_player.html' with url=asset.static_asset.video.default_variation_url %}
-        {% endif %}
-        {% elif asset.static_asset.thumbnail %}
-        <a data-toggle="modal" data-target="#file-zoom-modal" class="modal-asset-image-wrapper"
-          data-url="{% url 'api-asset-zoom' asset.id %}">
-          {% include "common/components/helpers/image_resize.html" with alt=asset.name classes="img-fluid" img_source=asset.static_asset.thumbnail width="780" %}
-        </a>
-        {% else %}
-        <img class="file-icon h1" src="{% static "common/images/icons/file.svg" %}" alt="File Icon">
+      <div class="modal-content bg-dark">
+        {# show spoiler alert to subscribers, or if this a free spoiler #}
+        {% if not asset.is_spoiler or not asset.is_free and not user_has_active_subscription %}
+        {% else %}{# this "else" inverts the following clause: #}
+          {# if asset.is_spoiler and (asset.is_free or user_has_active_subscription) #}
+          {% include 'common/components/spoiler_alert.html' %}
         {% endif %}
 
-        {% else %}
-        {% include 'common/components/content_locked.html' with background=asset.static_asset.thumbnail_s_url %}
-        {% endif %}
-      </div>
-      <div class="modal-body">
+        <div class="modal-header p-0 bg-secondary">
 
-        <div class="row align-items-start">
-          <div class="col-12 col-md mb-2 mb-md-3">
-            <div class="d-none d-md-block">
-              <p class="subtitle small">{{ asset.static_asset.get_source_type_display }}</p>
-              <h2 class="">{{ asset.name }}</h2>
+          <div class="modal-mobile-header d-md-none bg-dark">
+            <div class="modal-mobile-header-text  d-block d-md-none">
+              <p class="subtitle x-small">{{ asset.static_asset.get_source_type_display }}</p>
+              <h3 class="mb-0">{{ asset.name }}</h3>
             </div>
-            <div class="text-muted x-small">
-              <p class="d-inline mr-2">{{ asset.date_published|date:"jS F Y" }}</p>
-              {% if asset.static_asset.license %}
-              <a href="{{ asset.static_asset.license.url }}" target="_blank" class="d-inline mr-2 text-muted"
-                data-toggle="tooltip" data-placement="bottom" title="{{ asset.static_asset.license.description }}">
-                <i class="material-icons icon-inline x-small">info</i>
-                {{ asset.static_asset.license }}
+            <button class="modal-navigation modal-close btn btn-lg btn-icon" data-dismiss="modal">
+              <i class="material-icons btn-material-icons">close</i>
+            </button>
+          </div>
+          {% if asset.is_free or user_has_active_subscription %}
+            {% if asset.static_asset.source_type == "video" %}
+              {# **N.B.**: video thumbnail might be missing if video processing hadn't caught up yet #}
+              {% if asset.static_asset.thumbnail %}
+                {% include 'common/components/video_player.html' with url=asset.static_asset.video.default_variation_url poster=asset.static_asset.thumbnail.url %}
+              {% else %}
+                {% include 'common/components/video_player.html' with url=asset.static_asset.video.default_variation_url %}
+              {% endif %}
+            {% elif asset.static_asset.thumbnail %}
+              <a data-toggle="modal" data-target="#file-zoom-modal" class="modal-asset-image-wrapper"
+                data-url="{% url 'api-asset-zoom' asset.id %}">
+                {% include "common/components/helpers/image_resize.html" with alt=asset.name classes="img-fluid" img_source=asset.static_asset.thumbnail width="780" %}
               </a>
-              {% endif %}
-              {% if asset.static_asset.copyright %}
-              <p class="d-inline mr-2">
-                <i class="material-icons icon-inline x-small">copyright</i>
-                {{ asset.static_asset.copyright }}
-              </p>
-              {% endif %}
-              {% if asset.is_free %}
-              <p class="d-inline mr-2 text-success">
-                <i class="material-icons icon-inline x-small">lock_open</i>
-                Free
-              </p>
-              {% endif %}
-            </div>
-          </div>
-          <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
-            <div class="training-toolbar-container">
+            {% else %}
+              <img class="file-icon h1" src="{% static "common/images/icons/file.svg" %}" alt="File Icon">
+            {% endif %}
 
-              <div class="file-toolbar">
-                <button data-like-url="{{ asset.like_url }}"
-                        class="btn btn-transparent btn-sm btn-icon comment-material-button checkbox-like {% if not user.is_authenticated %}disabled{% endif%}"
-                        {% if not user.is_authenticated %}disabled{% endif%} {% if asset.liked %}data-checked="checked" {% endif %}>
+          {% else %}
+            {% include 'common/components/content_locked.html' with background=asset.static_asset.thumbnail_s_url %}
+          {% endif %}
+        </div>
+        <div class="modal-body">
+
+          <div class="row align-items-start">
+            <div class="col-12 col-md mb-2 mb-md-3">
+              <div class="d-none d-md-block">
+                <p class="subtitle small">{{ asset.static_asset.get_source_type_display }}</p>
+                <h2 class="">{{ asset.name }}</h2>
+              </div>
+              <div class="text-muted x-small">
+                <p class="d-inline mr-2">{{ asset.date_published|date:"jS F Y" }}</p>
+                {% if asset.static_asset.license %}
+                  <a href="{{ asset.static_asset.license.url }}" target="_blank" class="d-inline mr-2 text-muted"
+                    data-toggle="tooltip" data-placement="bottom" title="{{ asset.static_asset.license.description }}">
+                    <i class="material-icons icon-inline x-small">info</i>
+                    {{ asset.static_asset.license }}
+                  </a>
+                {% endif %}
+                {% if asset.static_asset.copyright %}
+                  <p class="d-inline mr-2">
+                    <i class="material-icons icon-inline x-small">copyright</i>
+                    {{ asset.static_asset.copyright }}
+                  </p>
+                {% endif %}
+                {% if asset.is_free %}
+                  <p class="d-inline mr-2 text-success">
+                    <i class="material-icons icon-inline x-small">lock_open</i>
+                    Free
+                  </p>
+                {% endif %}
+              </div>
+            </div>
+            <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
+              <div class="training-toolbar-container">
+
+                <div class="file-toolbar">
+                  <button data-like-url="{{ asset.like_url }}"
+                    class="btn btn-transparent btn-sm btn-icon comment-material-button checkbox-like {% if not user.is_authenticated %}disabled{% endif%}"
+                    {% if not user.is_authenticated %}disabled{% endif%} {% if asset.liked %}data-checked="checked" {% endif %}>
                     <i class="material-icons checkbox-like-icon-checked text-primary">favorite</i>
                     <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
                     {% if asset.likes.count != 0 %}<span class="likes-count">{{ asset.likes.count }}</span>{% endif %}
-                </button>
+                  </button>
 
-                {% if user.is_anonymous and not asset.is_free %}
-                <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to
-                  Download</button>
-                {% elif user_has_active_subscription %}
-                <a href="{{ asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span
-                    class="subtitle">({{ asset.download_size }})</span></a>
-                {% else %}
-                <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Subscribe to
-                  Download</button>
-                {% endif %}
-
-                <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
-                  <i class="material-icons">more_horiz</i>
-                </button>
-
-                <div class="dropdown-menu dropdown-menu-right">
-                  <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank"
-                    class="dropdown-item">
-                    <i class="material-icons">flag</i>
-                    <span>Report Problem</span>
-                  </a>
-                  {% if user_can_edit_asset %}
-                  <a href="{{ asset.admin_url }}" target="_blank" class="dropdown-item">
-                    <i class="material-icons">create</i>
-                    <span>Admin Edit</span>
-                  </a>
+                  {% if user.is_anonymous and not asset.is_free %}
+                    <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to
+                      Download</button>
+                  {% elif user_has_active_subscription %}
+                    <a href="{{ asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span
+                      class="subtitle">({{ asset.download_size }})</span></a>
+                  {% else %}
+                    <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Subscribe to
+                      Download</button>
                   {% endif %}
-                </div>
 
+                  <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
+                    <i class="material-icons">more_horiz</i>
+                  </button>
+
+                  <div class="dropdown-menu dropdown-menu-right">
+                    <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank"
+                      class="dropdown-item">
+                      <i class="material-icons">flag</i>
+                      <span>Report Problem</span>
+                    </a>
+                    {% if user_can_edit_asset %}
+                      <a href="{{ asset.admin_url }}" target="_blank" class="dropdown-item">
+                        <i class="material-icons">create</i>
+                        <span>Admin Edit</span>
+                      </a>
+                    {% endif %}
+                  </div>
+
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="row mb-2">
-          {% if asset.static_asset.author_image_url %}
-          <div style="background-image:url('{{ asset.static_asset.author_image_url }}');" class="profile ml-2"></div>
-          {% else %}
-          <div style="background-image:url('{% static 'common/images/blank-profile-pic.png' %}');" class="profile ml-2">
+          <div class="row mb-2">
+            {% if asset.static_asset.author_image_url %}
+              <div style="background-image:url('{{ asset.static_asset.author_image_url }}');" class="profile ml-2"></div>
+            {% else %}
+              <div style="background-image:url('{% static 'common/images/blank-profile-pic.png' %}');" class="profile ml-2">
+              </div>
+            {% endif %}
+            <div class="col-auto">
+              <p class="subtitle text-white-50 x-small">Author</p>
+              <h4 class="comment-name">{{ asset.static_asset.author_name }}</h4>
+            </div>
           </div>
-          {% endif %}
-          <div class="col-auto">
-            <p class="subtitle text-white-50 x-small">Author</p>
-            <h4 class="comment-name">{{ asset.static_asset.author_name }}</h4>
+          <div class="markdown-text">
+            {% if asset.is_spoiler and not asset.is_free and not user_has_active_subscription %}
+              {# do not show description to non-subscribers, if this is a subscription-only spoiler #}
+              <p class="mb-0">You need to subscribe to view this content.</p>
+            {% else %}
+              {% with_shortcodes asset.description|markdown %}
+            {% endif %}
           </div>
-        </div>
-        <div class="markdown-text">
+
           {% if asset.is_spoiler and not asset.is_free and not user_has_active_subscription %}
-          {# do not show description to non-subscribers, if this is a subscription-only spoiler #}
-          <p class="mb-0">You need to subscribe to view this content.</p>
+            {# do not show comments to non-subscribers, if this is a subscription-only spoiler #}
           {% else %}
-          {% with_shortcodes asset.description|markdown %}
+            <section>{% include 'comments/components/comment_section.html' %}</section>
           {% endif %}
+
         </div>
-
-        {% if asset.is_spoiler and not asset.is_free and not user_has_active_subscription %}
-        {# do not show comments to non-subscribers, if this is a subscription-only spoiler #}
-        {% else %}
-        <section>{% include 'comments/components/comment_section.html' %}</section>
-        {% endif %}
-
       </div>
-    </div>
 
+    </div>
   </div>
-</div>
 {% endwith %}

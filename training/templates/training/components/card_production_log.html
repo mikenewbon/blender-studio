@@ -1,11 +1,11 @@
 <div class="{{ card_sizes|default:"col-12 col-sm-6 col-lg-4" }} card-grid-item">
   <div class="card card-dark card-training card-media card-hover" {% if training.favorited %}data-checked="checked"
-    {% endif %} data-favorite-url="{{ training.favorite_url }}" data-training-id="{{ training.id }}">
+  {% endif %} data-favorite-url="{{ training.favorite_url }}" data-training-id="{{ training.id }}">
 
     <div class="card-header" style='background-image: url("{{ training.thumbnail_s_url }}")'>
       <a href="{{ training.url }}" class="card-header-link"></a>
       {% if request.user.is_authenticated %}
-      {% include 'training/components/card_button_favorite.html' with class='btn-save-media card-training-favorite' checked=training.favorited %}
+        {% include 'training/components/card_button_favorite.html' with class='btn-save-media card-training-favorite' checked=training.favorited %}
       {% endif %}
     </div>
 
@@ -13,8 +13,8 @@
       <div class="card-subtitle-group">
         <p class="card-subtitle">
           {% if training.is_free %}
-          <i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top"
-            title="Free">lock_open</i>
+            <i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top"
+              title="Free">lock_open</i>
           {% endif %}
           {% firstof training.type.label training.get_type_display %}
         </p>
@@ -28,13 +28,13 @@
     </a>
 
     {% if training.tags.all %}
-    <div class="card-footer">
-      <div class="pills">
-        {% for tag in training.tags.all %}
-        {% include 'common/components/cards/pill.html' with label=tag.name %}
-        {% endfor %}
+      <div class="card-footer">
+        <div class="pills">
+          {% for tag in training.tags.all %}
+            {% include 'common/components/cards/pill.html' with label=tag.name %}
+          {% endfor %}
+        </div>
       </div>
-    </div>
     {% endif %}
 
   </div>

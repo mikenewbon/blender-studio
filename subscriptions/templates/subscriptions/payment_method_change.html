@@ -3,47 +3,47 @@
 {% load pipeline %}
 
 {% block settings %}
-<p class="subtitle">Settings: Subscription</p>
-<h1 class="mb-3">Change Payment Method</h1>
+  <p class="subtitle">Settings: Subscription</p>
+  <h1 class="mb-3">Change Payment Method</h1>
 
-<div class="settings-billing">
-  <div>
-    <p>{% include 'subscriptions/components/info.html' %}</p>
-    <p>
-      <strong>{{ current_payment_method.recognisable_name }}</strong> is used as payment method.
-      Feel free to change it below.
-    </p>
-  </div>
+  <div class="settings-billing">
+    <div>
+      <p>{% include 'subscriptions/components/info.html' %}</p>
+      <p>
+        <strong>{{ current_payment_method.recognisable_name }}</strong> is used as payment method.
+        Feel free to change it below.
+      </p>
+    </div>
 
-  <div class="m-3">
-    <form id="payment-form" class="checkout-form" method="post"
-          data-looper-payment-form="true"
-          data-braintree-client-token="{{ client_token }}">{% csrf_token %}
-      {% with form|add_form_classes as form %}
-      <section class="checkout-form-fields pt-4">
-        <fieldset class="checkout-form-billing-address-readonly">
-          {% include "subscriptions/components/billing_address_form_readonly.html" %}
-        </fieldset>
-        <fieldset class="payment-form-payment-method">
-          {% include "subscriptions/components/payment_form.html" %}
-        </fieldset>
-      </section>
-      <hr/>
-      <div class="align-items-center pt-3"><a class="p-3" href="{% url 'user-settings-billing' %}">Cancel</a>
-        <button id="submit-button" class="ml-auto btn btn-success form-submit px-5"
-                type="submit"
-                aria-disabled="true" disabled
-                ><i class="fa fa-check"></i>Switch Payment method
-        </button>
-      </div>
-    {% endwith %}
-    </form>
+    <div class="m-3">
+      <form id="payment-form" class="checkout-form" method="post"
+        data-looper-payment-form="true"
+        data-braintree-client-token="{{ client_token }}">{% csrf_token %}
+        {% with form|add_form_classes as form %}
+          <section class="checkout-form-fields pt-4">
+            <fieldset class="checkout-form-billing-address-readonly">
+              {% include "subscriptions/components/billing_address_form_readonly.html" %}
+            </fieldset>
+            <fieldset class="payment-form-payment-method">
+              {% include "subscriptions/components/payment_form.html" %}
+            </fieldset>
+          </section>
+          <hr/>
+          <div class="align-items-center pt-3"><a class="p-3" href="{% url 'user-settings-billing' %}">Cancel</a>
+            <button id="submit-button" class="ml-auto btn btn-success form-submit px-5"
+              type="submit"
+              aria-disabled="true" disabled
+            ><i class="fa fa-check"></i>Switch Payment method
+            </button>
+          </div>
+        {% endwith %}
+      </form>
+    </div>
   </div>
-</div>
 {% endblock settings %}
 
 {% block scripts %}
-{{ block.super }}
-{% javascript "subscriptions" %}
-{% include "looper/scripts.html" %}
+  {{ block.super }}
+  {% javascript "subscriptions" %}
+  {% include "looper/scripts.html" %}
 {% endblock scripts %}
