@@ -166,7 +166,7 @@ class _SharedAssertsMixin:
         self.assertContains(response, 'on hold')
         self.assertContains(response, 'NL22 INGB 0005296212')
         subscription = response.wsgi_request.user.subscription_set.first()
-        self.assertContains(response, f'Order number: {subscription.latest_order().pk}')
+        self.assertContains(response, f'Blender Cloud order-{subscription.latest_order().pk}')
 
     def _assert_done_page_displayed(self, response_redirect):
         # Catch unexpected form errors so that they are displayed
