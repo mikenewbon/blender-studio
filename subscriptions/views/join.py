@@ -126,7 +126,14 @@ class _JoinMixin:
             return redirect(settings.STORE_PRODUCT_URL)
 
         if request.user.is_authenticated:
-            if self.subscription and self.subscription.status in self.subscription._ACTIVE_STATUSES:
+            # FIXME(anna): checkout creates an on-hold subscription with an order
+            # so this seems to be the only currently available way to tell
+            # when to stop showing the checkout to the customer:
+            if (
+                self.subscription
+                and self.subscription.latest_order()
+                and self.subscription.payment_method
+            ):
                 return redirect('user-settings-billing')
 
         return super().get(request, *args, **kwargs)
