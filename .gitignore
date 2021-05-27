@@ -16,6 +16,7 @@ node_modules/
 /public/
 /yarn-error.log
 .venv/
+venv/
 .python-version
 studio/blender-cloud-credentials.json
 data.ms/
