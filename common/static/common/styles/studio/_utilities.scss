@@ -101,3 +101,9 @@
 .right-0 {
   right: 0;
 }
+
+.mb-0-child {
+  >* {
+    margin-bottom: 0;
+  }
+}

@@ -4,65 +4,155 @@
 {% block settings %}
   <p class="subtitle">Receipts</p>
   <h1 class="mb-3">Receipt #{{ order.id }}</h1>
-  <div class="receipt mt-2">
-    <dl class="row">
-      <dt class="col">Receipt ID</dt>
-      <dd class="col">{{ order.id }}</dd>
-    </dl>
-    <dl class="row">
-      <dt class="col">Payment received on</dt>
-      <dd class="col">{{ order.paid_at|default:order.created_at }}</dd>
-    </dl>
-    <h2>Subscription</h2>
-    <dl class="row">
-      <dt class="col">Renewal type</dt>
-      <dd class="col">{{ order.subscription.collection_method|capfirst}}</dd>
-    </dl>
-    <dl class="row">
-      <dt class="col">Renewal period</dt>
-      <dd class="col">{{ order.subscription|renewal_period|capfirst }}</dd>
-    </dl>
-    <h2>Billing Address</h2>
-    <dl class="row">
-      <dt class="col">Address</dt>
-      <dd class="col">{{ order.billing_address|linebreaks }}</dd>
-    </dl>
+
+  <a class="btn btn-dark admin-float" href="{% url 'subscriptions:receipts' %}"><i class="material-icons">arrow_back</i> Back to receipts</a>
+
+  <ul class="receipt list-group list-group-flush list-group-account">
+
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col">
+          <p class="h4 mb-0">Receipt ID</p>
+        </div>
+        <div class="col-auto">
+          <p class="mb-0 small">{{ order.id }}</p>
+        </div>
+      </div>
+    </li>
+
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col">
+          <p class="h4 mb-0">Payment Received on</p>
+        </div>
+        <div class="col-auto">
+          <p class="mb-0 small">{{ order.paid_at|default:order.created_at }}</p>
+        </div>
+      </div>
+    </li>
+
+    <li class="list-group-item pb-2">
+      <div class="row">
+        <div class="col">
+          <p class="h2 mb-0">Subscription</p>
+        </div>
+      </div>
+    </li>
+
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col">
+          <p class="h4 mb-0">Renewal Type</p>
+        </div>
+        <div class="col-auto">
+          <p class="mb-0 small">{{ order.subscription.collection_method|capfirst}}</p>
+        </div>
+      </div>
+    </li>
+
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col">
+          <p class="h4 mb-0">Renewal Period</p>
+        </div>
+        <div class="col-auto">
+          <p class="mb-0 small">{{ order.subscription|renewal_period|capfirst }}</p>
+        </div>
+      </div>
+    </li>
+
+    <li class="list-group-item pb-2">
+      <div class="row">
+        <div class="col">
+          <p class="h2 mb-0">Billing Address</p>
+        </div>
+      </div>
+    </li>
+
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col justify-content-start">
+          <p class="h4 mb-0">Address</p>
+        </div>
+        <div class="col-auto text-right">
+          <div class="mb-0 small mb-0-child">{{ order.billing_address|linebreaks }}</p>
+        </div>
+      </div>
+    </li>
+
     {% if order.vat_number %}
-      <dl class="row">
-        <dt class="col">VATIN</dt>
-        <dd class="col">{{ order.vat_number }}</dd>
-      </dl>
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col">
+            <p class="h4 mb-0">VATIN</p>
+          </div>
+          <div class="col-auto">
+            <p class="mb-0 small">{{ order.vat_number }}</p>
+          </div>
+        </div>
+      </li>
     {% endif %}
-    <dl class="row">
-      <dt class="col">E-mail</dt>
-      <dd class="col">{{ order.email }}</dd>
-    </dl>
-    <h2>Payment Information</h2>
-    <dl class="row">
-      <dt class="col">Amount paid</dt>
-      <dd class="col">{{ order.price.with_currency_symbol_nonocents }}</dd>
-    </dl>
-    {% with taxable=order.taxable %}
-      {% if taxable.tax_is_charged %}
-        <dl class="row">
-          <dt class="col"></dt>
-          <dd class="col">{{ taxable.format_tax_amount }}</dd>
-        </dl>
-      {% endif %}
-    {% endwith %}
+
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col">
+          <p class="h4 mb-0">Email</p>
+        </div>
+        <div class="col-auto">
+          <p class="mb-0 small">{{ order.email }}</p>
+        </div>
+      </div>
+    </li>
+
+    <li class="list-group-item pb-2">
+      <div class="row">
+        <div class="col">
+          <p class="h2 mb-0">Payment Information</p>
+        </div>
+      </div>
+    </li>
+
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col justify-content-start">
+          <p class="h4 mb-0">Amount Paid</p>
+        </div>
+        <div class="col-auto text-right">
+          <p class="mb-0 small">{{ order.price.with_currency_symbol_nonocents }}</p>
+          {% with taxable=order.taxable %}
+            {% if taxable.tax_is_charged %}
+              <p class="mb-0 small">{{ taxable.format_tax_amount }}</p>
+            {% endif %}
+          {% endwith %}
+        </div>
+      </div>
+    </li>
+
     {% with refunded=order.total_refunded %}
       {% if refunded %}
-        <dl class="row">
-          <dt class="col">Amount refunded</dt>
-          <dd class="col">{{ refunded.with_currency_symbol_nonocents }}</dd>
-        </dl>
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col">
+              <p class="h4 mb-0">Amount Refunded</p>
+            </div>
+            <div class="col-auto">
+              <p class="mb-0 small">{{ refunded.with_currency_symbol_nonocents }}</p>
+            </div>
+          </div>
+        </li>
       {% endif %}
     {% endwith %}
-    <dl class="row">
-      <dt class="col">Payment method</dt>
-      <dd class="col">{{ order.payment_method.recognisable_name }}</dd>
-    </dl>
-  </div>
-  <hr/>
-  <a class="btn" href="{% url 'subscriptions:receipts' %}">← back to receipts</a>
+
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col">
+          <p class="h4 mb-0">Payment Method</p>
+        </div>
+        <div class="col-auto">
+          <p class="mb-0 small">{{ order.payment_method.recognisable_name }}</p>
+        </div>
+      </div>
+    </li>
+
+  </ul>
 {% endblock settings %}
