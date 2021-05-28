@@ -1,20 +1,49 @@
 {% extends 'users/settings/base.html' %}
 
+{% load common_extras %}
+
 {% block settings %}
   <p class="subtitle">Settings: Subscription</p>
-  <h1 class="mb-3">Cancellation</h1>
-  <p>Your {% include 'subscriptions/components/info.html' %}</p>
-  <p>Are you sure you want to cancel your Blender Cloud subscription?</p>{% if subscription.status == 'active' and subscription.next_payment_in_future %}
-    <p>
-      Your subscription will remain active until {{ subscription.next_payment|date }}, since you have
-      paid for your subscription until then.
-    </p>{% endif %}
+  <h1 class="mb-3">Cancel Your Subscription</h1>
+
+  {% if user|has_active_subscription %}
+    <div class="alert alert-success" role="alert">
+      <i class="material-icons align-middle">done</i>
+
+      {% with subscription=user.subscription_set.first %}
+        {% with order=subscription.latest_order %}
+          <span>Your {{ subscription.plan.name }} subscription is currently <span
+            class="font-weight-bolder">{{ subscription.get_status_display|lower }}</span>.</span>
+        {% endwith %}
+      {% endwith %}
+
+    </div>
+  {% endif %}
+
+  <h2>Are you sure you want to cancel?</h2>
+
+
   <form class="form" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <hr/>
+    <div class="mb-0-child">
+      {{ form.as_p }}
+    </div>
+    {% if subscription.status == 'active' and subscription.next_payment_in_future %}
+      <p class="small subtitle">
+        Your subscription will remain active until {{ subscription.next_payment|date }}, since you have
+        paid for your subscription until then.
+      </p>
+    {% endif %}
     {# TODO(anna): should instead link to a specific subscription in your settings, if we allow multiple #}
-    <a class="btn" href="{% url 'user-settings-billing' %}"><span>← Keep Subscription and Go Back</span></a>
-    <button class="btn btn-danger" id="submit-button" type="submit"><span>Confirm Cancellation of Subscription</span></button>
+    <div class="row mt-3">
+      <div class="col">
+        <a class="btn btn-dark btn-sm" href="{% url 'user-settings-billing' %}"><i class="material-icons">arrow_back</i> Keep Subscription</a>
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-danger btn-sm ml-auto" id="submit-button" type="submit"><span>Cancel Subscription</span></button>
+      </div>
+    </div>
+
+
   </form>
 {% endblock settings %}
