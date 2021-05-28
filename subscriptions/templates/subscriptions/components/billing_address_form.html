@@ -36,19 +36,6 @@
 {% endwith %}
 
 <div class="row mb-2">
-  <div class="col">
-    {% with field=form.postal_code %}
-      {% include "common/components/field_label_wrapped.html" %}
-    {% endwith %}
-  </div>
-  <div class="col">
-    {% with field=form.country %}
-      {% include "common/components/field_label_wrapped.html" %}
-    {% endwith %}
-  </div>
-</div>
-
-<div class="row mb-2">
   {% with field=form.region %}
     <div class="col {% if not field.value %}d-none{% endif %}">
       {% include "common/components/field_label_wrapped.html" %}
@@ -56,6 +43,19 @@
   {% endwith %}
   <div class="col">
     {% with field=form.locality %}
+      {% include "common/components/field_label_wrapped.html" %}
+    {% endwith %}
+  </div>
+</div>
+
+<div class="row mb-2">
+  <div class="col">
+    {% with field=form.postal_code %}
+      {% include "common/components/field_label_wrapped.html" %}
+    {% endwith %}
+  </div>
+  <div class="col">
+    {% with field=form.country %}
       {% include "common/components/field_label_wrapped.html" %}
     {% endwith %}
   </div>
