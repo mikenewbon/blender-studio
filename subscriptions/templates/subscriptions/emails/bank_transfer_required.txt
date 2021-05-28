@@ -1,0 +1,29 @@
+{% load subscriptions %}Dear {% firstof customer.full_name customer.billing_address.full_name user.full_name user.email %},
+
+Thank you for subscribing to Blender Cloud!
+
+Your {% spaceless %}{% include 'subscriptions/components/info.html' %}{% endspaceless %}
+and will be activated as soon as we have received and handled your bank transfer.
+
+Please send your payment of {{ subscription.price.with_currency_symbol }} to:
+
+{% include "subscriptions/components/bank_transfer_details.txt" %}
+Use the following as a payment reference:
+
+    {% include "subscriptions/components/bank_transfer_reference.txt" %}
+You may need to wait a few days until the payment clears before one of our team members activates your account.
+
+Subscription information:
+-------------------------
+Renewal type:       {{ subscription.collection_method }}
+Renewal period:     {{ subscription|renewal_period }}
+Payment method:     {{ subscription.payment_method }}{% with taxable=subscription.taxable %}
+Recurring total:    {{ taxable.price.with_currency_symbol }}{% if taxable.tax_is_charged %}
+                    {{ taxable.format_tax_amount }}{% endif %}{% endwith %}
+
+Manage subscription in your billing settings: {{ link }}.
+
+--
+Kind regards,
+
+Blender Cloud Team

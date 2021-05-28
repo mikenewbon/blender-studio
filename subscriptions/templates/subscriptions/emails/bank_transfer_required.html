@@ -1,0 +1,37 @@
+{% extends "emails/email_transactional.html" %}{% load subscriptions %}
+{% block content %}
+  <p>Dear {% firstof user.customer.full_name user.customer.billing_address.full_name user.full_name user.email %},</p>
+  <p>Thank you for subscribing to Blender Cloud!</p>
+  <p>
+    Your {% spaceless %}{% include 'subscriptions/components/info.html' %}{% endspaceless %}
+    and will be activated as soon as we have received and handled your bank transfer.
+  </p>
+  <p>Please send your payment of {{ subscription.price.with_currency_symbol }} to:</p>
+  <p>
+    <pre>{% include "subscriptions/components/bank_transfer_details.txt" %}</pre>
+  </p>
+  <p>
+    Use the following as a payment reference:
+  </p>
+  <p><pre>{% include "subscriptions/components/bank_transfer_reference.txt" %}</pre></p>
+  <p>
+    You may need to wait a few days until the payment clears before one of our team members activates your account.
+  </p>
+  <p>
+    <strong>Subscription information:</strong>
+  </p>
+  <p>
+    Renewal type: {{ subscription.collection_method }}<br />
+    Renewal period: {{ subscription|renewal_period }}
+  </p>
+  <p>
+    Payment method: {{ subscription.payment_method }}<br />
+    {% with taxable=subscription.taxable %}
+      Recurring total: {{ taxable.price.with_currency_symbol }}<br />
+      {% if taxable.tax_is_charged %}
+        <span style="margin-left: 8em">{{ taxable.format_tax_amount }}</span>
+      {% endif %}
+    {% endwith %}
+  </p>
+  <p>Manage subscription in your billing settings: <a href="{{ link }}">{{ link }}</a>.</p>
+{% endblock content %}

@@ -5,9 +5,14 @@ from django.dispatch import receiver
 import django.db.models.signals as django_signals
 
 from looper.models import Customer
+import looper.signals
+
+import subscriptions.tasks as tasks
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
+
+subscription_created_needs_payment = django_signals.Signal(providing_args=[])
 
 
 @receiver(django_signals.post_save, sender=User)
@@ -24,5 +29,28 @@ def create_customer(sender, instance: User, created, **kwargs):
     )
 
 
-# TODO(anna) looper:subscription_activated -> make has_active_subscription happen
-# TODO(anna) looper.subscription_deactivated -> undo has_active_subscription
+@receiver(subscription_created_needs_payment)
+def _on_subscription_created_needs_payment(sender: looper.models.Subscription, **kwargs):
+    tasks.send_mail_bank_transfer_required(subscription_id=sender.pk)
+
+
+@receiver(looper.signals.subscription_activated)
+@receiver(looper.signals.subscription_deactivated)
+def _on_subscription_status_changed(sender: looper.models.Subscription, **kwargs):
+    tasks.send_mail_subscription_status_changed(subscription_id=sender.pk)
+
+
+@receiver(looper.signals.automatic_payment_succesful)
+@receiver(looper.signals.automatic_payment_soft_failed)
+@receiver(looper.signals.automatic_payment_failed)
+def _on_automatic_payment_performed(
+    sender: looper.models.Order,
+    transaction: looper.models.Transaction,
+    **kwargs,
+):
+    tasks.send_mail_automatic_payment_performed(order_id=sender.pk, transaction_id=transaction.pk)
+
+
+@receiver(looper.signals.managed_subscription_notification)
+def _on_managed_subscription_notification(sender: looper.models.Subscription, **kwargs):
+    tasks.send_mail_managed_subscription_notification(subscription_id=sender.pk)

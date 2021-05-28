@@ -10,14 +10,15 @@ from django.shortcuts import redirect, render
 from django.views.generic import FormView
 import waffle
 
-from looper.views.checkout import AbstractPaymentView, CheckoutView
 from looper.middleware import COUNTRY_CODE_SESSION_KEY
+from looper.views.checkout import AbstractPaymentView, CheckoutView
 import looper.gateways
 import looper.models
 import looper.money
 import looper.taxes
 
 from subscriptions.forms import BillingDetailsForm, PaymentForm, AutomaticPaymentForm
+from subscriptions.signals import subscription_created_needs_payment
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -314,7 +315,12 @@ class JoinConfirmView(_JoinMixin, LoginRequiredMixin, FormView):
         return subscription
 
     def form_valid(self, form):
-        """Handle valid form data."""
+        """Handle valid form data.
+
+        Confirm and Pay view doesn't update the billing address,
+        only displays it for use by payment flow and validates it on submit.
+        The billing address is assumed to be saved at the previous step.
+        """
         assert self.request.method == 'POST'
 
         response = self._check_recaptcha(form)
@@ -349,6 +355,10 @@ class JoinConfirmView(_JoinMixin, LoginRequiredMixin, FormView):
         if order.price != price:
             form.add_error('', 'Payment failed: please reload the page and try again')
             return self.form_invalid(form)
+
+        if not gateway.provider.supports_transactions:
+            # Trigger an email with instructions about manual payment:
+            subscription_created_needs_payment.send(sender=subscription)
 
         response = self._charge_if_supported(form, gateway, order)
         return response
