@@ -1,0 +1,36 @@
+{% extends "settings/base.html" %}
+{% block content_settings %}
+  <h2 class="mt-2 text-secondary">Payment Methods</h2>
+  <p class="pb-3">
+    Here you can view and delete payment methods. You can add a new one while changing an old
+    one, or while paying for something.
+  </p>
+  <table class="table table-striped box m-3">
+    <tbody>
+      {% for payment_method in object_list %}
+        {% with payment_method.gateway_properties as pm_props %}
+          <tr>
+            {% if pm_props is None %}
+              <td>
+                Invalid payment method; just delete this one. This can happen when
+                the payment method was deleted at the payment service provider.
+              </td>
+            {% else %}
+              <td><img class="img-responsive" src="{{ pm_props.image_url }}"/></td>
+              {% if payment_method.method_type == 'cc' %}
+                <td>{{ pm_props.card_type }}</td>
+                <td>Ending with <strong>{{ pm_props.last_4 }}</strong></td>
+                <td>Expires <strong>{{ pm_props.expiration_date }}</strong></td>
+              {% elif payment_method.method_type == 'paypal_account'%}
+                <td colspan="3">With email <strong>{{ pm_props.email }}</strong></td>
+              {% else %}
+                <td colspan="3">{{ pm_props.recognisable_name }}</td>
+              {% endif %}
+            {% endif %}
+            <td class="actions"><a class="text-danger" href="{% url 'looper:payment_method_delete' pk=payment_method.pk %}">Remove</a></td>
+          </tr>
+        {% endwith %}
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock content_settings %}
