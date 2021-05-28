@@ -74,9 +74,12 @@
     {% if not user|has_group:"demo" %}{# for everyone except demo #}
       <div class="row">
         <div class="col">
-          <h2 class="mb-0">Manage Subscription</h2>
-          <p>If you have any problems with billing, contact the team directly on <a
-            href="mailto:cloudsupport@blender.org">cloudsupport@blender.org</a>.</p>
+          <div class="border-bottom pb-2">
+            <h2 class="mb-0">Manage Subscription</h2>
+            <p class="mb-0 subtitle small">If you have any problems with billing, contact the team directly on <a
+              href="mailto:cloudsupport@blender.org">cloudsupport@blender.org</a>.</p>
+          </div>
+
           {# **Do not** rearrange the ifs, unless the logic is obviously broken. #}
 
           {% if user.subscription_set.count %}

@@ -35,7 +35,9 @@
 
 
 <ul class="list-group list-group-flush list-group-account">
+
   {% if not user.subscription_set.count %}
+
     <li class="list-group-item">
       <div class="row">
         <div class="col">
@@ -43,6 +45,7 @@
         </div>
       </div>
     </li>
+
   {% else %}
 
     {# Blender Cloud only allows one subscriptin per account #}
@@ -211,8 +214,9 @@
                   action="{% url 'subscriptions:cancel' subscription.id %}">
                   {% csrf_token %}
                   <div class="d-flex justify-content-center">
-                    <a class="ml-auto small text-danger" href="{% url 'subscriptions:cancel' subscription.id %}"><span>Cancel
-                      subscription</span></a>
+                    <a class="ml-auto small text-danger" href="{% url 'subscriptions:cancel' subscription.id %}">
+                      <span>Cancel subscription</span>
+                    </a>
                   </div>
                 </form>
               </div>
