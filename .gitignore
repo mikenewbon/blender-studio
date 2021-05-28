@@ -22,3 +22,5 @@ studio/blender-cloud-credentials.json
 data.ms/
 .vscode
 **/*.pem
+
+venv
