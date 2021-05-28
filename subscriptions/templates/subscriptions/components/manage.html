@@ -1,5 +1,6 @@
 {% load looper %}
 {% load humanize %}
+{% load common_extras %}
 
 {% comment %}
   <ul class="list-group list-group-flush">
@@ -51,6 +52,25 @@
     {# Blender Cloud only allows one subscriptin per account #}
     {% with subscription=user.subscription_set.first %}
       {% with order=subscription.latest_order %}
+
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col">
+              <p class="h4 mb-0">Subscription Status</p>
+            </div>
+            <div class="col-auto">
+              {% if user|has_group:"demo" %}
+                <p class="text-primary small mb-0 d-flex align-items-center font-weight-bold"><i class="material-icons ">favorite</i> <span>Free</span></p>
+              {% elif user.subscription_set.first.status == "pending-cancellation" %}
+                <p class="text-warning small mb-0 d-flex align-items-center font-weight-bold"><i class="material-icons ">hourglass_top</i> <span>Pending Cancellation</span></p>
+              {% elif user|has_active_subscription %}
+                <p class="text-success small mb-0 d-flex align-items-center font-weight-bold"><i class="material-icons p ">done</i> <span>Active</span></p>
+              {% else %}
+                <p class="text-danger small mb-0 d-flex align-items-center font-weight-bold"><i class="material-icons">info</i> <span>Inactive</span></p>
+              {% endif %}
+            </div>
+          </div>
+        </li>
 
         {% if subscription.status == 'on-hold' %}
           <li class="list-group-item">

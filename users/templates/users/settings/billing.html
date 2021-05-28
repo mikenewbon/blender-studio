@@ -6,55 +6,10 @@
 {% block settings %}
 
   <p class="subtitle">Settings</p>
-  <h1 class="mb-3">Subscription</h1>
+  <h1 class="mb-0">Subscription</h1>
+  <p class="mb-2 subtitle">If you have any problems with billing, contact the team directly on <a href="mailto:cloudsupport@blender.org">cloudsupport@blender.org</a>.</p>
 
   <div class="settings-billing">
-
-    <div class="row mb-3">
-      <div class="col">
-        <h2 class="mb-0">Status</h2>
-        <p>The current status of your subscription:</p>
-        {% if user|has_group:"demo" %}
-          <div class="alert alert-primary" role="alert">
-            <i class="material-icons align-middle">favorite</i>
-            <span>You have a free account</span>
-          </div>
-        {% elif user.subscription_set.first.status == "pending-cancellation" %}
-          <div class="alert alert-warning" role="alert">
-            <i class="material-icons align-middle">hourglass_top</i>
-            {% flag "SUBSCRIPTIONS_ENABLED" %}
-              {% with subscription=user.subscription_set.first %}
-                {% with order=subscription.latest_order %}
-                  <span>Your {{ subscription.plan.name }} subscription is currently <span
-                    class="font-weight-bolder">{{ subscription.get_status_display|lower }}</span>.</span>
-                {% endwith %}
-              {% endwith %}
-            {% else %}
-              <span>Your subscription is currently <span class="font-weight-bolder">pending cancellation</span></span>
-            {% endflag %}
-          </div>
-        {% elif user|has_active_subscription %}
-          <div class="alert alert-success" role="alert">
-            <i class="material-icons align-middle">done</i>
-            {% flag "SUBSCRIPTIONS_ENABLED" %}
-              {% with subscription=user.subscription_set.first %}
-                {% with order=subscription.latest_order %}
-                  <span>Your {{ subscription.plan.name }} subscription is currently <span
-                    class="font-weight-bolder">{{ subscription.get_status_display|lower }}</span>.</span>
-                {% endwith %}
-              {% endwith %}
-            {% else %}
-              <span>You have an active subscription</span>
-            {% endflag %}
-          </div>
-        {% else %}
-          <div class="alert alert-danger" role="alert">
-            <i class="material-icons align-middle">info</i>
-            <span>You do not have an active subscription</span>
-          </div>
-        {% endif %}
-      </div>
-    </div>
 
     {% if user|has_group:"demo" %}
 
@@ -74,11 +29,7 @@
     {% if not user|has_group:"demo" %}{# for everyone except demo #}
       <div class="row">
         <div class="col">
-          <div class="border-bottom pb-2">
-            <h2 class="mb-0">Manage Subscription</h2>
-            <p class="mb-0 subtitle small">If you have any problems with billing, contact the team directly on <a
-              href="mailto:cloudsupport@blender.org">cloudsupport@blender.org</a>.</p>
-          </div>
+
 
           {# **Do not** rearrange the ifs, unless the logic is obviously broken. #}
 
