@@ -1,11 +1,21 @@
 {% extends "settings/base.html" %}
 {% block content_settings %}
-  <h2 class="mt-2 text-secondary">Payment Methods</h2>
+
+  <p class="subtitle">Subscription</p>
+  <h1 class="mb-3">Payment Methods</h2>
   <p class="pb-3">
     Here you can view and delete payment methods. You can add a new one while changing an old
     one, or while paying for something.
   </p>
-  <table class="table table-striped box m-3">
+
+  <table class="table table-sm text-center table-receipts">
+    <thead>
+      <tr>
+        <th class="text-left">Payment Method</th>
+        <th class="">Expiry</th>
+        <th class="text-right">Remove</th>
+      </tr>
+    </thead>
     <tbody>
       {% for payment_method in object_list %}
         {% with payment_method.gateway_properties as pm_props %}
@@ -16,18 +26,25 @@
                 the payment method was deleted at the payment service provider.
               </td>
             {% else %}
-              <td><img class="img-responsive" src="{{ pm_props.image_url }}"/></td>
               {% if payment_method.method_type == 'cc' %}
-                <td>{{ pm_props.card_type }}</td>
-                <td>Ending with <strong>{{ pm_props.last_4 }}</strong></td>
+                <td class="text-left">
+                  <img class="img-responsive mr-2" width="40" src="{{ pm_props.image_url }}"/>
+                  {{ pm_props.card_type }} Ending with <strong>{{ pm_props.last_4 }}</strong>
+                </td>
                 <td>Expires <strong>{{ pm_props.expiration_date }}</strong></td>
               {% elif payment_method.method_type == 'paypal_account'%}
-                <td colspan="3">With email <strong>{{ pm_props.email }}</strong></td>
+                <td class="text-left">
+                  <img class="img-responsive mr-2" width="40" src="{{ pm_props.image_url }}"/>
+                  With email <strong>{{ pm_props.email }}</strong>
+                </td>
               {% else %}
-                <td colspan="3">{{ pm_props.recognisable_name }}</td>
+                <td class="text-left">{{ pm_props.recognisable_name }}</td>
+                <td></td>
               {% endif %}
             {% endif %}
-            <td class="actions"><a class="text-danger" href="{% url 'looper:payment_method_delete' pk=payment_method.pk %}">Remove</a></td>
+            <td class="actions text-right">
+              <a class="text-danger" href="{% url 'looper:payment_method_delete' pk=payment_method.pk %}">Remove</a>
+            </td>
           </tr>
         {% endwith %}
       {% endfor %}
