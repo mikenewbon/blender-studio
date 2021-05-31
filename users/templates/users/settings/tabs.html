@@ -18,10 +18,16 @@
     <i class="material-icons mr-2">credit_card</i>
     <span>Subscription</span>
   </a>
+  {% flag "SUBSCRIPTIONS_ENABLED" and user.subscription_set.count %}
+    <a class="drawer-nav-dropdown icon" data-toggle="collapse" data-target="#subscription-collapse">
+      <i class="material-icons">keyboard_arrow_down</i>
+    </a>
+  {% endflag %}
 </div>
 
+
 {% flag "SUBSCRIPTIONS_ENABLED" and user.subscription_set.count %}
-  <div class="drawer-nav-list-wrapper collapse show">
+  <div class="drawer-nav-list-wrapper collapse show" id="subscription-collapse">
     <ol class="drawer-nav-list">
 
       <li class="drawer-nav-section">

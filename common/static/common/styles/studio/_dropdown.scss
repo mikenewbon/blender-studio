@@ -1,5 +1,6 @@
 .dropdown-menu {
   border: 1px solid $input-gray;
+  min-width: 240px;
 
   .material-icons {
     line-height: 1;
@@ -37,6 +38,8 @@
     &::before {
       opacity: 1;
     }
+
+    color: $white;
   }
 
   &::before {
@@ -51,7 +54,6 @@
     transition: $transition-base;
     width: calc(100% - #{$spacer});
     pointer-events: none;
-    z-index: -1;
   }
 
   &.icon {
@@ -61,6 +63,12 @@
     .material-icons {
       margin-right: 0;
     }
+  }
+
+  span,
+  .material-icons {
+    position: relative;
+    z-index: 1;
   }
 }
 
