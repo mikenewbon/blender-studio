@@ -35,7 +35,7 @@
           font-family: 'Lucida Grande', 'Helvetica Neue', 'Helvetica', 'Arial', 'Verdana', sans-serif;
           text-align: left;">
           <a style="float: left; text-decoration: none; line-height: 0;" href="https://cloud.blender.org">
-            <img src="{% static 'emails/images/blender_cloud_logo_email_transparent.png' %}" alt="Blender Cloud" title="Blender Cloud"/>
+            <img src="{{ site_url }}{% static 'emails/images/blender_cloud_logo_email_transparent.png' %}" alt="Blender Cloud" title="Blender Cloud"/>
           </a>
           <div style="clear:both"></div>
         </div>
@@ -73,7 +73,7 @@
           margin-left: auto; margin-right: auto;
           text-align: left;">
 
-          Do you want to renew or check the status of your account? <a href="https://cloud.blender.org/settings/billing">https://cloud.blender.org/settings/billing</a><br />
+          Do you want to renew or check the status of your account? <a href="{{ billing_url }}">{{ billing_url }}</a><br />
 
           <br/>
 

@@ -4,6 +4,7 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 
 from common import mixins
+from emails.util import get_template_context
 
 
 class Email(mixins.CreatedUpdatedMixin, models.Model):
@@ -30,7 +31,7 @@ class Email(mixins.CreatedUpdatedMixin, models.Model):
         return f'Email {self.subject} from {self.from_email}'
 
     def render_html(self):
-        return render_to_string('emails/email.html', {'email': self})
+        return render_to_string('emails/email.html', {'email': self, **get_template_context()})
 
     def send(self):
         """Send this email."""

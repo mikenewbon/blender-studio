@@ -1,46 +1,19 @@
 """Subscriptions tasks, such as sending of the emails."""
-from typing import Dict, Optional, Tuple
+from typing import Tuple
 import logging
 
 from background_task import background
 from django.conf import settings
-from django.contrib.sites.shortcuts import get_current_site
 from django.template import loader
-from django.urls import reverse
 import django.core.mail
 
 import looper.models
 import looper.signals
 
+from emails.util import get_template_context, absolute_url, is_noreply
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-
-
-def absolute_url(
-    view_name: str, args: Optional[tuple] = None, kwargs: Optional[dict] = None
-) -> str:
-    """Same as django.urls.reverse() but then as absolute URL.
-
-    For simplicity this assumes HTTPS is used.
-    """
-    from urllib.parse import urljoin
-
-    domain = get_current_site(None).domain
-    relative_url = reverse(view_name, args=args, kwargs=kwargs)
-    return urljoin(f'https://{domain}/', relative_url)
-
-
-def is_noreply(email: str) -> bool:
-    """Return True if the email address is a no-reply address."""
-    return email.startswith('noreply@') or email.startswith('no-reply@')
-
-
-def _get_extra_context() -> Dict[str, str]:
-    domain = get_current_site(None).domain
-    return {
-        'site_url': f'https://{domain}/',
-        'billing_url': absolute_url('user-settings-billing'),
-    }
 
 
 def _construct_subscription_mail(
@@ -60,7 +33,7 @@ def _construct_subscription_mail(
         'customer': subscription.user.customer,
         'subscription': subscription,
         'verb': verb,
-        **_get_extra_context(),
+        **get_template_context(),
     }
 
     subject: str = loader.render_to_string(
@@ -102,7 +75,7 @@ def send_mail_bank_transfer_required(subscription_id: int):
         'customer': subscription.user.customer,
         'subscription': subscription,
         'order': order,
-        **_get_extra_context(),
+        **get_template_context(),
     }
 
     subject: str = loader.render_to_string(
