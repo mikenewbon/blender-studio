@@ -1,5 +1,6 @@
-{% load subscriptions %}Dear {% firstof customer.full_name customer.billing_address.full_name user.full_name user.email %},
-
+{% extends "subscriptions/emails/base.txt" %}
+{% load subscriptions %}
+{% block content %}
 Thank you for subscribing to Blender Cloud!
 
 Your {% spaceless %}{% include 'subscriptions/components/info_with_status.txt' %}{% endspaceless %}
@@ -20,10 +21,4 @@ Renewal period:     {{ subscription|renewal_period }}
 Payment method:     {{ subscription.payment_method }}{% with taxable=subscription.taxable %}
 Recurring total:    {{ taxable.price.with_currency_symbol }}{% if taxable.tax_is_charged %}
                     {{ taxable.format_tax_amount }}{% endif %}{% endwith %}
-
-Manage subscription in your billing settings: {{ link }}.
-
---
-Kind regards,
-
-Blender Cloud Team
+{% endblock content %}

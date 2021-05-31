@@ -1,0 +1,12 @@
+{% extends "emails/email_base.html" %}
+
+{% block body %}
+  <p>Dear {% firstof user.customer.full_name user.customer.billing_address.full_name user.full_name user.email %},</p>
+  {% block content %}{% endblock content %}
+  <p>Manage subscription in your billing settings: <a href="{{ billing_url }}">{{ billing_url }}</a>.</p>
+  <p>
+    --<br />
+    Kind regards,<br />
+    Blender Cloud Team
+  </p>
+{% endblock body %}

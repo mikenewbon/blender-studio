@@ -1,6 +1,7 @@
-{% extends "emails/email_transactional.html" %}{% load subscriptions %}
+{% extends "subscriptions/emails/base.html" %}
+{% load subscriptions %}
+
 {% block content %}
-  <p>Dear {% firstof user.customer.full_name user.customer.billing_address.full_name user.full_name user.email %},</p>
   <p>Thank you for subscribing to Blender Cloud!</p>
   <p>
     Your {% spaceless %}{% include 'subscriptions/components/info_with_status.html' %}{% endspaceless %}
@@ -33,5 +34,4 @@
       {% endif %}
     {% endwith %}
   </p>
-  <p>Manage subscription in your billing settings: <a href="{{ link }}">{{ link }}</a>.</p>
 {% endblock content %}

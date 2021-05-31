@@ -1,0 +1,6 @@
+{% extends "subscriptions/emails/base.txt" %}
+{% block content %}
+Your {{ subscription.plan.name }} subscription has been activated. Thank you for subscribing to Blender Cloud!
+
+Explore all Blender Cloud Training: {{ site_url }}{% url 'training-home' %}
+{% endblock %}
