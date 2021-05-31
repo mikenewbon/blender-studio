@@ -3,7 +3,7 @@
   <p>Dear {% firstof user.customer.full_name user.customer.billing_address.full_name user.full_name user.email %},</p>
   <p>Thank you for subscribing to Blender Cloud!</p>
   <p>
-    Your {% spaceless %}{% include 'subscriptions/components/info.html' %}{% endspaceless %}
+    Your {% spaceless %}{% include 'subscriptions/components/info_with_status.html' %}{% endspaceless %}
     and will be activated as soon as we have received and handled your bank transfer.
   </p>
   <p>Please send your payment of {{ subscription.price.with_currency_symbol }} to:</p>

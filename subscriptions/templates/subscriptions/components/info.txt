@@ -1,1 +1,1 @@
-{{ subscription.plan.name }} subscription, {{ subscription.price.with_currency_symbol }} per {% if subscription.interval_length != 1 %}{{ subscription.interval_length }} {% endif %}{{ subscription.interval_unit }} is currently {{ subscription.get_status_display|lower }}
+{{ subscription.plan.name }} subscription, {{ subscription.price.with_currency_symbol }} per {% if subscription.interval_length != 1 %}{{ subscription.interval_length }} {% endif %}{{ subscription.interval_unit }}

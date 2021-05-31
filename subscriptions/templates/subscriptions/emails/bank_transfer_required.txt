@@ -2,7 +2,7 @@
 
 Thank you for subscribing to Blender Cloud!
 
-Your {% spaceless %}{% include 'subscriptions/components/info.html' %}{% endspaceless %}
+Your {% spaceless %}{% include 'subscriptions/components/info_with_status.txt' %}{% endspaceless %}
 and will be activated as soon as we have received and handled your bank transfer.
 
 Please send your payment of {{ subscription.price.with_currency_symbol }} to:

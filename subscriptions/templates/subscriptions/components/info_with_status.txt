@@ -1,0 +1,1 @@
+{% spaceless %}{% include "subscriptions/components/info.txt" %}{% endspaceless %} is currently {{ subscription.get_status_display|lower }}
