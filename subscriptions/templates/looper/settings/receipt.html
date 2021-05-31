@@ -2,17 +2,21 @@
 {% load common_extras %}
 {% load subscriptions %}
 {% block settings %}
-  <p class="subtitle">Receipts</p>
-  <h1 class="mb-3">Receipt #{{ order.id }}</h1>
 
-  <a class="btn btn-dark admin-float" href="{% url 'subscriptions:receipts' %}"><i class="material-icons">arrow_back</i> Back to receipts</a>
+
+
 
   <ul class="receipt list-group list-group-flush list-group-account">
+
+    <a class="btn btn-sm btn-secondary admin-float" href="{% url 'subscriptions:receipts' %}"><i class="material-icons">arrow_back</i> Back to receipts</a>
+
+    <p class="subtitle">Receipts</p>
+    <h1 class="h2 mb-2">Receipt #{{ order.id }}</h1>
 
     <li class="list-group-item">
       <div class="row">
         <div class="col">
-          <p class="h4 mb-0">Receipt ID</p>
+          <p class=" h4 mb-0 subtitle">Receipt ID</p>
         </div>
         <div class="col-auto">
           <p class="mb-0 small">{{ order.id }}</p>
@@ -23,7 +27,7 @@
     <li class="list-group-item">
       <div class="row">
         <div class="col">
-          <p class="h4 mb-0">Payment Received on</p>
+          <p class=" h4 mb-0 subtitle">Payment Received on</p>
         </div>
         <div class="col-auto">
           <p class="mb-0 small">{{ order.paid_at|default:order.created_at }}</p>
@@ -34,7 +38,7 @@
     <li class="list-group-item pb-2">
       <div class="row">
         <div class="col">
-          <p class="h2 mb-0">Subscription</p>
+          <p class="h3 mt-2 mb-0">Subscription</p>
         </div>
       </div>
     </li>
@@ -42,7 +46,7 @@
     <li class="list-group-item">
       <div class="row">
         <div class="col">
-          <p class="h4 mb-0">Renewal Type</p>
+          <p class=" h4 mb-0 subtitle">Renewal Type</p>
         </div>
         <div class="col-auto">
           <p class="mb-0 small">{{ order.subscription.collection_method|capfirst}}</p>
@@ -53,7 +57,7 @@
     <li class="list-group-item">
       <div class="row">
         <div class="col">
-          <p class="h4 mb-0">Renewal Period</p>
+          <p class=" h4 mb-0 subtitle">Renewal Period</p>
         </div>
         <div class="col-auto">
           <p class="mb-0 small">{{ order.subscription|renewal_period|capfirst }}</p>
@@ -64,7 +68,7 @@
     <li class="list-group-item pb-2">
       <div class="row">
         <div class="col">
-          <p class="h2 mb-0">Billing Address</p>
+          <p class="h3  mt-2 mb-0">Billing Address</p>
         </div>
       </div>
     </li>
@@ -72,7 +76,7 @@
     <li class="list-group-item">
       <div class="row">
         <div class="col justify-content-start">
-          <p class="h4 mb-0">Address</p>
+          <p class=" h4 mb-0 subtitle">Address</p>
         </div>
         <div class="col-auto text-right">
           <div class="mb-0 small mb-0-child">{{ order.billing_address|linebreaks }}</p>
@@ -84,7 +88,7 @@
       <li class="list-group-item">
         <div class="row">
           <div class="col">
-            <p class="h4 mb-0">VATIN</p>
+            <p class=" h4 mb-0 subtitle">VATIN</p>
           </div>
           <div class="col-auto">
             <p class="mb-0 small">{{ order.vat_number }}</p>
@@ -96,7 +100,7 @@
     <li class="list-group-item">
       <div class="row">
         <div class="col">
-          <p class="h4 mb-0">Email</p>
+          <p class=" h4 mb-0 subtitle">Email</p>
         </div>
         <div class="col-auto">
           <p class="mb-0 small">{{ order.email }}</p>
@@ -107,7 +111,7 @@
     <li class="list-group-item pb-2">
       <div class="row">
         <div class="col">
-          <p class="h2 mb-0">Payment Information</p>
+          <p class="h3 mt-2 mb-0">Payment Information</p>
         </div>
       </div>
     </li>
@@ -115,7 +119,7 @@
     <li class="list-group-item">
       <div class="row">
         <div class="col justify-content-start">
-          <p class="h4 mb-0">Amount Paid</p>
+          <p class=" h4 mb-0 subtitle">Amount Paid</p>
         </div>
         <div class="col-auto text-right">
           <p class="mb-0 small">{{ order.price.with_currency_symbol_nonocents }}</p>
@@ -133,7 +137,7 @@
         <li class="list-group-item">
           <div class="row">
             <div class="col">
-              <p class="h4 mb-0">Amount Refunded</p>
+              <p class=" h4 mb-0 subtitle">Amount Refunded</p>
             </div>
             <div class="col-auto">
               <p class="mb-0 small">{{ refunded.with_currency_symbol_nonocents }}</p>
@@ -146,7 +150,7 @@
     <li class="list-group-item">
       <div class="row">
         <div class="col">
-          <p class="h4 mb-0">Payment Method</p>
+          <p class=" h4 mb-0 subtitle">Payment Method</p>
         </div>
         <div class="col-auto">
           <p class="mb-0 small">{{ order.payment_method.recognisable_name }}</p>

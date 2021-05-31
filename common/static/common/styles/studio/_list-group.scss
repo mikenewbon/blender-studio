@@ -11,3 +11,17 @@
     justify-content: center;
   }
 }
+
+.receipt {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto;
+  background: $navigation-gray;
+  border: 1px solid $input-gray;
+  padding: $spacer;
+  border-radius: $border-radius;
+
+  .list-group-item {
+    padding: $spacer / 2 0;
+  }
+}
