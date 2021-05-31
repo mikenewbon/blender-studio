@@ -8,6 +8,16 @@ from common.tests.factories.users import UserFactory
 User = get_user_model()
 
 
+def _write_mail(mail, index=0):
+    email = mail.outbox[index]
+    name = email.subject.replace(' ', '_')
+    with open(f'/tmp/{name}.txt', 'w+') as f:
+        f.write(str(email.body))
+    for content, mimetype in email.alternatives:
+        with open(f'/tmp/{name}.{mimetype.replace("/", ".")}', 'w+') as f:
+            f.write(str(content))
+
+
 class _CreateCustomerAndBillingAddressMixin:
     @factory.django.mute_signals(signals.pre_save, signals.post_save)
     def setUp(self):

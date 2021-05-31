@@ -15,7 +15,7 @@ import looper.models
 
 from common.tests.factories.subscriptions import create_customer_with_billing_address
 from common.tests.factories.users import UserFactory
-from subscriptions.tests.base import _CreateCustomerAndBillingAddressMixin
+from subscriptions.tests.base import _CreateCustomerAndBillingAddressMixin, _write_mail
 import subscriptions.tasks
 
 required_address_data = {
@@ -33,16 +33,6 @@ full_billing_address_data = {
     'vat_number': 'NL818152011B01',
 }
 # **N.B.**: test cases below require settings.GEOIP2_DB to point to an existing GeoLite2 database.
-
-
-def _write_mail(mail, index=0):
-    email = mail.outbox[index]
-    name = email.subject.replace(' ', '_')
-    with open(f'/tmp/{name}.txt', 'w+') as f:
-        f.write(str(email.body))
-    for content, mimetype in email.alternatives:
-        with open(f'/tmp/{name}.{mimetype.replace("/", ".")}', 'w+') as f:
-            f.write(str(content))
 
 
 def _get_default_variation(currency='USD'):
