@@ -7,8 +7,7 @@
   <h1 class="mb-3">Cancel Your Subscription</h1>
 
   {% if user|has_active_subscription %}
-    <div class="alert alert-success" role="alert">
-      <i class="material-icons align-middle">done</i>
+    <div class="alert alert-warning" role="alert">
 
       {% with subscription=user.subscription_set.first %}
         {% with order=subscription.latest_order %}
