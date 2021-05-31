@@ -37,10 +37,11 @@ full_billing_address_data = {
 
 def _write_mail(mail, index=0):
     email = mail.outbox[index]
-    with open(f'/tmp/test_mail_{index}_body.txt', 'w+') as f:
+    name = email.subject.replace(' ', '_')
+    with open(f'/tmp/{name}.txt', 'w+') as f:
         f.write(str(email.body))
     for content, mimetype in email.alternatives:
-        with open(f'/tmp/test_mail_{index}.{mimetype.replace("/", ".")}', 'w+') as f:
+        with open(f'/tmp/{name}.{mimetype.replace("/", ".")}', 'w+') as f:
             f.write(str(content))
 
 
