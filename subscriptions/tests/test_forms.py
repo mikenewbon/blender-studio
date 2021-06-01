@@ -1,8 +1,7 @@
-from django.test import TestCase
 import unittest
 
 from subscriptions.forms import BillingAddressForm, PaymentForm
-from subscriptions.tests.base import _CreateCustomerAndBillingAddressMixin
+from subscriptions.tests.base import BaseSubscriptionTestCase
 
 # maxDiff = None does not work for some obscure reason.
 unittest.util._MAX_LENGTH = 1000
@@ -16,7 +15,7 @@ required_address_data = {
 }
 
 
-class TestBillingAddressForm(_CreateCustomerAndBillingAddressMixin, TestCase):
+class TestBillingAddressForm(BaseSubscriptionTestCase):
     def test_instance_loads_both_address_and_customer_data(self):
         form = BillingAddressForm(instance=self.billing_address)
 
@@ -150,7 +149,7 @@ class TestBillingAddressForm(_CreateCustomerAndBillingAddressMixin, TestCase):
         self.assertTrue(form.is_valid())
 
 
-class TestPaymentForm(_CreateCustomerAndBillingAddressMixin, TestCase):
+class TestPaymentForm(BaseSubscriptionTestCase):
     required_payment_form_data = {
         'gateway': 'bank',
         'payment_method_nonce': 'fake-nonce',

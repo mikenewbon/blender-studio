@@ -1,15 +1,14 @@
 from unittest.mock import patch
 
-from django.core import mail
-from django.test import TestCase
 from django.urls import reverse
 from waffle.testutils import override_flag
 
 from looper.models import PaymentMethod, PaymentMethodAuthentication, Gateway
+from looper.money import Money
 
 from common.tests.factories.users import UserFactory
 from common.tests.factories.subscriptions import SubscriptionFactory
-from subscriptions.tests.base import _CreateCustomerAndBillingAddressMixin, _write_mail
+from subscriptions.tests.base import BaseSubscriptionTestCase
 import subscriptions.tasks
 
 required_address_data = {
@@ -29,7 +28,7 @@ full_billing_address_data = {
 
 
 @override_flag('SUBSCRIPTIONS_ENABLED', active=True)
-class TestSubscriptionSettingsBillingAddress(_CreateCustomerAndBillingAddressMixin, TestCase):
+class TestSubscriptionSettingsBillingAddress(BaseSubscriptionTestCase):
     def test_saves_both_address_and_customer(self):
         user = UserFactory()
         self.client.force_login(user)
@@ -96,7 +95,7 @@ class TestSubscriptionSettingsBillingAddress(_CreateCustomerAndBillingAddressMix
 
 
 @override_flag('SUBSCRIPTIONS_ENABLED', active=True)
-class TestSubscriptionSettingsChangePaymentMethod(_CreateCustomerAndBillingAddressMixin, TestCase):
+class TestSubscriptionSettingsChangePaymentMethod(BaseSubscriptionTestCase):
     shared_payment_form_data = {
         **required_address_data,
         'next_url_after_done': '/settings/billing',
@@ -173,26 +172,8 @@ class TestSubscriptionSettingsChangePaymentMethod(_CreateCustomerAndBillingAddre
 
 
 @override_flag('SUBSCRIPTIONS_ENABLED', active=True)
-class TestSubscriptionCancel(_CreateCustomerAndBillingAddressMixin, TestCase):
+class TestSubscriptionCancel(BaseSubscriptionTestCase):
     url_name = 'subscriptions:cancel'
-
-    def _assert_subscription_deactivated_email_is_sent(self, subscription):
-        user = subscription.user
-        self.assertEqual(len(mail.outbox), 1)
-        _write_mail(mail)
-        email = mail.outbox[0]
-        self.assertEqual(email.to, [user.customer.billing_email])
-        # TODO(anna): set the correct reply_to
-        self.assertEqual(email.reply_to, [])
-        # TODO(anna): set the correct from_email DEFAULT_FROM_EMAIL
-        self.assertEqual(email.from_email, 'webmaster@localhost')
-        self.assertEqual(email.subject, 'Blender Cloud Subscription Deactivated')
-        self.assertEqual(email.alternatives[0][1], 'text/html')
-        for email_body in (email.body, email.alternatives[0][0]):
-            self.assertIn('deactivated', email_body)
-            self.assertIn('Dear Алексей Н.,', email_body)
-            self.assertIn('/settings/billing', email_body)
-            self.assertIn('Blender Cloud Team', email_body)
 
     def test_can_cancel_when_on_hold(self):
         subscription = SubscriptionFactory(
@@ -211,8 +192,6 @@ class TestSubscriptionCancel(_CreateCustomerAndBillingAddressMixin, TestCase):
             new=subscriptions.tasks.send_mail_subscription_status_changed.task_function,
         ):
             response = self.client.post(url, data=data)
-        with open('/tmp/response.html', 'wb+') as f:
-            f.write(response.content)
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['Location'], '/settings/billing')
@@ -261,3 +240,126 @@ class TestSubscriptionCancel(_CreateCustomerAndBillingAddressMixin, TestCase):
         self.assertEqual(subscription.status, 'cancelled')
 
         self._assert_subscription_deactivated_email_is_sent(subscription)
+
+
+@override_flag('SUBSCRIPTIONS_ENABLED', active=True)
+class TestPayExistingOrder(BaseSubscriptionTestCase):
+    url_name = 'subscriptions:pay-existing-order'
+    success_url_name = 'user-settings-billing'
+
+    def test_redirect_to_login_when_anonymous(self):
+        subscription = SubscriptionFactory(
+            user=self.user,
+            payment_method__user_id=self.user.pk,
+            payment_method__gateway=Gateway.objects.get(name='bank'),
+            status='on-hold',
+        )
+        order = subscription.generate_order()
+
+        self.client.logout()
+        url = reverse(self.url_name, kwargs={'order_id': order.pk})
+        data = {
+            'gateway': 'braintree',
+            'payment_method_nonce': 'fake-three-d-secure-visa-full-authentication-nonce',
+        }
+        response = self.client.post(url, data=data)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['Location'], f'/oauth/login?next={url}')
+
+    def test_cannot_pay_someone_elses_order(self):
+        subscription = SubscriptionFactory(
+            user=self.user,
+            payment_method__user_id=self.user.pk,
+            payment_method__gateway=Gateway.objects.get(name='bank'),
+            status='on-hold',
+        )
+        order = subscription.generate_order()
+        user = UserFactory()
+
+        self.client.force_login(user)
+        url = reverse(self.url_name, kwargs={'order_id': order.pk})
+        data = {
+            'gateway': 'braintree',
+            'payment_method_nonce': 'fake-three-d-secure-visa-full-authentication-nonce',
+        }
+        response = self.client.post(url, data=data)
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_invalid_missin_required_form_data(self):
+        subscription = SubscriptionFactory(
+            user=self.user,
+            payment_method__user_id=self.user.pk,
+            payment_method__gateway=Gateway.objects.get(name='bank'),
+            status='on-hold',
+        )
+        order = subscription.generate_order()
+        self.client.force_login(self.user)
+
+        url = reverse(self.url_name, kwargs={'order_id': order.pk})
+        response = self.client.post(url, data={})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.context['form'].errors,
+            {
+                'full_name': ['This field is required.'],
+                'street_address': ['This field is required.'],
+                'locality': ['This field is required.'],
+                'postal_code': ['This field is required.'],
+                'country': ['This field is required.'],
+                'email': ['This field is required.'],
+                'payment_method_nonce': ['This field is required.'],
+                'gateway': ['This field is required.'],
+                'price': ['This field is required.'],
+            },
+        )
+
+    @patch(
+        # Make sure background task is executed as a normal function
+        'subscriptions.signals.tasks.send_mail_subscription_status_changed',
+        new=subscriptions.tasks.send_mail_subscription_status_changed.task_function,
+    )
+    def test_can_pay_for_manual_subscription_with_an_order(self):
+        subscription = SubscriptionFactory(
+            user=self.user,
+            payment_method__user_id=self.user.pk,
+            payment_method__gateway=Gateway.objects.get(name='bank'),
+            currency='USD',
+            price=Money('USD', 1110),
+            status='on-hold',
+        )
+        order = subscription.generate_order()
+        self.client.force_login(self.user)
+
+        url = reverse(self.url_name, kwargs={'order_id': order.pk})
+        data = {
+            **required_address_data,
+            'price': order.price,
+            'gateway': 'braintree',
+            'payment_method_nonce': 'fake-three-d-secure-visa-full-authentication-nonce',
+        }
+        response = self.client.post(url, data=data)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(order.transaction_set.count(), 1)
+        transaction = order.latest_transaction()
+        self.assertEqual(
+            response['Location'],
+            reverse('looper:checkout_done', kwargs={'transaction_id': transaction.pk}),
+        )
+        # New payment method was created
+        self.assertEqual(PaymentMethod.objects.count(), 2)
+
+        subscription.refresh_from_db()
+        subscription.payment_method.refresh_from_db()
+        # Subscription's payment method wasn't changed
+        self.assertNotEqual(subscription.payment_method, 'bank')
+        self.assertEqual(
+            str(subscription.payment_method),
+            'braintree – Visa credit card ending in 0002',
+        )
+
+        self.assertEqual(subscription.status, 'active')
+        self._assert_subscription_activated_email_is_sent(subscription)

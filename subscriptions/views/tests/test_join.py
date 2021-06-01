@@ -3,8 +3,6 @@ from unittest.mock import patch
 import unittest
 
 from django.conf import settings
-from django.core import mail
-from django.test import TestCase
 from django.urls import reverse
 from freezegun import freeze_time
 from waffle.testutils import override_flag
@@ -15,7 +13,7 @@ import looper.models
 
 from common.tests.factories.subscriptions import create_customer_with_billing_address
 from common.tests.factories.users import UserFactory
-from subscriptions.tests.base import _CreateCustomerAndBillingAddressMixin, _write_mail
+from subscriptions.tests.base import BaseSubscriptionTestCase
 import subscriptions.tasks
 
 required_address_data = {
@@ -39,217 +37,9 @@ def _get_default_variation(currency='USD'):
     return looper.models.Plan.objects.first().variation_for_currency(currency)
 
 
-class _SharedAssertsMixin:
-    def _assert_required_billing_details_updated(self, user):
-        customer = user.customer
-        address = customer.billing_address
-        self.assertEqual(address.full_name, 'New Full Name')
-        self.assertEqual(address.street_address, 'MAIN ST 1')
-        self.assertEqual(address.locality, 'Amsterdam')
-        self.assertEqual(address.postal_code, '1000 AA')
-        self.assertEqual(address.country, 'NL')
-
-        # self.assertEqual(address.extended_address, 'Floor 2')
-        # self.assertEqual(address.company, 'Test LLC')
-
-        # Check that customer fields were updated as well
-        # self.assertEqual(customer.vat_number, 'NL818152011B01')
-        # N.B.: email is saved as Customer.billing_email
-        # self.assertEqual(customer.billing_email, 'my.billing.email@example.com')
-
-    def _assert_billing_details_form_displayed(self, response):
-        self.assertNotContains(response, 'Sign in with Blender ID')
-        self.assertContains(response, 'Continue to payment')
-        self.assertContains(response, 'id_street_address')
-        self.assertContains(response, 'id_full_name')
-
-    def _assert_payment_form_displayed(self, response):
-        self.assertNotContains(response, 'Pricing has been updated')
-        self.assertNotContains(response, 'Continue to payment')
-        self.assertContains(response, 'Payment Method')
-        self.assertContains(response, 'Confirm and pay')
-
-    def _assert_pricing_has_been_updated(self, response):
-        self.assertContains(response, 'Pricing has been updated')
-        self._assert_billing_details_form_displayed(response)
-
-    def _assert_plan_selector_displayed(self, response):
-        self.assertContains(
-            response,
-            '<option selected value="1" title="This subscription is renewed automatically. You can stop or cancel a subscription any time.">Automatic renewal</option>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<option value="2" title="This subscription is renewed manually. You can leave it on-hold, or renew it when convenient.">Manual renewal</option>',
-            html=True,
-        )
-
-    def _assert_plan_selector_with_sign_in_cta_displayed(self, response):
-        self._assert_plan_selector_displayed(response)
-
-        self.assertContains(response, 'Sign in with Blender ID')
-        self.assertNotContains(response, 'Continue to payment')
-        self.assertNotContains(response, 'id_street_address')
-        self.assertNotContains(response, 'id_full_name')
-
-    def _assert_default_variation_selected_no_tax_usd(self, response):
-        self._assert_no_tax(response)
-        self.assertContains(
-            response,
-            '<option selected data-first-renewal="June 19, 2021" data-currency-symbol="$" data-plan-id="1" data-price-recurring="$&nbsp;11.50&nbsp;/&nbsp;month" data-price="11.50" value="1">Every 1 month</option>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price">$&nbsp;11.50</span>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price-recurring">$&nbsp;11.50&nbsp;/&nbsp;month</span>',
-            html=True,
-        )
-
-    def _assert_default_variation_selected_tax_21_eur(self, response):
-        self.assertContains(
-            response,
-            '<option selected data-first-renewal="June 19, 2021" data-currency-symbol="€" data-plan-id="1" data-price-recurring="€&nbsp;9.90&nbsp;/&nbsp;month" data-price="9.90" data-price-tax="2.08" data-price-recurring-tax="2.08" data-tax-rate="21" data-tax-display-name="VAT" value="2">Every 1 month</option>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price">€&nbsp;9.90</span>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price-tax">Inc. 21% VAT (€&nbsp;2.08)</span>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price-recurring">€&nbsp;9.90&nbsp;/&nbsp;month</span>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price-recurring-tax">Inc. 21% VAT (€&nbsp;2.08)</span>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            'Renews <span class="x-first-renewal">June 19, 2021</span>',
-            html=True,
-        )
-
-    def _assert_no_tax(self, response):
-        self.assertNotContains(response, 'Inc. ')
-        self.assertContains(
-            response,
-            '<span class="x-price-tax"></span>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price-recurring-tax"></span>',
-            html=True,
-        )
-
-    def _assert_form_us_address_is_displayed(self, response):
-        self.assertContains(
-            response,
-            '<option value="US" selected>United States of America</option>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<option value="NY" selected>New York</option>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<input type="text" name="postal_code" value="12001" maxlength="255" placeholder="ZIP/Postal code" class="form-control" required id="id_postal_code">',
-            html=True,
-        )
-
-    def _assert_transactionless_done_page_displayed(self, response_redirect):
-        # Catch unexpected form errors so that they are displayed
-        # FIXME(anna): context is modified by the code that renders email, cannot access the form
-        # self.assertEqual(
-        #    response_redirect.context['form'].errors if response_redirect.context else {},
-        #    {},
-        # )
-        self.assertEqual(response_redirect.status_code, 302)
-        # Follow the redirect
-        response = self.client.get(response_redirect['Location'])
-        self.assertContains(response, '<h2 class="h3">Bank details:</h2>', html=True)
-        self.assertContains(response, 'on hold')
-        self.assertContains(response, 'NL22 INGB 0005296212')
-        subscription = response.wsgi_request.user.subscription_set.first()
-        self.assertContains(response, f'Blender Cloud order-{subscription.latest_order().pk}')
-
-    def _assert_bank_transfer_email_is_sent(self, subscription):
-        user = subscription.user
-        self.assertEqual(len(mail.outbox), 1)
-        _write_mail(mail)
-        email = mail.outbox[0]
-        self.assertEqual(email.to, [user.email])
-        # TODO(anna): set the correct reply_to
-        self.assertEqual(email.reply_to, [])
-        # TODO(anna): set the correct from_email DEFAULT_FROM_EMAIL
-        self.assertEqual(email.from_email, 'webmaster@localhost')
-        self.assertEqual(email.subject, 'Blender Cloud Subscription Bank Payment')
-        self.assertEqual(email.alternatives[0][1], 'text/html')
-        for email_body in (email.body, email.alternatives[0][0]):
-            self.assertIn(
-                f'Blender Cloud order-{subscription.latest_order().pk}',
-                email_body,
-            )
-            self.assertIn('NL22 INGB 0005296212', email_body)
-            self.assertIn('Dear Jane Doe,', email_body)
-            self.assertIn('/settings/billing', email_body)
-            self.assertIn('Manual renewal subscription', email_body)
-            self.assertIn('€\xa014.90 per month', email_body)
-            self.assertIn('Inc. 21% VAT', email_body)
-            self.assertIn('is currently on hold', email_body)
-
-    def _assert_subscription_activated_email_is_sent(self, subscription):
-        user = subscription.user
-        self.assertEqual(len(mail.outbox), 1)
-        _write_mail(mail)
-        email = mail.outbox[0]
-        self.assertEqual(email.to, [user.email])
-        # TODO(anna): set the correct reply_to
-        self.assertEqual(email.reply_to, [])
-        # TODO(anna): set the correct from_email DEFAULT_FROM_EMAIL
-        self.assertEqual(email.from_email, 'webmaster@localhost')
-        self.assertEqual(email.subject, 'Blender Cloud Subscription Activated')
-        self.assertEqual(email.alternatives[0][1], 'text/html')
-        for email_body in (email.body, email.alternatives[0][0]):
-            self.assertIn('activated', email_body)
-            self.assertIn('Dear Jane Doe,', email_body)
-            self.assertIn('/settings/billing', email_body)
-            self.assertIn('Automatic renewal subscription', email_body)
-            self.assertIn('Blender Cloud Team', email_body)
-
-    def _assert_done_page_displayed(self, response_redirect):
-        # Catch unexpected form errors so that they are displayed
-        # FIXME(anna): context is modified by the code that renders email, cannot access the form
-        # self.assertEqual(
-        #    response_redirect.context['form'].errors if response_redirect.context else {},
-        #    {},
-        # )
-        self.assertEqual(response_redirect.status_code, 302)
-        # Follow the redirect
-        response = self.client.get(response_redirect['Location'])
-        self.assertContains(response, 'is currently active')
-        self.assertNotContains(response, 'Bank details')
-
-
 @override_flag('SUBSCRIPTIONS_ENABLED', active=True)
 @freeze_time('2021-05-19 11:41:11')
-class TestGETJoinView(_CreateCustomerAndBillingAddressMixin, _SharedAssertsMixin, TestCase):
+class TestGETJoinView(BaseSubscriptionTestCase):
     url = reverse('subscriptions:join')
 
     def test_get_displays_plan_selection_with_tax_to_anonymous_nl(self):
@@ -440,7 +230,7 @@ class TestGETJoinView(_CreateCustomerAndBillingAddressMixin, _SharedAssertsMixin
 
 @override_flag('SUBSCRIPTIONS_ENABLED', active=True)
 @freeze_time('2021-05-19 11:41:11')
-class TestPOSTJoinView(_CreateCustomerAndBillingAddressMixin, _SharedAssertsMixin, TestCase):
+class TestPOSTJoinView(BaseSubscriptionTestCase):
     url = reverse('subscriptions:join')
 
     def test_post_updates_billing_address_and_customer_renders_next_form_de(self):
@@ -623,9 +413,7 @@ class TestPOSTJoinView(_CreateCustomerAndBillingAddressMixin, _SharedAssertsMixi
 
 @override_flag('SUBSCRIPTIONS_ENABLED', active=True)
 @freeze_time('2021-05-19 11:41:11')
-class TestPOSTJoinConfirmAndPayView(
-    _CreateCustomerAndBillingAddressMixin, _SharedAssertsMixin, TestCase
-):
+class TestPOSTJoinConfirmAndPayView(BaseSubscriptionTestCase):
     url = reverse('subscriptions:join-confirm-and-pay')
 
     def test_invalid_missing_required_fields(self):
@@ -834,7 +622,7 @@ class TestPOSTJoinConfirmAndPayView(
         self.assertEqual(order.tax_rate, 19)
 
 
-class TestJoinRedirectsWithoutFlagView(_CreateCustomerAndBillingAddressMixin, TestCase):
+class TestJoinRedirectsWithoutFlagView(BaseSubscriptionTestCase):
     def test_join_get_redirects_to_store_anonymous(self):
         response = self.client.get(reverse('subscriptions:join'), {})
 
@@ -880,7 +668,7 @@ class TestJoinRedirectsWithoutFlagView(_CreateCustomerAndBillingAddressMixin, Te
         self.assertEqual(response['Location'], settings.STORE_PRODUCT_URL)
 
 
-class TestJoinConfirmAndPayLoggedInUserOnlyView(_CreateCustomerAndBillingAddressMixin, TestCase):
+class TestJoinConfirmAndPayLoggedInUserOnlyView(BaseSubscriptionTestCase):
     def test_get_anonymous_403(self):
         response = self.client.get(reverse('subscriptions:join-confirm-and-pay'), {})
 

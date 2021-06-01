@@ -44,6 +44,7 @@ class CustomerFactory(DjangoModelFactory):
     class Meta:
         model = looper.models.Customer
 
+    billing_email = factory.LazyAttribute(lambda o: '%s.billing@example.com' % o.user.username)
     user = factory.SubFactory('common.tests.factories.users.UserFactory')
 
 
