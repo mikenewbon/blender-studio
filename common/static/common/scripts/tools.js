@@ -199,7 +199,7 @@ function getAnchor() {
 
 function hightlightAnchor(element) {
   const id = getAnchor();
-  if (id != null) return;
+  if (id == null) return;
   const anchor = element.querySelector(`#${id}`);
 
   if (id != null && anchor != null) {
@@ -329,8 +329,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const id = element.hash;
     element.addEventListener('click', (event) => {
       event.preventDefault();
-      document.querySelector(id + ' .read-more-elip').classList.toggle('d-none');
-      document.querySelector(id + ' .read-more-text').classList.toggle('d-none');
+      document.querySelector(`${id}\xa0.read-more-elip`).classList.toggle('d-none');
+      document.querySelector(`${id}\xa0.read-more-text`).classList.toggle('d-none');
       if (element.querySelector('.read-more-less').innerText === 'more') {
         // eslint-disable-next-line no-param-reassign
         element.querySelector('.read-more-less').innerText = 'less';
