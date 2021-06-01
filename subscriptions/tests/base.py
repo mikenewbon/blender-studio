@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.core import mail
 from django.db.models import signals
 from django.test import TestCase
+from django.urls import reverse
 import factory
 
 from common.tests.factories.subscriptions import create_customer_with_billing_address
@@ -258,5 +259,88 @@ class BaseSubscriptionTestCase(TestCase):
         for email_body in (email.body, email.alternatives[0][0]):
             self.assertIn('deactivated', email_body)
             self.assertIn('Dear Алексей Н.,', email_body)
+            self.assertIn('/settings/billing', email_body)
+            self.assertIn('Blender Cloud Team', email_body)
+
+    def _assert_payment_soft_failed_email_is_sent(self, subscription):
+        user = subscription.user
+        self.assertEqual(len(mail.outbox), 1)
+        _write_mail(mail)
+        email = mail.outbox[0]
+        self.assertEqual(email.to, [user.customer.billing_email])
+        # TODO(anna): set the correct reply_to
+        self.assertEqual(email.reply_to, [])
+        # TODO(anna): set the correct from_email DEFAULT_FROM_EMAIL
+        self.assertEqual(email.from_email, 'webmaster@localhost')
+        self.assertEqual(
+            email.subject, "Blender Cloud Subscription: payment failed (but we'll try again)"
+        )
+        self.assertEqual(email.alternatives[0][1], 'text/html')
+        for email_body in (email.body, email.alternatives[0][0]):
+            self.assertIn(f'Dear {user.customer.full_name},', email_body)
+            self.assertIn('Automatic payment', email_body)
+            self.assertIn('failed', email_body)
+            self.assertIn('try again', email_body)
+            self.assertIn('1 of 3', email_body)
+            self.assertIn(
+                reverse(
+                    'subscriptions:pay-existing-order',
+                    kwargs={'order_id': subscription.latest_order().pk},
+                ),
+                email_body,
+            )
+            self.assertIn('/settings/billing', email_body)
+            self.assertIn('Blender Cloud Team', email_body)
+
+    def _assert_payment_failed_email_is_sent(self, subscription):
+        user = subscription.user
+        self.assertEqual(len(mail.outbox), 1)
+        _write_mail(mail)
+        email = mail.outbox[0]
+        self.assertEqual(email.to, [user.customer.billing_email])
+        # TODO(anna): set the correct reply_to
+        self.assertEqual(email.reply_to, [])
+        # TODO(anna): set the correct from_email DEFAULT_FROM_EMAIL
+        self.assertEqual(email.from_email, 'webmaster@localhost')
+        self.assertEqual(email.subject, 'Blender Cloud Subscription: payment failed')
+        self.assertEqual(email.alternatives[0][1], 'text/html')
+        for email_body in (email.body, email.alternatives[0][0]):
+            self.assertIn(f'Dear {user.customer.full_name},', email_body)
+            self.assertIn('Automatic payment', email_body)
+            self.assertIn('failed', email_body)
+            self.assertIn('3 times', email_body)
+            self.assertIn(
+                reverse(
+                    'subscriptions:pay-existing-order',
+                    kwargs={'order_id': subscription.latest_order().pk},
+                ),
+                email_body,
+            )
+            self.assertIn('/settings/billing', email_body)
+            self.assertIn('Blender Cloud Team', email_body)
+
+    def _assert_payment_paid_email_is_sent(self, subscription):
+        user = subscription.user
+        self.assertEqual(len(mail.outbox), 1)
+        _write_mail(mail)
+        email = mail.outbox[0]
+        self.assertEqual(email.to, [user.customer.billing_email])
+        # TODO(anna): set the correct reply_to
+        self.assertEqual(email.reply_to, [])
+        # TODO(anna): set the correct from_email DEFAULT_FROM_EMAIL
+        self.assertEqual(email.from_email, 'webmaster@localhost')
+        self.assertEqual(email.subject, 'Blender Cloud Subscription: payment received')
+        self.assertEqual(email.alternatives[0][1], 'text/html')
+        for email_body in (email.body, email.alternatives[0][0]):
+            self.assertIn(f'Dear {user.customer.full_name},', email_body)
+            self.assertIn('Automatic monthly payment', email_body)
+            self.assertIn('successful', email_body)
+            self.assertIn('$\xa011.10', email_body)
+            self.assertIn(
+                reverse(
+                    'subscriptions:receipt', kwargs={'order_id': subscription.latest_order().pk}
+                ),
+                email_body,
+            )
             self.assertIn('/settings/billing', email_body)
             self.assertIn('Blender Cloud Team', email_body)

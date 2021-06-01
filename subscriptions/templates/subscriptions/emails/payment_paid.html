@@ -1,0 +1,8 @@
+{% extends "subscriptions/emails/base.html" %}
+{% load subscriptions %}
+{% block content  %}
+  <p>
+    Automatic {{ subscription|renewal_period }} payment for your Blender Cloud subscription ({{ order.price.with_currency_symbol }}) was successful. Thank you for subscribing to Blender Cloud!
+  </p>
+  <p>You will find the online receipt at <a href="{{ receipt_url }}">{{ receipt_url }}</a></p>
+{% endblock content %}

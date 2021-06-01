@@ -48,6 +48,11 @@ def _on_automatic_payment_performed(
     transaction: looper.models.Transaction,
     **kwargs,
 ):
+    # FIXME(anna): looper.clock sends the signal before updating the order record,
+    # which breaks async execution because the task might be quick enough
+    # to retrieve the order while it still has the previous (now, incorrect) status.
+    sender.save(update_fields={'collection_attempts', 'status', 'retry_after'})
+
     tasks.send_mail_automatic_payment_performed(order_id=sender.pk, transaction_id=transaction.pk)
 
 

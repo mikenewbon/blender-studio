@@ -30,7 +30,6 @@ def _construct_subscription_mail(
 
     context = {
         'user': subscription.user,
-        'customer': subscription.user.customer,
         'subscription': subscription,
         'verb': verb,
         **get_template_context(),
@@ -72,7 +71,6 @@ def send_mail_bank_transfer_required(subscription_id: int):
 
     context = {
         'user': subscription.user,
-        'customer': subscription.user.customer,
         'subscription': subscription,
         'order': order,
         **get_template_context(),
@@ -131,20 +129,20 @@ def send_mail_subscription_status_changed(subscription_id: int):
 @background()
 def send_mail_automatic_payment_performed(order_id: int, transaction_id: int):
     """Send out an email notifying about the soft-failed payment."""
-    order = looper.models.Order.get(pk=order_id)
-    transaction = looper.models.Transaction.get(pk=transaction_id)
+    order = looper.models.Order.objects.get(pk=order_id)
+    transaction = looper.models.Transaction.objects.get(pk=transaction_id)
     user = order.user
     customer = user.customer
     billing_email = customer.billing_email or user.email
     logger.debug('Sending %r notification to %s', order.status, billing_email)
 
-    subscription = order.subscription.subscription
+    subscription = order.subscription
 
-    pay_url = absolute_url('looper:checkout_existing_order', kwargs={'order_id': order.pk})
-    receipt_url = absolute_url('settings_receipt', kwargs={'order_id': order.pk})
+    pay_url = absolute_url('subscriptions:pay-existing-order', kwargs={'order_id': order.pk})
+    receipt_url = absolute_url('subscriptions:receipt', kwargs={'order_id': order.pk})
 
     context = {
-        'customer': customer,
+        'user': subscription.user,
         'email': billing_email,
         'order': order,
         'subscription': subscription,
@@ -153,6 +151,7 @@ def send_mail_automatic_payment_performed(order_id: int, transaction_id: int):
         'failure_message': transaction.failure_message,
         'payment_method': transaction.payment_method.recognisable_name,
         'maximum_collection_attemps': settings.LOOPER_CLOCK_MAX_AUTO_ATTEMPTS,
+        **get_template_context(),
     }
 
     subject: str = loader.render_to_string(
@@ -199,6 +198,7 @@ def send_mail_managed_subscription_notification(subscription_id: int):
         'user': user,
         'subscription': subscription,
         'subs_admin_url': subs_admin_url,
+        **get_template_context(),
     }
 
     subject: str = loader.render_to_string(

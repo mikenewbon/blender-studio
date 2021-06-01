@@ -1,0 +1,10 @@
+{% extends "subscriptions/emails/base.html" %}
+{% block content %}
+  <p>
+    Automatic payment for your Blender Cloud subscription has failed.
+    We have tried {{ order.collection_attempts }} times, but none of those attempts were successful.
+    As a result, we have paused your subscription for now.
+  </p>
+  <p>The error we received from the payment provider was: {{ failure_message }}.</p>
+  <p>To resume your subscription, please visit <a href="{{ pay_url }}">{{ pay_url }}</a></p>
+{% endblock %}
