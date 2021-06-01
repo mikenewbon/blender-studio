@@ -3,6 +3,8 @@ from typing import Optional
 import logging
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseForbidden
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import UpdateView, FormView
 from waffle.mixins import WaffleFlagMixin
@@ -87,6 +89,22 @@ class PayExistingOrderView(WaffleFlagMixin, looper.views.checkout.CheckoutExisti
 
     waffle_flag = "SUBSCRIPTIONS_ENABLED"
 
+    # Redirect to LOGIN_URL instead of raising an exception
+    raise_exception = False
     template_name = 'subscriptions/pay_existing_order.html'
     form_class = PayExistingOrderForm
     success_url = '/settings/billing'
+
+    def dispatch(self, request, *args, **kwargs):
+        """Return 403 unless current session and the order belong to the same user.
+
+        Looper renders a template instead, we just want to display the standard 403 page
+        or redirect to login, like LoginRequiredMixin does with raise_exception=False.
+        """
+        self.order = get_object_or_404(looper.models.Order, pk=kwargs['order_id'])
+        if request.user.is_authenticated and self.order.user_id != request.user.id:
+            return HttpResponseForbidden()
+        self.plan = self.order.subscription.plan
+        return super(looper.views.checkout.CheckoutExistingOrderView, self).dispatch(
+            request, *args, **kwargs
+        )
