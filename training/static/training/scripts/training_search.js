@@ -7,7 +7,8 @@ var favoritedTrainingIDs = JSON.parse(
 );
 const search = instantsearch({
   indexName: "training_date_desc",
-  searchClient: instantMeiliSearch(searchClientConfig.hostUrl, searchClientConfig.apiKey)
+  searchClient: instantMeiliSearch(searchClientConfig.hostUrl, searchClientConfig.apiKey),
+  routing: true
 });
 
 
