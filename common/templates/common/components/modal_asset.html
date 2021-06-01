@@ -105,8 +105,10 @@
                     <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
                     {% if asset.likes.count != 0 %}<span class="likes-count">{{ asset.likes.count }}</span>{% endif %}
                   </button>
-
-                  {% if user.is_anonymous and not asset.is_free %}
+                  {% if asset.is_free %}
+                    <a href="{{ asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span
+                      class="subtitle">({{ asset.download_size }})</span></a>
+                  {% elif user.is_anonymous and not asset.is_free %}
                     <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to
                       Download</button>
                   {% elif user_has_active_subscription %}
