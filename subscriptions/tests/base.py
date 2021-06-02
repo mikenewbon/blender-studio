@@ -344,3 +344,22 @@ class BaseSubscriptionTestCase(TestCase):
             )
             self.assertIn('/settings/billing', email_body)
             self.assertIn('Blender Cloud Team', email_body)
+
+    def _assert_managed_subscription_notification_email_is_sent(self, subscription):
+        user = subscription.user
+        self.assertEqual(len(mail.outbox), 1)
+        _write_mail(mail)
+        email = mail.outbox[0]
+        self.assertEqual(email.to, ['admin@example.com'])
+        # TODO(anna): set the correct from_email DEFAULT_FROM_EMAIL
+        self.assertEqual(email.from_email, 'webmaster@localhost')
+        self.assertEqual(email.subject, 'Blender Cloud managed subscription needs attention')
+        self.assertEqual(email.alternatives[0][1], 'text/html')
+        for email_body in (email.body, email.alternatives[0][0]):
+            self.assertIn(f'{user.customer.full_name} has', email_body)
+            self.assertIn('its next payment date', email_body)
+            self.assertIn('$\xa011.10', email_body)
+            self.assertIn(
+                f'/admin/looper/subscription/{subscription.pk}/change',
+                email_body,
+            )

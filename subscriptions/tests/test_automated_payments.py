@@ -3,6 +3,7 @@ from unittest import mock
 from unittest.mock import patch
 
 from dateutil.relativedelta import relativedelta
+from django.test import override_settings
 from django.utils import timezone
 
 from looper import admin_log
@@ -18,7 +19,7 @@ from subscriptions.tests.base import BaseSubscriptionTestCase
 import subscriptions.tasks
 
 
-class TestAutomatedPayments(BaseSubscriptionTestCase):
+class TestClock(BaseSubscriptionTestCase):
     def _create_subscription_due_now(self) -> Subscription:
         user = create_customer_with_billing_address(country='NL', full_name='Jane Doe')
         now = timezone.now()
@@ -44,7 +45,7 @@ class TestAutomatedPayments(BaseSubscriptionTestCase):
         'subscriptions.signals.tasks.send_mail_automatic_payment_performed',
         new=subscriptions.tasks.send_mail_automatic_payment_performed.task_function,
     )
-    def test_soft_failed_email_is_sent(self):
+    def test_automated_payment_soft_failed_email_is_sent(self):
         now = timezone.now()
         subscription = self._create_subscription_due_now()
 
@@ -82,7 +83,7 @@ class TestAutomatedPayments(BaseSubscriptionTestCase):
         'subscriptions.signals.tasks.send_mail_automatic_payment_performed',
         new=subscriptions.tasks.send_mail_automatic_payment_performed.task_function,
     )
-    def test_failed_email_is_sent(self):
+    def test_automated_payment_failed_email_is_sent(self):
         now = timezone.now()
         subscription = self._create_subscription_due_now()
         order = subscription.generate_order()
@@ -129,14 +130,9 @@ class TestAutomatedPayments(BaseSubscriptionTestCase):
         'subscriptions.signals.tasks.send_mail_automatic_payment_performed',
         new=subscriptions.tasks.send_mail_automatic_payment_performed.task_function,
     )
-    def test_paid_email_is_sent(self):
+    def test_automated_payment_paid_email_is_sent(self):
         now = timezone.now()
         subscription = self._create_subscription_due_now()
-
-        # Collect some properties before the clock ticks.
-        # order = subscription.latest_order()
-        # payment_token = subscription.payment_method.token
-        # last_order_pk = order.pk
 
         # Tick the clock and check that subscription renews, order and transaction were created
         with patch(
@@ -169,3 +165,28 @@ class TestAutomatedPayments(BaseSubscriptionTestCase):
 
         # Check that an email notification is sent
         self._assert_payment_paid_email_is_sent(subscription)
+
+    @patch(
+        # Make sure background task is executed as a normal function
+        'subscriptions.signals.tasks.send_mail_managed_subscription_notification',
+        new=subscriptions.tasks.send_mail_managed_subscription_notification.task_function,
+    )
+    @override_settings(LOOPER_MANAGER_MAIL='admin@example.com')
+    def test_managed_subscription_notification_email_is_sent(self):
+        now = timezone.now()
+        subscription = self._create_subscription_due_now()
+        subscription.collection_method = 'managed'
+        subscription.save(update_fields={'collection_method'})
+
+        # Tick the clock and check that subscription renews, order and transaction were created
+        Clock().tick()
+
+        # The subscription should be renewed now.
+        subscription.refresh_from_db()
+        self.assertEqual('active', subscription.status)
+        self.assertEqual(1, subscription.intervals_elapsed)
+        self.assertAlmostEqual(now, subscription.next_payment, delta=timedelta(seconds=1))
+        self.assertAlmostEqual(now, subscription.last_notification, delta=timedelta(seconds=1))
+
+        # Check that an email notification is sent
+        self._assert_managed_subscription_notification_email_is_sent(subscription)

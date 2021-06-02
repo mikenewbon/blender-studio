@@ -1,0 +1,3 @@
+{{ user.customer.full_name|default:user.email }} has a {% include "subscriptions/components/info.txt" %} that just passed its next payment date.
+
+See {{ admin_url }} in the Blender Cloud admin.

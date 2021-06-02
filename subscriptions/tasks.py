@@ -189,7 +189,7 @@ def send_mail_managed_subscription_notification(subscription_id: int):
     )
 
     user = subscription.user
-    subs_admin_url = absolute_url(
+    admin_url = absolute_url(
         'admin:looper_subscription_change',
         kwargs={'object_id': subscription.id},
     )
@@ -197,7 +197,7 @@ def send_mail_managed_subscription_notification(subscription_id: int):
     context = {
         'user': user,
         'subscription': subscription,
-        'subs_admin_url': subs_admin_url,
+        'admin_url': admin_url,
         **get_template_context(),
     }
 

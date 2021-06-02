@@ -1,0 +1,10 @@
+{% extends "subscriptions/emails/base.html" %}
+{% block body %}
+  <p>
+    {{ user.customer.full_name|default:user.email }} has a {% include "subscriptions/components/info.html" %} that just passed its next payment date.
+
+  </p>
+  <p>
+    See <a href="{{ admin_url }}">{{ admin_url }}</a> in the Blender Cloud admin.
+  </p>
+{% endblock body %}
