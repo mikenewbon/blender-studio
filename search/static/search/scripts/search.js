@@ -21,7 +21,7 @@ const search = instantsearch({
       routeToState(routeState) {
         return {
           [indexName]: {
-            query: routeState.q,
+            query: routeState.query,
             sortby: routeState.sortBy,
             menu: {
               model: routeState.type,
