@@ -53,7 +53,7 @@
       <td>
         {{ order.price.with_currency_symbol_nonocents }}
         {% with taxable=order.taxable %}
-          {% if taxable.tax_is_charged %}
+          {% if taxable.tax_is_charged %}<br />
             {{ taxable.format_tax_amount }}
           {% endif %}
         {% endwith %}
