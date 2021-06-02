@@ -1,10 +1,39 @@
 const searchClientConfig = JSON.parse(
   document.getElementById('search-client-config').textContent
 );
+
+const indexName = 'studio';
 const search = instantsearch({
-  indexName: "studio",
+  indexName: indexName,
   searchClient: instantMeiliSearch(searchClientConfig.hostUrl, searchClientConfig.apiKey),
-  routing: true
+  routing: {
+    stateMapping: {
+      stateToRoute(uiState) {
+        const indexUiState = uiState[indexName];
+        return {
+          query: indexUiState.query,
+          type: indexUiState.menu && indexUiState.menu.model,
+          media_type: indexUiState.menu && indexUiState.menu.media_type,
+          license: indexUiState.menu && indexUiState.menu.license,
+          sortBy: indexUiState && indexUiState.sortBy,
+        };
+      },
+      routeToState(routeState) {
+        return {
+          [indexName]: {
+            query: routeState.q,
+            sortby: routeState.sortBy,
+            menu: {
+              model: routeState.type,
+              categories: routeState.categories,
+              media_type: routeState.media_type,
+              license: routeState.license,
+            },
+          },
+        };
+      },
+    },
+  },
 });
 
 // -------- INPUT -------- //
@@ -128,7 +157,7 @@ const renderHits = (renderOptions, isFirstRender) => {
                 <div class="card-subtitle-group">
                   <p class="card-subtitle content-type">
                   ${item.is_free == true ? `<i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top"
-                  title="Free">lock_open</i>` :''}&nbsp;${item.model == "section" ? item.project : item.model}
+                  title="Free">lock_open</i>` : ''}&nbsp;${item.model == "section" ? item.project : item.model}
                   </p>
 
                   <p class="card-subtitle">
