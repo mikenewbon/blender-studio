@@ -1,13 +1,19 @@
 from __future__ import annotations
 
+from typing import List, Optional, Set, TypedDict
 import dataclasses as dc
 import datetime
-from typing import List, Optional, Set, TypedDict
 
+from django.db.models.manager import Manager
 from markupsafe import Markup
 
 from training.models import trainings
-from static_assets.models import StaticAsset
+
+
+@dc.dataclass
+class FlatPage:
+    title: str
+    url: str
 
 
 @dc.dataclass
@@ -29,6 +35,7 @@ class Training:
     thumbnail_m_url: str
     picture_header: str
     is_free: bool
+    flatpages: Manager[trainings.TrainingFlatPage]
 
 
 @dc.dataclass
@@ -43,37 +50,10 @@ class Chapter:
 
 
 @dc.dataclass
-class Section:
-    index: int
-    name: str
-    text: Markup
-    url: str
-    download_url: str
-    download_size: str
-    is_free: bool
-    is_featured: bool
-    is_published: bool
-    thumbnail_s_url: str
-    thumbnail_m_url: str
-    static_asset: StaticAsset
-    date_created: datetime.datetime
-
-    @property
-    def name_with_index(self) -> str:
-        return f'{self.index:02.0f}. {self.name}'
-
-
-@dc.dataclass
 class Video:
     url: str
     progress_url: str
     start_position: Optional[float]
-
-
-@dc.dataclass
-class StaticAsset:
-    name: str
-    url: str
 
 
 @dc.dataclass

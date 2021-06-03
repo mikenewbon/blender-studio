@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 
 from django.http.request import HttpRequest
 from django.template.response import TemplateResponse
@@ -6,14 +6,13 @@ from django.template.response import TemplateResponse
 from comments.typed_templates import Comments
 from common.typed_templates.types import TypeSafeTemplateResponse
 from training.typed_templates.types import (
-    StaticAsset,
     Chapter,
     Navigation,
-    Section,
     SectionProgressReportingData,
     Training,
     Video,
 )
+from training.models.sections import Section
 
 
 def section(

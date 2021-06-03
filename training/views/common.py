@@ -8,7 +8,11 @@ from common import markdown
 from common.types import assert_cast
 from training import typed_templates
 from training.models import chapters as chapters_models, sections as sections_models, trainings
-from training.typed_templates.types import ChapterNavigation, Navigation, SectionNavigation
+from training.typed_templates.types import (
+    ChapterNavigation,
+    Navigation,
+    SectionNavigation,
+)
 from training.typed_templates.home import RecentlyWatchedSection
 import static_assets.models as models_static_assets
 
@@ -39,6 +43,7 @@ def training_model_to_template_type(
         thumbnail_m_url=thumbnail_m_url,
         picture_header=picture_header,
         is_free=training.is_free,
+        flatpages=training.flatpages,
     )
 
 
@@ -50,13 +55,6 @@ def video_model_to_template_type(
         progress_url=video.progress_url,
         start_position=None if start_position is None else start_position.total_seconds(),
     )
-
-
-def asset_model_to_template_type(
-    asset: models_static_assets.StaticAsset,
-) -> typed_templates.types.StaticAsset:  # noqa: D103
-    # TODO(fsiddi) Remove this
-    return typed_templates.types.StaticAsset(name=asset.source.name, url=asset.source.url)
 
 
 def navigation_to_template_type(
