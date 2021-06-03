@@ -21,6 +21,14 @@
           {{ training.type.label }} Overview
         </a>
       </div>
+      {% for page in training.flatpages %}
+        <div class="drawer-nav-dropdown-wrapper">
+          <a class="drawer-nav-dropdown h3" href="{{ page.url }}">
+            <i class="material-icons mr-2">insert_drive_file</i>
+            {{ page.title }}
+          </a>
+        </div>
+      {% endfor %}
     </div>
 
     {% for chapter_navigation in navigation.chapters %}
@@ -79,6 +87,14 @@
         <span class="overflow-text">{{ training.type.label }} Overview</span>
       </a>
     </div>
+    {% for page in training.flatpages %}
+      <div class="drawer-nav-dropdown-wrapper">
+        <a class="drawer-nav-dropdown h3" href="{{ page.url }}">
+          <i class="material-icons mr-2">insert_drive_file</i>
+          {{ page.title }}
+        </a>
+      </div>
+    {% endfor %}
   </div>
 
   {% for chapter_navigation in navigation.chapters %}
