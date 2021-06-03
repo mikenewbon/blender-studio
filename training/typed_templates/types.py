@@ -11,12 +11,6 @@ from training.models import trainings
 
 
 @dc.dataclass
-class FlatPage:
-    title: str
-    url: str
-
-
-@dc.dataclass
 class Training:
     id: int
     name: str
