@@ -198,7 +198,7 @@ class TestGETJoinView(BaseSubscriptionTestCase):
         self._assert_default_variation_selected_no_tax_usd(response)
 
     @unittest.skipUnless(os.path.exists(settings.GEOIP2_DB), 'GeoIP database file is required')
-    def test_get_detects_country_nl_sets_preferred_currency_eur(self):
+    def test_get_detects_country_nl_sets_preferred_currency_eur_displays_correct_vat(self):
         user = create_customer_with_billing_address()
         self.client.force_login(user)
 
@@ -211,21 +211,7 @@ class TestGETJoinView(BaseSubscriptionTestCase):
             '<option value="NL" selected>Netherlands</option>',
             html=True,
         )
-        self.assertContains(
-            response,
-            '<option selected data-first-renewal="June 19, 2021" data-currency-symbol="€" data-plan-id="1" data-price-recurring="€&nbsp;9.90&nbsp;/&nbsp;month" data-price="9.90" value="2">Every 1 month</option>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price">€&nbsp;9.90</span>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price-recurring">€&nbsp;9.90&nbsp;/&nbsp;month</span>',
-            html=True,
-        )
+        self._assert_default_variation_selected_tax_21_eur(response)
 
 
 @override_flag('SUBSCRIPTIONS_ENABLED', active=True)
