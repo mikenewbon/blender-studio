@@ -72,7 +72,7 @@
           <i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top"
             title="Free">lock_open</i>
         {% endif %}
-        {{ training.type.label }}
+        {% firstof training.type.label training.type|capfirst %}
       </p>
       <a href="{{ navigation.overview_url }}" class="h3">{{ training.name }}</a>
     </div>
