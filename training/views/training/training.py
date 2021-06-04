@@ -57,6 +57,7 @@ def flatpage(request: HttpRequest, training_slug: str, page_slug: str) -> HttpRe
     """
     training = get_object_or_404(Training, slug=training_slug, is_published=True)
     flatpage = get_object_or_404(TrainingFlatPage, training=training, slug=page_slug)
+    navigation = queries.trainings.navigation(user_pk=request.user.pk, training_pk=training.pk)
     context = {
         'training': training,
         'flatpage': flatpage,
@@ -66,5 +67,6 @@ def flatpage(request: HttpRequest, training_slug: str, page_slug: str) -> HttpRe
         'user_can_edit_flatpage': (
             request.user.is_staff and request.user.has_perm('training.change_trainingflatpage')
         ),
+        'navigation': navigation_to_template_type(*navigation, user=request.user, current=flatpage),
     }
     return render(request, 'training/flatpage.html', context)
