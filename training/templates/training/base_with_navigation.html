@@ -89,9 +89,9 @@
     </div>
     {% for page in training.flatpages.all %}
       <div class="drawer-nav-dropdown-wrapper">
-        <a class="drawer-nav-dropdown h3" href="{{ page.url }}">
+        <a class="drawer-nav-dropdown h3" href="{{ page.url }}" data-tooltip="tooltip-overflow" data-placement="top" title="{{ page.title }}">
           <i class="material-icons mr-2">insert_drive_file</i>
-          {{ page.title }}
+          <span class="drawer-nav-dropdown-text overflow-text">{{ page.title }}</span>
         </a>
       </div>
     {% endfor %}

@@ -1,4 +1,4 @@
-{% extends 'training/base_training.html' %}
+{% extends 'training/base_with_navigation.html' %}
 {% load common_extras %}
 {% load pipeline %}
 
@@ -12,43 +12,60 @@
   {% endwith %}
 {% endblock %}
 
-{% block content %}
+
+{% block nexted_content %}
   {% if flatpage.header %}
-    <div class="jumbotron jumbotron-fluid jumbotron-blog jumbotron-overlay overlay-blog mb-3">
-      <div class="container py-5 px-5">
-        <div class="row">
-          <div class="col-md-5">
-            <p class="subtitle">{{ training.title }}</p>
-            <h1 class="display-3 text-uppercase font-weight-bold">{{ flatpage.title }}</h1>
+    {% include "common/components/helpers/image_resize.html" with alt=asset.name classes="img-fluid img-width-100 rounded mb-3" img_source=flatpage.header width="820" %}
+  {% endif %}
+
+  <div class="row">
+    <div class="col">
+
+      <div class="row align-items-start">
+        <div class="col-12 col-md mb-2 mb-md-3">
+          <p class="subtitle small">
+            {% if training.is_free %}
+              <i class="material-icons icon-inline text-success" data-toggle="tooltip" data-placement="top"
+                title="Free">lock_open</i>
+            {% endif %}
+            {{ training.name }}
+          </p>
+          <h2 class="mb-0">{{ flatpage.title }}</h2>
+        </div>
+        <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
+          <div class="training-toolbar-container">
+
+            <div class="training-toolbar">
+
+              {% if user.is_staff %}
+                <a href="{{ flatpage.admin_url }}" class="btn btn-sm btn-icon btn-dark">
+                  <i class="material-icons btn-material-icons">create</i>
+                </a>
+              {% endif %}
+
+              <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
+                <i class="material-icons btn-material-icons">more_horiz</i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-right">
+                <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank"
+                  class="dropdown-item">
+                  <i class="material-icons">flag</i>
+                  <span>Report Problem</span>
+                </a>
+              </div>
+
+            </div>
           </div>
         </div>
       </div>
-      <div class="jumbotron-bg-wrapper">
-        {% include "common/components/helpers/image_set.html" with alt=asset.name classes="jumbotron-bg" img_source=flatpage.header xsmall_width="600" small_width="800" medium_width="1000" large_width="1200" xlarge_width="1920" %}
-      </div>
-    </div>
-  {% endif %}
 
-  <div class="container-fluid pt-4">
-    <section class="flat-page-content editorial-text-area mb-4">
-      {% if user_can_edit_flatpage %}
-        <div class="admin-button">
-          <a href="{{ flatpage.admin_url }}" class="btn btn-sm btn-secondary btn-icon btn-float">
-            <i class="material-icons">create</i>
-          </a>
-        </div>
-      {% endif %}
-      {% if not flatpage.header %}
-        <div class="text-center mb-3">
-          <p class="subtitle">{{ training.title }}</p>
-          <h1 class="mb-0">{{ flatpage.title }}</h1>
-        </div>
-      {% endif %}
-      <div>{% with_shortcodes flatpage.html_content %}</div>
-    </section>
+      <section class="mb-3 markdown-text">{% with_shortcodes flatpage.html_content %}</section>
+    </div>
+
+
   </div>
 
-{% endblock content %}
+{% endblock nexted_content %}
 
 {% block scripts %}
   {% javascript 'training' %}
