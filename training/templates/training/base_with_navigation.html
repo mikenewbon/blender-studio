@@ -9,7 +9,7 @@
           <i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top"
             title="Free">lock_open</i>
         {% endif %}
-        {{ training.type.label }}
+        {% firstof training.type.label training.type|capfirst %}
       </p>
       <a class="h2" href="{{ navigation.overview_url }}">{{ training.name }}</a>
     </div>
@@ -18,7 +18,7 @@
       <div class="drawer-nav-dropdown-wrapper">
         <a class="drawer-nav-dropdown h3" href="{{ navigation.overview_url }}">
           <i class="material-icons mr-2">feed</i>
-          {{ training.type.label }} Overview
+          {% firstof training.type.label training.type|capfirst %} Overview
         </a>
       </div>
       {% for page in training.flatpages.all %}
@@ -82,9 +82,9 @@
   <div class="drawer-nav-group">
     <div class="drawer-nav-dropdown-wrapper">
       <a class="drawer-nav-dropdown font-weight-bold" href="{{ navigation.overview_url }}" data-tooltip="tooltip-overflow"
-        data-placement="top" title="{{ training.type.label }} Overview">
+        data-placement="top" title="{% firstof training.type.label training.type|capfirst %} Overview">
         <i class="material-icons mr-2">feed</i>
-        <span class="overflow-text">{{ training.type.label }} Overview</span>
+        <span class="overflow-text">{% firstof training.type.label training.type|capfirst %} Overview</span>
       </a>
     </div>
     {% for page in training.flatpages.all %}
