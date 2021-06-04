@@ -13,6 +13,7 @@ ADMIN_SITE_TITLE = 'Blender Studio'
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.redirects',
     'django.contrib.flatpages',
     'django_jsonfield_backport',
     'emails',
@@ -62,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
     'blendercloud.middleware.SessionMiddleware',
     'looper.middleware.PreferredCurrencyMiddleware',
     'waffle.middleware.WaffleMiddleware',
