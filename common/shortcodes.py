@@ -367,5 +367,5 @@ def render(text: str, context: typing.Any = None) -> str:
     try:
         return parser.parse(text, context)
     except shortcodes.ShortcodeError as e:
-        log.warning('Error rendering tag: %s', e)
+        log.exception('Error rendering tag: %s', e)
         return text
