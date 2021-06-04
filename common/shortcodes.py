@@ -132,9 +132,10 @@ class SubscribeBanner:
         kwargs: typing.Dict[str, str],
     ) -> str:
         """Display a subscribe banner for anonymous and subscription-less viewers."""
-        user = getattr(context.get('request'), 'user', None) if context else None
+        request = context.get('request')
+        user = getattr(request, 'user', None) if context else None
         if not user or not queries.has_active_subscription(user):
-            subscribe_banner = render_to_string('blog/subscribe_jumbotron.html')
+            subscribe_banner = render_to_string('blog/subscribe_jumbotron.html', request=request)
             return subscribe_banner
         return ''
 
