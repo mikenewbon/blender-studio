@@ -98,7 +98,7 @@ class TestSubscriptionSettingsBillingAddress(BaseSubscriptionTestCase):
 class TestSubscriptionSettingsChangePaymentMethod(BaseSubscriptionTestCase):
     shared_payment_form_data = {
         **required_address_data,
-        'next_url_after_done': '/settings/billing',
+        'next_url_after_done': reverse('user-settings-billing'),
     }
     url_name = 'subscriptions:payment-method-change'
     success_url_name = 'user-settings-billing'
@@ -194,7 +194,7 @@ class TestSubscriptionCancel(BaseSubscriptionTestCase):
             response = self.client.post(url, data=data)
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['Location'], '/settings/billing')
+        self.assertEqual(response['Location'], reverse('user-settings-billing'))
 
         subscription.refresh_from_db()
         self.assertEqual(subscription.status, 'cancelled')
@@ -214,7 +214,7 @@ class TestSubscriptionCancel(BaseSubscriptionTestCase):
         response = self.client.post(url, data=data)
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['Location'], '/settings/billing')
+        self.assertEqual(response['Location'], reverse('user-settings-billing'))
 
         subscription.refresh_from_db()
         self.assertEqual(subscription.status, 'pending-cancellation')

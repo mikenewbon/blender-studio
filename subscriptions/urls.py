@@ -12,17 +12,17 @@ urlpatterns = [
     path('join/', join.JoinView.as_view(), name='join'),
     path('join/confirm/', join.JoinConfirmView.as_view(), name='join-confirm-and-pay'),
     path(
-        'subscription/<int:subscription_id>/cancel',
+        'subscription/<int:subscription_id>/cancel/',
         settings.CancelSubscriptionView.as_view(),
         name='cancel',
     ),
     path(
-        'subscription/<int:subscription_id>/payment-method/change',
+        'subscription/<int:subscription_id>/payment-method/change/',
         settings.PaymentMethodChangeView.as_view(),
         name='payment-method-change',
     ),
     path(
-        'subscription/order/<int:order_id>/pay',
+        'subscription/order/<int:order_id>/pay/',
         settings.PayExistingOrderView.as_view(),
         name='pay-existing-order',
     ),

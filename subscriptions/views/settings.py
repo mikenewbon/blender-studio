@@ -79,7 +79,7 @@ class PaymentMethodChangeView(WaffleFlagMixin, looper.views.settings.PaymentMeth
 
     template_name = 'subscriptions/payment_method_change.html'
     form_class = ChangePaymentMethodForm
-    success_url = '/settings/billing'
+    success_url = reverse_lazy('user-settings-billing')
 
     subscription: looper.models.Subscription
 
@@ -93,7 +93,7 @@ class PayExistingOrderView(WaffleFlagMixin, looper.views.checkout.CheckoutExisti
     raise_exception = False
     template_name = 'subscriptions/pay_existing_order.html'
     form_class = PayExistingOrderForm
-    success_url = '/settings/billing'
+    success_url = reverse_lazy('user-settings-billing')
 
     def dispatch(self, request, *args, **kwargs):
         """Return 403 unless current session and the order belong to the same user.

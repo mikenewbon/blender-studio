@@ -125,9 +125,9 @@ class TestSiteMetadata(TestCase):
         self.assertEqual(response.status_code, 200)
         html = response.content
 
-        self.assertCanonicalLinkEquals(html, f'http://testserver/films/{film_slug}')
+        self.assertCanonicalLinkEquals(html, f'http://testserver/films/{film_slug}/')
         for meta, value in {
-            'property=.og:url.': f'http://testserver/films/{film_slug}',
+            'property=.og:url.': f'http://testserver/films/{film_slug}/',
             **shared_meta,
             'property=.og:title.': f'{film.title} - Blender Cloud',
             'name=.twitter:title.': f'{film.title} - Blender Cloud',
@@ -170,17 +170,17 @@ class TestSiteMetadata(TestCase):
         film = FilmFactory(slug=film_slug)
         asset = AssetFactory(film=film, is_featured=True, static_asset=StaticAssetFactory())
 
-        self.assertEqual(asset.url, f'/films/coffee-run/gallery?asset={asset.pk}')
+        self.assertEqual(asset.url, f'/films/coffee-run/gallery/?asset={asset.pk}')
         response = self.client.get(f'http://testserver{asset.url}&foo=bar')
 
         self.assertEqual(response.status_code, 200)
         html = response.content
 
         self.assertCanonicalLinkEquals(
-            html, f'http://testserver/films/{film_slug}/gallery?asset={asset.pk}'
+            html, f'http://testserver/films/{film_slug}/gallery/?asset={asset.pk}'
         )
         for meta, value in {
-            'property=.og:url.': f'http://testserver/films/{film_slug}/gallery?asset={asset.pk}',
+            'property=.og:url.': f'http://testserver/films/{film_slug}/gallery/?asset={asset.pk}',
             **shared_meta,
             'property=.og:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
             'name=.twitter:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
@@ -201,9 +201,9 @@ class TestSiteMetadata(TestCase):
         self.assertEqual(response.status_code, 200)
         html = response.content
 
-        self.assertCanonicalLinkEquals(html, f'http://testserver/films/{film_slug}/gallery')
+        self.assertCanonicalLinkEquals(html, f'http://testserver/films/{film_slug}/gallery/')
         for meta, value in {
-            'property=.og:url.': f'http://testserver/films/{film_slug}/gallery',
+            'property=.og:url.': f'http://testserver/films/{film_slug}/gallery/',
             **shared_meta,
             'property=.og:title.': f'{film.title} - Featured Artwork - Blender Cloud',
             'name=.twitter:title.': f'{film.title} - Featured Artwork - Blender Cloud',
@@ -227,10 +227,10 @@ class TestSiteMetadata(TestCase):
 
         self.assertCanonicalLinkEquals(
             html,
-            f'http://testserver/films/{film_slug}/{asset.collection.slug}?asset={asset.pk}',
+            f'http://testserver/films/{film_slug}/{asset.collection.slug}/?asset={asset.pk}',
         )
         for meta, value in {
-            'property=.og:url.': f'http://testserver/films/{film_slug}/{asset.collection.slug}?asset={asset.pk}',
+            'property=.og:url.': f'http://testserver/films/{film_slug}/{asset.collection.slug}/?asset={asset.pk}',
             **shared_meta,
             'property=.og:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
             'name=.twitter:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
@@ -260,10 +260,10 @@ class TestSiteMetadata(TestCase):
 
         self.assertCanonicalLinkEquals(
             html,
-            f'http://testserver/films/{film_slug}/{asset.collection.slug}',
+            f'http://testserver/films/{film_slug}/{asset.collection.slug}/',
         )
         for meta, value in {
-            'property=.og:url.': f'http://testserver/films/{film_slug}/{asset.collection.slug}',
+            'property=.og:url.': f'http://testserver/films/{film_slug}/{asset.collection.slug}/',
             **shared_meta,
             'property=.og:title.': f'{film.title} - {asset.collection.name} - Blender Cloud',
             'name=.twitter:title.': f'{film.title} - {asset.collection.name} - Blender Cloud',
@@ -298,10 +298,10 @@ class TestSiteMetadata(TestCase):
 
         self.assertCanonicalLinkEquals(
             html,
-            f'http://testserver/films/{film_slug}/{asset.collection.slug}',
+            f'http://testserver/films/{film_slug}/{asset.collection.slug}/',
         )
         for meta, value in {
-            'property=.og:url.': f'http://testserver/films/{film_slug}/{asset.collection.slug}',
+            'property=.og:url.': f'http://testserver/films/{film_slug}/{asset.collection.slug}/',
             **shared_meta,
             'property=.og:title.': f'{film.title} - {asset.collection.name} - Blender Cloud',
             'name=.twitter:title.': f'{film.title} - {asset.collection.name} - Blender Cloud',
@@ -331,10 +331,10 @@ class TestSiteMetadata(TestCase):
 
         self.assertCanonicalLinkEquals(
             html,
-            f'http://testserver/films/{film_slug}/{asset.collection.slug}?asset={asset.pk}',
+            f'http://testserver/films/{film_slug}/{asset.collection.slug}/?asset={asset.pk}',
         )
         for meta, value in {
-            'property=.og:url.': f'http://testserver/films/{film_slug}/{asset.collection.slug}?asset={asset.pk}',
+            'property=.og:url.': f'http://testserver/films/{film_slug}/{asset.collection.slug}/?asset={asset.pk}',
             **shared_meta,
             'property=.og:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
             'name=.twitter:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
@@ -356,10 +356,10 @@ class TestSiteMetadata(TestCase):
 
         self.assertCanonicalLinkEquals(
             html,
-            f'http://testserver/blog/{post.slug}',
+            f'http://testserver/blog/{post.slug}/',
         )
         for meta, value in {
-            'property=.og:url.': f'http://testserver/blog/{post.slug}',
+            'property=.og:url.': f'http://testserver/blog/{post.slug}/',
             **shared_meta,
             'property=.og:title.': f'{post.title} - Blender Cloud',
             'name=.twitter:title.': f'{post.title} - Blender Cloud',

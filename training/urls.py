@@ -31,10 +31,10 @@ urlpatterns = [
         include(
             [
                 path('', training, name='training'),
-                path('<slug:section_slug>', section, name='section'),
-                path('chapter/<slug:chapter_slug>', chapter, name='chapter'),
+                path('<slug:section_slug>/', section, name='section'),
+                path('chapter/<slug:chapter_slug>/', chapter, name='chapter'),
             ]
         ),
     ),
-    path('<slug:training_slug>/pages/<slug:page_slug>', flatpage, name='training-flatpage'),
+    path('<slug:training_slug>/pages/<slug:page_slug>/', flatpage, name='training-flatpage'),
 ]

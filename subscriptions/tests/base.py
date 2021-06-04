@@ -219,7 +219,7 @@ class BaseSubscriptionTestCase(TestCase):
             )
             self.assertIn('NL22 INGB 0005296212', email_body)
             self.assertIn('Dear Jane Doe,', email_body)
-            self.assertIn('/settings/billing', email_body)
+            self.assertIn(reverse('user-settings-billing'), email_body)
             self.assertIn('Manual renewal subscription', email_body)
             self.assertIn('€\xa014.90 per month', email_body)
             self.assertIn('Inc. 21% VAT', email_body)
@@ -240,7 +240,7 @@ class BaseSubscriptionTestCase(TestCase):
         for email_body in (email.body, email.alternatives[0][0]):
             self.assertIn('activated', email_body)
             self.assertIn(f'Dear {user.customer.full_name},', email_body)
-            self.assertIn('/settings/billing', email_body)
+            self.assertIn(reverse('user-settings-billing'), email_body)
             self.assertIn('Automatic renewal subscription', email_body)
             self.assertIn('Blender Cloud Team', email_body)
 
@@ -259,7 +259,7 @@ class BaseSubscriptionTestCase(TestCase):
         for email_body in (email.body, email.alternatives[0][0]):
             self.assertIn('deactivated', email_body)
             self.assertIn('Dear Алексей Н.,', email_body)
-            self.assertIn('/settings/billing', email_body)
+            self.assertIn(reverse('user-settings-billing'), email_body)
             self.assertIn('Blender Cloud Team', email_body)
 
     def _assert_payment_soft_failed_email_is_sent(self, subscription):
@@ -289,7 +289,7 @@ class BaseSubscriptionTestCase(TestCase):
                 ),
                 email_body,
             )
-            self.assertIn('/settings/billing', email_body)
+            self.assertIn(reverse('user-settings-billing'), email_body)
             self.assertIn('Blender Cloud Team', email_body)
 
     def _assert_payment_failed_email_is_sent(self, subscription):
@@ -316,7 +316,7 @@ class BaseSubscriptionTestCase(TestCase):
                 ),
                 email_body,
             )
-            self.assertIn('/settings/billing', email_body)
+            self.assertIn(reverse('user-settings-billing'), email_body)
             self.assertIn('Blender Cloud Team', email_body)
 
     def _assert_payment_paid_email_is_sent(self, subscription):
@@ -342,7 +342,7 @@ class BaseSubscriptionTestCase(TestCase):
                 ),
                 email_body,
             )
-            self.assertIn('/settings/billing', email_body)
+            self.assertIn(reverse('user-settings-billing'), email_body)
             self.assertIn('Blender Cloud Team', email_body)
 
     def _assert_managed_subscription_notification_email_is_sent(self, subscription):

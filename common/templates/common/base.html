@@ -163,17 +163,17 @@
                   <div class="dropdown-menu-nested">
                     {% if request.user.is_authenticated %}
                       {% if request.user|has_group:"demo" %}
-                        <a href="/settings/billing" class="dropdown-item text-blue">
+                        <a href="{% url 'user-settings-billing' %}" class="dropdown-item text-blue">
                           <i class="material-icons">favorite</i>
                           <span>Free Account</span>
                         </a>
                       {% elif request.user|has_active_subscription %}
-                        <a href="/settings/billing" class="dropdown-item text-green">
+                        <a href="{% url 'user-settings-billing' %}" class="dropdown-item text-green">
                           <i class="material-icons">done</i>
                           <span>Subscription Active</span>
                         </a>
                       {% else %}
-                        <a href="/settings/billing" class="dropdown-item text-red">
+                        <a href="{% url 'user-settings-billing' %}" class="dropdown-item text-red">
                           <i class="material-icons">error</i>
                           <span>Subscription Inactive</span>
                         </a>
@@ -185,7 +185,7 @@
                       <span>Settings</span>
                     </a>
 
-                    <a href="/settings/billing" class="dropdown-item">
+                    <a href="{% url 'user-settings-billing' %}" class="dropdown-item">
                       <i class="material-icons">credit_card</i>
                       <span>Subscription</span>
                     </a>
