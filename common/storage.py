@@ -1,5 +1,10 @@
 """Custom file storage classes."""
+from django.conf import settings
 from storages.backends.s3boto3 import S3Boto3Storage
+import boto3
+from botocore.client import Config
+
+_s3_client = None
 
 
 class S3PublicStorage(S3Boto3Storage):
@@ -27,3 +32,26 @@ class S3Boto3CustomStorage(S3Boto3Storage):
             content_disposition = f'attachment; filename="{original_name}"'
             params['ContentDisposition'] = content_disposition
         return params
+
+
+def get_s3_url(path, expires_in_seconds=3600):
+    """Generate a pre-signed S3 URL to a given path."""
+    global _s3_client
+    if not _s3_client:
+        _s3_client = boto3.client(
+            's3',
+            config=Config(signature_version='s3v4'),
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+            region_name=settings.AWS_S3_REGION_NAME,
+        )
+
+    return _s3_client.generate_presigned_url(
+        'get_object',
+        Params={
+            'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
+            'Key': path,
+        },
+        HttpMethod='GET',
+        ExpiresIn=expires_in_seconds,
+    )

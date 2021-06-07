@@ -179,12 +179,16 @@ class Video(models.Model):
 
     @property
     def default_variation_url(self):
+        return self.source.url
+
+    @property
+    def source(self):
         default_variation: VideoVariation = self.variations.first()
         # TODO(fsiddi) ensure that default_variation.source is never None
         if not default_variation or not default_variation.source:
             log.warning('Variation for video %i not found' % self.pk)
-            return self.static_asset.source.url
-        return default_variation.source.url
+            return self.static_asset.source
+        return default_variation.source
 
     @property
     def progress_url(self) -> str:

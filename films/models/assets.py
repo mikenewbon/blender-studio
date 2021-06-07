@@ -9,11 +9,14 @@ from taggit.managers import TaggableManager
 
 from comments.models import Comment
 from common import mixins
+from common.storage import get_s3_url
 from films.models import Collection
 import common.help_texts
 import static_assets.models as models_static_assets
 
 User = get_user_model()
+# CloudFront does not support files larger than 20GB
+CDN_SIZE_LIMIT_BYTES = 20 * 1024 ** 3
 
 
 class AssetCategory(models.TextChoices):
@@ -78,28 +81,43 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
             f'{self.is_free and " 🆓" or ""}{self.is_featured and " ★" or ""}'
         )
 
-    # TODO(fsiddi, anna) Share this code with Sections
     @property
-    def download_url(self) -> str:
+    def download_source(self):
         if not self.static_asset:
-            return ''
+            return
         if self.static_asset.source_type == 'video':
-            return self.static_asset.video.default_variation_url
+            return self.static_asset.video.source
         else:
-            return self.static_asset.source.url
+            return self.static_asset.source
 
     # TODO(fsiddi, anna) Share this code with Sections
     @property
-    def download_size(self) -> str:
-        if not self.static_asset:
+    def download_url(self) -> str:
+        download_source = self.download_source
+        if not download_source:
             return ''
+        if self.size_bytes > CDN_SIZE_LIMIT_BYTES:
+            return get_s3_url(download_source.name)
+        return download_source.url
+
+    @property
+    def size_bytes(self) -> int:
+        if not self.static_asset:
+            return 0
         if self.static_asset.source_type == 'video':
             variation = self.static_asset.video.variations.first()
             if not variation:
-                return filesizeformat(self.static_asset.size_bytes)
-            return filesizeformat(variation.size_bytes)
+                return self.static_asset.size_bytes
+            return variation.size_bytes
         else:
-            return filesizeformat(self.static_asset.size_bytes)
+            return self.static_asset.size_bytes
+
+    @property
+    def download_size(self) -> str:
+        size_bytes = self.size_bytes
+        if size_bytes:
+            return filesizeformat(size_bytes)
+        return ''
 
     def get_absolute_url(self) -> str:
         return self.url
