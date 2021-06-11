@@ -38,6 +38,7 @@ window.asset = (function asset() {
       // Remove modal content on hide
       $(this).on('hidden.bs.modal', event => {
         $(this).modal('handleUpdate');
+        console.log(this)
         $(this).empty();
         if (this.classList.contains('modal-asset')) {
           // Add loading spinner pre-emtively
@@ -52,8 +53,11 @@ window.asset = (function asset() {
 
     })
 
-    $(zoomModalId).on('hidden.bs.modal', event => {
-      $(this).modal('handleUpdate');
+    $(zoomModalId).each(function (i) {
+      $(this).on('hidden.bs.modal', event => {
+        $(this).modal('handleUpdate');
+        $(this).empty();
+      });
     });
 
     // Left-Right keyboard events
