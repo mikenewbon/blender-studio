@@ -70,21 +70,25 @@
     {% endcomment %}
 
     <!-- Latest Blog Posts -->
-    {% include 'common/components/cards/card_carousel.html' with title="Latest Blog Posts" subtitle="Hear the latest news about the Blender Cloud right here." slides=3 card_set=latest_posts media_type="blog" id="latestPosts" %}
+    {% url 'post-list' as blog_url %}
+    {% include 'common/components/cards/card_carousel.html' with title="Latest Blog Posts" title_link=blog_url subtitle="Hear the latest news about the Blender Cloud right here." slides=3 card_set=latest_posts media_type="blog" id="latestPosts" %}
 
     <!-- Recently watched -->
+    {% url 'training-home' as training_url %}
     {% if recently_watched_sections %}
-      {% include 'common/components/cards/card_carousel.html' with title="Continue training" subtitle="Recently watched videos appear here! Continue watching where you left off." slides=4 card_set=recently_watched_sections media_type="section" id="continueTraining" %}
+      {% include 'common/components/cards/card_carousel.html' with title="Continue training" title_link=training_url subtitle="Recently watched videos appear here! Continue watching where you left off." slides=4 card_set=recently_watched_sections media_type="section" id="continueTraining" %}
     {% endif %}
 
     <!-- Latest Training -->
-    {% include 'common/components/cards/card_carousel.html' with title="Latest Training" subtitle="Want to see more? <a href='/training'>Explore all training</a>" slides=3 card_set=featured_trainings media_type="training" id="featuredTrainings" %}
+
+    {% include 'common/components/cards/card_carousel.html' with title="Latest Training" title_link=training_url subtitle="Want to see more? <a href='/training'>Explore all training</a>" slides=3 card_set=featured_trainings media_type="training" id="featuredTrainings" %}
 
 
     <section class="mb-4">
       <div class="row justify-content-center mb-3">
         <div class="col-md-6 text-center">
-          <h2 class="mb-0">Featured Open Movies</h2>
+
+          <a class="mb-0 h2" href="{% url 'film-list' %}">Featured Open Movies</a>
           <p class="mb-0">The Blender <a href="/films">Open Movie projects</a> are made possible by subscriptions to the
             Blender Cloud.</p>
         </div>
@@ -95,8 +99,8 @@
         {% endfor %}
       </div>
     </section>
-
-    {% include 'common/components/cards/card_carousel.html' with title="From The Archives" subtitle="Want to see more? <a href='/training'>Explore all training</a>" slides=4 card_set=featured_film_assets media_type="file" id="fromTheArchives" %}
+    {% url 'film-list' as film_url %}
+    {% include 'common/components/cards/card_carousel.html' with title="From The Archives" title_link=film_url subtitle="Want to see more? <a href='/films'>Explore all films</a>" slides=4 card_set=featured_film_assets media_type="file" id="fromTheArchives" %}
 
   </div>
 
