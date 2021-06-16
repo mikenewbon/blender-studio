@@ -15,7 +15,7 @@
 
     <div class="row">
       {% for film in films %}
-        {% if film.is_published or request.user.is_superuser %}
+        {% if film.is_published or request.user.is_superuser or request.user.is_staff %}
           {% include "films/components/card_film.html" with film=film %}
         {% endif %}
       {% endfor %}
