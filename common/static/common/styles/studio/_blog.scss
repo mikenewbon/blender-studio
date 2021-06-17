@@ -165,7 +165,7 @@ hr {
       margin-left: -#{$spacer * 5};
       margin-right: -#{$spacer * 5};
       width: calc(100% + #{$spacer * 10});
-
+      max-width: calc(100% + #{$spacer * 10});
 
       .video-player {
         width: 100%;
