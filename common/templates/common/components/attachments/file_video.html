@@ -1,59 +1,75 @@
-{% if is_processing %}
-  <p>Content is processing</p>
-{% else %}
-  {% if caption %}
-    {% if link %}
-      {% if link == 'self' %}
-
-        <figure class="figure blog-video {{ class }}">
-          {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=static_asset.thumbnail_m_url rounded=True %}
-
-          <figcaption class="figure-caption">{{ caption }} <a href="{{ static_asset.source.url }}" target="_blank">[File]</a>
-          </figcaption>
-        </figure>
-
+{% load cache %}
+{% load thumbnail %}
+{% cache 500 thumbnails img_source width %}
+  {% with width='940' img_source=static_asset.thumbnail %}
+    {% thumbnail img_source width as im %}
+      {% if is_processing %}
+        <p>Content is processing</p>
       {% else %}
+        {% if caption %}
+          {% if link %}
+            {% if link == 'self' %}
 
-        <figure class="figure blog-video {{ class }}">
+              <figure class="figure blog-video {{ class }}">
+                {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=im.url rounded=True %}
 
-          {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=static_asset.thumbnail_m_url rounded=True %}
+                <figcaption class="figure-caption">{{ caption }} <a href="{{ static_asset.source.url }}" target="_blank">[File]</a>
+                </figcaption>
+              </figure>
 
-          <figcaption class="figure-caption">{{ caption }} <a href="{{ link }}" target="_blank">[ View File ]</a></figcaption>
-        </figure>
+            {% else %}
+
+              <figure class="figure blog-video {{ class }}">
+
+                {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=im.url rounded=True %}
+
+                <figcaption class="figure-caption">{{ caption }} <a href="{{ link }}" target="_blank">[ View File ]</a></figcaption>
+              </figure>
+
+            {% endif %}
+
+          {% else %}
+
+            {% cache 500 thumbnails img_source width %}
+              <figure class="figure blog-video {{ class }}">
+                {% with width='940' img_source=static_asset.thumbnail %}
+                  {% thumbnail img_source width as im %}
+                    {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=im.url rounded=True %}
+                  {% endthumbnail %}
+                {% endwith %}
+                <figcaption class="figure-caption">{{ caption }}</figcaption>
+              </figure>
+            {% endcache %}
+
+          {% endif %}
+        {% else %}
+
+          {% firstof class|default:""|add:" img-fluid blog-video" as classes %}
+          {% if link %}
+            {% if link == 'self' %}
+              <figure class="figure blog-video {{ class }}">
+
+                {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=im.url rounded=True %}
+
+                <figcaption class="figure-caption"><a href="{{ static_asset.source.url }}" target="_blank">[ View File ]</a></figcaption>
+              </figure>
+            {% else %}
+              <figure class="figure blog-video {{ class }}">
+
+                {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=im.url rounded=True %}
+
+                <figcaption class="figure-caption"><a href="{{ link }}" target="_blank">[ View File ]</a></figcaption>
+              </figure>
+            {% endif %}
+
+          {% else %}
+
+            {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=im.url rounded=True %}
+          {% endif %}
+
+        {% endif %}
 
       {% endif %}
-
-    {% else %}
-      <figure class="figure blog-video {{ class }}">
-        {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=static_asset.thumbnail_m_url rounded=True %}
-        <figcaption class="figure-caption">{{ caption }}</figcaption>
-      </figure>
-    {% endif %}
-  {% else %}
-
-    {% firstof class|default:""|add:" img-fluid blog-video" as classes %}
-    {% if link %}
-      {% if link == 'self' %}
-        <figure class="figure blog-video {{ class }}">
-
-          {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=static_asset.thumbnail_m_url rounded=True %}
-
-          <figcaption class="figure-caption"><a href="{{ static_asset.source.url }}" target="_blank">[ View File ]</a></figcaption>
-        </figure>
-      {% else %}
-        <figure class="figure blog-video {{ class }}">
-
-          {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=static_asset.thumbnail_m_url rounded=True %}
-
-          <figcaption class="figure-caption"><a href="{{ link }}" target="_blank">[ View File ]</a></figcaption>
-        </figure>
-      {% endif %}
-
-    {% else %}
-
-      {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=static_asset.thumbnail_m_url rounded=True %}
-    {% endif %}
-
-  {% endif %}
-
-{% endif %}
+    {% endthumbnail %}
+  {% endwith %}
+{% endcache %}
