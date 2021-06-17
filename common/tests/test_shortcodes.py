@@ -123,7 +123,11 @@ class YouTubeTest(TestCaseWithRequest):
 class IFrameTest(TestCaseWithRequest):
     def test_missing_group(self):
         md = '{iframe src="https://docs.python.org/3/library/"}'
-        expect = '<iframe src="https://docs.python.org/3/library/" class="shortcode"></iframe>'
+        expect = (
+            '<div class="embed-responsive embed-responsive-16by9">'
+            '<iframe src="https://docs.python.org/3/library/" class="shortcode"></iframe>'
+            '</div>'
+        )
         self.assertEqual(expect, render(md))
 
     def test_no_user_no_group(self):
@@ -160,13 +164,15 @@ class IFrameTest(TestCaseWithRequest):
         self.request.user = user
         context = {'request': self.request}
         self.assertEqual(
-            '<iframe class="shortcode"></iframe>', render('{iframe cap=subscriber}', context)
+            '<div class="embed-responsive embed-responsive-16by9"><iframe class="shortcode"></iframe></div>',
+            render('{iframe cap=subscriber}', context),
         )
         self.assertEqual(
-            '<iframe class="shortcode"></iframe>', render('{iframe cap="subscriber"}', context)
+            '<div class="embed-responsive embed-responsive-16by9"><iframe class="shortcode"></iframe></div>',
+            render('{iframe cap="subscriber"}', context),
         )
         self.assertEqual(
-            '<iframe class="shortcode"></iframe>',
+            '<div class="embed-responsive embed-responsive-16by9"><iframe class="shortcode"></iframe></div>',
             render('{iframe cap="subscriber" nocap="x"}', context),
         )
 
@@ -178,13 +184,15 @@ class IFrameTest(TestCaseWithRequest):
         self.request.user = user
         context = {'request': self.request}
         self.assertEqual(
-            '<iframe class="shortcode"></iframe>', render('{iframe cap=subscriber}', context)
+            '<div class="embed-responsive embed-responsive-16by9"><iframe class="shortcode"></iframe></div>',
+            render('{iframe cap=subscriber}', context),
         )
         self.assertEqual(
-            '<iframe class="shortcode"></iframe>', render('{iframe cap="subscriber"}', context)
+            '<div class="embed-responsive embed-responsive-16by9"><iframe class="shortcode"></iframe></div>',
+            render('{iframe cap="subscriber"}', context),
         )
         self.assertEqual(
-            '<iframe class="shortcode"></iframe>',
+            '<div class="embed-responsive embed-responsive-16by9"><iframe class="shortcode"></iframe></div>',
             render('{iframe group="subscriber" nogroup="x"}', context),
         )
 
@@ -198,9 +206,9 @@ class IFrameTest(TestCaseWithRequest):
             'src="https://docs.python.org/3/library/xml.etree.elementtree.html#functions"}'
         )
         expect = (
-            '<iframe zzz="xxx" class="shortcode bigger"'
+            '<div class="embed-responsive embed-responsive-16by9"><iframe zzz="xxx" class="shortcode bigger"'
             ' src="https://docs.python.org/3/library/xml.etree.elementtree.html#functions">'
-            '</iframe>'
+            '</iframe></div>'
         )
 
         self.request.user = user
