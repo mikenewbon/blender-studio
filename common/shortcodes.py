@@ -330,6 +330,7 @@ class Attachment:
                 'static_asset': static_asset,
                 'link': link,
                 'is_processing': is_processing,
+                'class': kwargs.get('class'),
                 'caption': kwargs.get('caption'),
             },
         )

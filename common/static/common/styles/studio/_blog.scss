@@ -159,6 +159,19 @@ hr {
   .video-player {
     margin: $spacer / 2 0;
   }
+
+  &.extra-wide {
+    @include media-breakpoint-up(lg) {
+      margin-left: -#{$spacer * 5};
+      margin-right: -#{$spacer * 5};
+      width: calc(100% + #{$spacer * 10});
+
+
+      .video-player {
+        width: 100%;
+      }
+    }
+  }
 }
 
 figure {
