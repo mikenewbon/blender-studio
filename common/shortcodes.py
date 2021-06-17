@@ -225,7 +225,11 @@ def iframe(
 
     kwargs['class'] = f'shortcode {kwargs.get("class", "")}'.strip()
     element = ET.Element('iframe', kwargs)
-    html = ET.tostring(element, encoding='unicode', method='html', short_empty_elements=True)
+    html = (
+        f'<div class="embed-responsive embed-responsive-16by9">' +
+        ET.tostring(element, encoding='unicode', method='html', short_empty_elements=True) +
+        f'</div>'
+    )
     return html
 
 
