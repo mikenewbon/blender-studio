@@ -29,16 +29,16 @@
 
         {% else %}
 
-          {% cache 500 thumbnails img_source width %}
-            <figure class="figure blog-video {{ class }}">
-              {% with width='940' img_source=static_asset.thumbnail %}
-                {% thumbnail img_source width as im %}
-                  {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=im.url rounded=True %}
-                {% endthumbnail %}
-              {% endwith %}
-              <figcaption class="figure-caption">{{ caption }}</figcaption>
-            </figure>
-          {% endcache %}
+
+          <figure class="figure blog-video {{ class }}">
+            {% with width='940' img_source=static_asset.thumbnail %}
+              {% thumbnail img_source width as im %}
+                {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=im.url rounded=True %}
+              {% endthumbnail %}
+            {% endwith %}
+            <figcaption class="figure-caption">{{ caption }}</figcaption>
+          </figure>
+
 
         {% endif %}
       {% else %}
