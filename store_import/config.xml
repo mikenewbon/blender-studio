@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration jdbcurl="jdbc:mysql://localhost:3307/store" userid="root" password="">
+
+    <table name="wp_users">
+        <column name="user_login" type="STRING" size="-1" />
+        <column name="user_pass" type="STRING" size="-1" />
+        <column name="user_nicename" type="ROMAN_NAME" />
+        <column name="user_email" type="EMAIL_ADDRESS" />
+        <column name="user_activation_key" type="STRING" size="-1" />
+        <column name="display_name" type="STRING" size="-1"/>
+    </table>
+
+    <table name="wp_usermeta">
+        <discriminator columnname="meta_key" value="nickname">
+            <column name="meta_value" type="EMAIL_ADDRESS"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="first_name">
+            <column name="meta_value" type="ROMAN_NAME"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="last_name">
+            <column name="meta_value" type="ROMAN_NAME"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="billing_company">
+            <column name="meta_value" type="STRING"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="billing_first_name">
+            <column name="meta_value" type="ROMAN_NAME"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="billing_last_name">
+            <column name="meta_value" type="ROMAN_NAME"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="billing_phone">
+            <column name="meta_value" type="RANDOMDIGITS"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="billing_postcode">
+            <column name="meta_value" type="DUTCH_ZIP_CODE"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="billing_email">
+            <column name="meta_value" type="EMAIL_ADDRESS"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="shipping_company">
+            <column name="meta_value" type="STRING"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="shipping_first_name">
+            <column name="meta_value" type="ROMAN_NAME"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="shipping_last_name">
+            <column name="meta_value" type="ROMAN_NAME"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="shipping_phone">
+            <column name="meta_value" type="RANDOMDIGITS"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="shipping_postcode">
+            <column name="meta_value" type="DUTCH_ZIP_CODE"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="shipping_postcode">
+            <column name="meta_value" type="DUTCH_ZIP_CODE"/>
+        </discriminator>
+
+        <!-- same address fields but with _ for whatever reason -->
+        <discriminator columnname="meta_key" value="_billing_company">
+            <column name="meta_value" type="STRING"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_billing_first_name">
+            <column name="meta_value" type="ROMAN_NAME"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_billing_last_name">
+            <column name="meta_value" type="ROMAN_NAME"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_billing_phone">
+            <column name="meta_value" type="RANDOMDIGITS"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_billing_postcode">
+            <column name="meta_value" type="DUTCH_ZIP_CODE"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_billing_email">
+            <column name="meta_value" type="EMAIL_ADDRESS"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_shipping_company">
+            <column name="meta_value" type="STRING"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_shipping_first_name">
+            <column name="meta_value" type="ROMAN_NAME"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_shipping_last_name">
+            <column name="meta_value" type="ROMAN_NAME"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_shipping_phone">
+            <column name="meta_value" type="RANDOMDIGITS"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_shipping_postcode">
+            <column name="meta_value" type="DUTCH_ZIP_CODE"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_shipping_postcode">
+            <column name="meta_value" type="DUTCH_ZIP_CODE"/>
+        </discriminator>
+
+        <!-- phpserialised field -->
+        <!--discriminator columnname="meta_key" value="_wc_braintree_credit_card_payment_tokens">
+            <column name="meta_value" type="??"/>
+        </discriminator-->
+
+    </table>
+
+    <table name="wp_postmeta">
+        <!-- Billing address -->
+        <discriminator columnname="meta_key" value="_billing_address_index">
+            <column name="meta_value" type="STRING"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_billing_first_name">
+            <column name="meta_value" type="ROMAN_NAME"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_billing_last_name">
+            <column name="meta_value" type="ROMAN_NAME"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_billing_company">
+            <column name="meta_value" type="STRING"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_billing_city">
+            <column name="meta_value" type="STRING"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_billing_email">
+            <column name="meta_value" type="EMAIL_ADDRESS"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_billing_phone">
+            <column name="meta_value" type="RANDOMDIGITS"/>
+        </discriminator>
+        <!-- Shipping address -->
+        <discriminator columnname="meta_key" value="_shipping_address_index">
+            <column name="meta_value" type="STRING"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_shipping_first_name">
+            <column name="meta_value" type="ROMAN_NAME"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_shipping_last_name">
+            <column name="meta_value" type="ROMAN_NAME"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_shipping_company">
+            <column name="meta_value" type="STRING"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_shipping_city">
+            <column name="meta_value" type="STRING"/>
+        </discriminator>
+        <!-- PayPal IPN -->
+        <discriminator columnname="meta_key" value="Payer PayPal address">
+            <column name="meta_value" type="EMAIL_ADDRESS"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="Payer PayPal first name">
+            <column name="meta_value" type="ROMAN_NAME"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="Payer PayPal last name">
+            <column name="meta_value" type="ROMAN_NAME"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="Payer first name">
+            <column name="meta_value" type="ROMAN_NAME"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="Payer last name">
+            <column name="meta_value" type="ROMAN_NAME"/>
+        </discriminator>
+
+        <!-- Braintree PayPal -->
+        <!--discriminator columnname="meta_key" value="_wc_braintree_paypal_payment_token">
+            <column name="meta_value" type="STRING"/>
+        </discriminator-->
+        <discriminator columnname="meta_key" value="_wc_braintree_paypal_payer_email">
+            <column name="meta_value" type="EMAIL_ADDRESS"/>
+        </discriminator>
+        <discriminator columnname="meta_key" value="_wc_braintree_paypal_customer_id">
+            <column name="meta_value" type="RANDOMDIGITS"/>
+        </discriminator>
+        <!-- Braintree Credit Card -->
+        <!--discriminator columnname="meta_key" value="_wc_braintree_credit_card_payment_token">
+            <column name="meta_value" type="STRING"/>
+        </discriminator-->
+        <discriminator columnname="meta_key" value="_wc_braintree_credit_card_customer_id">
+            <column name="meta_value" type="RANDOMDIGITS"/>
+        </discriminator>
+
+    </table>
+</configuration>

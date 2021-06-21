@@ -42,7 +42,11 @@ class UserAdmin(auth_admin.UserAdmin):
         ),
     )
     readonly_fields = ('date_deletion_requested',)
-    inlines = [looper.admin.AddressInline, looper.admin.CustomerInline]
+    inlines = [
+        looper.admin.AddressInline,
+        looper.admin.CustomerInline,
+        looper.admin.GatewayCustomerIdInline,
+    ]
 
     def deletion_requested(self, obj):
         """Display yes/no icon status of deletion request."""
@@ -64,7 +68,7 @@ class NotificationAdmin(admin.ModelAdmin):
 class OAuthUserInfoAdmin(admin.ModelAdmin):
     """Configure OAuthUserInfo admin, because blender_id_oauth_client doesn't."""
 
-    search_fields = ['user__email', 'user__username']
+    search_fields = ['user__email', 'user__username', 'oauth_user_id']
     list_display = ['user', 'oauth_user_id']
     raw_id_fields = ['user']
 

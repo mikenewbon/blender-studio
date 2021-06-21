@@ -1,4 +1,12 @@
 [[package]]
+name = "alphabetic-timestamp"
+version = "1.1.5"
+description = "This is small Python package which encode standard timestamp to shorted form by using alphabetic symbols."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "appdirs"
 version = "1.4.4"
 description = "A small Python module for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
@@ -839,7 +847,7 @@ six = ">=1.11.0"
 
 [[package]]
 name = "looper"
-version = "1.4.7"
+version = "1.4.10rc1"
 description = ""
 category = "main"
 optional = false
@@ -862,8 +870,8 @@ xhtml2pdf = "^0.2"
 [package.source]
 type = "git"
 url = "git://git.blender.org/looper.git"
-reference = "master"
-resolved_reference = "420e71815112a4f4984a37efe8931e121b68a9d0"
+reference = "store-orders"
+resolved_reference = "276a1fd1f5d46678018d6f0e3c626e78a49ef119"
 
 [[package]]
 name = "markupsafe"
@@ -933,6 +941,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "mysqlclient"
+version = "2.0.3"
+description = "Python interface to MySQL"
+category = "dev"
+optional = false
+python-versions = ">=3.5"
+
+[[package]]
 name = "nodeenv"
 version = "1.4.0"
 description = "Node.js virtual environment builder"
@@ -994,6 +1010,14 @@ python-versions = "*"
 
 [package.dependencies]
 ptyprocess = ">=0.5"
+
+[[package]]
+name = "phpserialize"
+version = "1.3"
+description = "a port of the serialize and unserialize functions of php to python."
+category = "dev"
+optional = false
+python-versions = "*"
 
 [[package]]
 name = "pickleshare"
@@ -1413,6 +1437,21 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "the-real-django-wordpress"
+version = "0.11.1rc0"
+description = "Django models and views for a WordPress database."
+category = "dev"
+optional = false
+python-versions = "*"
+develop = false
+
+[package.source]
+type = "git"
+url = "https://github.com/anka-sirota/django-wordpress"
+reference = "42c655c2142d009ddd6a2bab24809d731c17af8a"
+resolved_reference = "42c655c2142d009ddd6a2bab24809d731c17af8a"
+
+[[package]]
 name = "toml"
 version = "0.10.1"
 description = "Python Library for Tom's Obvious, Minimal Language"
@@ -1531,9 +1570,12 @@ six = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "4deb92710aa99eaff75ab4f07bd631819ac80084c22d484e62d409ff7cb0ed94"
+content-hash = "99d7e42fe1c426c9c735d89c5ac6567d35dbf5be5b577611c799e49327a15268"
 
 [metadata.files]
+alphabetic-timestamp = [
+    {file = "alphabetic_timestamp-1.1.5.tar.gz", hash = "sha256:1b61aae6e1157948d61157b4277fa7f9ba2437981f9c2e99d76589c101169356"},
+]
 appdirs = [
     {file = "appdirs-1.4.4-py2.py3-none-any.whl", hash = "sha256:a841dacd6b99318a741b166adb07e19ee71a274450e68237b4650ca1055ab128"},
     {file = "appdirs-1.4.4.tar.gz", hash = "sha256:7d5d0167b2b1ba821647616af46a749d1c653740dd0d2415100fe26e27afdf41"},
@@ -1938,6 +1980,13 @@ mypy-extensions = [
     {file = "mypy_extensions-0.4.3-py2.py3-none-any.whl", hash = "sha256:090fedd75945a69ae91ce1303b5824f428daf5a028d2f6ab8a299250a846f15d"},
     {file = "mypy_extensions-0.4.3.tar.gz", hash = "sha256:2d82818f5bb3e369420cb3c4060a7970edba416647068eb4c5343488a6c604a8"},
 ]
+mysqlclient = [
+    {file = "mysqlclient-2.0.3-cp36-cp36m-win_amd64.whl", hash = "sha256:3381ca1a4f37ff1155fcfde20836b46416d66531add8843f6aa6d968982731c3"},
+    {file = "mysqlclient-2.0.3-cp37-cp37m-win_amd64.whl", hash = "sha256:0ac0dd759c4ca02c35a9fedc24bc982cf75171651e8187c2495ec957a87dfff7"},
+    {file = "mysqlclient-2.0.3-cp38-cp38-win_amd64.whl", hash = "sha256:71c4b330cf2313bbda0307fc858cc9055e64493ba9bf28454d25cf8b3ee8d7f5"},
+    {file = "mysqlclient-2.0.3-cp39-cp39-win_amd64.whl", hash = "sha256:fc575093cf81b6605bed84653e48b277318b880dc9becf42dd47fa11ffd3e2b6"},
+    {file = "mysqlclient-2.0.3.tar.gz", hash = "sha256:f6ebea7c008f155baeefe16c56cd3ee6239f7a5a9ae42396c2f1860f08a7c432"},
+]
 nodeenv = [
     {file = "nodeenv-1.4.0-py2.py3-none-any.whl", hash = "sha256:4b0b77afa3ba9b54f4b6396e60b0c83f59eaeb2d63dc3cc7a70f7f4af96c82bc"},
     {file = "nodeenv-1.4.0.tar.gz", hash = "sha256:26941644654d8dd5378720e38f62a3bac5f9240811fb3b8913d2663a17baa91c"},
@@ -1961,6 +2010,9 @@ pathspec = [
 pexpect = [
     {file = "pexpect-4.8.0-py2.py3-none-any.whl", hash = "sha256:0b48a55dcb3c05f3329815901ea4fc1537514d6ba867a152b581d69ae3710937"},
     {file = "pexpect-4.8.0.tar.gz", hash = "sha256:fc65a43959d153d0114afe13997d439c22823a27cefceb5ff35c2178c6784c0c"},
+]
+phpserialize = [
+    {file = "phpserialize-1.3.tar.gz", hash = "sha256:bf672d312d203d09a84c26366fab8f438a3ffb355c407e69974b7ef2d39a0fa7"},
 ]
 pickleshare = [
     {file = "pickleshare-0.7.5-py2.py3-none-any.whl", hash = "sha256:9649af414d74d4df115d5d718f82acb59c9d418196b7b4290ed47a12ce62df56"},
@@ -2300,6 +2352,7 @@ text-unidecode = [
     {file = "text-unidecode-1.3.tar.gz", hash = "sha256:bad6603bb14d279193107714b288be206cac565dfa49aa5b105294dd5c4aab93"},
     {file = "text_unidecode-1.3-py2.py3-none-any.whl", hash = "sha256:1311f10e8b895935241623731c2ba64f4c455287888b18189350b67134a822e8"},
 ]
+the-real-django-wordpress = []
 toml = [
     {file = "toml-0.10.1-py2.py3-none-any.whl", hash = "sha256:bda89d5935c2eac546d648028b9901107a595863cb36bae0c73ac804a9b4ce88"},
     {file = "toml-0.10.1.tar.gz", hash = "sha256:926b612be1e5ce0634a2ca03470f95169cf16f939018233a670519cb4ac58b0f"},

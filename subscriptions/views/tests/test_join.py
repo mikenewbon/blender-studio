@@ -517,6 +517,8 @@ class TestPOSTJoinConfirmAndPayView(BaseSubscriptionTestCase):
         self.assertEqual(order.tax, Money('EUR', 313))
         self.assertEqual(order.tax_country, 'NL')
         self.assertEqual(order.tax_type, 'VATC')
+        self.assertIsNotNone(order.pk)
+        self.assertIsNotNone(order.number)
 
         self._assert_bank_transfer_email_is_sent(subscription)
 
@@ -553,6 +555,7 @@ class TestPOSTJoinConfirmAndPayView(BaseSubscriptionTestCase):
         self.assertEqual(subscription.collection_method, 'automatic')
         self.assertEqual(subscription.plan, selected_variation.plan)
         self.assertEqual(order.status, 'paid')
+        self.assertIsNotNone(order.number)
         self.assertEqual(order.price, Money('EUR', 990))
 
         self._assert_subscription_activated_email_is_sent(subscription)
@@ -606,6 +609,7 @@ class TestPOSTJoinConfirmAndPayView(BaseSubscriptionTestCase):
         self.assertEqual(order.vat_number, 'DE 260543043')
         self.assertEqual(order.tax_country, 'DE')
         self.assertEqual(order.tax_rate, 19)
+        self.assertIsNotNone(order.number)
 
 
 class TestJoinRedirectsWithoutFlagView(BaseSubscriptionTestCase):

@@ -62,6 +62,7 @@ class TestClock(BaseSubscriptionTestCase):
         new_order = subscription.latest_order()
         self.assertEqual('soft-failed', new_order.status)
         self.assertEqual(1, new_order.collection_attempts)
+        self.assertIsNotNone(new_order.number)
         self.assertAlmostEqual(now, new_order.retry_after, delta=timedelta(days=3))
 
         # Test the transaction
@@ -145,6 +146,7 @@ class TestClock(BaseSubscriptionTestCase):
         self.assertEqual('paid', new_order.status)
         self.assertEqual(1, new_order.collection_attempts)
         self.assertIsNone(new_order.retry_after)
+        self.assertIsNotNone(new_order.number)
         # self.assertNotEqual(last_order_pk, new_order.pk)
 
         # The subscription should be renewed now.

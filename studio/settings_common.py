@@ -406,6 +406,10 @@ LOOPER_MANAGER_MAIL = 'CHANGE_ME'
 # By default, dump emails to the console instead of trying to actually send them.
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# Allow missing feature flags and switches to be created
+WAFFLE_CREATE_MISSING_FLAGS = True
+WAFFLE_CREATE_MISSING_SWITCHES = True
+
 TESTS_IN_PROGRESS = 'test' in sys.argv
 if TESTS_IN_PROGRESS:
     STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'

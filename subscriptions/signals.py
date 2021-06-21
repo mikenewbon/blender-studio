@@ -2,9 +2,10 @@ import logging
 
 from django.contrib.auth import get_user_model
 from django.dispatch import receiver
+import alphabetic_timestamp as ats
 import django.db.models.signals as django_signals
 
-from looper.models import Customer
+from looper.models import Customer, Order
 import looper.signals
 
 import subscriptions.tasks as tasks
@@ -13,6 +14,11 @@ User = get_user_model()
 logger = logging.getLogger(__name__)
 
 subscription_created_needs_payment = django_signals.Signal(providing_args=[])
+
+
+def timebased_order_number():
+    """Generate a short sequential number for an order."""
+    return ats.base36.now(time_unit=ats.TimeUnit.milliseconds).upper()
 
 
 @receiver(django_signals.post_save, sender=User)
@@ -27,6 +33,14 @@ def create_customer(sender, instance: User, created, **kwargs):
         billing_email=instance.email,
         full_name=instance.full_name,
     )
+
+
+@receiver(django_signals.pre_save, sender=Order)
+def _set_order_number(sender, instance: Order, **kwargs):
+    if instance.pk or instance.number or instance.is_legacy:
+        return
+    instance.number = timebased_order_number()
+    assert instance.number
 
 
 @receiver(subscription_created_needs_payment)
