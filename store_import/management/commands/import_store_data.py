@@ -561,6 +561,9 @@ class Command(mixins._UpsertMixin, BaseCommand):
             try:
                 oauth_user_info = bid.get_oauth_user_info(oauth_user_id)
                 user = oauth_user_info.user
+                if user.date_deletion_requested:
+                    self._flag_as_inconsistent('user_deletion_requested', wp_subscription)
+                    return
             except Exception as e:
                 logger.debug(
                     '%s has %s with missing Blender ID=%s OAuth record: %s',
@@ -570,6 +573,7 @@ class Command(mixins._UpsertMixin, BaseCommand):
                     e,
                 )
                 self._flag_as_inconsistent('missing_oauth_records', wp_subscription)
+                # N.B.: the user might have been deleted, cannot check
                 user = self._create_oauth_record(wp_subscription, wp_user, oauth_user_id)
                 return
         else:
