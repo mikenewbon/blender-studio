@@ -1,4 +1,5 @@
-{% load waffle_tags %}
+{% load common_extras %}
+{% show_new_subscription_billing as show_new_subscription_billing_ %}
 <div class="drawer-nav-dropdown-wrapper font-weight-bold">
   <a class="drawer-nav-dropdown" href="{% url 'user-settings'%}">
     <i class="material-icons mr-2">person</i>
@@ -18,15 +19,15 @@
     <i class="material-icons mr-2">credit_card</i>
     <span>Subscription</span>
   </a>
-  {% flag "SUBSCRIPTIONS_ENABLED" and user.subscription_set.count %}
+  {% if show_new_subscription_billing_ %}
     <a class="drawer-nav-dropdown icon" data-toggle="collapse" data-target="#subscription-collapse">
       <i class="material-icons">keyboard_arrow_down</i>
     </a>
-  {% endflag %}
+  {% endif %}
 </div>
 
 
-{% flag "SUBSCRIPTIONS_ENABLED" and user.subscription_set.count %}
+{% if show_new_subscription_billing_ %}
   <div class="drawer-nav-list-wrapper collapse show" id="subscription-collapse">
     <ol class="drawer-nav-list">
 
@@ -49,7 +50,7 @@
       </li>
     </ol>
   </div>
-{% endflag %}
+{% endif %}
 
 <div class="drawer-nav-dropdown-wrapper font-weight-bold">
   <a class="drawer-nav-dropdown" href="/settings/roles">

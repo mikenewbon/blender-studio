@@ -32,9 +32,9 @@
 
 
           {# **Do not** rearrange the ifs, unless the logic is obviously broken. #}
+          {% show_new_subscription_billing as show_new_subscription_billing_ %}
 
-          {% if user.subscription_set.count %}
-            {# they have new-kind-of-subscription already, we cannot send them to the store #}
+          {% if show_new_subscription_billing_ %}
             {% include "subscriptions/components/manage.html" %}
 
           {% elif user|has_active_subscription %}
@@ -43,13 +43,10 @@
               href="{{ STORE_MANAGE_URL }}">Blender Store</a>.</p>
 
           {% else %}
-            {# send them to the new subscription flow or to the Store, depending on the flag #}
-            {% flag "SUBSCRIPTIONS_ENABLED" %}
-              {% include "subscriptions/components/manage.html" %}
-            {% else %}
-              <p>If you want to subscribe to Blender Cloud visit the <a target="_blank" href="{{ STORE_PRODUCT_URL }}">Blender
-                Store</a>.</p>
-            {% endflag %}
+            <p>
+              If you want to subscribe to Blender Cloud visit the
+              <a target="_blank" href="{{ STORE_PRODUCT_URL }}">Blender Store</a>.
+            </p>
           {% endif %}
         </div>
       </div>
