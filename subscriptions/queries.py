@@ -56,3 +56,17 @@ def has_subscription(user: User) -> bool:
     return Subscription.objects.filter(
         Q(user_id=user.id) | Q(team__team_users__user_id=user.id)
     ).exists()
+
+
+def should_redirect_to_billing(user: User) -> bool:
+    """Figure out if checkout should redirect a given user to their billing."""
+    if not user.is_authenticated:
+        return False
+
+    return has_subscription(user) and any(
+        # FIXME(anna): checkout creates an on-hold subscription with an order
+        # so this seems to be the only currently available way to tell
+        # when to stop showing the checkout to the customer.
+        subscription.latest_order() and subscription.payment_method
+        for subscription in user.subscription_set.all()
+    )

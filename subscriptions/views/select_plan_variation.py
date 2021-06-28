@@ -15,6 +15,7 @@ import looper.money
 import looper.taxes
 
 from subscriptions.forms import SelectPlanVariationForm
+from subscriptions.queries import should_redirect_to_billing
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -53,6 +54,9 @@ class SelectPlanVariationView(_PlanSelectorMixin, FormView):
         """
         if not waffle.flag_is_active(request, 'SUBSCRIPTIONS_ENABLED'):
             return redirect(settings.STORE_PRODUCT_URL)
+
+        if should_redirect_to_billing(request.user):
+            return redirect('user-settings-billing')
 
         plan_variation_id = kwargs.get('plan_variation_id')
         plan_variation = self._get_plan_variation(plan_variation_id)

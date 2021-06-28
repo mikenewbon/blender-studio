@@ -18,8 +18,9 @@ import looper.money
 import looper.taxes
 
 from subscriptions.forms import BillingAddressForm, PaymentForm, AutomaticPaymentForm
-from subscriptions.signals import subscription_created_needs_payment
 from subscriptions.middleware import preferred_currency_for_country_code
+from subscriptions.queries import should_redirect_to_billing
+from subscriptions.signals import subscription_created_needs_payment
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -81,16 +82,8 @@ class _JoinMixin:
         if not waffle.flag_is_active(request, 'SUBSCRIPTIONS_ENABLED'):
             return redirect(settings.STORE_PRODUCT_URL)
 
-        if request.user.is_authenticated:
-            # FIXME(anna): checkout creates an on-hold subscription with an order
-            # so this seems to be the only currently available way to tell
-            # when to stop showing the checkout to the customer:
-            if (
-                self.subscription
-                and self.subscription.latest_order()
-                and self.subscription.payment_method
-            ):
-                return redirect('user-settings-billing')
+        if should_redirect_to_billing(request.user):
+            return redirect('user-settings-billing')
 
         return super().get(request, *args, **kwargs)
 
