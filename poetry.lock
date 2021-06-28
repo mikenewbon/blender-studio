@@ -847,7 +847,7 @@ six = ">=1.11.0"
 
 [[package]]
 name = "looper"
-version = "1.4.10rc1"
+version = "1.5.0"
 description = ""
 category = "main"
 optional = false
@@ -870,8 +870,8 @@ xhtml2pdf = "^0.2"
 [package.source]
 type = "git"
 url = "git://git.blender.org/looper.git"
-reference = "store-orders"
-resolved_reference = "276a1fd1f5d46678018d6f0e3c626e78a49ef119"
+reference = "master"
+resolved_reference = "9f237a78284ef3de422371d95f70328c9fddd2f8"
 
 [[package]]
 name = "markupsafe"
@@ -1570,7 +1570,7 @@ six = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "99d7e42fe1c426c9c735d89c5ac6567d35dbf5be5b577611c799e49327a15268"
+content-hash = "adaefaa2d8c0d711310412e7feb6053cb925430bf14793419ef7198505cd7757"
 
 [metadata.files]
 alphabetic-timestamp = [
