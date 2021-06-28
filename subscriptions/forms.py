@@ -35,13 +35,12 @@ LABELS = {
     'company': 'Company',
     'extended_address': 'Extended address',
 }
+# email, country and full name, postcode
 REQUIRED_FIELDS = {
     'country',
     'email',
     'full_name',
-    'locality',
     'postal_code',
-    'street_address',
 }
 
 
@@ -67,8 +66,8 @@ class BillingAddressForm(forms.ModelForm):
     def _get_region_choices_and_label(self, country_code: str) -> List[Tuple[str, str]]:
         regions = ADMINISTRATIVE_AREAS.get(country_code)
         if regions:
-            is_required = regions.get('used_in_address', False)
-            if is_required:
+            has_choices = regions.get('used_in_address', False)
+            if has_choices:
                 return regions['choices'], regions['type'].capitalize()
         return [], ''
 
@@ -111,7 +110,6 @@ class BillingAddressForm(forms.ModelForm):
         choices, label = self._get_region_choices_and_label(country_code)
         region_field.choices = choices
         region_field.label = label
-        region_field.required = True if region_field.choices else False
 
     def clean(self):
         """Perform additional validation of the billing address."""
@@ -203,13 +201,27 @@ class BillingAddressHiddenForm(BillingAddressForm):
             field.widget.attrs['hidden'] = True
 
 
-class BillingDetailsForm(BillingAddressForm):
-    """Handle full billing details and PlanVariation ID in the first step of the checkout.
-
-    Selected plan options carry over to the next step of the checkout.
-    """
+class SelectPlanVariationForm(forms.Form):
+    """Form used in the plan selector."""
 
     plan_variation_id = forms.IntegerField(required=True)
+
+    def clean_plan_variation_id(self):
+        """Check that selected plan_variation_id exists, is active and matches the currency."""
+        plan_variation_id = self.cleaned_data['plan_variation_id']
+        try:
+            plan_variation = looper.models.PlanVariation.objects.active().get(
+                pk=plan_variation_id, currency=self.initial['currency']
+            )
+            return plan_variation.pk
+        except looper.models.PlanVariation.DoesNotExist:
+            self.add_error(
+                'plan_variation_id',
+                ValidationError(
+                    'This plan is not available, please reload the page and try again',
+                    'invalid',
+                ),
+            )
 
 
 class PaymentForm(BillingAddressReadonlyForm):
@@ -226,7 +238,6 @@ class PaymentForm(BillingAddressReadonlyForm):
     )
 
     price = forms.CharField(widget=forms.HiddenInput(), required=True)
-    plan_variation_id = forms.IntegerField(required=True)
 
     # These are used when a payment fails, so that the next attempt to pay can reuse
     # the already-created subscription and order.
@@ -254,15 +265,3 @@ class CancelSubscriptionForm(forms.Form):
     """Confirm cancellation of a subscription."""
 
     confirm = forms.BooleanField(label='Confirm Subscription Cancellation')
-
-
-class PayExistingOrderForm(AutomaticPaymentForm):
-    """Form for paying for an outstanding order."""
-
-    def __init__(self, *args, **kwargs):
-        """Work around Django's `exclude` bug by removing unused fields manually.
-
-        See https://code.djangoproject.com/ticket/8620
-        """
-        super().__init__(*args, **kwargs)
-        self.fields.pop('plan_variation_id')

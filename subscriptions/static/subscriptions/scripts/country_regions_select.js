@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (regionsPerCountry[selectedCountryCode]) {
       const regions = regionsPerCountry[selectedCountryCode];
       if (regions.used_in_address) {
-        regionSelect.required = true;
         // Update region choices accordindly
         regionSelect.innerHTML = templateRegionSelect(regions);
         regionLabel.innerText = regions.type;
@@ -37,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Reset and hide the region select
     regionSelect.innerHTML = '';
     regionLabel.innerText = 'Region';
-    regionSelect.required = false;
     regionSelectContainer.classList.add('d-none');
   }
 

@@ -1,73 +1,135 @@
 {% extends 'common/base.html' %}
 {% load static %}
+{% load common_extras %}
 
 {% block content %}
   {% with subscription=order.subscription %}
 
-    <div class="jumbotron jumbotron-fluid header jumbotron-overlay overlay-solid">
-      <div class="jumbotron-bg-wrapper">
-        <img class="jumbotron-bg" src="{% static 'common/images/join/join-header.png' %}"
-          alt="Cartoon dog eating tasty treats">
-      </div>
-      <div class="container flat-page-content">
-        <div class="row">
-          <div class="col">
-            <div class="jumbotron-body">
-              <h1 class="thanks">Thanks for subscribing to Blender Cloud!</h1>
-              <p>Make sure to explore everything the Cloud has to offer.</p>
-            </div>
-          </div>
+    {% comment %} <div class="jumbotron jumbotron-fluid header jumbotron-overlay overlay-solid">
+  <div class="jumbotron-bg-wrapper">
+    <img class="jumbotron-bg" src="{% static 'common/images/join/join-header.png' %}"
+      alt="Cartoon dog eating tasty treats">
+  </div>
+  <div class="container flat-page-content">
+    <div class="row">
+      <div class="col">
+        <div class="jumbotron-body">
+          <h1 class="thanks">Thanks for subscribing to Blender Cloud!</h1>
+          <p>Make sure to explore everything the Cloud has to offer.</p>
         </div>
       </div>
     </div>
+  </div>
+</div> {% endcomment %}
 
-    <div class="container flat-page-content mt-3">
+    <div class="join-header">
 
-      <div class="row">
-        <div class="col">
-          <div class="alert alert-success mb-3" role="alert">
-            Your {% include 'subscriptions/components/info_with_status.html' %}
-          </div>
-        </div>
+      <div class="join-header-background">
+        <img src="{% static 'subscriptions/images/join-header.png' %}" alt="Cartoon dog eating tasty treats"
+          class="join-header-background-image">
       </div>
 
-      <div class="row">
-        <div class="col">
-          <h2>Welcome!</h2>
+      {% comment %} <a href="/">
+    <img src="{% static 'common/images/blender_cloud_logo.svg' %}" alt="Blender Cloud" class="join-header-brand">
+  </a> {% endcomment %}
+
+    </div>
+
+    <div class="container flat-page-content checkout-done-container">
+
+
+      <div class="row mb-4 px-3 pt-4">
+        <div class="col text-center">
+          <h1>Welcome to Blender Cloud!</h1>
           <p>You're now a proud owner of a Blender Cloud subscription! You have access to <a
             href="{% url "film-list" %}">films</a>, <a href="{% url "training-home" %}">training</a> and assets from the
             Blender Studio team.</p>
           <p class="text-muted">
             Manage subscription in <a href="{% url 'user-settings-billing' %}">your billing settings</a>.
           </p>
+          <a href="/" class="btn btn-primary">Start exploring</a>
+          <button class="btn btn-success celebrate">Celebrate!</button>
         </div>
       </div>
 
     </div>
 
-
     <div class="container-xl my-4">
+      {% get_featured as featured %}
+      {% with featured_trainings=featured.trainings featured_films=featured.films %}
+        <!-- Recently watched -->
+        {% url 'training-home' as training_url %}
 
-      <div class="row justify-content-center mb-3">
-        <div class="col-md-6 text-center">
-          <h2 class="mb-1">Check out our latest training!</h2>
-          <p class="mb-0">With courses covering every major topic in Blender, you get the tools to learn, explore
-            and grow as an artist with the Blender Cloud.</p>
-        </div>
-      </div>
-      <div class="row">
-        {% for training in featured_trainings|slice:':3' %}
-          {% include "common/components/cards/card_training.html" with training=training %}
-        {% endfor %}
-      </div>
-      <div class="row justify-content-center mb-0">
-        <div class="col-md-6 text-center">
-          <p class="mb-0">Want to see more? <a href="/training">Explore all Blender Cloud Training</a>.</p>
-        </div>
-      </div>
+        {% include 'common/components/cards/card_carousel.html' with title="Check out our latest training!" title_link=training_url subtitle="Want to see more? <a href='/training'>Explore all training</a>" slides=3 card_set=featured_trainings media_type="training" id="featuredTrainings" %}
+      {% endwith %}
 
+      <section class="mb-4">
+        <div class="row justify-content-center mb-3">
+          <div class="col-md-6 text-center">
+
+            <a class="mb-0 h2" href="{% url 'film-list' %}">Featured Open Movies</a>
+            <p class="mb-0">The Blender <a href="/films">Open Movie projects</a> are made possible by subscriptions to the
+              Blender Cloud.</p>
+          </div>
+        </div>
+        <div class="row">
+          {% for film in featured.films|slice:':3' %}
+            {% include "films/components/card_film.html" with film=film %}
+          {% endfor %}
+        </div>
+      </section>
     </div>
 
 
   {% endwith %}
 {% endblock %}
+
+{% block scripts %}
+  <script>
+
+    var colors = ['#3583D0', '#44AB5C', '#C34343', '#D1528F', '#ECC154', '#8E5BC1', '#DC8648', '#44AE95'];
+    var count = 100;
+    (function frame() {
+      confetti({
+        particleCount: count,
+        angle: 60,
+        spread: 55,
+        origin: {
+          x: 0
+        },
+        colors: colors
+      });
+      confetti({
+        particleCount: count,
+        angle: 120,
+        spread: 55,
+        origin: {
+          x: 1
+        },
+        colors: colors
+      });
+
+      document.querySelector('.celebrate').addEventListener('click', () => {
+        confetti({
+          particleCount: count,
+          angle: 60,
+          spread: 55,
+          origin: {
+            x: 0
+          },
+          colors: colors
+        });
+        confetti({
+          particleCount: count,
+          angle: 120,
+          spread: 55,
+          origin: {
+            x: 1
+          },
+          colors: colors
+        });
+      })
+    }());
+
+  </script>
+{% endblock scripts %}

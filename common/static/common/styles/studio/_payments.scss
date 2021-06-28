@@ -1,3 +1,73 @@
+.join {
+  margin-top: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.join-header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  &-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+
+    &::after {
+      content: close-quote;
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(94.11% 100% at 50% 0%, rgba(31, 31, 31, 0) 76.84%, #1F1F1F 100%), radial-gradient(40.26% 143.41% at 50% 51.9%, rgba(0, 0, 0, 0) 30.35%, rgba(0, 0, 0, 0.75) 100%);
+      position: absolute;
+      top: 0;
+      left: 0;
+
+
+    }
+
+    &-image {
+      position: relative;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      height: auto;
+      z-index: -1;
+
+      @include media-breakpoint-down(md) {
+        height: 200px;
+      }
+    }
+  }
+
+  &-brand {
+    height: 30px;
+    margin-top: $spacer * 4;
+    margin-bottom: $spacer * 2;
+    z-index: 1;
+    position: relative;
+
+    @include media-breakpoint-down(md) {
+      margin-top: $spacer * 2;
+    }
+  }
+}
+
+.checkout-done-container {
+  margin-top: 300px !important;
+  // background: $dark;
+  border-radius: $border-radius;
+
+  @include media-breakpoint-down(md) {
+    margin-top: 100px !important;
+    background: none;
+  }
+}
+
 .checkout {
   position: sticky;
   top: 84px;
@@ -13,8 +83,8 @@
   border: 1px solid $input-gray;
   border-bottom-width: 0;
   border-radius: $border-radius $border-radius 0 0;
-  padding: $spacer $spacer 0;
-  background: $dark;
+  padding: $spacer;
+  background: $navigation-gray;
 }
 
 .payment-header-title {
@@ -93,7 +163,7 @@
 }
 
 .payment-content-inner {
-  padding: $spacer / 2 $spacer $spacer $spacer;
+  padding: $spacer;
 }
 
 .checkout-form {
@@ -177,26 +247,34 @@
 
 #id_gateway {
   @extend .list-unstyled;
+  margin-bottom: 0;
 }
 
 .braintree-option {
-  background: $dark;
-  border-color: $input-gray;
+  @extend .btn,
+  .btn-input;
 
-  &:first-child {
-    border-radius: 0;
+  border-top: 0;
+  width: 100%;
+  display: flex;
+  padding: $spacer / 2;
+  font-weight: $font-weight-base;
+  // background: $dark;
+  // border-color: $input-gray;
+  text-align: left;
+  margin-bottom: $spacer / 2;
+  border-radius: $border-radius !important;
+
+  .braintree-option__label {
+    color: $headings-color;
   }
 
   &:last-child {
-    border-radius: 0 0 $border-radius $border-radius;
-  }
-
-  .braintree-option__label {
-    color: $highlight-white-xxstrong;
+    margin-bottom: 0;
   }
 
   &:hover {
-    background: $input-gray;
+    // background: $input-gray;
 
     .braintree-option__label {
       font-weight: $font-weight-normal;
@@ -212,15 +290,18 @@
   &::before {
     background-color: $transparent;
     border-color: $input-gray;
-    border-radius: 0;
+    border-radius: $border-radius;
     bottom: 0;
+    margin-bottom: $spacer / 2;
   }
 }
 
 .looper-select-option-0 {
-  // .looper-select-option-label {
-  //   display: none;
-  // }
+
+  .looper-select-label {
+    color: $headings-color;
+    margin-bottom: $spacer / 2;
+  }
 
   .gateway-options-label {
     display: none;
@@ -239,7 +320,7 @@
 .looper-select-option {
   .gateway-options-label {
     @extend .subtitle;
-    @extend .small;
+    @extend .x-small;
   }
 
   input {
@@ -251,22 +332,22 @@
     margin-bottom: 0;
 
     :checked+span {
-      background: $input-gray;
-      color: $headings-color;
+      // background: $input-gray;
+      // color: $headings-color;
     }
 
     span {
-      background: $dark;
-      border: 1px solid $input-gray;
-      border-radius: $border-radius;
-      padding: $spacer * .75 $spacer / 2 $spacer * .75 #{$spacer * 1.5 + 24px};
+      // background: $dark;
+      // border: 1px solid $input-gray;
+      // border-radius: $border-radius;
+      // padding: $spacer * .75 $spacer / 2 $spacer * .75 #{$spacer * 1.5 + 24px};
       width: 100%;
-      position: relative;
+      // position: relative;
       display: block;
       font-weight: $headings-font-weight;
 
       &:hover {
-        background: $input-gray;
+        // background: $input-gray;
         cursor: pointer;
       }
     }
@@ -274,51 +355,110 @@
 }
 
 .looper-select-option-0 {
-  :checked+span {
-    border-radius: $border-radius $border-radius 0 0;
+  :not(:checked)+span {
+
+    @extend .btn,
+    .btn-input;
+
+    background: $input-gray;
+    border-radius: $border-radius;
+    font-weight: $font-weight-normal;
+    // margin-top: $spacer * 1.5;
+    padding-left: $spacer * 2.5;
+    position: relative;
+    text-align: left;
+    margin: 34px 0 0;
+
+    &:before {
+      color: $headings-color;
+      content: 'Credit Card or PayPal';
+      display: block;
+      font-weight: $headings-font-weight;
+      left: 0;
+      position: absolute;
+      top: - $spacer * 1.5;
+    }
+
+    &::after {
+      @extend .material-icons;
+      content: 'credit_card';
+      display: block;
+      left: $spacer * .75;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+}
+
+.looper-select-option-1 {
+  padding-top: calc(24px + #{$spacer});
+  position: relative;
+
+  &:before {
+    color: $headings-color;
+    content: 'Bank Transfer';
+    display: block;
+    font-weight: $headings-font-weight;
+    left: 0;
+    position: absolute;
+    top: $spacer / 2;
   }
 
   .looper-select-option-label {
-    span {
-      &::before {
-        @extend .material-icons;
-        content: 'payment';
-        display: block;
-        position: absolute;
-        left: $spacer;
-        top: 50%;
-        transform: translateY(-50%);
-      }
+
+    :checked+span {
+      border: 2px solid $success;
+    }
+  }
+
+  .looper-select-label {
+    @extend .btn,
+    .btn-input;
+
+    background: $input-gray;
+    border-radius: $border-radius;
+    font-weight: $font-weight-normal !important;
+    // margin-top: $spacer * 1.5;
+    padding-left: $spacer * 2.5;
+    position: relative;
+    text-align: left;
+  }
+
+  span {
+    text-align: left;
+
+    &::after {
+      @extend .material-icons;
+      content: 'account_balance';
+      display: block;
+      left: $spacer * .75;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    &:hover {
+      background: none;
     }
   }
 }
 
-.looper-select-option-1 {
-  margin-top: $spacer / 2;
+.gateway-options-label {
+  margin-top: $spacer / 4;
+}
 
-  .looper-select-option-label {
-    span {
-      &::before {
-        @extend .material-icons;
-        content: 'account_balance';
-        display: block;
-        position: absolute;
-        left: $spacer;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-    }
-  }
-
-  .gateway-options-label {
-    margin-top: $spacer / 4;
-  }
+.braintree-sheet__logo--header {
+  width: $spacer * 2;
 }
 
 .braintree-sheet {
   background: $navigation-gray;
   border: 1px solid $input-gray;
-  border-radius: 0;
+  border-radius: $border-radius;
+  margin-bottom: $spacer / 2;
+  overflow: hidden !important;
 }
 
 .braintree-sheet__header {
@@ -326,6 +466,7 @@
 
   .braintree-sheet__text {
     color: $body-color;
+    margin-left: $spacer;
 
   }
 }
@@ -333,7 +474,7 @@
 
 .braintree-sheet__content--form {
   background: $dark;
-  padding: $spacer $spacer / 2;
+  padding: $spacer $spacer / 2 $spacer / 2;
 
   .braintree-form__field-group {
     padding: 0 $spacer / 2;
@@ -384,18 +525,15 @@
 
 // Choose another way to pay button
 [data-braintree-id='toggle'] {
-  @extend .btn;
-  @extend .btn-input;
-
-  // color: $headings-color;
-  // background: $input-gray;
-  margin-bottom: $spacer / 2 0;
-  border-radius: 0 0 $border-radius $border-radius;
+  background: none;
+  padding: 0;
   font-weight: normal;
   color: $body-color;
 
   &:hover {
     font-weight: $font-weight-normal;
+    background: none;
+    text-decoration: underline;
   }
 
   span {
@@ -406,54 +544,84 @@
 
 [data-braintree-id='methods'] {
   margin-bottom: 0;
-  border: 1px solid $input-gray;
-  border-width: 0 1px;
+  border: 0px;
 }
 
 [data-braintree-id='methods-container'] {
-  padding: $spacer / 2;
+  // padding: $spacer / 2 0;
+  margin-bottom: $spacer / 2;
 }
 
 .braintree-method {
-  background-color: $dark;
+  @extend .btn,
+  .btn-input;
+
   border-radius: $border-radius !important;
-  border: 1px solid $input-gray;
+  border: 0 solid $input-gray;
   color: $body-color;
+  display: flex;
+  font-weight: $font-weight-base;
   margin: 0 0 $spacer / 2 0;
+  padding: $spacer / 2;
   width: 100%;
 
   .braintree-method__label {
-    color: $body-color;
-  }
+    color: $headings-color;
 
-  &:hover {
-    background: $input-gray;
-
-
-    .braintree-method__label {
-      font-weight: $font-weight-normal;
+    .braintree-method__label--small {
+      @extend .subtitle;
     }
   }
 
-  &:last-child {
-    margin-bottom: 0;
+  .braintree-method__icon {
+    width: $spacer * 1.25;
+    height: $spacer * 1.25;
+    position: relative;
+    background-color: $success !important;
+
+    svg {
+      width: $spacer * .75;
+      height: $spacer * .75;
+      position: absolute;
+      top: $spacer / 4;
+      left: $spacer / 4;
+    }
   }
 
-  &--active {
-    margin-bottom: $spacer / 2;
+  &:hover {
+    .braintree-method__label {
+      font-weight: $font-weight-base;
+    }
+  }
+
+  &:first-child {
+    border-top-width: 0 !important;
+    margin: 0 0 $spacer / 2 0 !important;
+  }
+
+  &:last-child {
+    margin: 0 0 $spacer / 2 0 !important;
   }
 }
 
 .braintree-methods--active:not(.braintree-methods--edit) .braintree-method--active {
+  // background: $success;
   margin-bottom: $spacer / 2;
+  border-color: $success;
+
+  .braintree-method__label {
+    font-weight: $font-weight-base !important;
+  }
+
+  &:first-child {
+    border-top-width: 2px !important;
+  }
 }
 
-
-
 [data-braintree-id="other-ways-to-pay"] {
-  margin: 0;
-  padding: $spacer;
-  border: 1px solid $input-gray;
+  margin: 0 0 $spacer / 2 0;
+  // padding: $spacer;
+  // border: 1px solid $input-gray;
   border-bottom-width: 0;
 }
 

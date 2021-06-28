@@ -7,7 +7,7 @@ from django.db.models.base import Model
 from django.db.models.expressions import Value
 from django.db.models.fields import CharField
 
-from films.models import ProductionLog
+from films.models import ProductionLog, Asset, AssetCategory
 from training.models import Training
 from blog.models import Post
 
@@ -115,3 +115,16 @@ def has_active_subscription(user: User) -> bool:
 
     # The new way, with subscriptions managed by Cloud itself
     return subscriptions.queries.has_active_subscription(user)
+
+
+def get_latest_trainings_and_production_lessons(production_lessons_limit=2, trainings_limit=10):
+    """Return trainings and production lessons, mixed together ordered by latest."""
+    latest_trainings = Training.objects.filter(is_published=True)[:trainings_limit]
+    latest_production_lessons = Asset.objects.filter(
+        category=AssetCategory.production_lesson, is_published=True
+    ).order_by('-date_published')[:production_lessons_limit]
+    return sorted(
+        [*latest_trainings, *latest_production_lessons],
+        key=lambda x: getattr(x, 'date_published', getattr(x, 'date_created', None)),
+        reverse=True,
+    )

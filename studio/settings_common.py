@@ -65,7 +65,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
     'blendercloud.middleware.SessionMiddleware',
-    'looper.middleware.PreferredCurrencyMiddleware',
+    'subscriptions.middleware.SetCurrencyMiddleware',
     'waffle.middleware.WaffleMiddleware',
 ]
 
@@ -179,6 +179,7 @@ PIPELINE = {
                 'common/scripts/vendor/js.cookie.js',
                 'common/scripts/vendor/masonry.pkgd.js',
                 'common/scripts/vendor/imagesloaded.pkgd.js',
+                'common/scripts/vendor/confetti.browser.min.js',
             ],
             'output_filename': 'js/vendor.js',
             'extra_context': {'async': False, 'defer': False},

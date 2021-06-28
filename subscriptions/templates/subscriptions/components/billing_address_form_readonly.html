@@ -1,46 +1,72 @@
-<div class="">
+<div class="subtitle small">
   <div>
-    <span class="font-weight-bold-child">{{ form.full_name }}</span>
+    <span class="font-weight-bold-child">
+      {% with field=form.full_name %}
+        {{ field.value }}
+        {{ field.as_hidden }}
+      {% endwith %}
+    </span>
+
     {% with field=form.company %}
       <div class="{% if not field.value %}d-none{% endif %}">
-        {{ field }}
+        {{ field.value }}
+        {{ field.as_hidden }}
       </div>
     {% endwith %}
   </div>
-  <div class="font-weight-bold">
-    {{ form.email }}
+  <div>
+    {% with field=form.email %}
+      {{ field.value }}
+      {{ field.as_hidden }}
+    {% endwith %}
   </div>
 
 
 
   <div>
-    {{ form.street_address }}
+    {% with field=form.street_address %}
+      {{ field.value }}
+      {{ field.as_hidden }}
+    {% endwith %}
 
     {% with field=form.extended_address %}
       <div class="{% if not field.value %}d-none{% endif %}">
-        {{ field }}
+        {{ field.value }}
+        {{ field.as_hidden }}
       </div>
     {% endwith %}
   </div>
 
   <div>
-    {{ form.postal_code }}
+    {% with field=form.postal_code %}
+      {{ field.value }}
+      {{ field.as_hidden }}
+    {% endwith %}
+
     {% with field=form.region %}
       <span class="{% if not field.value %}d-none{% endif %}">
-        {{ field }}
+        {{ field.value }}
+        {{ field.as_hidden }}
       </span>
     {% endwith %}
-    {{ form.locality }}
+
+    {% with field=form.locality %}
+      {{ field.value }}
+      {{ field.as_hidden }}
+    {% endwith %}
+    {% with field=form.country %}
+      {{ field.value }}
+      {{ field.as_hidden }}
+    {% endwith %}
   </div>
 
-  <div>
-    {{ form.country }}
-  </div>
+
 
   <div>
     {% with field=form.vat_number %}
       <div class="{% if not field.value %}d-none{% endif %}">
-        VATIN: {{ field }}
+        VATIN: {{ field.value }}
+        {{ field.as_hidden }}
       </div>
     {% endwith %}
   </div>

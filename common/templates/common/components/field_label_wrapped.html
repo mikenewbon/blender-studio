@@ -10,7 +10,7 @@
       </label>
       {% if field.field.required %}<span class="ml-1 subtitle font-weight-bold">*</span>{% endif %}
       {% if collapse_link == True %}
-        <a class="subtitle small text-decoration-underline ml-auto" data-toggle="collapse" href="#{{ collapse_link_target }}"
+        <a class="subtitle-light small text-decoration-underline ml-auto" data-toggle="collapse" href="#{{ collapse_link_target }}"
           role="button" aria-expanded="false" aria-controls="{{ collapse_link_target }}"><span class="add-remove">{% if collapse_field.value %}Remove{% else %}Add{% endif %}</span>
           {{ collapse_link_text }}
         </a>

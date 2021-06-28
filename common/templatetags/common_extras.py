@@ -1,4 +1,6 @@
 """Commonly used template tags and filters."""
+from typing import Dict, Any
+
 from django import template
 from django.contrib.auth import get_user_model
 from django.template.defaultfilters import stringfilter
@@ -10,7 +12,9 @@ from common.markdown import (
     render as render_markdown,
     render_unsafe as render_markdown_unsafe,
 )
+from common.queries import get_latest_trainings_and_production_lessons
 from common.shortcodes import render
+from films.models import Film
 from markupsafe import Markup
 import subscriptions.queries
 
@@ -135,3 +139,12 @@ def show_new_subscription_billing(context) -> bool:
         or waffle.flag_is_active(request, 'LEGACY_SUBSCRIPTIONS_ENABLED')
         and subscriptions.queries.has_legacy_subscription(user)
     )
+
+
+@register.simple_tag()
+def get_featured() -> Dict[str, Any]:
+    """Return featured content: trainings and films."""
+    return {
+        'films': Film.objects.filter(is_featured=True),
+        'trainings': get_latest_trainings_and_production_lessons(),
+    }

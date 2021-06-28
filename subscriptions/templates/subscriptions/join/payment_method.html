@@ -5,57 +5,78 @@
 
 {% block content %}
 
+  <div class="payment-header">
+    <h2 class="payment-header-title">Payment</h2>
+    <div class="d-flex justify-content-between">
+      <p class="mb-0  small">Step 3: Select a payment method.</p>
+      <p class="small  mb-0">3 of 3</p>
+    </div>
 
-  <form id="payment-form" class="checkout-form" method="post" action="{% url 'subscriptions:join-confirm-and-pay' %}"
+  </div>
+
+  <form id="payment-form" class="checkout-form" method="post" action="{% url 'subscriptions:join-confirm-and-pay' plan_variation_id=current_plan_variation.pk %}"
     data-looper-payment-form="true" data-braintree-client-token="{{ client_token }}">
+    {% csrf_token %}
 
-    {% include "subscriptions/components/header_jumbotron.html" %}
+    {% url 'subscriptions:join-billing-details' plan_variation_id=current_plan_variation.pk as billing_url %}
+    {% url "subscriptions:join" current_plan_variation.pk as plan_url %}
 
     {% with form|add_form_classes as form %}
-      <div class="container-xl my-4">
-        <div class="row">
-          <div class="col-md-7">
 
-            <section class="checkout-form-fields mb-3" style="opacity: .5;">
-              <a href="{% url 'subscriptions:join' %}" class="btn btn-sm btn-dark float-right"><i
-                class="material-icons">arrow_back</i> Go back</a>
-              <a href="{% url 'subscriptions:join' %}" class="mb-0 h3">Billing Details</a>
-              <p class="subtitle mb-2">Check your details below are correct before paying.</p>
+      <div class="payment-content">
+        <div class="payment-content-inner">
+          <fieldset class="payment-form-payment-method">
+            {{ form.non_field_errors }}
+            {% include "subscriptions/components/payment_form.html" %}
+          </fieldset>
+
+
+          {% if GOOGLE_RECAPTCHA_SITE_KEY %}
+            <div id="recaptcha" class="g-recaptcha" data-sitekey="{{ GOOGLE_RECAPTCHA_SITE_KEY }}" data-size="invisible">
+            </div>
+          {% endif %}
+
+        </div>
+
+        <div class="payment-tabs-footer border-bottom">
+          <div class="row">
+            {% if messages %}
+              {% for message in messages %}
+                <p {% if message.tags %} class="alert alert-sm alert-success alert-{{ message.tags }}" {% endif %}>
+                  {{ message }}
+                </p>
+              {% endfor %}
+            {% endif %}
+          </div>
+
+          <div class="row">
+            <div class="col-auto">
+              <p class="subtitle small font-weight-bold mb-0">Plan:</p>
+            </div>
+
+            <div class="col text-right">
+              <p class="subtitle small mb-0">{{ current_plan_variation.collection_method|capfirst }} (<a href="{{ plan_url }}" class="subtitle underline" >Change</a>)</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-auto">
+              <p class="subtitle small font-weight-bold mb-0">Billing:</p>
+            </div>
+
+            <div class="col text-right">
               <fieldset class="checkout-form-billing-address-readonly">
                 {% include "subscriptions/components/billing_address_form_readonly.html"%}
               </fieldset>
-            </section>
-
-            <section>
-              <h2 class="mb-0">Payment Method</h2>
-              <p class="subtitle mb-2">Select a payment method.</p>
-
-              {% comment %}
-                <div class="payment-method-toggle btn-group mb-3 w-100">
-                  <button class="btn btn-outline-input"><i class="material-icons">payment</i> Pay by Card or Paypal</button>
-                  <button class="btn btn-outline-input"><i class="material-icons">account_balance</i> Pay by Bank
-                    Transfer</button>
-                </div>
-              {% endcomment %}
-
-              <fieldset class="payment-form-payment-method">
-                {{ form.non_field_errors }}
-                {% include "subscriptions/components/payment_form.html" %}
-              </fieldset>
-            </section>
-          </div>
-
-          <div class="col-md-5 col-lg-4 offset-lg-1">
-            {% if GOOGLE_RECAPTCHA_SITE_KEY %}
-              <div id="recaptcha" class="g-recaptcha" data-sitekey="{{ GOOGLE_RECAPTCHA_SITE_KEY }}" data-size="invisible">
-              </div>
-            {% endif %}
-            {% include "subscriptions/components/plan_selector.html" with disabled=True %}
+              <p class="subtitle small mb-0">(<a href="{{ billing_url }}" class="subtitle underline" >Change</a>)</p>
+            </div>
           </div>
         </div>
+
+        {% include 'subscriptions/components/total.html' with button_text="Confirm and Pay" %}
+
       </div>
     {% endwith %}
-    {% include 'subscriptions/components/footer_currency.html' %}
   </form>
 {% endblock content %}
 

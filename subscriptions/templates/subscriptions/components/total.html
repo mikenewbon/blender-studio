@@ -1,0 +1,34 @@
+{% load looper %}
+
+<div class="payment-tabs-footer">
+
+  {% get_taxable current_plan_variation.price current_plan_variation.plan.product.type as current_price %}
+
+  <div class="selected-plan-variation-details">
+
+    <div class="row mb-3">
+      <div class="col">
+        <h3 class="mb-0">Total</h3>
+        <p class="subtitle small"><span class="x-price-tax">{{ current_price.format_tax_amount }}</span></p>
+      </div>
+      <div class="col text-right">
+        <h2 class="mb-n1"><span class="x-price">{{ current_price.price.with_currency_symbol }}</span></h2>
+        <p class="subtitle small">/ <span
+          class="x-price-period">{{ current_plan_variation.interval_length }} {{ current_plan_variation.interval_unit }}</span></p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row mt-3">
+    <div class="col text-right">
+      {% if user.is_authenticated %}
+        <button class="btn btn-primary w-100" id="submit-button" type="submit">{{ button_text|default:"Continue" }}</button>
+
+      {% else %}
+        <a class="btn btn-success w-100" href="{% url 'oauth:login' %}">Sign in with Blender ID</a>
+      {% endif %}
+    </div>
+  </div>
+
+</div>

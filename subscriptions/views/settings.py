@@ -16,7 +16,7 @@ from subscriptions.forms import (
     BillingAddressForm,
     CancelSubscriptionForm,
     ChangePaymentMethodForm,
-    PayExistingOrderForm,
+    AutomaticPaymentForm,
 )
 from subscriptions.views.mixins import SingleSubscriptionMixin
 
@@ -92,7 +92,7 @@ class PayExistingOrderView(WaffleFlagMixin, looper.views.checkout.CheckoutExisti
     # Redirect to LOGIN_URL instead of raising an exception
     raise_exception = False
     template_name = 'subscriptions/pay_existing_order.html'
-    form_class = PayExistingOrderForm
+    form_class = AutomaticPaymentForm
     success_url = reverse_lazy('user-settings-billing')
 
     def dispatch(self, request, *args, **kwargs):

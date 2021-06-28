@@ -1,5 +1,6 @@
-import os
+from typing import Tuple
 from unittest.mock import patch
+import os
 import unittest
 
 from django.conf import settings
@@ -20,12 +21,12 @@ required_address_data = {
     'country': 'NL',
     'email': 'my.billing.email@example.com',
     'full_name': 'New Full Name',
-    'locality': 'Amsterdam',
     'postal_code': '1000 AA',
-    'street_address': 'MAIN ST 1',
 }
 full_billing_address_data = {
     **required_address_data,
+    'street_address': 'MAIN ST 1',
+    'locality': 'Amsterdam',
     'extended_address': 'Floor 2',
     'company': 'Test LLC',
     'vat_number': 'NL818152011B01',
@@ -39,31 +40,18 @@ def _get_default_variation(currency='USD'):
 
 @override_flag('SUBSCRIPTIONS_ENABLED', active=True)
 @freeze_time('2021-05-19 11:41:11')
-class TestGETJoinView(BaseSubscriptionTestCase):
-    url = reverse('subscriptions:join')
-
-    def test_get_displays_plan_selection_with_tax_to_anonymous_nl(self):
-        response = self.client.get(self.url, REMOTE_ADDR=EURO_IPV4)
-
-        self.assertEqual(response.status_code, 200)
-        self._assert_plan_selector_with_sign_in_cta_displayed(response)
-        self._assert_default_variation_selected_tax_21_eur(response)
-
-    def test_get_displays_plan_selection_without_tax_to_anonymous_us(self):
-        response = self.client.get(self.url, REMOTE_ADDR=USA_IPV4)
-
-        self.assertEqual(response.status_code, 200)
-        self._assert_plan_selector_with_sign_in_cta_displayed(response)
-        self._assert_default_variation_selected_no_tax_usd(response)
+class TestGETBillingDetailsView(BaseSubscriptionTestCase):
+    url_usd = reverse('subscriptions:join-billing-details', kwargs={'plan_variation_id': 1})
+    url = reverse('subscriptions:join-billing-details', kwargs={'plan_variation_id': 2})
 
     def test_get_prefills_full_name_and_billing_email_from_user(self):
         user = UserFactory(full_name="Jane До", email='jane.doe@example.com')
         self.client.force_login(user)
 
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, REMOTE_ADDR=EURO_IPV4)
 
         self.assertEqual(response.status_code, 200)
-        self._assert_plan_selector_displayed(response)
+        self._assert_total_default_variation_selected_tax_21_eur(response)
         self.assertContains(
             response,
             '<input type="text" name="full_name" value="Jane До" maxlength="255" placeholder="Your Full Name" class="form-control" required id="id_full_name">',
@@ -75,7 +63,7 @@ class TestGETJoinView(BaseSubscriptionTestCase):
             html=True,
         )
 
-    def test_get_displays_plan_selection_and_billing_details_to_logged_in_nl(self):
+    def test_get_displays_total_and_billing_details_to_logged_in_nl(self):
         user = create_customer_with_billing_address(vat_number='', country='NL')
         self.client.force_login(user)
 
@@ -84,34 +72,9 @@ class TestGETJoinView(BaseSubscriptionTestCase):
         self.assertEqual(response.status_code, 200)
         self._assert_billing_details_form_displayed(response)
 
-        self._assert_plan_selector_displayed(response)
-        self.assertContains(
-            response,
-            '<option selected data-first-renewal="June 19, 2021" data-currency-symbol="€" data-plan-id="1" data-price-recurring="€&nbsp;9.90&nbsp;/&nbsp;month" data-price-recurring-tax="2.08" data-price="9.90" data-price-tax="2.08" data-tax-rate="21" data-tax-display-name="VAT" value="2">Every 1 month</option>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price">€&nbsp;9.90</span>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price-tax">Inc. 21% VAT (€&nbsp;2.08)</span>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price-recurring">€&nbsp;9.90&nbsp;/&nbsp;month</span>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price-recurring-tax">Inc. 21% VAT (€&nbsp;2.08)</span>',
-            html=True,
-        )
+        self._assert_total_default_variation_selected_tax_21_eur(response)
 
-    def test_get_displays_plan_selection_and_billing_details_to_logged_in_de(self):
+    def test_get_displays_total_and_billing_details_to_logged_in_de(self):
         user = create_customer_with_billing_address(vat_number='', country='DE')
         self.client.force_login(user)
 
@@ -119,56 +82,35 @@ class TestGETJoinView(BaseSubscriptionTestCase):
 
         self.assertEqual(response.status_code, 200)
         self._assert_billing_details_form_displayed(response)
+        self._assert_total_default_variation_selected_tax_19_eur(response)
 
-        self._assert_plan_selector_displayed(response)
-        self.assertContains(
-            response,
-            '<option selected data-first-renewal="June 19, 2021" data-currency-symbol="€" data-plan-id="1" data-price-recurring="€&nbsp;9.90&nbsp;/&nbsp;month" data-price="9.90" data-price-tax="1.88" data-price-recurring-tax="1.88" data-tax-rate="19" data-tax-display-name="VAT" value="2">Every 1 month</option>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price">€&nbsp;9.90</span>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price-tax">Inc. 19% VAT (€&nbsp;1.88)</span>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price-recurring">€&nbsp;9.90&nbsp;/&nbsp;month</span>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price-recurring-tax">Inc. 19% VAT (€&nbsp;1.88)</span>',
-            html=True,
-        )
-
-    def test_get_displays_plan_selection_and_billing_details_to_logged_in_us(self):
+    def test_get_displays_total_and_billing_details_to_logged_in_us(self):
         user = create_customer_with_billing_address(
             vat_number='', country='US', region='NY', postal_code='12001'
         )
         self.client.force_login(user)
 
-        response = self.client.get(self.url)
+        response = self.client.get(self.url_usd)
 
         self.assertEqual(response.status_code, 200)
         self._assert_billing_details_form_displayed(response)
         self._assert_form_us_address_is_displayed(response)
+        self._assert_total_default_variation_selected_usd(response)
 
-        self._assert_plan_selector_displayed(response)
-        # Check there's no tax on the displayed options
-        self._assert_no_tax(response)
+    @unittest.skipUnless(os.path.exists(settings.GEOIP2_DB), 'GeoIP database file is required')
+    def test_get_detects_country_us_sets_preferred_currency_usd_invalid_variation(self):
+        user = create_customer_with_billing_address()
+        self.client.force_login(user)
+
+        response = self.client.get(self.url, REMOTE_ADDR=USA_IPV4)
+        self.assertEqual(response.status_code, 404)
 
     @unittest.skipUnless(os.path.exists(settings.GEOIP2_DB), 'GeoIP database file is required')
     def test_get_detects_country_us_sets_preferred_currency_usd(self):
         user = create_customer_with_billing_address()
         self.client.force_login(user)
 
-        response = self.client.get(self.url, REMOTE_ADDR=USA_IPV4)
+        response = self.client.get(self.url_usd, REMOTE_ADDR=USA_IPV4)
 
         self.assertEqual(response.status_code, 200)
         # Check that country is preselected
@@ -177,15 +119,15 @@ class TestGETJoinView(BaseSubscriptionTestCase):
             '<option value="US" selected>United States of America</option>',
             html=True,
         )
-        # Check that prices are in USD and there is not tax
-        self._assert_default_variation_selected_no_tax_usd(response)
+        # Check that prices are in USD and there is no tax
+        self._assert_total_default_variation_selected_usd(response)
 
     @unittest.skipUnless(os.path.exists(settings.GEOIP2_DB), 'GeoIP database file is required')
     def test_get_detects_country_sg_sets_preferred_currency_usd(self):
         user = create_customer_with_billing_address()
         self.client.force_login(user)
 
-        response = self.client.get(self.url, REMOTE_ADDR=SINGAPORE_IPV4)
+        response = self.client.get(self.url_usd, REMOTE_ADDR=SINGAPORE_IPV4)
 
         self.assertEqual(response.status_code, 200)
         # Check that country is preselected
@@ -195,7 +137,7 @@ class TestGETJoinView(BaseSubscriptionTestCase):
             html=True,
         )
         # Check that prices are in USD and there is not tax
-        self._assert_default_variation_selected_no_tax_usd(response)
+        self._assert_total_default_variation_selected_usd(response)
 
     @unittest.skipUnless(os.path.exists(settings.GEOIP2_DB), 'GeoIP database file is required')
     def test_get_detects_country_nl_sets_preferred_currency_eur_displays_correct_vat(self):
@@ -211,13 +153,14 @@ class TestGETJoinView(BaseSubscriptionTestCase):
             '<option value="NL" selected>Netherlands</option>',
             html=True,
         )
-        self._assert_default_variation_selected_tax_21_eur(response)
+        self._assert_total_default_variation_selected_tax_21_eur(response)
 
 
 @override_flag('SUBSCRIPTIONS_ENABLED', active=True)
 @freeze_time('2021-05-19 11:41:11')
-class TestPOSTJoinView(BaseSubscriptionTestCase):
-    url = reverse('subscriptions:join')
+class TestPOSTBillingDetailsView(BaseSubscriptionTestCase):
+    url_usd = reverse('subscriptions:join-billing-details', kwargs={'plan_variation_id': 1})
+    url = reverse('subscriptions:join-billing-details', kwargs={'plan_variation_id': 2})
 
     def test_post_updates_billing_address_and_customer_renders_next_form_de(self):
         user = create_customer_with_billing_address(vat_number='', country='DE')
@@ -230,11 +173,12 @@ class TestPOSTJoinView(BaseSubscriptionTestCase):
             )
             .first()
         )
-        data = {
-            **required_address_data,
-            'plan_variation_id': selected_variation.id,
-        }
-        response = self.client.post(self.url, data, REMOTE_ADDR=EURO_IPV4)
+        data = full_billing_address_data
+        url = reverse(
+            'subscriptions:join-billing-details',
+            kwargs={'plan_variation_id': selected_variation.pk},
+        )
+        response = self.client.post(url, data)
 
         self.assertEqual(response.status_code, 200)
 
@@ -242,61 +186,38 @@ class TestPOSTJoinView(BaseSubscriptionTestCase):
         # Check that a warning message is displayed
         self._assert_pricing_has_been_updated(response)
 
-        # Check that the manual plan variation is still selected
+        self._assert_continue_to_payment_displayed(response)
+        # Check that the manual plan variation totals are displayed
+        self.assertContains(response, 'Total')
         self.assertContains(
-            response,
-            '<option selected value="2" title="This subscription is renewed manually. You can leave it on-hold, or renew it when convenient.">Manual renewal</option>',
-            html=True,
+            response, '<span class="x-price-tax">Inc. 21% VAT (€&nbsp;24.99)</span>', html=True
         )
-        self.assertContains(
-            response,
-            '<option selected data-first-renewal="May 19, 2022" data-currency-symbol="€" data-plan-id="2" data-price-recurring="€&nbsp;119&nbsp;/&nbsp;year" data-price="119.00" data-price-tax="24.99" data-price-recurring-tax="24.99" data-tax-rate="21" data-tax-display-name="VAT" value="14">Every 1 year</option>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price">€&nbsp;119.00</span>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price-tax">Inc. 21% VAT (€&nbsp;24.99)</span>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price-recurring">€&nbsp;119&nbsp;/&nbsp;year</span>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price-recurring-tax">Inc. 21% VAT (€&nbsp;24.99)</span>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            'Renews <span class="x-first-renewal">May 19, 2022</span>',
-            html=True,
-        )
-        self.assertEqual(
-            response.context['form'].cleaned_data['plan_variation_id'], selected_variation.pk
-        )
+        self.assertContains(response, '<span class="x-price">€&nbsp;119.00</span>', html=True)
+        self.assertContains(response, 'Manual ')
+        self.assertContains(response, '/ <span class="x-price-period">1 year</span>', html=True)
 
     def test_post_has_correct_price_field_value(self):
         self.client.force_login(self.user)
 
         default_variation = _get_default_variation('EUR')
-        data = {
-            **required_address_data,
-            'plan_variation_id': default_variation.pk,
-        }
+        data = required_address_data
         response = self.client.post(self.url, data, REMOTE_ADDR=EURO_IPV4)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            response['Location'],
+            reverse(
+                'subscriptions:join-confirm-and-pay',
+                kwargs={'plan_variation_id': default_variation.pk},
+            ),
+        )
+
+        # Follow the redirect to avoid "Couldn't retrieve content: Response code was 302 (expected 200)"
+        response = self.client.get(response['Location'])
         # Check that we are no longer on the billing details page
         self._assert_payment_form_displayed(response)
 
-        self._assert_default_variation_selected_tax_21_eur(response)
+        self._assert_total_default_variation_selected_tax_21_eur(response)
         # The hidden price field must also be set to a matching amount
         self.assertContains(
             response,
@@ -307,13 +228,11 @@ class TestPOSTJoinView(BaseSubscriptionTestCase):
     def test_post_updates_billing_address_and_customer_applies_reverse_charged_tax(self):
         self.client.force_login(self.user)
 
-        default_variation = _get_default_variation('EUR')
         data = {
             **required_address_data,
             'vat_number': 'DE 260543043',
             'country': 'DE',
             'postal_code': '11111',
-            'plan_variation_id': default_variation.id,
         }
         response = self.client.post(self.url, data, REMOTE_ADDR=EURO_IPV4)
 
@@ -330,27 +249,14 @@ class TestPOSTJoinView(BaseSubscriptionTestCase):
         self._assert_pricing_has_been_updated(response)
 
         # Check that default plan variation with subtracted VAT is displayed, and no tax is displayed
-        self._assert_no_tax(response)
-        self.assertContains(
-            response,
-            '<option selected data-first-renewal="June 19, 2021" data-currency-symbol="€" data-plan-id="1" data-price-recurring="€&nbsp;8.02&nbsp;/&nbsp;month" data-price="8.02" value="2">Every 1 month</option>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price">€&nbsp;8.02</span>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price-recurring">€&nbsp;8.02&nbsp;/&nbsp;month</span>',
-            html=True,
-        )
+        self._assert_total_default_variation_selected_tax_19_eur_reverse_charged(response)
 
         # Post the same form again
         response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, 302)
+        # Follow the redirect to avoid unexpected assertion errors
+        response = self.client.get(response['Location'])
 
-        self.assertEqual(response.status_code, 200)
         # Check that we are no longer on the billing details page
         self._assert_payment_form_displayed(response)
 
@@ -367,26 +273,27 @@ class TestPOSTJoinView(BaseSubscriptionTestCase):
         )
         self.client.force_login(user)
 
-        response = self.client.get(self.url, REMOTE_ADDR=EURO_IPV4)
+        response = self.client.get(self.url_usd)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(user.customer.billing_address.region, 'NY')
         self._assert_billing_details_form_displayed(response)
         self._assert_form_us_address_is_displayed(response)
-        self._assert_plan_selector_displayed(response)
-        self._assert_no_tax(response)
+        self._assert_total_default_variation_selected_usd(response)
 
         # Post an new address that doesn't require a region
-        default_variation = _get_default_variation('EUR')
         data = {
             **required_address_data,
             'country': 'DE',
             'postal_code': '11111',
-            'plan_variation_id': default_variation.id,
         }
-        response = self.client.post(self.url, data)
+        response = self.client.post(self.url_usd, data)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
+        # Redirected to the plan variation with matching currency
+        self.assertEqual(response['Location'], self.url)
+        # Follow redirect to be able to assert contents of it
+        response = self.client.get(response['Location'])
 
         self._assert_pricing_has_been_updated(response)
 
@@ -399,67 +306,101 @@ class TestPOSTJoinView(BaseSubscriptionTestCase):
 
 @override_flag('SUBSCRIPTIONS_ENABLED', active=True)
 @freeze_time('2021-05-19 11:41:11')
-class TestPOSTJoinConfirmAndPayView(BaseSubscriptionTestCase):
-    url = reverse('subscriptions:join-confirm-and-pay')
+class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
+    def _get_url_for(self, currency: str, cents: int) -> Tuple[str, looper.models.PlanVariation]:
+        plan_variation = looper.models.PlanVariation.objects.get(
+            price=Money(currency, cents), currency=currency
+        )
+        return (
+            reverse(
+                'subscriptions:join-confirm-and-pay',
+                kwargs={'plan_variation_id': plan_variation.pk},
+            ),
+            plan_variation,
+        )
 
-    def test_invalid_missing_required_fields(self):
+    def test_plan_variation_does_not_match_detected_currency_usd_euro_ip(self):
+        url, _ = self._get_url_for('USD', 11900)
         user = create_customer_with_billing_address(country='NL')
         self.client.force_login(user)
 
         data = required_address_data
-        response = self.client.post(self.url, data, REMOTE_ADDR=EURO_IPV4)
+        response = self.client.post(url, data, REMOTE_ADDR=EURO_IPV4)
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_plan_variation_does_not_match_detected_currency_eur_non_eea_ip(self):
+        url, _ = self._get_url_for('EUR', 990)
+        user = create_customer_with_billing_address()
+        self.client.force_login(user)
+
+        data = required_address_data
+        response = self.client.post(url, data, REMOTE_ADDR=SINGAPORE_IPV4)
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_billing_address_country_takes_precedence_over_geo_ip(self):
+        url, _ = self._get_url_for('EUR', 990)
+        user = create_customer_with_billing_address(country='NL')
+        self.client.force_login(user)
+
+        data = required_address_data
+        response = self.client.post(url, data, REMOTE_ADDR=SINGAPORE_IPV4)
 
         self.assertEqual(response.status_code, 200)
-        self._assert_plan_selector_displayed(response)
-        self._assert_default_variation_selected_tax_21_eur(response)
+        self._assert_total_default_variation_selected_tax_21_eur(response)
+
+    def test_invalid_missing_required_fields(self):
+        url, _ = self._get_url_for('EUR', 990)
+        user = create_customer_with_billing_address(country='NL')
+        self.client.force_login(user)
+
+        data = required_address_data
+        response = self.client.post(url, data, REMOTE_ADDR=EURO_IPV4)
+
+        self.assertEqual(response.status_code, 200)
+        self._assert_total_default_variation_selected_tax_21_eur(response)
         self.assertEqual(
             response.context['form'].errors,
             {
                 'gateway': ['This field is required.'],
                 'payment_method_nonce': ['This field is required.'],
-                'plan_variation_id': ['This field is required.'],
                 'price': ['This field is required.'],
             },
         )
 
     def test_invalid_price_does_not_match_selected_plan_variation(self):
+        url, selected_variation = self._get_url_for('EUR', 990)
         user = create_customer_with_billing_address(country='NL')
         self.client.force_login(user)
 
-        selected_variation = _get_default_variation('EUR')
         data = {
             **required_address_data,
             'gateway': 'braintree',
             'payment_method_nonce': 'fake-valid-nonce',
-            'plan_variation_id': selected_variation.id,
             'price': '999.09',
         }
-        response = self.client.post(self.url, data, REMOTE_ADDR=EURO_IPV4)
+        response = self.client.post(url, data, REMOTE_ADDR=EURO_IPV4)
 
         self.assertEqual(response.status_code, 200)
-        self._assert_plan_selector_displayed(response)
-        self._assert_default_variation_selected_tax_21_eur(response)
-        self.assertEqual(
-            response.context['form'].cleaned_data['plan_variation_id'], selected_variation.pk
-        )
+        self._assert_total_default_variation_selected_tax_21_eur(response)
         self.assertEqual(
             response.context['form'].errors,
             {'__all__': ['Payment failed: please reload the page and try again']},
         )
 
     def test_invalid_bank_transfer_cannot_be_selected_for_automatic_payments(self):
+        url, selected_variation = self._get_url_for('EUR', 990)
         user = create_customer_with_billing_address(country='NL')
         self.client.force_login(user)
 
-        selected_variation = _get_default_variation('EUR')
         data = {
             **required_address_data,
             'gateway': 'bank',
             'payment_method_nonce': 'unused',
-            'plan_variation_id': selected_variation.id,
             'price': '9.90',
         }
-        response = self.client.post(self.url, data, REMOTE_ADDR=EURO_IPV4)
+        response = self.client.post(url, data, REMOTE_ADDR=EURO_IPV4)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -490,14 +431,14 @@ class TestPOSTJoinConfirmAndPayView(BaseSubscriptionTestCase):
             )
             .first()
         )
+        url, _ = self._get_url_for('EUR', selected_variation.price._cents)
         data = {
             **required_address_data,
             'gateway': 'bank',
             'payment_method_nonce': 'unused',
-            'plan_variation_id': selected_variation.id,
             'price': '14.90',
         }
-        response = self.client.post(self.url, data, REMOTE_ADDR=EURO_IPV4)
+        response = self.client.post(url, data, REMOTE_ADDR=EURO_IPV4)
 
         self._assert_transactionless_done_page_displayed(response)
 
@@ -530,10 +471,10 @@ class TestPOSTJoinConfirmAndPayView(BaseSubscriptionTestCase):
         new=subscriptions.tasks.send_mail_subscription_status_changed.task_function,
     )
     def test_pay_with_credit_card_creates_order_subscription_active(self):
+        url, selected_variation = self._get_url_for('EUR', 990)
         user = create_customer_with_billing_address(country='NL', full_name='Jane Doe')
         self.client.force_login(user)
 
-        selected_variation = _get_default_variation('EUR')
         data = {
             **required_address_data,
             'gateway': 'braintree',
@@ -542,10 +483,9 @@ class TestPOSTJoinConfirmAndPayView(BaseSubscriptionTestCase):
             # Merchant account must match the 3D Secure authorization merchant account: code 91584
             # TODO(anna): figure out if this is due to our settings or a quirk of the sandbox
             'payment_method_nonce': 'fake-valid-nonce',
-            'plan_variation_id': selected_variation.id,
             'price': '9.90',
         }
-        response = self.client.post(self.url, data, REMOTE_ADDR=EURO_IPV4)
+        response = self.client.post(url, data, REMOTE_ADDR=EURO_IPV4)
 
         self._assert_done_page_displayed(response)
 
@@ -576,6 +516,7 @@ class TestPOSTJoinConfirmAndPayView(BaseSubscriptionTestCase):
             )
             .first()
         )
+        url, _ = self._get_url_for('EUR', selected_variation.price._cents)
         data = {
             **required_address_data,
             'vat_number': 'DE 260543043',
@@ -583,11 +524,10 @@ class TestPOSTJoinConfirmAndPayView(BaseSubscriptionTestCase):
             'postal_code': '11111',
             'gateway': 'braintree',
             'payment_method_nonce': 'fake-valid-nonce',
-            'plan_variation_id': selected_variation.id,
             # VAT is subtracted from the plan variation price:
             'price': '12.07',
         }
-        response = self.client.post(self.url, data, REMOTE_ADDR=EURO_IPV4)
+        response = self.client.post(url, data, REMOTE_ADDR=EURO_IPV4)
 
         self._assert_done_page_displayed(response)
 
@@ -646,7 +586,9 @@ class TestJoinRedirectsWithoutFlagView(BaseSubscriptionTestCase):
     def test_join_confirm_get_redirects_to_store(self):
         self.client.force_login(self.user)
 
-        response = self.client.get(reverse('subscriptions:join-confirm-and-pay'), {})
+        response = self.client.get(
+            reverse('subscriptions:join-confirm-and-pay', kwargs={'plan_variation_id': 2}), {}
+        )
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['Location'], settings.STORE_PRODUCT_URL)
@@ -654,19 +596,23 @@ class TestJoinRedirectsWithoutFlagView(BaseSubscriptionTestCase):
     def test_join_confirm_post_redirects_to_store(self):
         self.client.force_login(self.user)
 
-        response = self.client.post(reverse('subscriptions:join-confirm-and-pay'), {})
+        response = self.client.post(
+            reverse('subscriptions:join-confirm-and-pay', kwargs={'plan_variation_id': 2}), {}
+        )
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['Location'], settings.STORE_PRODUCT_URL)
 
 
 class TestJoinConfirmAndPayLoggedInUserOnlyView(BaseSubscriptionTestCase):
+    url = reverse('subscriptions:join-confirm-and-pay', kwargs={'plan_variation_id': 1})
+
     def test_get_anonymous_403(self):
-        response = self.client.get(reverse('subscriptions:join-confirm-and-pay'), {})
+        response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 403)
 
     def test_join_post_anonymous_403(self):
-        response = self.client.post(reverse('subscriptions:join-confirm-and-pay'), {})
+        response = self.client.post(self.url)
 
         self.assertEqual(response.status_code, 403)

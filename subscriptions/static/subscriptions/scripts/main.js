@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // When hiding collapsed inputs, empty them.
   document.querySelectorAll('.collapse').forEach((element) => {
-    $(element).on('hidden.bs.collapse', () => {
-      element.querySelectorAll('input').forEach((input) => {
+    $(element).on('hidden.bs.collapse', (e) => {
+      e.target.querySelectorAll('input').forEach((input) => {
         input.value = '';
       });
     });
@@ -62,9 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Plan variation details that are rerendered each time selection changes:
   const priceEl = document.querySelector('.x-price');
   const priceTaxEl = document.querySelector('.x-price-tax');
-  const priceRecurringEl = document.querySelector('.x-price-recurring');
-  const priceRecurringTaxEl = document.querySelector('.x-price-recurring-tax');
-  const firstRenewalEl = document.querySelector('.x-first-renewal');
+  const renewalPeriodEl = document.querySelector('.x-price-period');
   const priceInput = document.getElementById('id_price');
 
   function getSelectedPlan() {
@@ -102,16 +100,14 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     const selectedOption = getSelectedPlanVariation();
-    const { currencySymbol, firstRenewal } = selectedOption.dataset;
-    const { price, priceTax, priceRecurring, priceRecurringTax } = selectedOption.dataset;
+    const { currencySymbol, renewalPeriod } = selectedOption.dataset;
+    const { price, priceTax } = selectedOption.dataset;
 
     // Display the amounts with the tax details:
     priceEl.innerText = formatPriceAmount(price, currencySymbol);
-    priceRecurringEl.innerText = priceRecurring;
 
     priceTaxEl.innerText = formatTaxAmount(selectedOption, priceTax);
-    priceRecurringTaxEl.innerText = formatTaxAmount(selectedOption, priceRecurringTax);
-    firstRenewalEl.innerText = firstRenewal;
+    renewalPeriodEl.innerText = renewalPeriod;
 
     // priceInput is only available when user is logged in, it is part of payment form.
     if (priceInput) {

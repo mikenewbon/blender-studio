@@ -57,15 +57,15 @@ class BaseSubscriptionTestCase(TestCase):
 
     def _assert_billing_details_form_displayed(self, response):
         self.assertNotContains(response, 'Sign in with Blender ID')
-        self.assertContains(response, 'Continue to payment')
+        self._assert_continue_to_payment_displayed(response)
         self.assertContains(response, 'id_street_address')
         self.assertContains(response, 'id_full_name')
 
     def _assert_payment_form_displayed(self, response):
         self.assertNotContains(response, 'Pricing has been updated')
-        self.assertNotContains(response, 'Continue to payment')
-        self.assertContains(response, 'Payment Method')
-        self.assertContains(response, 'Confirm and pay')
+        self.assertNotContains(response, 'Continue to Payment')
+        self.assertContains(response, 'payment method')
+        self.assertContains(response, 'Confirm and Pay')
 
     def _assert_pricing_has_been_updated(self, response):
         self.assertContains(response, 'Pricing has been updated')
@@ -83,19 +83,25 @@ class BaseSubscriptionTestCase(TestCase):
             html=True,
         )
 
+    def _assert_continue_to_billing_displayed(self, response):
+        self.assertContains(response, 'Continue to Billing')
+
+    def _assert_continue_to_payment_displayed(self, response):
+        self.assertContains(response, 'Continue to Payment')
+
     def _assert_plan_selector_with_sign_in_cta_displayed(self, response):
         self._assert_plan_selector_displayed(response)
 
         self.assertContains(response, 'Sign in with Blender ID')
-        self.assertNotContains(response, 'Continue to payment')
+        self.assertNotContains(response, 'Continue to Payment')
         self.assertNotContains(response, 'id_street_address')
         self.assertNotContains(response, 'id_full_name')
 
     def _assert_default_variation_selected_no_tax_usd(self, response):
-        self._assert_no_tax(response)
+        self._assert_plan_selector_no_tax(response)
         self.assertContains(
             response,
-            '<option selected data-first-renewal="June 19, 2021" data-currency-symbol="$" data-plan-id="1" data-price-recurring="$&nbsp;11.50&nbsp;/&nbsp;month" data-price="11.50" value="1">Every 1 month</option>',
+            '<option selected data-renewal-period="1 month" data-currency-symbol="$" data-plan-id="1" data-price="11.50" value="1">Every 1 month</option>',
             html=True,
         )
         self.assertContains(
@@ -103,16 +109,11 @@ class BaseSubscriptionTestCase(TestCase):
             '<span class="x-price">$&nbsp;11.50</span>',
             html=True,
         )
-        self.assertContains(
-            response,
-            '<span class="x-price-recurring">$&nbsp;11.50&nbsp;/&nbsp;month</span>',
-            html=True,
-        )
 
     def _assert_default_variation_selected_tax_21_eur(self, response):
         self.assertContains(
             response,
-            '<option selected data-first-renewal="June 19, 2021" data-currency-symbol="€" data-plan-id="1" data-price-recurring="€&nbsp;9.90&nbsp;/&nbsp;month" data-price="9.90" data-price-tax="2.08" data-price-recurring-tax="2.08" data-tax-rate="21" data-tax-display-name="VAT" value="2">Every 1 month</option>',
+            '<option selected data-renewal-period="1 month" data-currency-symbol="€" data-plan-id="1" data-price="9.90" data-price-tax="2.08" data-tax-rate="21" data-tax-display-name="VAT" value="2">Every 1 month</option>',
             html=True,
         )
         self.assertContains(
@@ -125,32 +126,64 @@ class BaseSubscriptionTestCase(TestCase):
             '<span class="x-price-tax">Inc. 21% VAT (€&nbsp;2.08)</span>',
             html=True,
         )
+
+    def _assert_default_variation_selected_tax_19_eur(self, response):
         self.assertContains(
             response,
-            '<span class="x-price-recurring">€&nbsp;9.90&nbsp;/&nbsp;month</span>',
+            '<option selected data-renewal-period="1 month" data-currency-symbol="€" data-plan-id="1" data-price="9.90" data-price-tax="1.88" data-tax-rate="19" data-tax-display-name="VAT" value="2">Every 1 month</option>',
             html=True,
         )
         self.assertContains(
             response,
-            '<span class="x-price-recurring-tax">Inc. 21% VAT (€&nbsp;2.08)</span>',
+            '<span class="x-price">€&nbsp;9.90</span>',
             html=True,
         )
         self.assertContains(
             response,
-            'Renews <span class="x-first-renewal">June 19, 2021</span>',
+            '<span class="x-price-tax">Inc. 19% VAT (€&nbsp;1.88)</span>',
             html=True,
         )
 
-    def _assert_no_tax(self, response):
+    def _assert_total_default_variation_selected_eur(self, response):
+        self.assertContains(response, '<h3 class="mb-0">Total</h3>', html=True)
+        self.assertContains(response, '<span class="x-price">€&nbsp;9.90</span>', html=True)
+        self.assertContains(response, '/ <span class="x-price-period">1 month</span>', html=True)
+
+    def _assert_total_default_variation_selected_tax_21_eur(self, response):
+        self._assert_total_default_variation_selected_eur(response)
+        self.assertContains(
+            response, '<span class="x-price-tax">Inc. 21% VAT (€&nbsp;2.08)</span>', html=True
+        )
+        self.assertContains(response, 'Automatic ')
+        self.assertContains(response, '/ <span class="x-price-period">1 month</span>', html=True)
+
+    def _assert_total_default_variation_selected_tax_19_eur(self, response):
+        self._assert_total_default_variation_selected_eur(response)
+        self.assertContains(
+            response, '<span class="x-price-tax">Inc. 19% VAT (€&nbsp;1.88)</span>', html=True
+        )
+        self.assertContains(response, 'Automatic ')
+        self.assertContains(response, '/ <span class="x-price-period">1 month</span>', html=True)
+
+    def _assert_total_default_variation_selected_tax_19_eur_reverse_charged(self, response):
+        self.assertContains(response, '<h3 class="mb-0">Total</h3>', html=True)
+        self.assertContains(response, '<span class="x-price">€&nbsp;8.02</span>', html=True)
+
+    def _assert_total_default_variation_selected_tax_21_eur_reverse_charged(self, response):
+        self.assertContains(response, '<h3 class="mb-0">Total</h3>', html=True)
+        self.assertContains(response, '<span class="x-price">€&nbsp;7.82</span>', html=True)
+
+    def _assert_total_default_variation_selected_usd(self, response):
+        self.assertContains(response, '<h3 class="mb-0">Total</h3>', html=True)
+        self.assertContains(response, '<span class="x-price">$&nbsp;11.50</span>', html=True)
+        self.assertContains(response, 'Automatic ')
+        self.assertNotContains(response, 'Inc.')
+
+    def _assert_plan_selector_no_tax(self, response):
         self.assertNotContains(response, 'Inc. ')
         self.assertContains(
             response,
             '<span class="x-price-tax"></span>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<span class="x-price-recurring-tax"></span>',
             html=True,
         )
 
@@ -199,7 +232,7 @@ class BaseSubscriptionTestCase(TestCase):
         self.assertEqual(response_redirect.status_code, 302)
         # Follow the redirect
         response = self.client.get(response_redirect['Location'])
-        self.assertContains(response, 'is currently active')
+        self.assertContains(response, 'Welcome to Blender Cloud')
         self.assertNotContains(response, 'Bank details')
 
     def _assert_bank_transfer_email_is_sent(self, subscription):

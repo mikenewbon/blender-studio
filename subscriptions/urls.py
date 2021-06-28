@@ -1,16 +1,30 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from looper.views import settings as looper_settings
 
-import subscriptions.views.join as join
+from subscriptions.views.join import BillingDetailsView, ConfirmAndPayView
+from subscriptions.views.select_plan_variation import SelectPlanVariationView
 import subscriptions.views.settings as settings
 
 # Required for URL namespace to work
 app_name = 'subscriptions'
 
 urlpatterns = [
-    path('join/', join.JoinView.as_view(), name='join'),
-    path('join/confirm/', join.JoinConfirmView.as_view(), name='join-confirm-and-pay'),
+    re_path(
+        r'^join/(?:plan-variation/(?P<plan_variation_id>\d+)/)?$',
+        SelectPlanVariationView.as_view(),
+        name='join',
+    ),
+    path(
+        'join/plan-variation/<int:plan_variation_id>/billing/',
+        BillingDetailsView.as_view(),
+        name='join-billing-details',
+    ),
+    path(
+        'join/plan-variation/<int:plan_variation_id>/confirm/',
+        ConfirmAndPayView.as_view(),
+        name='join-confirm-and-pay',
+    ),
     path(
         'subscription/<int:subscription_id>/cancel/',
         settings.CancelSubscriptionView.as_view(),

@@ -1,5 +1,6 @@
 {% load pipeline %}
 {% load static %}
+{% load looper %}
 {% load common_extras %}
 
 
@@ -22,22 +23,35 @@
     {% stylesheet 'studio' %}
   </head>
 
-  <body class="{% block bodyclasses %}{% endblock bodyclasses %}"
-    data-authenticated="{% if request.user.is_authenticated %}true{% else%}false{% endif %}">
+  <body class="{% block bodyclasses %}{% endblock bodyclasses %} join" data-authenticated="{% if request.user.is_authenticated %}true{% else%}false{% endif %}">
 
-    <nav class="navbar">
-      <div class="navdrawer-offset">
-        <div class="container-xl flex-nowrap">
+    <div class="join-header">
 
-          <a href="/" class="navbar-brand">
-            <img src="{% static 'common/images/blender_cloud_logo.svg' %}" alt="Blender Cloud">
-          </a>
+      <div class="join-header-background">
+        <img src="{% static 'subscriptions/images/join-header.png' %}" alt="Cartoon dog eating tasty treats" class="join-header-background-image">
+      </div>
 
+      <a href="/">
+        <img src="{% static 'common/images/blender_cloud_logo.svg' %}" alt="Blender Cloud" class="join-header-brand">
+      </a>
+
+    </div>
+
+
+    <div class="container-xl mb-4">
+      <div class="row">
+        <div class="col-md-6 col-lg-4 offset-lg-4 offset-md-3">
+          <section class="checkout md-5">
+            <div class="payment-tabs-container">
+              {% block content %}{% endblock content %}
+            </div>
+          </section>
         </div>
       </div>
-    </nav>
+    </div>
 
-    {% block content %}{% endblock content %}
+
+    {% include 'subscriptions/components/footer.html' %}
 
     {{ user_dict|json_script:"current-user" }}
     {% javascript 'vendor' %}

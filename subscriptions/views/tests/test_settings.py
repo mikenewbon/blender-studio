@@ -305,8 +305,6 @@ class TestPayExistingOrder(BaseSubscriptionTestCase):
             response.context['form'].errors,
             {
                 'full_name': ['This field is required.'],
-                'street_address': ['This field is required.'],
-                'locality': ['This field is required.'],
                 'postal_code': ['This field is required.'],
                 'country': ['This field is required.'],
                 'email': ['This field is required.'],

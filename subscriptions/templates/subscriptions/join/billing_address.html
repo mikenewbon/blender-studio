@@ -4,25 +4,37 @@
 {% load pipeline %}
 
 {% block content %}
+
+
+
+  <div class="payment-header">
+    <h2 class="payment-header-title">Billing</h2>
+    <div class="d-flex justify-content-between">
+      <p class="mb-0  small">Step 2: Input your billing details.</p>
+      <p class="small  mb-0">2 of 3</p>
+    </div>
+
+  </div>
   <form id="payment-form" class="checkout-form" method="post">
+    {% csrf_token %}
 
-    {% include "subscriptions/components/header_jumbotron.html" %}
-
+    {% url "subscriptions:join" current_plan_variation.pk as back_url %}
 
     {% with form|add_form_classes as form %}
-      <div class="container-xl mt-4 mb-3">
-        <div class="row">
-          <div class="col-md-7 mb-3">
-            <section class="checkout-form-fields mb-n2">
-              <h2 class="mb-0">Billing Details</h2>
-              <p class="subtitle">Fill in your billing address. Required fields are marked with (<span class="subtitle font-weight-bold">*</span>).</p>
-              <fieldset class="payment-form-billing-address mt-2">
-                {% include "subscriptions/components/billing_address_form.html" %}
-              </fieldset>
-            </section>
-          </div>
 
-          <div class="col-md-5 col-lg-4 offset-lg-1 mb-3">
+
+      <div class="payment-content">
+        <div class="payment-content-inner">
+          <section class="checkout-form-fields">
+            <fieldset class="payment-form-billing-address">
+              {% include "subscriptions/components/billing_address_form.html" %}
+            </fieldset>
+            <p class="subtitle x-small mb-0">Required fields are marked with (*).</p>
+          </section>
+        </div>
+
+        <div class="payment-tabs-footer border-bottom">
+          <div class="row">
             {% if messages %}
               {% for message in messages %}
                 <p {% if message.tags %} class="alert alert-sm alert-success alert-{{ message.tags }}" {% endif %}>
@@ -30,37 +42,29 @@
                 </p>
               {% endfor %}
             {% endif %}
-            {% include "subscriptions/components/plan_selector.html" with submit_button_text="Continue to payment" %}
+          </div>
 
+          <div class="row">
+            <div class="col">
+              <p class="subtitle small font-weight-bold mb-0">Plan:</p>
+            </div>
+
+            <div class="col text-right">
+              <p class="subtitle small mb-0">{{ current_plan_variation.collection_method|capfirst }} (<a href="{{ back_url }}" class="subtitle underline" >Change</a>)</p>
+            </div>
           </div>
         </div>
-      </div>
-    {% endwith %}
 
-    {% include 'subscriptions/components/footer_currency.html' %}
+        {% include 'subscriptions/components/total.html' with button_text="Continue to Payment" %}
+
+      </div>
+
+    {% endwith %}
   </form>
+
+
 {% endblock content %}
 
 {% block scripts %}
   {% javascript "subscriptions" %}
-  <script>
-    const form = document.querySelector('form');
-    const submitButton = document.getElementById('submit-button');
-
-    function enableSubmitButton() {
-      submitButton.disabled = false;
-      submitButton.setAttribute('aria-disabled', 'false');
-      submitButton.classList.remove('disabled');
-      submitButton.classList.add('btn-success');
-    }
-
-    function allowSubmit() {
-      if (form.checkValidity()) {
-        enableSubmitButton();
-      }
-    }
-    form.addEventListener('change', allowSubmit);
-    allowSubmit();
-
-  </script>
 {% endblock scripts %}
