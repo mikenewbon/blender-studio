@@ -1,1 +1,1 @@
-Blender Cloud order-{{ order.id }}
+Blender Cloud order-{{ order.display_number }}

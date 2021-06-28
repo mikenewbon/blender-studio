@@ -519,6 +519,8 @@ class TestPOSTJoinConfirmAndPayView(BaseSubscriptionTestCase):
         self.assertEqual(order.tax_type, 'VATC')
         self.assertIsNotNone(order.pk)
         self.assertIsNotNone(order.number)
+        self.assertIsNotNone(order.display_number)
+        self.assertNotEqual(order.display_number, str(order.pk))
 
         self._assert_bank_transfer_email_is_sent(subscription)
 

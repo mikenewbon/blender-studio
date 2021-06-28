@@ -185,7 +185,9 @@ class BaseSubscriptionTestCase(TestCase):
         self.assertContains(response, 'on hold')
         self.assertContains(response, 'NL22 INGB 0005296212')
         subscription = response.wsgi_request.user.subscription_set.first()
-        self.assertContains(response, f'Blender Cloud order-{subscription.latest_order().pk}')
+        self.assertContains(
+            response, f'Blender Cloud order-{subscription.latest_order().display_number}'
+        )
 
     def _assert_done_page_displayed(self, response_redirect):
         # Catch unexpected form errors so that they are displayed
@@ -214,7 +216,7 @@ class BaseSubscriptionTestCase(TestCase):
         self.assertEqual(email.alternatives[0][1], 'text/html')
         for email_body in (email.body, email.alternatives[0][0]):
             self.assertIn(
-                f'Blender Cloud order-{subscription.latest_order().pk}',
+                f'Blender Cloud order-{subscription.latest_order().number}',
                 email_body,
             )
             self.assertIn('NL22 INGB 0005296212', email_body)

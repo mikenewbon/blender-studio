@@ -9,7 +9,7 @@
       <div class="col-md-7 mx-auto">
         <a class="text-muted" class="float-right" href="{% url 'user-settings-billing' %}"><i class="fa fa-angle-left pr-3"></i>back to subscription settings</a>
         <section class="plan-info">
-          <h1>Paying for Order #{{ order.pk }}</h1>
+          <h1>Paying for Order #{{ order.display_number }}</h1>
           <small>billed on {{ order.created_at|date }}</small>
           {% comment %}{# not sure what should be displayed here #}
         <h2 class="ml-auto my-0 pt-4"><span>{{ order.price.with_currency_symbol }} for {{ subscription.interval_length }} {{ subscription.interval_unit }}</span></h2>

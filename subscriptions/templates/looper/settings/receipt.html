@@ -11,7 +11,7 @@
     <a class="btn btn-sm btn-secondary admin-float" href="{% url 'subscriptions:receipts' %}"><i class="material-icons">arrow_back</i> Back to receipts</a>
 
     <p class="subtitle">Receipts</p>
-    <h1 class="h2 mb-2">Receipt #{{ order.id }}</h1>
+    <h1 class="h2 mb-2">Receipt #{{ order.display_number }}</h1>
 
     <li class="list-group-item">
       <div class="row">
@@ -19,7 +19,7 @@
           <p class=" h4 mb-0 subtitle">Receipt ID</p>
         </div>
         <div class="col-auto">
-          <p class="mb-0 small">{{ order.id }}</p>
+          <p class="mb-0 small">{{ order.display_number }}</p>
         </div>
       </div>
     </li>
