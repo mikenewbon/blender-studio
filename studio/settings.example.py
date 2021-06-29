@@ -20,6 +20,10 @@ BLENDER_ID = {
     "OAUTH_CLIENT": "CHANGE_ME",
     "OAUTH_SECRET": "CHANGE_ME",
     "WEBHOOK_USER_MODIFIED_SECRET": b"CHANGE_ME",
+    # Credentials linked to a Blender ID system cloud_badger user, for updating subscriber badges
+    "BADGER_API_OAUTH_CLIENT": "CHANGE_ME",
+    "BADGER_API_OAUTH_SECRET":  "CHANGE_ME",
+    "BADGER_API_ACCESS_TOKEN": "CHANGE_ME",
 }
 
 DATABASES = {

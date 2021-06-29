@@ -7,6 +7,7 @@ from django.conf import settings
 from django.urls import reverse
 from freezegun import freeze_time
 from waffle.testutils import override_flag
+import responses
 
 from looper.tests.test_preferred_currency import EURO_IPV4, USA_IPV4, SINGAPORE_IPV4
 from looper.money import Money
@@ -16,6 +17,8 @@ from common.tests.factories.subscriptions import create_customer_with_billing_ad
 from common.tests.factories.users import UserFactory
 from subscriptions.tests.base import BaseSubscriptionTestCase
 import subscriptions.tasks
+import users.tasks
+import users.tests.util as util
 
 required_address_data = {
     'country': 'NL',
@@ -417,9 +420,17 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
         'subscriptions.signals.tasks.send_mail_bank_transfer_required',
         new=subscriptions.tasks.send_mail_bank_transfer_required.task_function,
     )
+    @patch(
+        'users.signals.tasks.grant_blender_id_role',
+        new=users.tasks.grant_blender_id_role.task_function,
+    )
+    @responses.activate
     def test_pay_with_bank_transfer_creates_order_subscription_on_hold(self):
         user = create_customer_with_billing_address(country='NL', full_name='Jane Doe')
         self.client.force_login(user)
+        util.mock_blender_id_badger_badger_response(
+            'grant', 'cloud_has_subscription', user.oauth_info.oauth_user_id
+        )
 
         selected_variation = (
             looper.models.PlanVariation.objects.active()
@@ -470,10 +481,21 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
         'subscriptions.signals.tasks.send_mail_subscription_status_changed',
         new=subscriptions.tasks.send_mail_subscription_status_changed.task_function,
     )
+    @patch(
+        'users.signals.tasks.grant_blender_id_role',
+        new=users.tasks.grant_blender_id_role.task_function,
+    )
+    @responses.activate
     def test_pay_with_credit_card_creates_order_subscription_active(self):
         url, selected_variation = self._get_url_for('EUR', 990)
         user = create_customer_with_billing_address(country='NL', full_name='Jane Doe')
         self.client.force_login(user)
+        util.mock_blender_id_badger_badger_response(
+            'grant', 'cloud_has_subscription', user.oauth_info.oauth_user_id
+        )
+        util.mock_blender_id_badger_badger_response(
+            'grant', 'cloud_subscriber', user.oauth_info.oauth_user_id
+        )
 
         data = {
             **required_address_data,

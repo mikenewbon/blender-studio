@@ -56,6 +56,16 @@ def mock_blender_id_responses() -> None:
         )
 
 
+def mock_blender_id_badger_badger_response(action: str, role: str, oauth_user_id: str) -> None:
+    """Set up mock responses of Blender ID badger API."""
+    base_url = settings.BLENDER_ID['BASE_URL']
+    responses.add(
+        responses.POST,
+        f'{base_url}api/badger/{action}/{role}/{oauth_user_id}',
+        status=200,
+    )
+
+
 def mock_mailgun_responses() -> None:
     """Set up mock responses of Mailgun API."""
     base_url = 'https://api.mailgun.net/v3/'

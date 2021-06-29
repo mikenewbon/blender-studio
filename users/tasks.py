@@ -12,11 +12,14 @@ from django.utils import timezone
 from common import history
 from common import mailgun
 from common import queries
+from users.blender_id import BIDSession
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 DELETION_DELTA = timedelta(weeks=2)
+
+bid = BIDSession()
 
 
 @background()
@@ -115,4 +118,20 @@ def handle_deletion_request(pk: int) -> bool:
 
     user.delete()
     logger.warning('Deleted user pk=%s', pk)
+    return True
+
+
+@background()
+def grant_blender_id_role(pk: int, role: str) -> bool:
+    """Call Blender ID API to grant a given role to a user with given ID."""
+    user = User.objects.get(pk=pk)
+    bid.grant_revoke_role(user, action='grant', role=role)
+    return True
+
+
+@background()
+def revoke_blender_id_role(pk: int, role: str) -> bool:
+    """Call Blender ID API to revoke given roles from a user with given ID."""
+    user = User.objects.get(pk=pk)
+    bid.grant_revoke_role(user, action='revoke', role=role)
     return True

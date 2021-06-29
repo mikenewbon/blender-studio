@@ -4,6 +4,7 @@ from django.db.models import signals
 from django.test import TestCase
 from django.urls import reverse
 import factory
+import responses
 
 from common.tests.factories.subscriptions import create_customer_with_billing_address
 from common.tests.factories.users import UserFactory
@@ -24,6 +25,9 @@ def _write_mail(mail, index=0):
 class BaseSubscriptionTestCase(TestCase):
     @factory.django.mute_signals(signals.pre_save, signals.post_save)
     def setUp(self):
+        # Allow requests to Braintree Sandbox
+        responses.add_passthru('https://api.sandbox.braintreegateway.com:443/')
+
         # Create the admin user used for logging
         self.admin_user = UserFactory(
             id=1, email='admin@blender.studio', is_staff=True, is_superuser=True

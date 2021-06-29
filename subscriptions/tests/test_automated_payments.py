@@ -5,6 +5,7 @@ from unittest.mock import patch
 from dateutil.relativedelta import relativedelta
 from django.test import override_settings
 from django.utils import timezone
+import responses
 
 from looper import admin_log
 from looper.clock import Clock
@@ -17,6 +18,8 @@ from common.tests.factories.subscriptions import (
 )
 from subscriptions.tests.base import BaseSubscriptionTestCase
 import subscriptions.tasks
+import users.tasks
+import users.tests.util as util
 
 
 class TestClock(BaseSubscriptionTestCase):
@@ -87,6 +90,11 @@ class TestClock(BaseSubscriptionTestCase):
         'subscriptions.signals.tasks.send_mail_automatic_payment_performed',
         new=subscriptions.tasks.send_mail_automatic_payment_performed.task_function,
     )
+    @patch(
+        'users.signals.tasks.revoke_blender_id_role',
+        new=users.tasks.revoke_blender_id_role.task_function,
+    )
+    @responses.activate
     def test_automated_payment_failed_email_is_sent(self):
         now = timezone.now()
         order = self.subscription.generate_order()
@@ -98,6 +106,9 @@ class TestClock(BaseSubscriptionTestCase):
         self.assertIsNotNone(self.subscription.latest_order())
 
         # Tick the clock and check that order and transaction were created
+        util.mock_blender_id_badger_badger_response(
+            'revoke', 'cloud_subscriber', self.subscription.user.oauth_info.oauth_user_id
+        )
         Clock().tick()
 
         # The subscription should be on hold

@@ -6,11 +6,12 @@ import io
 import logging
 import pathlib
 
+from django.conf import settings
 import botocore
 import requests
 
 from blender_id_oauth_client.models import OAuthUserInfo, OAuthToken
-from blender_id_oauth_client.views import blender_id_oauth_settings
+from blender_id_oauth_client.views import blender_id_oauth_settings, ClientSettings
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +24,7 @@ class BIDSession:
     """Wrap up interactions with Blender ID, such as fetching user info and avatar."""
 
     _anonymous_session = None
+    _badger_api_session = None
 
     def __init__(self):
         """Initialise Blender ID client settings."""
@@ -35,6 +37,19 @@ class BIDSession:
         return OAuth2Session(self.settings.client)
 
     @property
+    def badger_oauth_settings(self) -> ClientSettings:
+        """Container for badger API OAuth Client settings."""
+        return ClientSettings(
+            client=settings.BLENDER_ID['BADGER_API_OAUTH_CLIENT'],
+            secret=settings.BLENDER_ID['BADGER_API_OAUTH_SECRET'],
+            url_base=self.settings.url_base,
+            url_authorize=self.settings.url_authorize,
+            url_token=self.settings.url_token,
+            url_userinfo=self.settings.url_userinfo,
+            url_logout=self.settings.url_logout,
+        )
+
+    @property
     def session(self):
         """
         Return a reusable "anonymous" OAuth2Session for fetching avatars from Blender ID.
@@ -44,6 +59,20 @@ class BIDSession:
         if not self._anonymous_session:
             self._anonymous_session = self._make_session()
         return self._anonymous_session
+
+    @property
+    def badger_api_session(self):
+        """
+        Return a reusable OAuth2Session for granting/revoking roles with Blender ID API.
+
+        Create it the first time this property is accessed.
+        """
+        if not self._badger_api_session:
+            token = settings.BLENDER_ID['BADGER_API_ACCESS_TOKEN']
+            self._badger_api_session = OAuth2Session(
+                self.badger_oauth_settings.client, token={'access_token': token}
+            )
+        return self._badger_api_session
 
     @classmethod
     def get_oauth_user_info(cls, oauth_user_id: str) -> OAuthUserInfo:
@@ -93,6 +122,15 @@ class BIDSession:
     def get_badges_url(self, oauth_user_id: str) -> str:
         """Return a Blender ID URL to the avatar for a given OAuth ID."""
         return urljoin(self.settings.url_base, f'api/badges/{oauth_user_id}')
+
+    def get_badger_api_url(self, action: str, role: str, oauth_user_id: str) -> str:
+        """Return a Blender ID API URL for granting/revoking roles."""
+        assert action in ('grant', 'revoke'), f'{action} is not a known Blender ID API action'
+        assert role in (
+            'cloud_subscriber',
+            'cloud_has_subscription',
+        ), f'{role} is not a known Blender ID badge'
+        return urljoin(self.settings.url_base, f'api/badger/{action}/{role}/{oauth_user_id}')
 
     def get_avatar(self, oauth_user_id: str) -> Tuple[str, io.BytesIO]:
         """Retrieve an avatar from Blender ID service using an OAuth2 session.
@@ -180,3 +218,14 @@ class BIDSession:
             logger.warning(f'Unable to retrieve badges for {user}: no access token')
         except Exception:
             logger.exception(f'Failed to copy an image for {user}')
+
+    def grant_revoke_role(self, user, action: str, role: str) -> None:
+        """Grant or revoke a given role (badge) to/from a user with a given OAuth ID."""
+        if not hasattr(user, 'oauth_info'):
+            logger.warning('Cannot %s Blender ID %s: %s is missing OAuth info', action, role, user)
+            return
+        oauth_info = user.oauth_info
+        oauth_user_id = oauth_info.oauth_user_id
+        url = self.get_badger_api_url(action=action, role=role, oauth_user_id=oauth_user_id)
+        resp = self.badger_api_session.post(url)
+        resp.raise_for_status()

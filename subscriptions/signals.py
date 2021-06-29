@@ -9,6 +9,7 @@ from looper.models import Customer, Order
 import looper.signals
 
 import subscriptions.tasks as tasks
+import users.tasks
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -47,11 +48,30 @@ def _set_order_number(sender, instance: Order, **kwargs):
 def _on_subscription_created_needs_payment(sender: looper.models.Subscription, **kwargs):
     tasks.send_mail_bank_transfer_required(subscription_id=sender.pk)
 
+    # TODO(anna): if this Subscription is a team subscription,
+    # the task has to be called for user IDs of the team members
+    users.tasks.grant_blender_id_role(pk=sender.user_id, role='cloud_has_subscription')
+
 
 @receiver(looper.signals.subscription_activated)
 @receiver(looper.signals.subscription_deactivated)
 def _on_subscription_status_changed(sender: looper.models.Subscription, **kwargs):
     tasks.send_mail_subscription_status_changed(subscription_id=sender.pk)
+
+
+@receiver(looper.signals.subscription_activated)
+def _on_subscription_status_activated(sender: looper.models.Subscription, **kwargs):
+    # TODO(anna): if this Subscription is a team subscription,
+    # the task has to be called for user IDs of the team members
+    users.tasks.grant_blender_id_role(pk=sender.user_id, role='cloud_has_subscription')
+    users.tasks.grant_blender_id_role(pk=sender.user_id, role='cloud_subscriber')
+
+
+@receiver(looper.signals.subscription_deactivated)
+def _on_subscription_status_deactivated(sender: looper.models.Subscription, **kwargs):
+    # TODO(anna): if this Subscription is a team subscription,
+    # the task has to be called for user IDs of the team members
+    users.tasks.revoke_blender_id_role(pk=sender.user_id, role='cloud_subscriber')
 
 
 @receiver(looper.signals.automatic_payment_succesful)
