@@ -102,7 +102,7 @@ d = ["aiohttp (>=3.3.2)", "aiohttp-cors"]
 
 [[package]]
 name = "bleach"
-version = "3.2.1"
+version = "3.3.0"
 description = "An easy safelist-based HTML-sanitizing tool."
 category = "main"
 optional = false
@@ -847,7 +847,7 @@ six = ">=1.11.0"
 
 [[package]]
 name = "looper"
-version = "1.5.0"
+version = "1.5.1rc1"
 description = ""
 category = "main"
 optional = false
@@ -857,6 +857,7 @@ develop = false
 [package.dependencies]
 attrs = "^19.3.0"
 babel = "^2.6"
+bleach = "^3.3.0"
 braintree = "4.0.0"
 django = "^2.2.0 || 3.0 || 3.0.*"
 django-countries = "^6.0"
@@ -870,8 +871,8 @@ xhtml2pdf = "^0.2"
 [package.source]
 type = "git"
 url = "git://git.blender.org/looper.git"
-reference = "master"
-resolved_reference = "9f237a78284ef3de422371d95f70328c9fddd2f8"
+reference = "reports"
+resolved_reference = "a5928e1967604198a3d59fa1d490cb776c7eac4b"
 
 [[package]]
 name = "markupsafe"
@@ -1570,7 +1571,7 @@ six = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "adaefaa2d8c0d711310412e7feb6053cb925430bf14793419ef7198505cd7757"
+content-hash = "c5fad51cba86434beefb1c021d6808cadb4ecb4e13c4cad3708e0f3436c943ce"
 
 [metadata.files]
 alphabetic-timestamp = [
@@ -1610,8 +1611,8 @@ black = [
     {file = "black-19.10b0.tar.gz", hash = "sha256:c2edb73a08e9e0e6f65a0e6af18b059b8b1cdd5bef997d7a0b181df93dc81539"},
 ]
 bleach = [
-    {file = "bleach-3.2.1-py2.py3-none-any.whl", hash = "sha256:9f8ccbeb6183c6e6cddea37592dfb0167485c1e3b13b3363bc325aa8bda3adbd"},
-    {file = "bleach-3.2.1.tar.gz", hash = "sha256:52b5919b81842b1854196eaae5ca29679a2f2e378905c346d3ca8227c2c66080"},
+    {file = "bleach-3.3.0-py2.py3-none-any.whl", hash = "sha256:6123ddc1052673e52bab52cdc955bcb57a015264a1c57d37bea2f6b817af0125"},
+    {file = "bleach-3.3.0.tar.gz", hash = "sha256:98b3170739e5e83dd9dc19633f074727ad848cbedb6026708c8ac2d3b697a433"},
 ]
 blender-id-oauth-client = []
 boto3 = [
