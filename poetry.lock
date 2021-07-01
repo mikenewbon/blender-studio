@@ -871,8 +871,8 @@ xhtml2pdf = "^0.2"
 [package.source]
 type = "git"
 url = "git://git.blender.org/looper.git"
-reference = "debug"
-resolved_reference = "a1420f1c47f875d53f73693c33d1efbda438ee25"
+reference = "master"
+resolved_reference = "994b3cd1e73ddf150ddeff0dd8e8aacd558de8a8"
 
 [[package]]
 name = "markupsafe"
@@ -1571,7 +1571,7 @@ six = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "4ef59811c207d59c14ad31532a2d64ccdf533cf39271d45beef69bccbc1a2c04"
+content-hash = "adaefaa2d8c0d711310412e7feb6053cb925430bf14793419ef7198505cd7757"
 
 [metadata.files]
 alphabetic-timestamp = [
