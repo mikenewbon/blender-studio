@@ -847,7 +847,7 @@ six = ">=1.11.0"
 
 [[package]]
 name = "looper"
-version = "1.5.1d2"
+version = "1.5.2"
 description = ""
 category = "main"
 optional = false
@@ -872,7 +872,7 @@ xhtml2pdf = "^0.2"
 type = "git"
 url = "git://git.blender.org/looper.git"
 reference = "debug"
-resolved_reference = "cf0dddcef4e5acfef135576e2e6699ccb11da42b"
+resolved_reference = "a1420f1c47f875d53f73693c33d1efbda438ee25"
 
 [[package]]
 name = "markupsafe"
