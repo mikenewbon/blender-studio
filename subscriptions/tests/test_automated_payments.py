@@ -27,7 +27,7 @@ class TestClock(BaseSubscriptionTestCase):
         user = create_customer_with_billing_address(country='NL', full_name='Jane Doe')
         now = timezone.now()
         with mock.patch('django.utils.timezone.now') as mock_now:
-            mock_now.return_value = now - timedelta(days=31)
+            mock_now.return_value = now + relativedelta(months=-1)
             # print('fake now:', mock_now.return_value)
             subscription = SubscriptionFactory(
                 user=user,
