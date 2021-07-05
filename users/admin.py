@@ -16,8 +16,10 @@ class UserAdmin(auth_admin.UserAdmin):
 
     list_display_links = ('full_name', 'username')
     list_filter = auth_admin.UserAdmin.list_filter + (
+        'date_joined',
         'is_subscribed_to_newsletter',
         'date_deletion_requested',
+        'last_login',
     )
     list_display = (
         ['full_name']
