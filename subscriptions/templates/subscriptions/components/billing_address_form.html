@@ -37,9 +37,8 @@
 </div>
 
 
-
-
-<div class="collapse {% if field.value %}show{% endif %}" id="collapseCompany">
+{# Make sure the rest of the address is expanded if any of its fields are filled #}
+<div class="collapse {% if form.street_address.value or form.city.value or form.extended_address.value or form.region.value or form.locality.value or form.company.value or form.vat_number.value %}show{% endif %}" id="collapseCompany">
 
   <div class="row mb-2">
     <div class="col-12">
