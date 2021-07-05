@@ -136,8 +136,9 @@ class BillingDetailsView(_JoinMixin, FormView):
             self.request, price=self.plan_variation.price, product_type=product_type
         )
         # Save the billing address
-        if form.has_changed():
-            form.save()
+        # Because pre-filled country might be kept as is, has_changed() might not return True,
+        # so we save the form unconditionally
+        form.save()
 
         msg = 'Pricing has been updated to reflect changes to your billing details'
         new_country = self.customer.billing_address.country
