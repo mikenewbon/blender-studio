@@ -28,7 +28,7 @@ BILLING_DETAILS_PLACEHOLDERS = {
     'locality': 'City',
     'country': 'Country',
     'email': 'mail@example.com',
-    'vat_number': 'VAT identification number',
+    'vat_number': 'VAT number, if applicable',
 }
 LABELS = {
     'vat_number': 'VAT Number',
