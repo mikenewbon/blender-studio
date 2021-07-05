@@ -43,7 +43,6 @@ class TestBillingAddressForm(BaseSubscriptionTestCase):
                 'country': ['This field is required.'],
                 'email': ['This field is required.'],
                 'full_name': ['This field is required.'],
-                'postal_code': ['This field is required.'],
             },
         )
 
@@ -246,7 +245,6 @@ class TestPaymentForm(BaseSubscriptionTestCase):
                 'country': ['This field is required.'],
                 'email': ['This field is required.'],
                 'full_name': ['This field is required.'],
-                'postal_code': ['This field is required.'],
                 'gateway': ['This field is required.'],
                 'payment_method_nonce': ['This field is required.'],
                 'price': ['This field is required.'],

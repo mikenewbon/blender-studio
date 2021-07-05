@@ -230,7 +230,7 @@ class BaseSubscriptionTestCase(TestCase):
         )
         self.assertContains(
             response,
-            '<input type="text" name="postal_code" value="12001" maxlength="255" placeholder="ZIP/Postal code" class="form-control" required id="id_postal_code">',
+            '<input type="text" name="postal_code" value="12001" maxlength="255" placeholder="ZIP/Postal code" class="form-control" id="id_postal_code">',
             html=True,
         )
 

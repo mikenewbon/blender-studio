@@ -22,14 +22,6 @@
 
 <div class="row mb-2">
   <div class="col">
-    {% with field=form.postal_code %}
-      {% include "common/components/field_label_wrapped.html" %}
-    {% endwith %}
-  </div>
-</div>
-
-<div class="row mb-2">
-  <div class="col">
     {% with field=form.country %}
       {% include "common/components/field_label_wrapped.html" %}
     {% endwith %}
@@ -38,7 +30,7 @@
 
 
 {# Make sure the rest of the address is expanded if any of its fields are filled #}
-<div class="collapse {% if form.street_address.value or form.city.value or form.extended_address.value or form.region.value or form.locality.value or form.company.value or form.vat_number.value %}show{% endif %}" id="collapseCompany">
+<div class="collapse {% if form.postal_code.value or form.street_address.value or form.city.value or form.extended_address.value or form.region.value or form.locality.value or form.company.value or form.vat_number.value %}show{% endif %}" id="collapseCompany">
 
   <div class="row mb-2">
     <div class="col-12">
@@ -72,6 +64,11 @@
         {% include "common/components/field_label_wrapped.html" %}
       {% endwith %}
     </div>
+    <div class="col">
+      {% with field=form.postal_code %}
+        {% include "common/components/field_label_wrapped.html" %}
+      {% endwith %}
+    </div>
   </div>
 
   <div class="row mb-2">
@@ -97,7 +94,7 @@
     <div class="col text-center mb-2">
       <a class="small subtitle-light text-decoration-underline" data-toggle="collapse" href="#collapseCompany" role="button"
         aria-expanded="false" aria-controls="collapseCompany"><span
-          class="add-remove">{% if field.value %}Remove{% else %}Add{% endif %}</span>
+          class="add-remove">{% if form.postal_code.value or form.street_address.value or form.city.value or form.extended_address.value or form.region.value or form.locality.value or form.company.value or form.vat_number.value %}Remove{% else %}Add{% endif %}</span>
         billing and VAT details (optional)</a>
     </div>
   </div>

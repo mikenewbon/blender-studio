@@ -16,11 +16,11 @@ required_address_data = {
     'email': 'my.billing.email@example.com',
     'full_name': 'New Full Name',
     'locality': 'Amsterdam',
-    'postal_code': '1000 AA',
     'street_address': 'MAIN ST 1',
 }
 full_billing_address_data = {
     **required_address_data,
+    'postal_code': '1000 AA',
     'extended_address': 'Floor 2',
     'company': 'Test LLC',
     'vat_number': 'NL818152011B01',
@@ -287,7 +287,7 @@ class TestPayExistingOrder(BaseSubscriptionTestCase):
 
         self.assertEqual(response.status_code, 403)
 
-    def test_invalid_missin_required_form_data(self):
+    def test_invalid_missing_required_form_data(self):
         subscription = SubscriptionFactory(
             user=self.user,
             payment_method__user_id=self.user.pk,
@@ -305,7 +305,6 @@ class TestPayExistingOrder(BaseSubscriptionTestCase):
             response.context['form'].errors,
             {
                 'full_name': ['This field is required.'],
-                'postal_code': ['This field is required.'],
                 'country': ['This field is required.'],
                 'email': ['This field is required.'],
                 'payment_method_nonce': ['This field is required.'],

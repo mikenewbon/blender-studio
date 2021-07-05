@@ -40,7 +40,6 @@ REQUIRED_FIELDS = {
     'country',
     'email',
     'full_name',
-    'postal_code',
 }
 
 
