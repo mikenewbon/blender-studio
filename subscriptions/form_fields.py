@@ -1,16 +1,21 @@
-"""Custom form fields and widgets."""
+"""Custom form fields."""
+import re
+
 from django import forms
 
-from localflavor.administrative_areas import ADMINISTRATIVE_AREAS
+from subscriptions.validators import VATINValidator
 
 
-class RegionSelect(forms.Select):
-    """Adds regions per country data."""
+class VATNumberField(forms.fields.CharField):
+    """Validate VAT number and strip all whitespaces from it."""
 
-    template_name = 'subscriptions/widgets/region_select.html'
+    default_validators = [VATINValidator()]
 
-    def get_context(self, name, value, attrs):
-        """Add regions/states/provinces data to the region field, to be handled by JS."""
-        context = super().get_context(name, value, attrs)
-        context['choices_per_country'] = ADMINISTRATIVE_AREAS
-        return context
+    def __init__(self, **kwargs):
+        """Strip whitespaces from the value."""
+        super().__init__(strip=True, **kwargs)
+
+    def to_python(self, value):
+        """Remove whitespaces that hadn't been stripped already."""
+        value = super().to_python(value)
+        return re.sub(r'\s+', '', value)

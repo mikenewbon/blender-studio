@@ -15,8 +15,8 @@ import looper.form_fields
 import looper.forms
 import looper.models
 
-from subscriptions.form_fields import RegionSelect
-from subscriptions.validators import VATINValidator
+from subscriptions.form_fields import VATNumberField
+from subscriptions.form_widgets import RegionSelect
 
 BILLING_DETAILS_PLACEHOLDERS = {
     'full_name': 'Your Full Name',
@@ -60,7 +60,7 @@ class BillingAddressForm(forms.ModelForm):
     # What kind of choices are allowed depends on the selected country
     # and is not yet known when the form is rendered.
     region = forms.ChoiceField(required=False, widget=RegionSelect)
-    vat_number = forms.CharField(required=False, validators=[VATINValidator()])
+    vat_number = VATNumberField(required=False)
     email = forms.EmailField(required=True)
 
     def _get_region_choices_and_label(self, country_code: str) -> List[Tuple[str, str]]:

@@ -34,7 +34,3 @@ class VATINValidator:
                 self.messages['country_code'],
                 code='vat_number',
             )
-
-    def clean(self, value):
-        """Return tuple of country code and number."""
-        return vat.validate(value)

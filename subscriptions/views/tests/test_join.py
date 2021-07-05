@@ -242,7 +242,7 @@ class TestPOSTBillingDetailsView(BaseSubscriptionTestCase):
         self.assertEqual(response.status_code, 200)
 
         self.user.refresh_from_db()
-        self.assertEqual(self.user.customer.vat_number, 'DE 260543043')
+        self.assertEqual(self.user.customer.vat_number, 'DE260543043')
         address = self.user.customer.billing_address
         self.assertEqual(address.full_name, 'New Full Name')
         self.assertEqual(address.postal_code, '11111')
@@ -525,7 +525,7 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
         self._assert_subscription_activated_email_is_sent(subscription)
 
     def test_pay_with_credit_card_creates_order_subscription_active_business_de(self):
-        user = create_customer_with_billing_address(country='DE', vat_number='DE 260543043')
+        user = create_customer_with_billing_address(country='DE', vat_number='DE260543043')
         self.client.force_login(user)
 
         selected_variation = (
@@ -570,7 +570,7 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
         self.assertEqual(order.status, 'paid')
         self.assertEqual(order.price, Money('EUR', 1207))
         self.assertEqual(order.tax, Money('EUR', 0))
-        self.assertEqual(order.vat_number, 'DE 260543043')
+        self.assertEqual(order.vat_number, 'DE260543043')
         self.assertEqual(order.tax_country, 'DE')
         self.assertEqual(order.tax_rate, 19)
         self.assertIsNotNone(order.number)

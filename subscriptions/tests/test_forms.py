@@ -146,6 +146,18 @@ class TestBillingAddressForm(BaseSubscriptionTestCase):
 
         self.assertTrue(form.is_valid())
 
+    def test_validates_vat_number_valid_removes_whitespaces(self):
+        form = BillingAddressForm(
+            data={
+                **required_address_data,
+                'country': 'NL',
+                'vat_number': '\tNL  818152011B01 ',
+            }
+        )
+
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data['vat_number'], 'NL818152011B01')
+
 
 class TestPaymentForm(BaseSubscriptionTestCase):
     required_payment_form_data = {
