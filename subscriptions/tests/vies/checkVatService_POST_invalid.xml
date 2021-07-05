@@ -1,0 +1,12 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+        <checkVatResponse xmlns="urn:ec.europa.eu:taxud:vies:services:checkVat:types">
+            <countryCode>NL</countryCode>
+            <vatNumber>000099998B57</vatNumber>
+            <requestDate>2021-07-05+02:00</requestDate>
+            <valid>false</valid>
+            <name></name>
+            <address></address>
+        </checkVatResponse>
+    </soap:Body>
+</soap:Envelope>

@@ -1,0 +1,14 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body><checkVatResponse xmlns="urn:ec.europa.eu:taxud:vies:services:checkVat:types">
+            <countryCode>NL</countryCode>
+            <vatNumber>818152011B01</vatNumber>
+            <requestDate>2021-07-05+02:00</requestDate>
+            <valid>true</valid>
+            <name>BLENDER INSTITUTE B.V.</name>
+            <address>
+                BUIKSLOTERMEERPLEIN 00161
+                1025ET AMSTERDAM
+            </address>
+        </checkVatResponse>
+    </soap:Body>
+</soap:Envelope>

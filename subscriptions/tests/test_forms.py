@@ -1,5 +1,7 @@
 import unittest
 
+import responses
+
 from subscriptions.forms import BillingAddressForm, PaymentForm
 from subscriptions.tests.base import BaseSubscriptionTestCase
 
@@ -107,6 +109,7 @@ class TestBillingAddressForm(BaseSubscriptionTestCase):
             {'postal_code': ['Enter a valid ZIP code in the format XXXXX or XXXXX-XXXX.']},
         )
 
+    @responses.activate
     def test_validates_vat_number_invalid_format(self):
         form = BillingAddressForm(
             data={
@@ -121,6 +124,7 @@ class TestBillingAddressForm(BaseSubscriptionTestCase):
             {'vat_number': ['!@#$!@#!#@$! is not a valid VAT identification number.']},
         )
 
+    @responses.activate
     def test_validates_vat_number_invalid(self):
         form = BillingAddressForm(
             data={
@@ -135,7 +139,9 @@ class TestBillingAddressForm(BaseSubscriptionTestCase):
             {'vat_number': ['NL12341234321 is not a valid VAT identification number.']},
         )
 
+    @responses.activate
     def test_validates_vat_number_valid(self):
+        self._mock_vies_response(is_valid=True)
         form = BillingAddressForm(
             data={
                 **required_address_data,
@@ -146,7 +152,9 @@ class TestBillingAddressForm(BaseSubscriptionTestCase):
 
         self.assertTrue(form.is_valid())
 
+    @responses.activate
     def test_validates_vat_number_valid_removes_whitespaces(self):
+        self._mock_vies_response(is_valid=True)
         form = BillingAddressForm(
             data={
                 **required_address_data,
@@ -157,6 +165,52 @@ class TestBillingAddressForm(BaseSubscriptionTestCase):
 
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data['vat_number'], 'NL818152011B01')
+
+    @responses.activate
+    def test_validates_vat_number_invalid_according_to_vies(self):
+        self._mock_vies_response(is_valid=False)
+
+        form = BillingAddressForm(
+            data={
+                **required_address_data,
+                'country': 'NL',
+                # Example value copied from
+                # https://business.gov.nl/regulation/using-checking-vat-numbers/
+                'vat_number': 'NL000099998B57',
+            }
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+            form.errors,
+            {
+                'vat_number': ['NL000099998B57 is not a registered VAT identification number.'],
+            },
+        )
+
+    @responses.activate
+    def test_validates_vat_number_unable_to_vies(self):
+        self._mock_vies_response(is_broken=True)
+
+        form = BillingAddressForm(
+            data={
+                **required_address_data,
+                'country': 'NL',
+                # Example value copied from
+                # https://business.gov.nl/regulation/using-checking-vat-numbers/
+                'vat_number': 'NL000099998B57',
+            }
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+            form.errors,
+            {
+                'vat_number': [
+                    'Unable to verify VAT identification number. Please try again later.',
+                ],
+            },
+        )
 
 
 class TestPaymentForm(BaseSubscriptionTestCase):
@@ -283,6 +337,7 @@ class TestPaymentForm(BaseSubscriptionTestCase):
             {'region': ['Select a valid choice. AA is not one of the available choices.']},
         )
 
+    @responses.activate
     def test_validates_vat_number_invalid_format(self):
         form = PaymentForm(
             data={
@@ -298,6 +353,7 @@ class TestPaymentForm(BaseSubscriptionTestCase):
             {'vat_number': ['!@#$!@#!#@$! is not a valid VAT identification number.']},
         )
 
+    @responses.activate
     def test_validates_vat_number_invalid(self):
         form = PaymentForm(
             data={
@@ -313,7 +369,9 @@ class TestPaymentForm(BaseSubscriptionTestCase):
             {'vat_number': ['NL12341234321 is not a valid VAT identification number.']},
         )
 
+    @responses.activate
     def test_validates_vat_number_valid(self):
+        self._mock_vies_response(is_valid=True)
         form = PaymentForm(
             data={
                 **self.required_payment_form_data,

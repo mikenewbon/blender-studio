@@ -1,3 +1,5 @@
+import os
+
 from django.contrib.auth import get_user_model
 from django.core import mail
 from django.db.models import signals
@@ -49,6 +51,30 @@ class BaseSubscriptionTestCase(TestCase):
         )
         self.customer = self.user.customer
         self.billing_address = self.customer.billing_address
+
+    def _mock_vies_response(self, is_valid=True, is_broken=False):
+        path = os.path.abspath(__file__)
+        dir_path = os.path.join(os.path.dirname(path), 'vies')
+
+        vies_base_url = 'https://ec.europa.eu/taxation_customs/vies'
+        wsdl_file = 'checkVatService.wsdl'
+        with open(os.path.join(dir_path, wsdl_file), 'r') as f:
+            responses.add(
+                responses.GET,
+                url=f'{vies_base_url}/checkVatService.wsdl',
+                body=f.read(),
+                content_type='text/xml',
+            )
+
+        post_xml_file = f'checkVatService_POST_{"valid" if is_valid else "invalid"}.xml'
+        with open(os.path.join(dir_path, post_xml_file), 'r') as f:
+            responses.add(
+                responses.POST,
+                url=f'{vies_base_url}/services/checkVatService',
+                body=f.read(),
+                content_type='text/xml',
+                status=500 if is_broken else 200,
+            )
 
     def _assert_required_billing_details_updated(self, user):
         customer = user.customer
