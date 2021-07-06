@@ -8,6 +8,7 @@ import logging
 
 from django.conf import settings
 from django.contrib.auth import login, logout
+from loginas.utils import is_impersonated_session
 
 import blendercloud.session
 
@@ -30,9 +31,13 @@ class SessionMiddleware:
         """
         forwarded_host = request.META.get('HTTP_X_FORWARDED_HOST')
         host = request.META.get('HTTP_HOST')
-        if settings.BLENDER_CLOUD_AUTH_ENABLED and (
-            settings.BLENDER_CLOUD_DOMAIN is None
-            or settings.BLENDER_CLOUD_DOMAIN in (host, forwarded_host)
+        if (
+            not is_impersonated_session(request)
+            and settings.BLENDER_CLOUD_AUTH_ENABLED
+            and (
+                settings.BLENDER_CLOUD_DOMAIN is None
+                or settings.BLENDER_CLOUD_DOMAIN in (host, forwarded_host)
+            )
         ):
             self._modify_session(request)
 
