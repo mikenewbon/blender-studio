@@ -10,6 +10,8 @@ from users.models import Notification
 
 @admin.register(get_user_model())
 class UserAdmin(auth_admin.UserAdmin):
+    change_form_template = 'loginas/change_form.html'
+
     def has_add_permission(self, request):
         """User records are managed by Blender ID, so no new user should be added here."""
         return False

@@ -390,6 +390,14 @@ python-versions = ">=3.5"
 Django = ">=2.2"
 
 [[package]]
+name = "django-loginas"
+version = "0.3.9"
+description = "An app to add a \"Log in as user\" button in the Django user admin page."
+category = "main"
+optional = false
+python-versions = ">3.3"
+
+[[package]]
 name = "django-nested-admin"
 version = "3.3.3"
 description = "Django admin classes that allow for nested inlines"
@@ -1670,7 +1678,7 @@ xmlsec = ["xmlsec (>=0.6.1)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "0d91a2c32b66ba19b9b76a71dc65faeba3df0a6c125d42677bac373536aac586"
+content-hash = "9bfad9a1e7c2d57aa7f4461b143a95ecf507253a333814f29f00e583188fe2e3"
 
 [metadata.files]
 alphabetic-timestamp = [
@@ -1845,6 +1853,10 @@ django-debug-toolbar = [
 django-jsonfield-backport = [
     {file = "django-jsonfield-backport-1.0.2.tar.gz", hash = "sha256:0286dcc1c112389d52096f269eed83a77364ea2b349fe1777f5e4464c3c36fa9"},
     {file = "django_jsonfield_backport-1.0.2-py3-none-any.whl", hash = "sha256:5574505967f6d7ada8c9269a5f873cfdca9812dc9502eee2b7a86be5c3798c76"},
+]
+django-loginas = [
+    {file = "django-loginas-0.3.9.tar.gz", hash = "sha256:9c10b2cdcf3b6605471f260e226bddf25726d6f5eb5fce88c91ef563bcd208bf"},
+    {file = "django_loginas-0.3.9-py2.py3-none-any.whl", hash = "sha256:16b6ccb8f07ee6b5950856b3c7d9cfa691de3a26e2b364efb7a7d4f7c57ac3d2"},
 ]
 django-nested-admin = [
     {file = "django-nested-admin-3.3.3.tar.gz", hash = "sha256:f1773c4d1be0a19e4b7a510734e88b81f551f831ed7b0641f63ad13cef3ee08c"},

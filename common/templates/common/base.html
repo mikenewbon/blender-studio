@@ -202,7 +202,15 @@
                     <i class="material-icons">exit_to_app</i>
                     <span>Sign Out</span>
                   </a>
-
+                  {# For exiing a "Login-As" switcheroo #}
+                  {% if is_impersonated_session %}
+                    {% with warn="(!) You are currently using login-as to impersonate someone else's session" %}
+                      <a class="dropdown-item" title="{{ warn }}" href="{% url 'loginas-logout' %}">
+                        <i class="text-warning material-icons">exit_to_app</i>
+                        <span class="text-warning">Switch back</span>
+                      </a>
+                    {% endwith %}
+                  {% endif %}
                 </div>
               </div>
 

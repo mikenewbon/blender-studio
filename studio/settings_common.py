@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'actstream',
     'background_task',
     'users',
+    'loginas',
     'nested_admin',
 ]
 
@@ -101,6 +102,7 @@ TEMPLATES = [
                 'training.context_processors.favorited',
                 'users.context_processors.user_dict',
                 'looper.context_processors.preferred_currency',
+                'loginas.context_processors.impersonated_session_status',
             ]
         },
     },
