@@ -5,6 +5,7 @@ Usage:
 """
 from typing import Tuple, Set
 import logging
+import re
 
 from django.core.management.base import BaseCommand
 import requests.exceptions
@@ -39,21 +40,21 @@ class Command(BaseCommand):
         wp_users = utils.get_wp_users(wp_subscriptions)
         for wp_subscription in wp_subscriptions:
             wp_user = wp_users[int(utils._get_meta_value(wp_subscription, '_customer_user'))]
-            oauth_user_id = utils._get_meta_value(wp_user, 'blender_id', '')
-            first_name = utils._get_meta_value(wp_subscription, 'billing_first_name', '')
-            last_name = utils._get_meta_value(wp_subscription, 'billing_last_name', '')
+            oauth_user_id = utils._get_meta_value(wp_user, 'blender_id', '').strip()
+            first_name = utils._get_meta_value(wp_subscription, 'billing_first_name', '').strip()
+            last_name = utils._get_meta_value(wp_subscription, 'billing_last_name', '').strip()
             full_name = ''
             if first_name or last_name:
                 full_name = f'{first_name} {last_name}'.strip()
-            email = utils._get_meta_value(wp_user, 'billing_email') or utils._get_meta_value(
-                wp_subscription, 'billing_email', ''
+            email = (
+                utils._get_meta_value(wp_user, 'billing_email')
+                or utils._get_meta_value(wp_subscription, 'billing_email', '').strip()
             )
 
             blender_id_user = {}
             if oauth_user_id:
                 try:
                     blender_id_user = bid.get_user_by_id(oauth_user_id)
-                    print(blender_id_user)
                 except requests.exceptions.HTTPError:
                     logger.warning(
                         'Unable to get Blender ID data for pk=%s, Blender ID %s',
@@ -62,16 +63,18 @@ class Command(BaseCommand):
                     )
             else:
                 logger.warning('pk=%s has no Blender ID', wp_subscription.pk)
-            blender_id_email = blender_id_user.get('email')
-            blender_id_full_name = blender_id_user.get('full_name')
-            date_deletion_requested = blender_id_user.get('date_deletion_requested')
+            blender_id_email = blender_id_user.get('email', '').strip()
+            blender_id_full_name = re.sub(
+                r'\s\s+', ' ', blender_id_user.get('full_name', '').strip()
+            )
+            date_deletion_requested = blender_id_user.get('date_deletion_requested', '')
             paypal_ipn_rows.append(
                 (
                     wp_subscription.pk,
                     email,
-                    blender_id_email,
+                    blender_id_email if blender_id_email != email else '',
                     full_name,
-                    blender_id_full_name,
+                    blender_id_full_name if blender_id_full_name != full_name else '',
                     date_deletion_requested,
                     utils._subscription_status(wp_subscription.status),
                     oauth_user_id,
