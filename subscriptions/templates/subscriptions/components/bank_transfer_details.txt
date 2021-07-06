@@ -1,5 +1,5 @@
-Blender Institute BV
+Blender Studio B.V.
 Bank: ING Bank
-Account number: 5296212
-IBAN: NL22 INGB 0005296212
+Account number: 8448982
+IBAN: NL07 INGB 0008 4489 82
 BIC/Swift: INGB NL2A

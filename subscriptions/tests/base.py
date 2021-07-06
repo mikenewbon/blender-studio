@@ -246,7 +246,7 @@ class BaseSubscriptionTestCase(TestCase):
         response = self.client.get(response_redirect['Location'])
         self.assertContains(response, '<h2 class="h3">Bank details:</h2>', html=True)
         self.assertContains(response, 'on hold')
-        self.assertContains(response, 'NL22 INGB 0005296212')
+        self.assertContains(response, 'NL07 INGB 0008 4489 82')
         subscription = response.wsgi_request.user.subscription_set.first()
         self.assertContains(
             response, f'Blender Cloud order-{subscription.latest_order().display_number}'
@@ -282,7 +282,7 @@ class BaseSubscriptionTestCase(TestCase):
                 f'Blender Cloud order-{subscription.latest_order().number}',
                 email_body,
             )
-            self.assertIn('NL22 INGB 0005296212', email_body)
+            self.assertIn('NL07 INGB 0008 4489 82', email_body)
             self.assertIn('Dear Jane Doe,', email_body)
             self.assertIn(reverse('user-settings-billing'), email_body)
             self.assertIn('Manual renewal subscription', email_body)
