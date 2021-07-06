@@ -404,6 +404,7 @@ LOOPER_CONVERTION_RATES_FROM_EURO = {
 }
 LOOPER_SUBSCRIPTION_CREATION_WARNING_THRESHOLD = relativedelta(days=1)
 LOOPER_ORDER_RECEIPT_PDF_URL = 'subscriptions:receipt-pdf'
+LOOPER_PAY_EXISTING_ORDER_URL = 'subscriptions:pay-existing-order'
 LOOPER_MANAGER_MAIL = 'CHANGE_ME'
 
 # By default, dump emails to the console instead of trying to actually send them.
