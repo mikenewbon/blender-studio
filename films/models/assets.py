@@ -71,7 +71,7 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
         # TODO(fsiddi) Add background job to update file metadata for static_asset on the bucket
         super().clean()
         if not self.slug:
-            self.slug = slugify(self.name)
+            self.slug = slugify(self.name)[:50]
         if self.collection and self.collection.film != self.film:
             raise ValidationError('Collection\'s film does not match the asset\'s film.')
 
