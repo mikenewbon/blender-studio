@@ -52,7 +52,8 @@ def handle_is_subscribed_to_newsletter(pk: int):
             mailgun.delete_from_maillist(remove_from, email)
         logger.info('Updated newsletter subscription for user %s', user)
     else:
-        mailgun.create_unsubscribe_record(email)
+        # Do not create an Unsubscribe records because we still need to send transactional emails!
+        # mailgun.create_unsubscribe_record(email)
         for alias_address in (
             settings.NEWSLETTER_LIST,
             settings.NEWSLETTER_SUBSCRIBER_LIST,
