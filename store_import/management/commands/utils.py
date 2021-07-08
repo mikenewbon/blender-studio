@@ -229,7 +229,7 @@ def _payment_method_from_order(wp_order: Post, user: User) -> PaymentMethod:
         four = _get_cc_last_four(wp_order)
         name = _recognisable_name_cc(card_type=card_type, four=four)
     elif paypal_email:
-        method_type = 'pp'
+        method_type = 'pa'
         name = _recognisable_name_pp(paypal_email)
     elif payment_method == 'bacs':
         method_type = 'ba'
