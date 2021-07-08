@@ -131,7 +131,7 @@ class BaseSubscriptionTestCase(TestCase):
         self._assert_plan_selector_no_tax(response)
         self.assertContains(
             response,
-            '<option selected data-renewal-period="1 month" data-currency-symbol="$" data-plan-id="1" data-price="11.50" value="1">Every 1 month</option>',
+            '<option selected data-renewal-period="1 month" data-currency-symbol="$" data-plan-id="1" data-price="11.50" data-next-url="/join/plan-variation/1/" value="1">Every 1 month</option>',
             html=True,
         )
         self.assertContains(
@@ -143,7 +143,7 @@ class BaseSubscriptionTestCase(TestCase):
     def _assert_default_variation_selected_tax_21_eur(self, response):
         self.assertContains(
             response,
-            '<option selected data-renewal-period="1 month" data-currency-symbol="€" data-plan-id="1" data-price="9.90" data-price-tax="2.08" data-tax-rate="21" data-tax-display-name="VAT" value="2">Every 1 month</option>',
+            '<option selected data-renewal-period="1 month" data-currency-symbol="€" data-plan-id="1" data-price="9.90" data-price-tax="2.08" data-tax-rate="21" data-tax-display-name="VAT" data-next-url="/join/plan-variation/2/" value="2">Every 1 month</option>',
             html=True,
         )
         self.assertContains(
@@ -160,7 +160,7 @@ class BaseSubscriptionTestCase(TestCase):
     def _assert_default_variation_selected_tax_19_eur(self, response):
         self.assertContains(
             response,
-            '<option selected data-renewal-period="1 month" data-currency-symbol="€" data-plan-id="1" data-price="9.90" data-price-tax="1.88" data-tax-rate="19" data-tax-display-name="VAT" value="2">Every 1 month</option>',
+            '<option selected data-renewal-period="1 month" data-currency-symbol="€" data-plan-id="1" data-price="9.90" data-price-tax="1.88" data-tax-rate="19" data-tax-display-name="VAT" data-next-url="/join/plan-variation/2/" value="2">Every 1 month</option>',
             html=True,
         )
         self.assertContains(
