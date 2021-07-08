@@ -67,6 +67,7 @@
                       {% if current_plan_variation.plan_id != plan.id %}
                         aria-disabled="true" disabled="true" hidden="true"
                       {% endif %}
+                      data-next-url="{% url "subscriptions:join" plan_variation_id=variation.pk %}"
                       value="{{ variation.pk }}">
                       Every {{ variation.interval_length }} {{ variation.interval_unit }}
                     </option>

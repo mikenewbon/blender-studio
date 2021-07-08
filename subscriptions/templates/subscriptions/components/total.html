@@ -26,7 +26,7 @@
         <button class="btn btn-primary w-100" id="submit-button" type="submit">{{ button_text|default:"Continue" }}</button>
 
       {% else %}
-        <a class="btn btn-success w-100" href="{% url 'oauth:login' %}">Sign in with Blender ID</a>
+        <a class="btn btn-success w-100 x-sign-in" href="{% url 'oauth:login' %}">Sign in with Blender ID</a>
       {% endif %}
     </div>
   </div>

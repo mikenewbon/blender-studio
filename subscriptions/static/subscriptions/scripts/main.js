@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const priceTaxEl = document.querySelector('.x-price-tax');
   const renewalPeriodEl = document.querySelector('.x-price-period');
   const priceInput = document.getElementById('id_price');
+  const signInLink = document.querySelector('.x-sign-in');
 
   function getSelectedPlan() {
     return selectPlan.options[selectPlan.selectedIndex];
@@ -100,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     const selectedOption = getSelectedPlanVariation();
-    const { currencySymbol, renewalPeriod } = selectedOption.dataset;
+    const { currencySymbol, renewalPeriod, nextUrl } = selectedOption.dataset;
     const { price, priceTax } = selectedOption.dataset;
 
     // Display the amounts with the tax details:
@@ -108,6 +109,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     priceTaxEl.innerText = formatTaxAmount(selectedOption, priceTax);
     renewalPeriodEl.innerText = renewalPeriod;
+
+    // Update SignIn button's "next" so that selection remains the same after sign in
+    if (signInLink && nextUrl) {
+      const url = new URL(signInLink.href);
+      signInLink.href = signInLink.href.replace(url.search, '');
+      signInLink.href = `${signInLink.href}?next=${nextUrl}`;
+    }
 
     // priceInput is only available when user is logged in, it is part of payment form.
     if (priceInput) {
