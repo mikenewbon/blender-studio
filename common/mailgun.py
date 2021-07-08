@@ -15,6 +15,10 @@ UNSUBSCRIBES_URL = f'{DOMAIN_URL}/unsubscribes'
 
 
 def _request_mailgun(url: str, method='GET', **kwargs) -> Optional[Dict]:
+    if not getattr(settings, 'MAILGUN_API_KEY', None):
+        logger.error('MAILGUN_API_KEY is missing')
+        return
+
     logger.debug(f'--> [{method}] {url} with {kwargs}')
     response = requests.request(
         method=method,

@@ -10,6 +10,7 @@ import django.core.mail
 import looper.models
 import looper.signals
 
+from common import mailgun
 from emails.util import get_template_context, absolute_url, is_noreply
 
 logger = logging.getLogger(__name__)
@@ -64,6 +65,11 @@ def send_mail_bank_transfer_required(subscription_id: int):
             'Not sending subscription-bank-info notification to no-reply address %s', email
         )
         return
+
+    # An Unsubscribe record will prevent this message from being delivered by Mailgun.
+    # This records might have been previously created for an existing account.
+    mailgun.delete_unsubscribe_record(email)
+
     logger.debug('Sending subscription-bank-info notification to %s', email)
 
     order = subscription.latest_order()
@@ -111,6 +117,10 @@ def send_mail_subscription_status_changed(subscription_id: int):
         logger.debug('Not sending subscription-changed notification to no-reply address %s', email)
         return
 
+    # An Unsubscribe record will prevent this message from being delivered by Mailgun.
+    # This records might have been previously created for an existing account.
+    mailgun.delete_unsubscribe_record(email)
+
     logger.debug('Sending subscription-changed notification to %s', email)
 
     email_body_html, email_body_txt, subject = _construct_subscription_mail(subscription)
@@ -135,6 +145,10 @@ def send_mail_automatic_payment_performed(order_id: int, transaction_id: int):
     customer = user.customer
     billing_email = customer.billing_email or user.email
     logger.debug('Sending %r notification to %s', order.status, billing_email)
+
+    # An Unsubscribe record will prevent this message from being delivered by Mailgun.
+    # This records might have been previously created for an existing account.
+    mailgun.delete_unsubscribe_record(billing_email)
 
     subscription = order.subscription
 
