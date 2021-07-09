@@ -3,9 +3,11 @@ from typing import Callable, TypeVar
 from django.contrib import admin
 from django.utils.html import format_html
 
+import looper.admin
+import looper.admin.mixins as looper_mixins
 
 from common import mixins
-from training.models import chapters, sections, trainings, flatpages
+from training.models import chapters, sections, trainings, flatpages, progress
 import static_assets.models as models_static_assets
 
 T = TypeVar('T', bound=Callable[..., object])
@@ -117,3 +119,19 @@ class TrainingFlatPageAdmin(mixins.ViewOnSiteMixin, admin.ModelAdmin):
     ]
     prepopulated_fields = {'slug': ('slug',)}
     raw_id_fields = ['training', 'attachments']
+
+
+@admin.register(progress.UserSectionProgress)
+class UserSectionProgressAdmin(
+    looper_mixins.NoChangeMixin, looper_mixins.NoAddDeleteMixin, admin.ModelAdmin
+):
+    model = progress.UserSectionProgress
+    list_display = (
+        looper.admin.user_link,
+        'section',
+        'started_duration_pageview_duration',
+        'finished_duration_pageview_duration',
+        'started',
+        'finished',
+    )
+    list_filter = ('started', 'finished', 'section__chapter__training')

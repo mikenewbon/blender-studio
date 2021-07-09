@@ -1,11 +1,23 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model, admin as auth_admin
+from django.urls import reverse
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 import looper.admin
 
 from blender_id_oauth_client.models import OAuthUserInfo, OAuthToken
 from users.models import Notification
+from training.models import progress
+
+
+def user_section_progress_link(obj):
+    admin_view = looper.admin._get_admin_url_name(progress.UserSectionProgress, 'changelist')
+    link = reverse(admin_view) + f'?user_id={obj.pk}'
+    return format_html('<a href="{}">{}</a>', link, 'View training progress for this user')
+
+
+user_section_progress_link.short_description = 'Training sections progress'
 
 
 @admin.register(get_user_model())
@@ -44,8 +56,9 @@ class UserAdmin(auth_admin.UserAdmin):
             _('Important dates'),
             {'fields': ('last_login', 'date_joined', 'date_deletion_requested')},
         ),
+        (_('Activity'), {'fields': (user_section_progress_link,)}),
     )
-    readonly_fields = ('date_deletion_requested',)
+    readonly_fields = ('date_deletion_requested', user_section_progress_link)
     inlines = [
         looper.admin.AddressInline,
         looper.admin.CustomerInline,
