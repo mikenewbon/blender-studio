@@ -128,6 +128,8 @@ class UserSectionProgressAdmin(
     model = progress.UserSectionProgress
     list_display = (
         looper.admin.user_link,
+        'date_created',
+        'date_updated',
         'section',
         'started_duration_pageview_duration',
         'finished_duration_pageview_duration',
