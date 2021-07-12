@@ -1,5 +1,5 @@
 """Subscriptions tasks, such as sending of the emails."""
-from typing import Tuple
+from typing import Tuple, Dict, Any
 import logging
 
 from background_task import background
@@ -17,37 +17,23 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-def _construct_subscription_mail(
-    subscription: looper.models.Subscription,
-) -> Tuple[str, str, str]:
+def _construct_subscription_mail(mail_name: str, context: Dict[str, Any]) -> Tuple[str, str, str]:
     """Construct a mail about a subscription.
 
     :return: tuple (html, text, subject)
     """
-    if subscription.status == 'active':
-        verb = 'activated'
-    else:
-        verb = 'deactivated'
-
-    context = {
-        'user': subscription.user,
-        'subscription': subscription,
-        'verb': verb,
-        **get_template_context(),
-    }
-
-    subject: str = loader.render_to_string(
-        f'subscriptions/emails/subscription_{verb}_subject.txt', context
+    base_path = 'subscriptions/emails'
+    subj_tmpl, html_tmpl, txt_tmpl = (
+        f'{base_path}/{mail_name}_subject.txt',
+        f'{base_path}/{mail_name}.html',
+        f'{base_path}/{mail_name}.txt',
     )
+
+    subject: str = loader.render_to_string(subj_tmpl, context)
     context['subject'] = subject.strip()
 
-    email_body_html = loader.render_to_string(
-        f'subscriptions/emails/subscription_{verb}.html', context
-    )
-    email_body_txt = loader.render_to_string(
-        f'subscriptions/emails/subscription_{verb}.txt', context
-    )
-
+    email_body_html = loader.render_to_string(html_tmpl, context)
+    email_body_txt = loader.render_to_string(txt_tmpl, context)
     return email_body_html, email_body_txt, context['subject']
 
 
@@ -82,17 +68,8 @@ def send_mail_bank_transfer_required(subscription_id: int):
         **get_template_context(),
     }
 
-    subject: str = loader.render_to_string(
-        'subscriptions/emails/bank_transfer_required_subject.txt', context
-    ).strip()
-    context['subject'] = subject
-
-    email_body_html = loader.render_to_string(
-        'subscriptions/emails/bank_transfer_required.html', context
-    )
-    email_body_txt = loader.render_to_string(
-        'subscriptions/emails/bank_transfer_required.txt', context
-    )
+    mail_name = 'bank_transfer_required'
+    email_body_html, email_body_txt, subject = _construct_subscription_mail(mail_name, context)
 
     django.core.mail.send_mail(
         subject,
@@ -123,7 +100,19 @@ def send_mail_subscription_status_changed(subscription_id: int):
 
     logger.debug('Sending subscription-changed notification to %s', email)
 
-    email_body_html, email_body_txt, subject = _construct_subscription_mail(subscription)
+    if subscription.status == 'active':
+        verb = 'activated'
+    else:
+        verb = 'deactivated'
+
+    context = {
+        'user': subscription.user,
+        'subscription': subscription,
+        'verb': verb,
+        **get_template_context(),
+    }
+    mail_name = f'subscription_{verb}'
+    email_body_html, email_body_txt, subject = _construct_subscription_mail(mail_name, context)
 
     django.core.mail.send_mail(
         subject,
@@ -143,12 +132,12 @@ def send_mail_automatic_payment_performed(order_id: int, transaction_id: int):
     transaction = looper.models.Transaction.objects.get(pk=transaction_id)
     user = order.user
     customer = user.customer
-    billing_email = customer.billing_email or user.email
-    logger.debug('Sending %r notification to %s', order.status, billing_email)
+    email = customer.billing_email or user.email
+    logger.debug('Sending %r notification to %s', order.status, email)
 
     # An Unsubscribe record will prevent this message from being delivered by Mailgun.
     # This records might have been previously created for an existing account.
-    mailgun.delete_unsubscribe_record(billing_email)
+    mailgun.delete_unsubscribe_record(email)
 
     subscription = order.subscription
 
@@ -157,7 +146,7 @@ def send_mail_automatic_payment_performed(order_id: int, transaction_id: int):
 
     context = {
         'user': subscription.user,
-        'email': billing_email,
+        'email': email,
         'order': order,
         'subscription': subscription,
         'pay_url': pay_url,
@@ -168,27 +157,18 @@ def send_mail_automatic_payment_performed(order_id: int, transaction_id: int):
         **get_template_context(),
     }
 
-    subject: str = loader.render_to_string(
-        f'subscriptions/emails/payment_{order.status}_subject.txt', context
-    ).strip()
-    context['subject'] = subject
-
-    email_body_html = loader.render_to_string(
-        f'subscriptions/emails/payment_{order.status}.html', context
-    )
-    email_body_txt = loader.render_to_string(
-        f'subscriptions/emails/payment_{order.status}.txt', context
-    )
+    mail_name = f'payment_{order.status}'
+    email_body_html, email_body_txt, subject = _construct_subscription_mail(mail_name, context)
 
     django.core.mail.send_mail(
         subject,
         message=email_body_txt,
         html_message=email_body_html,
         from_email=None,  # just use the configured default From-address.
-        recipient_list=[billing_email],
+        recipient_list=[email],
         fail_silently=False,
     )
-    logger.info('Sent %r notification to %s', order.status, billing_email)
+    logger.info('Sent %r notification to %s', order.status, email)
 
 
 @background()
@@ -215,17 +195,8 @@ def send_mail_managed_subscription_notification(subscription_id: int):
         **get_template_context(),
     }
 
-    subject: str = loader.render_to_string(
-        'subscriptions/emails/managed_notification_subject.txt', context
-    ).strip()
-    context['subject'] = subject
-
-    email_body_html = loader.render_to_string(
-        'subscriptions/emails/managed_notification.html', context
-    )
-    email_body_txt = loader.render_to_string(
-        'subscriptions/emails/managed_notification.txt', context
-    )
+    mail_name = 'managed_notification'
+    email_body_html, email_body_txt, subject = _construct_subscription_mail(mail_name, context)
 
     django.core.mail.send_mail(
         subject,
