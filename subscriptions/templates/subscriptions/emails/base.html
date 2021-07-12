@@ -1,5 +1,10 @@
 {% extends "emails/email_base.html" %}
 
+{% block header_logo %}
+  {# have a title instead of the logo with the remote image #}
+  <div style="text-align: center; font-weight: bold;">{{ subject }}</div>
+{% endblock header_logo %}
+
 {% block body %}
   <p>Dear {% firstof user.customer.full_name user.customer.billing_address.full_name user.full_name user.email %},</p>
   {% block content %}{% endblock content %}

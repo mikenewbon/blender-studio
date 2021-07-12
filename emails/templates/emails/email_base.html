@@ -34,9 +34,11 @@
           margin-left: auto; margin-right: auto;
           font-family: 'Lucida Grande', 'Helvetica Neue', 'Helvetica', 'Arial', 'Verdana', sans-serif;
           text-align: left;">
-          <a style="float: left; text-decoration: none; line-height: 0;" href="https://cloud.blender.org">
-            <img src="{{ site_url }}{% static 'emails/images/blender_cloud_logo_email_transparent.png' %}" alt="Blender Cloud" title="Blender Cloud"/>
-          </a>
+          {% block header_logo %}
+            <a style="float: left; text-decoration: none; line-height: 0;" href="https://cloud.blender.org">
+              <img src="{{ site_url }}{% static 'emails/images/blender_cloud_logo_email_transparent.png' %}" alt="Blender Cloud" title="Blender Cloud"/>
+            </a>
+          {% endblock %}
           <div style="clear:both"></div>
         </div>
       </div>
