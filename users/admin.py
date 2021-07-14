@@ -1,10 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model, admin as auth_admin
+from django.db.models import Count
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 import looper.admin
+import looper.models
 
 from blender_id_oauth_client.models import OAuthUserInfo, OAuthToken
 from users.models import Notification
@@ -20,6 +22,38 @@ def user_section_progress_link(obj):
 user_section_progress_link.short_description = 'Training sections progress'
 
 
+def user_subscriptions_link(obj, title='View subscriptions of this user'):
+    admin_view = looper.admin._get_admin_url_name(looper.models.Subscription, 'changelist')
+    link = reverse(admin_view) + f'?user_id={obj.pk}'
+    return format_html('<a href="{}">{}</a>', link, title)
+
+
+user_subscriptions_link.short_description = 'Subscriptions'
+
+
+class NumberOfSubscriptionsFilter(admin.SimpleListFilter):
+    title = _('subscriptions')
+
+    parameter_name = 'subscriptions_count'
+
+    def lookups(self, request, model_admin):
+        """Human-readable labels for filter choices."""
+        return (
+            ('none', 'without subscriptions'),
+            ('one', 'with one subscription'),
+            ('multiple', 'with more than one subscription'),
+        )
+
+    def queryset(self, request, queryset):
+        """Returns the filtered queryset based on the value provided in the query string."""
+        if self.value() == 'none':
+            return queryset.filter(subscriptions_count=0)
+        if self.value() == 'one':
+            return queryset.filter(subscriptions_count=1)
+        if self.value() == 'multiple':
+            return queryset.filter(subscriptions_count__gt=1)
+
+
 @admin.register(get_user_model())
 class UserAdmin(auth_admin.UserAdmin):
     change_form_template = 'loginas/change_form.html'
@@ -28,17 +62,29 @@ class UserAdmin(auth_admin.UserAdmin):
         """User records are managed by Blender ID, so no new user should be added here."""
         return False
 
+    def get_queryset(self, *args, **kwargs):
+        """Count user subscriptions for subscription debugging purposes."""
+        queryset = super().get_queryset(*args, **kwargs)
+        queryset = queryset.annotate(subscriptions_count=Count('subscription'))
+        return queryset
+
+    def subscriptions(self, obj):
+        """Return the number of subscriptions this user has and a link to them."""
+        return user_subscriptions_link(obj, obj.subscriptions_count)
+
     list_display_links = ('full_name', 'username')
     list_filter = auth_admin.UserAdmin.list_filter + (
         'date_joined',
         'is_subscribed_to_newsletter',
         'date_deletion_requested',
         'last_login',
+        NumberOfSubscriptionsFilter,
     )
+
     list_display = (
         ['full_name']
         + [_ for _ in auth_admin.UserAdmin.list_display if _ not in ('first_name', 'last_name')]
-        + ['is_active', 'deletion_requested']
+        + ['is_active', 'deletion_requested', 'subscriptions']
     )
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
@@ -54,11 +100,18 @@ class UserAdmin(auth_admin.UserAdmin):
         ),
         (
             _('Important dates'),
-            {'fields': ('last_login', 'date_joined', 'date_deletion_requested')},
+            {'fields': (('date_joined', 'last_login'), 'date_deletion_requested')},
         ),
-        (_('Activity'), {'fields': (user_section_progress_link,)}),
+        (_('Activity'), {'fields': (user_section_progress_link, user_subscriptions_link)}),
     )
-    readonly_fields = ('date_deletion_requested', user_section_progress_link)
+    readonly_fields = (
+        'date_deletion_requested',
+        'date_joined',
+        'last_login',
+        user_section_progress_link,
+        user_subscriptions_link,
+        subscriptions,
+    )
     inlines = [
         looper.admin.AddressInline,
         looper.admin.CustomerInline,
