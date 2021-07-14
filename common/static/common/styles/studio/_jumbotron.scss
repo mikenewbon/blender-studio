@@ -31,11 +31,22 @@
   }
 
   &.jumbotron-fluid {
-    padding-left: 0;
-    padding-right: 0;
-    border-top: 0;
-    border-right: 0;
-    border-left: 0;
+    padding: inherit 0;
+    border: 0;
+
+    &.jumbotron-overlay {
+      .jumbotron-bg-wrapper::after {
+        display: block;
+        content: close-quote;
+
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 100%;
+        width: 100%;
+        background: radial-gradient(94.11% 100% at 50% 0%, rgba(31, 31, 31, 0) 76.84%, #1F1F1F 100%);
+      }
+    }
   }
 
 
@@ -133,8 +144,12 @@ a.jumbotron {
   &.overlay-wide-content {
     .jumbotron-bg-wrapper::before {
       background: radial-gradient(78.58% 218.51% at 78.58% 51.9%, rgba(0, 0, 0, 0) 11.87%, rgba(0, 0, 0, .3) 34.9%, rgba(0, 0, 0, .75) 100%);
+    }
+  }
 
-
+  &.overlay-none {
+    .jumbotron-bg-wrapper::before {
+      background: none;
     }
   }
 

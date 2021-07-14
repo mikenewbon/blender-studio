@@ -1,3 +1,10 @@
+body {
+
+  &.has-secondary-nav{
+
+  }
+}
+
 .nav-drawer-open {
   overflow: hidden;
 
@@ -37,12 +44,12 @@
     display: block;
     border-radius: $border-radius;
     border-right: 0;
-    max-height: calc(100vh - #{$navbar-height + $spacer + $spacer});
+    max-height: calc(100vh - #{$navbar-height + $spacer * 3});
     height: auto;
     overflow: auto;
     padding: $spacer / 4 0;
     position: sticky;
-    top: calc(#{$navbar-height + $spacer});
+    top: calc(#{$navbar-height + $spacer * 2});
     width: auto;
     z-index: auto;
     border: 1px solid $input-gray;
@@ -78,8 +85,8 @@
 .has-secondary-nav {
   .nav-drawer {
     &.nested {
-      max-height: calc(100vh - #{$navbar-height + $secondary-navbar-height + $spacer + $spacer});
-      top: calc(#{$navbar-height + $secondary-navbar-height + $spacer});
+      max-height: calc(100vh - #{$navbar-height + $secondary-navbar-height + $spacer * 4});
+      top: calc(#{$navbar-height + $secondary-navbar-height + $spacer * 3});
     }
   }
 }

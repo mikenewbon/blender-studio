@@ -29,6 +29,10 @@
     @include media-breakpoint-down(sm) {
       margin: -20px -20px 0;
       border-radius: 0;
+
+      .plyr__poster {
+        border-radius: 0;
+      }
     }
 
     border-radius: $border-radius;

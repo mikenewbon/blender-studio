@@ -1,16 +1,42 @@
 body {
-  margin-top: $navbar-height;
+  &.spacer {
+    margin-top: #{$navbar-height + $spacer};
+
+    @include media-breakpoint-down(sm) {
+      margin-top: #{$navbar-height + $spacer};
+    }
+  }
+  &.has-secondary-nav{
+    &.spacer{
+      margin-top: #{$navbar-height + $spacer * 2};
+
+      @include media-breakpoint-down(sm) {
+        margin-top: #{$navbar-height + $spacer};
+      }
+    }
+  }
+}
+
+div.spacer {
+  height: #{$navbar-height + $spacer};
 }
 
 .navbar {
-  @include fixed-top;
+  position: fixed;
+  top: $spacer;
+  left: 0;
+  right: 0;
   align-items: stretch;
   background: $navigation-gray;
-  border-bottom: 1px solid $input-gray;
+  border: 1px solid $input-gray;
+  border-radius: $border-radius;
   flex-wrap: nowrap; // allow us to do the line break for collapsing content
+  margin: 0 auto;
+  max-width: calc(100% - #{$spacer * 2});
   min-height: $navbar-height;
   padding: $navbar-padding-y $navbar-padding-x;
   transition: margin-left $nav-drawer-animation-duration;
+  width: 1100px;
   z-index: 1040;
 
   a {
@@ -107,6 +133,13 @@ body {
   }
 
   @include media-breakpoint-down(sm) {
+
+    top: 0;
+    border-radius: 0;
+    border-width: 0 0 1px 0;
+    max-width: 100%;
+    margin: 0;
+
     .container {
       max-width: 100%;
       padding-left: 0;
@@ -144,13 +177,45 @@ body {
   @include media-breakpoint-down(sm) {
     position: static;
     z-index: 1020;
+    border-bottom: 1px solid $input-gray;
+    max-width: 100%;
+    width: 100%;
+    border-width: 0 0 1px;
+    border-radius: 0;
+    margin: 0;
   }
 
   background: $navigation-gray;
-  border-bottom: 1px solid $input-gray;
+  border: 1px solid $input-gray;
+  max-width: calc(100% - #{$spacer * 2});
+  width: 1100px;
   position: sticky;
-  top: $navbar-height;
+  top: #{$navbar-height + $spacer * 2};
   z-index: 1030;
+  border-radius: $border-radius;
+  margin: 0 auto 0 auto;
+
+
+
+  // position: fixed;
+  // top: $spacer;
+  // left: 0;
+  // right: 0;
+  // align-items: stretch;
+  // background: $navigation-gray;
+  // border: 1px solid $input-gray;
+  // border-radius: $border-radius;
+  // flex-wrap: nowrap; // allow us to do the line break for collapsing content
+  // margin: 0 auto;
+  // max-width: calc(100% - #{$spacer * 2});
+  // min-height: $navbar-height;
+  // padding: $navbar-padding-y $navbar-padding-x;
+  // transition: margin-left $nav-drawer-animation-duration;
+  // width: 1100px;
+  // z-index: 1040;
+
+
+
 
   .navdrawer-offset {
     border-top: 0;
@@ -174,7 +239,7 @@ body {
 
     flex-wrap: wrap;
     overflow-x: scroll;
-    padding: 0 $spacer;
+    padding: 0 #{$spacer / 4};
     scrollbar-width: none;
 
     // &::-webkit-scrollbar {

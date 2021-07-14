@@ -32,6 +32,7 @@
       <template id="comment-edit-input-template">
         {% include 'comments/components/comment_input.html' with div_class='comment-edit-input' %}
       </template>
+      {% comment %} This is here to stop the comment_input causing code-editor issues {% endcomment %}
     {% endblock %}
   </head>
 
