@@ -2,6 +2,6 @@
 <div class="submit-row">
   {% block submit-row %}
     {#% if show_save %}<input type="submit" value="Send a test email" class="default" name="_save">{% endif %#}
-    {% if show_save_and_continue %}<input type="submit" value="{% if can_change %}{% trans 'Send a test email and continue editing' %}{% else %}{% trans 'Save and view' %}{% endif %}" name="_continue">{% endif %}
+    {% if show_save_and_continue %}<input type="submit" value="{% if can_change %}{% trans 'Send a test email' %}{% else %}{% trans 'Save and view' %}{% endif %}" name="_continue">{% endif %}
   {% endblock %}
 </div>

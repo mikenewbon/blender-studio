@@ -4,9 +4,10 @@ from django.conf import settings
 from django.contrib import admin, messages
 from django.contrib.auth import get_user_model
 from django.template import Template, Context
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-import django.core.mail
 import anymail.exceptions
+import django.core.mail
 
 import looper.admin.mixins
 import looper.models
@@ -70,6 +71,12 @@ class SubscriptionEmailPreviewAdmin(looper.admin.mixins.NoAddDeleteMixin, EmailA
     save_as_continue = True
     save_on_top = True
 
+    list_display = ['subject', 'from_email']
+    actions = []
+
+    def _get_email_sent_message(self, obj):
+        return f'Sent a test email "{obj.subject}" to {obj.to} from {obj.from_email}'
+
     def get_object(self, request, object_id, from_field=None):
         """Construct the Email on th fly from known subscription email templates."""
         user = User()
@@ -93,7 +100,7 @@ class SubscriptionEmailPreviewAdmin(looper.admin.mixins.NoAddDeleteMixin, EmailA
             message=email_body_txt,
         )
 
-    def _get_emails(self, request):
+    def _get_emails_list(self, request):
         emails = []
         for mail_name in (
             'bank_transfer_required',
@@ -107,6 +114,19 @@ class SubscriptionEmailPreviewAdmin(looper.admin.mixins.NoAddDeleteMixin, EmailA
             emails.append(self.get_object(request, object_id=mail_name))
         return emails
 
+    def _changeform_view(self, request, object_id, form_url, extra_context):
+        """Change title of the change view to make it clear it's not actually changing anything."""
+        template_name = object_id.replace('_5F', '_')
+        extra_context = {
+            **(extra_context or {}),
+            'title': format_html(
+                f'Previewing email rendered from the "<b>{template_name}</b>" template.'
+                '<br/>You can adjust the content of the email before sending it, '
+                'but these changes will not be persisted.'
+            ),
+        }
+        return super()._changeform_view(request, object_id, form_url, extra_context=extra_context)
+
     def save_model(self, request, obj, form, change):
         """Send an email instead, display a notification about it."""
         django.core.mail.send_mail(
@@ -119,18 +139,25 @@ class SubscriptionEmailPreviewAdmin(looper.admin.mixins.NoAddDeleteMixin, EmailA
         )
 
     def construct_change_message(self, request, form, formsets, add=False):
-        """Notify about successfully sent test email."""
+        """Log the fact that an email was sent."""
         obj = form.instance
-        message = ('Sent a test email to %s', obj.to)
-        logger.info(*message)
-        self.message_user(request, message[0] % message[1:], messages.INFO)
-        return message
+        return self._get_email_sent_message(obj)
+
+    def response_change(self, request, obj):
+        """Override notification messages on change. Notify about successfully sent test email."""
+        response = super().response_change(request, obj)
+        # Clear the usual change messages: nothing was actually changed/saved, so they are confusing
+        list(messages.get_messages(request))
+
+        message = self._get_email_sent_message(obj)
+        self.message_user(request, message, messages.INFO)
+        return response
 
     def get_changelist_instance(self, request):
         """Monkey-patch changelist replacing the queryset with the existing transactional emails."""
         try:
             cl = super().get_changelist_instance(request)
-            emails = self._get_emails(request)
+            emails = self._get_emails_list(request)
             cl.result_list = emails
             cl.result_count = len(emails)
             cl.can_show_all = True
