@@ -16,6 +16,7 @@ You may need to wait a few days until the payment clears before one of our team 
 
 Subscription information:
 -------------------------
+Subscription #:     {{ subscription.id }}
 Renewal type:       {{ subscription.collection_method }}
 Renewal period:     {{ subscription|renewal_period }}
 Payment method:     {{ subscription.payment_method }}{% with taxable=subscription.taxable %}

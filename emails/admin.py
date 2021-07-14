@@ -81,7 +81,15 @@ class SubscriptionEmailPreviewAdmin(looper.admin.mixins.NoAddDeleteMixin, EmailA
         """Construct the Email on th fly from known subscription email templates."""
         user = User()
         user.customer = looper.models.Customer(full_name='Jane Doe')
-        subscription = looper.models.Subscription(user=user)
+        subscription = looper.models.Subscription(
+            id=1234567890,
+            user=user,
+            payment_method=looper.models.PaymentMethod(
+                method_type='cc',
+                gateway_id=1,
+                recognisable_name='Fake Credit Card payment method',
+            ),
+        )
         order = looper.models.Order(subscription=subscription)
         context = {
             'user': subscription.user,
