@@ -76,7 +76,7 @@
                   {% endif %}
 
                   {% if comment.delete_url %}
-                    <a href="" class="dropdown-item comment-delete">
+                    <a href="{{ comment.delete_url }}" class="dropdown-item comment-delete">
                       <i class="material-icons">delete</i>
                       <span>Delete</span>
                     </a>
@@ -90,14 +90,14 @@
                   {% endcomment %}
 
                   {% if comment.delete_tree_url %}
-                    <a href="" class="dropdown-item comment-delete-tree">
+                    <a href="{{ comment.delete_tree_url }}" class="dropdown-item comment-delete-tree">
                       <i class="material-icons">account_tree</i>
                       <span>Delete Tree</span>
                     </a>
                   {% endif %}
 
                   {% if comment.hard_delete_tree_url %}
-                    <a href="" class="dropdown-item comment-hard-delete-tree">
+                    <a href="{{ comment.hard_delete_tree_url }}" class="dropdown-item comment-hard-delete-tree">
                       <i class="material-icons">delete_forever</i>
                       <span>Hard Delete Tree</span>
                     </a>
@@ -105,7 +105,7 @@
 
                   {% if comment.archive_tree_url %}
 
-                    <a href="" class="dropdown-item comment-archive">
+                    <a href="{{ comment.archive_tree_url }}" class="dropdown-item comment-archive">
                       {% if comment.is_archived and comment.is_top_level %}
                         <i class="material-icons">unarchive</i>
                         <span class="comment-archive-text">Un-archive comment</span>
