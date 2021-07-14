@@ -890,7 +890,7 @@ six = ">=1.11.0"
 
 [[package]]
 name = "looper"
-version = "1.6.1rc7"
+version = "1.6.1rc8"
 description = ""
 category = "main"
 optional = false
@@ -915,8 +915,8 @@ xhtml2pdf = "^0.2"
 [package.source]
 type = "git"
 url = "git://git.blender.org/looper.git"
-reference = "master"
-resolved_reference = "76ef69ffdf7f5df8f2077d21c5e8759771fac860"
+reference = "transaction-failure-code"
+resolved_reference = "695f3e29b7c7fd94a85a7c00d746d57f0a633a09"
 
 [[package]]
 name = "lxml"
@@ -1678,7 +1678,7 @@ xmlsec = ["xmlsec (>=0.6.1)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "9bfad9a1e7c2d57aa7f4461b143a95ecf507253a333814f29f00e583188fe2e3"
+content-hash = "92b9b59902d080e24a76d83e83cc8c59b1c411afa5167cc06a21ba9665635d34"
 
 [metadata.files]
 alphabetic-timestamp = [
