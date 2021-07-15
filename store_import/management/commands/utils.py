@@ -22,6 +22,7 @@ from looper.models import (
     Address,
     Order,
     PaymentMethod,
+    Transaction,
 )
 from looper.money import Money
 from looper.taxes import TaxType  # , Taxable
@@ -649,6 +650,43 @@ def _construct_log_entries_from_comments(wp: Post, instance, action_flag=CHANGE)
             )
         )
     return entries
+
+
+def _construct_failed_transactions_from_comments(wp_order: Post, order: Order) -> List[Transaction]:
+    # Try to parse it out of the comments then
+    failed_transactions = []
+    comments_with_transaction_id = wp_order.comments.filter(content__contains='Transaction ID')
+    for comment in comments_with_transaction_id:
+        if 'failed' not in comment.content.lower():
+            continue
+        transaction_ids = re.findall(r'Transaction ID ([^ ]+)\)', comment.content)
+        if not transaction_ids:
+            continue
+
+        failure_codes = re.findall(r'status code (\d+)', comment.content, re.I)
+        failure_code = failure_codes[0] if failure_codes else ''
+        if not failure_code:
+            continue
+        transaction_id = transaction_ids[0]
+        failure_messages = re.findall(r'status code \d+: ([^(]+)', comment.content, re.I)
+        failure_message = failure_messages[0].strip() if failure_messages else ''
+        failed_transactions.append(
+            Transaction(
+                created_at=comment.post_date,
+                updated_at=comment.post_date,
+                user=order.user,
+                order=order,
+                payment_method=order.payment_method,
+                transaction_id=transaction_id,
+                failure_code=failure_code,
+                failure_message=failure_message,
+                currency=order.currency,
+                amount=order.price,
+                paid=False,
+                status='failed',
+            )
+        )
+    return failed_transactions
 
 
 def _equal_allow_one_cent(money1, money2) -> bool:

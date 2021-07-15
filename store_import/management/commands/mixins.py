@@ -184,12 +184,31 @@ class _UpsertMixin:
             )
             t.payment_method_id = t.payment_method.pk
 
-        new_transactions, existing_transactions = self._separate_new_existing(
-            Transaction, self.transactions_to_upsert
+        new_transactions = {}
+        existing_transactions = {}
+        for t in self.transactions_to_upsert:
+            assert t.user_id
+            assert t.order_id
+            key = f'{t.order_id}{t.transaction_id}'
+            existing_t = Transaction.objects.filter(
+                order_id=t.order_id,
+                transaction_id=t.transaction_id,
+            ).first()
+            if existing_t:
+                t.pk = existing_t.pk
+                if key not in existing_transactions:
+                    existing_transactions[key] = t
+            else:
+                if key not in new_transactions:
+                    new_transactions[key] = t
+        logger.info(
+            '%s new, %s existing Transactions to upsert',
+            len(new_transactions),
+            len(existing_transactions),
         )
-        Transaction.objects.bulk_create(new_transactions, batch_size=self.BATCH_SIZE)
+        Transaction.objects.bulk_create(new_transactions.values(), batch_size=self.BATCH_SIZE)
         Transaction.objects.bulk_update(
-            existing_transactions,
+            existing_transactions.values(),
             fields=self._get_fields_for_update(Transaction),
             batch_size=self.BATCH_SIZE,
         )

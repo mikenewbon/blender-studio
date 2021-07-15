@@ -254,6 +254,7 @@ def _construct_transactions(
     # Looper does not allow transactions without payment methods:
     if not order.payment_method:
         return []
+    order_ip_address = utils._get_meta_value(wp_order, 'customer_ip_address', '') or None
     transaction_id = (
         utils._get_meta_value(wp_order, 'PayPal Transaction ID', '')
         or utils._get_meta_value(wp_order, '_wc_braintree_paypal_trans_id', '')
@@ -264,7 +265,6 @@ def _construct_transactions(
     # _status = utils._get_meta_value(
     #    wp_order, '_paypal_status', '') or utils._get_meta_value(wp_order, '', ''
     # )
-    # TODO(anna): how to copy a refund?
     status = 'pending'
     if order.status == 'paid':
         status = 'succeeded'
@@ -274,15 +274,23 @@ def _construct_transactions(
         status = 'refunded'
     source = 'recurring_first' if is_first else 'recurring'
 
+    # When transaction has failed, its ID appears to only be available in the comments
+    if not transaction_id and status == 'failed':
+        failed_transactions = utils._construct_failed_transactions_from_comments(wp_order, order)
+        for t in failed_transactions:
+            t.source = source
+            t.ip_address = order_ip_address
+        return failed_transactions
+
     transaction = Transaction(
-        id=order.id,
+        # id=order.id,
         created_at=transaction_date,
         updated_at=transaction_date,
         user=order.user,
         order=order,
         payment_method=order.payment_method,
         transaction_id=transaction_id,
-        ip_address=utils._get_meta_value(wp_order, 'customer_ip_address', '') or None,
+        ip_address=order_ip_address,
         currency=order.currency,
         amount=order.price,
         paid=order.status == 'paid',
@@ -294,6 +302,10 @@ def _construct_transactions(
         transaction.refunded_at = transaction_date
         # TODO(anna): check the refunded amount against the WP order, if possible
         transaction.amount_refunded = transaction.amount
+
+        order.refunded_at = transaction.refunded_at
+        order.refunded = transaction.amount
+        order.tax_refunded = round(order.refunded._cents * order.tax_rate / 100)
     return [transaction]
 
 
