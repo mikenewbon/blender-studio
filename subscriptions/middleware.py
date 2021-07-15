@@ -44,13 +44,14 @@ EEA_COUNTRY_CODES = (
     'SE',
     'SI',
 )
+COUTRY_CODE_USD = ('US',)
 
 
 def preferred_currency_for_country_code(country_code: Optional[str] = '') -> str:
     """Return currency for the given country code."""
-    if country_code in EEA_COUNTRY_CODES:
-        return 'EUR'
-    return 'USD'
+    if country_code in COUTRY_CODE_USD:
+        return 'USD'
+    return 'EUR'
 
 
 class SetCurrencyMiddleware(looper.middleware.PreferredCurrencyMiddleware):
