@@ -1,5 +1,6 @@
 """Override some of looper model forms."""
 from typing import List, Tuple
+import logging
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -17,6 +18,8 @@ import looper.models
 
 from subscriptions.form_fields import VATNumberField
 from subscriptions.form_widgets import RegionSelect
+
+logger = logging.getLogger(__name__)
 
 BILLING_DETAILS_PLACEHOLDERS = {
     'full_name': 'Your Full Name',
@@ -214,6 +217,7 @@ class SelectPlanVariationForm(forms.Form):
             )
             return plan_variation.pk
         except looper.models.PlanVariation.DoesNotExist:
+            logger.exception('Invalid PlanVariation is selected')
             self.add_error(
                 'plan_variation_id',
                 ValidationError(
