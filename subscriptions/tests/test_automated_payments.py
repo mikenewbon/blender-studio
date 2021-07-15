@@ -144,6 +144,43 @@ class TestClock(BaseSubscriptionTestCase):
         'subscriptions.signals.tasks.send_mail_automatic_payment_performed',
         new=subscriptions.tasks.send_mail_automatic_payment_performed.task_function,
     )
+    @patch('users.signals.tasks.revoke_blender_id_role')
+    @responses.activate
+    def test_automated_payment_failed_email_but_another_active_subscription_exists(
+        self, mock_revoke_blender_id_role
+    ):
+        now = timezone.now()
+        order = self.subscription.generate_order()
+        # Make the clock attempt to charge the same order one last time
+        order.retry_after = now - timedelta(seconds=2)
+        order.collection_attempts = 2
+        order.status = 'soft-failed'
+        order.save(update_fields={'collection_attempts', 'retry_after', 'status'})
+        self.assertIsNotNone(self.subscription.latest_order())
+
+        # Create another active subscription for the same user
+        SubscriptionFactory(
+            user=self.subscription.user,
+            payment_method=self.subscription.payment_method,
+            currency='USD',
+            price=Money('USD', 1110),
+            status='active',
+        )
+
+        # Tick the clock and check that order and transaction were created
+        Clock().tick()
+
+        # Check that an email notification is sent
+        self._assert_payment_failed_email_is_sent(self.subscription)
+
+        # But badge has not be revoked
+        mock_revoke_blender_id_role.assert_not_called()
+
+    @patch(
+        # Make sure background task is executed as a normal function
+        'subscriptions.signals.tasks.send_mail_automatic_payment_performed',
+        new=subscriptions.tasks.send_mail_automatic_payment_performed.task_function,
+    )
     def test_automated_payment_paid_email_is_sent(self):
         now = timezone.now()
 

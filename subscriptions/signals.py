@@ -71,7 +71,10 @@ def _on_subscription_status_activated(sender: looper.models.Subscription, **kwar
 def _on_subscription_status_deactivated(sender: looper.models.Subscription, **kwargs):
     # TODO(anna): if this Subscription is a team subscription,
     # the task has to be called for user IDs of the team members
-    users.tasks.revoke_blender_id_role(pk=sender.user_id, role='cloud_subscriber')
+
+    # No other active subscription exists, subscriber badge can be revoked
+    if not sender.user.subscription_set.active().count():
+        users.tasks.revoke_blender_id_role(pk=sender.user_id, role='cloud_subscriber')
 
 
 @receiver(looper.signals.automatic_payment_succesful)
