@@ -42,5 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!!countrySelect && !!regionSelect && !!regionLabel) {
     // Update region select with choices appropriated for the selected country
     countrySelect.addEventListener('change', updateRegionSelect);
+    updateRegionSelect();
   }
 });
