@@ -7,7 +7,7 @@
   {% show_new_subscription_billing as show_new_subscription_billing_ %}
 
   <p class="subtitle">Settings</p>
-  <h1 class="mb-0">Subscription{% if show_new_subscription_billing_ and not user|has_group:"demo" %} #{{ user.subscription_set.first.pk }}{% endif %}</h1>
+  <h1 class="mb-0">Subscription{% if show_new_subscription_billing_ and not user|has_group:"demo" and user.subscription_set.count %} #{{ user.subscription_set.first.pk }}{% endif %}</h1>
   <p class="mb-2 subtitle">If you have any problems with billing, contact the team directly on <a href="mailto:cloudsupport@blender.org">cloudsupport@blender.org</a>.</p>
 
   <div class="settings-billing">
