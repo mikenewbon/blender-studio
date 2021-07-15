@@ -101,12 +101,24 @@ class TestGETBillingDetailsView(BaseSubscriptionTestCase):
         self._assert_total_default_variation_selected_usd(response)
 
     @unittest.skipUnless(os.path.exists(settings.GEOIP2_DB), 'GeoIP database file is required')
-    def test_get_detects_country_us_sets_preferred_currency_usd_invalid_variation(self):
+    def test_get_detects_country_us_sets_preferred_currency_usd_redirects(self):
         user = create_customer_with_billing_address()
         self.client.force_login(user)
 
         response = self.client.get(self.url, REMOTE_ADDR=USA_IPV4)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['Location'], self.url_usd)
+
+        # Follow the redirect
+        response = self.client.get(response['Location'])
+        # Check that country is preselected
+        self.assertContains(
+            response,
+            '<option value="US" selected>United States of America</option>',
+            html=True,
+        )
+        # Check that prices are in USD and there is no tax
+        self._assert_total_default_variation_selected_usd(response)
 
     @unittest.skipUnless(os.path.exists(settings.GEOIP2_DB), 'GeoIP database file is required')
     def test_get_detects_country_us_sets_preferred_currency_usd(self):
@@ -126,13 +138,17 @@ class TestGETBillingDetailsView(BaseSubscriptionTestCase):
         self._assert_total_default_variation_selected_usd(response)
 
     @unittest.skipUnless(os.path.exists(settings.GEOIP2_DB), 'GeoIP database file is required')
-    def test_get_detects_country_sg_sets_preferred_currency_usd(self):
+    def test_get_detects_country_sg_sets_preferred_currency_eur(self):
         user = create_customer_with_billing_address()
         self.client.force_login(user)
 
         response = self.client.get(self.url_usd, REMOTE_ADDR=SINGAPORE_IPV4)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['Location'], self.url)
+
+        # Follow the redirect
+        response = self.client.get(response['Location'])
         # Check that country is preselected
         self.assertContains(
             response,
@@ -140,7 +156,7 @@ class TestGETBillingDetailsView(BaseSubscriptionTestCase):
             html=True,
         )
         # Check that prices are in USD and there is not tax
-        self._assert_total_default_variation_selected_usd(response)
+        self._assert_total_default_variation_selected_eur(response)
 
     @unittest.skipUnless(os.path.exists(settings.GEOIP2_DB), 'GeoIP database file is required')
     def test_get_detects_country_nl_sets_preferred_currency_eur_displays_correct_vat(self):
@@ -322,7 +338,7 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
             plan_variation,
         )
 
-    def test_plan_variation_does_not_match_detected_currency_usd_euro_ip(self):
+    def test_plan_variation_does_not_match_detected_currency_usd_euro_ip_redirects(self):
         url, _ = self._get_url_for('USD', 11900)
         user = create_customer_with_billing_address(country='NL')
         self.client.force_login(user)
@@ -330,9 +346,11 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
         data = required_address_data
         response = self.client.post(url, data, REMOTE_ADDR=EURO_IPV4)
 
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 302)
+        url_eur, _ = self._get_url_for('EUR', 10900)
+        self.assertEqual(response['Location'], url_eur)
 
-    def test_plan_variation_does_not_match_detected_currency_eur_non_eea_ip(self):
+    def test_plan_variation_matches_detected_currency_eur_non_eea_ip(self):
         url, _ = self._get_url_for('EUR', 990)
         user = create_customer_with_billing_address()
         self.client.force_login(user)
@@ -340,7 +358,7 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
         data = required_address_data
         response = self.client.post(url, data, REMOTE_ADDR=SINGAPORE_IPV4)
 
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 200)
 
     def test_billing_address_country_takes_precedence_over_geo_ip(self):
         url, _ = self._get_url_for('EUR', 990)
