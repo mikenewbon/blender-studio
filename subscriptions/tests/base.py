@@ -179,6 +179,15 @@ class BaseSubscriptionTestCase(TestCase):
         self.assertContains(response, '<span class="x-price">€&nbsp;9.90</span>', html=True)
         self.assertContains(response, '/ <span class="x-price-period">1 month</span>', html=True)
 
+    def _assert_total_default_variation_selected_no_tax_eur(self, response):
+        self._assert_total_default_variation_selected_eur(response)
+        self.assertContains(response, 'Automatic ')
+        self.assertContains(response, '/ <span class="x-price-period">1 month</span>', html=True)
+
+        self.assertContains(response, '<h3 class="mb-0">Total</h3>', html=True)
+        self.assertContains(response, '<span class="x-price">€&nbsp;9.90</span>', html=True)
+        self.assertNotContains(response, 'Inc.')
+
     def _assert_total_default_variation_selected_tax_21_eur(self, response):
         self._assert_total_default_variation_selected_eur(response)
         self.assertContains(
