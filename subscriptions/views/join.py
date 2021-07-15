@@ -51,13 +51,12 @@ class _JoinMixin:
     def dispatch(self, request, *args, **kwargs):
         """Set customer for authenticated user, same as AbstractPaymentView does."""
         plan_variation_id = kwargs['plan_variation_id']
-        currency = self.get_currency()
         self.plan_variation = get_object_or_404(
             looper.models.PlanVariation,
             pk=plan_variation_id,
             is_active=True,
+            currency=self.get_currency(),
         )
-
         if not getattr(self, 'gateway', None):
             self.gateway = looper.models.Gateway.default()
         self.user = self.request.user
@@ -66,14 +65,6 @@ class _JoinMixin:
         if self.user.is_authenticated:
             self.customer = self.user.customer
             self.subscription = self._get_existing_subscription()
-
-            # If currency of the plan variation doesn't match, redirect to the right plan variation
-            # but do this only for authenticated sessions.
-            if self.plan_variation.currency != currency:
-                plan_variation = self.plan_variation.in_other_currency(currency)
-                view_name = request.resolver_match.view_name
-                return redirect(view_name, plan_variation_id=plan_variation.pk)
-
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self) -> dict:
