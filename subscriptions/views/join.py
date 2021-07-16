@@ -249,6 +249,11 @@ class ConfirmAndPayView(_JoinMixin, LoginRequiredMixin, FormView):
         self.log.debug('Updated subscription pk=%r', subscription.pk)
         return subscription
 
+    def form_invalid(self, form):
+        """Temporarily log all validation errors."""
+        logger.exception('Validation error in ConfirmAndPayView: %s', form.errors)
+        return super().form_invalid(form)
+
     def form_valid(self, form):
         """Handle valid form data.
 
