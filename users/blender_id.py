@@ -9,6 +9,7 @@ import pathlib
 from django.conf import settings
 import botocore
 import requests
+import requests.exceptions
 
 from blender_id_oauth_client.models import OAuthUserInfo, OAuthToken
 from blender_id_oauth_client.views import blender_id_oauth_settings, ClientSettings
@@ -197,6 +198,8 @@ class BIDSession:
                 user.save(update_fields=['username'])
         except BIDMissingAccessToken:
             logger.warning(f'Unable to retrieve username for {user}: no access token')
+        except requests.exceptions.HTTPError:
+            logger.warning(f'Unable to update username for {user}: HTTPError')
         except Exception:
             logger.exception(f'Unable to update username for {user}')
 

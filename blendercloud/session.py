@@ -135,7 +135,7 @@ def get_or_create_current_user(request: HttpRequest) -> Optional[User]:
         resp.raise_for_status()
         oauth_info = resp.json()
     except Exception:
-        logger.exception('Unable to retrieve user info from Blender ID')
+        logger.warning('Unable to retrieve user info from Blender ID')
         return None
 
     oauth_user_id = oauth_info.get('id')
