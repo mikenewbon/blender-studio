@@ -61,8 +61,8 @@ class _UpsertMixin:
         # Set payment gateways for all payment methods
         for pm in payment_methods:
             # FIXME(anna): make this an option or remove
-            pm.token = str(pm.token) + 'test'
-            if pm.method_type in ('cc', 'pp'):
+            # pm.token = str(pm.token) + 'test'
+            if pm.method_type in ('cc', 'pa'):
                 pm.gateway = self.gateways['braintree']
             elif pm.method_type == 'ba':
                 pm.gateway = self.gateways['bank']

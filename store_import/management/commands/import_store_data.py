@@ -61,6 +61,7 @@ READ_LIMIT = 700  # 1k older subscriptions w/orders can take over 4GB, cannot us
 BATCH_SIZE = 300
 
 ORDER_STATUS = {
+    'wc-processing': 'processing',
     'wc-completed': 'paid',
     'wc-pending': 'created',
     'wc-failed': 'failed',

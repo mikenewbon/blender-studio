@@ -180,7 +180,7 @@ def _payment_methods_from_user(wp_user: Post, user: User) -> List[PaymentMethod]
             method_type = 'cc'
             name = _recognisable_name_cc(card_type=data['card_type'], four=data['last_four'])
         elif _type == 'paypal':
-            method_type = 'pp'
+            method_type = 'pa'
             name = _recognisable_name_pp(payer_email=data['payer_email'])
         else:
             raise Exception(f'Unknown payment method type {data}')
