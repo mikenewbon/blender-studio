@@ -3,12 +3,19 @@ footer {
     text-align: center;
   }
 
-  border-top: 1px solid $input-gray;
+
   margin-top: auto;
 
   ul {
     @include list-unstyled;
   }
+}
+
+.footer-inner {
+  border: 1px solid $input-gray;
+  border-radius: $border-radius;
+  background: $navigation-gray;
+  padding: $spacer;
 }
 
 .footer-social-media {
@@ -30,8 +37,8 @@ footer {
 }
 
 // Pushes the footer down the the bottom of the page using margin-top auto on footer
-body{
+body {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - #{$navbar-height});
+  min-height: calc(100vh - #{$navbar-height + $spacer});
 }
