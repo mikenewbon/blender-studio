@@ -7,6 +7,7 @@ import time
 
 from django.conf import settings
 from django.contrib.admin.models import ADDITION, CHANGE, DELETION, LogEntry  # noqa: F401
+from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.utils.timezone import make_aware as _make_aware
 from phpserialize import dumps, loads
@@ -27,6 +28,11 @@ from looper.models import (
 from looper.money import Money
 from looper.taxes import TaxType  # , Taxable
 
+from common.markdown import sanitize
+from users.blender_id import BIDSession
+
+UserModel = get_user_model()
+bid = BIDSession()
 logger = logging.getLogger('store_import')
 wp_tax_rates = None
 re_order_tax_item_name = re.compile(r'([A-Z]{2})-VAT\s+(\d{2})%')
@@ -631,19 +637,51 @@ def _get_subscription_line_item(wc_order_items):
         return None
 
 
-def _construct_log_entries_from_comments(wp: Post, instance, action_flag=CHANGE) -> List[LogEntry]:
+def _get_admin_user(bid, wp_user: Post) -> Optional[User]:
+    oauth_user_id = _get_meta_value(wp_user, 'blender_id', '')
+    if oauth_user_id:
+        try:
+            oauth_user_info = bid.get_oauth_user_info(oauth_user_id)
+            return oauth_user_info.user
+        except Exception:
+            return
+
+    email = _get_meta_value(wp_user, 'email', '')
+    if email:
+        return UserModel.objects.filter(email=email).first()
+
+
+def _construct_log_entries_from_comments(
+    wp: Post, instance, wp_users, action_flag=CHANGE
+) -> List[LogEntry]:
     entries = []
     _print_comments(wp)
     content_type_id = ContentType.objects.get_for_model(type(instance)).pk
     object_repr = str(instance)
     for comment in wp.comments.all():
         message = comment.content
+        wp_user = None
+        if comment.user_id:
+            if comment.user_id not in wp_users:
+                wp_user = User.objects.prefetch_related('meta').filter(id=comment.user_id).first()
+                if wp_user:
+                    wp_users[comment.user_id] = wp_user
+            else:
+                wp_user = wp_users[comment.user_id]
+
+        user = None
+        if wp_user:
+            user = _get_admin_user(bid, wp_user)
+        else:
+            user = UserModel.objects.filter(email=comment.author_email).first()
+        message = sanitize(message)
         entries.append(
             dict(
-                user_id=settings.LOOPER_SYSTEM_USER_ID,
+                user_id=user.pk if user else settings.LOOPER_SYSTEM_USER_ID,
                 content_type_id=content_type_id,
                 object_id=str(instance.pk),
                 object_repr=object_repr[:200],
+                # ADDITION is useless because change_message is ignored when such entry is displayed
                 action_flag=action_flag,
                 action_time=comment.post_date,
                 change_message=message,

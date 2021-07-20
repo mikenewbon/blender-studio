@@ -86,7 +86,7 @@ class _UpsertMixin:
             self._upsert_subscriptions()
             self._upsert_orders()
             self._upsert_transactions()
-            self._upsert_log_entries()
+            # self._upsert_log_entries()
         self._reset()
         logger.info('Took %s to upsert', time.time() - _start_t)
 
@@ -213,11 +213,52 @@ class _UpsertMixin:
             batch_size=self.BATCH_SIZE,
         )
 
+
+class _UpsertLogEntriesMixin:
+    def _reset(self):
+        # self.log_entries_to_upsert: List[LogEntry] = []
+        self.log_entries_to_upsert: List[Dict[str, Any]] = []
+
+    def _get_fields_for_update(self, model):
+        fields = []
+        for f in model._meta.get_fields():
+            if not f.concrete or f.many_to_many:
+                continue
+            if f.primary_key:
+                continue
+            fields.append(f.name)
+        return fields
+
+    def _separate_new_existing(self, model, objects, pk_field='id', **filters):
+        obj_ids = set(getattr(s, pk_field) for s in objects)
+        # filters = {f'{pk_field}__in': obj_ids}
+        if not filters:
+            filters = {f'{pk_field}__in': obj_ids}
+        existing_ids = set(_[pk_field] for _ in model.objects.filter(**filters).values(pk_field))
+        new_objects = [s for s in objects if getattr(s, pk_field) not in existing_ids]
+        existing_objects = [s for s in objects if getattr(s, pk_field) in existing_ids]
+        logger.info(
+            '%s new, %s existing %s to upsert',
+            len(new_objects),
+            len(existing_objects),
+            model.__name__,
+        )
+        return new_objects, existing_objects
+
+    def _upsert(self):
+        # Save all the subscription data gathered so far
+        if self.total_count > self.BATCH_SIZE and len(self.log_entries_to_upsert) < self.BATCH_SIZE:
+            return
+        _start_t = time.time()
+        with transaction.atomic():
+            self._upsert_log_entries()
+        self._reset()
+        logger.info('Took %s to upsert', time.time() - _start_t)
+
+    def _delete_existing_log_entries(self, entry_data):
+        LogEntry.objects.filter(
+            object_id=entry_data['object_id'], content_type_id=entry_data['content_type_id']
+        ).delete()
+
     def _upsert_log_entries(self) -> None:
-        return  # TODO(anna): make a separate command for copying LogEntries.
-        # LogEntry.objects.bulk_create(log_entries)
-        for log_entry_kwargs in self.log_entries_to_upsert:
-            try:
-                LogEntry.objects.get_or_create(**log_entry_kwargs)
-            except LogEntry.MultipleObjectsReturned:
-                pass
+        LogEntry.objects.bulk_create([LogEntry(**_) for _ in self.log_entries_to_upsert])
