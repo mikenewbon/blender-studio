@@ -17,6 +17,10 @@
       <td>{{ order.paid_at|default:order.created_at }}</td>
     </tr>
     <tr>
+      <th>Subscription #</th>
+      <td>{{ order.subscription_id }}</td>
+    </tr>
+    <tr>
       <th>Renewal type</th>
       <td>{{ order.subscription.collection_method|capfirst }}</td>
     </tr>
