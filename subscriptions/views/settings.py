@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
-from django.views.generic import UpdateView, FormView
+from django.views.generic import UpdateView, FormView, TemplateView
 from waffle.mixins import WaffleFlagMixin
 
 import looper.models
@@ -108,3 +108,9 @@ class PayExistingOrderView(WaffleFlagMixin, looper.views.checkout.CheckoutExisti
         return super(looper.views.checkout.CheckoutExistingOrderView, self).dispatch(
             request, *args, **kwargs
         )
+
+
+class ManageSubscriptionView(SingleSubscriptionMixin, TemplateView):
+    """View and manage a subscription."""
+
+    template_name = 'subscriptions/manage.html'

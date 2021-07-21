@@ -1,0 +1,11 @@
+<table class="table table-receipts">
+  <tbody>
+    {% for subscription in user.subscription_set.all %}
+      <tr>
+        <td class="font-weight-bold">Subscription #{{ subscription.pk }}</td>
+        <td>{{ subscription.status }}</td>
+        <td><a href="{% url 'subscriptions:manage' subscription_id=subscription.pk %}">Manage</a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

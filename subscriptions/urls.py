@@ -26,6 +26,11 @@ urlpatterns = [
         name='join-confirm-and-pay',
     ),
     path(
+        'subscription/<int:subscription_id>/manage/',
+        settings.ManageSubscriptionView.as_view(),
+        name='manage',
+    ),
+    path(
         'subscription/<int:subscription_id>/cancel/',
         settings.CancelSubscriptionView.as_view(),
         name='cancel',

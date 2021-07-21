@@ -3,18 +3,14 @@
 {% load common_extras %}
 
 {% block settings %}
-  <p class="subtitle">Settings: Subscription</p>
-  <h1 class="mb-3">Cancel Your Subscription</h1>
+  <p class="subtitle">Settings: Subscription #{{ subscription.pk }}</p>
+  <h1 class="mb-3">Cancel Subscription #{{ subscription.pk }}</h1>
 
-  {% if user|has_active_subscription %}
+  {% if subscription.status == 'active' %}
     <div class="alert alert-warning" role="alert">
 
-      {% with subscription=user.subscription_set.first %}
-        {% with order=subscription.latest_order %}
-          <span>Your {{ subscription.plan.name }} subscription is currently <span
-            class="font-weight-bolder">{{ subscription.get_status_display|lower }}</span>.</span>
-        {% endwith %}
-      {% endwith %}
+      <span>Your {{ subscription.plan.name }} subscription is currently <span
+        class="font-weight-bolder">{{ subscription.get_status_display|lower }}</span>.</span>
 
     </div>
   {% endif %}
@@ -36,7 +32,7 @@
     {# TODO(anna): should instead link to a specific subscription in your settings, if we allow multiple #}
     <div class="row mt-3">
       <div class="col">
-        <a class="btn btn-dark btn-sm" href="{% url 'user-settings-billing' %}"><i class="material-icons">arrow_back</i> Keep Subscription</a>
+        <a class="btn btn-dark btn-sm" href="{% url 'subscriptions:manage' subscription_id=subscription.pk %}"><i class="material-icons">arrow_back</i> Keep Subscription</a>
       </div>
       <div class="col-auto">
         <button class="btn btn-danger btn-sm ml-auto" id="submit-button" type="submit"><span>Cancel Subscription</span></button>
