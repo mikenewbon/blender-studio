@@ -12,7 +12,6 @@
     <thead>
       <tr>
         <th class="text-left">Payment Method</th>
-        <th class="">Expiry</th>
         <th class="text-right">Remove</th>
       </tr>
     </thead>
@@ -22,8 +21,9 @@
           <tr>
             {% if pm_props is None %}
               <td>
-                Invalid payment method; just delete this one. This can happen when
-                the payment method was deleted at the payment service provider.
+                Invalid or unsupported payment method.<br/>
+                The payment method was either deleted at the payment service provider
+                or is no longer supported.
               </td>
             {% else %}
               {% if payment_method.method_type == 'cc' %}
