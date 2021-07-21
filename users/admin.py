@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model, admin as auth_admin
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
@@ -54,6 +54,29 @@ class NumberOfSubscriptionsFilter(admin.SimpleListFilter):
             return queryset.filter(subscriptions_count__gt=1)
 
 
+class NumberOfBraintreeCustomerIDsFilter(admin.SimpleListFilter):
+    title = _('Braintree Customer IDs')
+
+    parameter_name = 'braintreecustomerids_count'
+
+    def lookups(self, request, model_admin):
+        """Human-readable labels for filter choices."""
+        return (
+            ('none', 'none'),
+            ('one', 'one'),
+            ('multiple', 'multiple'),
+        )
+
+    def queryset(self, request, queryset):
+        """Returns the filtered queryset based on the value provided in the query string."""
+        if self.value() == 'none':
+            return queryset.filter(braintreecustomerids_count=0)
+        if self.value() == 'one':
+            return queryset.filter(braintreecustomerids_count=1)
+        if self.value() == 'multiple':
+            return queryset.filter(braintreecustomerids_count__gt=1)
+
+
 @admin.register(get_user_model())
 class UserAdmin(auth_admin.UserAdmin):
     change_form_template = 'loginas/change_form.html'
@@ -65,7 +88,12 @@ class UserAdmin(auth_admin.UserAdmin):
     def get_queryset(self, *args, **kwargs):
         """Count user subscriptions for subscription debugging purposes."""
         queryset = super().get_queryset(*args, **kwargs)
-        queryset = queryset.annotate(subscriptions_count=Count('subscription'))
+        queryset = queryset.annotate(
+            subscriptions_count=Count('subscription', distinct=True),
+            braintreecustomerids_count=Count(
+                'gatewaycustomerid', Q(gateway__name='braintree'), distinct=True
+            ),
+        )
         return queryset
 
     def subscriptions(self, obj):
@@ -79,6 +107,7 @@ class UserAdmin(auth_admin.UserAdmin):
         'date_deletion_requested',
         'last_login',
         NumberOfSubscriptionsFilter,
+        NumberOfBraintreeCustomerIDsFilter,
     )
 
     list_display = (
