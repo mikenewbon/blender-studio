@@ -32,6 +32,7 @@ class TestClock(BaseSubscriptionTestCase):
             subscription = SubscriptionFactory(
                 user=user,
                 payment_method__user_id=user.pk,
+                payment_method__recognisable_name='Test payment method',
                 payment_method__gateway=Gateway.objects.get(name='braintree'),
                 currency='USD',
                 price=Money('USD', 1110),
