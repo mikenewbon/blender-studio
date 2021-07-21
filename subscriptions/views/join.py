@@ -116,6 +116,11 @@ class BillingDetailsView(_JoinMixin, FormView):
         geoip_country = self.request.session.get(COUNTRY_CODE_SESSION_KEY)
         if geoip_country and (not self.customer or not self.customer.billing_address.country):
             initial['country'] = geoip_country
+
+        if not (self.customer and self.customer.billing_address.full_name):
+            # Fall back to user's full name, if no full name set already in the billing address:
+            if self.request.user.full_name:
+                initial['full_name'] = self.request.user.full_name
         return initial
 
     def get_context_data(self, **kwargs) -> dict:

@@ -89,9 +89,6 @@ class BillingAddressForm(forms.ModelForm):
                 **customer_form_data,
                 **initial,
             }
-            if not kwargs['initial'].get('full_name'):
-                kwargs['initial']['full_name'] = instance.user.full_name
-
         super().__init__(*args, **kwargs)
 
         # Set placeholder values on all form fields
