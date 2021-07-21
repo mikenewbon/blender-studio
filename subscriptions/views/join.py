@@ -43,10 +43,9 @@ class _JoinMixin:
         return f'PAYMENT_GATEWAY_CLIENT_TOKEN_{currency}'
 
     def _get_existing_subscription(self):
-        existing_subscriptions = self.request.user.subscription_set
-        existing_count = existing_subscriptions.count()
-        assert existing_count < 2, f'More than one subscription exists: {existing_count}'
-        return self.request.user.subscription_set.first()
+        # Exclude cancelled subscriptions because they cannot transition to active
+        existing_subscriptions = self.request.user.subscription_set.exclude(status='cancelled')
+        return existing_subscriptions.first()
 
     def dispatch(self, request, *args, **kwargs):
         """Set customer for authenticated user, same as AbstractPaymentView does."""

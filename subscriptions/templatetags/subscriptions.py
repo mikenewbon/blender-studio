@@ -49,3 +49,9 @@ def recurring_pricing(variation: PlanVariation, money: Optional[looper.money.Mon
     else:
         formatted_interval = '\u00A0{variation.interval_unit}s'
     return f'{price}\u00A0/\u00A0{formatted_interval}'
+
+
+@register.filter
+def can_subscribe(user) -> bool:
+    """True if user either has no subscriptions at all or they are all cancelled."""
+    return user.subscription_set.exclude(status='cancelled').count() == 0

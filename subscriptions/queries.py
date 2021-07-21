@@ -63,6 +63,10 @@ def should_redirect_to_billing(user: User) -> bool:
     if not user.is_authenticated:
         return False
 
+    if user.subscription_set.exclude(status='cancelled').count() == 0:
+        # Only cancelled subscriptions, no need to redirect to billing
+        return False
+
     return has_subscription(user) and any(
         # FIXME(anna): checkout creates an on-hold subscription with an order
         # so this seems to be the only currently available way to tell

@@ -1,3 +1,5 @@
+{% load subscriptions %}
+
 <table class="table table-receipts">
   <tbody>
     {% for subscription in user.subscription_set.all %}
@@ -9,3 +11,11 @@
     {% endfor %}
   </tbody>
 </table>
+
+{% if user|can_subscribe %}
+  <div class="row">
+    <div class="col">
+      <a class="btn btn-primary btn-lg btn-block mt-3" href="{% url 'subscriptions:join' %}">Subscribe</a>
+    </div>
+  </div>
+{% endif %}
