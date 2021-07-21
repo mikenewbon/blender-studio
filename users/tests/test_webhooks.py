@@ -399,7 +399,7 @@ class TestBlenderIDWebhook(TestCase):
             responses.GET, f'{BLENDER_ID_BASE_URL}api/me', status=403, body='Unauthorized'
         )
 
-        with self.assertLogs('users.blender_id', level='ERROR') as logs:
+        with self.assertLogs('users.blender_id', level='WARNING') as logs:
             response = self.client.post(
                 self.url, body, content_type='application/json', **prepare_hmac_header(body)
             )
