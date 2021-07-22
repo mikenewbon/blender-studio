@@ -248,7 +248,7 @@ class Attachment:
         """Handle attachment shortcode."""
         try:
             slug = pargs[0]
-        except KeyError:
+        except (KeyError, IndexError):
             return '{attachment No slug given}'
 
         try:
