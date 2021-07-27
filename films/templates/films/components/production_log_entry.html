@@ -43,10 +43,10 @@
           {% endif %}
         {% endif %}
         {% if production_log.summary %}
-
-          <span class="font-weight-bold">This week on {{ film.title }}:</span>
-          {% with_shortcodes production_log.summary|markdown %}
-
+          <div class="production-log-header-summary-text-inner-wrapper">
+            <span class="font-weight-bold">This week on {{ film.title }}:</span>
+            {% with_shortcodes production_log.summary|markdown %}
+          </div>
           {% if production_log.youtube_link != "" %}
             <a href="{{ production_log.youtube_link }}" class="video-modal-link btn btn-primary btn-sm mb-0" data-toggle="modal"
               data-target="#videoModal" data-video="{{ production_log.youtube_link }}">Watch the video</a>

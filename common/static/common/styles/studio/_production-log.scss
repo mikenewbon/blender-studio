@@ -106,6 +106,14 @@
   h3 {
     margin-bottom: $spacer / 4;
   }
+
+  &-inner-wrapper {
+    margin-bottom: $spacer / 2;
+
+    >* {
+      display: inline;
+    }
+  }
 }
 
 .production-log-header-summary-image {
@@ -148,6 +156,6 @@
   margin-bottom: $spacer;
 }
 
-.add-entry{
+.add-entry {
   margin-top: $spacer;
 }
