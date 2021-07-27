@@ -98,10 +98,10 @@
 }
 
 .production-log-header-summary-text {
-  @extend .col-md-8;
-  @extend .col-lg-9;
+  @extend .col-md-6;
+  @extend .col-lg-7;
 
-  margin-bottom: $spacer / 2;
+  margin-bottom: $spacer;
 
   h3 {
     margin-bottom: $spacer / 4;
@@ -109,8 +109,8 @@
 }
 
 .production-log-header-summary-image {
-  @extend .col-md-4;
-  @extend .col-lg-3;
+  @extend .col-md-6;
+  @extend .col-lg-5;
 
   >*:last-child {
     margin-bottom: $spacer;
@@ -118,11 +118,14 @@
 
   img {
     @extend .img-fluid;
+
+    width: 100%;
     border-radius: $border-radius;
   }
 
   >a {
     display: inline-block;
+    width: 100%;
   }
 }
 

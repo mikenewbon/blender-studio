@@ -4,18 +4,6 @@
 <div class="production-log-week">
 
   <div class="production-log-week-header">
-    {% if header != "false" %}
-      {% if production_log_link != "false" %}
-        <a href="{{ production_log.url }}" class="h2">{{ production_log.name }}</a>
-      {% else %}
-        <h2>{{ production_log.name }}</h2>
-      {% endif %}
-
-      {% if production_log.start_date %}
-        <p class="subtitle small mb-3"><i class="material-icons icon-inline small">calendar_today</i>
-          {{ production_log.start_date|date:'M jS Y' }}</p>
-      {% endif %}
-    {% endif %}
 
     {% if user_can_edit_production_log %}
 
@@ -39,17 +27,33 @@
 
       </div>
 
-      {% if production_log.summary %}
-        <div class="production-log-header-summary-text">
-          <h3>This week on {{ film.title }}</h3>
-          {% with_shortcodes production_log.summary|markdown %}
-          {% if production_log.youtube_link != "" %}
-            <a href="{{ production_log.youtube_link }}" class="video-modal-link mb-0" data-toggle="modal"
-              data-target="#videoModal" data-video="{{ production_log.youtube_link }}">Watch the video</a>
+
+      <div class="production-log-header-summary-text">
+
+        {% if header != "false" %}
+          {% if production_log_link != "false" %}
+            <a href="{{ production_log.url }}" class="h2">{{ production_log.name }}</a>
+          {% else %}
+            <h2>{{ production_log.name }}</h2>
           {% endif %}
 
-        </div>
-      {% endif %}
+          {% if production_log.start_date %}
+            <p class="subtitle small mb-2"><i class="material-icons icon-inline small">calendar_today</i>
+              {{ production_log.start_date|date:'M jS Y' }}</p>
+          {% endif %}
+        {% endif %}
+        {% if production_log.summary %}
+
+          <span class="font-weight-bold">This week on {{ film.title }}:</span>
+          {% with_shortcodes production_log.summary|markdown %}
+
+          {% if production_log.youtube_link != "" %}
+            <a href="{{ production_log.youtube_link }}" class="video-modal-link btn btn-primary btn-sm mb-0" data-toggle="modal"
+              data-target="#videoModal" data-video="{{ production_log.youtube_link }}">Watch the video</a>
+          {% endif %}
+        {% endif %}
+      </div>
+
 
     </div>
 
