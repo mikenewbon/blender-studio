@@ -147,10 +147,10 @@ const renderHits = (renderOptions, isFirstRender) => {
         item =>
           `
           <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
-            <div class="card card-dark card-hover card-media">
+            <div class="card">
               <div class="card-header">
                 <a class="card-header-link" href="${item.url}">
-                  <img src="${item.thumbnail_url || fileIconURL}" class="${item.thumbnail_url ? 'card-image' : 'file-icon'}" loading=lazy>
+                  <img src="${item.thumbnail_url || fileIconURL}" class="${item.thumbnail_url ? 'card-img' : 'file-icon'}" loading=lazy>
                 </a>
               </div>
               <a href="${item.url}" class="card-body">

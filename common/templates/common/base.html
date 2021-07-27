@@ -36,7 +36,7 @@
     {% endblock %}
   </head>
 
-  <body class="{% block bodyclasses %}{% endblock bodyclasses %}"
+  <body class="spacer {% block bodyclasses %}{% endblock bodyclasses %}"
     data-authenticated="{% if request.user.is_authenticated %}true{% else%}false{% endif %}">
     <!-- When the body has a nav-drawer, it should have the class 'has-nav-drawer' and when it's wide, 'has-nav-drawer nav-drawer-wide' -->
     <div class="progress global-progress">
@@ -230,13 +230,10 @@
       </div>
     </nav>
 
-
-
+    {% block secondary_nav %}{% endblock secondary_nav %}
 
     {% block jumbotron %}{% endblock jumbotron %}
 
-
-    {% block secondary_nav %}{% endblock secondary_nav %}
     {% comment %}
       <div class="navbar-secondary">
         <div class="content-holder">

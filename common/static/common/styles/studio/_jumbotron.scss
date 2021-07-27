@@ -31,7 +31,7 @@
   }
 
   &.jumbotron-fluid {
-    padding: inherit 0;
+    padding: $spacer * 4 0;
     border: 0;
 
     &.jumbotron-overlay {

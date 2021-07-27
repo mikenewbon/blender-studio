@@ -1,10 +1,10 @@
 <div class="{% block classes %}grid-item{% endblock classes %}">
-  <div class="card card-dark card-hover card-media">
+  <div class="card">
     <div class="card-header">
       <a class="card-header-link" href="{% url 'post-detail' slug=post.slug %}">
         {% if post.thumbnail %}
           {% block image %}
-            <img alt="{{ post.title }}" class="card-image" src="{{ post.thumbnail_s_url }}">
+            <img alt="{{ post.title }}" class="card-img" src="{{ post.thumbnail_s_url }}">
           {% endblock image %}
         {% endif %}
       </a>

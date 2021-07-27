@@ -122,10 +122,10 @@ const renderHits = (renderOptions, isFirstRender) => {
         `
           <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
 
-            <div class="card card-dark card-training card-media card-hover" data-training-id="${ item.id }" data-favorite-url="${ item.favorite_url }" ${ favoritedTrainingIDs.filter(i => i == item.id).length > 0 == true ? 'data-checked="checked"' : ''}>
+            <div class="card card-training" data-training-id="${ item.id }" data-favorite-url="${ item.favorite_url }" ${ favoritedTrainingIDs.filter(i => i == item.id).length > 0 == true ? 'data-checked="checked"' : ''}>
               <div class="card-header">
                 <a href="${ item.url }" class="card-header-link">
-                  <img src="${ item.thumbnail_url }" class="card-image" loading="lazy">
+                  <img src="${ item.thumbnail_url }" class="card-img" loading="lazy">
                 </a>
                 ${ item.type !== 'production lesson' ? authCheck() == true ?
                 `<button class="btn btn-xs btn-icon btn-float checkbox-favorite btn-save-media card-training-favorite ${ favoritedTrainingIDs.filter(i => i == item.id).length > 0 == true ? 'checked primary' : ''}" data-toggle="tooltip" data-placement="left" title="Save for later">

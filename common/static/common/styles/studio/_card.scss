@@ -10,6 +10,7 @@
     background-size: cover;
     overflow: hidden;
     background: $highlight-black;
+    border-radius: $border-radius;
   }
 
   .btn-save-media {
@@ -30,87 +31,72 @@
     }
   }
 
-  &.card-hover {
-    @include hover-focus {
-      background-color: shade($white, 10%);
+  .card-body {
+    opacity: .5;
+    transition: $transition-base;
+  }
 
-      .progress-bar {
-        background: $primary;
-      }
+  @include hover-focus {
+    // background-color: shade($white, 10%);
 
-      .file-icon {
-        opacity: 1;
-      }
+    .progress-bar {
+      background: $primary;
     }
 
-    &.card-dark {
-      @include hover-focus {
-        background-color: tint($navigation-gray, 10%);
-
-        .card-body {
-          color: $body-color;
-        }
-      }
+    .file-icon {
+      opacity: 1;
     }
 
     .card-body {
-      @include hover {
-        color: $card-color;
-        text-decoration: none;
-      }
-    }
-
-    .progress-bar {
-      border-radius: $border-radius;
-      transition: $transition-base;
+      opacity: 1;
     }
   }
 
-  &.card-media {
-    border: 1px solid $input-gray;
-
-
-
-    &.card-poster {
-
-
-      .card-header {
-        padding: 0;
-      }
-
-      .card-header-link {
-        position: static;
-
-        img {
-          width: 100%;
-        }
-      }
+  // To fix body underline issue
+  .card-body {
+    @include hover {
+      text-decoration: none;
     }
+  }
 
+  .progress-bar {
+    border-radius: $border-radius;
+    transition: $transition-base;
+  }
+
+  &.card-poster {
     .card-header {
-      padding-bottom: 56.25%;
-      padding-top: 0;
-      position: relative;
-      width: 100%;
-      background-size: cover;
+      padding: 0;
+    }
 
-      >* {
-        position: absolute;
-      }
+    .card-header-link {
+      position: static;
 
-      .progress {
-        bottom: $spacer / 2;
-        left: $spacer / 2;
-        position: absolute;
-        width: calc(100% - #{$spacer});
-        border-radius: $border-radius;
+      img {
+        width: 100%;
       }
     }
   }
-}
 
-.card-dark {
-  background-color: $navigation-gray;
+  .card-header {
+    padding-bottom: 56.25%;
+    padding-top: 0;
+    position: relative;
+    width: 100%;
+    background-size: cover;
+
+    >* {
+      position: absolute;
+    }
+
+    .progress {
+      bottom: $spacer / 2;
+      left: $spacer / 2;
+      position: absolute;
+      width: calc(100% - #{$spacer});
+      border-radius: $border-radius;
+    }
+  }
 
   .card-body {
     color: $body-color;
@@ -124,11 +110,12 @@
   }
 }
 
+
 .card-subtitle-group {
   align-items: center;
   display: flex;
   justify-content: space-between;
-  margin-bottom: $spacer / 2;
+  margin-bottom: $spacer / 4;
 
   .card-subtitle:first-child {
     overflow: visible;
@@ -204,6 +191,7 @@
 .card-img-top-left {
   flex-shrink: 0; // For IE: https://github.com/twbs/bootstrap/issues/29396
   width: 100%; // Required because we use flexbox and this inherently applies align-self: stretch
+  border-radius: $border-radius;
 }
 
 .card-img-top-left {
@@ -278,8 +266,6 @@
         width: 100%;
 
         &:hover {
-
-
           i {
             text-decoration: none;
           }

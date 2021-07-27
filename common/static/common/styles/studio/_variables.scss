@@ -890,12 +890,12 @@ $jumbotron-bg: $gray-200 !default;
 // Cards
 
 $card-spacer-y: $spacer / 2 !default;
-$card-spacer-x: $spacer !default;
-$card-border-width: $border-width !default;
+$card-spacer-x: $spacer / 2 !default;
+$card-border-width: 0 !default;
 $card-border-radius: $border-radius !default;
-$card-border-color: rgba($black, 0.125) !default;
+$card-border-color: transparent !default;
 $card-inner-border-radius: subtract($card-border-radius, $card-border-width) !default;
-$card-bg: $white !default;
+$card-bg: $dark !default;
 $card-cap-bg: none !default;
 $card-cap-color: null !default;
 $card-height: null !default;
