@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (regionsPerCountry[selectedCountryCode]) {
       const regions = regionsPerCountry[selectedCountryCode];
       if (regions.used_in_address) {
-        // Update region choices accordindly
+        // Update region choices accordingly
         regionSelect.innerHTML = templateRegionSelect(regions);
         regionLabel.innerText = regions.type;
         // Show the updated select
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (!!countrySelect && !!regionSelect && !!regionLabel) {
-    // Update region select with choices appropriated for the selected country
+    // Update region select with choices appropriate for the selected country
     countrySelect.addEventListener('change', updateRegionSelect);
     updateRegionSelect();
   }
