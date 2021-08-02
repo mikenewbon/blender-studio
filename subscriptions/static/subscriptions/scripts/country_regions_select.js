@@ -42,6 +42,15 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!!countrySelect && !!regionSelect && !!regionLabel) {
     // Update region select with choices appropriate for the selected country
     countrySelect.addEventListener('change', updateRegionSelect);
-    updateRegionSelect();
+
+    const alreadySelected = !!(
+      regionSelect.options[regionSelect.selectedIndex] &&
+      regionSelect.options[regionSelect.selectedIndex].value
+    );
+    // Render choices on-load, unless there's already a selected value
+    // in which case the choices were already rendered by back-end
+    if (!alreadySelected) {
+      updateRegionSelect();
+    }
   }
 });

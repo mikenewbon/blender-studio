@@ -70,7 +70,12 @@ class BillingAddressForm(forms.ModelForm):
         if regions:
             has_choices = regions.get('used_in_address', False)
             if has_choices:
-                return regions['choices'], regions['type'].capitalize()
+                # Regions are not required, so an empty "choice" must be prepended to the list
+                choices = [
+                    ('', f'Select {regions["type"]}'),
+                    *regions['choices'],
+                ]
+                return choices, regions['type'].capitalize()
         return [], ''
 
     def __init__(self, *args, **kwargs):
