@@ -240,18 +240,21 @@
 
 
 .accordion {
+  background: $navigation-gray;
+  border-radius: $border-radius;
+  padding: $spacer / 2;
+  border: 1px solid $input-gray;
+
   >.card {
     margin-bottom: 0;
+    background: none;
 
     &:not(:last-of-type) {
       border-bottom: 1px solid $input-gray;
     }
 
-    // .card-body {
-    //   padding-top: 0;
-    // }
-
     >.card-header {
+      position: relative;
       padding: 0;
 
       .btn {
@@ -271,23 +274,25 @@
           }
         }
       }
-    }
 
-
-    @include hover-focus {
-      background-color: shade($white, 10%);
-    }
-
-    &.card-dark {
-      @include hover-focus {
-        background-color: tint($navigation-gray, 10%);
-
-        .card-body {
-          color: $white;
-        }
+      >* {
+        position: relative;
       }
     }
 
+    .card-body{
+      border-radius: $border-radius;
+      background: $highlight-black-strong;
+      margin: $spacer / 2;
+    }
+
+    @include hover-focus {
+      background-color: tint($navigation-gray, 10%);
+
+      .card-body {
+        color: $white;
+      }
+    }
   }
 }
 
