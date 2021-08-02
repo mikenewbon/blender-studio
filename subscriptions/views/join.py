@@ -117,6 +117,8 @@ class BillingDetailsView(_JoinMixin, FormView):
         if geoip_country and (not self.customer or not self.customer.billing_address.country):
             initial['country'] = geoip_country
 
+        # Only set initial values if they aren't already saved to the billing address.
+        # Initial values always override form data, which leads to confusing issues with views.
         if not (self.customer and self.customer.billing_address.full_name):
             # Fall back to user's full name, if no full name set already in the billing address:
             if self.request.user.full_name:

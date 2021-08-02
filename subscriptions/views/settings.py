@@ -95,6 +95,20 @@ class PayExistingOrderView(WaffleFlagMixin, looper.views.checkout.CheckoutExisti
     form_class = AutomaticPaymentForm
     success_url = reverse_lazy('user-settings-billing')
 
+    def get_initial(self) -> dict:
+        """Prefill the payment amount and missing form data, if any."""
+        initial = {
+            'price': self.order.price.decimals_string,
+        }
+
+        # Only set initial values if they aren't already saved to the billing address.
+        # Initial values always override form data, which leads to confusing issues with views.
+        if not (self.customer and self.customer.billing_address.full_name):
+            # Fall back to user's full name, if no full name set already in the billing address:
+            if self.request.user.full_name:
+                initial['full_name'] = self.request.user.full_name
+        return initial
+
     def form_invalid(self, form):
         """Temporarily log all validation errors."""
         logger.exception('Validation error in PayExistingOrderView: %s', form.errors)
