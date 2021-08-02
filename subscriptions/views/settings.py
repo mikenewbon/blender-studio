@@ -95,6 +95,11 @@ class PayExistingOrderView(WaffleFlagMixin, looper.views.checkout.CheckoutExisti
     form_class = AutomaticPaymentForm
     success_url = reverse_lazy('user-settings-billing')
 
+    def form_invalid(self, form):
+        """Temporarily log all validation errors."""
+        logger.exception('Validation error in PayExistingOrderView: %s', form.errors)
+        return super().form_invalid(form)
+
     def dispatch(self, request, *args, **kwargs):
         """Return 403 unless current session and the order belong to the same user.
 
