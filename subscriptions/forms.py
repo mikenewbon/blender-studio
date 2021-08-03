@@ -174,24 +174,6 @@ class BillingAddressForm(forms.ModelForm):
         return instance
 
 
-class BillingAddressReadonlyForm(BillingAddressForm):
-    """Readonly version of the above form, for use on the "Confirm and Pay" step of the checkout."""
-
-    def __init__(self, *args, **kwargs):
-        """Add a "readonly" attribute all fields."""
-        super().__init__(*args, **kwargs)
-        for field_name, field in self.fields.items():
-            # Only make billing details fields readonly (this form is inherited by other forms)
-            if field_name not in BILLING_DETAILS_PLACEHOLDERS:
-                continue
-            field.widget.attrs['readonly'] = True
-            if field.widget.input_type == 'select':
-                continue
-            # Try to adjust inputs width to their current values for compact display
-            value = self.data.get(field_name, self.initial.get(field_name, ''))
-            field.widget.attrs['size'] = len(str(value))
-
-
 class BillingAddressHiddenForm(BillingAddressForm):
     """Hidden version of the billing address form, for use in "Change Payment"."""
 
@@ -229,7 +211,7 @@ class SelectPlanVariationForm(forms.Form):
             )
 
 
-class PaymentForm(BillingAddressReadonlyForm):
+class PaymentForm(BillingAddressForm):
     """Handle PlanVariation ID and payment method details in the second step of the checkout.
 
     Billing details are displayed as read-only and cannot be edited,
