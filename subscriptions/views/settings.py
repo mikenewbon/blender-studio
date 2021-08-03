@@ -16,7 +16,7 @@ from subscriptions.forms import (
     BillingAddressForm,
     CancelSubscriptionForm,
     ChangePaymentMethodForm,
-    AutomaticPaymentForm,
+    PayExistingOrderForm,
 )
 from subscriptions.views.mixins import SingleSubscriptionMixin
 
@@ -97,13 +97,14 @@ class PayExistingOrderView(WaffleFlagMixin, looper.views.checkout.CheckoutExisti
     # Redirect to LOGIN_URL instead of raising an exception
     raise_exception = False
     template_name = 'subscriptions/pay_existing_order.html'
-    form_class = AutomaticPaymentForm
+    form_class = PayExistingOrderForm
     success_url = reverse_lazy('user-settings-billing')
 
     def get_initial(self) -> dict:
         """Prefill the payment amount and missing form data, if any."""
         initial = {
             'price': self.order.price.decimals_string,
+            'email': self.customer.billing_email,
         }
 
         # Only set initial values if they aren't already saved to the billing address.

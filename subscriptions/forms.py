@@ -260,6 +260,38 @@ class AutomaticPaymentForm(PaymentForm):
     )
 
 
+class PayExistingOrderForm(forms.ModelForm):
+    """Display the billing details in a payment form but neither validate nor update them."""
+
+    class Meta:
+        model = looper.models.Address
+        fields = looper.models.Address.PUBLIC_FIELDS
+
+    def __init__(self, *args, **kwargs):
+        """Disable all the billing details fields.
+
+        The billing details are only for display and for use by the payment flow.
+        """
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if field_name not in BILLING_DETAILS_PLACEHOLDERS:
+                continue
+            field.disabled = True
+
+    email = forms.EmailField(required=False, disabled=True)
+
+    payment_method_nonce = forms.CharField(initial='set-in-javascript', widget=forms.HiddenInput())
+    gateway = looper.form_fields.GatewayChoiceField(
+        queryset=looper.models.Gateway.objects.filter(
+            name__in=looper.gateways.Registry.gateway_names_supports_transactions()
+        )
+    )
+    device_data = forms.CharField(
+        initial='set-in-javascript', widget=forms.HiddenInput(), required=False
+    )
+    price = forms.CharField(widget=forms.HiddenInput(), required=True)
+
+
 class ChangePaymentMethodForm(BillingAddressHiddenForm, looper.forms.ChangePaymentMethodForm):
     """Add full billing address to the change payment form."""
 
