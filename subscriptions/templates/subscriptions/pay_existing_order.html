@@ -24,6 +24,7 @@
           <div class="payment-content-inner">
             <section class="checkout-form-fields mb-n2">
               {% with form|add_form_classes as form %}
+                <a class="text-muted float-right" href="{% url 'subscriptions:billing-address' %}"><i class="fa fa-angle-left pr-3"></i>change billing details</a>
                 <fieldset class="checkout-form-billing-address-readonly mb-2">
                   {% include "subscriptions/components/billing_address_form_readonly.html" %}
                 </fieldset>
