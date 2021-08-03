@@ -101,7 +101,7 @@ class _JoinMixin:
         return super().post(request, *args, **kwargs)
 
 
-class BillingDetailsView(_JoinMixin, FormView):
+class BillingDetailsView(_JoinMixin, LoginRequiredMixin, FormView):
     """Display billing details form and save them as billing Address and Customer."""
 
     template_name = 'subscriptions/join/billing_address.html'
