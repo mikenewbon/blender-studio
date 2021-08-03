@@ -174,17 +174,28 @@ class BillingAddressForm(forms.ModelForm):
         return instance
 
 
-class BillingAddressHiddenForm(BillingAddressForm):
-    """Hidden version of the billing address form, for use in "Change Payment"."""
+class BillingAddressReadonlyForm(forms.ModelForm):
+    """Display the billing details in a payment form but neither validate nor update them.
+
+    Used in PaymentMethodChangeView and PayExistingOrderView.
+    """
+
+    class Meta:
+        model = looper.models.Address
+        fields = looper.models.Address.PUBLIC_FIELDS
 
     def __init__(self, *args, **kwargs):
-        """Add a "hidden" attribute all fields."""
+        """Disable all the billing details fields.
+
+        The billing details are only for display and for use by the payment flow.
+        """
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
-            # Only make billing details fields hidden (this form is inherited by other forms)
             if field_name not in BILLING_DETAILS_PLACEHOLDERS:
                 continue
-            field.widget.attrs['hidden'] = True
+            field.disabled = True
+
+    email = forms.EmailField(required=False, disabled=True)
 
 
 class SelectPlanVariationForm(forms.Form):
@@ -242,25 +253,8 @@ class AutomaticPaymentForm(PaymentForm):
     )
 
 
-class PayExistingOrderForm(forms.ModelForm):
-    """Display the billing details in a payment form but neither validate nor update them."""
-
-    class Meta:
-        model = looper.models.Address
-        fields = looper.models.Address.PUBLIC_FIELDS
-
-    def __init__(self, *args, **kwargs):
-        """Disable all the billing details fields.
-
-        The billing details are only for display and for use by the payment flow.
-        """
-        super().__init__(*args, **kwargs)
-        for field_name, field in self.fields.items():
-            if field_name not in BILLING_DETAILS_PLACEHOLDERS:
-                continue
-            field.disabled = True
-
-    email = forms.EmailField(required=False, disabled=True)
+class PayExistingOrderForm(BillingAddressReadonlyForm):
+    """Same as AutomaticPaymentForm, but doesn't validate or update billing details."""
 
     payment_method_nonce = forms.CharField(initial='set-in-javascript', widget=forms.HiddenInput())
     gateway = looper.form_fields.GatewayChoiceField(
@@ -274,7 +268,7 @@ class PayExistingOrderForm(forms.ModelForm):
     price = forms.CharField(widget=forms.HiddenInput(), required=True)
 
 
-class ChangePaymentMethodForm(BillingAddressHiddenForm, looper.forms.ChangePaymentMethodForm):
+class ChangePaymentMethodForm(BillingAddressReadonlyForm, looper.forms.ChangePaymentMethodForm):
     """Add full billing address to the change payment form."""
 
     pass
