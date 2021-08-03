@@ -83,6 +83,11 @@ class PaymentMethodChangeView(WaffleFlagMixin, looper.views.settings.PaymentMeth
 
     subscription: looper.models.Subscription
 
+    def form_invalid(self, form):
+        """Temporarily log all validation errors."""
+        logger.exception('Validation error in ChangePaymentMethodForm: %s', form.errors)
+        return super().form_invalid(form)
+
 
 class PayExistingOrderView(WaffleFlagMixin, looper.views.checkout.CheckoutExistingOrderView):
     """Override looper's view with our forms."""
