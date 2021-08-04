@@ -193,7 +193,7 @@ class TestPOSTBillingDetailsView(BaseSubscriptionTestCase):
         # Check that the manual plan variation totals are displayed
         self.assertContains(response, 'Total')
         self.assertContains(
-            response, '<span class="x-price-tax">Inc. 21% VAT (€&nbsp;24.99)</span>', html=True
+            response, '<span class="x-price-tax">Inc. 21% VAT (€&nbsp;20.65)</span>', html=True
         )
         self.assertContains(response, '<span class="x-price">€&nbsp;119.00</span>', html=True)
         self.assertContains(response, 'Manual ')
@@ -266,7 +266,7 @@ class TestPOSTBillingDetailsView(BaseSubscriptionTestCase):
         # The hidden price field must also be set to a matching amount
         self.assertContains(
             response,
-            '<input type="hidden" name="price" value="8.02" class="form-control" id="id_price">',
+            '<input type="hidden" name="price" value="8.32" class="form-control" id="id_price">',
             html=True,
         )
 
@@ -458,7 +458,7 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
         subscription = user.subscription_set.first()
         self.assertEqual(subscription.status, 'on-hold')
         self.assertEqual(subscription.price, Money('EUR', 1490))
-        self.assertEqual(subscription.tax, Money('EUR', 313))
+        self.assertEqual(subscription.tax, Money('EUR', 259))
         self.assertEqual(subscription.tax_country, 'NL')
         self.assertEqual(subscription.tax_type, 'VATC')
         self.assertEqual(subscription.collection_method, selected_variation.collection_method)
@@ -468,7 +468,7 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
         order = subscription.latest_order()
         self.assertEqual(order.status, 'created')
         self.assertEqual(order.price, Money('EUR', 1490))
-        self.assertEqual(order.tax, Money('EUR', 313))
+        self.assertEqual(order.tax, Money('EUR', 259))
         self.assertEqual(order.tax_country, 'NL')
         self.assertEqual(order.tax_type, 'VATC')
         self.assertIsNotNone(order.pk)
@@ -549,7 +549,7 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
             'gateway': 'braintree',
             'payment_method_nonce': 'fake-valid-nonce',
             # VAT is subtracted from the plan variation price:
-            'price': '12.07',
+            'price': '12.52',
         }
         response = self.client.post(url, data, REMOTE_ADDR=EURO_IPV4)
 
@@ -570,7 +570,7 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
 
         order = subscription.latest_order()
         self.assertEqual(order.status, 'paid')
-        self.assertEqual(order.price, Money('EUR', 1207))
+        self.assertEqual(order.price, Money('EUR', 1252))
         self.assertEqual(order.tax, Money('EUR', 0))
         self.assertEqual(order.vat_number, 'DE260543043')
         self.assertEqual(order.tax_country, 'DE')

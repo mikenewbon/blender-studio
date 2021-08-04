@@ -143,7 +143,7 @@ class BaseSubscriptionTestCase(TestCase):
     def _assert_default_variation_selected_tax_21_eur(self, response):
         self.assertContains(
             response,
-            '<option selected data-renewal-period="1 month" data-currency-symbol="€" data-plan-id="1" data-price="9.90" data-price-tax="2.08" data-tax-rate="21" data-tax-display-name="VAT" data-next-url="/join/plan-variation/2/" value="2">Every 1 month</option>',
+            '<option selected data-renewal-period="1 month" data-currency-symbol="€" data-plan-id="1" data-price="9.90" data-price-tax="1.72" data-tax-rate="21" data-tax-display-name="VAT" data-next-url="/join/plan-variation/2/" value="2">Every 1 month</option>',
             html=True,
         )
         self.assertContains(
@@ -153,14 +153,14 @@ class BaseSubscriptionTestCase(TestCase):
         )
         self.assertContains(
             response,
-            '<span class="x-price-tax">Inc. 21% VAT (€&nbsp;2.08)</span>',
+            '<span class="x-price-tax">Inc. 21% VAT (€&nbsp;1.72)</span>',
             html=True,
         )
 
     def _assert_default_variation_selected_tax_19_eur(self, response):
         self.assertContains(
             response,
-            '<option selected data-renewal-period="1 month" data-currency-symbol="€" data-plan-id="1" data-price="9.90" data-price-tax="1.88" data-tax-rate="19" data-tax-display-name="VAT" data-next-url="/join/plan-variation/2/" value="2">Every 1 month</option>',
+            '<option selected data-renewal-period="1 month" data-currency-symbol="€" data-plan-id="1" data-price="9.90" data-price-tax="1.58" data-tax-rate="19" data-tax-display-name="VAT" data-next-url="/join/plan-variation/2/" value="2">Every 1 month</option>',
             html=True,
         )
         self.assertContains(
@@ -170,7 +170,7 @@ class BaseSubscriptionTestCase(TestCase):
         )
         self.assertContains(
             response,
-            '<span class="x-price-tax">Inc. 19% VAT (€&nbsp;1.88)</span>',
+            '<span class="x-price-tax">Inc. 19% VAT (€&nbsp;1.58)</span>',
             html=True,
         )
 
@@ -191,7 +191,7 @@ class BaseSubscriptionTestCase(TestCase):
     def _assert_total_default_variation_selected_tax_21_eur(self, response):
         self._assert_total_default_variation_selected_eur(response)
         self.assertContains(
-            response, '<span class="x-price-tax">Inc. 21% VAT (€&nbsp;2.08)</span>', html=True
+            response, '<span class="x-price-tax">Inc. 21% VAT (€&nbsp;1.72)</span>', html=True
         )
         self.assertContains(response, 'Automatic ')
         self.assertContains(response, '/ <span class="x-price-period">1 month</span>', html=True)
@@ -199,18 +199,18 @@ class BaseSubscriptionTestCase(TestCase):
     def _assert_total_default_variation_selected_tax_19_eur(self, response):
         self._assert_total_default_variation_selected_eur(response)
         self.assertContains(
-            response, '<span class="x-price-tax">Inc. 19% VAT (€&nbsp;1.88)</span>', html=True
+            response, '<span class="x-price-tax">Inc. 19% VAT (€&nbsp;1.58)</span>', html=True
         )
         self.assertContains(response, 'Automatic ')
         self.assertContains(response, '/ <span class="x-price-period">1 month</span>', html=True)
 
     def _assert_total_default_variation_selected_tax_19_eur_reverse_charged(self, response):
         self.assertContains(response, '<h3 class="mb-0">Total</h3>', html=True)
-        self.assertContains(response, '<span class="x-price">€&nbsp;8.02</span>', html=True)
+        self.assertContains(response, '<span class="x-price">€&nbsp;8.32</span>', html=True)
 
     def _assert_total_default_variation_selected_tax_21_eur_reverse_charged(self, response):
         self.assertContains(response, '<h3 class="mb-0">Total</h3>', html=True)
-        self.assertContains(response, '<span class="x-price">€&nbsp;7.82</span>', html=True)
+        self.assertContains(response, '<span class="x-price">€&nbsp;8.18</span>', html=True)
 
     def _assert_total_default_variation_selected_usd(self, response):
         self.assertContains(response, '<h3 class="mb-0">Total</h3>', html=True)
