@@ -1,13 +1,9 @@
-{# If a subscription already exists, require to confirm #}
-<div class="row">
-  <div class="col">
-    {% with field=form.approve_new_subscription %}
-      {% if field.required %}
-        {% include "common/components/field_label_wrapped.html" %}
-      {% endif %}
-    {% endwith %}
+{% if form.non_field_errors %}
+  <div class="alert alert-sm alert-danger mt-2">
+    <p>Unable to proceed due to the following issue:</p>
+    <p>{{ form.non_field_errors }}</p>
   </div>
-</div>
+{% endif %}
 
 {# Payment process specific form fields, most of them a hidden and don't require special templating. #}
 <div class="row">

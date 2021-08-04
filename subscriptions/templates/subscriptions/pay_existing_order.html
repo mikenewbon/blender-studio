@@ -8,37 +8,44 @@
     <section class="checkout">
       <div class="mx-auto">
         <a class="text-muted" class="float-right" href="{% url 'user-settings-billing' %}"><i class="fa fa-angle-left pr-3"></i>back to subscription settings</a>
-        <section class="plan-info">
-          <h1>Paying for Order #{{ order.display_number }}</h1>
-          <small>billed on {{ order.created_at|date }}</small>
-          {% comment %}{# not sure what should be displayed here #}
-        <h2 class="ml-auto my-0 pt-4"><span>{{ order.price.with_currency_symbol }} for {{ subscription.interval_length }} {{ subscription.interval_unit }}</span></h2>
-        <h3 class="my-0 pt-4">{{ plan.description }}</h3>
-        {% endcomment %}
-          <h4 class="my-0 pt-4">Your {% include "subscriptions/components/info_with_status.html" %}. It will be activated as soon as the outstanding amount is paid:</h4>
-        </section>
-        <hr/>
+        <div class="alert alert-sm">
+          Your {% include "subscriptions/components/info_with_status.html" %}. It will be activated as soon as the outstanding amount is paid
+        </div>
+
+        <div class="payment-header">
+          <h2 class="payment-header-title">Paying for Order #{{ order.display_number }}</h2>
+          <div class="d-flex justify-content-between">
+            <p class="mb-0 small">billed on {{ order.created_at|date }}</p>
+            <p class="small mb-0">{{ order.price.with_currency_symbol }}</p>
+          </div>
+        </div>
+
         <form class="checkout-form" id="payment-form" method="post"
           data-looper-payment-form="true"
           data-braintree-client-token="{{ client_token }}">{% csrf_token %}
-          <div class="payment-content-inner">
-            <section class="checkout-form-fields mb-n2">
-              {% with form|add_form_classes as form %}
-                <a class="text-muted float-right" href="{% url 'subscriptions:billing-address' %}"><i class="fa fa-angle-left pr-3"></i>change billing details</a>
-                <fieldset class="checkout-form-billing-address-readonly mb-2">
-                  {% include "subscriptions/components/billing_address_form_readonly.html" %}
-                </fieldset>
-                <fieldset class="payment-form-payment-method">
-                  {% include "subscriptions/components/payment_form.html" %}
-                </fieldset>
-              {% endwith %}
-            </section>
+          <div class="payment-content">
+            <div class="payment-content-inner">
+              <section class="checkout-form-fields mb-n2">
+                {% with form|add_form_classes as form %}
+                  <a class="text-muted float-right small" href="{% url 'subscriptions:billing-address' %}"><i class="fa fa-angle-left pr-3"></i>change billing details</a>
+                  <fieldset class="checkout-form-billing-address-readonly mb-2">
+                    {% include "subscriptions/components/billing_address_form_readonly.html" %}
+                  </fieldset>
+                  <fieldset class="payment-form-payment-method">
+                    {% include "subscriptions/components/payment_form.html" %}
+                  </fieldset>
+                {% endwith %}
+              </section>
+            </div>
+
+            {# will be enabled when payment gateways are initialized successfully #}
+            <div class="m-2">
+              <button id="submit-button" class="btn btn-block btn-lg btn-payment-confirm btn-success" type="submit"
+                aria-disabled="true"
+                disabled>Pay {{ order.price.with_currency_symbol }}
+              </button>
+            </div>
           </div>
-          {# will be enabled when payment gateways are initialized successfully #}
-          <button id="submit-button" class="btn btn-block btn-lg btn-payment-confirm mt-2 btn-success" type="submit"
-            aria-disabled="true"
-            disabled>Pay {{ order.price.with_currency_symbol }}
-          </button>
         </form>
       </div>
     </section>
