@@ -890,7 +890,7 @@ six = ">=1.11.0"
 
 [[package]]
 name = "looper"
-version = "1.7.1rc1"
+version = "1.7.1rc2"
 description = ""
 category = "main"
 optional = false
@@ -908,7 +908,7 @@ django-countries = "^6.0"
 django-pipeline = "^2.0.6"
 geoip2 = "^3.0"
 python-dateutil = "^2.7"
-pyvat = "1.3.15"
+pyvat = "rev 419abd659ae5a4a6cb6ea9b54aa4bde17aefeb5b"
 requests = "^2.22"
 xhtml2pdf = "^0.2"
 
@@ -916,7 +916,7 @@ xhtml2pdf = "^0.2"
 type = "git"
 url = "git://git.blender.org/looper.git"
 reference = "patched-clock"
-resolved_reference = "631ff1b9ed2937a602ad88311ebf0b1acd3f99b9"
+resolved_reference = "7b087a0a549c9a4b09935d9d2086b7892dae00ca"
 
 [[package]]
 name = "lxml"
@@ -1309,14 +1309,21 @@ python-versions = "*"
 [[package]]
 name = "pyvat"
 version = "1.3.15"
-description = "VAT validation for Python"
+description = ""
 category = "main"
 optional = false
 python-versions = "*"
+develop = false
 
 [package.dependencies]
 pycountry = "*"
 requests = ">=1.0.0,<3.0"
+
+[package.source]
+type = "git"
+url = "https://github.com/iconfinder/pyvat.git"
+reference = "419abd659ae5a4a6cb6ea9b54aa4bde17aefeb5b"
+resolved_reference = "419abd659ae5a4a6cb6ea9b54aa4bde17aefeb5b"
 
 [[package]]
 name = "pyyaml"
@@ -1678,7 +1685,7 @@ xmlsec = ["xmlsec (>=0.6.1)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "91f7eca8d60a42c25fe84bb265e3b2f4fd64e38c66ff998a5abb3dc58605c39a"
+content-hash = "948cb2920356d5e951acc6876f10ddd2b0e3be9b0f2ee2ab77cc991124cff9a5"
 
 [metadata.files]
 alphabetic-timestamp = [
@@ -2407,10 +2414,7 @@ pytz = [
     {file = "pytz-2020.1-py2.py3-none-any.whl", hash = "sha256:a494d53b6d39c3c6e44c3bec237336e14305e4f29bbf800b599253057fbb79ed"},
     {file = "pytz-2020.1.tar.gz", hash = "sha256:c35965d010ce31b23eeb663ed3cc8c906275d6be1a34393a1d73a41febf4a048"},
 ]
-pyvat = [
-    {file = "pyvat-1.3.15-py3-none-any.whl", hash = "sha256:ce320791323c72d29cf2fd0f3211161057861414f1e88171d88d68d8afc878c7"},
-    {file = "pyvat-1.3.15.tar.gz", hash = "sha256:b9321d3899c79f68319c8cdd6356b6d8f9c977ffb3113683f95439f68edea547"},
-]
+pyvat = []
 pyyaml = [
     {file = "PyYAML-5.3.1-cp27-cp27m-win32.whl", hash = "sha256:74809a57b329d6cc0fdccee6318f44b9b8649961fa73144a98735b0aaf029f1f"},
     {file = "PyYAML-5.3.1-cp27-cp27m-win_amd64.whl", hash = "sha256:240097ff019d7c70a4922b6869d8a86407758333f02203e0fc6ff79c5dcede76"},
