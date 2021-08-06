@@ -157,6 +157,23 @@ class BaseSubscriptionTestCase(TestCase):
             html=True,
         )
 
+    def _assert_default_variation_selected_tax_20_eur(self, response):
+        self.assertContains(
+            response,
+            '<option selected data-renewal-period="1 month" data-currency-symbol="€" data-plan-id="1" data-price="9.90" data-price-tax="1.65" data-tax-rate="20" data-tax-display-name="VAT" data-next-url="/join/plan-variation/2/" value="2">Every 1 month</option>',
+            html=True,
+        )
+        self.assertContains(
+            response,
+            '<span class="x-price">€&nbsp;9.90</span>',
+            html=True,
+        )
+        self.assertContains(
+            response,
+            '<span class="x-price-tax">Inc. 20% VAT (€&nbsp;1.65)</span>',
+            html=True,
+        )
+
     def _assert_default_variation_selected_tax_19_eur(self, response):
         self.assertContains(
             response,
