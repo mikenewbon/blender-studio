@@ -15,21 +15,36 @@ class Command(BaseCommand):
     """Go over latest orders with incorrect tax amounts and update them."""
 
     def _add_order(self, order):
-        if order.pk not in self.orders_seen:
-            self.orders_to_update.append(order)
-            self.orders_seen.add(order.pk)
+        if order.pk in self.orders_seen:
+            return
+
+        self.orders_to_update.append(order)
+        self.orders_seen.add(order.pk)
 
     def _add_subscription(self, subscription):
-        if subscription.pk not in self.subscriptions_seen:
-            self.subscriptions_to_update.append(subscription)
-            self.subscriptions_seen.add(subscription.pk)
+        if subscription.pk in self.subscriptions_seen:
+            return
+
+        self.subscriptions_to_update.append(subscription)
+        self.subscriptions_seen.add(subscription.pk)
+
+    def _get_taxable(self, subscription):
+        """Calculate tax rate using tax country already set on the subscription."""
+        tax_country = subscription.tax_country
+        product_type = subscription.plan.product.type
+        tax_type, tax_rate = looper.taxes.ProductType(product_type).get_tax(
+            buyer_country_code=tax_country,
+            is_business=False,
+        )
+        return looper.taxes.Taxable(subscription.price, tax_type=tax_type, tax_rate=tax_rate)
 
     def _handle_order(self, order):
         # Make sure subscription's tax rate is recalculated
         if order.subscription_id not in self.subscriptions_seen:
             self._handle_subscription(order.subscription)
 
-        taxable = order.subscription.taxable
+        subscription = order.subscription
+        taxable = self._get_taxable(subscription)
         assert (
             order.tax_type == taxable.tax_type.value
         ), f'Order #{order.pk} tax type changed from {order.tax_type} to {taxable.tax_type}'
@@ -61,25 +76,24 @@ class Command(BaseCommand):
             self._add_order(order)
 
     def _handle_subscription(self, subscription):
-        self.subscriptions_seen.add(subscription.pk)
-
         old_taxable = subscription.taxable
 
-        # Recalculate tax rate
-        subscription.update_tax(save=False)
-        taxable = subscription.taxable
-        assert subscription.tax_type == old_taxable.tax_type.value == taxable.tax_type.value, (
+        taxable = self._get_taxable(subscription)
+        assert old_taxable.tax_type.value == taxable.tax_type.value, (
             f'Subs #{subscription.pk} tax type changed from '
-            f'{old_taxable.tax_type} to {subscription.tax_type}'
+            f'{old_taxable.tax_type} to {taxable.tax_type} '
+            f'({subscription.tax_country})'
         )
 
-        if old_taxable.tax_rate != subscription.tax_rate:
+        if old_taxable.tax_rate != taxable.tax_rate:
             logger.info(
                 f'Subs #{subscription.pk} tax rate will be updated: '
-                f'{old_taxable.tax_rate} -> {subscription.tax_rate} '
+                f'{old_taxable.tax_rate} -> {taxable.tax_rate} '
                 f'({subscription.price})'
             )
+            # Not expecting tax rate changes for anything except Ireland
             assert subscription.tax_country == 'IE', f'{subscription.tax_country} != IE'
+            subscription.tax_rate = taxable.tax_rate
             self._add_subscription(subscription)
 
         if taxable.tax != subscription.tax:
@@ -98,7 +112,18 @@ class Command(BaseCommand):
             .filter(
                 created_at__gte='2021-07-01',
                 tax_type=looper.taxes.TaxType.VAT_CHARGE.value,
+                # tax_country='IE',
                 # FIXME: handle reverse-charged ones later
+                user__customer__vat_number='',
+            )
+            .exclude(
+                # FIXME(anna): will most likely need to add exceptions
+                # for GB and MC, because pyvat only tracks EU member
+                # states
+                tax_country__in=('GB', 'IE', 'MC'),
+            )
+            .exclude(
+                subscription__tax_country__in=('GB', 'IE', 'MC'),
             )
             .exclude(
                 tax_type=looper.taxes.TaxType.NO_CHARGE.value,
@@ -111,7 +136,10 @@ class Command(BaseCommand):
         self.orders_seen = set()
 
         for order in orders_q:
+            assert order.tax_country != 'GB'
             self._handle_order(order)
+        logger.info('Orders to update: %s', len(self.orders_to_update))
+        logger.info('Subscriptions to update: %s', len(self.subscriptions_to_update))
 
         return  # FIXME uncomment after reviewing all the changes and run again
         fields = {'tax', 'tax_rate'}
