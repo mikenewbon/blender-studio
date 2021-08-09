@@ -67,6 +67,10 @@ div.spacer-n {
     overflow-wrap: normal;
   }
 
+  .container-xl {
+    padding: 0 $spacer / 2;
+  }
+
   // Because flex properties aren't inherited, we need to redeclare these first
   // few properties so that content nested within behave properly.
   .profile {
@@ -224,7 +228,7 @@ div.spacer-n {
   transition: top $nav-drawer-animation-duration;
 
   &.hover {
-    top: #{$navbar-height + $spacer / 2 - 1}!important;
+    top: #{$navbar-height + $spacer / 2 - 1} !important;
   }
 
   // position: fixed;
@@ -342,9 +346,32 @@ div.spacer-n {
     margin-right: 0;
   }
 
+  @include hover-focus {
+    &::before {
+      opacity: 1;
+    }
+  }
+
   align-items: center;
   display: flex;
-  margin-right: $spacer;
+  padding-left: $spacer / 2;
+  padding-right: $spacer / 2;
+  margin-right: $spacer / 2;
+  position: relative;
+
+  &:before {
+    content: close-quote;
+    transition: $transition-base;
+    display: block;
+    background: $highlight-white;
+    opacity: 0;
+    width: calc(100%);
+    height: calc(100% - #{$spacer});
+    position: absolute;
+    left: 0;
+    top: $spacer / 2;
+    border-radius: $border-radius;
+  }
 
   img {
     @include img-fluid;

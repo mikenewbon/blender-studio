@@ -10,11 +10,17 @@
       </a>
     </div>
     <a href="{% url 'post-detail' slug=post.slug %}" class="card-body">
+
+      <h3 class="card-title">{{ post.title }}</h3>
+      <p class="card-text">{{ post.excerpt }}</p>
+
+    </a>
+    <a href="{% url 'post-detail' slug=post.slug %}" class="card-footer">
       <div class="card-subtitle-group">
 
-        <p class="card-subtitle">
+        {% comment %} <p class="card-subtitle">
           {{ post.category|title }}
-        </p>
+        </p> {% endcomment %}
         {% if not post.is_published %}
           <div class="badge badge-danger">
             Unpublished
@@ -33,9 +39,8 @@
         {% endif %}
 
       </div>
-      <h3 class="card-title">{{ post.title }}</h3>
-      <p class="card-text">{{ post.excerpt }}</p>
-
     </a>
+
+
   </div>
 </div>

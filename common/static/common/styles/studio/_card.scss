@@ -31,11 +31,6 @@
     }
   }
 
-  .card-body {
-    opacity: .5;
-    transition: $transition-base;
-  }
-
   @include hover-focus {
     // background-color: shade($white, 10%);
 
@@ -49,6 +44,10 @@
 
     .card-body {
       opacity: 1;
+    }
+
+    .card-title {
+      color: $white;
     }
   }
 
@@ -99,7 +98,7 @@
   }
 
   .card-body {
-    color: $body-color;
+    color: $highlight-white-xstrong;
   }
 
   .card-subtitle {
@@ -114,8 +113,7 @@
 .card-subtitle-group {
   align-items: center;
   display: flex;
-  justify-content: space-between;
-  margin-bottom: $spacer / 4;
+  justify-content: flex-start;
 
   .card-subtitle:first-child {
     overflow: visible;
@@ -135,6 +133,8 @@
 }
 
 .card-title {
+  color: $highlight-white-xstrong;
+  transition: $transition-base;
   margin-bottom: $spacer / 4;
 }
 
@@ -182,7 +182,11 @@
 
 .card-footer {
   margin-top: -$spacer / 2;
-  padding: 0 $card-spacer-x 20px;
+  padding: 0 $card-spacer-x $card-spacer-x;
+
+  @include hover {
+    text-decoration: none;
+  }
 }
 
 .card-img,
@@ -280,7 +284,7 @@
       }
     }
 
-    .card-body{
+    .card-body {
       border-radius: $border-radius;
       background: $highlight-black-strong;
       margin: $spacer / 2;
@@ -337,6 +341,7 @@
 }
 
 .card-text {
+  @extend .small;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   /* number of lines to show */
