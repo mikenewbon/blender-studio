@@ -148,6 +148,7 @@ class Video(models.Model):
     duration = models.DurationField(help_text='[DD] [[HH:]MM:]ss[.uuuuuu]')
     duration.description = 'Video duration in the format [DD] [[HH:]MM:]ss[.uuuuuu]'
     play_count = models.PositiveIntegerField(default=0, editable=False)
+    loop = models.BooleanField(default=False)
 
     @property
     def duration_label(self):
