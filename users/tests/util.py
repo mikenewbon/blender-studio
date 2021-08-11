@@ -2,7 +2,12 @@ import json
 import re
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
 import responses
+
+from common.tests.factories.users import UserFactory
+
+User = get_user_model()
 
 
 def mock_blender_id_responses() -> None:
@@ -139,3 +144,11 @@ def mock_mailgun_responses() -> None:
             'message': 'Mailing list member has been deleted',
         },
     )
+
+
+def create_admin_log_user() -> User:
+    """Create the admin user used for logging."""
+    admin_user = UserFactory(id=1, email='admin@blender.studio', is_staff=True, is_superuser=True)
+    # Reset ID sequence to avoid clashing with an already used ID 1
+    UserFactory.reset_sequence(100, force=True)
+    return admin_user

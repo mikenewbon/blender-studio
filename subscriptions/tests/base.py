@@ -9,7 +9,7 @@ import factory
 import responses
 
 from common.tests.factories.subscriptions import create_customer_with_billing_address
-from common.tests.factories.users import UserFactory
+import users.tests.util as util
 
 User = get_user_model()
 
@@ -31,11 +31,7 @@ class BaseSubscriptionTestCase(TestCase):
         responses.add_passthru('https://api.sandbox.braintreegateway.com:443/')
 
         # Create the admin user used for logging
-        self.admin_user = UserFactory(
-            id=1, email='admin@blender.studio', is_staff=True, is_superuser=True
-        )
-        # Reset ID sequence to avoid clashing with an already used ID 1
-        UserFactory.reset_sequence(100, force=True)
+        self.admin_user = util.create_admin_log_user()
 
         self.user = create_customer_with_billing_address(
             full_name='Алексей Н.',
