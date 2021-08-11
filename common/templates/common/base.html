@@ -1,6 +1,5 @@
 {% load pipeline %}
 {% load static %}
-{% load comment_extras %}
 {% load common_extras %}
 <!DOCTYPE html>
 <html lang="en">
@@ -27,11 +26,11 @@
       </template>
 
       <template id="comment-reply-input-template">
-        {% comment_input div_class='comment-reply-input' %}
+        {% include 'comments/components/comment_input.html' with div_class='comment-reply-input' %}
       </template>
 
       <template id="comment-edit-input-template">
-        {% comment_input div_class='comment-edit-input' %}
+        {% include 'comments/components/comment_input.html' with div_class='comment-edit-input' %}
       </template>
     {% endblock %}
   </head>

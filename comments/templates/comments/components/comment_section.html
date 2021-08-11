@@ -1,11 +1,9 @@
 {% load common_extras %}
-{% load comment_extras %}
 
 <div class="comment-section" data-comment-url="{{ comments.comment_url }}">
   <h3>{{ comments.number_of_comments }} Comments</h3>
   {% if user|has_active_subscription %}
     {% include 'comments/components/comment_input.html' with div_class='comment-main-input' %}
-    {% comment %} {% comment_input button_label='Comment' div_class='comment-main-input'%} {% endcomment %}
   {% else %}
     <div class="comment-input row" onkeydown="event.stopPropagation()">
       <div class="col">
