@@ -1,10 +1,11 @@
 from typing import Optional
 import logging
+import time
 
 from actstream.models import Action
 from django.contrib.admin.utils import NestedObjects
 from django.contrib.auth.models import AbstractUser
-from django.db import models, DEFAULT_DB_ALIAS
+from django.db import models, DEFAULT_DB_ALIAS, transaction
 from django.db.models import Case, When, Value, IntegerField
 from django.templatetags.static import static
 from django.urls import reverse
@@ -14,6 +15,11 @@ from django_jsonfield_backport.models import JSONField
 from common.upload_paths import get_upload_to_hashed_path
 
 logger = logging.getLogger(__name__)
+
+
+def shortuid() -> str:
+    """Generate a 14-characters long string ID based on time."""
+    return hex(int(time.monotonic() * 10 ** 10))[2:]
 
 
 class User(AbstractUser):
@@ -86,6 +92,93 @@ class User(AbstractUser):
         self.save(
             update_fields=['is_active', 'date_deletion_requested', 'is_subscribed_to_newsletter']
         )
+
+    @transaction.atomic
+    def anonymize_or_delete(self):
+        """Delete user completely if they don't have a subscription with order, otherwise anonymize.
+
+        Does nothing if deletion hasn't been explicitly requested earlier.
+        """
+        import looper.admin_log as admin_log
+        import looper.models
+
+        if not self.can_be_deleted:
+            looper.error(
+                'User.anonymize called, but pk=%s cannot be deleted',
+                self.pk,
+            )
+            return
+
+        if not self.date_deletion_requested:
+            logger.error(
+                "User.anonymize_or_delete called, but deletion of pk=%s hasn't been requested",
+                self.pk,
+            )
+            return
+
+        if self.image:
+            try:
+                self.image.delete(save=False)
+            except Exception:
+                logger.exception(
+                    'Unable to delete image %s for pk=%s',
+                    self.image.name,
+                    self.pk,
+                )
+
+        # If there are no orders, the user account can be deleted
+        if self.order_set.count() == 0:
+            logger.warning(
+                'User pk=%s requested deletion and has no orders: deleting the account',
+                self.pk,
+            )
+            self.delete()
+            return
+
+        logger.warning(
+            'User pk=%s requested deletion and has orders: anonymizing the account',
+            self.pk,
+        )
+        username = f'del{shortuid()}'
+        self.__class__.objects.filter(pk=self.pk).update(
+            email=f'{username}@example.com',
+            full_name='',
+            username=username,
+            badges=None,
+            is_subscribed_to_newsletter=False,
+            is_active=False,
+            image=None,
+        )
+        logger.warning('Anonymized user pk=%s', self.pk)
+
+        logger.warning('Soft-deleting payment methods records of user pk=%s', self.pk)
+        for payment_method in self.paymentmethod_set.all():
+            payment_method.recognisable_name = '<deleted>'
+            logger.warning(
+                'Deleting payment method %s of user pk=%s at the payment gateway',
+                payment_method.pk,
+                self.pk,
+            )
+            payment_method.delete()
+
+        logger.warning('Deleting address records of user pk=%s', self.pk)
+        looper.models.Address.objects.filter(user_id=self.pk).delete()
+
+        logger.warning('Deleting customer records of user pk=%s', self.pk)
+        looper.models.Customer.objects.filter(user_id=self.pk).delete()
+        looper.models.GatewayCustomerId.objects.filter(user_id=self.pk).delete()
+
+        logger.warning('Anonymizing comments of user pk=%s', self.pk)
+        self.comments.update(user_id=None)
+
+        logger.warning('Anonymizing likes of user pk=%s', self.pk)
+        self.like_set.update(user_id=None)
+
+        logger.warning('Deleting actions of user pk=%s', self.pk)
+        self.actor_actions.all().delete()
+
+        message = 'Anonymized because account deletion was requested'
+        admin_log.attach_log_entry(self, message)
 
 
 class Notification(models.Model):

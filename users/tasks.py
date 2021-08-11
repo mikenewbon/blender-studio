@@ -105,6 +105,21 @@ def handle_tracking_event_unsubscribe(event_type: str, message_id: str, event: D
 
 
 @background()
+def unsubscribe_from_newsletters(pk: int):
+    """Remove emails of user with given pk from newsletter lists."""
+    user = User.objects.get(pk=pk)
+    emails = (user.email, user.customer.billing_email)
+    for email in emails:
+        if not email:
+            continue
+        for list_name in (
+            settings.NEWSLETTER_SUBSCRIBER_LIST,
+            settings.NEWSLETTER_NONSUBSCRIBER_LIST,
+        ):
+            mailgun.delete_from_maillist(list_name, email)
+
+
+@background()
 def handle_deletion_request(pk: int) -> bool:
     """Delete user account and all data related to it."""
     prior_to = timezone.now() - DELETION_DELTA
@@ -113,12 +128,14 @@ def handle_deletion_request(pk: int) -> bool:
         date_deletion_requested__lt=prior_to,
         pk=pk,
     )
+
     if not user.can_be_deleted:
         logger.error('Cannot delete user pk=%s', pk)
         return False
 
-    user.delete()
-    logger.warning('Deleted user pk=%s', pk)
+    unsubscribe_from_newsletters(pk=pk)
+
+    user.anonymize_or_delete()
     return True
 
 

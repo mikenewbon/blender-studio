@@ -22,7 +22,10 @@ class Command(BaseCommand):
         """Go through existing deletion requests, schedule handling of ones that are old enough."""
         prior_to = timezone.now() - tasks.DELETION_DELTA
         users_to_delete = User.objects.filter(
-            date_deletion_requested__isnull=False, date_deletion_requested__lt=prior_to
+            date_deletion_requested__isnull=False,
+            date_deletion_requested__lt=prior_to,
+        ).exclude(  # exclude already processed records
+            is_active=False,
         )
         user_ids = {user.pk for user in users_to_delete}
         if not len(user_ids):

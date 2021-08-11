@@ -31,6 +31,24 @@ class SubscriptionFactory(DjangoModelFactory):
     user = factory.SubFactory('common.tests.factories.users.UserFactory')
 
 
+class OrderFactory(DjangoModelFactory):
+    class Meta:
+        model = looper.models.Order
+
+    user = factory.SubFactory('common.tests.factories.users.UserFactory')
+    subscription = factory.SubFactory(SubscriptionFactory)
+    payment_method = factory.SubFactory(PaymentMethodFactory)
+
+
+class TransactionFactory(DjangoModelFactory):
+    class Meta:
+        model = looper.models.Transaction
+
+    user = factory.SubFactory('common.tests.factories.users.UserFactory')
+    order = factory.SubFactory(OrderFactory)
+    payment_method = factory.SubFactory(PaymentMethodFactory)
+
+
 class TeamFactory(DjangoModelFactory):
     class Meta:
         model = Team

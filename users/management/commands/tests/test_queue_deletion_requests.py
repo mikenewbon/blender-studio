@@ -31,6 +31,12 @@ class QueueDeletionRequestsCommandTest(TestCase):
         users_to_delete = [
             UserFactory(date_deletion_requested=now - timedelta(days=30)) for _ in range(4)
         ]
+        # create some users who requested deletion and have already been processed
+        for i in range(2):
+            UserFactory(
+                date_deletion_requested=now - timedelta(days=30),
+                is_active=False,
+            )
 
         with self.assertLogs(
             'users.management.commands.queue_deletion_requests', level='INFO'
