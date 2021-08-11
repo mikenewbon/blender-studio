@@ -24,46 +24,22 @@ function timeDifference(datetime) {
 
   if (elapsed < msPerMinute) {
     const value = Math.round(elapsed / 1000);
-    if (value === 1) {
-      return `${value}\xa0sec ago`;
-    } else {
-      return `${value}\xa0secs ago`;
-    }
+    return `${value}\xa0sec`;
   } else if (elapsed < msPerHour) {
     const value = Math.round(elapsed / msPerMinute);
-    if (value === 1) {
-      return `${value}\xa0min ago`;
-    } else {
-      return `${value}\xa0mins ago`;
-    }
+    return `${value}\xa0min`;
   } else if (elapsed < msPerDay) {
     const value = Math.round(elapsed / msPerHour);
-    if (value === 1) {
-      return `${value}\xa0hour ago`;
-    } else {
-      return `${value}\xa0hours ago`;
-    }
+    return `${value}\xa0h`;
   } else if (elapsed < msPerMonth) {
     const value = Math.round(elapsed / msPerDay);
-    if (value === 1) {
-      return `${value}\xa0day ago`;
-    } else {
-      return `${value}\xa0days ago`;
-    }
+    return `${value}\xa0d`;
   } else if (elapsed < msPerYear) {
     const value = Math.round(elapsed / msPerMonth);
-    if (value === 1) {
-      return `${value}\xa0month ago`;
-    } else {
-      return `${value}\xa0months ago`;
-    }
+    return `${value}\xa0mo`;
   } else {
     const value = Math.round(elapsed / msPerYear);
-    if (value === 1) {
-      return `${value}\xa0year ago`;
-    } else {
-      return `${value}\xa0years ago`;
-    }
+    return `${value}\xa0yr`;
   }
 }
 
@@ -261,6 +237,12 @@ function initVideo(container) {
         .querySelector('.plyr__menu')
         .insertAdjacentHTML('afterend', loopButton);
 
+      if (dataElement.querySelector('video').hasAttribute('loop')) {
+        element.elements.controls
+          .querySelector('[data-plyr="loop"]')
+          .classList.add('plyr__control--pressed');
+      }
+
       element.elements.controls
         .querySelector('[data-plyr="loop"]')
         .addEventListener('click', (event) => {
@@ -340,4 +322,30 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+});
+
+// TODO(Mike): Simplify and clean up
+document.addEventListener('DOMContentLoaded', () => {
+
+  const nav = document.querySelector('.navbar');
+  const secondaryNav = document.querySelector('.navbar-secondary');
+
+  nav?.addEventListener('mouseover', (e) => {
+    nav.classList.add('hover');
+    secondaryNav.classList.add('hover');
+  });
+  nav?.addEventListener('mouseout', (e) => {
+    nav.classList.remove('hover');
+    secondaryNav.classList.remove('hover');
+  });
+
+  secondaryNav?.addEventListener('mouseover', (e) => {
+    nav.classList.add('hover');
+    secondaryNav.classList.add('hover');
+  });
+  secondaryNav?.addEventListener('mouseout', (e) => {
+    nav.classList.remove('hover');
+    secondaryNav.classList.remove('hover');
+  });
+
 });
