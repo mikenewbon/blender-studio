@@ -1,5 +1,5 @@
 {% extends 'common/base.html' %}
-{% load pipeline %}
+{% load static %}
 
 {% block title_append %} - Stats{% endblock title_append %}
 
@@ -8,47 +8,63 @@
   <div class="container-xl pt-4">
     {% include "common/components/simple_header.html" with title="Stats" subtitle="The latest Blender Cloud numbers." %}
 
-    <div class="row">
-      <canvas id="myChart" ></canvas>
+    <script src="{% static "looper/scripts/vendor/moment.min.js" %}"></script>
+    <script src="{% static "looper/scripts/vendor/chart.min.js" %}"></script>
+    <script src="{% static "looper/scripts/vendor/chartjs-adapter-moment.min.js" %}"></script>
+    <div class="chart-container">
+      <canvas style="margin-bottom: 30px; width: 60%; height: 50%;" id="chart-canvas"></canvas>
     </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const ctx = document.getElementById('chart-canvas').getContext('2d');
+        const chartDatasets = {{ chart.datasets | safe }};
+
+        // Parse the dates to JS
+        chartDatasets.forEach((chartData) => {
+          chartData.data.forEach((d) => {
+            d.x = new Date(d.date);
+          });
+        });
+
+        // Render the chart
+        const chart = new Chart(ctx, {
+          type: '{% firstof chart.type "bar" %}',
+          data: {
+            datasets: chartDatasets,
+          },
+          indexAxis: 'x',
+          options: {
+            animation: false,
+            responsive: true,
+            scales: {
+              x: {
+                type: 'time',
+                ticks: {
+                  source: 'auto',
+                  maxRotation: 0,
+                  autoSkip: true,
+                },
+                time: {
+                  unit: '{{ chart.aggregate_by }}',
+                  round: '{{ chart.aggregate_by }}',
+                },
+              },
+            },
+            plugins: {
+              tooltip: {
+                enabled: true,
+                callbacks: {
+                  title: function(context) {
+                    return moment(context[0].raw.x).format('{% if aggregate_by == "month" %}MMM YYYY{% else %}MMM D, YYYY{% endif %}');
+                  },
+                },
+              },
+            },
+          },
+        });
+      });
+    </script>
 
   </div>
 
-
-
 {% endblock content %}
-
-{% block scripts %}
-  {% javascript 'vendor_chartjs' %}
-  {{ subscribers_by_month_series|json_script:"subscribers_by_month_series" }}
-  <script>
-    const subscribersByMonthSeries = JSON.parse(
-      document.getElementById('subscribers_by_month_series').textContent
-    );
-    console.log(subscribersByMonthSeries);
-    var ctx = document.getElementById('myChart');
-    var myChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        datasets: [{
-          borderColor: 'rgb(0,183,255)',
-          data: subscribersByMonthSeries
-        }]
-      },
-      options: {
-        legend: {
-          display: false,
-        },
-        scales: {
-          xAxes: [{
-            type: 'time',
-            time: {
-              unit: 'month'
-            }
-          }],
-        }
-      }
-    });
-  </script>
-
-{% endblock scripts %}

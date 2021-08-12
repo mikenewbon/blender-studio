@@ -1,33 +1,37 @@
+"""Display samples data as charts."""
 import datetime
-from django.http import Http404
+import json
+
+from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models import Avg, IntegerField
+from django.db.models.functions import TruncDay
 from django.shortcuts import render
-from django.db.models import Count, Avg, Sum
-from django.db.models.functions import TruncMonth, TruncYear
+
 from stats.models import Sample
 
 
 def index(request):
     """Display stats for subscribers count."""
     time_threshold = datetime.datetime.now() - datetime.timedelta(days=365)
-    subscribers_by_month = (
+    count_per_day_q = (
         Sample.objects.filter(timestamp__gt=time_threshold)
-        .annotate(month=TruncMonth('timestamp'))
-        .values('month')
-        .annotate(average_subscribers_count=Avg('users_subscribers_count'))
-        .order_by('month')
+        .annotate(date=TruncDay('timestamp'))
+        .values('date')
+        .annotate(y=Avg('value', output_field=IntegerField()))
+        .order_by('date')
     )
-
-    # subscribers_by_month_series = []
-    # for s in subscribers_by_month:
-    #     subscribers_by_month_series.append({'t': s['month']})
-
-    subscribers_by_month_series = [
-        {'x': s['month'].strftime("%b %Y"), 'y': s['average_subscribers_count']}
-        for s in subscribers_by_month
+    subscribers = count_per_day_q.filter(slug='users_subscribers_count')
+    # blog_posts = count_per_day_q.filter(slug='blog_posts_count')
+    chart_data = [
+        {
+            'type': 'line',
+            'data': list(subscribers),
+            'label': 'Subscribers',
+            'borderColor': 'rgb(0,183,255)',
+        },
     ]
-    # for f in subscribers_by_month_series:
-    #     print(f)
-
-    return render(
-        request, 'stats/index.html', {'subscribers_by_month_series': subscribers_by_month_series}
-    )
+    chart = {
+        'datasets': json.dumps(chart_data, cls=DjangoJSONEncoder),
+        'aggregate_by': 'day',
+    }
+    return render(request, 'stats/index.html', {'chart': chart})
