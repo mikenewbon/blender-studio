@@ -1,0 +1,7 @@
+[Unit]
+Description=call write_stats command to record stats
+
+[Service]
+Type=oneshot
+ExecStart=/var/www/venv/bin/python /var/www/blender-studio/manage.py write_stats -v 3
+StandardError=syslog
