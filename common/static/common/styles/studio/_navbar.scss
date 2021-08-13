@@ -58,7 +58,8 @@ div.spacer-n {
   width: 1140px;
   z-index: 1040;
 
-  &.hover {
+  &.hover,
+  &.scroll {
     top: $spacer / 2 !important;
   }
 
@@ -227,29 +228,28 @@ div.spacer-n {
   margin: -1px auto 0 auto;
   transition: top $nav-drawer-animation-duration;
 
-  &.hover {
+  &.hover,
+  &.scroll {
     top: #{$navbar-height + $spacer / 2 - 1} !important;
+
+    .show-on-scroll {
+      display: none;
+    }
   }
 
-  // position: fixed;
-  // top: $spacer;
-  // left: 0;
-  // right: 0;
-  // align-items: stretch;
-  // background: $navigation-gray;
-  // border: 1px solid $input-gray;
-  // border-radius: $border-radius;
-  // flex-wrap: nowrap; // allow us to do the line break for collapsing content
-  // margin: 0 auto;
-  // max-width: calc(100% - #{$spacer * 2});
-  // min-height: $navbar-height;
-  // padding: $navbar-padding-y $navbar-padding-x;
-  // transition: margin-left $nav-drawer-animation-duration;
-  // width: 1100px;
-  // z-index: 1040;
+  @include media-breakpoint-down(md) {
+    .show-on-scroll {
+      display: none !important;
+    }
+  }
 
-
-
+  .navbar-main-nav-toolbar {
+    align-items: center;
+    display: flex;
+    padding: 0 0 0 10px;
+    position: relative;
+    margin-left: auto;
+  }
 
   .navdrawer-offset {
     border-top: 0;
@@ -271,14 +271,13 @@ div.spacer-n {
       margin: 0;
     }
 
-    flex-wrap: wrap;
-    overflow-x: scroll;
-    padding: 0 #{$spacer / 4};
-    scrollbar-width: none;
+    @include media-breakpoint-down(md) {
+      flex-wrap: wrap;
+      overflow-x: scroll;
+      scrollbar-width: none;
+    }
 
-    // &::-webkit-scrollbar {
-    //   display: none;
-    // }
+    padding: 0 #{$spacer / 4};
   }
 
   .breadcrumb-item {
@@ -306,6 +305,30 @@ div.spacer-n {
     padding: $spacer / 2 $spacer * .75;
     transition: $transition-base;
     white-space: nowrap;
+
+    &.logo {
+      padding: $spacer / 2;
+      line-height: 1.25;
+    }
+
+    &.icon {
+      line-height: 1;
+      padding: 7.25px 8.5px;
+
+      &::after {
+        left: $spacer / 4;
+        width: calc(100% - #{$spacer / 2});
+      }
+    }
+
+    &.btn-profile {
+      padding: 8.5px;
+
+      .profile {
+        width: 24px;
+        height: 24px;
+      }
+    }
 
     &::after {
       background: $highlight-white;

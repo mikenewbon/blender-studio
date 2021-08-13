@@ -330,22 +330,34 @@ document.addEventListener('DOMContentLoaded', () => {
   const nav = document.querySelector('.navbar');
   const secondaryNav = document.querySelector('.navbar-secondary');
 
-  nav?.addEventListener('mouseover', (e) => {
-    nav.classList.add('hover');
-    secondaryNav.classList.add('hover');
-  });
-  nav?.addEventListener('mouseout', (e) => {
-    nav.classList.remove('hover');
-    secondaryNav.classList.remove('hover');
-  });
+  // nav?.addEventListener('mouseover', (e) => {
+  //   nav.classList.add('hover');
+  //   secondaryNav.classList.add('hover');
+  // });
+  // nav?.addEventListener('mouseout', (e) => {
+  //   nav.classList.remove('hover');
+  //   secondaryNav.classList.remove('hover');
+  // });
 
-  secondaryNav?.addEventListener('mouseover', (e) => {
-    nav.classList.add('hover');
-    secondaryNav.classList.add('hover');
-  });
-  secondaryNav?.addEventListener('mouseout', (e) => {
-    nav.classList.remove('hover');
-    secondaryNav.classList.remove('hover');
-  });
+  // secondaryNav?.addEventListener('mouseover', () => {
+  //   nav.classList.add('hover');
+  //   secondaryNav.classList.add('hover');
+  // });
+  // secondaryNav?.addEventListener('mouseout', () => {
+  //   nav.classList.remove('hover');
+  //   secondaryNav.classList.remove('hover');
+  // });
 
+  let prevScrollpos = window.pageYOffset;
+  window.onscroll = () => {
+    const currentScrollPos = window.pageYOffset;
+    if (prevScrollpos > currentScrollPos) {
+      nav?.classList.add('scroll');
+      secondaryNav?.classList.add('scroll');
+    } else {
+      nav?.classList.remove('scroll');
+      secondaryNav?.classList.remove('scroll');
+    }
+    prevScrollpos = currentScrollPos;
+  };
 });
