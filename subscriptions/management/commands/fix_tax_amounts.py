@@ -15,6 +15,7 @@ class Command(BaseCommand):
     """Go over latest orders with incorrect tax amounts and update them."""
 
     def _add_order(self, order):
+        assert isinstance(order, Order)
         if order.pk in self.orders_seen:
             return
 
@@ -22,6 +23,7 @@ class Command(BaseCommand):
         self.orders_seen.add(order.pk)
 
     def _add_subscription(self, subscription):
+        assert isinstance(subscription, Subscription)
         if subscription.pk in self.subscriptions_seen:
             return
 
@@ -43,13 +45,27 @@ class Command(BaseCommand):
         if order.subscription_id not in self.subscriptions_seen:
             self._handle_subscription(order.subscription)
 
+        # Not sure what to do with reverse-charged yet FIXME
+
         subscription = order.subscription
         taxable = self._get_taxable(subscription)
-        assert (
-            order.tax_type == taxable.tax_type.value
-        ), f'Order #{order.pk} tax type changed from {order.tax_type} to {taxable.tax_type}'
 
-        # Not sure what to do with reverse-charged yet FIXME
+        assert order.tax_type == taxable.tax_type.value, (
+            f'Not expecting tax type changes for '
+            f'{order.tax_country}: {order.tax_type} -> {taxable.tax_type}'
+        )
+        if order.tax_type != taxable.tax_type.value:
+            assert order.tax_country == 'GB', (
+                f'Not expecting tax type changes for '
+                f'{order.tax_country}: {order.tax_type} -> {taxable.tax_type}'
+            )
+            logger.info(
+                f'Order #{order.pk} tax type changed from {order.tax_type} to {taxable.tax_type}, '
+                f'({order.tax_country})'
+            )
+            order.tax_type = taxable.tax_type.value
+            self._add_order(order)
+
         if order.price != order.subscription.price:
             subs_url = f'{admin_url}looper/subscription/{order.subscription_id}/change/'
             logger.info(
@@ -60,74 +76,83 @@ class Command(BaseCommand):
         if taxable.tax_rate != order.tax_rate:
             logger.info(
                 f'Order #{order.pk} tax rate will be updated: '
-                f'{order.tax_rate} -> {taxable.tax_rate} ({order.price})'
+                f'{order.tax_rate} -> {taxable.tax_rate} ({order.price}, {order.tax_country})'
             )
             # Not expecting tax rate changes for anything except Ireland
-            assert order.tax_country == 'IE', f'{order.tax_country} != IE'
+            expected = ('GB', 'IE')
+            assert order.tax_country in expected, f'{order.tax_country} not {expected}'
             order.tax_rate = taxable.tax_rate
             self._add_order(order)
 
         if taxable.tax != order.tax:
             logger.info(
                 f'Order #{order.pk} tax will be updated: '
-                f'{order.tax} -> {taxable.tax} ({order.price}, {order.tax_rate}%)'
+                f'{order.tax} -> {taxable.tax} ({order.price}, '
+                f'{order.tax_rate}%, {order.tax_country})'
             )
             order.tax = taxable.tax
             self._add_order(order)
 
     def _handle_subscription(self, subscription):
-        old_taxable = subscription.taxable
-
         taxable = self._get_taxable(subscription)
-        assert old_taxable.tax_type.value == taxable.tax_type.value, (
-            f'Subs #{subscription.pk} tax type changed from '
-            f'{old_taxable.tax_type} to {taxable.tax_type} '
-            f'({subscription.tax_country})'
-        )
 
-        if old_taxable.tax_rate != taxable.tax_rate:
+        # assert subscription.tax_type == taxable.tax_type.value, (
+        #    f'Not expecting tax type changes for '
+        #    f'{subscription.tax_country}: {subscription.tax_type} -> {taxable.tax_type}'
+        # )
+        if subscription.tax_type != taxable.tax_type.value:
+            expected = ('EE',)
+            logger.info(
+                f'Subs #{subscription.pk} tax type changed from '
+                f'{subscription.tax_type} to {taxable.tax_type} '
+                f'({subscription.tax_country})'
+            )
+            assert subscription.tax_country in expected, (
+                f'Not expecting tax type changes for '
+                f'{subscription.tax_country}: {subscription.tax_type} -> {taxable.tax_type}'
+            )
+            subscription.tax_type = taxable.tax_type.value
+            self._add_subscription(subscription)
+
+        if subscription.tax_rate != taxable.tax_rate:
             logger.info(
                 f'Subs #{subscription.pk} tax rate will be updated: '
-                f'{old_taxable.tax_rate} -> {taxable.tax_rate} '
-                f'({subscription.price})'
+                f'{subscription.tax_rate} -> {taxable.tax_rate} '
+                f'({subscription.price}, {subscription.tax_country})'
             )
             # Not expecting tax rate changes for anything except Ireland
-            assert subscription.tax_country == 'IE', f'{subscription.tax_country} != IE'
+            expected = ('GB', 'IE', 'EE')
+            # Add IDs here after reviewing the unexpected changes
+            expected_ids = []
+            assert (
+                subscription.tax_country in expected or subscription.pk in expected_ids
+            ), f'{subscription.tax_country} not {expected}'
             subscription.tax_rate = taxable.tax_rate
             self._add_subscription(subscription)
 
         if taxable.tax != subscription.tax:
             logger.info(
                 f'Subs #{subscription.pk} tax will be updated: '
-                f'{taxable.tax} -> {subscription.tax} '
-                f'({subscription.price}, {subscription.tax_rate})'
+                f'{subscription.tax} -> {taxable.tax} '
+                f'({subscription.price}, {subscription.tax_rate}, {subscription.tax_country})'
             )
             subscription.tax = taxable.tax
             self._add_subscription(subscription)
 
-    def handle(self, *args, **options):
-        """Loop over recent subscriptions and their order to update their tax amounts."""
+    def _find_orders(self):
+        """Loop over recent orders to update their tax amounts."""
         orders_q = (
             Order.objects.select_related('subscription', 'user')
             .filter(
                 created_at__gte='2021-07-01',
                 tax_type=looper.taxes.TaxType.VAT_CHARGE.value,
-                # tax_country='IE',
                 # FIXME: handle reverse-charged ones later
                 user__customer__vat_number='',
             )
             .exclude(
-                # FIXME(anna): will most likely need to add exceptions
-                # for GB and MC, because pyvat only tracks EU member
-                # states
-                tax_country__in=('GB', 'IE', 'MC'),
-            )
-            .exclude(
-                subscription__tax_country__in=('GB', 'IE', 'MC'),
-            )
-            .exclude(
                 tax_type=looper.taxes.TaxType.NO_CHARGE.value,
             )
+            .exclude(tax_country__in=('GB',))
         )
         logger.info('Total orders to fix: %s', orders_q.count())
         self.subscriptions_to_update = []
@@ -136,14 +161,47 @@ class Command(BaseCommand):
         self.orders_seen = set()
 
         for order in orders_q:
-            assert order.tax_country != 'GB'
             self._handle_order(order)
         logger.info('Orders to update: %s', len(self.orders_to_update))
+        per_country_code = {}
+        for _ in self.orders_to_update:
+            per_country_code[_.tax_country] = per_country_code.get(_.tax_country, 0) + 1
+        for _ in self.subscriptions_to_update:
+            per_country_code[_.tax_country] = per_country_code.get(_.tax_country, 0) + 1
+        logger.info(per_country_code)
         logger.info('Subscriptions to update: %s', len(self.subscriptions_to_update))
 
-        return  # FIXME uncomment after reviewing all the changes and run again
+        return  # FIXME comment out after reviewing all the changes and run again
         fields = {'tax', 'tax_rate'}
         if self.subscriptions_to_update:
             Subscription.objects.bulk_update(self.subscriptions_to_update, fields=fields)
         if self.orders_to_update:
             Order.objects.bulk_update(self.orders_to_update, fields=fields)
+
+    def _find_subscriptions(self):
+        """Loop over subscriptions to update their tax amounts."""
+        subscriptions_q = Subscription.objects.filter(
+            tax_type=looper.taxes.TaxType.VAT_CHARGE.value,
+            tax_country__in=('GB',),
+            # FIXME: handle reverse-charged ones later
+            user__customer__vat_number='',
+        )
+        logger.info('Total subscriptions to review: %s', subscriptions_q.count())
+        self.subscriptions_to_update = []
+        self.subscriptions_seen = set()
+
+        for sub in subscriptions_q:
+            self._handle_subscription(sub)
+        logger.info('Subscriptions to update: %s', len(self.subscriptions_to_update))
+
+        return  # FIXME comment out after reviewing all the changes and run again
+        fields = {'tax', 'tax_rate'}
+        if self.subscriptions_to_update:
+            Subscription.objects.bulk_update(
+                self.subscriptions_to_update, fields=fields, batch_size=500
+            )
+
+    def handle(self, *args, **options):
+        """Find orders and/or subscriptions with incorrect tax amounts/rates and update them."""
+        # self._find_orders()
+        self._find_subscriptions()
