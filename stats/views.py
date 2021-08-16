@@ -29,6 +29,9 @@ def index(request):
             'data': list(subscribers),
             'label': 'Subscribers',
             'borderColor': 'rgb(0,183,255)',
+            'backgroundColor': 'rgba(0,183,255, 0.1)',
+            'fill': True,
+            'pointRadius': '0',
         },
     ]
     chart = {

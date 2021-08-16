@@ -4,20 +4,29 @@
 {% block title_append %} - Stats{% endblock title_append %}
 
 {% block content %}
+  <script src="{% static "looper/scripts/vendor/moment.min.js" %}"></script>
+  <script src="{% static "looper/scripts/vendor/chart.min.js" %}"></script>
+  <script src="{% static "looper/scripts/vendor/chartjs-adapter-moment.min.js" %}"></script>
 
   <div class="container-xl pt-4">
-    {% include "common/components/simple_header.html" with title="Stats" subtitle="The latest Blender Cloud numbers." %}
+    {% include "common/components/simple_header.html" with title="Subscriber Stats" subtitle="The latest Blender Cloud numbers." %}
 
-    <script src="{% static "looper/scripts/vendor/moment.min.js" %}"></script>
-    <script src="{% static "looper/scripts/vendor/chart.min.js" %}"></script>
-    <script src="{% static "looper/scripts/vendor/chartjs-adapter-moment.min.js" %}"></script>
-    <div class="chart-container">
-      <canvas style="margin-bottom: 30px; width: 60%; height: 50%;" id="chart-canvas"></canvas>
+    <div class="chart-container mb-4">
+
+      <h2 class="display-1 mb-0">{{ current_subscribers_count }} <span class="h2">Subscribers</span></h1>
+      <hr>
+      <canvas id="chart-canvas"></canvas>
+
     </div>
+
+    <script>
+      const chartDatasets = {{ chart.datasets | safe }};
+
+    </script>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const ctx = document.getElementById('chart-canvas').getContext('2d');
-        const chartDatasets = {{ chart.datasets | safe }};
+
 
         // Parse the dates to JS
         chartDatasets.forEach((chartData) => {
@@ -26,9 +35,11 @@
           });
         });
 
+        console.log({{ chart.datasets | safe }})
+
         // Render the chart
         const chart = new Chart(ctx, {
-          type: '{% firstof chart.type "bar" %}',
+          type: '{% firstof chart.type "line" %}',
           data: {
             datasets: chartDatasets,
           },
@@ -36,6 +47,11 @@
           options: {
             animation: false,
             responsive: true,
+            elements: {
+              points: {
+                radius: 3,
+              },
+            },
             scales: {
               x: {
                 type: 'time',
@@ -43,14 +59,38 @@
                   source: 'auto',
                   maxRotation: 0,
                   autoSkip: true,
+                  color: 'rgba(255, 255, 255, 0.75)',
                 },
                 time: {
-                  unit: '{{ chart.aggregate_by }}',
+                  unit: 'month',
                   round: '{{ chart.aggregate_by }}',
                 },
+                grid: {
+                  display: false,
+                },
               },
+              y:{
+                ticks: {
+                  color: 'rgba(255, 255, 255, 0.75)',
+                },
+                grid: {
+                  width: 1,
+                  drawBorder: false,
+                  color: 'rgba(255, 255, 255, 0.1)',
+                },
+              }
+            },
+
+            legend: {
+
+              labels: {
+                fontColor: '#ffffff'
+              }
             },
             plugins: {
+              legend: {
+                display: false
+              },
               tooltip: {
                 enabled: true,
                 callbacks: {
