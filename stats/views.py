@@ -21,6 +21,7 @@ def index(request):
         .order_by('date')
     )
     subscribers = count_per_day_q.filter(slug='users_subscribers_count')
+    current_subscribers_count = subscribers.order_by('-date').first()['y']
     # blog_posts = count_per_day_q.filter(slug='blog_posts_count')
     chart_data = [
         {
@@ -34,4 +35,8 @@ def index(request):
         'datasets': json.dumps(chart_data, cls=DjangoJSONEncoder),
         'aggregate_by': 'day',
     }
-    return render(request, 'stats/index.html', {'chart': chart})
+    return render(
+        request,
+        'stats/index.html',
+        {'chart': chart, 'current_subscribers_count': current_subscribers_count},
+    )
