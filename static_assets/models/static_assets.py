@@ -58,6 +58,12 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
     license = models.ForeignKey(
         License, null=True, on_delete=models.SET_NULL, related_name='static_assets'
     )
+    contributors = models.ManyToManyField(
+        User,
+        blank=True,
+        help_text='People who contributed to creation of this asset.',
+        verbose_name='contributors (optional)',
+    )
 
     thumbnail = models.FileField(upload_to=get_upload_to_hashed_path, blank=True, max_length=256)
     thumbnail.description = (

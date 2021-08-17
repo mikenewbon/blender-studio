@@ -35,7 +35,7 @@ class VideoInline(nested_admin.NestedTabularInline):
 class StaticAssetAdmin(AdminUserDefaultMixin, nested_admin.NestedModelAdmin):
     actions = ['process_videos']
     inlines = [ImageInline, VideoInline]
-    autocomplete_fields = ['user', 'author']
+    autocomplete_fields = ['user', 'author', 'contributors']
     list_display = ['__str__', 'date_created', 'date_updated']
     fieldsets = (
         (
@@ -47,8 +47,7 @@ class StaticAssetAdmin(AdminUserDefaultMixin, nested_admin.NestedModelAdmin):
                     'original_filename',
                     'size_bytes',
                     'source_type',
-                    'user',
-                    'author',
+                    ('user', 'author', 'contributors'),
                     'license',
                     'thumbnail',
                     'date_created',

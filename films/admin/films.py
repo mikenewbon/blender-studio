@@ -4,7 +4,7 @@ import logging
 
 from django import forms
 from django.contrib import admin, messages
-from django.contrib.auth import get_permission_codename
+from django.contrib.auth import get_permission_codename, get_user_model
 from django.db.models.query import QuerySet
 from django.http import HttpResponseRedirect
 from django.http.request import HttpRequest
@@ -16,6 +16,7 @@ from films.models import assets, collections, films
 from static_assets.models import static_assets
 from common import mixins
 
+User = get_user_model()
 logger = logging.getLogger(__name__)
 
 
@@ -202,6 +203,18 @@ class NewAsset(static_assets.StaticAsset):
 
 @admin.register(NewAsset)
 class NewAssetAdmin(mixins.AdminUserDefaultMixin, admin.ModelAdmin):
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        """Limit contributors to film crew, if this is an existing film asset."""
+        if db_field.name == 'contributors':
+            try:
+                film_id = request.GET.get('film')
+                film = films.Film.objects.get(id=film_id)
+                kwargs['queryset'] = film.crew.all()
+            except Exception:
+                logger.exception('Unable to limit users contributors queryset')
+                kwargs['queryset'] = User.objects.none()
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+
     def has_view_permission(self, request, obj=None):
         """Inherit permission from the parent Asset model.
 
@@ -248,10 +261,12 @@ class NewAssetAdmin(mixins.AdminUserDefaultMixin, admin.ModelAdmin):
     form = _Form
     model = NewAsset
     inlines = [AssetFromFileInline]
+    # FIXME(anna): Django 3.2 supports filters for autocomplete_fields
+    # autocomplete_fields = ['contributors']
     fieldsets = (
         (
             'Upload a file',
-            {'fields': ('source',)},
+            {'fields': (('source', 'contributors'),)},
         ),
         (
             'Add a thumbnail (only required for production files)',
