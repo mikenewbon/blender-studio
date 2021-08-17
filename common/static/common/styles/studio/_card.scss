@@ -1,6 +1,20 @@
 .card {
   @include button-float;
 
+  &::before {
+    opacity: 0;
+    transition: $transition-base;
+    content: close-quote;
+    background: $highlight-white;
+    border-radius: $border-radius-lg;
+    width: calc(100% + #{$spacer});
+    height: calc(100% + #{$spacer});
+    position: absolute;
+    top: - $spacer / 2;
+    left: - $spacer / 2;
+    pointer-events: none;
+  }
+
   flex-grow: 1;
   margin-bottom: $spacer;
   transition: $transition-base;
@@ -32,7 +46,10 @@
   }
 
   @include hover-focus {
-    // background-color: shade($white, 10%);
+
+    &::before {
+      opacity: 1;
+    }
 
     .progress-bar {
       background: $primary;
@@ -66,6 +83,10 @@
   &.card-poster {
     .card-header {
       padding: 0;
+    }
+
+    .card-body {
+      padding-bottom: 0;
     }
 
     .card-header-link {
@@ -348,4 +369,5 @@
   display: -webkit-box;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: $spacer / 4;
 }

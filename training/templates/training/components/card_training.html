@@ -12,6 +12,12 @@
     </div>
 
     <a class="card-body" href="{{ training.url }}">
+
+      <h3 class="card-title">{{ training.name }}</h3>
+      <p class="card-text">{{ training.description }}</p>
+    </a>
+
+    <a  href="{{ training.url }}" class="card-footer">
       <div class="card-subtitle-group">
         <p class="card-subtitle">
           {% if training.is_free %}
@@ -33,19 +39,15 @@
           {% endif %}
         </p>
       </div>
-      <h3 class="card-title">{{ training.name }}</h3>
-      <p class="card-text">{{ training.description }}</p>
-    </a>
-
-    {% if training.tags.all %}
-      <div class="card-footer">
-        <div class="pills">
+      {% if training.tags.all %}
+        <div class="pills mt-1">
           {% for tag in training.tags.all %}
             {% include 'common/components/cards/pill.html' with label=tag.name %}
           {% endfor %}
         </div>
-      </div>
-    {% endif %}
+      {% endif %}
+    </a>
+
 
   </div>
 </div>

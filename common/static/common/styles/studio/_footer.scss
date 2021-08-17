@@ -40,5 +40,5 @@ footer {
 body {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - #{$navbar-height + $spacer});
+  min-height: calc(100vh - #{$spacer});
 }

@@ -13,17 +13,12 @@
 }
 
 .card {
+
   .badge-pill {
-    background: $highlight-black;
-    color: $charcoal-gray;
+    background: $highlight-white;
+    color: $highlight-white-xstrong;
   }
 
-  &.card-dark {
-    .badge-pill {
-      background: $highlight-white;
-      color: $highlight-white-xstrong;
-    }
-  }
 }
 
 .pills {

@@ -42,7 +42,7 @@ div.spacer-n {
 
 .navbar {
   position: sticky;
-  top: #{- $navbar-height + $spacer};
+  top: #{- $navbar-height };
   left: 0;
   right: 0;
   align-items: stretch;

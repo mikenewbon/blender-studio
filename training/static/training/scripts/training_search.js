@@ -134,6 +134,11 @@ const renderHits = (renderOptions, isFirstRender) => {
               </div>
 
               <a class="card-body" href="${ item.url }">
+
+                <h3 class="card-title">${instantsearch.highlight({ attribute: 'name', hit: item })}</h3>
+                <p class="card-text">${instantsearch.highlight({ attribute: 'description', hit: item })}</p>
+              </a>
+              <div class="card-footer">
                 <div class="card-subtitle-group">
                   <p class="card-subtitle">${item.is_free == true ? `<i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top"
                   title="Free">lock_open</i>&nbsp;` :''}${ titleCase(item.type) }</p>
@@ -142,24 +147,19 @@ const renderHits = (renderOptions, isFirstRender) => {
                   ${ !!(item.project) ? `<i class="material-icons icon-inline small">movie</i>&nbsp;${ titleCase(item.project) }` : ''}
                   </p>
                 </div>
-                <h3 class="card-title">${instantsearch.highlight({ attribute: 'name', hit: item })}</h3>
-                <p class="card-text">${instantsearch.highlight({ attribute: 'description', hit: item })}</p>
-              </a>
-
-              ${ item.tags != '' ? `<div class="card-footer">
-                <div class="pills">
-                  ${item.tags.map( tag => `
-                  <p class="badge badge-pill">${titleCase(tag)}</p>
-                  `).join('')}
-                </div>
-              </div>` : ''}
+                ${ item.tags != '' ? `
+                  <div class="pills">
+                    ${item.tags.map( tag => `
+                    <p class="badge badge-pill">${titleCase(tag)}</p>
+                    `).join('')}
+                  </div>
+                  ` : '' }
+              </div>
 
             </div>
           </div>
         `
-      )
-      .join('')}
-  `;
+      ).join('')}`;
 
   lastRenderArgs = renderOptions;
 

@@ -154,24 +154,26 @@ const renderHits = (renderOptions, isFirstRender) => {
                 </a>
               </div>
               <a href="${item.url}" class="card-body">
-                <div class="card-subtitle-group">
-                  <p class="card-subtitle content-type">
-                  ${item.is_free == true ? `<i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top"
-                  title="Free">lock_open</i>` : ''}&nbsp;${item.model == "section" ? item.project : item.model}
-                  </p>
 
-                  <p class="card-subtitle">
-                    <i class="material-icons icon-inline small">schedule</i>&nbsp;
-                    ${timeDifference(epochToDate(item.timestamp))}
-                  </p>
-
-                </div>
                 <h3 class="card-title">
                   ${instantsearch.highlight({ attribute: 'name', hit: item })}
                 </h3>
                 <p class="card-text">
                   ${instantsearch.highlight({ attribute: 'description', hit: item })}
                 </p>
+              </a>
+              <a href="${item.url}" class="card-footer">
+                <div class="card-subtitle-group">
+                  <p class="card-subtitle content-type">
+                  ${item.is_free == true ? `<i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top"
+                  title="Free">lock_open</i>&nbsp;` : ''}${item.model == "section" ? item.project : item.model}
+                  </p>
+
+                  <p class="card-subtitle">
+                    <i class="material-icons icon-inline small">schedule</i>&nbsp;${timeDifference(epochToDate(item.timestamp))}
+                  </p>
+
+                </div>
               </a>
             </div>
           </div>
