@@ -151,9 +151,53 @@
             {% endif %}
             <div class="col-auto">
               <p class="subtitle text-white-50 x-small">Author</p>
-              <h4 class="comment-name">{{ asset.static_asset.author_name }}</h4>
+              <h4 class="comment-name mb-0">{{ asset.static_asset.author_name }}</h4>
             </div>
+
+
+            {% if asset.static_asset.contributors.all %}
+              <div class="contributors d-flex col-auto ml-2 align-items-center">
+                <div class="mr-2">
+                  <p class="subtitle text-white-50 x-small">Contributors</p>
+                  <h4 class="comment-name mb-0">{{ asset.static_asset.contributors.all|length}} Others:</h4>
+                </div>
+
+                {% for contributor in asset.static_asset.contributors.all %}
+                  <div class="d-flex">
+                    <img src="{{ contributor.image_url }}" alt="{{ contributor.full_name }}" class="profile rounded-circle mr-n1">
+                    {% comment %} <p>{{ contributor.username }}</p>
+                  <p>{{ contributor.full_name }}</p>
+                  <img >{{ contributor.image_url }}</p>
+                  <p>{{ contributor.badges }}</p> {% endcomment %}
+                  </div>
+                {% endfor %}
+                <button class="btn btn-xs btn-icon btn-dark ml-2" data-toggle="dropdown" href="">
+                  <i class="material-icons">arrow_drop_down</i>
+                </button>
+                <div class="dropdown-menu mt-2 dropdown-menu-right px-2 pt-2 pb-0">
+                  <h3 class="mb-2">Other Contributors</h3>
+                  {% for contributor in asset.static_asset.contributors.all %}
+                    <div class="d-flex mb-2">
+                      <div style="background-image:url('{{ contributor.image_url }}');" class="profile"></div>
+                      <div class="col-auto">
+                        <h4 class="comment-name mb-0">{{ contributor.full_name }}</h4>
+
+                        {% for crew in contributor.film_crew.all %}
+                          {% if crew.film.id == asset.film.id %}
+                            <p class="subtitle text-white-50 x-small">{{ crew.role }}</p>
+                          {% endif %}
+                        {% endfor %}
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
           </div>
+
+
+
+
           <div class="markdown-text">
             {% if asset.is_spoiler and not asset.is_free and not user_has_active_subscription %}
               {# do not show description to non-subscribers, if this is a subscription-only spoiler #}
