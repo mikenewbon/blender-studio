@@ -144,14 +144,18 @@
 
           <div class="row">
             <div class="col-auto d-flex mb-2">
-              {% if asset.static_asset.author_image_url %}
-                <img src="{{ asset.static_asset.author_image_url }}" class="profile">
-              {% else %}
-                <img src="{% static 'common/images/blank-profile-pic.png' %}" class="profile">
-              {% endif %}
-              <div class="col-auto">
-                <p class="subtitle text-white-50 x-small">Author</p>
-                <h4 class="comment-name mb-0">{{ asset.static_asset.author_name }}</h4>
+              <div class="row">
+                <div class="col-auto pr-0">
+                  {% if asset.static_asset.author_image_url %}
+                    <img src="{{ asset.static_asset.author_image_url }}" class="profile">
+                  {% else %}
+                    <img src="{% static 'common/images/blank-profile-pic.png' %}" class="profile">
+                  {% endif %}
+                </div>
+                <div class="col-auto">
+                  <p class="subtitle text-white-50 x-small">Author</p>
+                  <h4 class="comment-name mb-0">{{ asset.static_asset.author_name }}</h4>
+                </div>
               </div>
             </div>
 
