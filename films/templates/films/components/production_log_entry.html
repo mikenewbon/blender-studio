@@ -45,12 +45,12 @@
           {% endif %}
         {% endif %}
         {% if production_log.summary %}
-          <div class="production-log-header-summary-text-inner-wrapper">
+          <div class="production-log-header-summary-text-inner-wrapper mb-0">
             <span class="font-weight-bold">This week on {{ film.title }}:</span>
             {% with_shortcodes production_log.summary|markdown %}
           </div>
           {% if production_log.youtube_link != "" %}
-            <a href="{{ production_log.youtube_link }}" class="video-modal-link mb-0" data-toggle="modal"
+            <a href="{{ production_log.youtube_link }}" class="video-modal-link mt-2 mb-0" data-toggle="modal"
               data-target="#videoModal" data-video="{{ production_log.youtube_link }}">Watch the video</a>
           {% endif %}
         {% endif %}
@@ -74,7 +74,7 @@
               <p class="profile-title subtitle text-white-50 x-small">{{ entry.author_role }}</p>
             </div>
             {% if user_can_edit_production_log_entry %}
-              <div class="admin-button mt-2 btn-float">
+              <div class="admin-button mt-n2 btn-float">
                 <a href="{{ entry.admin_url }}" class="btn btn-xs btn-icon btn-secondary">
                   <i class="material-icons">create</i>
                 </a>
@@ -248,7 +248,7 @@
   </div>
 
   {% if user_can_edit_production_log %}
-    <div class="add-entry">
+    <div class="add-entry text-center">
       <a href="{% url 'admin:films_productionlogentry_add' %}?production_log={{ production_log.pk }}"
         class="btn btn-sm btn-darkhighlight-strong">Add Entry</a>
     </div>
