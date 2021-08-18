@@ -8,12 +8,6 @@
   background: none;
   border: 0;
 
-  &::before {
-    left: 0;
-    top: - $spacer / 2;
-    width: 100%;
-  }
-
   &:hover {
 
 
@@ -302,4 +296,15 @@
 .grid-item {
   margin-bottom: $spacer;
 
+}
+
+// different style for the grid view and carousel views
+.files {
+  .file {
+    &::before {
+      left: 0;
+      top: - $spacer / 2;
+      width: 100%;
+    }
+  }
 }

@@ -11,6 +11,14 @@
     </div>
 
     <a class="card-body" href="{{ training.url }}">
+
+      <h3 class="card-title">{{ training.name }}</h3>
+      <p class="card-text">{{ training.description }}</p>
+    </a>
+
+
+    <div class="card-footer">
+
       <div class="card-subtitle-group">
         <p class="card-subtitle">{{ training.get_type_display }}</p>
         <p class="card-subtitle">
@@ -18,19 +26,15 @@
           {{ training.get_difficulty_display }}
         </p>
       </div>
-      <h3 class="card-title">{{ training.name }}</h3>
-      <p class="card-text">{{ training.description }}</p>
-    </a>
-
-    {% if training.tags.all %}
-      <div class="card-footer">
+      {% if training.tags.all %}
         <div class="pills {% comment %}{{ class|join(' ') }}{% endcomment %}">
           {% for tag in training.tags.all %}
             {% include 'common/components/cards/pill.html' with label=tag.name %}
           {% endfor %}
         </div>
-      </div>
-    {% endif %}
+      {% endif %}
+    </div>
+
 
   </div>
 </div>

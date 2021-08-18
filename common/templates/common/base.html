@@ -155,11 +155,6 @@
                     <span>My Cloud</span>
                   </a>
 
-                  <a href="{% url 'user-activity' %}" class="dropdown-item">
-                    <i class="material-icons">timeline</i>
-                    <span>My Activity</span>
-                  </a>
-
                   <div class="dropdown-menu-nested">
                     {% if request.user.is_authenticated %}
                       {% if request.user|has_group:"demo" %}
@@ -190,6 +185,11 @@
                       <span>Subscription</span>
                     </a>
                   </div>
+
+                  <a href="{% url 'user-activity' %}" class="dropdown-item">
+                    <i class="material-icons">timeline</i>
+                    <span>My Activity</span>
+                  </a>
 
                   {% if user.is_superuser or user.is_staff %}
                     <a href="/admin" class="dropdown-item">

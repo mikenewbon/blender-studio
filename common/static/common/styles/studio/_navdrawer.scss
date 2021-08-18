@@ -170,10 +170,10 @@ body {
 
 .drawer-nav-list {
   background: $highlight-black-strong;
-  border-radius: $border-radius;
+
   color: $highlight-white-xstrong;
   list-style: none;
-  margin: $spacer / 4 $spacer / 2;
+  margin: $spacer / 4 0;
   padding: $spacer / 4 0;
 
   &.training {
