@@ -238,16 +238,29 @@ def get_production_logs(film: Film) -> paginator.Page:
             performance (see the note in the docs:
             https://docs.djangoproject.com/en/dev/ref/models/querysets/#django.db.models.Prefetch).
     """
-    production_logs = film.production_logs.order_by(*ProductionLog._meta.ordering).prefetch_related(
-        'log_entries__author',
-        'log_entries__user',
-        Prefetch(
-            'log_entries__entry_assets',
-            queryset=ProductionLogEntryAsset.objects.select_related(
-                'asset__static_asset__video',
-            ).order_by(*[f'asset__{field}' for field in Asset._meta.ordering]),
-            to_attr='assets',
-        ),
+    production_logs = (
+        film.production_logs.order_by(*ProductionLog._meta.ordering)
+        .select_related(
+            'film',
+        )
+        .prefetch_related(
+            'log_entries__author',
+            'log_entries__user',
+            'log_entries__production_log',
+            'log_entries__production_log__film',
+            'log_entries__production_log__film__filmcrew_set',
+            Prefetch(
+                'log_entries__entry_assets',
+                queryset=ProductionLogEntryAsset.objects.select_related(
+                    'asset__static_asset__video',
+                ).order_by(*[f'asset__{field}' for field in Asset._meta.ordering]),
+                to_attr='assets',
+            ),
+            'log_entries__assets__static_asset',
+            'log_entries__assets__static_asset__contributors',
+            'log_entries__assets__static_asset__image',
+            'log_entries__assets__static_asset__video',
+        )
     )
     return production_logs
 

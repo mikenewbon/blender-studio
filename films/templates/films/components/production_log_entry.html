@@ -71,6 +71,9 @@
             <div class="col-auto flex-shrink-1">
               <h4 class="profile-name">{{ entry.author_name }}</h4>
               <p class="profile-title subtitle text-white-50 x-small">{{ entry.author_role }}</p>
+              {% for contributor in entry.contributors %}
+                <span><img width=32 src="{{ contributor.image_url }}" title="{{ contributor.full_name }} ({{ contributor }})"></span>
+              {% endfor %}
             </div>
             {% if user_can_edit_production_log_entry %}
               <div class="admin-button mt-2 btn-float">

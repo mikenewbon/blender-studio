@@ -1,3 +1,4 @@
+from typing import Iterable
 from datetime import date, timedelta
 
 from django.contrib.auth import get_user_model
@@ -6,7 +7,7 @@ from django.urls.base import reverse
 
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
-from films.models import Asset, Film, FilmCrew
+from films.models import Asset, Film
 
 User = get_user_model()
 
@@ -130,6 +131,26 @@ class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
 
     assets = models.ManyToManyField(Asset, through='ProductionLogEntryAsset')
 
+    def _get_crew_role_for(self, user: User):
+        film_crew = self.production_log.film.filmcrew_set.all()
+        crew_member_role = next((_ for _ in film_crew if _.user_id == user.pk), None)
+        return crew_member_role.role if crew_member_role else ''
+
+    @property
+    def contributors(self) -> Iterable[User]:
+        """Return all contributors listed in the production log assets."""
+        contributors_ids = set()
+        contributors = []
+        for asset in self.assets.all():
+            for contributor in asset.static_asset.contributors.all():
+                if contributor.pk in contributors_ids:
+                    continue
+                contributors_ids.add(contributor.pk)
+                contributors.append(contributor)
+                # Set contributor's role, if any
+                contributor.role = self._get_crew_role_for(contributor)
+        return contributors
+
     def get_absolute_url(self) -> str:
         return self.url
 
@@ -143,17 +164,8 @@ class ProductionLogEntry(mixins.CreatedUpdatedMixin, models.Model):
     @property
     def author_role(self) -> str:
         """Find the role for the log entry author."""
-        try:
-            user = self.author or self.user
-            crew_member_role = user.film_crew.filter(film=self.production_log.film).first()
-            if not crew_member_role:
-                return ''
-            crew_member_role = crew_member_role.role
-
-        except FilmCrew.DoesNotExist:
-            crew_member_role = ''
-
-        return crew_member_role
+        user = self.author or self.user
+        return self._get_crew_role_for(user)
 
     @property
     def author_name(self) -> str:
