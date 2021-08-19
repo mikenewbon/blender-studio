@@ -183,7 +183,8 @@
   }
 
   .comment {
-    border-radius: $border-radius;
+    margin-left: -$spacer / 2;
+    margin-right: -$spacer / 2;
     background: $highlight-black-strong;
   }
 }
