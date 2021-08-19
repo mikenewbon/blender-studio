@@ -42,11 +42,6 @@
       margin-bottom: $spacer;
     }
 
-    img {
-      @extend .img-fluid;
-      border-radius: $border-radius;
-    }
-
     >a {
       display: inline-block;
     }

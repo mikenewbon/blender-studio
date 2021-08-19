@@ -6,6 +6,14 @@
 // Porifle Pictures
 //
 
+.contributors {
+  .profile.rounded-circle {
+    margin-right: -4px;
+    width: 24px;
+    height: 24px;
+  }
+}
+
 .profile {
   // align-self: center;
   background: center / cover;
