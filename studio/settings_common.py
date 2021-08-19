@@ -298,6 +298,7 @@ MAIN_SEARCH = {
         'description',
         'summary',
         'content',
+        'author_name',
     ],
     'FACETING_ATTRIBUTES': ['model', 'project', 'license', 'media_type', 'free'],
     'RANKING_RULES': {
@@ -316,6 +317,7 @@ TRAINING_SEARCH = {
         'chapter_name',
         'description',
         'summary',
+        'author_name',
     ],
     'FACETING_ATTRIBUTES': ['type', 'difficulty'],
     'RANKING_RULES': {

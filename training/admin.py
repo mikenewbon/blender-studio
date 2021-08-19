@@ -8,6 +8,7 @@ import looper.admin.mixins as looper_mixins
 
 from common import mixins
 from training.models import chapters, sections, trainings, flatpages, progress
+import search.signals
 import static_assets.models as models_static_assets
 
 T = TypeVar('T', bound=Callable[..., object])
@@ -44,6 +45,8 @@ class TrainingAdmin(admin.ModelAdmin):
         'name',
     ]
     inlines = [ChapterInline]
+
+    actions = [search.signals.reindex]
 
 
 class SectionInline(admin.TabularInline):
@@ -108,6 +111,8 @@ class SectionAdmin(admin.ModelAdmin):
         'static_asset__source',
     ]
     autocomplete_fields = ['chapter', 'static_asset', 'user', 'attachments']
+
+    actions = [search.signals.reindex]
 
 
 @admin.register(flatpages.TrainingFlatPage)

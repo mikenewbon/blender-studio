@@ -3,7 +3,6 @@ import datetime as dt
 
 from django.db.models.expressions import F, Value, Case, When
 from django.db.models.fields import CharField
-from django.db.models.functions.text import Concat
 from django.db.models.query import QuerySet
 from taggit.models import Tag
 
@@ -27,6 +26,11 @@ class MainSearchSerializer(BaseSearchSerializer):
     annotations = {
         Film: {'project': F('title'), 'name': F('title')},
         Asset: {
+            'author_name': Case(
+                When(static_asset__author__isnull=False, then=F('static_asset__author__full_name')),
+                default=F('static_asset__user__full_name'),
+                output_field=CharField(),
+            ),
             'project': F('film__title'),
             'collection_name': F('collection__name'),
             'license': F('static_asset__license__name'),
@@ -40,6 +44,7 @@ class MainSearchSerializer(BaseSearchSerializer):
         },
         Training: {'project': F('name')},
         Section: {
+            'author_name': F('user__full_name'),
             'project': F('chapter__training__name'),
             'chapter_name': F('chapter__name'),
             'media_type': Case(
@@ -54,6 +59,7 @@ class MainSearchSerializer(BaseSearchSerializer):
             ),
         },
         Post: {
+            'author_name': F('author__full_name'),
             'project': Case(
                 When(film__isnull=False, then=F('film__title')),
                 default=Value(''),

@@ -172,3 +172,14 @@ def delete_from_index(
 
     for index_uid in ALL_INDEX_UIDS:
         settings.SEARCH_CLIENT.get_index(index_uid).delete_document(search_id)
+
+
+def reindex(self, request, queryset):
+    """Reindex objects from the given queryset by calling Meilisearch API for each."""
+    for instance in queryset:
+        sender = instance.__class__
+        update_main_search_indexes(sender, instance)
+        if isinstance(instance, (Training, Asset)):
+            update_training_search_index(sender, instance)
+        if isinstance(instance, Section):
+            update_training_search_index_on_section_update(sender, instance)

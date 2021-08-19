@@ -116,6 +116,8 @@ class BaseSearchSerializer(ABC):
         else:
             instance_dict['thumbnail_url'] = instance.thumbnail_s_url or ''
 
+        # Replace model's ID with search_id to make sure indexed objects can be updated correctly
+        instance_dict['id'] = instance_dict['search_id']
         return instance_dict
 
     def _serialize_data(

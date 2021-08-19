@@ -3,6 +3,7 @@ from django.forms import Textarea
 
 from blog.models import Post
 from common.mixins import ViewOnSiteMixin
+import search.signals
 
 
 @admin.register(Post)
@@ -48,3 +49,5 @@ class PostAdmin(ViewOnSiteMixin, admin.ModelAdmin):
     prepopulated_fields = {
         'slug': ('title',),
     }
+
+    actions = [search.signals.reindex]

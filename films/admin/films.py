@@ -15,6 +15,7 @@ from django.utils.html import format_html
 from films.models import assets, collections, films
 from static_assets.models import static_assets
 from common import mixins
+import search.signals
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -92,6 +93,8 @@ class AssetAdmin(mixins.ThumbnailMixin, mixins.ViewOnSiteMixin, admin.ModelAdmin
             film = assets.Asset.objects.get(pk=object_id).film
             kwargs['queryset'] = collections.Collection.objects.filter(film=film).distinct()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    actions = [search.signals.reindex]
 
 
 @admin.register(collections.Collection)

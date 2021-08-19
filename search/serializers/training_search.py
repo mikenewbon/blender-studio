@@ -1,4 +1,4 @@
-from django.db.models.expressions import F, Value
+from django.db.models.expressions import F, Value, Case, When
 from django.db.models.fields import CharField
 from taggit.models import Tag
 
@@ -24,6 +24,11 @@ class TrainingSearchSerializer(BaseSearchSerializer):
     annotations = {
         Training: {},
         Asset: {
+            'author_name': Case(
+                When(static_asset__author__isnull=False, then=F('static_asset__author__full_name')),
+                default=F('static_asset__user__full_name'),
+                output_field=CharField(),
+            ),
             'project': F('film__title'),
             'type': Value(clean_tag(AssetCategory.production_lesson), output_field=CharField()),
         },
