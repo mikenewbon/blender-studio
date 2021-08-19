@@ -34,6 +34,10 @@
     padding: $spacer * 4 0;
     border: 0;
 
+    @include media-breakpoint-down(md) {
+      padding: $spacer * 2 0;
+    }
+
     &.jumbotron-overlay {
       .jumbotron-bg-wrapper::after {
         display: block;
