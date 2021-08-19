@@ -20,6 +20,11 @@ User = get_user_model()
 log = logging.getLogger(__name__)
 
 
+def _get_default_license_id() -> Optional[int]:
+    cc_by = License.objects.filter(slug='cc-by').first()
+    return cc_by.pk if cc_by else None
+
+
 class StaticAssetFileTypeChoices(models.TextChoices):
     file = 'file', 'File'
     image = 'image', 'Image'
@@ -56,7 +61,11 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
     )
     author.description = 'The actual author of the artwork/learning materials.'
     license = models.ForeignKey(
-        License, null=True, on_delete=models.SET_NULL, related_name='static_assets'
+        License,
+        null=True,
+        default=_get_default_license_id,
+        on_delete=models.SET_NULL,
+        related_name='static_assets',
     )
     contributors = models.ManyToManyField(
         User,
