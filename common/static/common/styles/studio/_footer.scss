@@ -11,11 +11,12 @@ footer {
   }
 }
 
-.footer-inner {
+footer {
   border: 1px solid $input-gray;
   border-radius: $border-radius;
   background: $navigation-gray;
   padding: $spacer;
+  margin-bottom: $spacer;
 }
 
 .footer-social-media {

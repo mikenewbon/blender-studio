@@ -300,6 +300,11 @@
 
 // different style for the grid view and carousel views
 .files {
+
+  &.grid{
+    margin-bottom: $spacer / 2;
+  }
+
   .file {
     &::before {
       left: 0;
