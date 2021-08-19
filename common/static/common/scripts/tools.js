@@ -329,6 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const nav = document.querySelector('.navbar');
   const secondaryNav = document.querySelector('.navbar-secondary');
+  const nestedNav = document.querySelector('.nav-drawer.nested');
 
   // nav?.addEventListener('mouseover', (e) => {
   //   nav.classList.add('hover');
@@ -354,9 +355,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (prevScrollpos > currentScrollPos) {
       nav?.classList.add('scroll');
       secondaryNav?.classList.add('scroll');
+      nestedNav?.classList.add('scroll');
     } else {
       nav?.classList.remove('scroll');
       secondaryNav?.classList.remove('scroll');
+      nestedNav?.classList.remove('scroll');
     }
     prevScrollpos = currentScrollPos;
   };

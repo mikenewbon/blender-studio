@@ -1,7 +1,14 @@
-body {
+.has-secondary-nav {
+  .nav-drawer {
+    &.nested {
+      max-height: calc(100vh - #{$secondary-navbar-height + $spacer * 2});
+      top: calc(#{$secondary-navbar-height + $spacer});
 
-  &.has-secondary-nav{
-
+      &.scroll {
+        top: calc(#{$navbar-height + $secondary-navbar-height + $spacer * 1.5});
+        max-height: calc(100vh - #{$navbar-height + $secondary-navbar-height + $spacer * 2.5});
+      }
+    }
   }
 }
 
@@ -44,15 +51,20 @@ body {
     display: block;
     border-radius: $border-radius;
     border-right: 0;
-    max-height: calc(100vh - #{$navbar-height + $spacer * 3});
+    max-height: calc(100vh - #{$spacer * 2});
     height: auto;
     overflow: auto;
     padding: $spacer / 4 0;
     position: sticky;
-    top: calc(#{$navbar-height + $spacer * 2});
+    top: calc(#{$spacer});
     width: auto;
     z-index: auto;
     border: 1px solid $input-gray;
+    transition: top $nav-drawer-animation-duration, max-height $nav-drawer-animation-duration;
+
+    @include media-breakpoint-up(xl) {
+      margin-left: - $spacer;
+    }
 
     @include scroll-bar($navigation-gray, $input-gray);
 
@@ -63,6 +75,11 @@ body {
 
     &::after {
       content: none;
+    }
+
+    &.scroll {
+      top: #{$navbar-height + $spacer * 1.5};
+      max-height: calc(100vh - #{$navbar-height + $spacer * 2.5});
     }
   }
 
@@ -80,15 +97,6 @@ body {
 
 .nav-drawer-inner {
   padding: $spacer / 2 0;
-}
-
-.has-secondary-nav {
-  .nav-drawer {
-    &.nested {
-      max-height: calc(100vh - #{$navbar-height + $secondary-navbar-height + $spacer * 4});
-      top: calc(#{$navbar-height + $secondary-navbar-height + $spacer * 3});
-    }
-  }
 }
 
 .nav-drawer-body {
