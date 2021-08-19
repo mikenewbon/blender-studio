@@ -14,6 +14,10 @@ body {
     .navbar {
       border-radius: $border-radius $border-radius 0 0;
       top: #{- $navbar-height};
+
+      &.scroll {
+        top: $spacer / 2;
+      }
     }
 
     &.spacer {
@@ -65,6 +69,8 @@ div.spacer-n {
     @include media-breakpoint-up(sm) {
       top: $spacer / 2 !important;
     }
+
+    top: 0;
   }
 
   a {
@@ -168,7 +174,7 @@ div.spacer-n {
     top: $spacer / 2;
     border-radius: $border-radius;
     max-width: calc(100% - #{$spacer});
-    margin: $spacer / 2;
+    margin: $spacer / 2 $spacer / 2 0;
 
     .container {
       max-width: 100%;
@@ -209,14 +215,13 @@ div.spacer-n {
 
 .navbar-secondary {
   @include media-breakpoint-down(sm) {
-    position: static;
     z-index: 1020;
-    border-bottom: 1px solid $input-gray;
+    border: 1px solid $input-gray;
     max-width: 100%;
-    width: 100%;
-    border-width: 0 0 1px;
+    width: calc(100% - #{$spacer});
     border-radius: 0;
-    margin: 0;
+    margin: -1px $spacer / 2 0;
+    top: 0;
   }
 
   background: $navigation-gray;
@@ -274,12 +279,16 @@ div.spacer-n {
     }
 
     @include media-breakpoint-down(md) {
-      flex-wrap: wrap;
+      // flex-wrap: wrap;
       overflow-x: scroll;
       scrollbar-width: none;
     }
 
-    padding: 0 #{$spacer / 4};
+    padding: 0 $spacer / 8;
+  }
+
+  .list-group-horizontal>.list-group-item+.list-group-item.active {
+    margin-left: $spacer / 8;
   }
 
   .breadcrumb-item {
@@ -294,6 +303,8 @@ div.spacer-n {
   }
 
   .list-group-item {
+    margin: 0 $spacer / 8;
+
     @include hover-focus {
       color: $white;
       text-decoration: none;
@@ -347,9 +358,9 @@ div.spacer-n {
       z-index: -1;
     }
 
-    +.list-group-item {
-      margin-left: $spacer / 4 !important;
-    }
+    // +.list-group-item {
+    //   margin-left: $spacer / 4 !important;
+    // }
 
     &.search {
       align-items: center;

@@ -32,19 +32,21 @@
   height: 100%;
   max-height: calc(100vh - #{$navbar-height});
   position: fixed;
-  top: $navbar-height;
+  top: #{$navbar-height + $spacer};
   // transform: translateX(-$nav-drawer-width);
   transition: transform $nav-drawer-animation-duration;
   width: $nav-drawer-width;
-  z-index: $zindex-fixed;
+  z-index: $zindex-dropdown;
+  border-radius: $border-radius;
 
   @include media-breakpoint-down(sm) {
     border-right: 0;
     display: block;
     height: auto;
-    left: 0;
+    left: $spacer / 2;
     transform: translateY(-100%);
-    width: 100%;
+    width: calc(100% - #{$spacer});
+
   }
 
   &.nested {
