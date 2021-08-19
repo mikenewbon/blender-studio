@@ -1,10 +1,12 @@
 body {
   &.spacer {
-    margin-top: $spacer;
-
-    @include media-breakpoint-down(sm) {
-      margin-top: #{$navbar-height + $spacer};
+    @include media-breakpoint-up(sm) {
+      margin-top: $spacer;
     }
+
+    // @include media-breakpoint-down(sm) {
+    //   margin-top: #{$navbar-height + $spacer};
+    // }
   }
 
   &.has-secondary-nav {
@@ -17,9 +19,9 @@ body {
     &.spacer {
       // margin-top: $spacer;
 
-      @include media-breakpoint-down(sm) {
-        margin-top: #{$navbar-height + $spacer};
-      }
+      // @include media-breakpoint-down(sm) {
+      //   margin-top: #{$navbar-height + $spacer};
+      // }
     }
 
     div.spacer {
@@ -60,7 +62,9 @@ div.spacer-n {
 
   &.hover,
   &.scroll {
-    top: $spacer / 2 !important;
+    @include media-breakpoint-up(sm) {
+      top: $spacer / 2 !important;
+    }
   }
 
   a {
@@ -161,12 +165,10 @@ div.spacer-n {
   }
 
   @include media-breakpoint-down(sm) {
-
-    top: 0;
-    border-radius: 0;
-    border-width: 0 0 1px 0;
-    max-width: 100%;
-    margin: 0;
+    top: $spacer / 2;
+    border-radius: $border-radius;
+    max-width: calc(100% - #{$spacer});
+    margin: $spacer / 2;
 
     .container {
       max-width: 100%;
