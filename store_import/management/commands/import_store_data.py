@@ -896,7 +896,7 @@ class Command(mixins._UpsertMixin, BaseCommand):
                 self._handle_subscription(wp_subscription)
                 self.subscriptions_handled_count += 1
                 # FIXME(anna): uncomment to insert the data
-                self._upsert()
+                # self._upsert()
             except Exception:
                 logger.exception('Stopped at %s', wp_subscription)
                 raise
