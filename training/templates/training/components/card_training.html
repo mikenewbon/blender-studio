@@ -18,6 +18,13 @@
     </a>
 
     <a  href="{{ training.url }}" class="card-footer">
+      {% if training.tags.all %}
+        <div class="pills mb-0">
+          {% for tag in training.tags.all %}
+            {% include 'common/components/cards/pill.html' with label=tag.name %}
+          {% endfor %}
+        </div>
+      {% endif %}
       <div class="card-subtitle-group">
         <p class="card-subtitle">
           {% if training.is_free %}
@@ -39,13 +46,7 @@
           {% endif %}
         </p>
       </div>
-      {% if training.tags.all %}
-        <div class="pills mt-1">
-          {% for tag in training.tags.all %}
-            {% include 'common/components/cards/pill.html' with label=tag.name %}
-          {% endfor %}
-        </div>
-      {% endif %}
+
     </a>
 
 
