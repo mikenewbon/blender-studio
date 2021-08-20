@@ -336,7 +336,7 @@ class Command(mixins._UpsertMixin, BaseCommand):
         wp_subscription: Post,
     ) -> Tuple[List[Order], List[Transaction], List[LogEntry], Optional[Order]]:
         subscr_id = wp_subscription.id
-        orders, transactions, log_entries = [], [], []
+        orders, transactions = [], []
         latest_paid_order, latest_order = None, None
         wp_order = wp_subscription.parent
         order = _construct_order(
@@ -344,10 +344,6 @@ class Command(mixins._UpsertMixin, BaseCommand):
         )
         if order is not None:
             transactions.extend(_construct_transactions(wp_order, order, is_first=True))
-            log_entries.extend(utils._construct_log_entries_from_comments(wp_order, order))
-            log_entries.extend(
-                utils._construct_log_entries_from_comments(wp_subscription, subscription)
-            )
             orders.append(order)
             latest_paid_order = order if order.paid_at else None
             latest_order = order
@@ -359,7 +355,6 @@ class Command(mixins._UpsertMixin, BaseCommand):
             if order is None:
                 continue
             transactions.extend(_construct_transactions(wp_order, order))
-            log_entries.extend(utils._construct_log_entries_from_comments(wp_order, order))
             orders.append(order)
             if latest_paid_order and order.paid_at and latest_paid_order.paid_at < order.paid_at:
                 latest_paid_order = order
@@ -375,7 +370,7 @@ class Command(mixins._UpsertMixin, BaseCommand):
                 original_order_count,
             )
             self._flag_as_inconsistent('missing_orders', wp_subscription)
-        return orders, transactions, log_entries, latest_order
+        return orders, transactions, latest_order
 
     def _get_matching_plan_variation(
         self, currency, price, interval_unit, interval_length, collection_method
@@ -727,7 +722,7 @@ class Command(mixins._UpsertMixin, BaseCommand):
             currency=currency,
             # last_notification=,  TODO: do manually managed even exist in Store?
         )
-        orders, transactions, log_entries, latest_order = self._construct_subscription_orders(
+        orders, transactions, latest_order = self._construct_subscription_orders(
             subscription, payment_methods, wp_subscription
         )
         subscription.intervals_elapsed = len([o for o in orders if o.status == 'paid'])
@@ -826,7 +821,6 @@ class Command(mixins._UpsertMixin, BaseCommand):
         self.subscriptions_to_upsert.append(subscription)
         self.orders_to_upsert.extend(orders)
         self.transactions_to_upsert.extend(transactions)
-        self.log_entries_to_upsert.extend(log_entries)
 
         self._validate_subscription(
             wp_subscription, subscription, orders, transactions, latest_order
