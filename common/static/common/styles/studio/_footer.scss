@@ -17,6 +17,11 @@ footer {
   background: $navigation-gray;
   padding: $spacer;
   margin-bottom: $spacer;
+
+  @include media-breakpoint-down(sm) {
+    margin: $spacer / 2 !important;
+    width: calc(100% - #{$spacer}) !important;
+  }
 }
 
 .footer-social-media {

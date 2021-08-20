@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const nav = document.querySelector('.navbar');
   const secondaryNav = document.querySelector('.navbar-secondary');
-  const nestedNav = document.querySelector('.nav-drawer.nested');
+  const nestedNav = document.querySelector('.nav-drawer-nested');
 
   // nav?.addEventListener('mouseover', (e) => {
   //   nav.classList.add('hover');

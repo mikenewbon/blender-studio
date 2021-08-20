@@ -1,6 +1,10 @@
 .has-secondary-nav {
   .nav-drawer {
-    &.nested {
+    max-height: calc(100vh - #{$navbar-height + $secondary-navbar-height + $spacer * 1.5});
+    top: $navbar-height + $secondary-navbar-height + $spacer;
+    transform: translateY(calc(-100% - #{$navbar-height + $secondary-navbar-height + $spacer}));
+
+    &-nested {
       max-height: calc(100vh - #{$secondary-navbar-height + $spacer * 2});
       top: calc(#{$secondary-navbar-height + $spacer});
 
@@ -26,74 +30,85 @@
 
 .nav-drawer {
   background: $navigation-gray;
-  border-right: 1px solid $input-gray;
+  border-radius: $border-radius;
+  border-width: 0 0 1px;
   display: none;
   flex-direction: column;
-  height: 100%;
-  max-height: calc(100vh - #{$navbar-height});
+  // height: 100%;
+  max-height: calc(100vh - #{$navbar-height + $spacer * 1.5 });
+  overflow-y: auto;
   position: fixed;
-  top: #{$navbar-height + $spacer};
-  // transform: translateX(-$nav-drawer-width);
+  top: $navbar-height + $spacer;
+  transform: translateY(calc(-100% - #{$navbar-height + $spacer}));
   transition: transform $nav-drawer-animation-duration;
-  width: $nav-drawer-width;
   z-index: $zindex-dropdown;
-  border-radius: $border-radius;
+  width: calc(100% - #{$spacer});
+  left: $spacer / 2;
+  border: 1px solid $input-gray;
 
   @include media-breakpoint-down(sm) {
-    border-right: 0;
     display: block;
-    height: auto;
-    left: $spacer / 2;
-    transform: translateY(-100%);
-    width: calc(100% - #{$spacer});
-
   }
 
-  &.nested {
-    display: block;
-    border-radius: $border-radius;
-    border-right: 0;
-    max-height: calc(100vh - #{$spacer * 2});
-    height: auto;
-    overflow: auto;
-    padding: $spacer / 4 0;
-    position: sticky;
-    top: calc(#{$spacer});
-    width: auto;
-    z-index: auto;
-    border: 1px solid $input-gray;
-    transition: top $nav-drawer-animation-duration, max-height $nav-drawer-animation-duration;
-
-    @include media-breakpoint-up(xl) {
-      margin-left: - $spacer;
-    }
-
-    @include scroll-bar($navigation-gray, $input-gray);
-
-    .nav-drawer-body {
-      height: auto;
-      max-height: none;
-    }
-
-    &::after {
-      content: none;
-    }
-
-    &.scroll {
-      top: #{$navbar-height + $spacer * 1.5};
-      max-height: calc(100vh - #{$navbar-height + $spacer * 2.5});
-    }
+  .nav-drawer-inner {
+    border-top: 1px solid $input-gray;
   }
 
-  &::after {
-    background-color: $highlight-black-xstrong;
-    content: close-quote;
-    height: 100vh;
-    opacity: 0;
-    position: absolute;
-    transition: $transition-base;
+  .navbar-secondary {
+    border-width: 0;
     width: 100%;
-    pointer-events: none;
+    margin: 0;
+    position: relative;
+    top: 0;
+  }
+
+  // &::after {
+  //   background-color: $highlight-black-xstrong;
+  //   content: close-quote;
+  //   height: 100vh;
+  //   opacity: 0;
+  //   position: absolute;
+  //   transition: $transition-base;
+  //   width: 100%;
+  //   pointer-events: none;
+  // }
+
+}
+
+.nav-drawer-nested {
+  background: $navigation-gray;
+  display: block;
+  border-radius: $border-radius;
+  border-right: 0;
+  max-height: calc(100vh - #{$spacer * 2});
+  height: auto;
+  overflow: auto;
+  padding: $spacer / 4 0;
+  position: sticky;
+  top: calc(#{$spacer});
+  width: auto;
+  z-index: auto;
+  border: 1px solid $input-gray;
+  transition: top $nav-drawer-animation-duration, max-height $nav-drawer-animation-duration;
+
+  .nav-drawer-body {
+    overflow-y: auto;
+  }
+
+  @include media-breakpoint-up(xl) {
+    margin-left: - $spacer;
+  }
+
+  @include scroll-bar($navigation-gray, $input-gray);
+
+  .nav-drawer-body {
+    height: auto;
+    max-height: none;
+  }
+
+  &.scroll {
+    top: #{$navbar-height + $spacer * 1.5};
+    max-height: calc(100vh - #{$navbar-height + $spacer * 2.5});
   }
 }
 
@@ -120,7 +135,7 @@
 
   height: 100%;
   max-height: calc(100vh - #{$navbar-height});
-  overflow-y: auto;
+
 }
 
 .nav-drawer-list {

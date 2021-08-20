@@ -1,6 +1,6 @@
 body {
   &.spacer {
-    @include media-breakpoint-up(sm) {
+    @include media-breakpoint-up(md) {
       margin-top: $spacer;
     }
 
@@ -221,7 +221,7 @@ div.spacer-n {
     width: calc(100% - #{$spacer});
     border-radius: 0;
     margin: -1px $spacer / 2 0;
-    top: 0;
+    top: -1px;
   }
 
   background: $navigation-gray;
