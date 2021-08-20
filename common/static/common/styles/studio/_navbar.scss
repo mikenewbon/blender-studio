@@ -326,12 +326,12 @@ div.spacer-n {
 
     &.icon {
       line-height: 1;
-      padding: 7.25px 8.5px;
+      padding: 7.25px 3.5px;
 
-      &::after {
-        left: $spacer / 4;
-        width: calc(100% - #{$spacer / 2});
-      }
+      // &::after {
+      //   left: $spacer / 4;
+      //   width: calc(100% - #{$spacer / 2});
+      // }
     }
 
     &.btn-profile {

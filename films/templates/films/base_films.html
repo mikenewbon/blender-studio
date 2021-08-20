@@ -175,12 +175,12 @@
 
             </div>
           {% else %}
-            <div class="navbar-login-wrapper">
-              <a href="{% url 'search' %}" class="btn mr-2 btn-secondary btn-nav btn-icon search-button">
+            <div class="navbar-main-nav-toolbar show-on-scroll">
+              <a href="{% url 'search' %}" class="search-button list-group-item icon">
                 <i class="material-icons">search</i>
               </a>
-              <a href="{% url 'oauth:login' %}" class="btn btn-transparent btn-nav login-button">Login</a>
-              <a {% include "subscriptions/components/join_url" %} class="btn btn-primary ">Join
+              <a href="{% url 'oauth:login' %}" class="list-group-item login-button">Login</a>
+              <a {% include "subscriptions/components/join_url" %} class="list-group-item primary">Join
                 <span class="d-none d-lg-inline-block">Blender Cloud</span></a>
 
             </div>
