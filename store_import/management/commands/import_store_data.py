@@ -578,9 +578,6 @@ class Command(mixins._UpsertMixin, BaseCommand):
             try:
                 oauth_user_info = bid.get_oauth_user_info(oauth_user_id)
                 user = oauth_user_info.user
-                if user.date_deletion_requested:
-                    self._flag_as_inconsistent('user_deletion_requested', wp_subscription)
-                    return
             except Exception as e:
                 logger.debug(
                     '%s has %s with missing Blender ID=%s OAuth record: %s',
@@ -590,13 +587,19 @@ class Command(mixins._UpsertMixin, BaseCommand):
                     e,
                 )
                 self._flag_as_inconsistent('missing_oauth_records', wp_subscription)
-                # N.B.: the user might have been deleted, cannot check
                 user = self._create_oauth_record(wp_subscription, wp_user, oauth_user_id)
-                return
         else:
             logger.debug('%s has %s without Blender ID', wp_subscription, wp_user)
             self._flag_as_inconsistent('without_blender_id', wp_subscription)
             return
+
+        if user.date_deletion_requested:
+            self._flag_as_inconsistent('user_deletion_requested', wp_subscription)
+            return
+
+        # if user.subscription_set.active().count():
+        #    logger.error(f'Subs #{wp_subscription.pk}: user #{user.pk} already has subscriptions')
+        #    return
 
         return user
 
@@ -606,6 +609,23 @@ class Command(mixins._UpsertMixin, BaseCommand):
         email = utils._get_meta_value(wp_user, 'billing_email')
         first_name = utils._get_meta_value(wp_user, 'first_name', '')
         last_name = utils._get_meta_value(wp_user, 'last_name', '')
+
+        # Check if user has been deleted and don't created it in case it has
+        check_user = bid.check_user_by_email(email)
+        if not check_user['found']:
+            logger.error('User with email %s does not exist at BID', email)
+            self._flag_as_inconsistent('without_blender_id', wp_subscription)
+            return
+        if check_user.get('date_deletion_requested'):
+            logger.error(
+                'Subs #%s: deletion requested for %s, skipping (%s, %s)',
+                wp_subscription.pk,
+                email,
+                check_user['date_deletion_requested'],
+            )
+            self._flag_as_inconsistent('user_deletion_requested', wp_subscription)
+            return
+
         prefix = email
         if first_name or last_name:
             prefix = f'{first_name.capitalize()}{last_name.capitalize()}'
@@ -825,6 +845,40 @@ class Command(mixins._UpsertMixin, BaseCommand):
         self._validate_subscription(
             wp_subscription, subscription, orders, transactions, latest_order
         )
+
+    def get_all_flagged_ids(self):
+        """Read IDs of flagged subscriptions, exclude ones with deletion requests."""
+        deletion_requested_ids, _ = self._read_flagged('user_deletion_requested')
+        all_flagged_ids = set()
+        for filename in (
+            'currency_changed',
+            'inconsistent_vat_charge',
+            'missing_oauth_records',
+            'missing_oauth_records_duplicate_email',
+            'missing_orders',
+            'missing_payment_methods',
+            'no_order_price_match',
+            'no_transaction_price_match',
+            'order_prices_mismatch',
+            'paypal_ipn',
+            'switched',
+            'tax_types_mismatch',
+            'unknown_gateway',
+            'without_blender_id',
+        ):
+            _ids, _ = self._read_flagged(filename)
+            _missing_ids = set()
+            for _id in _ids:
+                if _ids in deletion_requested_ids:
+                    continue
+                if Subscription.objects.filter(pk=_id).exists():
+                    continue
+                _missing_ids.add(_id)
+            if len(_missing_ids):
+                logger.info(f'found {len(_missing_ids)} of {filename}')
+                all_flagged_ids.update(_missing_ids)
+        logger.info(f'found {len(all_flagged_ids)} subscriptions that are missing')
+        return all_flagged_ids
 
     def handle(self, *args, **options):
         """Import subscriptions and orders data from a backup Store database."""
