@@ -128,6 +128,10 @@ class BIDSession:
         """Return a Blender ID URL for the user with a given OAuth ID."""
         return urljoin(self.settings.url_base, f'api/user/{oauth_user_id}')
 
+    def get_check_user_by_email_url(self, email: str) -> str:
+        """Return a Blender ID URL for checking existence of a record with a given email."""
+        return urljoin(self.settings.url_base, f'api/check-user/{email}')
+
     def get_badger_api_url(self, action: str, role: str, oauth_user_id: str) -> str:
         """Return a Blender ID API URL for granting/revoking roles."""
         assert action in ('grant', 'revoke'), f'{action} is not a known Blender ID API action'
@@ -240,6 +244,13 @@ class BIDSession:
     def get_user_by_id(self, oauth_user_id: str) -> Dict[str, str]:
         """Get Blender ID user info using the API OAuth token."""
         url = self.get_user_by_id_url(oauth_user_id=oauth_user_id)
+        resp = self.badger_api_session.get(url)
+        resp.raise_for_status()
+        return resp.json()
+
+    def check_user_by_email(self, email: str) -> Dict[str, str]:
+        """Check if Blender ID with a given email exists."""
+        url = self.get_check_user_by_email_url(email=email)
         resp = self.badger_api_session.get(url)
         resp.raise_for_status()
         return resp.json()
