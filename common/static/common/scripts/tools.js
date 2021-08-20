@@ -331,24 +331,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const secondaryNav = document.querySelector('.navbar-secondary');
   const nestedNav = document.querySelector('.nav-drawer-nested');
 
-  // nav?.addEventListener('mouseover', (e) => {
-  //   nav.classList.add('hover');
-  //   secondaryNav.classList.add('hover');
-  // });
-  // nav?.addEventListener('mouseout', (e) => {
-  //   nav.classList.remove('hover');
-  //   secondaryNav.classList.remove('hover');
-  // });
-
-  // secondaryNav?.addEventListener('mouseover', () => {
-  //   nav.classList.add('hover');
-  //   secondaryNav.classList.add('hover');
-  // });
-  // secondaryNav?.addEventListener('mouseout', () => {
-  //   nav.classList.remove('hover');
-  //   secondaryNav.classList.remove('hover');
-  // });
-
   let prevScrollpos = window.pageYOffset;
   window.onscroll = () => {
     const currentScrollPos = window.pageYOffset;
