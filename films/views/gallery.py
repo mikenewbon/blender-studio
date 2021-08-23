@@ -1,7 +1,8 @@
 """Render film asset gallery and collections."""
-from django.http import HttpResponse, HttpRequest
 from django.http import Http404
+from django.http import HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404, render, redirect
+from django.urls.base import reverse
 from django.views.decorators.http import require_safe
 
 from common.queries import has_active_subscription
@@ -108,6 +109,9 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
     film = get_object_or_404(Film, slug=film_slug)
     if not request.user.is_superuser and not film.is_published:
         raise Http404("Film does not exist")
+    # Redirect Cloudv3 /browse/ endpoint to the gallery
+    if collection_slug == 'browse':
+        return redirect(reverse('film-gallery', kwargs={'film_slug': film_slug}))
     try:
         collection = get_object_or_404(Collection, slug=collection_slug, film_id=film.id)
     except Exception:
