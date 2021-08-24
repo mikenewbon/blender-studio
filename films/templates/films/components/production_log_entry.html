@@ -123,75 +123,72 @@
 
               </div>
 
+              {% if entry.assets.count > 4 and entry.description|length <= 158 %}
+                <p class="small">{{ entry.description }}</p>
+              {% elif entry.assets.count > 4 and entry.description|length > 158 %}
+                <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":158"}}<span
+                  class="read-more-elip">...</span><span
+                    class="read-more-text d-none">{{ entry.description|slice:"158:"}}</span> <a class="small read-more-link"
+                      href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
+              {% elif entry.assets.count == 4 and entry.description|length <= 87 %}
+                <p class="small">{{ entry.description }}</p>
+              {% elif entry.assets.count == 4 and entry.description|length > 87 %}
+                <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":87"}}<span
+                  class="read-more-elip">...</span><span
+                    class="read-more-text d-none">{{ entry.description|slice:"87:"}}</span> <a class="small read-more-link"
+                      href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
+              {% elif entry.assets.count == 3 and entry.description|length <= 155 %}
+                <p class="small">{{ entry.description }}</p>
+              {% elif entry.assets.count == 3 and entry.description|length > 155 %}
+                <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":155"}}<span
+                  class="read-more-elip">...</span><span
+                    class="read-more-text d-none">{{ entry.description|slice:"155:"}}</span> <a class="small read-more-link"
+                      href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
+              {% elif entry.assets.count < 3 and entry.description|length <= 332 %}
+                <p class="small">{{ entry.description }}</p>
+              {% elif entry.assets.count < 3 and entry.description|length > 332 %}
+                <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":332"}}<span
+                  class="read-more-elip">...</span><span
+                    class="read-more-text d-none">{{ entry.description|slice:"332:"}}</span> <a class="small read-more-link"
+                      href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
+              {% else %}
+                <p class="small">{{ entry.description }}</p>
+              {% endif %}
+            {% else %}
+              {% if entry.assets.count > 4 and entry.description|length <= 225 %}
+                <p class="small">{{ entry.description }}</p>
+              {% elif entry.assets.count > 4 and entry.description|length > 225 %}
+                <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":215"}}<span
+                  class="read-more-elip">...</span><span
+                    class="read-more-text d-none">{{ entry.description|slice:"215:"}}</span> <a class="small read-more-link"
+                      href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
+              {% elif entry.assets.count == 4 and entry.description|length <= 150 %}
+                <p class="small">{{ entry.description }}</p>
+              {% elif entry.assets.count == 4 and entry.description|length > 150 %}
+                <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":150"}}<span
+                  class="read-more-elip">...</span><span
+                    class="read-more-text d-none">{{ entry.description|slice:"150:"}}</span> <a class="small read-more-link"
+                      href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
+              {% elif entry.assets.count == 3 and entry.description|length <= 225 %}
+                <p class="small">{{ entry.description }}</p>
+              {% elif entry.assets.count == 3 and entry.description|length > 225 %}
+                <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":225"}}<span
+                  class="read-more-elip">...</span><span
+                    class="read-more-text d-none">{{ entry.description|slice:"225:"}}</span> <a class="small read-more-link"
+                      href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
+              {% elif entry.assets.count < 3 and entry.description|length <= 390 %}
+                <p class="small">{{ entry.description }}</p>
+              {% elif entry.assets.count < 3 and entry.description|length > 390 %}
+                <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":390"}}<span
+                  class="read-more-elip">...</span><span
+                    class="read-more-text d-none">{{ entry.description|slice:"390:"}}</span> <a class="small read-more-link"
+                      href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
+              {% else %}
+                <p class="small">{{ entry.description }}</p>
+              {% endif %}
+
             {% endif %}
           {% endwith %}
-
-
-          {% if entry.contributors %}
-            {% if entry.assets.count > 4 and entry.description|length <= 158 %}
-              <p class="small">{{ entry.description }}</p>
-            {% elif entry.assets.count > 4 and entry.description|length > 158 %}
-              <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":158"}}<span
-                class="read-more-elip">...</span><span
-                  class="read-more-text d-none">{{ entry.description|slice:"158:"}}</span> <a class="small read-more-link"
-                    href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
-            {% elif entry.assets.count == 4 and entry.description|length <= 87 %}
-              <p class="small">{{ entry.description }}</p>
-            {% elif entry.assets.count == 4 and entry.description|length > 87 %}
-              <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":87"}}<span
-                class="read-more-elip">...</span><span
-                  class="read-more-text d-none">{{ entry.description|slice:"87:"}}</span> <a class="small read-more-link"
-                    href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
-            {% elif entry.assets.count == 3 and entry.description|length <= 155 %}
-              <p class="small">{{ entry.description }}</p>
-            {% elif entry.assets.count == 3 and entry.description|length > 155 %}
-              <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":155"}}<span
-                class="read-more-elip">...</span><span
-                  class="read-more-text d-none">{{ entry.description|slice:"155:"}}</span> <a class="small read-more-link"
-                    href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
-            {% elif entry.assets.count < 3 and entry.description|length <= 332 %}
-              <p class="small">{{ entry.description }}</p>
-            {% elif entry.assets.count < 3 and entry.description|length > 332 %}
-              <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":332"}}<span
-                class="read-more-elip">...</span><span
-                  class="read-more-text d-none">{{ entry.description|slice:"332:"}}</span> <a class="small read-more-link"
-                    href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
-            {% else %}
-              <p class="small">{{ entry.description }}</p>
-            {% endif %}
-          {% else %}
-            {% if entry.assets.count > 4 and entry.description|length <= 225 %}
-              <p class="small">{{ entry.description }}</p>
-            {% elif entry.assets.count > 4 and entry.description|length > 225 %}
-              <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":215"}}<span
-                class="read-more-elip">...</span><span
-                  class="read-more-text d-none">{{ entry.description|slice:"215:"}}</span> <a class="small read-more-link"
-                    href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
-            {% elif entry.assets.count == 4 and entry.description|length <= 150 %}
-              <p class="small">{{ entry.description }}</p>
-            {% elif entry.assets.count == 4 and entry.description|length > 150 %}
-              <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":150"}}<span
-                class="read-more-elip">...</span><span
-                  class="read-more-text d-none">{{ entry.description|slice:"150:"}}</span> <a class="small read-more-link"
-                    href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
-            {% elif entry.assets.count == 3 and entry.description|length <= 225 %}
-              <p class="small">{{ entry.description }}</p>
-            {% elif entry.assets.count == 3 and entry.description|length > 225 %}
-              <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":225"}}<span
-                class="read-more-elip">...</span><span
-                  class="read-more-text d-none">{{ entry.description|slice:"225:"}}</span> <a class="small read-more-link"
-                    href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
-            {% elif entry.assets.count < 3 and entry.description|length <= 390 %}
-              <p class="small">{{ entry.description }}</p>
-            {% elif entry.assets.count < 3 and entry.description|length > 390 %}
-              <p id="read-more-{{ entry.id }}" class="small read-more">{{ entry.description|slice:":390"}}<span
-                class="read-more-elip">...</span><span
-                  class="read-more-text d-none">{{ entry.description|slice:"390:"}}</span> <a class="small read-more-link"
-                    href="#read-more-{{ entry.id}}">Show <span class="read-more-less">more</span></a></p>
-            {% else %}
-              <p class="small">{{ entry.description }}</p>
-            {% endif %}
-          {% endif %}
 
 
 
