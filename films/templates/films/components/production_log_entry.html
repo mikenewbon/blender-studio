@@ -82,50 +82,49 @@
             {% endif %}
           </div>
 
-          {% comment %} {% for contributor in entry.contributors %}
-            <span><img width=32 src="{{ contributor.image_url }}"
-              title="{{ contributor.full_name }} ({{ contributor }})"></span>
-          {% endfor %} {% endcomment %}
 
+          {% with entry_author=entry.author|default:entry.user contributors=entry.contributors %}
+            {% if contributors|length > 1 or contributors|length == 1 and contributors.first.pk != entry_author.pk %}
+              <h5 class="mb-1 subtitle-light">Other Contributors:</h5>
 
+              <div class="contributors d-flex align-items-center mb-1">
 
+                <div class="d-flex">
+                  {% for contributor in contributors %}
+                    {% if contributor.pk != entry_author.pk %}
+                      <img src="{{ contributor.image_url }}" alt="{{ contributor.full_name }}" class="profile rounded-circle">
+                    {% endif %}
+                  {% endfor %}
+                </div>
 
-          {% if entry.contributors %}
-            <h5 class="mb-1 subtitle-light">Other Contributors:</h5>
+                <button class="btn btn-xs btn-icon btn-dark ml-2" data-toggle="dropdown" href="">
+                  <i class="material-icons">arrow_drop_down</i>
+                </button>
 
-            <div class="contributors d-flex align-items-center mb-1">
+                <div class="dropdown-menu mt-2 px-2 pt-2 pb-0">
+                  <h3 class="mb-2">Other Contributors</h3>
+                  {% for contributor in contributors %}
+                    {% if contributor.pk != entry_author.pk %}
+                      <div class="d-flex mb-2">
+                        <div style="background-image:url('{{ contributor.image_url }}');" class="profile"></div>
+                        <div class="col-auto">
+                          <h4 class="comment-name mb-0">{{ contributor.full_name }}</h4>
 
-              <div class="d-flex">
-                {% for contributor in entry.contributors %}
-                  <img src="{{ contributor.image_url }}" alt="{{ contributor.full_name }}" class="profile rounded-circle">
-                {% endfor %}
+                          {% for crew in contributor.film_crew.all %}
+                            {% if crew.film.id == film.id %}
+                              <p class="subtitle text-white-50 x-small">{{ crew.role }}</p>
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+
               </div>
 
-              <button class="btn btn-xs btn-icon btn-dark ml-2" data-toggle="dropdown" href="">
-                <i class="material-icons">arrow_drop_down</i>
-              </button>
-
-              <div class="dropdown-menu mt-2 px-2 pt-2 pb-0">
-                <h3 class="mb-2">Other Contributors</h3>
-                {% for contributor in entry.contributors %}
-                  <div class="d-flex mb-2">
-                    <div style="background-image:url('{{ contributor.image_url }}');" class="profile"></div>
-                    <div class="col-auto">
-                      <h4 class="comment-name mb-0">{{ contributor.full_name }}</h4>
-
-                      {% for crew in contributor.film_crew.all %}
-                        {% if crew.film.id == film.id %}
-                          <p class="subtitle text-white-50 x-small">{{ crew.role }}</p>
-                        {% endif %}
-                      {% endfor %}
-                    </div>
-                  </div>
-                {% endfor %}
-              </div>
-
-            </div>
-
-          {% endif %}
+            {% endif %}
+          {% endwith %}
 
 
           {% if entry.contributors %}
