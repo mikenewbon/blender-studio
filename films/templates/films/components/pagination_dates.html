@@ -13,7 +13,7 @@
               {% if next_month != date_list|first %}
                 <li class="page-item">
                   <a class="page-link"
-                    href="{% url 'film-production-logs-month' film_slug=film.slug year=date_list|first|date:"Y"|lower month=date_list|first|date:"M"|lower %}">{{ date_list|first|date:"M Y" }}</a>
+                    href="{% url 'film-production-logs-month' film_slug=film.slug year=date_list|first|date:"Y"|lower month=date_list|first|date:"M"|lower %}">{{ date_list|first|date:"M y" }}</a>
                 </li>
                 <li class="page-item disabled">
                   <span class="page-link">...</span>
@@ -27,7 +27,7 @@
                 {% if current_month == month or date == previous_month or date == next_month %}
                   <li class="page-item {% if current_month == month %}active{% endif %} ">
                     <a class="page-link"
-                      href="{% url 'film-production-logs-month' film_slug=film.slug year=date.year month=date|date:"M"|lower %}">{{ date|date:"M Y" }}</a>
+                      href="{% url 'film-production-logs-month' film_slug=film.slug year=date.year month=date|date:"M"|lower %}">{{ date|date:"M y" }}</a>
                   </li>
                 {% endif %}
               {% endwith %}
@@ -42,7 +42,7 @@
                 </li>
                 <li class="page-item">
                   <a class="page-link"
-                    href="{% url 'film-production-logs-month' film_slug=film.slug year=date_list|last|date:"Y"|lower month=date_list|last|date:"M"|lower %}">{{ date_list|last|date:"M Y" }}</a>
+                    href="{% url 'film-production-logs-month' film_slug=film.slug year=date_list|last|date:"Y"|lower month=date_list|last|date:"M"|lower %}">{{ date_list|last|date:"M y" }}</a>
                 </li>
 
               {% endif %}
