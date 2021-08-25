@@ -163,6 +163,10 @@
   color: $highlight-white-xxstrong;
   transition: $transition-base;
   margin-bottom: $spacer / 4;
+
+  .badge {
+    margin-top: - $spacer / 8;
+  }
 }
 
 .card-header-link {
