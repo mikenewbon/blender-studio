@@ -134,7 +134,7 @@ const renderHits = (renderOptions, isFirstRender) => {
     </div>
     <a class="card-body" href="${ item.url }">
       <h3 class="card-title">
-        ${item.is_free == true ? `<i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top" title="Free">lock_open</i>&nbsp;` :''}
+        ${item.is_free == true ? `<i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top" title="Free">lock_open</i>` :''}
         ${instantsearch.highlight({ attribute: 'name', hit: item })}
       </h3>
       <p class="card-text">${instantsearch.highlight({ attribute: 'description', hit: item })}</p>
@@ -144,7 +144,7 @@ const renderHits = (renderOptions, isFirstRender) => {
         <p class="card-subtitle"><i class="material-icons icon-inline small" data-toggle="tooltip" data-placement="top"
         title="Free">school</i>&nbsp;${ titleCase(item.type) }</p>
         <p class="card-subtitle">
-        ${ !!(item.difficulty) ? `<i class="material-icons icon-inline small">leaderboard</i>&nbsp;${titleCase(item.difficulty)}` : ''}
+        ${ !!(item.difficulty) ? `<i class="material-icons icon-inline small">equalizer</i>&nbsp;${titleCase(item.difficulty)}` : ''}
         ${ !!(item.project) ? `<i class="material-icons icon-inline small">movie</i>&nbsp;${ titleCase(item.project) }` : ''}
         </p>
       </div>

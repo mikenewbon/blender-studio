@@ -35,7 +35,7 @@
         </p>
         <p class="card-subtitle">
           {% if training.get_difficulty_display or training.difficulty.label %}
-            <i class="material-icons icon-inline small">school</i>
+            <i class="material-icons icon-inline small">equalizer</i>
             {% firstof training.get_difficulty_display training.difficulty.label %}
           {% elif training.project %}
             <i class="material-icons icon-inline small">school</i>
