@@ -67,6 +67,7 @@
         <section class="mb-3 markdown-text">{% with_shortcodes chapter.description|markdown %}</section>
       {% endif %}
 
+
       <div class="files row grid">
         <div class="grid-sizer col-12 col-sm-6 col-md-6 col-lg-4"></div>
         {% for section in chapter.sections.all %}
@@ -85,6 +86,7 @@
   {{ block.super }}
 
   {% javascript 'training' %}
+  {% javascript 'vendor_masonry' %}
 
   <script>
     makeGrid();

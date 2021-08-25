@@ -1,10 +1,10 @@
 <div class="{{ card_sizes|default:"col-12 col-sm-6 col-lg-4" }} card-grid-item">
-  <div class="card card-dark card-training card-media card-hover" {% if training.favorited %}data-checked="checked"
+  <div class="card card-training" {% if training.favorited %}data-checked="checked"
   {% endif %} data-favorite-url="{{ training.favorite_url }}" data-training-id="{{ training.id }}">
 
     <div class="card-header">
       <a href="{{ training.url }}" class="card-header-link">
-        <img src="{% firstof training.static_asset.thumbnail_s_url training.thumbnail_s_url %}" class="card-image">
+        <img src="{% firstof training.static_asset.thumbnail_s_url training.thumbnail_s_url %}" class="card-img" alt="{{ training.name }}">
       </a>
       {% if request.user.is_authenticated %}
         {% include 'training/components/card_button_favorite.html' with class='btn-save-media card-training-favorite' checked=training.favorited %}
@@ -12,6 +12,19 @@
     </div>
 
     <a class="card-body" href="{{ training.url }}">
+
+      <h3 class="card-title">{{ training.name }}</h3>
+      <p class="card-text">{{ training.description }}</p>
+    </a>
+
+    <a  href="{{ training.url }}" class="card-footer">
+      {% comment %} {% if training.tags.all %}
+        <div class="pills mb-0">
+          {% for tag in training.tags.all %}
+            {% include 'common/components/cards/pill.html' with label=tag.name %}
+          {% endfor %}
+        </div>
+      {% endif %} {% endcomment %}
       <div class="card-subtitle-group">
         <p class="card-subtitle">
           {% if training.is_free %}
@@ -33,19 +46,9 @@
           {% endif %}
         </p>
       </div>
-      <h3 class="card-title">{{ training.name }}</h3>
-      <p class="card-text">{{ training.description }}</p>
+
     </a>
 
-    {% if training.tags.all %}
-      <div class="card-footer">
-        <div class="pills">
-          {% for tag in training.tags.all %}
-            {% include 'common/components/cards/pill.html' with label=tag.name %}
-          {% endfor %}
-        </div>
-      </div>
-    {% endif %}
 
   </div>
 </div>

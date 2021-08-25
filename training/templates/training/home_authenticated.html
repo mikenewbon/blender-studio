@@ -15,18 +15,19 @@
 {% endblock %}
 
 {% block jumbotron %}
-  <div class="jumbotron jumbotron-fluid jumbotron-overlay header">
+  <div class="jumbotron jumbotron-fluid jumbotron-overlay header spacer-n mb-n5">
     <div class="jumbotron-bg-wrapper">
-      <img class="jumbotron-bg" src="{% static "training/images/training-header-primitive.jpg" %}">
+      <img class="jumbotron-bg" src="{% static "training/images/training-header-primitive.png" %}">
       <!-- TODO(Mike): Implement image sets when flat-pages are done. -->
       {% comment %}
     {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
     {% endcomment %}
     </div>
-    <div class="container-xl">
+    <div class="container-xl pb-5">
       <div class="row">
         <div class="col-lg-5 col-xl-4">
           <div class="jumbotron-body">
+            <div class="spacer"></div>
             <h1>Training</h1>
             <p class="mb-0">
               Learn from our expert team. Courses, workshops and production lessons with .blend files included.
@@ -39,7 +40,7 @@
 {% endblock jumbotron %}
 
 {% block content %}
-  <div class="container-xl pt-3">
+  <div class="container-xl pt-2 pt-md-3">
 
     <!-- Recently watched -->
     {% if recently_watched_sections %}

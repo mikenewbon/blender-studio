@@ -2,8 +2,7 @@
 {% load thumbnail %}
 {% load common_extras %}
 
-<div class="{{ card_sizes|default:"col-12 col-sm-6 col-md-6 col-lg-4" }} grid-item card-grid-item">
-  <div class="file">
+<div class="file {{ card_sizes|default:"col-12 col-sm-6 col-md-6 col-lg-4" }} grid-item card-grid-item">
     <div class="file-header">
       <a href="{{ section.url }}" class="file-folder-link">
 
@@ -28,8 +27,6 @@
         <i class="material-icons icon-inline small text-success mr-1" data-toggle="tooltip" data-placement="top"
           title="Free">lock_open</i>
       {% endif %}
-      <h4 class="overflow-text">{{ section.name }}</h4>
+      <p class="overflow-text h4">{{ section.name }}</p>
     </a>
-
-  </div>
 </div>

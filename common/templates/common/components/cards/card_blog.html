@@ -1,27 +1,34 @@
 <div class="{% block classes %}grid-item{% endblock classes %}">
-  <div class="card card-dark card-hover card-media">
+  <div class="card">
     <div class="card-header">
-      <a class="card-header-link" href="{% url 'post-detail' slug=post.slug %}">
+      <a class="card-header-link" href="{% url 'post-detail' slug=post.slug %}" aria-label="{{ post.title }}">
         {% if post.thumbnail %}
           {% block image %}
-            <img alt="{{ post.title }}" class="card-image" src="{{ post.thumbnail_s_url }}">
+            <img alt="{{ post.title }}" class="card-img" src="{{ post.thumbnail_s_url }}">
           {% endblock image %}
         {% endif %}
       </a>
     </div>
     <a href="{% url 'post-detail' slug=post.slug %}" class="card-body">
+
+      <h3 class="card-title">
+        {% if post.is_new %}
+          <div class="badge badge-primary mt-n1">New</div>
+        {% endif %}
+        {{ post.title }}
+      </h3>
+      <p class="card-text">{{ post.excerpt }}</p>
+
+    </a>
+    <a href="{% url 'post-detail' slug=post.slug %}" class="card-footer">
       <div class="card-subtitle-group">
 
-        <p class="card-subtitle">
+        {% comment %} <p class="card-subtitle">
           {{ post.category|title }}
-        </p>
+        </p> {% endcomment %}
         {% if not post.is_published %}
           <div class="badge badge-danger">
             Unpublished
-          </div>
-        {% elif post.is_new %}
-          <div class="badge badge-primary">
-            New
           </div>
         {% else %}
           <p class="card-subtitle">
@@ -33,9 +40,8 @@
         {% endif %}
 
       </div>
-      <h3 class="card-title">{{ post.title }}</h3>
-      <p class="card-text">{{ post.excerpt }}</p>
-
     </a>
+
+
   </div>
 </div>

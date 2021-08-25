@@ -1,15 +1,21 @@
 {% load common_extras %}
 {% load film_extras %}
 
-<nav class="row mb-2" aria-label="breadcrumb">
+<nav class="row mb-3" aria-label="breadcrumb">
 
-  <ol class="breadcrumb col">
+  <ol class="breadcrumb col mb-n1">
     {% for name, url in breadcrumbs %}
-      <a class="breadcrumb-item btn btn-dark btn-sm mb-1" href="{{ url }}">
-        {{ name }}
-      </a>
+      <li class="breadcrumb-item">
+        <a class="btn btn-dark btn-sm mb-1 font-weight-normal" href="{{ url }}">
+          {{ name }}
+        </a>
+      </li>
     {% endfor %}
-    <li class="breadcrumb-item active btn btn-sm disabled mb-1">{{ current_location }}</li>
+    <li class="breadcrumb-item active ">
+      <span class="btn btn-sm disabled mb-1 font-weight-normal">
+        {{ current_location }}
+      </span>
+    </li>
   </ol>
 
   <div class="file-toolbar col-auto mt-0 flex-shrink-1 flex-grow-0">
@@ -18,15 +24,22 @@
       {% url 'admin:films_asset_changelist' as list_url %}
       {% url 'admin:films_newasset_add' as add_url %}
       {% url 'admin:films_collection_add' as add_collection_url %}
-      <a href="{{ add_url }}?film={{ film.id }}&is_published=1{% if current_collection.admin_url %}&collection={{ current_collection.id }}{% elif featured_artwork %}&is_featured=1{% endif %}" class="btn btn-sm btn-dark btn-icon" title="Add a new asset to {% firstof current_collection "featured" %}" data-toggle="tooltip" data-placement="top">
+      <a href="{{ add_url }}?film={{ film.id }}&is_published=1{% if current_collection.admin_url %}&collection={{ current_collection.id }}{% elif featured_artwork %}&is_featured=1{% endif %}"
+        class="btn btn-sm btn-dark btn-icon" title="Add a new asset to {% firstof current_collection "featured" %}"
+        data-toggle="tooltip" data-placement="top">
         <i class="material-icons">note_add</i>
 
       </a>
-      <a href="{% if current_collection.admin_url %}{{ current_collection.admin_url }}{% elif featured_artwork %}{{ list_url }}?film__id__exact={{ film.id }}&is_featured__exact=1{% endif %}" class="btn btn-sm btn-dark btn-icon" title="Edit {% firstof current_collection "featured assets" %}" data-toggle="tooltip" data-placement="top">
+      <a href="{% if current_collection.admin_url %}{{ current_collection.admin_url }}{% elif featured_artwork %}{{ list_url }}?film__id__exact={{ film.id }}&is_featured__exact=1{% endif %}"
+        class="btn btn-sm btn-dark btn-icon" title="Edit {% firstof current_collection "featured assets" %}"
+        data-toggle="tooltip" data-placement="top">
         <i class="material-icons">edit</i>
 
       </a>
-      <a href="{{ add_collection_url }}?next-view-link=1&film={{ film.id }}{% if current_collection.admin_url %}&parent={{ current_collection.id }}{% endif %}" class="btn btn-sm btn-dark btn-icon" title="Create a new collection{% if current_collection %} in {{current_collection}}{% endif %}" data-toggle="tooltip" data-placement="top">
+      <a href="{{ add_collection_url }}?next-view-link=1&film={{ film.id }}{% if current_collection.admin_url %}&parent={{ current_collection.id }}{% endif %}"
+        class="btn btn-sm btn-dark btn-icon"
+        title="Create a new collection{% if current_collection %} in {{current_collection}}{% endif %}"
+        data-toggle="tooltip" data-placement="top">
         <i class="material-icons">create_new_folder</i>
 
       </a>
@@ -34,7 +47,8 @@
       {% if perms.films.delete_collection and current_collection.assets.count == 0 and current_collection.child_collections.count == 0 %}
         {% url 'admin:films_collection_delete' object_id=current_collection.id as delete_collection_url %}
         {% url 'film-gallery' film_slug=film.slug as gallery_url %}
-        <a href="{{ delete_collection_url }}?next={% firstof current_collection.parent.url gallery_url %}" class="btn btn-sm btn-dark" title="Delete this empty collection">
+        <a href="{{ delete_collection_url }}?next={% firstof current_collection.parent.url gallery_url %}"
+          class="btn btn-sm btn-dark" title="Delete this empty collection">
           <i class="material-icons">remove</i>
           Delete
         </a>

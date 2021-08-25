@@ -3,6 +3,8 @@
 
 {% block title_prepend %}{{ film.title }}: {{ flatpage.title }} - {% endblock title_prepend %}
 
+{% block bodyclasses %}spacer{% endblock bodyclasses %}
+
 {% block meta %}
   {% capture title %}{{ film.title }}: {{ flatpage.title }}{% endcapture %}
   {% firstof title flatpage.title film.title as title %}

@@ -1,6 +1,9 @@
 {% extends 'common/base.html' %}
+{% load static %}
+{% load common_extras %}
 
 {% block bodyclasses %}
+
   has-secondary-nav
 {% endblock bodyclasses %}
 
@@ -11,10 +14,15 @@
 {% endblock %}
 
 {% block secondary_nav %}
-  <div class="navbar-secondary">
+  <div class="navbar-secondary scroll">
     <div class="navdrawer-offset">
       <div class="container-xl">
         <div class="list-group list-group-flush list-group-horizontal small side-scroll">
+
+          <a class="list-group-item logo show-on-scroll" href="/">
+            <img src="{% static 'common/images/cloud-icon.svg' %}" alt="Blender Cloud Icon">
+          </a>
+
           <a class="list-group-item" href="{% url 'film-detail' film_slug=film.slug %}">
             {{ film.title }}
           </a>
@@ -36,6 +44,146 @@
             <a href="{{ film.admin_url }}" class="list-group-item btn-icon small">
               Admin Edit
             </a>
+          {% endif %}
+
+          {% if request.user.is_authenticated %}
+
+            <div class="navbar-main-nav-toolbar show-on-scroll">
+
+              <a href="{% url 'search' %}" class="search-button list-group-item icon">
+                <i class="material-icons">search</i>
+              </a>
+
+              <div>
+                <a href="{% url 'user-notification' %}" data-toggle="dropdown"
+                  class="list-group-item icon notification-button">
+                  <i class="material-icons">notifications</i>
+                  {% if user.notifications_unread.count >= 1 %}
+                    <span class="notifications-counter">{{ user.notifications_unread.count }}</span>
+                  {% endif %}
+                </a>
+                <div class="dropdown-menu dropdown-menu-right notification-dropdown">
+
+                  <div class="dropdown-double">
+                    <a href="{% url 'user-notification' %}" class="dropdown-item">
+                      <i class="material-icons">notifications</i>
+                      <span>Notifications</span>
+                    </a>
+
+                    <button class="dropdown-item icon {% if user.notifications_unread.count >= 1 %}unread{% endif %}"
+                      data-toggle="tooltip" data-placement="top"
+                      data-mark-all-read-url="{% url 'api-notifications-mark-read' %}" title="Mark all as read">
+                      <i class="material-icons">markunread_mailbox</i>
+                    </button>
+                  </div>
+
+                  <div class="dropdown-menu-nested">
+
+                    {% for notification in user.notifications.all|slice:":10" %}
+                      {% with action=notification.action %}
+                        {% include 'users/components/nav_action.html' %}
+                      {% endwith %}
+                    {% empty %}
+                      <p class="px-2 py-2 subtitle text-center">
+                        No notifications yet
+                      </p>
+                    {% endfor %}
+
+                  </div>
+
+                  <a href="{% url 'user-notification' %}" class="dropdown-item small">
+                    <span>See all notifications</span>
+                  </a>
+
+                </div>
+              </div>
+
+              <div>
+                <a data-toggle="dropdown" class="list-group-item icon btn-profile">
+                  {% if request.user.is_authenticated and request.user.image_url %}
+                    <div style="background-image:url('{{ request.user.image_url }}');" class="profile"></div>
+                  {% else %}
+                    <div style="background-image:url('{% static 'common/images/blank-profile-pic.png' %}');" class="profile">
+                    </div>
+                  {% endif %}
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+
+                  <a href="/p/home/" class="dropdown-item">
+                    <i class="material-icons">home</i>
+                    <span>My Cloud</span>
+                  </a>
+
+                  <a href="{% url 'user-activity' %}" class="dropdown-item">
+                    <i class="material-icons">timeline</i>
+                    <span>My Activity</span>
+                  </a>
+
+                  <div class="dropdown-menu-nested">
+                    {% if request.user.is_authenticated %}
+                      {% if request.user|has_group:"demo" %}
+                        <a href="{% url 'user-settings-billing' %}" class="dropdown-item text-blue">
+                          <i class="material-icons">favorite</i>
+                          <span>Free Account</span>
+                        </a>
+                      {% elif request.user|has_active_subscription %}
+                        <a href="{% url 'user-settings-billing' %}" class="dropdown-item text-green">
+                          <i class="material-icons">done</i>
+                          <span>Subscription Active</span>
+                        </a>
+                      {% else %}
+                        <a href="{% url 'user-settings-billing' %}" class="dropdown-item text-red">
+                          <i class="material-icons">error</i>
+                          <span>Subscription Inactive</span>
+                        </a>
+                      {% endif %}
+                    {% endif %}
+
+                    <a href="/settings/profile" class="dropdown-item">
+                      <i class="material-icons">settings</i>
+                      <span>Settings</span>
+                    </a>
+
+                    <a href="{% url 'user-settings-billing' %}" class="dropdown-item">
+                      <i class="material-icons">credit_card</i>
+                      <span>Subscription</span>
+                    </a>
+                  </div>
+
+                  {% if user.is_superuser or user.is_staff %}
+                    <a href="/admin" class="dropdown-item">
+                      <i class="material-icons">security</i>
+                      <span>Admin</span>
+                    </a>
+                  {% endif %}
+
+                  <a href="{% url 'oauth:logout' %}" class="dropdown-item">
+                    <i class="material-icons">exit_to_app</i>
+                    <span>Sign Out</span>
+                  </a>
+                  {# For exiing a "Login-As" switcheroo #}
+                  {% if is_impersonated_session %}
+                    {% with warn="(!) You are currently using login-as to impersonate someone else's session" %}
+                      <a class="dropdown-item" title="{{ warn }}" href="{% url 'loginas-logout' %}">
+                        <i class="text-warning material-icons">exit_to_app</i>
+                        <span class="text-warning">Switch back</span>
+                      </a>
+                    {% endwith %}
+                  {% endif %}
+                </div>
+              </div>
+
+            </div>
+          {% else %}
+            <div class="navbar-main-nav-toolbar show-on-scroll">
+              <a href="{% url 'search' %}" class="search-button list-group-item icon">
+                <i class="material-icons">search</i>
+              </a>
+              <a href="{% url 'oauth:login' %}" class="list-group-item login-button">Login</a>
+              <a {% include "subscriptions/components/join_url" %} class="list-group-item primary">Join
+                <span class="d-none d-lg-inline-block">Blender Cloud</span></a>
+
+            </div>
           {% endif %}
         </div>
       </div>

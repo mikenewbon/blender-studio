@@ -1,12 +1,13 @@
-<div class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content header">
+<div class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content header spacer-n">
   <div class="jumbotron-bg-wrapper">
-    {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=film.picture_header xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
+    {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" alt=film.title img_source=film.picture_header xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
   </div>
   <div class="container-xl">
     <div class="row">
       <div class="col-md-7 col-lg-6 col-xl-5">
         <div class="jumbotron-body">
-          <img class="mb-3 film-logo" src="{{ film.logo.url }}">
+          <div class="spacer"></div>
+          <img class="mb-3 film-logo" src="{{ film.logo.url }}" alt="{{ film.title }} Logo">
           <p class="mb-3">
             {{ film.summary|linebreaksbr }}
           </p>

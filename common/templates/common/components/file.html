@@ -26,10 +26,10 @@
           {% endif %}
         {% else %}
           <div class="file-lock-text">
-            <h4 class="mb-0">
+            <p class="mb-0 h4">
               <i class="material-icons icon-inline small">lock</i>
               Subscribe to view
-            </h4>
+            </p>
           </div>
           {% include "common/components/helpers/image_resize.html" with alt=asset.name classes="file-image locked" img_source=asset.static_asset.thumbnail width="200" %}
         {% endif %}
@@ -67,7 +67,7 @@
       <i class="material-icons icon-inline small text-success mr-1" data-toggle="tooltip" data-placement="top" title="Free">lock_open</i>
     {% endif %}
     <span data-tooltip="tooltip-overflow" data-placement="top" title="{{ asset.name }}" class="overflow-text">
-      <h4 class="overflow-text">{{ asset.name }}</h4>
+      <p class="overflow-text h4">{{ asset.name }}</p>
     </span>
 
   </a>

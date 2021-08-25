@@ -1,21 +1,81 @@
 body {
-  margin-top: $navbar-height;
+  &.spacer {
+    @include media-breakpoint-up(md) {
+      margin-top: $spacer;
+    }
+
+    // @include media-breakpoint-down(sm) {
+    //   margin-top: #{$navbar-height + $spacer};
+    // }
+  }
+
+  &.has-secondary-nav {
+
+    .navbar {
+      border-radius: $border-radius $border-radius 0 0;
+      top: #{- $navbar-height};
+
+      &.scroll {
+        top: $spacer / 2;
+      }
+    }
+
+    &.spacer {
+      // margin-top: $spacer;
+
+      // @include media-breakpoint-down(sm) {
+      //   margin-top: #{$navbar-height + $spacer};
+      // }
+    }
+
+    div.spacer {
+      height: #{$navbar-height + $secondary-navbar-height + $spacer};
+    }
+
+    div.spacer-n {
+      margin-top: #{ - $navbar-height - $secondary-navbar-height - $spacer};
+    }
+  }
+}
+
+div.spacer {
+  height: #{$navbar-height + $spacer};
+}
+
+div.spacer-n {
+  margin-top: #{ - $navbar-height - $spacer};
 }
 
 .navbar {
-  @include fixed-top;
+  position: sticky;
+  top: #{- $navbar-height };
+  left: 0;
+  right: 0;
   align-items: stretch;
   background: $navigation-gray;
-  border-bottom: 1px solid $input-gray;
+  border: 1px solid $input-gray;
+  border-radius: $border-radius;
   flex-wrap: nowrap; // allow us to do the line break for collapsing content
+  margin: 0 auto;
+  max-width: calc(100% - #{$spacer * 2});
   min-height: $navbar-height;
   padding: $navbar-padding-y $navbar-padding-x;
-  transition: margin-left $nav-drawer-animation-duration;
+  transition: margin-left $nav-drawer-animation-duration, top $nav-drawer-animation-duration;
+  width: 1140px;
   z-index: 1040;
+
+  &.hover,
+  &.scroll {
+    top: $spacer / 2 !important;
+  }
 
   a {
     word-break: normal;
     overflow-wrap: normal;
+  }
+
+  .container-xl {
+    padding: 0 $spacer / 2;
   }
 
   // Because flex properties aren't inherited, we need to redeclare these first
@@ -107,6 +167,11 @@ body {
   }
 
   @include media-breakpoint-down(sm) {
+    // top: $spacer / 2;
+    border-radius: $border-radius;
+    max-width: calc(100% - #{$spacer});
+    margin: $spacer / 2;
+
     .container {
       max-width: 100%;
       padding-left: 0;
@@ -138,19 +203,56 @@ body {
   .container-fluid {
     align-items: stretch;
   }
+
+  +.navbar-secondary {
+    border-radius: 0 0 $border-radius $border-radius;
+  }
 }
 
 .navbar-secondary {
   @include media-breakpoint-down(sm) {
-    position: static;
     z-index: 1020;
+    border: 1px solid $input-gray;
+    max-width: 100%;
+    width: calc(100% - #{$spacer});
+    border-radius: 0;
+    margin: -1px $spacer / 2 0;
+    top: -1px;
   }
 
   background: $navigation-gray;
-  border-bottom: 1px solid $input-gray;
+  border: 1px solid $input-gray;
+  max-width: calc(100% - #{$spacer * 2});
+  width: 1140px;
   position: sticky;
-  top: $navbar-height;
+  top: -1px;
   z-index: 1030;
+  border-radius: $border-radius;
+  margin: -1px auto 0 auto;
+  transition: top $nav-drawer-animation-duration;
+
+  &.hover,
+  &.scroll {
+    top: #{$navbar-height + $spacer / 2 - 1} !important;
+
+    .show-on-scroll {
+      display: none;
+    }
+  }
+
+  @include media-breakpoint-down(md) {
+    .show-on-scroll {
+      display: none !important;
+    }
+  }
+
+  .navbar-main-nav-toolbar {
+    align-items: center;
+    display: flex;
+    padding: 0 0 0 10px;
+    position: relative;
+    margin-left: auto;
+  }
 
   .navdrawer-offset {
     border-top: 0;
@@ -172,14 +274,17 @@ body {
       margin: 0;
     }
 
-    flex-wrap: wrap;
-    overflow-x: scroll;
-    padding: 0 $spacer;
-    scrollbar-width: none;
+    @include media-breakpoint-down(md) {
+      // flex-wrap: wrap;
+      overflow-x: scroll;
+      scrollbar-width: none;
+    }
 
-    // &::-webkit-scrollbar {
-    //   display: none;
-    // }
+    padding: 0 $spacer / 8;
+  }
+
+  .list-group-horizontal>.list-group-item+.list-group-item.active {
+    margin-left: $spacer / 8;
   }
 
   .breadcrumb-item {
@@ -194,6 +299,8 @@ body {
   }
 
   .list-group-item {
+    margin: 0 $spacer / 8;
+
     @include hover-focus {
       color: $white;
       text-decoration: none;
@@ -207,6 +314,31 @@ body {
     padding: $spacer / 2 $spacer * .75;
     transition: $transition-base;
     white-space: nowrap;
+
+    &.logo {
+      padding: $spacer / 2;
+      line-height: 1.25;
+    }
+
+    &.icon {
+      line-height: 1;
+      padding: 7.25px 3.5px;
+
+      // &::after {
+      //   left: $spacer / 4;
+      //   width: calc(100% - #{$spacer / 2});
+      // }
+    }
+
+    &.btn-profile {
+      padding: 8.5px 3.5px;
+      cursor: pointer;
+
+      .profile {
+        width: 24px;
+        height: 24px;
+      }
+    }
 
     &::after {
       background: $highlight-white;
@@ -222,9 +354,9 @@ body {
       z-index: -1;
     }
 
-    +.list-group-item {
-      margin-left: $spacer / 4 !important;
-    }
+    // +.list-group-item {
+    //   margin-left: $spacer / 4 !important;
+    // }
 
     &.search {
       align-items: center;
@@ -247,9 +379,32 @@ body {
     margin-right: 0;
   }
 
+  @include hover-focus {
+    &::before {
+      opacity: 1;
+    }
+  }
+
   align-items: center;
   display: flex;
-  margin-right: $spacer;
+  padding-left: $spacer / 2;
+  padding-right: $spacer / 2;
+  margin-right: $spacer / 2;
+  position: relative;
+
+  &:before {
+    content: close-quote;
+    transition: $transition-base;
+    display: block;
+    background: $highlight-white;
+    opacity: 0;
+    width: calc(100%);
+    height: calc(100% - #{$spacer});
+    position: absolute;
+    left: 0;
+    top: $spacer / 2;
+    border-radius: $border-radius;
+  }
 
   img {
     @include img-fluid;

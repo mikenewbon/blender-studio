@@ -1,6 +1,6 @@
 {% url 'user-notification' as my_notifications_url %}
 
-<div class="activity-list-item-wrapper">
+<li class="activity-list-item-wrapper">
   {% include 'users/components/action_summary.html' %}
 
   {% if not notification.date_read and request.path == my_notifications_url %}
@@ -11,4 +11,4 @@
     </button>
   {% endif %}
 
-</div>
+</li>

@@ -1,6 +1,20 @@
 .card {
   @include button-float;
 
+  &::before {
+    opacity: 0;
+    transition: $transition-base;
+    content: close-quote;
+    background: $highlight-white;
+    border-radius: $border-radius-lg;
+    width: calc(100% + #{$spacer});
+    height: calc(100% + #{$spacer});
+    position: absolute;
+    top: - $spacer / 2;
+    left: - $spacer / 2;
+    pointer-events: none;
+  }
+
   flex-grow: 1;
   margin-bottom: $spacer;
   transition: $transition-base;
@@ -10,6 +24,7 @@
     background-size: cover;
     overflow: hidden;
     background: $highlight-black;
+    border-radius: $border-radius;
   }
 
   .btn-save-media {
@@ -30,90 +45,82 @@
     }
   }
 
-  &.card-hover {
-    @include hover-focus {
-      background-color: shade($white, 10%);
+  @include hover-focus {
 
-      .progress-bar {
-        background: $primary;
-      }
-
-      .file-icon {
-        opacity: 1;
-      }
-    }
-
-    &.card-dark {
-      @include hover-focus {
-        background-color: tint($navigation-gray, 10%);
-
-        .card-body {
-          color: $body-color;
-        }
-      }
-    }
-
-    .card-body {
-      @include hover {
-        color: $card-color;
-        text-decoration: none;
-      }
+    &::before {
+      opacity: 1;
     }
 
     .progress-bar {
-      border-radius: $border-radius;
-      transition: $transition-base;
+      background: $primary;
+    }
+
+    .file-icon {
+      opacity: 1;
+    }
+
+    .card-body {
+      opacity: 1;
+    }
+
+    .card-title {
+      color: $white;
     }
   }
 
-  &.card-media {
-    border: 1px solid $input-gray;
-
-
-
-    &.card-poster {
-
-
-      .card-header {
-        padding: 0;
-      }
-
-      .card-header-link {
-        position: static;
-
-        img {
-          width: 100%;
-        }
-      }
+  // To fix body underline issue
+  .card-body {
+    @include hover {
+      text-decoration: none;
     }
+  }
 
+  .progress-bar {
+    border-radius: $border-radius;
+    transition: $transition-base;
+  }
+
+  &.card-poster {
     .card-header {
-      padding-bottom: 56.25%;
-      padding-top: 0;
-      position: relative;
-      width: 100%;
-      background-size: cover;
+      padding: 0;
+    }
 
-      >* {
-        position: absolute;
-      }
+    .card-body {
+      padding-bottom: 0;
+    }
 
-      .progress {
-        bottom: $spacer / 2;
-        left: $spacer / 2;
-        position: absolute;
-        width: calc(100% - #{$spacer});
-        border-radius: $border-radius;
+    .card-header-link {
+      position: static;
+
+      img {
+        width: 100%;
       }
     }
   }
-}
 
-.card-dark {
-  background-color: $navigation-gray;
+  .card-header {
+    padding-bottom: 56.25%;
+    padding-top: 0;
+    position: relative;
+    width: 100%;
+    background-size: cover;
+
+    >* {
+      position: absolute;
+    }
+
+    .progress {
+      bottom: $spacer / 2;
+      left: $spacer / 2;
+      position: absolute;
+      width: calc(100% - #{$spacer});
+      border-radius: $border-radius;
+    }
+  }
 
   .card-body {
-    color: $body-color;
+    color: $highlight-white-xstrong;
+    padding: $card-spacer-y $card-spacer-x;
   }
 
   .card-subtitle {
@@ -124,11 +131,11 @@
   }
 }
 
+
 .card-subtitle-group {
   align-items: center;
   display: flex;
-  justify-content: space-between;
-  margin-bottom: $spacer / 2;
+  justify-content: flex-start;
 
   .card-subtitle:first-child {
     overflow: visible;
@@ -148,6 +155,8 @@
 }
 
 .card-title {
+  color: $highlight-white-xxstrong;
+  transition: $transition-base;
   margin-bottom: $spacer / 4;
 }
 
@@ -195,7 +204,11 @@
 
 .card-footer {
   margin-top: -$spacer / 2;
-  padding: 0 $card-spacer-x 20px;
+  padding: 0 $card-spacer-x $card-spacer-x;
+
+  @include hover {
+    text-decoration: none;
+  }
 }
 
 .card-img,
@@ -204,6 +217,7 @@
 .card-img-top-left {
   flex-shrink: 0; // For IE: https://github.com/twbs/bootstrap/issues/29396
   width: 100%; // Required because we use flexbox and this inherently applies align-self: stretch
+  border-radius: $border-radius;
 }
 
 .card-img-top-left {
@@ -252,18 +266,20 @@
 
 
 .accordion {
+  background: $navigation-gray;
+  border-radius: $border-radius;
+  border: 1px solid $input-gray;
+
   >.card {
     margin-bottom: 0;
+    background: none;
 
     &:not(:last-of-type) {
       border-bottom: 1px solid $input-gray;
     }
 
-    // .card-body {
-    //   padding-top: 0;
-    // }
-
     >.card-header {
+      position: relative;
       padding: 0;
 
       .btn {
@@ -278,30 +294,29 @@
         width: 100%;
 
         &:hover {
-
-
           i {
             text-decoration: none;
           }
         }
       }
-    }
 
-
-    @include hover-focus {
-      background-color: shade($white, 10%);
-    }
-
-    &.card-dark {
-      @include hover-focus {
-        background-color: tint($navigation-gray, 10%);
-
-        .card-body {
-          color: $white;
-        }
+      >* {
+        position: relative;
       }
     }
 
+    .card-body {
+      border-radius: $border-radius;
+      margin: $spacer / 2;
+    }
+
+    @include hover-focus {
+
+
+      .card-body {
+        color: $white;
+      }
+    }
   }
 }
 
@@ -346,10 +361,12 @@
 }
 
 .card-text {
+  @extend .small;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   /* number of lines to show */
   display: -webkit-box;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: $spacer / 4;
 }

@@ -1,7 +1,5 @@
 .file {
   @extend .card;
-  @extend .card-media;
-  @extend .card-dark;
 
   height: auto;
   margin-bottom: 0;
@@ -17,7 +15,7 @@
       color: $white;
       text-decoration: none;
 
-      h4 {
+      h4, .h4 {
         color: white;
       }
     }
@@ -42,7 +40,7 @@
     transition: $transition-base;
   }
 
-  h4 {
+  h4, .h4 {
     color: $highlight-white-xstrong;
     transition: $transition-base;
   }
@@ -164,7 +162,7 @@
 .file-body {
   color: $highlight-white-xstrong;
   display: block;
-  padding: $spacer / 2 $spacer / 2 0;
+  padding: $spacer / 2 $spacer / 4 0;
   position: relative;
   transition: $transition-base;
   display: flex;
@@ -173,7 +171,7 @@
     line-height: $headings-line-height;
   }
 
-  h4 {
+  h4,.h4 {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -298,4 +296,20 @@
 .grid-item {
   margin-bottom: $spacer;
 
+}
+
+// different style for the grid view and carousel views
+.files {
+
+  &.grid{
+    margin-bottom: $spacer / 2;
+  }
+
+  .file {
+    &::before {
+      left: 0;
+      top: - $spacer / 2;
+      width: 100%;
+    }
+  }
 }

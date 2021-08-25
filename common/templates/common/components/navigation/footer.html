@@ -1,0 +1,102 @@
+{% load static %}
+{% load common_extras %}
+
+<footer class="pb-3 container-xl">
+  <div class="navdrawer-offset">
+    <div class="footer-inner">
+      <div class="row">
+
+        <div class="col-lg-3 col-md-4 mb-4 mb-md-0 justify-content-center align-items-center d-flex flex-column text-center">
+
+          <a href="/">
+            <img src="{% static 'common/images/blender_cloud_logo.svg' %}" alt="Blender Cloud" class="mb-2">
+          </a>
+
+          <p class="text-muted x-small">Blender Cloud is the creative hub for your projects, powered by Free and Open Source Software.</p>
+
+          <div class="footer-social-media">
+            <a href="https://www.facebook.com/BlenderCloudOfficial" target="_blank" class="mr-3">
+              <img alt="Facebook Logo" src="{% static 'common/images/icons/facebook.svg' %}">
+            </a>
+            <a href="https://twitter.com/Blender_Cloud" target="_blank" class="mr-3">
+              <img alt="Twitter Logo" src="{% static 'common/images/icons/twitter.svg' %}">
+            </a>
+            <a href="https://www.youtube.com/channel/UC5qvW9fotdsSJkCguB_t-kQ" target="_blank">
+              <img alt="YouTube Logo" src="{% static 'common/images/icons/youtube.svg' %}">
+            </a>
+          </div>
+
+        </div>
+
+        <div class="col-md-8 offset-lg-1">
+          <div class="row text-white">
+
+            <div class="col-md-3 col-6">
+              <ul class="subtitle">
+                <li class="mb-2"><a href="{% url 'film-list' %}" class="h3 text-white">Films</a></li>
+                <li class="mb-2"><a href="{% url 'training-home' %}" class="h3 text-white">Training</a></li>
+                <li class="mb-2"><a href="{% url 'post-list' %}" class="h3 text-white">Blog</a></li>
+              </ul>
+            </div>
+
+            <div class="col-md-3 col-6">
+              <a href="/services" class="h3 text-white">Services</a>
+              <ul class="mb-0">
+                <li>
+                  <a href="/services#blender-cloud-add-on" class="small subtitle">Add-on</a>
+                </li>
+                <li>
+                  <a href="/p/home/" class="small subtitle">Blender Sync</a>
+                </li>
+                <li>
+                  <a href="/attract" class="small subtitle">Attract</a>
+                </li>
+                <li>
+                  <a href="/flamenco" class="small subtitle">Flamenco</a>
+                </li>
+                <li>
+                  <a href="/p/home/images" class="small subtitle">Image Sharing</a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="col-md-3 col-6">
+              <a href="/libraries" class="h3 text-white">Libraries</a>
+              <ul>
+                <li>
+                  <a href="/p/hdri/" class="small subtitle">HDRIs</a>
+                </li>
+                <li>
+                  <a href="/p/textures/" class="small subtitle">Textures</a>
+                </li>
+                <li>
+                  <a href="/p/characters/" class="small subtitle">Characters</a>
+                </li>
+                <li>
+                  <a href="/p/gallery/" class="small subtitle">Art Gallery</a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="col-md-3 col-6">
+              <a href="/" class="h3 text-white">Cloud</a>
+              <ul>
+                <li>
+                  <a href="/terms-and-conditions" class="small subtitle">Terms &amp; Conditions</a>
+                </li>
+                <li>
+                  <a href="/privacy" class="small subtitle">Privacy Policy</a>
+                </li>
+                <li>
+                  <a href="/contact" class="small subtitle">Contact</a>
+                </li>
+              </ul>
+              <a href="https://www.blender.org/" target="_blank" class="small subtitle">Blender.org</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>

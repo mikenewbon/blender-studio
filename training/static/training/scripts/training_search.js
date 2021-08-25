@@ -117,49 +117,49 @@ const renderHits = (renderOptions, isFirstRender) => {
 
   widgetParams.container.innerHTML = `
       ${hits
-      .map(
-        item =>
+        .map(
+          (item) =>
+            `
+<div class="col-12 col-sm-6 col-lg-4 card-grid-item">
+  <div class="card card-training" data-training-id="${ item.id }" data-favorite-url="${ item.favorite_url }" ${ favoritedTrainingIDs.filter(i => i == item.id).length > 0 == true ? 'data-checked="checked"' : ''}>
+    <div class="card-header">
+      <a href="${item.url}" class="card-header-link">
+        <img src="${item.thumbnail_url}" class="card-img" loading="lazy">
+      </a>
+      ${item.type !== 'production lesson' ? authCheck() == true ? `
+        <button class="btn btn-xs btn-icon btn-float checkbox-favorite btn-save-media card-training-favorite ${favoritedTrainingIDs.filter(i => i == item.id).length > 0 == true ? 'checked primary' : ''}" data-toggle="tooltip" data-placement="left" title="Save for later">
+          <i class="material-icons checkbox-favorite-icon-unchecked">${ favoritedTrainingIDs.filter(i => i == item.id).length > 0 == true ? 'check' : 'add'}</i>
+        </button>
+      ` : '' : '' }
+    </div>
+    <a class="card-body" href="${ item.url }">
+      <h3 class="card-title">${instantsearch.highlight({ attribute: 'name', hit: item })}</h3>
+      <p class="card-text">${instantsearch.highlight({ attribute: 'description', hit: item })}</p>
+    </a>
+    <div class="card-footer">
+      <div class="card-subtitle-group">
+        <p class="card-subtitle">${item.is_free == true ? `<i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top"
+        title="Free">lock_open</i>&nbsp;` :''}${ titleCase(item.type) }</p>
+        <p class="card-subtitle">
+        ${ !!(item.difficulty) ? `<i class="material-icons icon-inline small">school</i>&nbsp;${titleCase(item.difficulty)}` : ''}
+        ${ !!(item.project) ? `<i class="material-icons icon-inline small">movie</i>&nbsp;${ titleCase(item.project) }` : ''}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
         `
-          <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
+        )
+        .join('')}`;
 
-            <div class="card card-dark card-training card-media card-hover" data-training-id="${ item.id }" data-favorite-url="${ item.favorite_url }" ${ favoritedTrainingIDs.filter(i => i == item.id).length > 0 == true ? 'data-checked="checked"' : ''}>
-              <div class="card-header">
-                <a href="${ item.url }" class="card-header-link">
-                  <img src="${ item.thumbnail_url }" class="card-image" loading="lazy">
-                </a>
-                ${ item.type !== 'production lesson' ? authCheck() == true ?
-                `<button class="btn btn-xs btn-icon btn-float checkbox-favorite btn-save-media card-training-favorite ${ favoritedTrainingIDs.filter(i => i == item.id).length > 0 == true ? 'checked primary' : ''}" data-toggle="tooltip" data-placement="left" title="Save for later">
-                  <i class="material-icons checkbox-favorite-icon-unchecked">${ favoritedTrainingIDs.filter(i => i == item.id).length > 0 == true ? 'check' : 'add'}</i>
-                </button>` : '' : '' }
-              </div>
-
-              <a class="card-body" href="${ item.url }">
-                <div class="card-subtitle-group">
-                  <p class="card-subtitle">${item.is_free == true ? `<i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top"
-                  title="Free">lock_open</i>&nbsp;` :''}${ titleCase(item.type) }</p>
-                  <p class="card-subtitle">
-                  ${ !!(item.difficulty) ? `<i class="material-icons icon-inline small">school</i>&nbsp;${titleCase(item.difficulty)}` : ''}
-                  ${ !!(item.project) ? `<i class="material-icons icon-inline small">movie</i>&nbsp;${ titleCase(item.project) }` : ''}
-                  </p>
-                </div>
-                <h3 class="card-title">${instantsearch.highlight({ attribute: 'name', hit: item })}</h3>
-                <p class="card-text">${instantsearch.highlight({ attribute: 'description', hit: item })}</p>
-              </a>
-
-              ${ item.tags != '' ? `<div class="card-footer">
-                <div class="pills">
-                  ${item.tags.map( tag => `
-                  <p class="badge badge-pill">${titleCase(tag)}</p>
-                  `).join('')}
-                </div>
-              </div>` : ''}
-
-            </div>
-          </div>
-        `
-      )
-      .join('')}
-  `;
+  // If tags are to be Re-added
+  // ${ item.tags != '' ? `
+  // <div class="pills mb-0">
+  //   ${item.tags.map( tag => `
+  //   <p class="badge badge-pill">${titleCase(tag)}</p>
+  //   `).join('')}
+  // </div>
+  // ` : '' }
 
   lastRenderArgs = renderOptions;
 

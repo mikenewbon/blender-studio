@@ -1,3 +1,21 @@
+.has-secondary-nav {
+  .nav-drawer {
+    max-height: calc(100vh - #{$navbar-height + $secondary-navbar-height + $spacer * 1.5});
+    top: $navbar-height + $secondary-navbar-height + $spacer;
+    transform: translateY(calc(-100% - #{$navbar-height + $secondary-navbar-height + $spacer}));
+
+    &-nested {
+      max-height: calc(100vh - #{$secondary-navbar-height + $spacer * 2});
+      top: calc(#{$secondary-navbar-height + $spacer});
+
+      &.scroll {
+        top: calc(#{$navbar-height + $secondary-navbar-height + $spacer * 1.5});
+        max-height: calc(100vh - #{$navbar-height + $secondary-navbar-height + $spacer * 2.5});
+      }
+    }
+  }
+}
+
 .nav-drawer-open {
   overflow: hidden;
 
@@ -12,76 +30,94 @@
 
 .nav-drawer {
   background: $navigation-gray;
-  border-right: 1px solid $input-gray;
+  border-radius: $border-radius;
+  border-width: 0 0 1px;
   display: none;
   flex-direction: column;
-  height: 100%;
-  max-height: calc(100vh - #{$navbar-height});
+  // height: 100%;
+  max-height: calc(100vh - #{$navbar-height + $spacer * 1.5 });
+  overflow-y: auto;
   position: fixed;
-  top: $navbar-height;
-  // transform: translateX(-$nav-drawer-width);
+  top: $navbar-height + $spacer;
+  transform: translateY(calc(-100% - #{$navbar-height + $spacer}));
   transition: transform $nav-drawer-animation-duration;
-  width: $nav-drawer-width;
-  z-index: $zindex-fixed;
+  z-index: $zindex-dropdown;
+  width: calc(100% - #{$spacer});
+  left: $spacer / 2;
+  border: 1px solid $input-gray;
 
   @include media-breakpoint-down(sm) {
-    border-right: 0;
     display: block;
-    height: auto;
-    left: 0;
-    transform: translateY(-100%);
-    width: 100%;
   }
 
-  &.nested {
-    display: block;
-    border-radius: $border-radius;
-    border-right: 0;
-    max-height: calc(100vh - #{$navbar-height + $spacer + $spacer});
-    height: auto;
-    overflow: auto;
-    padding: $spacer / 4 0;
-    position: sticky;
-    top: calc(#{$navbar-height + $spacer});
-    width: auto;
-    z-index: auto;
-    border: 1px solid $input-gray;
+  .nav-drawer-inner {
+    border-top: 1px solid $input-gray;
+  }
 
-    @include scroll-bar($navigation-gray, $input-gray);
+  .navbar-secondary {
+    border-width: 0;
+    width: 100%;
+    margin: 0;
+    position: relative;
+    top: 0;
 
-    .nav-drawer-body {
-      height: auto;
-      max-height: none;
-    }
-
-    &::after {
-      content: none;
+    &.hover,&.scroll{
+      top: 0!important;
     }
   }
 
-  &::after {
-    background-color: $highlight-black-xstrong;
-    content: close-quote;
-    height: 100vh;
-    opacity: 0;
-    position: absolute;
-    transition: $transition-base;
-    width: 100%;
-    pointer-events: none;
+  // &::after {
+  //   background-color: $highlight-black-xstrong;
+  //   content: close-quote;
+  //   height: 100vh;
+  //   opacity: 0;
+  //   position: absolute;
+  //   transition: $transition-base;
+  //   width: 100%;
+  //   pointer-events: none;
+  // }
+
+}
+
+.nav-drawer-nested {
+  background: $navigation-gray;
+  display: block;
+  border-radius: $border-radius;
+  border-right: 0;
+  max-height: calc(100vh - #{$spacer * 2});
+  height: auto;
+  overflow: auto;
+  padding: $spacer / 4 0;
+  position: sticky;
+  top: calc(#{$spacer});
+  width: auto;
+  z-index: auto;
+  border: 1px solid $input-gray;
+  transition: top $nav-drawer-animation-duration, max-height $nav-drawer-animation-duration;
+
+  .nav-drawer-body {
+    overflow-y: auto;
+  }
+
+  @include media-breakpoint-up(xl) {
+    margin-left: - $spacer;
+  }
+
+  @include scroll-bar($navigation-gray, $input-gray);
+
+  .nav-drawer-body {
+    height: auto;
+    max-height: none;
+  }
+
+  &.scroll {
+    top: #{$navbar-height + $spacer * 1.5};
+    max-height: calc(100vh - #{$navbar-height + $spacer * 2.5});
   }
 }
 
 .nav-drawer-inner {
   padding: $spacer / 2 0;
-}
-
-.has-secondary-nav {
-  .nav-drawer {
-    &.nested {
-      max-height: calc(100vh - #{$navbar-height + $secondary-navbar-height + $spacer + $spacer});
-      top: calc(#{$navbar-height + $secondary-navbar-height + $spacer});
-    }
-  }
 }
 
 .nav-drawer-body {
@@ -103,7 +139,7 @@
 
   height: 100%;
   max-height: calc(100vh - #{$navbar-height});
-  overflow-y: auto;
+
 }
 
 .nav-drawer-list {
@@ -151,10 +187,15 @@
 .drawer-nav-header {
 
   h1,
+  .h1,
   h2,
+  .h2,
   h3,
+  .h3,
   h4,
+  .h4,
   h5,
+  .h5,
   p,
   a {
     margin-bottom: 0;
@@ -163,10 +204,10 @@
 
 .drawer-nav-list {
   background: $highlight-black-strong;
-  border-radius: $border-radius;
+
   color: $highlight-white-xstrong;
   list-style: none;
-  margin: $spacer / 4 $spacer / 2;
+  margin: $spacer / 4 0;
   padding: $spacer / 4 0;
 
   &.training {
@@ -243,11 +284,16 @@
 
   }
 
-  .nav-drawer-section-progress-wrapper+h4 {
-    margin-left: $spacer * 1.75;
+  .nav-drawer-section-progress-wrapper {
+
+    &+h4,
+    +.h4 {
+      margin-left: $spacer * 1.75;
+    }
   }
 
-  h4 {
+  h4,
+  .h4 {
     margin-bottom: 0;
     line-height: 1.5;
     color: $highlight-white-xstrong;
@@ -280,7 +326,7 @@
       stroke: $primary;
     }
 
-    h4 {
+    h4,.h4 {
       color: white;
     }
 
@@ -300,7 +346,7 @@
     //   opacity: 1;
     // }
 
-    h4 {
+    h4, .h4 {
       color: $white;
 
     }

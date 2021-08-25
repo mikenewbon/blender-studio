@@ -3,9 +3,9 @@
 
 {% block content %}
 
-  <div class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content jumbotron header mb-4">
+  <div class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content jumbotron header mb-4 spacer-n">
     <div class="jumbotron-bg-wrapper">
-      <img class="jumbotron-bg" src="{% static 'common/images/home/sf-background.jpg' %}">
+      <img class="jumbotron-bg" src="{% static 'common/images/home/sf-background.jpg' %}" alt="A tiny mushroom-headed imp hides amongst the forrest.">
       <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
       {% comment %}
         {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
@@ -15,12 +15,13 @@
       <div class="row">
         <div class="col-lg-5 col-md-6">
           <div class="jumbotron-body">
+            <div class="spacer"></div>
             <p class="mb-2">
               {% comment %} <span class="badge badge-primary mr-2">New</span> {% endcomment %}
               <span class="subtitle">Open Movie In Production</span>
             </p>
             <a href="/films/sprite-fright">
-              <img class="mb-2 film-logo" src="{% static "common/images/home/sf-logo.png" %}">
+              <img class="mb-2 film-logo" src="{% static "common/images/home/sf-logo.png" %}" alt="Sprite Fright Logo">
             </a>
             <p class="mb-3">Blender Studio’s 13th open movie will be an 80’s-inspired horror comedy, set in Britain: When
               a group of rowdy teenagers trek into an isolated forest, they discover peaceful mushroom creatures that turn

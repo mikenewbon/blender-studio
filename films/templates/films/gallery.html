@@ -2,6 +2,7 @@
 {% load common_extras %}
 {% load film_extras %}
 {% load static %}
+{% load pipeline %}
 
 {% block title_prepend %}{{ film.title }} Content Gallery - {% endblock title_prepend %}
 
@@ -23,7 +24,7 @@
 {% endblock %}
 
 {% block bodyclasses %}
-  {% comment %} has-nav-drawer{% endcomment %}
+  spacer
   has-secondary-nav
 {% endblock bodyclasses %}
 
@@ -113,12 +114,12 @@
 {% endblock nav_drawer_inner %}
 
 {% block content %}
-  <div class="container-xl pt-3">
+  <div class="container-xl pt-2 pt-md-3">
     <div class="row">
 
       <div class="col-md-4 col-lg-3 mb-3 d-none d-md-block">
         {% block nested_nav_drawer %}
-          <nav class="nav-drawer nested">
+          <nav class="nav-drawer-nested scroll">
             <div class="nav-drawer-body">
 
               {% block nested_nav_drawer_inner %}
@@ -177,7 +178,7 @@
                               data-placement="top" title="{{ child_collection.name }}">
 
                               <i class="material-icons">folder</i>
-                              <h4 class="overflow-text">{{ child_collection.name }}</h4>
+                              <p class="overflow-text h4">{{ child_collection.name }}</p>
 
                             </a>
                           </li>
@@ -205,9 +206,9 @@
           {% block gallery_files %}
 
             <div class="">
-
               <div class="files row grid">
                 {% if featured_artwork %}
+
                   <div class="grid-sizer col-6 col-sm-6 col-md-6 col-lg-4"></div>
                   {% for asset in featured_artwork %}
                     {% if asset.is_published or user_can_edit_collection %}
@@ -243,32 +244,13 @@
 
 
 {% block footer %}
-  <footer class="bg-navigation py-2">
-    <div class="navdrawer-offset">
-      <div class="container-xl">
-        <div class="row">
-
-          <div class="col-12">
-            <div class="row">
-              <div class="col-auto">
-                <a href="/terms-and-conditions" class="small text-highlight-xstrong">Terms &amp; Conditions</a>
-              </div>
-              <div class="col-auto">
-                <a href="/privacy" class="small text-highlight-xstrong">Privacy Policy</a>
-              </div>
-              <div class="col-auto">
-                <a href="https://www.blender.org/" target="_blank" class="small text-highlight-xstrong">Blender.org</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </footer>
+  {% include "common/components/navigation/footer_simple.html" %}
 {% endblock footer%}
 
 
 {% block scripts %}
+
+{% javascript 'vendor_masonry' %}
 
   <script>
     makeGrid();

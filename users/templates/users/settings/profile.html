@@ -17,24 +17,24 @@
 
     <div class="row">
       <div class="col-md-6 mb-3">
-        <h3 class="mb-0">Full Name</h3>
+        <label class="mb-0 h3" for="userFullName">Full Name</label>
         <p>This is displayed in comments.</p>
-        <input disabled class="form-control" type="text" value="{{ user.full_name }}"
+        <input disabled class="form-control" type="text" value="{{ user.full_name }}" id="userFullName"
           style="background-image:url({% static "common/images/icons/lock.svg" %});">
       </div>
       <div class="col-md-6 mb-3">
-        <h3 class="mb-0">Email</h3>
+        <label class="mb-0 h3" for="email">Email</label>
         <p>This is how we contact you.</p>
-        <input disabled class="form-control" type="text" value="{{ user.email }}"
+        <input disabled class="form-control" type="text" value="{{ user.email }}" id="email"
           style="background-image:url({% static "common/images/icons/lock.svg" %});">
       </div>
     </div>
 
     <div class="row">
       <div class="col-md-6 mb-3">
-        <h3 class="mb-0">Username</h3>
+        <label class="mb-0 h3" for="username">Username</label>
         <p>This is used in comments.</p>
-        <input disabled class="form-control" type="text" value="{{ user.username }}"
+        <input disabled class="form-control" type="text" value="{{ user.username }}" id="username"
           style="background-image:url({% static "common/images/icons/lock.svg" %});">
       </div>
       <div class="col-md-6 mb-3">

@@ -23,6 +23,8 @@
 
       &::before {
         left: -.4rem;
+        top: calc(50% - #{$spacer / 8});
+        transform: translateY(-50%);
         position: absolute;
         padding-right: 0;
       }

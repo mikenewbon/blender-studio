@@ -5,7 +5,7 @@
   display: flex;
   flex-direction: column;
   margin-bottom: $spacer;
-  padding: $spacer;
+  padding: $spacer 0 0;
 
   @include media-breakpoint-down(sm) {
     padding-bottom: 0;
@@ -14,6 +14,7 @@
 
 .production-log-week-header {
   position: relative;
+  padding: 0 $spacer;
 
   h2,
   .h2 {
@@ -27,20 +28,21 @@
 
 .production-log-individual {
   @extend .row;
-  margin-bottom: $spacer;
+  margin-bottom: $spacer / 2;
+  padding: $spacer;
   position: relative;
 
   &-summary {
     @extend .col-md-4;
     @extend .col-lg-3;
 
-    @include media-breakpoint-up(md) {
-      padding-left: calc(#{$spacer} * 1.5);
-    }
+    // @include media-breakpoint-up(md) {
+    //   padding-left: calc(#{$spacer} * 1.5);
+    // }
 
-    >*:last-child {
-      margin-bottom: $spacer;
-    }
+    // >*:last-child {
+    //   margin-bottom: $spacer;
+    // }
 
     >a {
       display: inline-block;
@@ -48,22 +50,22 @@
   }
 
   &-files {
-    @include media-breakpoint-up(md) {
-      padding-left: 0;
-    }
+    // @include media-breakpoint-up(md) {
+    //   padding-left: 0;
+    // }
 
     .files {
-      @include media-breakpoint-up(md) {
-        padding: $spacer $spacer 0 $spacer / 2;
-      }
-
+      // @include media-breakpoint-up(md) {
+      //   padding: $spacer $spacer 0 $spacer / 2;
+      // }
+      margin-bottom: - $spacer;
       padding: 0;
     }
   }
 
   &::before {
-    border-radius: $border-radius;
     content: close-quote;
+    pointer-events: none;
     top: 0;
     position: absolute;
     width: calc(100% - #{$spacer});
@@ -72,16 +74,14 @@
     background: $highlight-black-strong;
 
     @include media-breakpoint-down(sm) {
-      width: calc(100% + #{$spacer});
-      left: - $spacer / 2;
+      // width: calc(100% + #{$spacer});
+      // left: - $spacer / 2;
       border-radius: 0;
     }
   }
 }
 
-.production-log-individual-wrapper {
-  margin-bottom: -$spacer;
-}
+.production-log-individual-wrapper {}
 
 .production-log-individual-files {
   @extend .col-md-8;
@@ -115,6 +115,11 @@
   @extend .col-md-6;
   @extend .col-lg-5;
 
+  @include media-breakpoint-down(sm) {
+    margin: #{-$spacer} #{-$spacer} 0 #{-$spacer};
+    width: calc(100% + 40px);
+  }
+
   >*:last-child {
     margin-bottom: $spacer;
   }
@@ -124,6 +129,10 @@
 
     width: 100%;
     border-radius: $border-radius;
+
+    @include media-breakpoint-down(sm) {
+      border-radius: $border-radius $border-radius 0 0;
+    }
   }
 
   >a {
@@ -133,7 +142,7 @@
 }
 
 .production-log-individual-summary-profile {
-  padding-top: $spacer;
+  @extend .row;
   margin-bottom: $spacer / 2;
   flex-wrap: nowrap;
 
@@ -148,9 +157,10 @@
 }
 
 .production-log-individual-files-show-more {
-  margin-bottom: $spacer;
+  margin-bottom: $spacer / 2;
+  margin-top: - $spacer / 4;
 }
 
 .add-entry {
-  margin-top: $spacer;
+  margin-bottom: $spacer / 2;
 }

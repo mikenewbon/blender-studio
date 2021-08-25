@@ -179,7 +179,6 @@ PIPELINE = {
                 'common/scripts/vendor/bootstrap.js',
                 'common/scripts/vendor/plyr.polyfilled.js',
                 'common/scripts/vendor/js.cookie.js',
-                'common/scripts/vendor/masonry.pkgd.js',
                 'common/scripts/vendor/imagesloaded.pkgd.js',
                 'common/scripts/vendor/confetti.browser.min.js',
             ],
@@ -197,6 +196,11 @@ PIPELINE = {
         'vendor_chartjs': {
             'source_filenames': ['common/scripts/vendor/chart.bundle.min.js'],
             'output_filename': 'js/vendor_chartjs.js',
+            'extra_context': {'async': False, 'defer': False},
+        },
+        'vendor_masonry': {
+            'source_filenames': ['common/scripts/vendor/masonry.pkgd.js'],
+            'output_filename': 'js/vendor_masonry.js',
             'extra_context': {'async': False, 'defer': False},
         },
         'looper': {

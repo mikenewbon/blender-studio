@@ -329,23 +329,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const nav = document.querySelector('.navbar');
   const secondaryNav = document.querySelector('.navbar-secondary');
+  const nestedNav = document.querySelector('.nav-drawer-nested');
 
-  nav?.addEventListener('mouseover', (e) => {
-    nav.classList.add('hover');
-    secondaryNav.classList.add('hover');
-  });
-  nav?.addEventListener('mouseout', (e) => {
-    nav.classList.remove('hover');
-    secondaryNav.classList.remove('hover');
-  });
-
-  secondaryNav?.addEventListener('mouseover', (e) => {
-    nav.classList.add('hover');
-    secondaryNav.classList.add('hover');
-  });
-  secondaryNav?.addEventListener('mouseout', (e) => {
-    nav.classList.remove('hover');
-    secondaryNav.classList.remove('hover');
-  });
-
+  let prevScrollpos = window.pageYOffset;
+  window.onscroll = () => {
+    const currentScrollPos = window.pageYOffset;
+    if (prevScrollpos > currentScrollPos) {
+      nav?.classList.add('scroll');
+      secondaryNav?.classList.add('scroll');
+      nestedNav?.classList.add('scroll');
+    } else {
+      nav?.classList.remove('scroll');
+      secondaryNav?.classList.remove('scroll');
+      nestedNav?.classList.remove('scroll');
+    }
+    prevScrollpos = currentScrollPos;
+  };
 });

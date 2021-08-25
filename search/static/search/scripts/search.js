@@ -147,31 +147,33 @@ const renderHits = (renderOptions, isFirstRender) => {
         item =>
           `
           <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
-            <div class="card card-dark card-hover card-media">
+            <div class="card">
               <div class="card-header">
-                <a class="card-header-link" href="${item.url}">
-                  <img src="${item.thumbnail_url || fileIconURL}" class="${item.thumbnail_url ? 'card-image' : 'file-icon'}" loading=lazy>
+                <a class="card-header-link" href="${item.url}" aria-label="${item.name}">
+                  <img src="${item.thumbnail_url || fileIconURL}" class="${item.thumbnail_url ? 'card-img' : 'file-icon'}" loading=lazy aria-label="${item.name}">
                 </a>
               </div>
               <a href="${item.url}" class="card-body">
-                <div class="card-subtitle-group">
-                  <p class="card-subtitle content-type">
-                  ${item.is_free == true ? `<i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top"
-                  title="Free">lock_open</i>` : ''}&nbsp;${item.model == "section" ? item.project : item.model}
-                  </p>
 
-                  <p class="card-subtitle">
-                    <i class="material-icons icon-inline small">schedule</i>&nbsp;
-                    ${timeDifference(epochToDate(item.timestamp))}
-                  </p>
-
-                </div>
                 <h3 class="card-title">
                   ${instantsearch.highlight({ attribute: 'name', hit: item })}
                 </h3>
                 <p class="card-text">
                   ${instantsearch.highlight({ attribute: 'description', hit: item })}
                 </p>
+              </a>
+              <a href="${item.url}" class="card-footer">
+                <div class="card-subtitle-group">
+                  <p class="card-subtitle content-type">
+                  ${item.is_free == true ? `<i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top"
+                  title="Free">lock_open</i>&nbsp;` : ''}${item.model == "section" ? item.project : item.model}
+                  </p>
+
+                  <p class="card-subtitle">
+                    <i class="material-icons icon-inline small">schedule</i>&nbsp;${timeDifference(epochToDate(item.timestamp))}
+                  </p>
+
+                </div>
               </a>
             </div>
           </div>

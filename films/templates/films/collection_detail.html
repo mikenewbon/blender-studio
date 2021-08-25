@@ -1,6 +1,7 @@
 {% extends 'films/gallery.html' %}
 {% load film_extras %}
 {% load common_extras %}
+{% load pipeline %}
 
 {% block title_append %} - {{ film.title }} {{ current_collection.name }}{% endblock title_append %}
 
@@ -10,6 +11,7 @@
     <p>{% with_shortcodes current_collection.text|markdown %}</p>
     <div class="">
       <div class="files row grid">
+
         <div class="grid-sizer col-6 col-sm-6 col-md-6 col-lg-4"></div>
         {% if child_collections %}
           {% for child_collection in child_collections %}
@@ -32,6 +34,7 @@
 {% endblock gallery_files %}
 
 {% block scripts %}
+  {% javascript 'vendor_masonry' %}
 
   <script>
     makeGrid();

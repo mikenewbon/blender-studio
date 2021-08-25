@@ -1,12 +1,9 @@
 {% extends 'films/base_films.html' %}
 {% load static %}
 {% load common_extras %}
+{% load pipeline %}
 
 {% block title_append %} - {{ film.title }}{% endblock title_append %}
-
-{% block jumbotron %}
-  {% include "films/components/jumbotron_film.html" with film=film %}
-{% endblock jumbotron %}
 
 {% block meta %}
   {% firstof asset.url as url %}
@@ -21,7 +18,10 @@
   {% include 'common/components/meta.html' %}
 {% endblock %}
 
+
+
 {% block content %}
+  {% include "films/components/jumbotron_film.html" with film=film %}
 
   <div class="container-xl pt-4">
     <section class="mb-4">
@@ -101,9 +101,14 @@
 
 {% block scripts %}
 
-  <script>
-    makeGrid();
+  {% if featured_artwork %}
+    {% javascript 'vendor_masonry' %}
 
-  </script>
+    <script>
+      makeGrid();
+
+    </script>
+
+  {% endif %}
 
 {% endblock scripts %}

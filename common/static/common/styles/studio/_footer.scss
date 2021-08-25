@@ -1,13 +1,32 @@
-footer {
+footer.container-xl {
   @include media-breakpoint-down(sm) {
     text-align: center;
+    margin: $spacer / 2!important;
+    width: calc(100% - #{$spacer})!important;
   }
 
-  border-top: 1px solid $input-gray;
+  @include media-breakpoint-down(lg) {
+    margin: $spacer;
+    width: calc(100% - #{$spacer * 2});
+  }
+
+  border: 1px solid $input-gray;
+  border-radius: $border-radius;
+  background: $navigation-gray;
+  padding: $spacer;
+  margin-bottom: $spacer;
   margin-top: auto;
 
   ul {
     @include list-unstyled;
+  }
+}
+
+footer {
+
+
+  @include media-breakpoint-down(sm) {
+
   }
 }
 
@@ -30,8 +49,10 @@ footer {
 }
 
 // Pushes the footer down the the bottom of the page using margin-top auto on footer
-body{
+body {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - #{$navbar-height});
+  min-height: calc(100vh - #{$spacer});
+
+  @include scroll-bar($dark, $input-gray);
 }

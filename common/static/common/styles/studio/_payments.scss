@@ -22,7 +22,7 @@
       display: block;
       width: 100%;
       height: 100%;
-      background: radial-gradient(94.11% 100% at 50% 0%, rgba(31, 31, 31, 0) 76.84%, #1F1F1F 100%), radial-gradient(40.26% 143.41% at 50% 51.9%, rgba(0, 0, 0, 0) 30.35%, rgba(0, 0, 0, 0.75) 100%);
+      background: radial-gradient(94.11% 100% at 50% 0%, rgba(31, 31, 31, 0) 76.84%, #{$dark} 100%), radial-gradient(40.26% 143.41% at 50% 51.9%, rgba(0, 0, 0, 0) 30.35%, rgba(0, 0, 0, 0.75) 100%);
       position: absolute;
       top: 0;
       left: 0;
