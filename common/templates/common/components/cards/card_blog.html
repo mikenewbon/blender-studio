@@ -27,7 +27,7 @@
           {{ post.category|title }}
         </p> {% endcomment %}
         {% if not post.is_published %}
-          <div class="badge badge-danger">
+          <div class="badge badge-danger mr-2">
             Unpublished
           </div>
         {% else %}
@@ -38,7 +38,18 @@
             </span>
           </p>
         {% endif %}
-
+        {% if post.likes.count > 0 %}
+          <p class="card-subtitle">
+            <i class="material-icons icon-inline small">favorite_border</i>
+            {{ post.likes.count }}
+          </p>
+        {% endif %}
+        {% if post.comments.count > 0 %}
+          <p class="card-subtitle">
+            <i class="material-icons icon-inline small">chat_bubble_outline</i>
+            {{ post.comments.count }}
+          </p>
+        {% endif %}
       </div>
     </a>
 
