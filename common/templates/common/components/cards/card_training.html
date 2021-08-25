@@ -12,7 +12,12 @@
 
     <a class="card-body" href="{{ training.url }}">
 
-      <h3 class="card-title">{{ training.name }}</h3>
+      <h3 class="card-title">
+        {% if training.is_free %}
+          <i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top" title="Free">lock_open</i>
+        {% endif %}
+        {{ training.name }}
+      </h3>
       <p class="card-text">{{ training.description }}</p>
     </a>
 
@@ -26,9 +31,11 @@
         </div>
       {% endif %}
       <div class="card-subtitle-group">
-        <p class="card-subtitle">{{ training.get_type_display }}</p>
         <p class="card-subtitle">
           <i class="material-icons icon-inline small">school</i>
+          {{ training.get_type_display }}</p>
+        <p class="card-subtitle">
+          <i class="material-icons icon-inline small">leaderboard</i>
           {{ training.get_difficulty_display }}
         </p>
       </div>

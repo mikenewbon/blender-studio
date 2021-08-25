@@ -167,6 +167,11 @@
   .badge {
     margin-top: - $spacer / 8;
   }
+
+  .icon-inline {
+    line-height: 1.25;
+    font-size: inherit;
+  }
 }
 
 .card-header-link {
