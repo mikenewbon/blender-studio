@@ -12,7 +12,7 @@
     <a href="{% url 'post-detail' slug=post.slug %}" class="card-body">
 
       <h3 class="card-title">
-        {% if post.is_new %}
+        {% if post.is_new and post.is_published %}
           <div class="badge badge-primary mt-n1">New</div>
         {% endif %}
         {{ post.title }}
