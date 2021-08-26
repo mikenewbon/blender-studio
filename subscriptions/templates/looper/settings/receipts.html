@@ -3,7 +3,7 @@
 
 {% block settings %}
   <p class="subtitle">Settings: Subscription</p>
-  <h1 class="mb-3">Receipts</h1>
+  <h1 class="mb-3">Invoices</h1>
 
   {% if orders %}
     <table class="table table-sm text-center table-receipts">
@@ -11,7 +11,7 @@
         <tr>
           <th class="text-left">Date</th>
           <th class="text-left">Description</th>
-          <th>Receipt</th>
+          <th>Invoice</th>
           <th class="text-right">Amount</th>
 
         </tr>
@@ -32,6 +32,6 @@
       </tbody>
     </table>
   {% else %}
-    <p>You have no receipts.</p>
+    <p>You have no invoices.</p>
   {% endif %}
 {% endblock settings %}

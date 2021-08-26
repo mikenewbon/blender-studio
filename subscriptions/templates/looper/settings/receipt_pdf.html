@@ -1,16 +1,20 @@
 {% extends "pdf_layout.html" %}
 {% load subscriptions %}
-{% block title %}Blender Cloud Receipt #{{ order.id }}{% endblock %}
+{% block title %}Blender Cloud Invoice #{{ order.id }}{% endblock %}
 {% block main_content %}
   <table style="width: 40em">
     <tr>
       <td colspan="2">
-        <h4>Blender Cloud Receipt</h4>
+        <h4>Blender Cloud Invoice</h4>
       </td>
     </tr>
     <tr>
-      <th>Receipt ID</th>
+      <th>Invoice ID</th>
       <td>{{ order.display_number }}</td>
+    </tr>
+    <tr>
+      <th>Status</th>
+      <td>PAID</td>
     </tr>
     <tr>
       <th>Payment received on</th>
