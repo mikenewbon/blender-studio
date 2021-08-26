@@ -146,6 +146,7 @@ class UserAdmin(auth_admin.UserAdmin):
         looper.admin.CustomerInline,
         looper.admin.GatewayCustomerIdInline,
     ]
+    search_fields = ['email', 'full_name', 'username']
 
     def deletion_requested(self, obj):
         """Display yes/no icon status of deletion request."""
