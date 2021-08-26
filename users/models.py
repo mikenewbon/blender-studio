@@ -35,6 +35,9 @@ class User(AbstractUser):
 
     date_deletion_requested = models.DateTimeField(null=True, blank=True)
 
+    def __str__(self):
+        return f'{self.full_name or self.username} ({self.email})'
+
     @property
     def image_url(self) -> Optional[str]:
         """Return a URL of the Profile image."""
