@@ -110,11 +110,9 @@ class UserAdmin(auth_admin.UserAdmin):
         NumberOfBraintreeCustomerIDsFilter,
     )
 
-    list_display = (
-        ['full_name']
-        + [_ for _ in auth_admin.UserAdmin.list_display if _ not in ('first_name', 'last_name')]
-        + ['is_active', 'deletion_requested', 'subscriptions']
-    )
+    list_display = [
+        _ for _ in auth_admin.UserAdmin.list_display if _ not in ('first_name', 'last_name')
+    ] + ['is_active', 'deletion_requested', 'subscriptions']
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         (
