@@ -890,7 +890,7 @@ six = ">=1.11.0"
 
 [[package]]
 name = "looper"
-version = "1.8.1rc7"
+version = "1.8.2rc0"
 description = ""
 category = "main"
 optional = false
@@ -908,14 +908,16 @@ django-countries = "^6.0"
 django-pipeline = "^2.0.6"
 geoip2 = "^3.0"
 python-dateutil = "^2.7"
+python-stdnum = "^1.16"
 requests = "^2.22"
 xhtml2pdf = "^0.2"
+zeep = "4.0.0"
 
 [package.source]
 type = "git"
 url = "git://git.blender.org/looper.git"
 reference = "patched-clock"
-resolved_reference = "712fc9aef6e033a75b4dad023a73c6cc7430e7aa"
+resolved_reference = "b4d417123f4cdcd45130f67406cb366746f8abd7"
 
 [[package]]
 name = "lxml"
