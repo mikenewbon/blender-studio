@@ -144,6 +144,7 @@ class UserAdmin(auth_admin.UserAdmin):
         looper.admin.CustomerInline,
         looper.admin.GatewayCustomerIdInline,
     ]
+    ordering = ['-date_joined']
     search_fields = ['email', 'full_name', 'username']
 
     def deletion_requested(self, obj):
