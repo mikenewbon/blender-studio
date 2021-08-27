@@ -156,7 +156,7 @@ const renderHits = (renderOptions, isFirstRender) => {
     <a href="${item.url}" class="card-body">
 
       <h3 class="card-title">
-        ${item.is_free == true ? `<i class="material-icons icon-inline text-success" data-toggle="tooltip" data-placement="top" title="Free">lock_open</i>&nbsp;` : ''}
+        ${item.is_free == true ? `<i class="material-icons icon-inline text-success" data-toggle="tooltip" data-placement="top" title="Free">lock_open</i>` : ''}
         ${instantsearch.highlight({ attribute: 'name', hit: item })}
       </h3>
       <p class="card-text">
