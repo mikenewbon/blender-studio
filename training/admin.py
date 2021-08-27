@@ -96,6 +96,7 @@ class SectionAdmin(admin.ModelAdmin):
     # ]
     list_filter = [
         'chapter__training__type',
+        'static_asset__source_type',
         'chapter__training__difficulty',
         'chapter__training',
         'is_published',
