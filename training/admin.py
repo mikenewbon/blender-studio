@@ -128,9 +128,11 @@ class TrainingFlatPageAdmin(mixins.ViewOnSiteMixin, admin.ModelAdmin):
 
 
 @admin.register(progress.UserSectionProgress)
-class UserSectionProgressAdmin(
-    looper_mixins.NoChangeMixin, looper_mixins.NoAddDeleteMixin, admin.ModelAdmin
-):
+class UserSectionProgressAdmin(looper_mixins.NoChangeMixin, admin.ModelAdmin):
+    def has_add_permission(self, *args, **kwargs):
+        """Never added via the admin."""
+        return False
+
     model = progress.UserSectionProgress
     list_display = (
         looper.admin.user_link,
