@@ -6,7 +6,6 @@ import unittest
 from django.conf import settings
 from django.urls import reverse
 from freezegun import freeze_time
-from waffle.testutils import override_flag
 import responses
 
 from looper.tests.test_preferred_currency import EURO_IPV4, USA_IPV4, SINGAPORE_IPV4
@@ -41,7 +40,6 @@ def _get_default_variation(currency='USD'):
     return looper.models.Plan.objects.first().variation_for_currency(currency)
 
 
-@override_flag('SUBSCRIPTIONS_ENABLED', active=True)
 @freeze_time('2021-05-19 11:41:11')
 class TestGETBillingDetailsView(BaseSubscriptionTestCase):
     url_usd = reverse('subscriptions:join-billing-details', kwargs={'plan_variation_id': 1})
@@ -159,7 +157,6 @@ class TestGETBillingDetailsView(BaseSubscriptionTestCase):
         self._assert_total_default_variation_selected_tax_21_eur(response)
 
 
-@override_flag('SUBSCRIPTIONS_ENABLED', active=True)
 @freeze_time('2021-05-19 11:41:11')
 class TestPOSTBillingDetailsView(BaseSubscriptionTestCase):
     url_usd = reverse('subscriptions:join-billing-details', kwargs={'plan_variation_id': 1})
@@ -307,7 +304,6 @@ class TestPOSTBillingDetailsView(BaseSubscriptionTestCase):
         self.assertEqual(user.customer.billing_address.postal_code, '11111')
 
 
-@override_flag('SUBSCRIPTIONS_ENABLED', active=True)
 @freeze_time('2021-05-19 11:41:11')
 class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
     def _get_url_for(self, currency: str, cents: int) -> Tuple[str, looper.models.PlanVariation]:
@@ -576,56 +572,6 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
         self.assertEqual(order.tax_country, 'DE')
         self.assertEqual(order.tax_rate, 19)
         self.assertIsNotNone(order.number)
-
-
-class TestJoinRedirectsWithoutFlagView(BaseSubscriptionTestCase):
-    def test_join_get_redirects_to_store_anonymous(self):
-        response = self.client.get(reverse('subscriptions:join'), {})
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['Location'], settings.STORE_PRODUCT_URL)
-
-    def test_join_post_redirects_to_store_anonymous(self):
-        response = self.client.post(reverse('subscriptions:join'), {})
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['Location'], settings.STORE_PRODUCT_URL)
-
-    def test_join_get_redirects_to_store(self):
-        self.client.force_login(self.user)
-
-        response = self.client.get(reverse('subscriptions:join'), {})
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['Location'], settings.STORE_PRODUCT_URL)
-
-    def test_join_post_redirects_to_store(self):
-        self.client.force_login(self.user)
-
-        response = self.client.post(reverse('subscriptions:join'), {})
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['Location'], settings.STORE_PRODUCT_URL)
-
-    def test_join_confirm_get_redirects_to_store(self):
-        self.client.force_login(self.user)
-
-        response = self.client.get(
-            reverse('subscriptions:join-confirm-and-pay', kwargs={'plan_variation_id': 2}), {}
-        )
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['Location'], settings.STORE_PRODUCT_URL)
-
-    def test_join_confirm_post_redirects_to_store(self):
-        self.client.force_login(self.user)
-
-        response = self.client.post(
-            reverse('subscriptions:join-confirm-and-pay', kwargs={'plan_variation_id': 2}), {}
-        )
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['Location'], settings.STORE_PRODUCT_URL)
 
 
 class TestJoinConfirmAndPayLoggedInUserOnlyView(BaseSubscriptionTestCase):

@@ -36,18 +36,6 @@ def has_non_legacy_subscription(user: User) -> bool:
     return subscriptions.filter(Q(user_id=user.id) | Q(team__team_users__user_id=user.id)).exists()
 
 
-def has_legacy_subscription(user: User) -> bool:
-    """Check if a given user has a legacy subscription."""
-    if not user.is_authenticated:
-        return False
-
-    legacy_subscriptions: 'QuerySet[Subscription]' = Subscription.objects.filter(is_legacy=True)
-
-    return legacy_subscriptions.filter(
-        Q(user_id=user.id) | Q(team__team_users__user_id=user.id)
-    ).exists()
-
-
 def has_subscription(user: User) -> bool:
     """Check if a given user has any kind of subscription."""
     if not user.is_authenticated:

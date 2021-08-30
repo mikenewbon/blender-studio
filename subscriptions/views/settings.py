@@ -7,7 +7,6 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import UpdateView, FormView, TemplateView
-from waffle.mixins import WaffleFlagMixin
 
 import looper.models
 import looper.views.settings
@@ -24,10 +23,8 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-class BillingAddressView(WaffleFlagMixin, LoginRequiredMixin, UpdateView):
+class BillingAddressView(LoginRequiredMixin, UpdateView):
     """Combine looper's Customer and Address into a billing address."""
-
-    waffle_flag = "SUBSCRIPTIONS_ENABLED"
 
     template_name = 'settings/billing_address.html'
     model = looper.models.Address
@@ -45,10 +42,8 @@ class BillingAddressView(WaffleFlagMixin, LoginRequiredMixin, UpdateView):
         return customer.billing_address if customer else None
 
 
-class CancelSubscriptionView(WaffleFlagMixin, SingleSubscriptionMixin, FormView):
+class CancelSubscriptionView(SingleSubscriptionMixin, FormView):
     """Confirm and cancel a subscription."""
-
-    waffle_flag = "SUBSCRIPTIONS_ENABLED"
 
     _log = logger
 
@@ -72,10 +67,8 @@ class CancelSubscriptionView(WaffleFlagMixin, SingleSubscriptionMixin, FormView)
         return super().form_valid(form)
 
 
-class PaymentMethodChangeView(WaffleFlagMixin, looper.views.settings.PaymentMethodChangeView):
+class PaymentMethodChangeView(looper.views.settings.PaymentMethodChangeView):
     """Use the Braintree drop-in UI to switch a subscription's payment method."""
-
-    waffle_flag = "SUBSCRIPTIONS_ENABLED"
 
     template_name = 'subscriptions/payment_method_change.html'
     form_class = ChangePaymentMethodForm
@@ -105,10 +98,8 @@ class PaymentMethodChangeView(WaffleFlagMixin, looper.views.settings.PaymentMeth
         return super().form_invalid(form)
 
 
-class PayExistingOrderView(WaffleFlagMixin, looper.views.checkout.CheckoutExistingOrderView):
+class PayExistingOrderView(looper.views.checkout.CheckoutExistingOrderView):
     """Override looper's view with our forms."""
-
-    waffle_flag = "SUBSCRIPTIONS_ENABLED"
 
     # Redirect to LOGIN_URL instead of raising an exception
     raise_exception = False

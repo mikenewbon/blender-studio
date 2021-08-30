@@ -222,7 +222,7 @@
                 <i class="material-icons">search</i>
               </a>
               <a href="{% url 'oauth:login' %}" class="btn btn-transparent btn-nav login-button mr-2">Login</a>
-              <a {% include "subscriptions/components/join_url" %} class="btn btn-primary ">Join
+              <a href="{% url 'subscriptions:join' %}" class="btn btn-primary ">Join
                 <span class="d-none d-lg-inline-block">Blender Cloud</span></a>
             </div>
           {% endif %}

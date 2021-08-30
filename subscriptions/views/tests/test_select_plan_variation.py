@@ -1,6 +1,5 @@
 from django.urls import reverse
 from freezegun import freeze_time
-from waffle.testutils import override_flag
 
 from looper.tests.test_preferred_currency import EURO_IPV4, USA_IPV4  # , SINGAPORE_IPV4
 
@@ -10,7 +9,6 @@ from subscriptions.tests.base import BaseSubscriptionTestCase
 EURO_FR_IPV4 = '92.147.188.130'
 
 
-@override_flag('SUBSCRIPTIONS_ENABLED', active=True)
 @freeze_time('2021-05-19 11:41:11')
 class TestSelectPlanVariationView(BaseSubscriptionTestCase):
     url = reverse('subscriptions:join')

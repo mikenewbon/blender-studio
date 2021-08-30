@@ -5,7 +5,6 @@ from django import template
 from django.contrib.auth import get_user_model
 from django.template.defaultfilters import stringfilter
 from django.utils.html import mark_safe
-import waffle
 
 from common import queries
 from common.markdown import (
@@ -16,7 +15,6 @@ from common.queries import get_latest_trainings_and_production_lessons
 from common.shortcodes import render
 from films.models import Film
 from markupsafe import Markup
-import subscriptions.queries
 
 User = get_user_model()
 register = template.Library()
@@ -117,28 +115,6 @@ def add_form_classes(form, size_class=""):
         attrs = form.fields[field_name].widget.attrs
         attrs.update({'class': attrs.get('class', '') + ' is-invalid'})
     return form
-
-
-@register.simple_tag(takes_context=True)
-def show_new_subscription_billing(context) -> bool:
-    """Check if a user from a given request should be able to manage their subscription."""
-    request = context.get('request')
-    if not request:
-        return False
-    user = request.user
-    return (
-        # new subscriptions are enabled and they either have a non-legacy subscription
-        # or they don't have a subscription of any kind:
-        waffle.flag_is_active(request, 'SUBSCRIPTIONS_ENABLED')
-        and (
-            subscriptions.queries.has_non_legacy_subscription(user)
-            or not subscriptions.queries.has_subscription(user)
-        )
-        # their legacy subscription has been copied over
-        # and managing legacy subscriptions is allowed:
-        or waffle.flag_is_active(request, 'LEGACY_SUBSCRIPTIONS_ENABLED')
-        and subscriptions.queries.has_legacy_subscription(user)
-    )
 
 
 @register.simple_tag()

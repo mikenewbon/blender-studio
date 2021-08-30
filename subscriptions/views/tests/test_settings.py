@@ -1,7 +1,6 @@
 from unittest.mock import patch
 
 from django.urls import reverse
-from waffle.testutils import override_flag
 
 from looper.models import PaymentMethod, PaymentMethodAuthentication, Gateway
 from looper.money import Money
@@ -27,7 +26,6 @@ full_billing_address_data = {
 }
 
 
-@override_flag('SUBSCRIPTIONS_ENABLED', active=True)
 class TestSubscriptionSettingsBillingAddress(BaseSubscriptionTestCase):
     def test_saves_both_address_and_customer(self):
         user = UserFactory()
@@ -94,7 +92,6 @@ class TestSubscriptionSettingsBillingAddress(BaseSubscriptionTestCase):
         self.assertContains(response, 'is required')
 
 
-@override_flag('SUBSCRIPTIONS_ENABLED', active=True)
 class TestSubscriptionSettingsChangePaymentMethod(BaseSubscriptionTestCase):
     shared_payment_form_data = {
         **required_address_data,
@@ -171,7 +168,6 @@ class TestSubscriptionSettingsChangePaymentMethod(BaseSubscriptionTestCase):
         self.assertIsNone(PaymentMethodAuthentication.objects.first())
 
 
-@override_flag('SUBSCRIPTIONS_ENABLED', active=True)
 class TestSubscriptionCancel(BaseSubscriptionTestCase):
     url_name = 'subscriptions:cancel'
 
@@ -242,7 +238,6 @@ class TestSubscriptionCancel(BaseSubscriptionTestCase):
         self._assert_subscription_deactivated_email_is_sent(subscription)
 
 
-@override_flag('SUBSCRIPTIONS_ENABLED', active=True)
 class TestPayExistingOrder(BaseSubscriptionTestCase):
     url_name = 'subscriptions:pay-existing-order'
     success_url_name = 'user-settings-billing'

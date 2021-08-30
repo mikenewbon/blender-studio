@@ -7,7 +7,6 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, get_object_or_404
 from django.views.generic import FormView
-import waffle
 
 from looper.middleware import COUNTRY_CODE_SESSION_KEY
 from looper.views.checkout import AbstractPaymentView, CheckoutView
@@ -78,9 +77,6 @@ class _JoinMixin:
 
     def get(self, request, *args, **kwargs):
         """Redirect to the Store if subscriptions are not enabled."""
-        if not waffle.flag_is_active(request, 'SUBSCRIPTIONS_ENABLED'):
-            return redirect(settings.STORE_PRODUCT_URL)
-
         if should_redirect_to_billing(request.user):
             return redirect('user-settings-billing')
 
@@ -88,9 +84,6 @@ class _JoinMixin:
 
     def post(self, request, *args, **kwargs):
         """Redirect anonymous users to login."""
-        if not waffle.flag_is_active(request, 'SUBSCRIPTIONS_ENABLED'):
-            return redirect(settings.STORE_PRODUCT_URL)
-
         if request.user.is_anonymous:
             return redirect('{}?next={}'.format(settings.LOGIN_URL, request.path))
 

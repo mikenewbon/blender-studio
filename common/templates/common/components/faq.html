@@ -1,4 +1,3 @@
-{% load waffle_tags %}
 <section class="{{ classes }}">
   <div class="row justify-content-center mb-3">
     <div class="col-md-6 text-center">
@@ -87,14 +86,7 @@
           <div id="faqCollapsePaymentMethod" class="collapse" aria-labelledby="faqHeadingPaymentMethod"
             data-parent="#faqPayment">
             <div class="card-body small">
-              {% flag "SUBSCRIPTIONS_ENABLED" %}
-                Blender Cloud offers payment through major credit cards, PayPal or direct bank transfer.
-              {% else %}
-                Blender Cloud subscriptions are available for purchase through the <a href="https://store.blender.org/"
-                  target="_blank">Blender Store</a>.<br><br>
-
-                The Blender Store offers payment through major credit cards, PayPal or direct bank transfer.
-              {% endflag %}
+              Blender Cloud offers payment through major credit cards, PayPal or direct bank transfer.
             </div>
           </div>
         </div>

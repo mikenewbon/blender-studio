@@ -1,5 +1,4 @@
 {% load common_extras %}
-{% show_new_subscription_billing as show_new_subscription_billing_ %}
 <div class="drawer-nav-dropdown-wrapper font-weight-bold">
   <a class="drawer-nav-dropdown" href="{% url 'user-settings'%}">
     <i class="material-icons mr-2">person</i>
@@ -19,38 +18,34 @@
     <i class="material-icons mr-2">credit_card</i>
     <span>Subscription</span>
   </a>
-  {% if show_new_subscription_billing_ %}
-    <a class="drawer-nav-dropdown icon" data-toggle="collapse" data-target="#subscription-collapse">
-      <i class="material-icons">keyboard_arrow_down</i>
-    </a>
-  {% endif %}
+  <a class="drawer-nav-dropdown icon" data-toggle="collapse" data-target="#subscription-collapse">
+    <i class="material-icons">keyboard_arrow_down</i>
+  </a>
 </div>
 
 
-{% if show_new_subscription_billing_ %}
-  <div class="drawer-nav-list-wrapper collapse show" id="subscription-collapse">
-    <ol class="drawer-nav-list">
+<div class="drawer-nav-list-wrapper collapse show" id="subscription-collapse">
+  <ol class="drawer-nav-list">
 
-      <li class="drawer-nav-section">
-        <a href="{% url 'subscriptions:billing-address' %}" class="drawer-nav-section-link " data-tooltip="tooltip-overflow" data-placement="top" title="" data-original-title="">
-          <p class="overflow-text h4">Billing addresss</p>
-        </a>
-      </li>
+    <li class="drawer-nav-section">
+      <a href="{% url 'subscriptions:billing-address' %}" class="drawer-nav-section-link " data-tooltip="tooltip-overflow" data-placement="top" title="" data-original-title="">
+        <p class="overflow-text h4">Billing addresss</p>
+      </a>
+    </li>
 
-      <li class="drawer-nav-section">
-        <a href="{% url 'subscriptions:receipts' %}" class="drawer-nav-section-link " data-tooltip="tooltip-overflow" data-placement="top" title="" data-original-title="">
-          <p class="overflow-text h4">Invoices</p>
-        </a>
-      </li>
+    <li class="drawer-nav-section">
+      <a href="{% url 'subscriptions:receipts' %}" class="drawer-nav-section-link " data-tooltip="tooltip-overflow" data-placement="top" title="" data-original-title="">
+        <p class="overflow-text h4">Invoices</p>
+      </a>
+    </li>
 
-      <li class="drawer-nav-section">
-        <a href="{% url 'looper:payment_methods' %}" class="drawer-nav-section-link " data-tooltip="tooltip-overflow" data-placement="top" title="" data-original-title="">
-          <p class="overflow-text h4">Payment methods</p>
-        </a>
-      </li>
-    </ol>
-  </div>
-{% endif %}
+    <li class="drawer-nav-section">
+      <a href="{% url 'looper:payment_methods' %}" class="drawer-nav-section-link " data-tooltip="tooltip-overflow" data-placement="top" title="" data-original-title="">
+        <p class="overflow-text h4">Payment methods</p>
+      </a>
+    </li>
+  </ol>
+</div>
 
 <div class="drawer-nav-dropdown-wrapper font-weight-bold">
   <a class="drawer-nav-dropdown" href="/settings/roles">

@@ -2,10 +2,8 @@
 from typing import Optional
 import logging
 
-from django.conf import settings
 from django.shortcuts import redirect
 from django.views.generic import FormView
-import waffle
 
 from looper.views.checkout import AbstractPaymentView
 import looper.gateways
@@ -52,9 +50,6 @@ class SelectPlanVariationView(_PlanSelectorMixin, FormView):
 
         Also check the feature flag and redirect to Blender Store if not active.
         """
-        if not waffle.flag_is_active(request, 'SUBSCRIPTIONS_ENABLED'):
-            return redirect(settings.STORE_PRODUCT_URL)
-
         if should_redirect_to_billing(request.user):
             return redirect('user-settings-billing')
 
@@ -65,12 +60,6 @@ class SelectPlanVariationView(_PlanSelectorMixin, FormView):
         self.plan_variation = plan_variation
         self.plan = plan_variation.plan
         return super().get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        """Redirect to Blender Store depending on the state of feature flag."""
-        if not waffle.flag_is_active(request, 'SUBSCRIPTIONS_ENABLED'):
-            return redirect(settings.STORE_PRODUCT_URL)
-        return super().post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs) -> dict:
         """Add an extra form and gateway's client token."""

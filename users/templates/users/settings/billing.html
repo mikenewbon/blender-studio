@@ -1,11 +1,8 @@
 {% extends 'users/settings/base.html' %}
 {% load common_extras %}
-{% load waffle_tags %}
 {% load looper %}
 
 {% block settings %}
-  {% show_new_subscription_billing as show_new_subscription_billing_ %}
-
   <p class="subtitle">Settings</p>
   <h1 class="mb-0">Subscription{% if user.subscription_set.count > 1 %}s{% endif %}</h1>
   <p class="mb-2 subtitle">If you have any problems with billing, contact the team directly on <a href="mailto:cloudsupport@blender.org">cloudsupport@blender.org</a>.</p>
@@ -28,23 +25,7 @@
     {% else %}{# for everyone except demo #}
       <div class="row">
         <div class="col">
-
-
-          {# **Do not** rearrange the ifs, unless the logic is obviously broken. #}
-          {% if show_new_subscription_billing_ %}
-            {% include "subscriptions/components/list.html" %}
-
-          {% elif user|has_active_subscription %}
-            {# they don't have new-kind-of-subscription, this must be coming from Store #}
-            <p>If you want to change or cancel your billing, visit the <a target="_blank"
-              href="{{ STORE_MANAGE_URL }}">Blender Store</a>.</p>
-
-          {% else %}
-            <p>
-              If you want to subscribe to Blender Cloud visit the
-              <a target="_blank" href="{{ STORE_PRODUCT_URL }}">Blender Store</a>.
-            </p>
-          {% endif %}
+          {% include "subscriptions/components/list.html" %}
         </div>
       </div>
     {% endif %}

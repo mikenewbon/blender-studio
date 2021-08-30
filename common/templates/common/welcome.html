@@ -39,7 +39,7 @@
               </div>
             {% endcomment %}
             <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center">
-              <a {% include "subscriptions/components/join_url" %}
+              <a href="{% url 'subscriptions:join' %}"
                 class="btn btn-lg btn-primary mr-md-4 mb-2 mb-md-0">Join the Blender Cloud</a>
               <div class="d-inline-block">
                 <p class="mb-0">Access to all training, assets<br>and films for €9.90/month</p>
@@ -87,7 +87,7 @@
             training from the people in Blender.</p>
           <p>Ask questions and receive replies from the Author, download resources and join the discussion.</p>
           <div class="button-group">
-            <a {% include "subscriptions/components/join_url" %} class="btn btn-primary">Subscribe for €9.90/month</a>
+            <a href="{% url 'subscriptions:join' %}" class="btn btn-primary">Subscribe for €9.90/month</a>
             <a href="/training" class="btn btn-transparent">Explore Training</a>
           </div>
         </div>
@@ -115,7 +115,7 @@
                   <p class="mb-4">Blender Studio’s 13th open movie will be an 80’s-inspired horror comedy, set in Britain:
                     When a group of rowdy teenagers trek into an isolated forest, they discover peaceful mushroom
                     creatures that turn out to be an unexpected force of nature.</p>
-                  <a {% include "subscriptions/components/join_url" %}
+                  <a href="{% url 'subscriptions:join' %}"
                     class="btn btn-primary mb-2 mb-md-0">Subscribe for €9.90/month</a>
                   <a href="/films/sprite-fright" class="btn btn-transparent">Explore the Film</a>
                 </div>
@@ -169,7 +169,7 @@
                   <p class="mb-4">Join Blender Cloud and get access to hundreds of hours of training,
                     production assets and files from the Open Movies as well as a platform to learn at
                     your own pace, in your own time.</p>
-                  <a {% include "subscriptions/components/join_url" %}
+                  <a href="{% url 'subscriptions:join' %}"
                     class="btn btn-lg btn-primary">Subscribe for €9.90/month</a>
                 </div>
               </div>
