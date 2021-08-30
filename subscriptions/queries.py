@@ -74,3 +74,20 @@ def should_redirect_to_billing(user: User) -> bool:
         subscription.latest_order() and subscription.payment_method
         for subscription in user.subscription_set.all()
     )
+
+
+def has_not_yet_cancelled_subscription(user: User) -> bool:
+    """Check if a given user has any subscriptions that had not been cancelled yet.
+
+    Checks both for personal and team subscriptions.
+    """
+    if not user.is_authenticated:
+        return False
+
+    not_yet_cancelled_subscriptions: 'QuerySet[Subscription]' = Subscription.objects.exclude(
+        status='cancelled'
+    )
+
+    return not_yet_cancelled_subscriptions.filter(
+        Q(user_id=user.id) | Q(team__team_users__user_id=user.id)
+    ).exists()

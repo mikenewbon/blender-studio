@@ -7,6 +7,8 @@ from looper.models import PlanVariation, Subscription
 import looper.money
 import looper.taxes
 
+import subscriptions.queries
+
 register = template.Library()
 
 
@@ -54,4 +56,4 @@ def recurring_pricing(variation: PlanVariation, money: Optional[looper.money.Mon
 @register.filter
 def can_subscribe(user) -> bool:
     """True if user either has no subscriptions at all or they are all cancelled."""
-    return user.subscription_set.exclude(status='cancelled').count() == 0
+    return not subscriptions.queries.has_not_yet_cancelled_subscription(user)
