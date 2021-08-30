@@ -8,7 +8,7 @@
       {% if action.actor == request.user %}
         You
       {% else %}
-        {% firstof action.actor.profile.full_name action.actor %}
+        {% firstof action.actor.full_name action.actor.username %}
       {% endif %}
     {% else %}
       Someone
