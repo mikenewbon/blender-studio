@@ -131,7 +131,7 @@ class TestSubscriptionSettingsChangePaymentMethod(BaseSubscriptionTestCase):
         self.assertNotEqual(subscription.payment_method_id, payment_method.pk)
         self.assertEqual(
             str(subscription.payment_method),
-            'braintree – Visa credit card ending in 0002',
+            'Visa credit card ending in 0002',
         )
         # SCA was stored
         self.assertIsNotNone(PaymentMethodAuthentication.objects.first())
@@ -164,7 +164,7 @@ class TestSubscriptionSettingsChangePaymentMethod(BaseSubscriptionTestCase):
         subscription.payment_method.refresh_from_db()
         # Subscription's payment method was changed to bank transfer
         self.assertNotEqual(subscription.payment_method_id, payment_method.pk)
-        self.assertEqual(str(subscription.payment_method), 'bank – Bank Transfer')
+        self.assertEqual(str(subscription.payment_method), 'Bank Transfer')
         self.assertIsNone(PaymentMethodAuthentication.objects.first())
 
 
@@ -350,7 +350,7 @@ class TestPayExistingOrder(BaseSubscriptionTestCase):
         self.assertNotEqual(subscription.payment_method, 'bank')
         self.assertEqual(
             str(subscription.payment_method),
-            'braintree – Visa credit card ending in 0002',
+            'Visa credit card ending in 0002',
         )
 
         self.assertEqual(subscription.status, 'active')
