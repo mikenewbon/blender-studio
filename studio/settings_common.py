@@ -136,7 +136,10 @@ TIME_ZONE = 'Europe/Amsterdam'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
+DATE_FORMAT = 'N j, Y'
+TIME_FORMAT = 'H:i'
+DATETIME_FORMAT = f'{DATE_FORMAT} {TIME_FORMAT}'
 
 USE_TZ = True
 
