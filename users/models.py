@@ -104,6 +104,7 @@ class User(AbstractUser):
         """
         import looper.admin_log as admin_log
         import looper.models
+        import subscriptions.queries
 
         if not self.can_be_deleted:
             looper.error(
@@ -115,6 +116,13 @@ class User(AbstractUser):
         if not self.date_deletion_requested:
             logger.error(
                 "User.anonymize_or_delete called, but deletion of pk=%s hasn't been requested",
+                self.pk,
+            )
+            return
+
+        if subscriptions.queries.has_not_yet_cancelled_subscription(self):
+            logger.error(
+                "User.anonymize_or_delete called, but pk=%s has not yet cancelled subscriptions",
                 self.pk,
             )
             return

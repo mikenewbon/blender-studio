@@ -105,6 +105,7 @@ class TestTasks(TestCase):
             order__payment_method=payment_method,
             order__subscription__payment_method=payment_method,
             order__subscription__user=user,
+            order__subscription__status='cancelled',
             order__user=user,
             payment_method=payment_method,
         )
@@ -160,3 +161,45 @@ class TestTasks(TestCase):
             self.assertEqual(like.username, '<deleted>')
             # the notification, however, is also deleted
             self.assertEqual(like.comment.user.notifications.count(), 0)
+
+    def test_handle_deletion_request_user_has_not_yet_cancelled_subscription(self):
+        now = timezone.now()
+        user = create_customer_with_billing_address(
+            full_name='Joe Dane',
+            email='mail1@example.com',
+            date_deletion_requested=now - timedelta(days=30),
+        )
+        # this user has a subscription with an order and a transaction
+        payment_method = PaymentMethodFactory(user=user)
+        transaction = TransactionFactory(
+            user=user,
+            order__price=990,
+            order__tax_country='NL',
+            order__payment_method=payment_method,
+            order__subscription__payment_method=payment_method,
+            order__subscription__user=user,
+            order__subscription__status='on-hold',
+            order__user=user,
+            payment_method=payment_method,
+        )
+
+        with self.assertLogs('users.models', level='ERROR') as log:
+            tasks.handle_deletion_request.task_function(pk=user.pk)
+            self.assertRegex(
+                log.output[0],
+                f'User.anonymize_or_delete called, but pk={user.pk} has not yet cancelled subscriptions',
+                log.output,
+            )
+
+        # user was neither deleted nor anonymised
+        user.refresh_from_db()
+        self.assertTrue(user.is_active)
+        self.assertEqual(user.full_name, 'Joe Dane')
+        self.assertEqual(user.email, 'mail1@example.com')
+
+        # subscription and order records remained
+        transaction.refresh_from_db()
+        transaction.order.refresh_from_db()
+        transaction.order.subscription.refresh_from_db()
+        self.assertEqual(transaction.order.price._cents, 990)
+        self.assertEqual(transaction.order.tax_country, 'NL')
