@@ -34,6 +34,7 @@ class ChapterInline(admin.TabularInline):
 
 @admin.register(trainings.Training)
 class TrainingAdmin(admin.ModelAdmin):
+    save_on_top = True
     prepopulated_fields = {'slug': ('name',)}
     list_display = [
         '__str__',
@@ -59,6 +60,7 @@ class SectionInline(admin.TabularInline):
 
 @admin.register(chapters.Chapter)
 class ChapterAdmin(admin.ModelAdmin):
+    save_on_top = True
     prepopulated_fields = {'slug': ('name',)}
     autocomplete_fields = ['training', 'user']
     inlines = [SectionInline]
