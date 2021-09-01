@@ -13,9 +13,15 @@
       </svg>
     </div>
     <p class="overflow-text h4">{{ title }}</p>
-    {% if free %}
+    {% if published %}
+      {% if free %}
+        <span class="ml-auto">
+          <i class="material-icons icon-inline small text-success ml-1 mr-0" data-toggle="tooltip" data-placement="top" title="Free">lock_open</i>
+        </span>
+      {% endif %}
+    {% else %}
       <span class="ml-auto">
-        <i class="material-icons icon-inline small text-success ml-1 mr-0" data-toggle="tooltip" data-placement="top" title="Free">lock_open</i>
+        <i class="material-icons icon-inline small text-danger ml-1 mr-0" data-toggle="tooltip" data-placement="top" title="Unpublished">visibility_off</i>
       </span>
     {% endif %}
   </a>

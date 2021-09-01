@@ -104,9 +104,14 @@
 
       <div class="drawer-nav-dropdown-wrapper ">
         <a href="{{ chapter_navigation.url }}"
-          class="drawer-nav-dropdown dropdown font-weight-bold {% if chapter_navigation.current %} active {% else %}collapsed{% endif %}"
+          class="drawer-nav-dropdown dropdown font-weight-bold {% if chapter_navigation.current %} active{% endif %}"
           data-tooltip="tooltip-overflow" data-placement="top" title="{{ chapter_navigation.name }}">
           <span class="drawer-nav-dropdown-text overflow-text">{{ chapter_navigation.name }}</span>
+          {% if not chapter_navigation.is_published %}
+            <span class="ml-auto">
+              <i class="material-icons icon-inline small text-danger ml-1 mr-0" data-toggle="tooltip" data-placement="top" title="Unpublished">visibility_off</i>
+            </span>
+          {% endif %}
           {% comment %} <i class="material-icons">keyboard_arrow_down</i> {% endcomment %}
         </a>
         <a class="drawer-nav-dropdown icon {% if chapter_navigation.current %} active {% else %}collapsed{% endif %}"
@@ -121,9 +126,9 @@
           {% for section_navigation in chapter_navigation.sections %}
             {% if section_navigation.is_published or request.user.is_superuser or request.user.is_staff %}
               {% if section_navigation.source_type == "video" %}
-                {% include 'common/components/navigation/nav_drawer_section_progress.html' with title=section_navigation.name href=section_navigation.url active=section_navigation.current started=section_navigation.started finished=section_navigation.finished progress_fraction=section_navigation.progress_fraction admin_change_href=section_navigation.admin_url nth=forloop.counter|stringformat:"02d" free=section_navigation.is_free %}
+                {% include 'common/components/navigation/nav_drawer_section_progress.html' with title=section_navigation.name href=section_navigation.url active=section_navigation.current started=section_navigation.started finished=section_navigation.finished progress_fraction=section_navigation.progress_fraction admin_change_href=section_navigation.admin_url nth=forloop.counter|stringformat:"02d" free=section_navigation.is_free published=section_navigation.is_published %}
               {% else %}
-                {% include 'common/components/navigation/nav_drawer_section_file.html' with title=section_navigation.name href=section_navigation.url admin_change_href=section_navigation.admin_url free=section_navigation.is_free %}
+                {% include 'common/components/navigation/nav_drawer_section_file.html' with title=section_navigation.name href=section_navigation.url admin_change_href=section_navigation.admin_url free=section_navigation.is_free published=section_navigation.is_published %}
               {% endif %}
             {% endif %}
           {% endfor %}
