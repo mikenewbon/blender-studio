@@ -890,7 +890,7 @@ six = ">=1.11.0"
 
 [[package]]
 name = "looper"
-version = "1.8.3rc0"
+version = "1.8.3rc1"
 description = ""
 category = "main"
 optional = false
@@ -917,7 +917,7 @@ zeep = "4.0.0"
 type = "git"
 url = "git://git.blender.org/looper.git"
 reference = "patched-clock"
-resolved_reference = "e998c59d3a585398f88ce376ed52402e3697c957"
+resolved_reference = "7400c5233c8948b550738d6fe9801911c93b5eda"
 
 [[package]]
 name = "lxml"
