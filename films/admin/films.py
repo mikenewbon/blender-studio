@@ -101,7 +101,7 @@ class AssetAdmin(mixins.ThumbnailMixin, mixins.ViewOnSiteMixin, admin.ModelAdmin
 class CollectionAdmin(mixins.ViewOnSiteMixin, admin.ModelAdmin):
     list_display = ['__str__', 'film', 'order', 'parent', 'view_link']
     list_filter = ['film']
-    search_fields = ['name', 'film__title']
+    search_fields = ['name', 'film__title', 'slug']
     autocomplete_fields = ['parent', 'user', 'film']
     readonly_fields = ['slug']
     ordering = ('-date_created',)
