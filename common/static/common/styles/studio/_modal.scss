@@ -256,6 +256,12 @@
   }
 }
 
+.modal-asset-zoom {
+  .modal-content {
+    border-radius: 0;
+  }
+}
+
 .modal-content {
   @include media-breakpoint-down(sm) {
     border-radius: 0;
