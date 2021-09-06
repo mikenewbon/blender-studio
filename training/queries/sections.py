@@ -1,3 +1,4 @@
+# noqa: D100
 import datetime
 from typing import List, Optional, Tuple, cast
 
@@ -10,26 +11,30 @@ from static_assets.models.progress import UserVideoProgress
 import static_assets.models as models_static_assets
 
 
-def recently_watched(*, user_pk: int) -> List[sections.Section]:
+def recently_watched(*, user_pk: int) -> List[sections.Section]:  # noqa: D103
     return list(
         sections.Section.objects.raw(
             '''
             SELECT *
             FROM (SELECT s.*,
-                         c.index                                                                             AS chapter_index,
-                         c.name                                                                              AS chapter_name,
-                         t.name                                                                              AS training_name,
-                         uvp.position                                                                        AS video_position,
-                         v.duration                                                                          AS video_duration,
+                         c.index AS chapter_index,
+                         c.name AS chapter_name,
+                         t.name AS training_name,
+                         uvp.position AS video_position,
+                         v.duration AS video_duration,
                          row_number()
-                         OVER (PARTITION BY t.id ORDER BY coalesce(uvp.date_updated, usp.date_updated) DESC) AS row_number_per_training
+                         OVER (
+                            PARTITION BY t.id ORDER BY coalesce(uvp.date_updated, usp.date_updated)
+                         DESC
+                         ) AS row_number_per_training
                   FROM training_usersectionprogress usp
                            LEFT JOIN training_section s ON usp.section_id = s.id
                            LEFT JOIN training_chapter c ON s.chapter_id = c.id
                            LEFT JOIN training_training t ON c.training_id = t.id
                            LEFT JOIN static_assets_staticasset sa ON s.static_asset_id = sa.id
                            LEFT JOIN static_assets_video v ON sa.id = v.static_asset_id
-                           LEFT JOIN static_assets_uservideoprogress uvp ON v.id = uvp.video_id AND usp.user_id = uvp.user_id
+                           LEFT JOIN static_assets_uservideoprogress uvp
+                                ON v.id = uvp.video_id AND usp.user_id = uvp.user_id
                   WHERE usp.user_id = %s
                     AND usp.started
                     AND NOT usp.finished
@@ -41,7 +46,7 @@ def recently_watched(*, user_pk: int) -> List[sections.Section]:
     )
 
 
-def from_slug(
+def from_slug(  # noqa: D103
     *, user_pk: int, training_slug: str, section_slug: str, **filters
 ) -> Optional[
     Tuple[
@@ -87,7 +92,7 @@ def from_slug(
     return training, training_favorited, chapter, section, video, comments
 
 
-def comment(
+def comment(  # noqa: D103
     *, user_pk: int, section_pk: int, message: str, reply_to_pk: Optional[int]
 ) -> models.Comment:
     comment = models.Comment.objects.create(
