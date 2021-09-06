@@ -252,6 +252,12 @@
 
 #videoModal {
   .modal-content {
-    border-radius: 8px;
+    border-radius: $border-radius-lg;
+  }
+}
+
+.modal-content {
+  @include media-breakpoint-down(sm) {
+    border-radius: 0;
   }
 }
