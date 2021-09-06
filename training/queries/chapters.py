@@ -7,12 +7,13 @@ from training.models import chapters, trainings
 
 
 def from_slug(
-    user_pk: int, training_slug: str, slug: str
+    user_pk: int, training_slug: str, slug: str, **filters
 ) -> Optional[Tuple[trainings.Training, bool, chapters.Chapter]]:
     """Retrieve a training chapter by its slug."""
     try:
         chapter = (
-            chapters.Chapter.objects.annotate(
+            chapters.Chapter.objects.filter(**filters)
+            .annotate(
                 training_favorited=Exists(
                     trainings.Favorite.objects.filter(
                         user_id=user_pk, training_id=OuterRef('training_id')

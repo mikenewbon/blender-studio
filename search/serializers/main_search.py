@@ -20,7 +20,11 @@ class MainSearchSerializer(BaseSearchSerializer):
         Film: {'is_published': True},
         Asset: {'is_published': True, 'film__is_published': True},
         Training: {'is_published': True},
-        Section: {'chapter__training__is_published': True, 'is_published': True},
+        Section: {
+            'chapter__is_published': True,
+            'chapter__training__is_published': True,
+            'is_published': True,
+        },
         Post: {'is_published': True},
     }
     annotations = {

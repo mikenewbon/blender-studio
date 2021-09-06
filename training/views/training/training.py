@@ -17,7 +17,14 @@ from training.models import Training, TrainingFlatPage
 # @subscription_required
 def training(request: HttpRequest, *, training_slug: str) -> TypeSafeTemplateResponse:
     """Display a training with a given slug."""
-    result = queries.trainings.from_slug(user_pk=request.user.pk, training_slug=training_slug)
+    filter_published = (
+        {'is_published': True}
+        if not request.user.is_staff and not request.user.is_superuser
+        else {}
+    )
+    result = queries.trainings.from_slug(
+        user_pk=request.user.pk, training_slug=training_slug, **filter_published
+    )
 
     if result is None:
         return not_found(request)
@@ -55,7 +62,12 @@ def flatpage(request: HttpRequest, training_slug: str, page_slug: str) -> HttpRe
 
     :template:`training/flatpage.html`
     """
-    training = get_object_or_404(Training, slug=training_slug, is_published=True)
+    filter_published = (
+        {'is_published': True}
+        if not request.user.is_staff and not request.user.is_superuser
+        else {}
+    )
+    training = get_object_or_404(Training, slug=training_slug, **filter_published)
     flatpage = get_object_or_404(TrainingFlatPage, training=training, slug=page_slug)
     navigation = queries.trainings.navigation(user_pk=request.user.pk, training_pk=training.pk)
     context = {

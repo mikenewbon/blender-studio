@@ -25,8 +25,20 @@ def section(
 
     The redirect is here due to sections and chapters having identical URL format on the old Cloud.
     """
+    filter_published = (
+        {
+            'chapter__is_published': True,
+            'chapter__training__is_published': True,
+            'is_published': True,
+        }
+        if not request.user.is_staff and not request.user.is_superuser
+        else {}
+    )
     result = queries.sections.from_slug(
-        user_pk=request.user.pk, training_slug=training_slug, section_slug=section_slug
+        user_pk=request.user.pk,
+        training_slug=training_slug,
+        section_slug=section_slug,
+        **filter_published,
     )
     if not result:
         return redirect('chapter', training_slug=training_slug, chapter_slug=section_slug)
@@ -63,8 +75,16 @@ def section(
 @require_safe
 def chapter(request: HttpRequest, training_slug: str, chapter_slug: str) -> HttpResponse:
     """Display a training chapter."""
+    filter_published = (
+        {
+            'training__is_published': True,
+            'is_published': True,
+        }
+        if not request.user.is_staff and not request.user.is_superuser
+        else {}
+    )
     result = queries.chapters.from_slug(
-        user_pk=request.user.pk, training_slug=training_slug, slug=chapter_slug
+        user_pk=request.user.pk, training_slug=training_slug, slug=chapter_slug, **filter_published
     )
     if not result:
         return redirect('training', training_slug=training_slug)

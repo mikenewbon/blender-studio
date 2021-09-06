@@ -1,13 +1,9 @@
 from typing import List, Optional, Tuple, cast
 
-from django.db.models import Exists, OuterRef, QuerySet, Subquery
+from django.db.models import Exists, OuterRef, Subquery
 
 from training.models import chapters, progress, sections, trainings
 import static_assets.models as models_static_assets
-
-
-def _published() -> 'QuerySet[trainings.Training]':
-    return trainings.Training.objects.filter(is_published=True)
 
 
 def set_favorite(*, training_pk: int, user_pk: int, favorite: bool) -> None:
@@ -25,10 +21,12 @@ def set_favorite(*, training_pk: int, user_pk: int, favorite: bool) -> None:
         ).delete()
 
 
-def from_slug(*, user_pk: int, training_slug: str,) -> Optional[Tuple[trainings.Training, bool]]:
+def from_slug(
+    *, user_pk: int, training_slug: str, **filters
+) -> Optional[Tuple[trainings.Training, bool]]:
     try:
         training = (
-            _published()
+            trainings.Training.objects.filter(**filters)
             .annotate(
                 favorited=Exists(
                     trainings.Favorite.objects.filter(user_id=user_pk, training_id=OuterRef('pk'))
@@ -43,18 +41,18 @@ def from_slug(*, user_pk: int, training_slug: str,) -> Optional[Tuple[trainings.
     return training, cast(bool, getattr(training, 'favorited'))
 
 
-def favorited(*, user_pk: int) -> List[trainings.Training]:
+def favorited(*, user_pk: int, **filters) -> List[trainings.Training]:
     return list(
-        _published()
+        trainings.Training.objects.filter(**filters)
         .prefetch_related('tags')
         .filter(favorites__user_id=user_pk)
         .order_by('-favorites__date_created')
     )
 
 
-def all(user_pk: Optional[int]) -> List[trainings.Training]:
+def all(user_pk: Optional[int], **filters) -> List[trainings.Training]:
     return list(
-        _published()
+        trainings.Training.objects.filter(**filters)
         .exclude(favorites__user_id=user_pk)
         .prefetch_related('tags')
         .order_by('-date_created')
@@ -62,10 +60,10 @@ def all(user_pk: Optional[int]) -> List[trainings.Training]:
 
 
 def navigation(
-    *, user_pk: int, training_pk: int
+    *, user_pk: int, training_pk: int, **filters
 ) -> Tuple[trainings.Training, List[chapters.Chapter], List[sections.Section]]:
     return (
-        _published().get(id=training_pk),
+        trainings.Training.objects.filter(**filters).get(id=training_pk),
         list(chapters.Chapter.objects.filter(training_id=training_pk).all()),
         list(
             sections.Section.objects.annotate(

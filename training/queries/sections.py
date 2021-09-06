@@ -1,17 +1,13 @@
 import datetime
 from typing import List, Optional, Tuple, cast
 
-from django.db.models import Exists, OuterRef, QuerySet
+from django.db.models import Exists, OuterRef
 
 from comments import models
 from comments.queries import get_annotated_comments
 from training.models import chapters, sections, trainings
 from static_assets.models.progress import UserVideoProgress
 import static_assets.models as models_static_assets
-
-
-def _published() -> 'QuerySet[sections.Section]':
-    return sections.Section.objects.filter(chapter__training__is_published=True)
 
 
 def recently_watched(*, user_pk: int) -> List[sections.Section]:
@@ -46,7 +42,7 @@ def recently_watched(*, user_pk: int) -> List[sections.Section]:
 
 
 def from_slug(
-    *, user_pk: int, training_slug: str, section_slug: str
+    *, user_pk: int, training_slug: str, section_slug: str, **filters
 ) -> Optional[
     Tuple[
         trainings.Training,
@@ -59,7 +55,7 @@ def from_slug(
 ]:
     try:
         section = (
-            _published()
+            sections.Section.objects.filter(**filters)
             .annotate(
                 training_favorited=Exists(
                     trainings.Favorite.objects.filter(

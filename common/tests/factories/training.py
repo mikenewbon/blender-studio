@@ -3,6 +3,7 @@ from factory import fuzzy
 from factory.django import DjangoModelFactory
 
 from common.tests.factories.helpers import generate_image_path
+from common.tests.factories.static_assets import StaticAssetFactory
 from search import signals as search_signals
 from training.models import (
     Training,
@@ -49,6 +50,8 @@ class SectionFactory(DjangoModelFactory):
     name = factory.Faker('text', max_nb_chars=20)
     slug = factory.Faker('slug')
     text = factory.Faker('text')
+
+    static_asset = factory.SubFactory(StaticAssetFactory)
 
 
 class TrainingFlatPageFactory(DjangoModelFactory):
