@@ -37,7 +37,7 @@ django-nested-admin = "^3.3.3"
 cryptography = "3.3.2"
 django-waffle = "2.1.0"
 html5lib = "1.1"
-braintree = "4.0.0"
+braintree = "4.12.0"
 python-stdnum = "^1.16"
 localflavor = "^1.9"
 pyvat = {git = "https://github.com/iconfinder/pyvat.git", rev = "419abd659ae5a4a6cb6ea9b54aa4bde17aefeb5b"}

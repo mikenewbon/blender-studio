@@ -160,7 +160,7 @@ urllib3 = {version = ">=1.20,<1.26", markers = "python_version != \"3.4\""}
 
 [[package]]
 name = "braintree"
-version = "4.0.0"
+version = "4.12.0"
 description = "Braintree Python Library"
 category = "main"
 optional = false
@@ -890,7 +890,7 @@ six = ">=1.11.0"
 
 [[package]]
 name = "looper"
-version = "1.8.3rc1"
+version = "1.9.1rc0"
 description = ""
 category = "main"
 optional = false
@@ -901,7 +901,7 @@ develop = false
 attrs = "^19.3.0"
 babel = "^2.6"
 bleach = "^3.3.0"
-braintree = "4.0.0"
+braintree = "4.12.0"
 colorhash = "^1.0.3"
 django = "^2.2.0 || 3.0 || 3.0.*"
 django-countries = "^6.0"
@@ -917,7 +917,7 @@ zeep = "4.0.0"
 type = "git"
 url = "git://git.blender.org/looper.git"
 reference = "patched-clock"
-resolved_reference = "7400c5233c8948b550738d6fe9801911c93b5eda"
+resolved_reference = "7e2909715b1b3f4e6fe84caed6f4a54e2902187c"
 
 [[package]]
 name = "lxml"
@@ -1686,7 +1686,7 @@ xmlsec = ["xmlsec (>=0.6.1)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "948cb2920356d5e951acc6876f10ddd2b0e3be9b0f2ee2ab77cc991124cff9a5"
+content-hash = "fd2597ae5a8e72e777c7b682dddb192b3b4507900c5659e732669999b95112bc"
 
 [metadata.files]
 alphabetic-timestamp = [
@@ -1739,8 +1739,8 @@ botocore = [
     {file = "botocore-1.17.60.tar.gz", hash = "sha256:193f193a66ac79106725e14dd73e28ed36bcec99b37156538a2202d061056a58"},
 ]
 braintree = [
-    {file = "braintree-4.0.0-py2.py3-none-any.whl", hash = "sha256:25e4b3afc396724ea35afbd6f58e9a3bbe837a97e1ff3cfaa70c3a7eb8b542a5"},
-    {file = "braintree-4.0.0.tar.gz", hash = "sha256:b06a7989747ae7f36eceaae3499cab98f0e03d751681e2aa65af76405e041fd5"},
+    {file = "braintree-4.12.0-py2.py3-none-any.whl", hash = "sha256:781252d063438c563cc74a3101727a2472ac1621d491bd217a965add0e8a0c3d"},
+    {file = "braintree-4.12.0.tar.gz", hash = "sha256:946abd50fe2843eec586ac3cec285d27dfae0cc5a43a64b505e8a2800b8a74a6"},
 ]
 cached-property = [
     {file = "cached-property-1.5.2.tar.gz", hash = "sha256:9fa5755838eecbb2d234c3aa390bd80fbd3ac6b6869109bfc1b499f7bd89a130"},
