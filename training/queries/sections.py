@@ -78,10 +78,11 @@ def from_slug(  # noqa: D103
     video: Optional[Tuple[models_static_assets.Video, Optional[datetime.timedelta]]]
     try:
         try:
-            progress = section.static_asset.video.progress.get(user_id=user_pk)
+            _video = section.static_asset.video if section.static_asset else None
+            progress = _video.progress.get(user_id=user_pk) if _video else None
         except UserVideoProgress.DoesNotExist:
             progress = None
-        video = (section.static_asset.video, None if progress is None else progress.position)
+        video = (_video, None if progress is None else progress.position) if _video else None
     except models_static_assets.Video.DoesNotExist:
         video = None
 

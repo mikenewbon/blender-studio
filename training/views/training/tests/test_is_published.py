@@ -83,7 +83,10 @@ class TestSectionIsPublishedYes(_AlwaysAvailableToStaffMixin, _BaseTestCase):
     def setUp(self):
         super().setUp()
         self.section = SectionFactory(
-            is_published=True, chapter__is_published=True, chapter__training__is_published=True
+            is_published=True,
+            chapter__is_published=True,
+            chapter__training__is_published=True,
+            static_asset=None,
         )
 
     def test_anon_200(self):
