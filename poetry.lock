@@ -128,7 +128,7 @@ requests-oauthlib = "^1.0"
 
 [package.source]
 type = "git"
-url = "git@gitlab.com:blender-institute/blender-id-oauth-client.git"
+url = "https://gitlab.com/blender-institute/blender-id-oauth-client.git"
 reference = "master"
 
 [[package]]
