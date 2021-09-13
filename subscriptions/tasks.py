@@ -10,8 +10,11 @@ import django.core.mail
 import looper.models
 import looper.signals
 
+from blog.models import Post
 from common import mailgun
+from common.queries import get_latest_trainings_and_production_lessons
 from emails.util import get_template_context, absolute_url, is_noreply
+import subscriptions.queries as queries
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -211,3 +214,55 @@ def send_mail_managed_subscription_notification(subscription_id: int):
         email,
         subscription.pk,
     )
+
+
+@background()
+def send_mail_subscription_expired(subscription_id: int):
+    """Send out an email notifying about an expired subscription."""
+    subscription = looper.models.Subscription.objects.get(pk=subscription_id)
+    user = subscription.user
+
+    assert (
+        subscription.status == 'expired'
+    ), f'Expected expired, got "{subscription.status} (pk={subscription_id})"'
+    # Only send a "subscription expired" email when there are no other active subscriptions
+    if queries.has_active_subscription(user):
+        logger.error(
+            'Not sending subscription-expired notification: pk=%s has other active subscriptions',
+            subscription.user_id,
+        )
+        return
+
+    # We use account's email here, that email is most likely the same as Blender ID's email
+    # they'll use to login into the platform
+    email = user.email
+    assert email, f'Cannot send notification about subscription {subscription.pk} status: no email'
+    if is_noreply(email):
+        raise
+        logger.debug('Not sending subscription-expired notification to no-reply address %s', email)
+        return
+
+    # An Unsubscribe record will prevent this message from being delivered by Mailgun.
+    # This records might have been previously created for an existing account.
+    mailgun.delete_unsubscribe_record(email)
+
+    logger.debug('Sending subscription-expired notification to %s', email)
+    context = {
+        'user': subscription.user,
+        'subscription': subscription,
+        'latest_trainings': get_latest_trainings_and_production_lessons(),
+        'latest_posts': Post.objects.filter(is_published=True)[:5],
+        **get_template_context(),
+    }
+    mail_name = 'subscription_expired'
+    email_body_html, email_body_txt, subject = _construct_subscription_mail(mail_name, context)
+
+    django.core.mail.send_mail(
+        subject,
+        message=email_body_txt,
+        html_message=email_body_html,
+        from_email=None,  # just use the configured default From-address.
+        recipient_list=[email],
+        fail_silently=False,
+    )
+    logger.info('Sent subscription-expired notification to %s', email)

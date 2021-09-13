@@ -43,7 +43,9 @@ class _JoinMixin:
 
     def _get_existing_subscription(self):
         # Exclude cancelled subscriptions because they cannot transition to active
-        existing_subscriptions = self.request.user.subscription_set.exclude(status='cancelled')
+        existing_subscriptions = self.request.user.subscription_set.exclude(
+            status__in=looper.models.Subscription._CANCELLED_STATUSES
+        )
         return existing_subscriptions.first()
 
     def dispatch(self, request, *args, **kwargs):

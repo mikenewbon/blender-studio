@@ -51,7 +51,7 @@ def should_redirect_to_billing(user: User) -> bool:
     if not user.is_authenticated:
         return False
 
-    if user.subscription_set.exclude(status='cancelled').count() == 0:
+    if user.subscription_set.exclude(status__in=Subscription._CANCELLED_STATUSES).count() == 0:
         # Only cancelled subscriptions, no need to redirect to billing
         return False
 
@@ -73,7 +73,7 @@ def has_not_yet_cancelled_subscription(user: User) -> bool:
         return False
 
     not_yet_cancelled_subscriptions: 'QuerySet[Subscription]' = Subscription.objects.exclude(
-        status='cancelled'
+        status__in=Subscription._CANCELLED_STATUSES
     )
 
     return not_yet_cancelled_subscriptions.filter(

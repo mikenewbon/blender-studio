@@ -12,6 +12,8 @@ import django.core.mail
 import looper.admin.mixins
 import looper.models
 
+from blog.models import Post
+from common.queries import get_latest_trainings_and_production_lessons
 from emails.models import Email
 from emails.util import get_template_context
 from subscriptions.tasks import _construct_subscription_mail
@@ -95,6 +97,9 @@ class SubscriptionEmailPreviewAdmin(looper.admin.mixins.NoAddDeleteMixin, EmailA
             'user': subscription.user,
             'subscription': subscription,
             'order': order,
+            # Also add context for the expired email
+            'latest_trainings': get_latest_trainings_and_production_lessons(),
+            'latest_posts': Post.objects.filter(is_published=True)[:5],
             **get_template_context(),
         }
         mail_name = object_id
@@ -118,6 +123,7 @@ class SubscriptionEmailPreviewAdmin(looper.admin.mixins.NoAddDeleteMixin, EmailA
             'payment_paid',
             'payment_failed',
             'managed_notification',
+            'subscription_expired',
         ):
             emails.append(self.get_object(request, object_id=mail_name))
         return emails

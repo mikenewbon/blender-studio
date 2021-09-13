@@ -243,3 +243,58 @@ class TestClock(BaseSubscriptionTestCase):
 
         # Check that an email notification is sent
         self._assert_managed_subscription_notification_email_is_sent(self.subscription)
+
+
+class TestClockExpiredSubscription(BaseSubscriptionTestCase):
+    def test_subscription_on_hold_not_long_enough(self):
+        now = timezone.now()
+        user = create_customer_with_billing_address(country='NL', full_name='Jane Doe')
+        self.subscription = SubscriptionFactory(
+            user=user,
+            status='on-hold',
+            # payment date has passed, but not long enough ago
+            next_payment=now - timedelta(weeks=4),
+        )
+
+        Clock().tick()
+
+        # Check that nothing has happened
+        self.subscription.refresh_from_db()
+        self.assertEqual('on-hold', self.subscription.status)
+        self.assertFalse(self.subscription.is_cancelled)
+        self.assertIsNone(self.subscription.cancelled_at)
+        self._assert_no_emails_sent()
+
+    @patch(
+        # Make sure background task is executed as a normal function
+        'subscriptions.signals.tasks.send_mail_subscription_expired',
+        new=subscriptions.tasks.send_mail_subscription_expired.task_function,
+    )
+    @patch(
+        'users.signals.tasks.revoke_blender_id_role',
+        new=users.tasks.revoke_blender_id_role.task_function,
+    )
+    @responses.activate
+    def test_subscription_on_hold_too_long_status_changed_to_expired_email_sent(self):
+        now = timezone.now()
+        user = create_customer_with_billing_address(country='NL', full_name='Jane Doe')
+        self.subscription = SubscriptionFactory(
+            user=user,
+            status='on-hold',
+            # payment date has passed a long long time ago
+            next_payment=now - timedelta(weeks=4 * 10),
+        )
+        util.mock_blender_id_badger_badger_response(
+            'revoke', 'cloud_subscriber', user.oauth_info.oauth_user_id
+        )
+
+        Clock().tick()
+
+        # Check that subscription is expired now
+        self.subscription.refresh_from_db()
+        self.assertEqual('expired', self.subscription.status)
+        self.assertTrue(self.subscription.is_cancelled)
+        self.assertAlmostEqual(now, self.subscription.cancelled_at, delta=timedelta(seconds=1))
+
+        # Check that an email notification is sent
+        self._assert_subscription_expired_email_is_sent(self.subscription)

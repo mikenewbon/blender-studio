@@ -287,6 +287,9 @@ class BaseSubscriptionTestCase(TestCase):
         self.assertContains(response, 'Welcome to Blender Cloud')
         self.assertNotContains(response, 'Bank details')
 
+    def _assert_no_emails_sent(self):
+        self.assertEqual(len(mail.outbox), 0)
+
     def _assert_bank_transfer_email_is_sent(self, subscription):
         user = subscription.user
         self.assertEqual(len(mail.outbox), 1)
@@ -448,5 +451,23 @@ class BaseSubscriptionTestCase(TestCase):
             self.assertIn('$\xa011.10', email_body)
             self.assertIn(
                 f'/admin/looper/subscription/{subscription.pk}/change',
+                email_body,
+            )
+
+    def _assert_subscription_expired_email_is_sent(self, subscription):
+        user = subscription.user
+        self.assertEqual(len(mail.outbox), 1)
+        _write_mail(mail)
+        email = mail.outbox[0]
+        self.assertEqual(email.to, [subscription.user.email])
+        self.assertEqual(email.from_email, 'webmaster@localhost')
+        self.assertEqual(email.subject, 'We miss you at Blender Cloud')
+        self.assertEqual(email.alternatives[0][1], 'text/html')
+        for email_body in (email.body, email.alternatives[0][0]):
+            self.assertIn(f'Dear {user.customer.full_name}', email_body)
+            self.assertIn(f'#{subscription.pk}', email_body)
+            self.assertIn('has expired', email_body)
+            self.assertIn(
+                '/join/?source=subscription_expired_email',
                 email_body,
             )

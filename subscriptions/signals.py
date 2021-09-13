@@ -8,6 +8,7 @@ import django.db.models.signals as django_signals
 from looper.models import Customer, Order
 import looper.signals
 
+import subscriptions.queries as queries
 import subscriptions.tasks as tasks
 import users.tasks
 
@@ -68,12 +69,13 @@ def _on_subscription_status_activated(sender: looper.models.Subscription, **kwar
 
 
 @receiver(looper.signals.subscription_deactivated)
+@receiver(looper.signals.subscription_expired)
 def _on_subscription_status_deactivated(sender: looper.models.Subscription, **kwargs):
     # TODO(anna): if this Subscription is a team subscription,
     # the task has to be called for user IDs of the team members
 
     # No other active subscription exists, subscriber badge can be revoked
-    if not sender.user.subscription_set.active().count():
+    if not queries.has_active_subscription(sender.user):
         users.tasks.revoke_blender_id_role(pk=sender.user_id, role='cloud_subscriber')
 
 
@@ -96,3 +98,12 @@ def _on_automatic_payment_performed(
 @receiver(looper.signals.managed_subscription_notification)
 def _on_managed_subscription_notification(sender: looper.models.Subscription, **kwargs):
     tasks.send_mail_managed_subscription_notification(subscription_id=sender.pk)
+
+
+@receiver(looper.signals.subscription_expired)
+def _on_subscription_expired(sender: looper.models.Subscription, **kwargs):
+    assert sender.status == 'expired', f'Expected expired, got "{sender.status} (pk={sender.pk})"'
+
+    # Only send a "subscription expired" email when there are no other active subscriptions
+    if not queries.has_active_subscription(sender.user):
+        tasks.send_mail_subscription_expired(subscription_id=sender.pk)

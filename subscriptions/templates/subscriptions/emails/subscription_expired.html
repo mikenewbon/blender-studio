@@ -1,0 +1,77 @@
+{% extends "emails/email_base.html" %}
+
+{% block header_logo %}
+  {# have a title instead of the logo with the remote image #}
+  <div style="text-align: center; font-weight: bold;">{{ subject }}</div>
+{% endblock header_logo %}
+
+{% block body %}
+  <p>Dear {% firstof user.customer.full_name user.customer.billing_address.full_name user.full_name user.email %},</p>
+  <p>Your Blender Cloud subscription #{{subscription.pk}} has expired a while back. We miss you -- and you are missing some exciting content on Blender Cloud as well.</p>
+  {% if latest_posts or latest_trainings %}
+    <p>Just recently, we've published:</p>
+    <ul>
+      {% for post in latest_posts|slice:":2" %}
+        <li><a href="{{ site_url }}{{ post.url }}">{{ post.title }}</a></li>
+      {% endfor %}
+      {% for training in latest_trainings|slice:":2" %}
+        <li><a href="{{ site_url }}{{ training.url }}">{{ training.name }}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <p>If you'd like to rejoin Blender Cloud, use the link below, we'd love to have you back.</p>
+  <p style="text-align: center">
+    <a style="
+      text-decoration: none;
+      background-color: #009eff;
+      border-bottom-color: #009eff;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+      border-bottom-style: solid;
+      border-bottom-width: 0px;
+      border-image-source: none;
+      border-left-color: #009eff;
+      border-left-style: solid;
+      border-left-width: 0px;
+      border-right-color: #009eff;
+      border-right-style: solid;
+      border-right-width: 0px;
+      border-top-color: #009eff;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      border-top-style: solid;
+      border-top-width: 0px;
+      box-sizing: border-box;
+      color: #ffffff;
+      cursor: pointer;
+      display: inline-block;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 16px;
+      margin-bottom: 0px;
+      margin-left: 0px;
+      margin-right: 0px;
+      margin-top: 0px;
+      overflow: visible;
+      overflow-x: visible;
+      overflow-y: visible;
+      padding-bottom: 14px;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-top: 14px;
+      text-align: center;
+      text-transform: none;
+      vertical-align: middle;
+      width: auto;" href="{{ site_url }}{% url 'subscriptions:join' %}?source=subscription_expired_email">Join Blender Cloud</a>
+  </p>
+
+  <p>Hope to see you again soon!</p>
+
+  <p>
+    --<br />
+    Until then,<br />
+
+    Blender Cloud Team
+  </p>
+{% endblock body %}
