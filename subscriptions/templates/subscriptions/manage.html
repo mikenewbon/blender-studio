@@ -100,11 +100,14 @@
                       {% endif %}
                     </div>
 
-                    <div class="col-auto">
-                      <a class=" small"
-                        href="{% url 'subscriptions:payment-method-change' subscription_id=subscription.id %}">Change
-                      </a>
-                    </div>
+                    {% if not subscription.is_cancelled %}
+                      <div class="col-auto">
+                        <a class="small"
+                          href="{% url 'subscriptions:payment-method-change' subscription_id=subscription.id %}">
+                          Change
+                        </a>
+                      </div>
+                    {% endif %}
                   </div>
                 </li>
               {% endwith %}
