@@ -175,10 +175,15 @@
 
             <li class="list-group-item">
               <div class="row">
-                {% if subscription and subscription.is_cancelled %}
+                {% if subscription and subscription.status == 'cancelled' %}
                   <div class="col">
                     <p class="h4 mb-0">Subscription Cancelled</p>
                     <p class="x-small subtitle">This subscription has been cancelled. :(</p>
+                  </div>
+                {% elif subscription and subscription.status == 'expired' %}
+                  <div class="col">
+                    <p class="h4 mb-0">Subscription Cancelled</p>
+                    <p class="x-small subtitle">This subscription has expired.</p>
                   </div>
                 {% elif subscription.status == 'pending-cancellation' %}
                   <div class="col">
