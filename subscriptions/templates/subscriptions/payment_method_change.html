@@ -8,16 +8,25 @@
 
   <div class="settings-billing">
     <div>
-      <div class="alert alert-warning" role="alert">
-
-        <span>Your {{ subscription.plan.name }} subscription is currently <span
-          class="font-weight-bolder">{{ subscription.get_status_display|lower }}</span>.</span>
-
+      <div class="alert alert-{% if subscription.status == 'active' %}primary{% else %}warning{% endif %}" role="alert">
+        <span>
+          Your {{ subscription.plan.name }} subscription is currently
+          <span class="font-weight-bolder">{{ subscription.get_status_display|lower }}</span>.
+        </span>
       </div>
-      <p>
-        <strong>{{ current_payment_method.recognisable_name }}</strong> is used as payment method.
-        Feel free to change it below.
-      </p>
+
+      {% if current_payment_method %}
+        <p>
+          <strong>{{ current_payment_method.recognisable_name }}</strong> is used as payment method.
+          Feel free to change it below.
+        </p>
+      {% else %}
+        <div class="alert alert-danger" role="alert">
+          <i class="material-icons icon-inline">warning_amber</i>
+          You subscription is using an unsupported payment method,
+          please use the form below to change it.
+        </div>
+      {% endif %}
     </div>
 
     <form id="payment-form" class="checkout-form" method="post"
