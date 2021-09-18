@@ -13,6 +13,7 @@ from comments.models import Comment
 from comments.queries import get_annotated_comments
 from comments.views.common import comments_to_template_type
 from films.models import Asset, Collection, Film, ProductionLogEntryAsset, Like, ProductionLog
+import common.queries
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -373,3 +374,10 @@ def set_asset_like(*, asset_pk: int, user_pk: int, like: bool) -> int:
         Like.objects.filter(asset_id=asset_pk, user_id=user_pk).delete()
 
     return Like.objects.filter(asset_id=asset_pk).count()
+
+
+def should_show_landing_page(request: HttpRequest, film: Film) -> bool:
+    """Return true if the given film is "locked" and a landing page should be shown for it."""
+    return film.show_landing_page and (
+        request.user.is_anonymous or not common.queries.has_active_subscription(request.user)
+    )

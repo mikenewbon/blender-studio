@@ -16,6 +16,7 @@ footer.container-xl {
   padding: $spacer;
   margin-bottom: $spacer;
   margin-top: auto;
+  z-index: 1;
 
   ul {
     @include list-unstyled;

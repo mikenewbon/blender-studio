@@ -48,6 +48,9 @@ class Film(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Mo
         default=False,
         help_text='Display latest blog posts on the film page.',
     )
+    show_landing_page = models.BooleanField(
+        default=False, help_text='Show a landing page to non-subscribers instead of film content'
+    )
 
     class Meta:
         ordering = ('-release_date',)

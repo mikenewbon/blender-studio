@@ -21,3 +21,70 @@
   height: $profile-size;
   width: $profile-size;
 }
+
+// Sprite Fright Landing Page
+.image-float-section {
+  margin: 0 0 $spacer * 2;
+
+  @include media-breakpoint-up(md) {
+    padding: 5vw 0;
+    margin: 10vw 0;
+  }
+}
+
+.image-float-container {
+  position: relative;
+}
+
+.image-float {
+  @include media-breakpoint-up(md) {
+    position: absolute;
+    transform: translateY(-50%);
+    max-width: 40vw;
+  }
+
+  &-left {
+    right: 0;
+  }
+
+  max-width: 100%;
+}
+
+.flow-cards {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.flow-cards-inner{
+  white-space: nowrap;
+  animation: flow-card 30s linear infinite;
+  width: 200vw;
+  display: flex;
+
+  &.reverse {
+    animation-direction: reverse;
+  }
+  @include media-breakpoint-down(md) {
+    animation-duration: 20s;
+  }
+}
+
+.flow-card {
+  width: 15vw;
+  margin: $spacer / 2;
+  border-radius: $border-radius;
+  @include media-breakpoint-down(md) {
+    width: 30vw;
+  }
+}
+
+@keyframes flow-card {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100vw);
+  }
+}

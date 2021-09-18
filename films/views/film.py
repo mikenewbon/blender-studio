@@ -6,7 +6,12 @@ from django.views.decorators.http import require_safe
 
 from common.queries import has_active_subscription
 from films.models import Film, FilmFlatPage
-from films.queries import get_production_logs_page, get_current_asset, get_featured_assets
+from films.queries import (
+    get_production_logs_page,
+    get_current_asset,
+    get_featured_assets,
+    should_show_landing_page,
+)
 
 
 @require_safe
@@ -88,7 +93,10 @@ def film_detail(request: HttpRequest, film_slug: str) -> HttpResponse:
     if film.show_production_logs_as_featured:
         context['production_logs_page'] = get_production_logs_page(film)
 
-    return render(request, 'films/film_detail.html', context)
+    template_file = 'films/film_detail.html'
+    if should_show_landing_page(request, film):
+        template_file = 'films/film_landing_page.html'
+    return render(request, template_file, context)
 
 
 @require_safe

@@ -2,11 +2,18 @@
 from django.db.models.query import QuerySet
 from django.http import Http404
 from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
+from django.urls.base import reverse
 from django.views.generic import dates, detail
 
 from common.queries import has_active_subscription
 from films.models import Film, ProductionLog
-from films.queries import get_production_logs, get_previous_production_log, get_next_production_log
+from films.queries import (
+    get_next_production_log,
+    get_previous_production_log,
+    get_production_logs,
+    should_show_landing_page,
+)
 
 
 def _get_shared_context(request):
@@ -29,7 +36,20 @@ def _get_shared_context(request):
     }
 
 
-class ProductionLogDetailView(detail.DetailView):
+class LandingPageMixin:
+    """Possibly redirect to film landing page instead of showing the content."""
+
+    def render_to_response(self, context, *args, **kwargs):
+        """Redirect non-subscribers to film landing page if this film is configured so."""
+        film = context.get('film')
+        if film and should_show_landing_page(self.request, film):
+            return redirect(
+                reverse('film-detail', kwargs={'film_slug': film.slug}), permanent=False
+            )
+        return super().render_to_response(context, *args, **kwargs)
+
+
+class ProductionLogDetailView(LandingPageMixin, detail.DetailView):
     """Display a single production log."""
 
     model = ProductionLog
@@ -78,7 +98,7 @@ class _ProductionLogViewMixin:
         return get_production_logs(film)
 
 
-class ProductionLogView(_ProductionLogViewMixin, dates.ArchiveIndexView):
+class ProductionLogView(_ProductionLogViewMixin, LandingPageMixin, dates.ArchiveIndexView):
     """Displays the latest production logs for the :model:`films.Film` with the given slug.
 
     Also fetches the related log entries (:model:`films.ProductionLogEntry`), and
@@ -125,7 +145,7 @@ class ProductionLogView(_ProductionLogViewMixin, dates.ArchiveIndexView):
         return context
 
 
-class ProductionLogMonthView(_ProductionLogViewMixin, dates.MonthArchiveView):
+class ProductionLogMonthView(_ProductionLogViewMixin, LandingPageMixin, dates.MonthArchiveView):
     """Display film production logs paginated by month.
 
     Also fetches the related log entries (:model:`films.ProductionLogEntry`), and

@@ -1,0 +1,316 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% load common_extras %}
+{% load pipeline %}
+
+{% block title_append %} - {{ film.title }}{% endblock title_append %}
+
+{% block meta %}
+  {% firstof asset.url as url %}
+  {% firstof asset.description film.description as description %}
+  {% firstof asset.static_asset.thumbnail_m_url film.thumbnail_m_url as image_url %}
+  {% if asset and asset.collection.name %}
+    {% capture title %}{{ film.title }} - {{ asset.collection.name }}: {{ asset.name }}{% endcapture %}
+  {% elif asset %}
+    {% capture title %}{{ film.title }} - {{ asset.name }}{% endcapture %}
+  {% endif %}
+  {% firstof title film.title as title %}
+  {% include 'common/components/meta.html' %}
+{% endblock %}
+
+
+
+{% block content %}
+
+  <div class="jumbotron jumbotron-fluid jumbotron-overlay full-height-bg header spacer-n">
+
+    <div class="jumbotron-bg-wrapper">
+      <img src="{% static "films/images/sprite-fright/sprite-fright-clouds.png" %}" alt="{{ film.title }}" class="jumbotron-bg">
+    </div>
+
+    <div class="container-xl">
+      <div class="row">
+        <div class="col">
+          <div class="jumbotron-body">
+
+            <div class="spacer"></div>
+            <div class="row">
+
+              <div class="col-md-4">
+                {% include "common/components/helpers/image_resize.html" with alt=film.title classes="img-fluid rounded mb-2 mb-md-0" img_source=film.poster width="700" %}
+              </div>
+
+              <div class="col-md-6 offset-md-1 align-self-center">
+                {% comment %} <img class="mb-3 film-logo" src="{{ film.logo.url }}" alt="{{ film.title }} Logo"> {% endcomment %}
+                <h1>{{ film.title }}</h1>
+                <p class="mb-2">
+                  {{ film.summary|linebreaksbr }}
+                </p>
+                <p class="mb-2">
+                  Blender Studio is the creative part of the Blender HQ. A dedicated team of artists and developers challenge themselves with creative-technical targets to help Blender users and to drive Blender development forward. This happens in an open source production environment and by sharing everything they make in an open and free license.
+                </p>
+                <p class="mb-3">Want to know more? Join the studio today and help the team to create & share.</p>
+
+                <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center mb-n2">
+                  <a class="btn btn-primary mr-2 mb-2" href="{% url 'subscriptions:join' %}">Subscribe to get access!</a>
+                  <div class="d-inline-block">
+                    <p class="mb-2 small">Access to all training, assets<br>and films for €9.90/month</p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Blog Posts -->
+  <section class="mb-4">
+    <div class="container-xl">
+
+      <!-- Latest Blog Posts -->
+      {% with subtitle="Read the latest news about "|add:film.title|add:"." %}
+        {% url 'post-list' as blog_url %}
+        {% include 'common/components/cards/card_carousel.html' with title="Latest Blog Posts" title_link=blog_url subtitle=subtitle slides=3 card_set=film_blog_posts|slice:":6" media_type="blog" id="latestPosts" %}
+      {% endwith %}
+
+    </div>
+  </section>
+
+  <!-- Storytelling (50-50) -->
+  <div class="image-float-section">
+    <div class="container-xl">
+      <div class="row ">
+
+        <div class="col-md-6">
+          <h1 class="mb-3">The Blender Studio levels up its storytelling super-powers!</h1>
+          <p>For this project, the Blender Studio team wanted to take a more story-focused approach to movie-making, as well as improving its 3D production pipeline. With Matthew Luhn (Pixar story artist veteran) as director, working with a team of 20+ artists and developers, this is Blender Studio’s most ambitious production to date.</p>
+          <p class="mb-3">All assets, film versions and know-how are being shared as part of the process.</p>
+          <div class="row">
+            <div class="col col-lg-4">
+              <p class="subtitle">Movie Versions</p>
+              <h1>124</h1>
+            </div>
+            <div class="col col-lg-4">
+              <p class="subtitle">Pre-Production Assets</p>
+              <h1>100+</h1>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-xl-5 offset-xl-1 h-0 align-self-center image-float-container order-first order-md-last">
+          <img src="{% static "films/images/sprite-fright/production-lessons.png" %}" alt="{{ film.title }}" class="image-float">
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Production Logs (50-50) -->
+  <section class="image-float-section">
+    <div class="container-xl">
+      <div class="row ">
+
+        <div class="col-md-5 h-0 align-self-center image-float-container">
+          <img src="{% static "films/images/sprite-fright/production-log.png" %}" alt="{{ film.title }}" class="image-float image-float-left">
+        </div>
+
+        <div class="col-md-6 offset-md-1">
+          <h1 class="mb-3">Follow the production progress, week by week</h1>
+          <p>Check the weekly progress of the team through “Production Logs”,  where artists share breakdowns, artwork and .blend files. This allows you to deep-dive into actual production content, and learn by example.</p>
+          <p class="mb-3">As an added bonus, check out the weekly updates on <a href="https://www.youtube.com/watch?v=YZCiaZwl37A&list=PLav47HAVZMjmgPa4t3-LZktQne67L3LPi">YouTube</a>!</p>
+          <div class="row">
+            <div class="col col-lg-4">
+              <p class="subtitle">Production Logs</p>
+              <h1>62</h1>
+            </div>
+            <div class="col col-lg-4">
+              <p class="subtitle">Artist Entries</p>
+              <h1>380+</h1>
+            </div>
+            <div class="col col-lg-4">
+              <p class="subtitle">Film Assets</p>
+              <h1>1900+</h1>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Pipeline (Card slide) -->
+  <section class="my-5">
+
+    <div class="container-xl">
+      <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+          <h1>Discover how we built our pipeline for film making!</h1>
+          <p>One target for the team was to improve and extend the production the pipeline, and to share those tools and insights with the community.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-cards">
+      <div class="flow-cards-inner">
+        <img src="{% static 'films/images/sprite-fright/cards/cloudrig.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/animcache.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/animsetup.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/contactsheet.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/kitsuaddon.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/animsetup.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/blenderpurge.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/cloudrig.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/contactsheet.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/kitsuaddon.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/blenderpurge.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/animcache.png' %}" class="flow-card" alt="Animation Caching">
+      </div>
+      <!-- <div class="flow-cards-inner reverse">
+        <img src="{% static 'films/images/sprite-fright/cards/blenderpurge.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/animsetup.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/cloudrig.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/kitsuaddon.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/blenderpurge.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/animcache.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/cloudrig.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/contactsheet.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/kitsuaddon.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/animcache.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/contactsheet.png' %}" class="flow-card" alt="Animation Caching">
+        <img src="{% static 'films/images/sprite-fright/cards/animsetup.png' %}" class="flow-card" alt="Animation Caching">
+      </div> -->
+    </div>
+
+  </section>
+
+  <!-- Production Lessons (50-50) -->
+  <div class="image-float-section">
+    <div class="container-xl">
+      <div class="row ">
+
+        <div class="col-md-6">
+          <h1 class="mb-3">Sharing Production Lessons</h1>
+          <p>During production, we regularly release short-form training to document techniques or creative processes.</p>
+          <p class="mb-3">For example: lead animator <strong class="text-white">Rik Schutte</strong> shows how he uses grease-pencil for animating smear frames for cartoony animation, and shading artist <strong class="text-white">Simon Thommes</strong> shares several procedural surfacing workflows.</p>
+          <div class="row">
+            <div class="col col-lg-4">
+              <p class="subtitle">Production Lessons</p>
+              <h1>30</h1>
+            </div>
+            <div class="col col-lg-4">
+              <p class="subtitle">Hours of content</p>
+              <h1>45+</h1>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-xl-5 offset-xl-1 h-0 align-self-center image-float-container order-first order-md-last">
+          <img src="{% static "films/images/sprite-fright/production-lessons.png" %}" alt="{{ film.title }}" class="image-float">
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured Gallery -->
+  <section class="mb-4">
+    <div class="container-xl">
+
+      <div class="row mb-3">
+        <div class="col text-center">
+          <h1 class="mb-0">Access all the content, .blend files included!</h1>
+          <p class="mb-0">Download over <strong class="text-white">5000 production files</strong> directly from Blender Studio.</p>
+        </div>
+      </div>
+
+      {% if featured_artwork %}
+        <div class="">
+          <div class="files row grid">
+            <div class="grid-sizer col-6 col-sm-6 col-md-4 col-lg-3"></div>
+            {% for asset in featured_artwork|slice:":12" %}
+              {% if asset.is_published or request.user.is_superuser or request.user.is_staff %}
+                {% include "common/components/file.html" with asset=asset site_context="featured_artwork" card_sizes="col-6 col-sm-6 col-md-4 col-lg-3" %}
+              {% endif %}
+            {% endfor %}
+
+          </div>
+        </div>
+      {% else %}
+        <div class="row">
+          <div class="col text-center">
+            <div class="bg-secondary py-4 rounded">
+              <h3 class="mb-0">No Featured Artwork to display</h3>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+    </div>
+  </section>
+
+  <!-- Subscribe Banner -->
+  <div class="jumbotron jumbotron-fluid jumbotron-overlay overlay-y py-3 py-md-6 mb-md-n5">
+
+    <div class="jumbotron-bg-wrapper">
+      <img src="{% static "films/images/sprite-fright/phil-log.png" %}" alt="{{ film.title }}" class="jumbotron-bg">
+    </div>
+
+    <div class="container-xl">
+      <div class="row">
+        <div class="col">
+          <div class="jumbotron-body">
+            <div class="row">
+              <div class="col-md-6">
+
+                <h1 class="mb-3">Subscribe & get insider access to Sprite Fright today!</h1>
+                <p class="mb-3">Join Blender Studio and get access to hundreds of hours of training, production assets and files from the Open Movies as well as a platform to learn at your own pace, in your own time.</p>
+
+                <div class="row mb-3">
+                  <div class="col col-lg-4">
+                    <h4>Follow along with movie production</h4>
+                  </div>
+                  <div class="col col-lg-4">
+                    <h4>Download film files, rigs and assets</h4>
+                  </div>
+                  <div class="col col-lg-4">
+                    <h4>Learn from our production lessons</h4>
+                  </div>
+                </div>
+
+
+                <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center mb-n2">
+                  <a class="btn btn-primary mr-2 mb-2" href="{% url 'subscriptions:join' %}">Subscribe to get access!</a>
+                  <div class="d-inline-block">
+                    <p class="mb-2 small">Access to all training, assets<br>and films for €9.90/month</p>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+{% endblock %}
+
+{% block scripts %}
+
+  {% if featured_artwork %}
+    {% javascript 'vendor_masonry' %}
+    <script>
+      makeGrid();
+    </script>
+  {% endif %}
+
+{% endblock scripts %}
