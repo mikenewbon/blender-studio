@@ -1169,7 +1169,7 @@ $close-text-shadow: 0 1px 0 $white !default;
 
 // Code
 
-$code-font-size: 87.5% !default;
+$code-font-size: $font-size-sm !default;
 $code-color: $pink !default;
 
 $kbd-padding-y: 0.2rem !default;

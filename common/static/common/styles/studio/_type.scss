@@ -113,3 +113,29 @@ a {
     font-weight: $font-weight-bold;
   }
 }
+
+code {
+  background: rgba(209, 82, 143, 0.1);
+  border: 1px solid #d1528f;
+  border-radius: 8px;
+  border-left-width: 8px;
+  padding: 10px;
+  display: block;
+  color: lighten($code-color, 15%);
+}
+
+pre {
+  background: rgba($pre-color, .1);
+  border: 1px solid $pre-color;
+  border-radius: $border-radius;
+  border-left-width: $border-radius;
+  padding: $spacer / 2;
+
+  code {
+    background: none;
+    border: none;
+    padding: 0;
+    border-radius: 0;
+    color: lighten($code-color, 15%);
+  }
+}
