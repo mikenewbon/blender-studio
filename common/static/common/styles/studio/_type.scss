@@ -124,10 +124,11 @@ code {
 
 pre {
   background: rgba($pre-color, .1);
-  border: 1px solid $pre-color;
+  border: 0px solid $pre-color;
   border-radius: $border-radius;
   border-left-width: $border-radius;
   padding: $spacer / 2;
+  font-size: inherit;
 
   code {
     background: none;
@@ -135,5 +136,13 @@ pre {
     padding: 0;
     border-radius: 0;
     color: lighten($code-color, 15%);
+    font-size: $code-font-size;
+  }
+}
+
+.editorial-text-area {
+  pre {
+    font-size: 1.2rem;
+    line-height: 1.25;
   }
 }
