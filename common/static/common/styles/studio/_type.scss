@@ -116,12 +116,10 @@ a {
 
 code {
   background: rgba(209, 82, 143, 0.1);
-  border: 1px solid #d1528f;
   border-radius: 8px;
-  border-left-width: 8px;
-  padding: 10px;
-  display: block;
+  padding: $spacer / 4;
   color: lighten($code-color, 15%);
+  vertical-align: middle;
 }
 
 pre {
