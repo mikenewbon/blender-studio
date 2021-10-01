@@ -130,6 +130,8 @@ pre {
   padding: $spacer / 2;
   font-size: inherit;
 
+  @include scroll-bar(#2c1e24, rgba($pre-color, .5));
+
   code {
     background: none;
     border: none;
