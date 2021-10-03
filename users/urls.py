@@ -16,6 +16,11 @@ urlpatterns = [
                 path('profile/', settings.ProfileView.as_view(), name='user-settings'),
                 path('billing/', settings.BillingView.as_view(), name='user-settings-billing'),
                 path('emails/', settings.EmailsView.as_view(), name='user-settings-emails'),
+                path(
+                    'production-credits/',
+                    settings.ProductionCreditsView.as_view(),
+                    name='user-settings-production-credits',
+                ),
                 path('delete/', settings.DeleteView.as_view(), name='user-settings-delete'),
             ]
         ),

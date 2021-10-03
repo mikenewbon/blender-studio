@@ -73,6 +73,9 @@ class ProductionLogDetailView(LandingPageMixin, detail.DetailView):
         )
         context['previous'] = get_previous_production_log(film_production_logs, production_log)
         context['next'] = get_next_production_log(film_production_logs, production_log)
+        if self.request.user.is_authenticated:
+            context['user_has_production_credit'] = self.request.user.production_credits.filter(film=self.object.film)
+
         return context
 
 
@@ -89,6 +92,10 @@ class _ProductionLogViewMixin:
         # Make sure `date_list` is an actual list, not a QuerySet, otherwise `|last` won't work
         if 'date_list' in context:
             context['date_list'] = list(context['date_list'])
+        if self.request.user.is_authenticated:
+            film_slug = self.request.resolver_match.kwargs['film_slug']
+            film = get_object_or_404(Film, slug=film_slug, is_published=True)
+            context['user_has_production_credit'] = self.request.user.production_credits.filter(film=film)
         return context
 
     def get_queryset(self) -> QuerySet:

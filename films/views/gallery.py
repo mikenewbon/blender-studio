@@ -66,6 +66,7 @@ def collection_list(request: HttpRequest, film_slug: str) -> HttpResponse:
         'user_can_edit_asset': (
             request.user.is_staff and request.user.has_perm('films.change_asset')
         ),
+        'user_has_production_credit': request.user.production_credits.filter(film=film),
         **drawer_menu_context,
         **get_current_asset(request),
     }

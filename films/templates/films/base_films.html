@@ -40,6 +40,11 @@
               Production Logs
             </a>
           {% endif %}
+          {% if user_has_production_credit %}
+            <a href="{% url 'production-credit' film_slug=film.slug %}" class="list-group-item small" style="color: red">
+              Production Credit
+            </a>
+          {% endif %}
           {% if user_can_edit_film %}
             <a href="{{ film.admin_url }}" class="list-group-item btn-icon small">
               Admin Edit

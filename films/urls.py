@@ -20,6 +20,11 @@ urlpatterns = [
     path('<slug:film_slug>/', film.film_detail, name='film-detail'),
     path('<slug:film_slug>/gallery/', gallery.collection_list, name='film-gallery'),
     path(
+        '<slug:film_slug>/production-credit/',
+        film.ProductionCreditView.as_view(),
+        name='production-credit',
+    ),
+    path(
         '<slug:film_slug>/production-logs/',
         production_log.ProductionLogView.as_view(),
         name='film-production-logs',

@@ -47,6 +47,18 @@ class EmailsView(LoginRequiredMixin, TemplateView):
         return redirect(reverse('user-settings-emails'))
 
 
+class ProductionCreditsView(LoginRequiredMixin, TemplateView):
+    """View to handle visibility of a user credit for the film."""
+
+    template_name = 'users/settings/production_credits.html'
+
+    def get_context_data(self):
+        """Add credits to the context."""
+        context = super().get_context_data()
+        context['credits'] = self.request.user.production_credits.all()
+        return context
+
+
 class DeleteView(LoginRequiredMixin, TemplateView):
     """Template view where account deletion can be requested."""
 

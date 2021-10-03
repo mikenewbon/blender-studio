@@ -1,17 +1,33 @@
 # noqa: D100
-from django.http import HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.forms import ModelForm, widgets
+from django.http import HttpResponse, HttpResponseNotAllowed
 from django.http.request import HttpRequest
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 from django.views.decorators.http import require_safe
+from django.views.generic import TemplateView
 
 from common.queries import has_active_subscription
-from films.models import Film, FilmFlatPage
+from films.models import Film, FilmFlatPage, FilmProductionCredit
 from films.queries import (
     get_production_logs_page,
     get_current_asset,
     get_featured_assets,
     should_show_landing_page,
 )
+
+
+class FilmProductionCreditForm(ModelForm):
+    """Manage user production credit."""
+
+    class Meta:
+        model = FilmProductionCredit
+        fields = ['is_public']
+        widgets = {
+            'is_public': widgets.CheckboxInput,
+        }
+        help_texts = {'is_public': 'Include my name in the end credits.'}
 
 
 @require_safe
@@ -85,6 +101,7 @@ def film_detail(request: HttpRequest, film_slug: str) -> HttpResponse:
         'user_can_edit_asset': (
             request.user.is_staff and request.user.has_perm('films.change_asset')
         ),
+        'user_has_production_credit': request.user.production_credits.filter(film=film),
         'film_blog_posts': film.posts.all()
         if request.user.is_staff
         else film.posts.filter(is_published=True),
@@ -132,5 +149,35 @@ def flatpage(request: HttpRequest, film_slug: str, page_slug: str) -> HttpRespon
         'user_can_edit_flatpage': (
             request.user.is_staff and request.user.has_perm('films.change_filmflatpage')
         ),
+        'user_has_production_credit': request.user.production_credits.filter(film=film),
     }
     return render(request, 'films/flatpage.html', context)
+
+
+class ProductionCreditView(LoginRequiredMixin, TemplateView):
+    """View to handle visibility of a user credit for the film."""
+
+    def get_film(self, film_slug):
+        return get_object_or_404(Film, slug=film_slug, is_published=True)
+
+    def get_credit(self, film):
+        return get_object_or_404(FilmProductionCredit, user=self.request.user, film=film)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['film'] = self.get_film(kwargs['film_slug'])
+        context['credit'] = self.get_credit(context['film'])
+        context['form'] = FilmProductionCreditForm(instance=context['credit'])
+        return context
+
+    def post(self, request, **kwargs):
+        """Change is_public flag for this credit."""
+        film = self.get_film(kwargs['film_slug'])
+        credit = self.get_credit(film)
+        if not credit.is_editable:
+            return HttpResponseNotAllowed(['GET'], reason='Credit is not editable.')
+        form = FilmProductionCreditForm(request.POST, instance=self.get_credit(film))
+        form.save()
+        return redirect(reverse('production-credit', kwargs={'film_slug': film.slug}))
+
+    template_name = 'films/production_credit.html'
