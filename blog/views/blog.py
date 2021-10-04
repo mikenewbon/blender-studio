@@ -38,6 +38,9 @@ class PostDetail(DetailView):
             'blog.change_post'
         )
 
+        if post.film and post.author.film_crew.filter(film=post.film):
+            context['user_film_role'] = post.author.film_crew.filter(film=post.film)[0].role
+
         # Comment threads
         comments: List[Comment] = get_annotated_comments(post, self.request.user.pk)
         context['comments'] = comments_to_template_type(

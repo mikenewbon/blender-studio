@@ -5,7 +5,9 @@
       </div>
       <div class="col-auto">
         <p class="profile-name h4 mb-0">{{ post.author.full_name }}</p>
-        <p class="profile-title subtitle text-white-50 x-small">Author</p>
+        <p class="profile-title subtitle text-white-50 x-small">
+          {{ user_film_role|default_if_none:"Author" }}
+        </p>
       </div>
     </div>
   </div>
