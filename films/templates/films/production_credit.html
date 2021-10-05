@@ -15,6 +15,13 @@
             you add it to your Blender ID at <a href="https://id.blender.org/settings/profile">id.blender.org</a>.
             Then come back to configure your credit.</p>
         {% else %}
+          <div class="notice-wrapper">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+          </div>
           <form id="settings-form" method="POST" action="{% url 'production-credit' film_slug=film.slug %}">
             {% for field in form %}
               <div class="form-group form-check pl-0 mb-3">

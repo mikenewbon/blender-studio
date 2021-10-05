@@ -1,4 +1,5 @@
 # noqa: D100
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import ModelForm, widgets
 from django.http import HttpResponse, HttpResponseNotAllowed
@@ -159,6 +160,8 @@ def flatpage(request: HttpRequest, film_slug: str, page_slug: str) -> HttpRespon
 class ProductionCreditView(LoginRequiredMixin, TemplateView):
     """View to handle visibility of a user credit for the film."""
 
+    template_name = 'films/production_credit.html'
+
     def get_film(self, film_slug):
         return get_object_or_404(Film, slug=film_slug, is_published=True)
 
@@ -180,6 +183,5 @@ class ProductionCreditView(LoginRequiredMixin, TemplateView):
             return HttpResponseNotAllowed(['GET'], reason='Credit is not editable.')
         form = FilmProductionCreditForm(request.POST, instance=self.get_credit(film))
         form.save()
-        return redirect(reverse('production-credit', kwargs={'film_slug': film.slug}))
-
-    template_name = 'films/production_credit.html'
+        messages.add_message(request, messages.INFO, 'Your preference has been saved.')
+        return self.render_to_response(context=self.get_context_data(**kwargs))
