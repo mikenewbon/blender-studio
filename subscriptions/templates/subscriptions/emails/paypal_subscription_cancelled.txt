@@ -1,0 +1,33 @@
+{% load subscriptions %}Dear {% firstof user.customer.full_name user.customer.billing_address.full_name user.full_name user.email %},
+
+As you may have heard, Blender Cloud's subscription system recently got a new shiny update,
+more on that in the blog post https://cloud.blender.org/blog/subscription-system-update-2021/ .
+
+Due to this update, the old PayPal Subscriptions payment method is no longer supported.
+This means that PayPal's billing agreement that was used to pay for subscription #{{ subscription.pk }} has been cancelled,
+and no more charges will be made until subscription's payment method is updated.
+
+For this reason, we ask you to update the payment method using the following link:
+
+    {{ site_url }}{% url "subscriptions:payment-method-change" subscription_id=subscription.pk %}
+
+There you can choose to use the same PayPal account, however going through the process of updating the payment method is still necessary.
+
+Subscription information:
+-------------------------
+Subscription #: 			{{ subscription.id }}
+Renewal type: 			{{ subscription.collection_method }}
+Renewal period: 			{{ subscription|renewal_period }}{% with taxable=subscription.taxable %}
+Recurring total: 			{{ taxable.price.with_currency_symbol }}{% endwith %}
+Payment method: 		PayPal Billing Agreement {{ billing_agreement_id }} (cancelled)
+Last payment: 			{{ billing_agreement_last_payment_date|date }}
+Payment due: 			{{ subscription.next_payment|date }}
+
+In case you choose not to update the subscription, it will be cancelled a few weeks after payment due date.
+
+We hope for your understanding and thank you for your continued support! 🧡
+
+--
+Best regards,
+
+Blender Cloud Team

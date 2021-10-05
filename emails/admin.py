@@ -1,9 +1,12 @@
+from datetime import timedelta
+from decimal import Decimal
 import logging
 
 from django.conf import settings
 from django.contrib import admin, messages
 from django.contrib.auth import get_user_model
 from django.template import Template, Context
+from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 import anymail.exceptions
@@ -11,6 +14,7 @@ import django.core.mail
 
 import looper.admin.mixins
 import looper.models
+import looper.taxes
 
 from blog.models import Post
 from common.queries import get_latest_trainings_and_production_lessons
@@ -41,7 +45,13 @@ class EmailAdmin(admin.ModelAdmin):
     rendered_html.allow_tags = True
     rendered_html.short_description = "Preview"
 
-    list_display = ['subject', 'from_email', 'to']
+    def was_sent(self, obj):
+        """Display yes/no icon sent status."""
+        return obj.date_sent is not None
+
+    was_sent.boolean = True
+
+    list_display = ['subject', 'from_email', 'to', 'was_sent']
     readonly_fields = ['rendered_html', 'date_sent']
     actions = ['send']
 
@@ -83,6 +93,7 @@ class SubscriptionEmailPreviewAdmin(looper.admin.mixins.NoAddDeleteMixin, EmailA
         """Construct the Email on th fly from known subscription email templates."""
         user = User()
         user.customer = looper.models.Customer(full_name='Jane Doe')
+        now = timezone.now()
         subscription = looper.models.Subscription(
             id=1234567890,
             user=user,
@@ -91,6 +102,11 @@ class SubscriptionEmailPreviewAdmin(looper.admin.mixins.NoAddDeleteMixin, EmailA
                 gateway_id=1,
                 recognisable_name='Fake Credit Card payment method',
             ),
+            price=1000,
+            tax=160,
+            tax_type=looper.taxes.TaxType.VAT_CHARGE.value,
+            tax_rate=Decimal(19),
+            next_payment=now + timedelta(days=10),
         )
         order = looper.models.Order(subscription=subscription)
         context = {
@@ -124,6 +140,7 @@ class SubscriptionEmailPreviewAdmin(looper.admin.mixins.NoAddDeleteMixin, EmailA
             'payment_failed',
             'managed_notification',
             'subscription_expired',
+            'paypal_subscription_cancelled',
         ):
             emails.append(self.get_object(request, object_id=mail_name))
         return emails

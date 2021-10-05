@@ -24,6 +24,12 @@ class Email(mixins.CreatedUpdatedMixin, models.Model):
     )
     message = models.TextField(help_text="Plain text body of the email", null=False, blank=False)
     html_message = models.TextField(help_text="HTML version of the email", null=False, blank=False)
+    base_html_template = models.CharField(
+        default='emails/email.html',
+        blank=True,
+        max_length=255,
+        help_text='Base template to use when rendering the HTML version of the email',
+    )
 
     date_sent = models.DateTimeField(null=True, blank=True)
 
@@ -31,7 +37,9 @@ class Email(mixins.CreatedUpdatedMixin, models.Model):
         return f'Email {self.subject} from {self.from_email}'
 
     def render_html(self):
-        return render_to_string('emails/email.html', {'email': self, **get_template_context()})
+        if not self.base_html_template:
+            return self.html_message
+        return render_to_string(self.base_html_template, {'email': self, **get_template_context()})
 
     def send(self):
         """Send this email."""

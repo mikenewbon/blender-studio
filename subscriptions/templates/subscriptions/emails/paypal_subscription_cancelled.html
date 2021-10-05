@@ -1,0 +1,116 @@
+{% extends "emails/email_base.html" %}
+{% load subscriptions %}
+
+{% block header_logo %}
+  {# have a title instead of the logo with the remote image #}
+  <div style="text-align: center; font-weight: bold;">{{ subject }}</div>
+{% endblock header_logo %}
+
+{% block body %}
+  <p>Dear {% firstof user.customer.full_name user.customer.billing_address.full_name user.full_name user.email %},</p>
+  <p>
+    As you may have heard, Blender Cloud's subscription system recently got a new shiny update,
+    more on that in <a href="https://cloud.blender.org/blog/subscription-system-update-2021/">the blog post</a>.
+  </p>
+  <p>Due to this update, the old PayPal Subscriptions payment method is no longer supported.</p>
+  <p>
+    This means that PayPal's billing agreement that was used to pay for subscription #{{ subscription.pk }} has been cancelled,
+    and <b>no more charges will be made until subscription's payment method is updated</b>.
+  </p>
+  <p>For this reason, we ask you to update the payment method using the following link:</p>
+  <p style="text-align: center">
+    <a style="
+      text-decoration: none;
+      background-color: #009eff;
+      border-bottom-color: #009eff;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+      border-bottom-style: solid;
+      border-bottom-width: 0px;
+      border-image-source: none;
+      border-left-color: #009eff;
+      border-left-style: solid;
+      border-left-width: 0px;
+      border-right-color: #009eff;
+      border-right-style: solid;
+      border-right-width: 0px;
+      border-top-color: #009eff;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      border-top-style: solid;
+      border-top-width: 0px;
+      box-sizing: border-box;
+      color: #ffffff;
+      cursor: pointer;
+      display: inline-block;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 16px;
+      margin-bottom: 0px;
+      margin-left: 0px;
+      margin-right: 0px;
+      margin-top: 0px;
+      overflow: visible;
+      overflow-x: visible;
+      overflow-y: visible;
+      padding-bottom: 14px;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-top: 14px;
+      text-align: center;
+      text-transform: none;
+      vertical-align: middle;
+      width: auto;" href="{{ site_url }}{% url "subscriptions:payment-method-change" subscription_id=subscription.pk %}">Update payment method</a>
+  </p>
+  <p>There you can choose to use the same PayPal account, however going through the process of updating the payment method is still necessary.</p>
+
+  <h3>Subscription information:</h3>
+  <hr/>
+  <table style="
+    color: #C7C7C7;
+    font-family: 'Lucida Grande', 'Helvetica Neue', 'Helvetica', 'Arial', 'Verdana', sans-serif;
+    ">
+    <tbody>
+      <tr>
+        <td>Subscription #:</td>
+        <td style="padding-left: 1em;">{{ subscription.id }}</td>
+      </tr>
+      <tr>
+        <td>Renewal type:</td>
+        <td style="padding-left: 1em;">{{ subscription.collection_method }}</td>
+      </tr>
+      <tr>
+        <td>Renewal period:</td>
+        <td style="padding-left: 1em;">{{ subscription|renewal_period }}</td>
+      </tr>
+      {% with taxable=subscription.taxable %}
+        <tr>
+          <td>Recurring total:</td>
+          <td style="padding-left: 1em;">{{ taxable.price.with_currency_symbol }}</td>
+        </tr>
+      {% endwith %}
+      <tr>
+        <td>Payment method:</td>
+        <td style="padding-left: 1em;">PayPal Billing Agreement {{ billing_agreement_id }} <b>(cancelled)</b></td>
+      </tr>
+      <tr>
+        <td>Last payment:</td>
+        <td style="padding-left: 1em;">{{ billing_agreement_last_payment_date|date }}</td>
+      </tr>
+      <tr>
+        <td>Payment due:</td>
+        <td style="padding-left: 1em;">{{ subscription.next_payment|date }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>In case you choose not to update the subscription, it will be cancelled a few weeks after payment due date.</p>
+
+  <p>We hope for your understanding and thank you for your support! 🧡</p>
+
+  <p>
+    --<br />
+    Best regards,<br />
+
+    Blender Cloud Team
+  </p>
+{% endblock body %}
