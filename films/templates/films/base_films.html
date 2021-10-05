@@ -40,10 +40,12 @@
               Production Logs
             </a>
           {% endif %}
-          {% if user_has_production_credit %}
+          {% if user_has_production_credit or credit %}
             <a href="{% url 'production-credit' film_slug=film.slug %}" class="list-group-item small">
               Production Credit
-              <i class="profile-subscription-badge unsubscribed material-icons">priority_high</i>
+              {% if not credit.is_public %}
+                <i class="profile-subscription-badge unsubscribed material-icons">priority_high</i>
+              {% endif %}
             </a>
           {% endif %}
           {% if user_can_edit_film %}

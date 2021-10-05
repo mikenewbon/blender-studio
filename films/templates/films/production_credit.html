@@ -5,38 +5,38 @@
 {% block content %}
   <div class="container-fluid pt-4">
     <section class="flat-page-content">
-    <h1>Your {{ film.title }} Production Credit</h1>
-    {% if credit.is_editable %}
-      <p class="mb-3">Thank you for supporting the <strong>{{ film.title }}</strong> production.
-        Fill in the form to get your name in the end credits! If you don't want your name to be in the credits,
-        no action is required.</p>
-      {% if not request.user.full_name %}
-        <p class="alert alert-danger text-danger">It looks like your name is missing from your profile. Make sure
-          you add it to your Blender ID at <a href="https://id.blender.org/settings/profile">id.blender.org</a>.
-          Then come back to configure your credit.</p>
+      <h1>Your {{ film.title }} Production Credit</h1>
+      {% if credit.is_editable %}
+        <p class="mb-3">Thank you for supporting the <strong>{{ film.title }}</strong> production.
+          Fill in the form to get your name in the end credits! If you don't want your name to be in the credits,
+          no action is required.</p>
+        {% if not request.user.full_name %}
+          <p class="alert alert-danger text-danger">It looks like your name is missing from your profile. Make sure
+            you add it to your Blender ID at <a href="https://id.blender.org/settings/profile">id.blender.org</a>.
+            Then come back to configure your credit.</p>
+        {% else %}
+          <form id="settings-form" method="POST" action="{% url 'production-credit' film_slug=film.slug %}">
+            {% for field in form %}
+              <div class="form-group form-check pl-0 mb-3">
+                {% csrf_token %}
+                {{ field.errors }}
+                <label class="form-check-label">
+                  {{ field }}
+                  {{ field.help_text }}
+                </label>
+              </div>
+            {% endfor %}
+            <p class="mb-3">The name <strong class="badge badge-warning">{{ request.user.full_name }}</strong> will be used.
+              If you wish to change it, visit <a href="https://id.blender.org/settings/profile">id.blender.org</a>.</p>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </form>
+        {% endif %}
       {% else %}
-      <form id="settings-form" method="POST" action="{% url 'production-credit' film_slug=film.slug %}">
-        {% for field in form %}
-          <div class="form-group form-check pl-0 mb-3">
-            {% csrf_token %}
-            {{ field.errors }}
-            <label class="form-check-label">
-              {{ field }}
-              {{ field.help_text }}
-            </label>
-          </div>
-        {% endfor %}
-        <p class="mb-3">The name <strong class="badge badge-warning">{{ request.user.full_name }}</strong> will be used.
-          If you wish to change it, visit <a href="https://id.blender.org/settings/profile">id.blender.org</a>.</p>
-        <button type="submit" class="btn btn-primary">Save changes</button>
-      </form>
+        <p class="mb-3">Thank you for supporting the <strong>{{ film.title }}</strong> production.</p>
+        {% if credit.is_public %}
+          <p>You have a credit as <strong class="badge badge-warning">{{ credit.display_name }}</strong> in the end scroll of the film.</p>
+        {% endif %}
       {% endif %}
-    {% else %}
-      <p class="mb-3">Thank you for supporting the <strong>{{ film.title }}</strong> production.</p>
-      {% if credit.is_public %}
-        <p>You have a credit as <strong class="badge badge-warning">{{ credit.display_name }}</strong> in the end scroll of the film.</p>
-      {% endif %}
-    {% endif %}
     </section>
   </div>
 
