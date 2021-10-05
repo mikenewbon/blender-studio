@@ -41,8 +41,9 @@
             </a>
           {% endif %}
           {% if user_has_production_credit %}
-            <a href="{% url 'production-credit' film_slug=film.slug %}" class="list-group-item small" style="color: red">
+            <a href="{% url 'production-credit' film_slug=film.slug %}" class="list-group-item small">
               Production Credit
+              <i class="profile-subscription-badge unsubscribed material-icons">priority_high</i>
             </a>
           {% endif %}
           {% if user_can_edit_film %}
