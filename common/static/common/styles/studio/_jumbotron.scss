@@ -179,7 +179,7 @@ a.jumbotron {
 
   &.overlay-y {
     background:
-      linear-gradient(90.25deg, rgba(24, 24, 24, 0) 0.21%, rgba(24, 24, 24, 0.35) 19.45%, rgba(24, 24, 24, 0.241756) 80.53%, rgba(24, 24, 24, 0) 99.78%),
+      linear-gradient(90.25deg, rgba($dark, 0) 0.21%, rgba($dark, 0.35) 19.45%, rgba($dark, 0) 80.53%, rgba($dark, 0) 100%),
       radial-gradient(79.71% 49.95% at 50% 50.05%, rgba(24, 24, 24, 0) 53.87%, #181818 100%);
   }
 }
