@@ -127,3 +127,11 @@
 .border-right {
   border-right: 1px solid $highlight-white !important;
 }
+
+.notification-spot {
+  position: absolute;
+  top: $spacer / 4;
+  right: 0;
+  border-radius: 50%;
+  padding: $spacer / 4;
+}

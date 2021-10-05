@@ -41,10 +41,11 @@
             </a>
           {% endif %}
           {% if user_has_production_credit or credit %}
+
             <a href="{% url 'production-credit' film_slug=film.slug %}" class="list-group-item small">
               Production Credit
               {% if not credit.is_public %}
-                <i class="profile-subscription-badge unsubscribed material-icons">priority_high</i>
+                <span class="notification-spot bg-warning"></span>
               {% endif %}
             </a>
           {% endif %}
