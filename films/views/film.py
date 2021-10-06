@@ -4,8 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import ModelForm, widgets
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.http.request import HttpRequest
-from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse
+from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_safe
 from django.views.generic import TemplateView
 
@@ -162,13 +161,13 @@ class ProductionCreditView(LoginRequiredMixin, TemplateView):
 
     template_name = 'films/production_credit.html'
 
-    def get_film(self, film_slug):
+    def get_film(self, film_slug):  # noqa: D102
         return get_object_or_404(Film, slug=film_slug, is_published=True)
 
-    def get_credit(self, film):
+    def get_credit(self, film):  # noqa: D102
         return get_object_or_404(FilmProductionCredit, user=self.request.user, film=film)
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs):  # noqa: D102
         context = super().get_context_data(**kwargs)
         context['film'] = self.get_film(kwargs['film_slug'])
         context['credit'] = self.get_credit(context['film'])
