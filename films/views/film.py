@@ -151,7 +151,9 @@ def flatpage(request: HttpRequest, film_slug: str, page_slug: str) -> HttpRespon
         'user_can_edit_flatpage': (
             request.user.is_staff and request.user.has_perm('films.change_filmflatpage')
         ),
-        'user_has_production_credit': request.user.production_credits.filter(film=film),
+        'user_has_production_credit': (
+            request.user.is_authenticated and request.user.production_credits.filter(film=film)
+        ),
     }
     return render(request, 'films/flatpage.html', context)
 
