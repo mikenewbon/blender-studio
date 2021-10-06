@@ -52,7 +52,7 @@ class EmailAdmin(admin.ModelAdmin):
     was_sent.boolean = True
 
     list_display = ['subject', 'from_email', 'to', 'was_sent']
-    list_filter = ['reply_to', 'base_html_template']
+    list_filter = ['reply_to', 'base_html_template', 'date_sent']
     readonly_fields = ['rendered_html', 'date_sent']
     actions = ['send']
 
