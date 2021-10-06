@@ -225,12 +225,6 @@ class ConfirmAndPayView(_JoinMixin, LoginRequiredMixin, FormView):
             self.log.debug('Creating an new subscription for %s, %s', gateway, payment_method)
         collection_method = self.plan_variation.collection_method
         supported = set(gateway.provider.supported_collection_methods)
-        # FIXME(anna): looper only allows automatic collection with BraintreeGateway,
-        # which is what was required for DevFund, but we need to maintain what is
-        # possible with Cloud subscriptions in the Store,
-        # which allows manual plans with Braintree payment methods:
-        if isinstance(gateway.provider, looper.gateways.BraintreeGateway):
-            supported.add('manual')
         if collection_method not in supported:
             # FIXME(anna): this breaks plan selector because collection method
             # might not match the one selected by the customer.
