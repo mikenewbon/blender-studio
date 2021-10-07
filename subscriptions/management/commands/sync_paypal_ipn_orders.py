@@ -167,6 +167,8 @@ class Command(BaseCommand):  # noqa: D101
         Order.objects.bulk_create(sorted(self.orders_to_upsert, key=lambda x: x.created_at))
 
     def _order_from_transaction(self, subscription: Subscription, transaction) -> Order:
+        if not subscription:
+            return
         # assert transaction.status.lower() == 'completed', (
         #    f'Unexpected transaction status: {transaction.status}'
         # )
