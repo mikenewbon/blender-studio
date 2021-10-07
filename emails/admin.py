@@ -55,6 +55,7 @@ class EmailAdmin(admin.ModelAdmin):
     list_filter = ['reply_to', 'base_html_template', 'date_sent']
     readonly_fields = ['rendered_html', 'date_sent']
     actions = ['send']
+    search_fields = ['to', 'subject']
 
     def send(self, request, queryset):
         """Custom action for sending an email."""
