@@ -19,6 +19,12 @@ s3_client = boto3.client(
     aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
     aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
 )
+transcribe_client = boto3.client(
+    'transcribe',
+    region_name='eu-central-1',
+    aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+)
 
 
 @background()
@@ -123,3 +129,29 @@ def move_blob_from_upload_to_storage(key, **metadata):
         Bucket=settings.AWS_UPLOADS_BUCKET_NAME,
         Key=key,
     )
+
+
+# @background()
+def create_video_transcribing_job(static_asset_id: int):
+    """Create a video transcribing job."""
+    static_asset = models_static_assets.StaticAsset.objects.get(pk=static_asset_id)
+
+    import time
+
+    job_name = "job name"
+    job_uri = f"s3://{settings.AWS_STORAGE_BUCKET_NAME}/{static_asset.video.source.name}"
+    print(job_uri)
+    transcribe_client.start_transcription_job(
+        TranscriptionJobName=job_name,
+        Media={'MediaFileUri': job_uri},
+        MediaFormat=job_uri.split('.')[-1],
+        LanguageCode='en-US',
+        Subtitles={'Formats': ['vtt', 'srt']},
+    )
+    while True:
+        status = transcribe_client.get_transcription_job(TranscriptionJobName=job_name)
+        if status['TranscriptionJob']['TranscriptionJobStatus'] in ['COMPLETED', 'FAILED']:
+            break
+        print("Not ready yet...")
+        time.sleep(5)
+    print(status)

@@ -13,7 +13,7 @@ from django.utils.text import slugify
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
 from static_assets.models import License
-from static_assets.tasks import create_video_processing_job
+from static_assets.tasks import create_video_processing_job, create_video_transcribing_job
 import common.storage
 
 User = get_user_model()
@@ -110,6 +110,15 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
             return
         # Create a background job, using only hashable arguments
         create_video_processing_job(self.id)
+
+    def transcribe_video(self):
+        """Create video transcribing task if asset has correct type."""
+        if self.source_type != StaticAssetFileTypeChoices.video:
+            return
+        if not self.source:
+            return
+        # Create a background job, using only hashable arguments
+        create_video_transcribing_job(self.id)
 
     def clean(self):
         super().clean()
@@ -242,6 +251,12 @@ class VideoVariation(models.Model):
 
         if filename:
             return f'attachment; filename="{filename}"'
+
+
+class Subtitles(models.Model):
+    video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='subtitles')
+    language_code = models.CharField(blank=False, null=False, max_length=5)
+    source = models.FileField(upload_to=get_upload_to_hashed_path, blank=True, max_length=256)
 
 
 class Image(models.Model):

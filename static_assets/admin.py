@@ -23,9 +23,15 @@ class VideoVariationInline(nested_admin.NestedTabularInline):
     extra = 0
 
 
+class SubtitlesInline(nested_admin.NestedTabularInline):
+    model = static_assets.Subtitles
+    show_change_link = True
+    extra = 0
+
+
 class VideoInline(nested_admin.NestedTabularInline):
     model = static_assets.Video
-    inlines = [VideoVariationInline]
+    inlines = [VideoVariationInline, SubtitlesInline]
     show_change_link = True
     extra = 0
     readonly_fields = ['play_count']
@@ -33,7 +39,7 @@ class VideoInline(nested_admin.NestedTabularInline):
 
 @admin.register(static_assets.StaticAsset)
 class StaticAssetAdmin(AdminUserDefaultMixin, nested_admin.NestedModelAdmin):
-    actions = ['process_videos']
+    actions = ['process_videos', 'transcribe_videos']
     inlines = [ImageInline, VideoInline]
     autocomplete_fields = ['user', 'author', 'contributors']
     list_display = ['__str__', 'date_created', 'date_updated']
@@ -95,3 +101,19 @@ class StaticAssetAdmin(AdminUserDefaultMixin, nested_admin.NestedModelAdmin):
         self.message_user(request, "%s processing." % message_bit)
 
     process_videos.short_description = "Process videos for selected assets"
+
+    def transcribe_videos(self, request, queryset):
+        """For each asset, transcribe all videos attached if available."""
+        videos_transcribing_count = 0
+        for a in queryset:
+            a.transcribe_video()
+            videos_transcribing_count += 1
+        if videos_transcribing_count == 0:
+            message_bit = "No video is"
+        elif videos_transcribing_count == 1:
+            message_bit = "1 video is"
+        else:
+            message_bit = "%s videos are" % videos_transcribing_count
+        self.message_user(request, "%s transcribing." % message_bit)
+
+    transcribe_videos.short_description = "Transcribe videos for selected assets"
