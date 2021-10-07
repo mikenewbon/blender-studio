@@ -78,8 +78,8 @@ class Command(BaseCommand):  # noqa: D101
                 billing_agreement.id, api=self.api
             )
             logger.warning(
-                "Billing Agreement [%s] has state %s" % billing_agreement.id,
-                billing_agreement.state,
+                "Billing Agreement [%s] has state %s"
+                % (billing_agreement.id, billing_agreement.state),
             )
             # Would expect status has changed to Cancelled
             assert (
