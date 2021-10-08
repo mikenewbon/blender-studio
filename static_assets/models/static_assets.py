@@ -253,9 +253,15 @@ class VideoVariation(models.Model):
             return f'attachment; filename="{filename}"'
 
 
+class SubtitlesLanguageCodeChoices(models.TextChoices):
+    en_US = 'en-US', 'English'
+
+
 class Subtitles(models.Model):
     video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='subtitles')
-    language_code = models.CharField(blank=False, null=False, max_length=5)
+    language = models.CharField(
+        blank=False, null=False, max_length=5, choices=SubtitlesLanguageCodeChoices.choices
+    )
     source = models.FileField(upload_to=get_upload_to_hashed_path, blank=True, max_length=256)
 
 

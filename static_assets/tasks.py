@@ -143,7 +143,7 @@ def create_video_transcribing_job(static_asset_id: int):
         video=static_asset.video, language_code=language_code
     )
     if not subtitles.source.name:
-        filename = 'transcription.srt'
+        filename = 'transcription.vtt'
         output_path = get_upload_to_hashed_path(subtitles, filename)
         subtitles.source.name = str(output_path)
         subtitles.save()
@@ -152,7 +152,7 @@ def create_video_transcribing_job(static_asset_id: int):
     # The job name must be unique, but we want to reuse the storage paths
     job_suffix = str(int(time.time() * 1000))
     job_name = output_path.parts[-1].split('.')[0] + f'-{job_suffix}'
-    output_key = str(output_path).replace('.srt', '.json')
+    output_key = str(output_path).replace('.vtt', '.json')
     print(job_uri, job_name, job_suffix)
     transcribe_client.start_transcription_job(
         TranscriptionJobName=job_name,
@@ -161,7 +161,7 @@ def create_video_transcribing_job(static_asset_id: int):
         OutputBucketName=settings.AWS_STORAGE_BUCKET_NAME,
         MediaFormat=job_uri.split('.')[-1],
         LanguageCode=subtitles.language_code,
-        Subtitles={'Formats': ['srt']},
+        Subtitles={'Formats': ['vtt']},
     )
     while True:
         status = transcribe_client.get_transcription_job(TranscriptionJobName=job_name)
