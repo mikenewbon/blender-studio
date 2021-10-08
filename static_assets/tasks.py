@@ -2,6 +2,7 @@
 import logging
 import mimetypes
 import pathlib
+import time
 
 from background_task import background
 from django.conf import settings
@@ -132,13 +133,10 @@ def move_blob_from_upload_to_storage(key, **metadata):
     )
 
 
-# @background()
+# @background() FIXME(anna): make a background job before merging
 def create_video_transcribing_job(static_asset_id: int):
     """Create a video transcribing job."""
     static_asset = models_static_assets.StaticAsset.objects.get(pk=static_asset_id)
-
-    import time
-
     job_uri = f"s3://{settings.AWS_STORAGE_BUCKET_NAME}/{static_asset.video.source.name}"
     language_code = 'en-US'
     subtitles, is_new = models_static_assets.Subtitles.objects.get_or_create(
@@ -147,21 +145,23 @@ def create_video_transcribing_job(static_asset_id: int):
     if not subtitles.source.name:
         filename = 'transcription.srt'
         output_path = get_upload_to_hashed_path(subtitles, filename)
-        output_key = str(output_path)
-        subtitles.source.name = output_key
+        subtitles.source.name = str(output_path)
         subtitles.save()
     else:
         output_path = pathlib.PurePath(subtitles.source.name)
-    job_name = output_path.parts[-1].split('.')[0]
-    print(job_uri, job_name)
+    # The job name must be unique, but we want to reuse the storage paths
+    job_suffix = str(int(time.time() * 1000))
+    job_name = output_path.parts[-1].split('.')[0] + f'-{job_suffix}'
+    output_key = str(output_path).replace('.srt', '.json')
+    print(job_uri, job_name, job_suffix)
     transcribe_client.start_transcription_job(
         TranscriptionJobName=job_name,
         Media={'MediaFileUri': job_uri},
-        OutputKey=subtitles.source.name,
+        OutputKey=output_key,
         OutputBucketName=settings.AWS_STORAGE_BUCKET_NAME,
         MediaFormat=job_uri.split('.')[-1],
         LanguageCode=subtitles.language_code,
-        Subtitles={'Formats': ['vtt', 'srt']},
+        Subtitles={'Formats': ['srt']},
     )
     while True:
         status = transcribe_client.get_transcription_job(TranscriptionJobName=job_name)
