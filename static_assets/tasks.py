@@ -138,9 +138,9 @@ def create_video_transcribing_job(static_asset_id: int):
     """Create a video transcribing job."""
     static_asset = models_static_assets.StaticAsset.objects.get(pk=static_asset_id)
     job_uri = f"s3://{settings.AWS_STORAGE_BUCKET_NAME}/{static_asset.video.source.name}"
-    language_code = 'en-US'
+    language = 'en-US'
     subtitles, is_new = models_static_assets.Subtitles.objects.get_or_create(
-        video=static_asset.video, language_code=language_code
+        video=static_asset.video, language=language
     )
     if not subtitles.source.name:
         filename = 'transcription.vtt'
@@ -160,7 +160,7 @@ def create_video_transcribing_job(static_asset_id: int):
         OutputKey=output_key,
         OutputBucketName=settings.AWS_STORAGE_BUCKET_NAME,
         MediaFormat=job_uri.split('.')[-1],
-        LanguageCode=subtitles.language_code,
+        LanguageCode=subtitles.language,
         Subtitles={'Formats': ['vtt']},
     )
     while True:
