@@ -258,6 +258,9 @@ class SubtitlesLanguageCodeChoices(models.TextChoices):
 
 
 class Subtitles(models.Model):
+    class Meta:
+        verbose_name_plural = 'substitles'
+
     video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='subtitles')
     language = models.CharField(
         blank=False, null=False, max_length=5, choices=SubtitlesLanguageCodeChoices.choices
