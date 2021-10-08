@@ -9,6 +9,7 @@ from django.urls import reverse
 import boto3
 
 import static_assets.coconut.job
+from common.upload_paths import get_upload_to_hashed_path
 from static_assets.models import static_assets as models_static_assets
 
 
@@ -138,14 +139,28 @@ def create_video_transcribing_job(static_asset_id: int):
 
     import time
 
-    job_name = "job name"
     job_uri = f"s3://{settings.AWS_STORAGE_BUCKET_NAME}/{static_asset.video.source.name}"
-    print(job_uri)
+    language_code = 'en-US'
+    subtitles, is_new = models_static_assets.Subtitles.objects.get_or_create(
+        video=static_asset.video, language_code=language_code
+    )
+    if not subtitles.source.name:
+        filename = 'transcription.srt'
+        output_path = get_upload_to_hashed_path(subtitles, filename)
+        output_key = str(output_path)
+        subtitles.source.name = output_key
+        subtitles.save()
+    else:
+        output_path = pathlib.PurePath(subtitles.source.name)
+    job_name = output_path.parts[-1].split('.')[0]
+    print(job_uri, job_name)
     transcribe_client.start_transcription_job(
         TranscriptionJobName=job_name,
         Media={'MediaFileUri': job_uri},
+        OutputKey=subtitles.source.name,
+        OutputBucketName=settings.AWS_STORAGE_BUCKET_NAME,
         MediaFormat=job_uri.split('.')[-1],
-        LanguageCode='en-US',
+        LanguageCode=subtitles.language_code,
         Subtitles={'Formats': ['vtt', 'srt']},
     )
     while True:
