@@ -74,13 +74,7 @@
       <div class="row">
         {% for section in featured_sections|slice:':1' %}
           {% if section.static_asset.source_type == 'video' %}
-            {% include "common/components/video_player.html" with url=section.static_asset.source.url poster=section.thumbnail_m_url classes="col-12 col-md-6 mb-3 mb-md-0 rounded" subtitle=section.static_asset.video.subtitle %}
-            <h2>
-              {% for sbt in section.static_asset.video.subtitles.all %}
-                {{ sbt.get_language_display }}
-                {{ sbt.source.url }}
-              {% endfor %}
-            </h2>
+            {% include "common/components/video_player.html" with url=section.static_asset.source.url poster=section.thumbnail_m_url classes="col-12 col-md-6 mb-3 mb-md-0 rounded" subtitles=section.static_asset.video.subtitles.all %}
           {% endif %}
         {% endfor %}
         <div class="col-12 col-md-6 col-lg-5 offset-lg-1 d-flex flex-column justify-content-center">
