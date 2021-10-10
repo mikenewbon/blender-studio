@@ -12,14 +12,10 @@ Apps:
 
 To be extracted to a separate app:
  - [progress](#progress) - currently inside [training](#training)
-
-Not implemented yet:
- - [user and profile](#user-profile)
-
+ 
 Other:
- - **Project** - this word may refer to a film or a training. In production, there'll be exactly one
- storage location (GCS, S3, etc.) per project. We don't have a `Project` model at the moment, but
- there's a chance that it changes in the future.
+ - **Project** - this word may refer to a film or a training. We don't have a `Project` model at 
+   the moment, but there's a chance that it changes in the future.
  - flat pages - at the moment only used for the films' ["About" pages](#film-flat-pages).
 
 ### Models (simplified) hierarchy
@@ -223,14 +219,6 @@ to be portable, and independent of the other apps.
 ##### Licenses
 For now, licenses are only added to static assets (image, video, file).
 
-##### Storage locations
-Storage location is a place to store all the film-related or training-related files.
-In production, there's exactly one storage location (GCS, S3 bucket, etc.) per project,
-i.e. per film or per training.
-
-There's a plan to move all the 'production' resources to one S3 bucket, because apparently
-it will make handling them much easier.
-
 
 ## Subscriptions
 This has to be documented yet. It is not actually used at this stage.
@@ -253,12 +241,3 @@ A section can have comments (from the [comments](#comments) app, linked via the
 
 The training Asset model should not be confused with an identically named model in the
 films app.
-
-
-## User and Profile
-For now, we use the Django's default `User` model.
-
-In the future, we'll most likely have a `Profile` with a `OneToOneField` to `User`.
-It enables creating profiles without registering users, as well as swapping profiles
-easily when a new user, for whom a profile has been created by admin, registers an
-account (this has proved useful in the conference website).
