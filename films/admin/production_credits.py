@@ -17,6 +17,7 @@ class FilmProductionCreditAdmin(admin.ModelAdmin):
         'is_public',
     )
     list_filter = ['film', 'is_public']
+    search_fields = ['user__email', 'user__full_name', 'user__username']
     actions = ['generate_mailing_list_from_selected']
 
     def generate_mailing_list_from_selected(self, request, queryset):
