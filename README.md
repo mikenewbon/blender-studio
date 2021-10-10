@@ -1,15 +1,15 @@
 # Blender Studio
 
-Blender Studio is the creative hub for your projects, powered by Free and Open Source Software.
-Follow along with our expert team at your own pace - on every subject from Animation to UV unwrapping.
-Classes, workshops and production lessons with .blend files included.
-With 400+ hours of training and 1000's of production files, you're getting the best resources
-Blender has to offer.
+This is the publishing platform of Blender Studio, available on cloud.blender.org.
+
+By subscribing to Blender Cloud you support the creation of open content,
+the development of high-end production tools like Blender and access a
+unique set of learning and creative resources.
 
 
 ## Development
 
-The project is written in Django, with Django templates and some Java Script.
+The project is written in Django, with Django templates and some Javascript.
 
 The full developer documentation is in the [docs folder](docs).
 
