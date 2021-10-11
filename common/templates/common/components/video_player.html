@@ -1,5 +1,5 @@
 <div class="video-player {% if rounded %}rounded{% endif %} {% if classes %}{{ classes}}{% endif %}" {% if progress_url is not none %}data-progress-url="{{ progress_url }}"{% endif %} {% if start_position is not none %}data-start-position="{{ start_position }}"{% endif %}>
-  <video {% if asset.static_asset.video.loop %}loop{% endif %} playsinline controls data-poster="{{ poster }}">
+  <video {% if asset.static_asset.video.loop %}loop{% endif %} playsinline controls data-poster="{{ poster }}" crossorigin="anonymous">
     <source src="{{ url }}">
     {% for subtitle in subtitles %}
       <track kind="captions" label="{{ subtitle.get_language_display }}" src="{{ subtitle.source.url }}" srclang="{{ subtitle.language }}" {% if subtitle.id == 1 %}default{% endif %}/>
