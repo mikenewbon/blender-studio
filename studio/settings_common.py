@@ -359,9 +359,9 @@ AWS_S3_CUSTOM_DOMAIN = 'ddz4ak4pa3d19.cloudfront.net'
 # we take care of moving the file to AWS_STORAGE_BUCKET_NAME through a
 # background task.
 AWS_UPLOADS_BUCKET_NAME = 'blender-studio-uploads'
-AWS_HEADERS = {
+AWS_S3_OBJECT_PARAMETERS = {
     # Set max-age to 10 days
-    'Cache-Control': str('public, max-age=864000'),
+    'CacheControl': str('public, max-age=864000'),
 }
 # In order to set the same headers for already existing S3 keys,
 # --metadata-directive must be used, e.g.:
