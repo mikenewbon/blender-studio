@@ -7,7 +7,7 @@ There is the full-website search available everywhere by clicking on the magnify
 glass icon in the top right-hand corner of a page, and a training-specific search on the
 training home page.
 
-#### Full-website search
+### Full-website search
 For the main search, all the indexed documents are stored under one index, `studio`. This
 name (the uid of the index) is defined in settings.py, in the `MEILISEARCH_INDEX_UID`
 variable.
@@ -21,14 +21,14 @@ The models that are 'searchable', i.e. added to the index, are:
  - training.Section - belonging to a published training,
  - blog.Post - the published ones.
 
-#### Training search
+### Training search
 For the training search, there is a separate index `training` (`TRAINING_INDEX_UID`
 in settings.py). The searchable models are:
  - training.Training - the published ones,
  - training.Section - belonging to a published training,
  - films.Asset - only Production Lessons which are also published.
 
-### Indexing
+## Indexing
 Each document in any index needs to have a unique ID field. The field is called `search_id`
 and is generated based on the model and the object `pk`, e.g. `film_1` for the film with
 `pk=1`.
@@ -77,7 +77,7 @@ Nginx config can be found in the `var/www/config` directory. Add a `location` fo
 ```
     # Meilisearch
     location /s/ {
-    	rewrite /s/(.*) /$1  break;
+        rewrite /s/(.*) /$1  break;
         proxy_pass  http://127.0.0.1:7700;
     }
 ```
