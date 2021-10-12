@@ -5,6 +5,7 @@ import mimetypes
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, SuspiciousOperation
+from django.http import Http404
 from django.http.request import HttpRequest
 from django.http.response import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404
@@ -86,7 +87,9 @@ def video_track_view(request, pk: int, path: str):
     See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/track#attr-src
     """
     track = get_object_or_404(VideoTrack, pk=pk, source=path)
-    original_mimetype, _ = mimetypes.guess_type(track.source.name)
     with requests.get(track.source.url) as storage_response:
+        if storage_response.status_code != 200:
+            raise Http404()
+        original_mimetype, _ = mimetypes.guess_type(track.source.name)
         response = HttpResponse(storage_response.content, content_type=original_mimetype)
         return response
