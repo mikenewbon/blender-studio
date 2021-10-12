@@ -27,6 +27,7 @@ transcribe_client = boto3.client(
     aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
     aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
 )
+TRANSCRIBE_SOURCE_SIZE_LIMIT_BYTES = 2 * 1024 ** 3
 
 
 @background()
@@ -137,13 +138,21 @@ def move_blob_from_upload_to_storage(key, **metadata):
 def create_video_transcribing_job(static_asset_id: int):
     """Create a video transcribing job."""
     static_asset = models_static_assets.StaticAsset.objects.get(pk=static_asset_id)
-    job_uri = f"s3://{settings.AWS_STORAGE_BUCKET_NAME}/{static_asset.video.source.name}"
     language = 'en-US'
+    if static_asset.size_bytes / 1024 / 1024 >= TRANSCRIBE_SOURCE_SIZE_LIMIT_BYTES:
+        # Try to find a video variation with the lowest resolution
+        variation = static_asset.video.variations.order_by('width').first()
+        if variation:
+            source_key = variation.source.name
+    else:
+        source_key = static_asset.video.source.name
+
     track, is_new = models_static_assets.VideoTrack.objects.get_or_create(
         video=static_asset.video, language=language
     )
+
     if not track.source.name:
-        source_path = os.path.dirname(static_asset.video.source.name)
+        source_path = os.path.dirname(source_key)
         source_name = source_path.split('/')[-1]
         track.source.name = os.path.join(source_path, f'{source_name}.vtt')
         track.save()
@@ -151,6 +160,7 @@ def create_video_transcribing_job(static_asset_id: int):
         source_path = os.path.dirname(track.source.name)
         source_name = source_path.split('/')[-1]
     job_name = source_name
+    job_uri = f"s3://{settings.AWS_STORAGE_BUCKET_NAME}/{source_key}"
     output_key = str(track.source.name).replace('.vtt', '.json')
     try:
         transcribe_client.start_transcription_job(
@@ -162,6 +172,6 @@ def create_video_transcribing_job(static_asset_id: int):
             LanguageCode=track.language,
             Subtitles={'Formats': ['vtt']},
         )
+        return transcribe_client.get_transcription_job(TranscriptionJobName=job_name)
     except botocore.exceptions.ClientError:
-        log.exception('Cannot create a transcribe job already exists for %s', static_asset_id)
-    return transcribe_client.get_transcription_job(TranscriptionJobName=job_name)
+        log.exception('Cannot create a transcribe job for Video pk=%s', static_asset_id)
