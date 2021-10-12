@@ -117,3 +117,9 @@ class StaticAssetAdmin(AdminUserDefaultMixin, nested_admin.NestedModelAdmin):
         self.message_user(request, "%s transcribing." % message_bit)
 
     transcribe_videos.short_description = "Transcribe videos for selected assets"
+
+
+@admin.register(static_assets.VideoTrack)
+class VideoTrackAdmin(nested_admin.NestedModelAdmin):
+    list_display = ('id', 'video', 'language')
+    readonly_fields = ['video']

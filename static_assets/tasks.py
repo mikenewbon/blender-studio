@@ -1,16 +1,16 @@
 """Background processing of assets."""
 import logging
 import mimetypes
+import os.path
 import pathlib
-import time
 
 from background_task import background
 from django.conf import settings
 from django.urls import reverse
 import boto3
+import botocore.exceptions
 
 import static_assets.coconut.job
-from common.upload_paths import get_upload_to_hashed_path
 from static_assets.models import static_assets as models_static_assets
 
 
@@ -133,7 +133,7 @@ def move_blob_from_upload_to_storage(key, **metadata):
     )
 
 
-# @background() FIXME(anna): make a background job before merging
+@background(queue='aws-transcribe')
 def create_video_transcribing_job(static_asset_id: int):
     """Create a video transcribing job."""
     static_asset = models_static_assets.StaticAsset.objects.get(pk=static_asset_id)
@@ -143,30 +143,25 @@ def create_video_transcribing_job(static_asset_id: int):
         video=static_asset.video, language=language
     )
     if not track.source.name:
-        filename = 'transcription.vtt'
-        output_path = get_upload_to_hashed_path(track, filename)
-        track.source.name = str(output_path)
+        source_path = os.path.dirname(static_asset.video.source.name)
+        source_name = source_path.split('/')[-1]
+        track.source.name = os.path.join(source_path, f'{source_name}.vtt')
         track.save()
     else:
-        output_path = pathlib.PurePath(track.source.name)
-    # The job name must be unique, but we want to reuse the storage paths
-    job_suffix = str(int(time.time() * 1000))
-    job_name = output_path.parts[-1].split('.')[0] + f'-{job_suffix}'
-    output_key = str(output_path).replace('.vtt', '.json')
-    print(job_uri, job_name, job_suffix)
-    transcribe_client.start_transcription_job(
-        TranscriptionJobName=job_name,
-        Media={'MediaFileUri': job_uri},
-        OutputKey=output_key,
-        OutputBucketName=settings.AWS_STORAGE_BUCKET_NAME,
-        MediaFormat=job_uri.split('.')[-1],
-        LanguageCode=track.language,
-        Subtitles={'Formats': ['vtt']},
-    )
-    while True:
-        status = transcribe_client.get_transcription_job(TranscriptionJobName=job_name)
-        if status['TranscriptionJob']['TranscriptionJobStatus'] in ['COMPLETED', 'FAILED']:
-            break
-        print("Not ready yet...")
-        time.sleep(5)
-    print(status)
+        source_path = os.path.dirname(track.source.name)
+        source_name = source_path.split('/')[-1]
+    job_name = source_name
+    output_key = str(track.source.name).replace('.vtt', '.json')
+    try:
+        transcribe_client.start_transcription_job(
+            TranscriptionJobName=job_name,
+            Media={'MediaFileUri': job_uri},
+            OutputKey=output_key,
+            OutputBucketName=settings.AWS_STORAGE_BUCKET_NAME,
+            MediaFormat=job_uri.split('.')[-1],
+            LanguageCode=track.language,
+            Subtitles={'Formats': ['vtt']},
+        )
+    except botocore.exceptions.ClientError:
+        log.exception('Cannot create a transcribe job already exists for %s', static_asset_id)
+    return transcribe_client.get_transcription_job(TranscriptionJobName=job_name)
