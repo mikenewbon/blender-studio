@@ -94,7 +94,7 @@
                     </div>
                   </div>
                 {% else%}
-                  <a href="{{ asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ section.download_size }})</span></a>
+                  <a href="{{ section.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ section.download_size }})</span></a>
                 {% endif %}
               {% endif %}
 
