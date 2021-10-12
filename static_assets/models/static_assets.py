@@ -255,6 +255,10 @@ class VideoVariation(models.Model):
 
 class VideoTrackLanguageCodeChoices(models.TextChoices):
     en_US = 'en-US', 'English'
+    nl_NL = 'nl-NL', 'Nederlands'
+    de_DE = 'de-DE', 'Deutsch'
+    fr_FR = 'fr-FR', 'Français'
+    ru_RU = 'ru-RU', 'Русский'
 
 
 class VideoTrack(models.Model):
