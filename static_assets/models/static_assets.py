@@ -266,7 +266,7 @@ class VideoTrack(models.Model):
 
     @property
     def url(self) -> str:
-        return reverse('video-track', kwargs={'pk': self.pk})
+        return reverse('video-track', kwargs={'pk': self.pk, 'path': self.source.name})
 
 
 class Image(models.Model):

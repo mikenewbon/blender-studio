@@ -77,17 +77,16 @@ def coconut_webhook(request, video_id):
 
 @cache_page(60 * 15)
 @require_GET
-def video_track_view(request, pk):
-    """Return subtitles content.
+def video_track_view(request, pk: int, path: str):
+    """Return track content.
 
     Video tracks served from a different domain require "crossorigin" attribute set on <video>,
     so tracks are served from the same domain to avoid having CORS set up at the CDN for
     all the videos as well as tracks.
     See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/track#attr-src
     """
-    subtitles = get_object_or_404(VideoTrack, pk=pk)
-    original_mimetype, _ = mimetypes.guess_type(subtitles.source.name)
-    with requests.get(subtitles.source.url) as storage_response:
-        print(subtitles.source.url, original_mimetype)
+    track = get_object_or_404(VideoTrack, pk=pk, source=path)
+    original_mimetype, _ = mimetypes.guess_type(track.source.name)
+    with requests.get(track.source.url) as storage_response:
         response = HttpResponse(storage_response.content, content_type=original_mimetype)
         return response

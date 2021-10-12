@@ -1,4 +1,4 @@
-from django.urls.conf import path
+from django.urls.conf import path, re_path
 
 from static_assets.views import video_progress, coconut_webhook, video_track_view
 
@@ -10,5 +10,9 @@ urlpatterns = [
     # so tracks are served from the same domain to avoid having CORS set up at the CDN for
     # all the videos as well as tracks.
     # See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/track#attr-src
-    path('media/videos/track/<int:pk>/', video_track_view, name='video-track'),
+    re_path(
+        r'media/videos/track/(?P<pk>\d+)/(?P<path>\w+/\w+/\w+\.vtt)$',
+        video_track_view,
+        name='video-track',
+    ),
 ]
