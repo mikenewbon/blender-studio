@@ -106,37 +106,48 @@
                     <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
                     {% if asset.likes.count != 0 %}<span class="likes-count">{{ asset.likes.count }}</span>{% endif %}
                   </button>
-                  {% if asset.is_free %}
-                    <a href="{{ asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span
-                      class="subtitle">({{ asset.download_size }})</span></a>
-                  {% elif user.is_anonymous and not asset.is_free %}
-                    <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to
-                      Download</button>
-                  {% elif user_has_active_subscription %}
-                    <a href="{{ asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span
-                      class="subtitle">({{ asset.download_size }})</span></a>
-                  {% else %}
-                    <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Subscribe to
-                      Download</button>
+
+                  {% if user.is_anonymous %}
+                    <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to Download</button>
+                  {% elif not asset.is_free and not user_has_active_subscription %}
+                    <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Subscribe to Download</button>
+                  {% elif user_has_active_subscription or asset.is_free %}
+                    {% if asset.static_asset.video.tracks.all %}
+                      <div class="btn-group">
+                        <a href="{{ asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ asset.download_size }})</span></a>
+                        <button data-toggle="dropdown" id="subtitleDownload" class="btn btn-sm btn-icon btn-dark rounded-right" ><i class="material-icons">arrow_drop_down</i></button>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="subtitleDownload">
+                          {% for track in asset.static_asset.video.tracks.all %}
+                            <a href="{{ track.url }}" target="_blank" download="{{ asset.name }}_{{ track.language }}.vtt" onclick="setTimeout(resetProgress, 100)" class="dropdown-item">
+                              <span>Download {{ track.get_language_display }} Subtitles</span>
+                            </a>
+                          {% endfor %}
+                        </div>
+                      </div>
+                    {% else%}
+                      <a href="{{ asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ asset.download_size }})</span></a>
+                    {% endif %}
                   {% endif %}
 
-                  <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
-                    <i class="material-icons">more_horiz</i>
-                  </button>
-
-                  <div class="dropdown-menu dropdown-menu-right">
-                    <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank"
-                      class="dropdown-item">
-                      <i class="material-icons">flag</i>
-                      <span>Report Problem</span>
-                    </a>
-                    {% if user_can_edit_asset %}
-                      <a href="{{ asset.admin_url }}" target="_blank" class="dropdown-item">
-                        <i class="material-icons">create</i>
-                        <span>Admin Edit</span>
+                  <div class="ml-2">
+                    <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
+                      <i class="material-icons">more_horiz</i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank"
+                        class="dropdown-item">
+                        <i class="material-icons">flag</i>
+                        <span>Report Problem</span>
                       </a>
-                    {% endif %}
+                      {% if user_can_edit_asset %}
+                        <a href="{{ asset.admin_url }}" target="_blank" class="dropdown-item">
+                          <i class="material-icons">create</i>
+                          <span>Admin Edit</span>
+                        </a>
+                      {% endif %}
+                    </div>
                   </div>
+
 
                 </div>
               </div>

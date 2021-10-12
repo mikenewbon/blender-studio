@@ -1,1 +1,17 @@
+.btn-group {
+  .btn+.btn {
+    margin-left: 0 !important;
+  }
 
+  &+.btn {
+    margin-left: $spacer / 2;
+  }
+
+  &+.btn-group {
+    margin-left: $spacer / 2;
+  }
+}
+
+.btn+.btn-group {
+  margin-left: $spacer / 2;
+}
