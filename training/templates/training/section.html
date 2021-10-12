@@ -75,10 +75,26 @@
           <div class="training-toolbar-container">
 
             <div class="training-toolbar">
-              {% if section.is_free or request.user|has_active_subscription %}
-                {% if section.download_url %}
-                  <a href="{{ section.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span
-                    class="subtitle">({{ section.download_size }})</span></a>
+
+              {% if user.is_anonymous %}
+                <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to Download</button>
+              {% elif not section.is_free and not request.user|has_active_subscription %}
+                <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Subscribe to Download</button>
+              {% elif request.user|has_active_subscription or section.is_free %}
+                {% if section.static_asset.video.tracks.all %}
+                  <div class="btn-group">
+                    <a href="{{ section.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ section.download_size }})</span></a>
+                    <button data-toggle="dropdown" id="subtitleDownload" class="btn btn-sm btn-icon btn-dark rounded-right" ><i class="material-icons">arrow_drop_down</i></button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="subtitleDownload">
+                      {% for track in section.static_asset.video.tracks.all %}
+                        <a href="{{ track.url }}" target="_blank" download="{{ section.name }}_{{ track.language }}.vtt" onclick="setTimeout(resetProgress, 100)" class="dropdown-item">
+                          <span>Download {{ track.get_language_display }} Subtitles</span>
+                        </a>
+                      {% endfor %}
+                    </div>
+                  </div>
+                {% else%}
+                  <a href="{{ asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ section.download_size }})</span></a>
                 {% endif %}
               {% endif %}
 
