@@ -84,7 +84,10 @@ class StaticAssetAdmin(AdminUserDefaultMixin, nested_admin.NestedModelAdmin):
         'user__last_name',
         'author__first_name',
         'author__last_name',
+        'id',
         'source_type',
+        'section__name',
+        'assets__name',
     ]
     readonly_fields = ['original_filename', 'size_bytes', 'date_created', 'id']
 
