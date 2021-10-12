@@ -4,7 +4,7 @@
 {% load static %}
 {% load pipeline %}
 
-{% block title_prepend %}{{ film.title }} Content Gallery - {% endblock title_prepend %}
+{% block title_prepend %}Content Gallery - {{ film.title }} - {% endblock title_prepend %}
 
 {% block meta %}
   {% firstof asset.url current_collection.url as url %}
@@ -250,7 +250,7 @@
 
 {% block scripts %}
 
-{% javascript 'vendor_masonry' %}
+  {% javascript 'vendor_masonry' %}
 
   <script>
     makeGrid();

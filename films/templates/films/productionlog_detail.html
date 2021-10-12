@@ -1,7 +1,7 @@
 {% extends 'films/base_films.html' %}
 {% load static %}
 
-{% block title_append %} - {{ film.title }} {{ production_log.name }}{% endblock title_append %}
+{% block title_prepend %}{{ production_log.name }} - {{ film.title }} - {% endblock title_prepend %}
 
 {% block meta %}
   {% with title=film.title|add:' '|add:production_log.name description='Check out the latest progress in our weekly production log.' image_url=production_log.thumbnail_m_url %}

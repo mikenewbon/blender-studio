@@ -2,7 +2,8 @@
 {% load static %}
 {% load common_extras %}
 
-{% block title_append %} - {{ post.title }}{% endblock title_append %}
+{% block title_prepend %}{{ post.title }} - Blog - {% endblock title_prepend %}
+{% block title_append %} - {% endblock title_append %}
 
 {% block meta %}
   {% with title=post.title description=post.excerpt image_url=post.thumbnail_m_url %}

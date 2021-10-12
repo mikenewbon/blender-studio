@@ -3,7 +3,7 @@
 {% load common_extras %}
 {% load pipeline %}
 
-{% block title_append %} - {{ film.title }} {{ current_collection.name }}{% endblock title_append %}
+{% block title_prepend %}{{ current_collection.name }} - {{ film.title }} - {% endblock title_prepend %}
 
 {% block gallery_files %}
 

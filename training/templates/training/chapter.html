@@ -4,7 +4,7 @@
 {% load pipeline %}
 {% load common_extras %}
 
-{% block title_append %} - {{ training.name }}: {{ chapter.name }}{% endblock title_append %}
+{% block title_prepend %}{{ chapter.name }} - {{ training.name }} - {% endblock title_prepend %}
 
 {% block meta %}
   {% capture title %}{{ training.name }}: {{ chapter.name }}{% endcapture %}

@@ -1,5 +1,7 @@
 {% extends 'films/flatpage.html' %}
 
+{% block title_prepend %}Production Credit - {{ film.title }} - {% endblock title_prepend %}
+
 {% load static %}
 
 {% block content %}
@@ -17,9 +19,9 @@
         {% else %}
           <div class="notice-wrapper">
             {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-success">{{ message }}</div>
-            {% endfor %}
+              {% for message in messages %}
+                <div class="alert alert-success">{{ message }}</div>
+              {% endfor %}
             {% endif %}
           </div>
           <form id="settings-form" method="POST" action="{% url 'production-credit' film_slug=film.slug %}">

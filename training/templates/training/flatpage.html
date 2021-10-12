@@ -2,7 +2,7 @@
 {% load common_extras %}
 {% load pipeline %}
 
-{% block title_append %} - {{ training.title }} {{ flatpage.title }}{% endblock title_append %}
+{% block title_prepend %}{{ flatpage.title }} - {{ training.name }} - {% endblock title_prepend %}
 
 {% block meta %}
   {% firstof flatpage.title as title %}

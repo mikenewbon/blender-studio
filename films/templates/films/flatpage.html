@@ -1,7 +1,7 @@
 {% extends 'films/base_films.html' %}
 {% load common_extras %}
 
-{% block title_prepend %}{{ film.title }}: {{ flatpage.title }} - {% endblock title_prepend %}
+{% block title_prepend %}{{ flatpage.title }} - {{ film.title }} - {% endblock title_prepend %}
 
 {% block bodyclasses %}spacer has-secondary-nav{% endblock bodyclasses %}
 
