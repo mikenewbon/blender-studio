@@ -11,7 +11,7 @@ urlpatterns = [
     # all the videos as well as tracks.
     # See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/track#attr-src
     re_path(
-        r'media/videos/track/(?P<pk>\d+)/(?P<path>\w+/\w+/\w+\.vtt)$',
+        r'api/videos/track/(?P<pk>\d+)/(?P<path>\w+/\w+/\w+\.vtt)$',
         video_track_view,
         name='video-track',
     ),
