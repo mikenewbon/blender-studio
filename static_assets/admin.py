@@ -42,7 +42,7 @@ class StaticAssetAdmin(AdminUserDefaultMixin, nested_admin.NestedModelAdmin):
     actions = ['process_videos', 'transcribe_videos']
     inlines = [ImageInline, VideoInline]
     autocomplete_fields = ['user', 'author', 'contributors']
-    list_display = ['__str__', 'date_created', 'date_updated']
+    list_display = ['__str__', 'date_created', 'date_updated', 'has_tracks']
     fieldsets = (
         (
             None,
@@ -74,6 +74,7 @@ class StaticAssetAdmin(AdminUserDefaultMixin, nested_admin.NestedModelAdmin):
         'source_type',
         'section__chapter__training',
         'assets__film',
+        'video__tracks__language',
     ]
     search_fields = [
         'source',
@@ -117,6 +118,14 @@ class StaticAssetAdmin(AdminUserDefaultMixin, nested_admin.NestedModelAdmin):
         self.message_user(request, "%s transcribing." % message_bit)
 
     transcribe_videos.short_description = "Transcribe videos for selected assets"
+
+    def has_tracks(self, obj):
+        """Display yes/no icon indicating that this is a video with or without video tracks."""
+        if obj.video is None:
+            return None
+        return obj.video.tracks.count() > 0
+
+    has_tracks.boolean = True
 
 
 @admin.register(static_assets.VideoTrack)
