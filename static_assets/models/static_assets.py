@@ -253,19 +253,20 @@ class VideoVariation(models.Model):
             return f'attachment; filename="{filename}"'
 
 
-class SubtitlesLanguageCodeChoices(models.TextChoices):
+class VideoTrackLanguageCodeChoices(models.TextChoices):
     en_US = 'en-US', 'English'
 
 
-class Subtitles(models.Model):
-    class Meta:
-        verbose_name_plural = 'substitles'
-
-    video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='subtitles')
+class VideoTrack(models.Model):
+    video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='tracks')
     language = models.CharField(
-        blank=False, null=False, max_length=5, choices=SubtitlesLanguageCodeChoices.choices
+        blank=False, null=False, max_length=5, choices=VideoTrackLanguageCodeChoices.choices
     )
     source = models.FileField(upload_to=get_upload_to_hashed_path, blank=True, max_length=256)
+
+    @property
+    def url(self) -> str:
+        return reverse('video-track', kwargs={'pk': self.pk})
 
 
 class Image(models.Model):

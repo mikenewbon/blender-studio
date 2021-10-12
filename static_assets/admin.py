@@ -23,15 +23,15 @@ class VideoVariationInline(nested_admin.NestedTabularInline):
     extra = 0
 
 
-class SubtitlesInline(nested_admin.NestedTabularInline):
-    model = static_assets.Subtitles
+class VideoTrackInline(nested_admin.NestedTabularInline):
+    model = static_assets.VideoTrack
     show_change_link = True
     extra = 0
 
 
 class VideoInline(nested_admin.NestedTabularInline):
     model = static_assets.Video
-    inlines = [VideoVariationInline, SubtitlesInline]
+    inlines = [VideoVariationInline, VideoTrackInline]
     show_change_link = True
     extra = 0
     readonly_fields = ['play_count']

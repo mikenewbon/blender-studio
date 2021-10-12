@@ -139,16 +139,16 @@ def create_video_transcribing_job(static_asset_id: int):
     static_asset = models_static_assets.StaticAsset.objects.get(pk=static_asset_id)
     job_uri = f"s3://{settings.AWS_STORAGE_BUCKET_NAME}/{static_asset.video.source.name}"
     language = 'en-US'
-    subtitles, is_new = models_static_assets.Subtitles.objects.get_or_create(
+    track, is_new = models_static_assets.VideoTrack.objects.get_or_create(
         video=static_asset.video, language=language
     )
-    if not subtitles.source.name:
+    if not track.source.name:
         filename = 'transcription.vtt'
-        output_path = get_upload_to_hashed_path(subtitles, filename)
-        subtitles.source.name = str(output_path)
-        subtitles.save()
+        output_path = get_upload_to_hashed_path(track, filename)
+        track.source.name = str(output_path)
+        track.save()
     else:
-        output_path = pathlib.PurePath(subtitles.source.name)
+        output_path = pathlib.PurePath(track.source.name)
     # The job name must be unique, but we want to reuse the storage paths
     job_suffix = str(int(time.time() * 1000))
     job_name = output_path.parts[-1].split('.')[0] + f'-{job_suffix}'
@@ -160,7 +160,7 @@ def create_video_transcribing_job(static_asset_id: int):
         OutputKey=output_key,
         OutputBucketName=settings.AWS_STORAGE_BUCKET_NAME,
         MediaFormat=job_uri.split('.')[-1],
-        LanguageCode=subtitles.language,
+        LanguageCode=track.language,
         Subtitles={'Formats': ['vtt']},
     )
     while True:

@@ -1,17 +1,20 @@
 import datetime
 import json
 import logging
+import mimetypes
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, SuspiciousOperation
 from django.http.request import HttpRequest
-from django.http.response import JsonResponse
+from django.http.response import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
+from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
+import requests
 
 from static_assets.models.progress import UserVideoProgress
-from static_assets.models import Video
+from static_assets.models import Video, VideoTrack
 from training.queries.progress import (
     set_video_progress,
     set_section_progress_started,
@@ -70,3 +73,21 @@ def coconut_webhook(request, video_id):
         # TODO: Add publishing logic
         pass
     return JsonResponse({'status': 'ok'})
+
+
+@cache_page(60 * 15)
+@require_GET
+def video_track_view(request, pk):
+    """Return subtitles content.
+
+    Video tracks served from a different domain require "crossorigin" attribute set on <video>,
+    so tracks are served from the same domain to avoid having CORS set up at the CDN for
+    all the videos as well as tracks.
+    See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/track#attr-src
+    """
+    subtitles = get_object_or_404(VideoTrack, pk=pk)
+    original_mimetype, _ = mimetypes.guess_type(subtitles.source.name)
+    with requests.get(subtitles.source.url) as storage_response:
+        print(subtitles.source.url, original_mimetype)
+        response = HttpResponse(storage_response.content, content_type=original_mimetype)
+        return response
