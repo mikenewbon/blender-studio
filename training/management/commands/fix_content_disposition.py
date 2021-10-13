@@ -52,21 +52,24 @@ class Command(BaseCommand):
         if not _file:
             logger.warning('Missing file %s', _path)
             return
-        need_fix = False
-        if content_type != _file.content_type:
-            self.wrong_mimetype += 1
-            need_fix = True
-        if _file.content_disposition != content_disposition:
+        old_metadata = {
+            'ContentType': _file.content_type,
+            'CacheControl': _file.cache_control,
+        }
+        metadata = {
+            'ContentType': content_type,
+            'CacheControl': settings.AWS_S3_OBJECT_PARAMETERS['CacheControl'],
+        }
+        if old_metadata['ContentType'] != metadata['ContentType']:
+            self.wrong_content_type += 1
+        if content_disposition and _file.content_disposition != content_disposition:
             self.wrong_disposition += 1
-            need_fix = True
-        if need_fix:
-            metadata = {'ContentType': content_type}
-            if content_disposition:
-                metadata['ContentDisposition'] = content_disposition
-            logger.warning(
-                f'Updating: ContentDisposition "{_file.content_disposition}"'
-                f' ContentType "{_file.content_type}" -> "{metadata.values()}"'
-            )
+            metadata['ContentDisposition'] = content_disposition
+            old_metadata['ContentDisposition'] = ''
+        if old_metadata['CacheControl'] != metadata['CacheControl']:
+            self.wrong_cache_control += 1
+        if old_metadata != metadata:
+            logger.warning(f'Replacing metadata: {old_metadata} -> {metadata}')
             _file.copy_from(
                 CopySource={
                     'Bucket': BUCKET_NAME,
@@ -86,7 +89,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         """Do what is described in help."""
-        self.wrong_mimetype, self.wrong_disposition = 0, 0
+        self.wrong_content_type, self.wrong_disposition, self.wrong_cache_control = 0, 0, 0
+        # for v in Training.objects.filter(
+        #    chapters__sections__static_asset__original_filename__icontains='0-0_introduction.mp4'
+        # ):
         for v in Training.objects.all():
             for c in v.chapters.all():
                 for s in c.sections.all():
@@ -94,7 +100,9 @@ class Command(BaseCommand):
                     if not getattr(asset, 'video', None):
                         continue
                     self._handle_video(asset)
-        logger.info(
-            f'Wrong MIME-type: {self.wrong_mimetype}, '
-            f'wrong content disposition: {self.wrong_disposition}'
-        )
+        if self.wrong_content_type:
+            logger.warning(f'Wrong Content-Type: {self.wrong_content_type}')
+        if self.wrong_disposition:
+            logger.warning(f'Wrong Content-Disposition: {self.wrong_disposition}')
+        if self.wrong_cache_control:
+            logger.warning(f'Wrong Cache-Control: {self.wrong_cache_control}')
