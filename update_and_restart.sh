@@ -4,9 +4,9 @@ set -e
 
 PYTHON_BIN=/var/www/venv/bin/python
 DEPLOY_USER=www-data
-REMOTE_DIR="/var/www/blender-studio"
 
-sudo -u $DEPLOY_USER git pull
+git pull
+chown $DEPLOY_USER:$DEPLOY_USER -R .
 echo "Installing dependencies"
 # Just look at them go breaking teh internets:
 # https://github.com/pyca/cryptography/issues/5771#issuecomment-775016788
@@ -21,7 +21,6 @@ then
     sudo -u $DEPLOY_USER $PYTHON_BIN manage.py migrate
     echo "Collecting static"
     sudo -u $DEPLOY_USER $PYTHON_BIN manage.py collectstatic --no-input
-    chown $DEPLOY_USER:$DEPLOY_USER -R $REMOTE_DIR
 
     echo "Restarting services"
     systemctl restart studio.service
