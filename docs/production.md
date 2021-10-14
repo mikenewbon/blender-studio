@@ -74,6 +74,7 @@ While logged in as `root`, copy the contents of `deploy` into their appropriate 
 ```
 cp deploy/etc/systemd/system/* /etc/systemd/system/
 cp deploy/var/www/config/* /var/www/config/
+cp -r deploy/var/www/.config/* /var/www/.config/
 ```
 
 All of the Blender Studio services, with an exception of nginx, run as `www-data` user and `www-data` group.
