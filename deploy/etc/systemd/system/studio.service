@@ -3,6 +3,8 @@ Description=Blender Studio systemd service.
 After=syslog.target
 
 [Service]
+User=www-data
+Group=www-data
 ExecStart=/usr/bin/uwsgi --ini /var/www/config/uwsgi_studio.ini
 Restart=always
 KillSignal=SIGQUIT

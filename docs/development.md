@@ -1,7 +1,9 @@
 # Development
 
 ## Requirements
-- Python 3.8.x
+- [git](https://git-scm.com/)
+- [Python 3.8.x](https://www.python.org/)
+- [virtualenv](https://virtualenv.pypa.io/en/latest/installation.html)
 - [poetry](https://python-poetry.org/)
 - [PostgreSQL](https://www.postgresql.org/) (tested on 12.2)
 
@@ -210,7 +212,7 @@ other developers if you plan to do it.
 Studio doesn't use Docker, only a clone of its own repository and a few systemd units.
 To deploy latest `production`, use the following script:
 
-```bash
+```
 ./deploy.sh studiobeta.blender.org
 ```
 This will
@@ -235,7 +237,7 @@ The following periodic services exist at the moment:
 
 In order to set them up in production, the following commands were used:
 
-```bash
+```
 ssh root@studiobeta.blender.org
 cd /var/www/blender-studio/
 cp systemd/system/*.{service,timer} /lib/systemd/system/
@@ -248,7 +250,7 @@ systemctl start studio-background-restart.timer
 ```
 
 To view existing timers and details about when they were called last and other usefull info:
-```bash
+```
 systemctl list-timers --all
 ```
 

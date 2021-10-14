@@ -3,5 +3,7 @@ Description=call looper clock_tick to process subscriptions
 
 [Service]
 Type=oneshot
+User=www-data
+Group=www-data
 ExecStart=/var/www/venv/bin/python /var/www/blender-studio/manage.py clock_tick -v 3
 StandardError=syslog

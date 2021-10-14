@@ -3,4 +3,6 @@ Description=queue deletion requests by calling a management command
 
 [Service]
 Type=oneshot
+User=www-data
+Group=www-data
 ExecStart=/var/www/venv/bin/python /var/www/blender-studio/manage.py queue_deletion_requests

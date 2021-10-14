@@ -66,54 +66,6 @@ The commands can be run from the Bash console with the project's venv activated:
 ./manage.py index_documents
 ```
 
-
-## Deployment to production
-MeiliSearch is deployed more or less according to [the tutorial](https://docs.meilisearch.com/running-production),
-but it does not have SSL set up.
-It is run as a service, and the requests to it are routed via nginx.
-
-### Nginx config
-Nginx config can be found in the `var/www/config` directory. Add a `location` for search:
-```
-    # Meilisearch
-    location /s/ {
-        rewrite /s/(.*) /$1  break;
-        proxy_pass  http://127.0.0.1:7700;
-    }
-```
-Since all the search requests have to be sent to `https://studiobeta.blender.org/s/`,
-update the `MEILISEARCH_API_ADDRESS` variable in `settings.py`:
-```
-MEILISEARCH_API_ADDRESS = 'https://studiobeta.blender.org/s/'
-```
-
-### Authentication
-Use the master key (the same that you passed to MeiliSearch's `ExecStart` command) to retrieve
-the public and the private key:
-```
-curl -H "X-Meili-API-Key: myMasterKey" -X GET 'http://localhost:7700/keys'
-```
-Update `settings.py` with these values:
-```
-MEILISEARCH_PUBLIC_KEY = 'PublicKeyGoesHere'
-MEILISEARCH_PRIVATE_KEY = 'PrivateKeyHere'
-```
-
-#### How it works
-In production, the server should be run in the `Production` mode, and with a master key.
-Running the server without a master key is only possible in the development mode, as it makes
-all routes accessible and constitutes a security issue.
-The details are explained in [the authentication guide](https://docs.meilisearch.com/guides/advanced_guides/authentication.html).
-
-What is important here is that when the server is running with a master key, all the requests
-sent to it have to include the `X-Meili-API-Key` header with either the public key (for search
-requests), or the private key (for all other requests). In practise, the front end needs the
-public key, and the back end (management commands, signals) - the private one.
-
-When you change the master key, the public and private keys change too, and you will have to
-update them in `settings.py`.
-
-
 ## Troubleshooting
 If the search does not work as expected, it may be due to some index settings being out of
 date or the documents in the index being out of date.

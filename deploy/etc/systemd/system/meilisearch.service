@@ -1,0 +1,20 @@
+[Unit]
+Description=MeiliSearch
+After=systemd-user-sessions.service
+StartLimitIntervalSec=500
+StartLimitBurst=5
+
+[Service]
+User=www-data
+Group=www-data
+Type=simple
+Environment=MEILI_DB_PATH=/var/www/data.ms
+Environment=MEILI_MASTER_KEY=CHANGE_ME
+# Environment=SENTRY_DSN=CHANGE_ME
+Environment=MEILI_NO_SENTRY=1
+ExecStart=/usr/bin/meilisearch --no-analytics true --http-addr 127.0.0.1:7700 --env production
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=default.target

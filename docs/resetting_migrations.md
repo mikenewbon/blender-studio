@@ -21,7 +21,7 @@ separate app that will contain it. This ensures
 
 ### Re-creating migrations
 
-```bash
+```
 find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 find . -path "*/migrations/*.pyc" -delete
 ./manage.py makemigrations
@@ -31,7 +31,7 @@ find . -path "*/migrations/*.pyc" -delete
 
 * `blender_id_oauth_client` constraint:
 
-```python
+```
         # FIXME(anna): because this table is en external dependency,
         # there's no other way to enforce this contraint
         # Addin OAuthUserInfo._meta.get_field('oauth_user_id')._unique = True
@@ -58,7 +58,7 @@ find . -path "*/migrations/*.pyc" -delete
 
 * `can_view_content` to the `demo` and `subscriber` groups:
 
-```python
+```
 def add_can_view_content_permission_to_groups(apps, schema_editor):
     Group = apps.get_model('auth', 'Group')
     Permission = apps.get_model('auth', 'Permission')
@@ -86,7 +86,7 @@ At this point testsuite should complete without issues and a commit can be made.
 
 ## Deployment steps
 
-```bash
+```
 echo 'TRUNCATE TABLE django_migrations;' | psql --dbname=postgresql://studio:PASSWORD@localhost:5432/studio
 git pull
 ./manage.py migrate --fake
@@ -95,7 +95,7 @@ git pull
 ### rewrite content types
 
 Now rewrite LogEntry to keep the admin history intact:
-```python
+```
 ./manage.py shell
 >>>
 >>> from django.contrib.admin.models import LogEntry
@@ -117,6 +117,6 @@ Now rewrite LogEntry to keep the admin history intact:
 
 Run this and **make sure to answer NO** to find more models that might need refer to `ContentType` that need updating:
 
-```bash
+```
 ./manage.py remove_stale_contenttypes
 ```

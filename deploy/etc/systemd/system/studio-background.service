@@ -3,6 +3,8 @@ Description=Studio Background tasks systemd service.
 After=syslog.target
 
 [Service]
+User=www-data
+Group=www-data
 ExecStart=/var/www/venv/bin/python /var/www/blender-studio/manage.py process_tasks
 Restart=always
 KillSignal=SIGQUIT

@@ -23,7 +23,7 @@ Skip if the goal is to load Store data into a production database of `blender-st
 2. extract it into this directory (this will add a `anonimatron-1.14` directory here, in case you are downloading v1.14, for example);
 3. go to Anonimatron's directory and modify `anonimatron.sh` changing the options to `-Xmx8G` to avoid `GC overhead limit exceeded` error;
 4. run it:
-```bash
+```
 path/to/anonimatron.sh/anonimatron.sh -config `realpath ./store_import/config.xml`
 ```
 
