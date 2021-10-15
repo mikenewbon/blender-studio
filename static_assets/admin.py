@@ -124,10 +124,15 @@ class StaticAssetAdmin(AdminUserDefaultMixin, nested_admin.NestedModelAdmin):
     transcribe_videos.short_description = "Transcribe videos for selected assets"
 
     def has_tracks(self, obj):
-        """Display yes/no icon indicating that this is a video with or without video tracks."""
+        """Display yes/no icon indicating that this is a video with tracks.
+
+        Checks if track files actually exist in storage (e.g. by calling AWS S3).
+        """
         if obj.video is None:
             return None
-        return obj.video.tracks.count() > 0
+        return any(
+            track.source.storage.exists(track.source.name) for track in obj.video.tracks.all()
+        )
 
     has_tracks.boolean = True
 
