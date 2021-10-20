@@ -91,6 +91,11 @@ find /var/www -type d -exec chgrp www-data {} +
 find /var/www -type d -exec chmod g+s {} +
 ```
 
+In case you have to edit some of the files in production, be sure to edit them as `www-data` user, e.g.
+```
+sudo -Hu www-data vim training/management/commands/my_command.py
+```
+
 **⚠️ The steps below assume that all the configuration files have been copied to their appropriate locations.**
 
 ### Meilisearch
