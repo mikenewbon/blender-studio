@@ -71,6 +71,7 @@ class AssetAdmin(mixins.ThumbnailMixin, mixins.ViewOnSiteMixin, admin.ModelAdmin
         'collection__name',
         'slug',
         'static_asset__slug',
+        'static_asset__source',
     ]
     fieldsets = (
         (None, {'fields': ('static_asset',)}),
