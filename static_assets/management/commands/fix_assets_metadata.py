@@ -37,6 +37,7 @@ CONTENT_TYPE_ALLOW_OVERWRITE = (
     ('video/mov', 'video/quicktime'),
     ('video/mp4', 'video/webm'),
     ('video/quicktime', 'video/mp4'),
+    ('image/png', 'image/jpeg'),
 )
 CONTENT_TYPE_IGNORE = (
     ('application/octet-stream', None),
@@ -197,6 +198,7 @@ class Command(BaseCommand):
                     # date_updated is included to avoid auto-update of it
                     self.to_update,
                     fields={'content_type', 'date_updated'},
+                    batch_size=300,
                 )
         if self.wrong_content_type:
             logger.warning(f'Wrong Content-Type: {self.wrong_content_type}')
