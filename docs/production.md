@@ -62,7 +62,7 @@ source /var/www/venv/bin/activate
 
 ## Configuration files
 
-All the configuration files use domain `studiobeta.blender.org`, make sure to change it when appropriate.
+All the configuration files use domain `studio.blender.org`, make sure to change it when appropriate.
 
 Some configuration files have `CHANGE_ME` values which must be replaced with production values, see sections below for more details.
 
@@ -152,10 +152,10 @@ MEILISEARCH_PUBLIC_KEY = 'PublicKeyGoesHere'
 MEILISEARCH_PRIVATE_KEY = 'PrivateKeyGoesHere'
 ```
 
-Since all the search requests have to be sent to `https://studiobeta.blender.org/s/`,
+Since all the search requests have to be sent to `https://studio.blender.org/s/`,
 update the `MEILISEARCH_API_ADDRESS` variable in `settings.py`:
 ```
-MEILISEARCH_API_ADDRESS = 'https://studiobeta.blender.org/s/'
+MEILISEARCH_API_ADDRESS = 'https://studio.blender.org/s/'
 ```
 
 To index available data, activate the virtualenv, and run `create_search_indexes` and `index_documents` commands,
@@ -181,7 +181,7 @@ ln -s /var/www/config/nginx_studio.conf /etc/nginx/sites-enabled/nginx_studio.co
 
 Follow [the official instructions](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx) to install certbot and get a Let's Encrypt certificate for your domain.
 
-Nginx configuration file included into this repository assume that Studio is running on the `studiobeta.blender.org` domain,
+Nginx configuration file included into this repository assume that Studio is running on the `studio.blender.org` domain,
 so you must review the `/var/www/config/nginx_studio.conf` configuration files to make sure the right domain is used instead.
 
 
