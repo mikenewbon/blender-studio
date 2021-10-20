@@ -64,9 +64,8 @@ def _get_s3_object(key):
         obj.content_type
         return obj
     except botocore.exceptions.ClientError as e:
-        print(e.response)
+        logger.error('%s: %s', key, e.response)
         if e.response['Error']['Code'] != "404":
-            print(e.response)
             raise
 
 
@@ -118,18 +117,23 @@ class Command(BaseCommand):
         if old_metadata != metadata:
             logger.warning(f'{_file.key} replacing metadata: {old_metadata} -> {metadata}')
             if not self.is_dry_run:
-                _file.copy_from(
-                    CopySource={
-                        'Bucket': BUCKET_NAME,
-                        'Key': _file.key,
-                    },
-                    # N.B.: REPLACE is the only way to update metadata, apparently.
-                    # This will create a new version of the key in a *versioned* bucket,
-                    # or just overwrite the key in a non-versioned one.
-                    # Make sure to set ALL the metadata the key has to have, because it is replaced.
-                    MetadataDirective='REPLACE',
-                    **metadata,
-                )
+                try:
+                    _file.copy_from(
+                        CopySource={
+                            'Bucket': BUCKET_NAME,
+                            'Key': _file.key,
+                        },
+                        # N.B.: REPLACE is the only way to update metadata, apparently.
+                        # This will create a new version of the key in a *versioned* bucket,
+                        # or just overwrite the key in a non-versioned one.
+                        # Make sure to set ALL the metadata key has to have, because it's replaced
+                        MetadataDirective='REPLACE',
+                        **metadata,
+                    )
+                except botocore.exceptions.ClientError as e:
+                    logger.error('%s: %s', _path, e.response)
+                    if 'the maximum allowable size for a copy source' not in str(e):
+                        raise
 
     def _handle_video(self, video: Video):
         variations = video.variations.all()
