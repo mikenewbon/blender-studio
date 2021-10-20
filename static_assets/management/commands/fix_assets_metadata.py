@@ -38,7 +38,10 @@ CONTENT_TYPE_ALLOW_OVERWRITE = (
     ('video/mp4', 'video/webm'),
     ('video/quicktime', 'video/mp4'),
 )
-CONTENT_TYPE_IGNORE = (('application/octet-stream', None),)
+CONTENT_TYPE_IGNORE = (
+    ('application/octet-stream', None),
+    ('image/jpeg', None),
+)
 
 s3_client = boto3.client(
     's3',
