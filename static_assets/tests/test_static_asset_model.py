@@ -62,6 +62,9 @@ class TestStaticAssetModel(TestCase):
         content_type, _ = mimetypes.guess_type('test.mp4')
         self.assertEqual(content_type, 'video/mp4')
 
+        content_type, _ = mimetypes.guess_type('test.m4v')
+        self.assertEqual(content_type, 'video/mp4')
+
         content_type, _ = mimetypes.guess_type('test.png')
         self.assertEqual(content_type, 'image/png')
 
