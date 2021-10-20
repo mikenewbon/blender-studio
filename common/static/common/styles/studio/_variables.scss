@@ -292,8 +292,10 @@ $embed-responsive-aspect-ratios: join(((21 9), (16 9), (4 3), (1 1)), $embed-res
 //
 // Font, line-height, and color for body text, headings, and more.
 
+$font-path: '/static/common/fonts';
+
 // stylelint-disable value-keyword-case
-$font-family-sans-serif: BlinkMacSystemFont,
+$font-family-sans-serif: "Heebo",
 "Segoe UI",
 Roboto,
 "Helvetica Neue",
