@@ -43,6 +43,147 @@
       <div class="progress-bar" role="progressbar" aria-label="Page loading progress" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
         aria-valuemax="100"></div>
     </div>
+
+    <div class="bg-dark mt-n3 mb-3 border-bottom">
+      <div class="container-xl px-md-2">
+        <div class="row justify-content-between">
+
+          <div class="col-auto d-flex align-items-stretch">
+            <a href="https://blender.org" class="blender-navbar-brand" target="_blank">
+              <img src="{% static 'common/images/blender_logo_white.svg' %}">
+            </a>
+          </div>
+
+          <div class="col-auto d-flex align-items-center">
+
+            {% comment %} <a href="https://www.blender.org/download/" target="_blank" class="btn btn-dark btn-sm btn-nav">
+              Download Blender
+            </a> {% endcomment %}
+
+            <button data-toggle="dropdown" class="btn btn-dark btn-sm btn-nav btn-icon">
+              <i class="material-icons">apps</i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-grid bg-dark" style="z-index: 1045;">
+
+              <a href="/" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <i class="material-icons">savings</i>
+                </div>
+                <div class="dropdown-item-text">
+                  <h4>Dev Fund</h4>
+                  <p>Support Blender Development directly with a monthly contribution.</p>
+                </div>
+              </a>
+
+              <a href="/" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <i class="material-icons">people</i>
+                </div>
+                <div class="dropdown-item-text">
+                  <h4>Get Involved</h4>
+                  <p>Write some code or fix a bug yourself - Blender is a community project.</p>
+                </div>
+              </a>
+
+              <a href="/" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <i class="material-icons">bar_chart</i>
+                </div>
+                <div class="dropdown-item-text">
+                  <h4>Open Data</h4>
+                  <p>A platform to collect, display and query hardware and software performance tests.</p>
+                </div>
+              </a>
+
+              <a href="/" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <i class="material-icons">theaters</i>
+                </div>
+                <div class="dropdown-item-text">
+                  <h4>Blender Studio</h4>
+                  <p>The creators who share. Access assets, rigs and training from the Open Movies.</p>
+                </div>
+              </a>
+
+              <a href="/" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <i class="material-icons">menu_book</i>
+                </div>
+                <div class="dropdown-item-text">
+                  <h4>Blender Manual</h4>
+                  <p>Documentation on all of the Blender software features and tools.</p>
+                </div>
+              </a>
+
+              <a href="/" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  {% comment %} <i class="material-icons">menu_book</i> {% endcomment %}
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="icon" xmlns="http://www.w3.org/2000/svg">
+                    <g>
+                      <path d="M13.6303 1.5C8.28429 1.5 3.8711 5.61792 3.31955 10.8856C3.71692 10.7717 4.1366 10.7094 4.57217 10.7094C7.11951 10.7094 9.15738 12.7859 9.15738 15.365C9.15738 17.2571 8.05893 18.8612 6.46905 19.5835C8.33238 21.3879 10.8545 22.5 13.6303 22.5C19.3481 22.5 24 17.7898 24 12.0002C24 6.21037 19.3481 1.5 13.6303 1.5Z"/>
+                      <path d="M1.91375 11.5696C0.751498 12.4118 0 13.7946 0 15.365C0 17.9442 2.02487 19.9947 4.57221 19.9947C4.70001 19.9947 4.82607 19.988 4.95096 19.9776C3.05796 17.868 1.90289 15.0681 1.90289 12C1.90289 11.8557 1.90871 11.7127 1.91375 11.5696Z"/>
+                    </g>
+                  </svg>
+                </div>
+                <div class="dropdown-item-text">
+                  <h4>Blender Conference</h4>
+                  <p>Bringing together our developers, creators and fans under one roof.</p>
+                </div>
+              </a>
+
+              <a href="/" class="dropdown-item">
+                <div class="dropdown-item-icon">
+                  <i class="material-icons">code</i>
+                </div>
+                <div class="dropdown-item-text">
+                  <h4>Blender Developer Portal</h4>
+                  <p>This is where we hide the bugs, dont look!</p>
+                </div>
+              </a>
+
+              {% comment %}
+                  <a href="/" class="dropdown-item">
+                    <i class="material-icons">event</i>
+                    <span>Blender Conference</span>
+                  </a>
+
+                  <a href="/" class="dropdown-item">
+                    <i class="material-icons">movie</i>
+                    <span>Blender Studio</span>
+                  </a>
+
+                  <a href="/" class="dropdown-item">
+                    <i class="material-icons">savings</i>
+                    <span>Blender Fund</span>
+                  </a>
+
+                  <a href="/" class="dropdown-item">
+                    <i class="material-icons">code</i>
+                    <span>Blender Code</span>
+                  </a>
+
+                  <a href="/" class="dropdown-item">
+                    <i class="material-icons">bug_report</i>
+                    <span>Blender Developer</span>
+                  </a>
+
+                  <a href="/" class="dropdown-item">
+                    <i class="material-icons">menu_book</i>
+                    <span>Blender Docs</span>
+                  </a>
+
+                  <a href="/" class="dropdown-item">
+                    <i class="material-icons">question_answer</i>
+                    <span>Blender Chat</span>
+                  </a> {% endcomment %}
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
     <nav class="navbar scroll">
       <div class="navdrawer-offset">
         <div class="container-xl flex-nowrap">

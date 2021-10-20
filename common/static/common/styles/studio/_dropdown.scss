@@ -88,3 +88,51 @@
     }
   }
 }
+
+.dropdown-menu-grid {
+  padding: $spacer / 4;
+  flex-wrap: wrap;
+  justify-content: stretch;
+  width: 500px;
+  box-sizing: content-box;
+
+  &.show {
+    display: flex;
+  }
+
+  .dropdown-item {
+    width: 50%;
+    padding: $spacer * .75;
+    display: flex;
+    flex-direction: row;
+
+    &-text {
+      padding: 0;
+      margin-left: $spacer / 2;
+    }
+
+    &::before {
+      left: $spacer / 4;
+      width: calc(100% - #{$spacer / 2});
+    }
+
+    p {
+      white-space: normal;
+      font-size: $font-size-sm;
+      line-height: 1.25;
+      margin-top: $spacer / 4;
+      font-weight: normal;
+    }
+
+    .icon {
+      fill: $highlight-white-xstrong;
+      transition: $transition-base;
+    }
+
+    &:hover {
+      .icon {
+        fill: $white;
+      }
+    }
+  }
+}

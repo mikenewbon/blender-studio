@@ -409,6 +409,25 @@ div.spacer-n {
   img {
     @include img-fluid;
   }
+
+}
+
+.blender-navbar-brand {
+
+  padding: $spacer / 2 0;
+  line-height: 1;
+
+  @include hover-focus {
+    img {
+      opacity: 1;
+    }
+  }
+
+  img {
+    opacity: .75;
+    transition: $transition-base;
+    height: 20px;
+  }
 }
 
 .navbar-login-wrapper {
