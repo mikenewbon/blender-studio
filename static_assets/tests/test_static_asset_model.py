@@ -1,6 +1,8 @@
-import datetime
-from django.test import TestCase
 from unittest.mock import patch, call
+import datetime
+import mimetypes
+
+from django.test import TestCase
 
 from common.tests.factories.static_assets import StaticAssetFactory, VideoFactory
 from static_assets.models import StaticAsset, Video
@@ -39,3 +41,23 @@ class TestStaticAssetModel(TestCase):
 
         video.duration = datetime.timedelta(hours=1, minutes=1, seconds=1)
         self.assertEqual(video.duration_label, '1:01:01')
+
+    def test_content_type(self):
+        """Test that StaticAsset app adds/overwrites some mimetypes."""
+        content_type, _ = mimetypes.guess_type('test.blend')
+        self.assertEqual(content_type, 'application/x-blender')
+
+        content_type, _ = mimetypes.guess_type('test.exr')
+        self.assertEqual(content_type, 'application/x-exr')
+
+        content_type, _ = mimetypes.guess_type('test.hdr')
+        self.assertEqual(content_type, 'application/x-radiance-hdr')
+
+        content_type, _ = mimetypes.guess_type('test.mp4')
+        self.assertEqual(content_type, 'video/mp4')
+
+        content_type, _ = mimetypes.guess_type('test.png')
+        self.assertEqual(content_type, 'image/png')
+
+        content_type, _ = mimetypes.guess_type('test.jpg')
+        self.assertEqual(content_type, 'image/jpeg')
