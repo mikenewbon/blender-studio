@@ -53,6 +53,9 @@ class TestStaticAssetModel(TestCase):
         content_type, _ = mimetypes.guess_type('test.hdr')
         self.assertEqual(content_type, 'application/x-radiance-hdr')
 
+        content_type, _ = mimetypes.guess_type('test.kra')
+        self.assertEqual(content_type, 'application/x-krita')
+
         content_type, _ = mimetypes.guess_type('test.mp4')
         self.assertEqual(content_type, 'video/mp4')
 
