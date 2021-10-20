@@ -20,7 +20,7 @@ class TestStaticAssetModel(TestCase):
         self.assertEqual(asset.source.url, 's3://file')
         self.assertEqual(asset.thumbnail.url, 's3://file')
 
-        mock_storage_url.assert_has_calls((call(asset.source.name,), call(asset.thumbnail.name,),))
+        mock_storage_url.assert_has_calls((call(asset.source.name), call(asset.thumbnail.name)))
 
     @patch('storages.backends.s3boto3.S3Boto3Storage.url', return_value='s3://file')
     def test_video_duration_label(self, mock_storage_url):
