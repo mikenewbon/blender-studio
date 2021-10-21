@@ -14,12 +14,12 @@
 </div>
 
 {% if  request.user.production_credits.all %}
-<div class="drawer-nav-dropdown-wrapper font-weight-bold">
-  <a class="drawer-nav-dropdown" href="{% url 'user-settings-production-credits' %}">
-    <i class="material-icons mr-2">recent_actors</i>
-    <span>Production Credits</span>
-  </a>
-</div>
+  <div class="drawer-nav-dropdown-wrapper font-weight-bold">
+    <a class="drawer-nav-dropdown" href="{% url 'user-settings-production-credits' %}">
+      <i class="material-icons mr-2">recent_actors</i>
+      <span>Production Credits</span>
+    </a>
+  </div>
 {% endif %}
 
 <div class="drawer-nav-dropdown-wrapper font-weight-bold">
@@ -54,13 +54,6 @@
       </a>
     </li>
   </ol>
-</div>
-
-<div class="drawer-nav-dropdown-wrapper font-weight-bold">
-  <a class="drawer-nav-dropdown" href="/settings/roles">
-    <i class="material-icons mr-2">settings</i>
-    <span>Roles &amp; Capabilities</span>
-  </a>
 </div>
 
 <div class="drawer-nav-dropdown-wrapper font-weight-bold">
