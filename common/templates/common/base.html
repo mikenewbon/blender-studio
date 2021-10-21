@@ -64,7 +64,7 @@
 
               <a href="/" class="dropdown-item">
                 <div class="dropdown-item-icon">
-                  <i class="material-icons">savings</i>
+                  <i class="material-icons">volunteer_activism</i>
                 </div>
                 <div class="dropdown-item-text">
                   <h4>Dev Fund</h4>
@@ -138,42 +138,6 @@
                 </div>
               </a>
 
-              {% comment %}
-                  <a href="/" class="dropdown-item">
-                    <i class="material-icons">event</i>
-                    <span>Blender Conference</span>
-                  </a>
-
-                  <a href="/" class="dropdown-item">
-                    <i class="material-icons">movie</i>
-                    <span>Blender Studio</span>
-                  </a>
-
-                  <a href="/" class="dropdown-item">
-                    <i class="material-icons">savings</i>
-                    <span>Blender Fund</span>
-                  </a>
-
-                  <a href="/" class="dropdown-item">
-                    <i class="material-icons">code</i>
-                    <span>Blender Code</span>
-                  </a>
-
-                  <a href="/" class="dropdown-item">
-                    <i class="material-icons">bug_report</i>
-                    <span>Blender Developer</span>
-                  </a>
-
-                  <a href="/" class="dropdown-item">
-                    <i class="material-icons">menu_book</i>
-                    <span>Blender Docs</span>
-                  </a>
-
-                  <a href="/" class="dropdown-item">
-                    <i class="material-icons">question_answer</i>
-                    <span>Blender Chat</span>
-                  </a> {% endcomment %}
-
             </div>
           </div>
 
@@ -192,7 +156,7 @@
           </div>
 
           <a href="/" class="navbar-brand">
-            <h1 class="mb-n1 h2 text-uppercase"><span class="d-inline d-md-none d-lg-inline">Blender</span> Studio</h1>
+            <h1 style="transform: translateY(1px);" class="h3 mb-0 text-uppercase">Blender Studio</h1>
           </a>
 
           <div class="navbar-main-nav">
@@ -207,13 +171,28 @@
               <span>Blog</span>
             </a>
 
-            <a href="/libraries" class="btn btn-secondary btn-nav">
-              <span>Libraries</span>
+            <div class="mx-2 position-relative d-none d-md-block d-lg-none">
+              <button class="btn btn-nav btn-icon btn-secondary" data-toggle="dropdown" id="nav-dropdown">
+                <i class="material-icons">arrow_drop_down</i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-right mt-3" aria-labelledby="nav-dropdown">
+                <a href="/tools" class="dropdown-item">
+                  <span>Tools</span>
+                </a>
+
+                <a href="https://cloud.blender.org/p/characters/" class="dropdown-item" target="_blank" rel="nofollow">
+                  <span>Characters</span>
+                </a>
+              </div>
+            </div>
+
+            <a href="/tools" class="btn btn-secondary btn-nav d-none d-lg-block ml-2">
+              <span>Tools</span>
             </a>
 
-            {% comment %} <a href="/services" class="btn btn-secondary btn-nav">
-              <span>Services</span>
-            </a> {% endcomment %}
+            <a href="https://cloud.blender.org/p/characters/" class="btn btn-secondary btn-nav d-none d-lg-block" target="_blank" rel="nofollow">
+              <span>Characters</span>
+            </a>
           </div>
           {% if request.user.is_authenticated %}
 
@@ -416,12 +395,12 @@
                   </div>
 
                   <div class="col-6 p-0">
-                    <a class="h3 drawer-nav-dropdown" href="/libraries">Libraries</a>
+                    <a class="h3 drawer-nav-dropdown" href="/tools">tools</a>
                   </div>
 
-                  {% comment %} <div class="col-6 p-0">
-                    <a class="h3 drawer-nav-dropdown" href="/services">Services</a>
-                  </div> {% endcomment %}
+                  <div class="col-6 p-0">
+                    <a class="h3 drawer-nav-dropdown" target="_blank" rel="nofollow" href="https://cloud.blender.org/p/characters/">Characters</a>
+                  </div>
 
                   <div class="col-6 p-0">
                     <a class="h3 drawer-nav-dropdown" href="{% url 'search' %}">Search</a>
