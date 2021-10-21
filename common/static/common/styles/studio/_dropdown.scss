@@ -93,7 +93,8 @@
   padding: $spacer / 4;
   flex-wrap: wrap;
   justify-content: stretch;
-  width: 600px;
+  max-width: 600px;
+  width: calc(100vw - 20px);
   box-sizing: content-box;
 
   &.show {

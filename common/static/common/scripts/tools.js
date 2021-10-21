@@ -330,6 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const nav = document.querySelector('.navbar');
   const secondaryNav = document.querySelector('.navbar-secondary');
   const nestedNav = document.querySelector('.nav-drawer-nested');
+  const navDrawer = document.querySelector('.nav-drawer');
 
   let prevScrollpos = window.pageYOffset;
   window.onscroll = () => {
@@ -344,5 +345,11 @@ document.addEventListener('DOMContentLoaded', () => {
       nestedNav?.classList.remove('scroll');
     }
     prevScrollpos = currentScrollPos;
+
+    if (window.pageYOffset > 40) {
+      navDrawer?.classList.add('scroll');
+    } else {
+      navDrawer?.classList.remove('scroll');
+    }
   };
 });

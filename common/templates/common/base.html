@@ -8,9 +8,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="{% static 'common/images/favicon/favicon.ico' %}">
-    {#<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">#}
-    <title>{% block title_prepend %}{% endblock title_prepend %}Blender
-      Cloud{% block title_append %}{% endblock title_append %}</title>
+    <title>{% block title_prepend %}{% endblock title_prepend %}Blender Studio{% block title_append %}{% endblock title_append %}</title>
     <meta name="google-site-verification" content="r-8DuUEYwMyb14SRVj0I4mSUSEPmdRRMrT-zMSbFkas">
 
     {% block meta %}
@@ -43,8 +41,8 @@
         aria-valuemax="100"></div>
     </div>
 
-    <div class="bg-dark mt-n3 mb-3 border-bottom">
-      <div class="container-xl px-md-2">
+    <div class="bg-dark mt-md-n3 mb-md-3 border-bottom">
+      <div class="container-xl px-lg-3 px-xl-2">
         <div class="row justify-content-between">
 
           <div class="col-auto d-flex align-items-stretch">
@@ -194,7 +192,7 @@
           </div>
 
           <a href="/" class="navbar-brand">
-            <h1 class="mb-0 h2 text-uppercase">Blender Studio</h1>
+            <h1 class="mb-n1 h2 text-uppercase">Blender Studio</h1>
             {% comment %} <img src="{% static 'common/images/blender_cloud_logo_icon.svg' %}" alt="Blender Cloud" class="">
             <img src="{% static 'common/images/blender_cloud_logo_text.svg' %}" alt="Blender Cloud" style="margin-left: 9px;" class="d-block d-md-none d-lg-block"> {% endcomment %}
           </a>
@@ -389,7 +387,7 @@
 
     {% block nav_drawer %}
 
-      <nav class="nav-drawer">
+      <nav class="nav-drawer scroll">
         <div class="nav-drawer-body">
           {% comment %}
             <div class="px-2 py-2 d-block d-md-none">

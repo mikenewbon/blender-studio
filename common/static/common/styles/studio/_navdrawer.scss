@@ -20,7 +20,12 @@
   overflow: hidden;
 
   .nav-drawer {
-    transform: translateY(0%);
+    transform: translateY(40px);
+
+    &.scroll {
+
+      transform: translateY(0);
+    }
 
     &::after {
       opacity: 1;
