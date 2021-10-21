@@ -46,6 +46,10 @@
   +.btn-nav {
     margin-left: $spacer / 2;
   }
+
+  @include media-breakpoint-down(md) {
+    padding: 0.875rem;
+  }
 }
 
 .btn-profile {

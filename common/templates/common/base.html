@@ -192,7 +192,7 @@
           </div>
 
           <a href="/" class="navbar-brand">
-            <h1 class="mb-n1 h2 text-uppercase">Blender Studio</h1>
+            <h1 class="mb-n1 h2 text-uppercase"><span class="d-inline d-md-none d-lg-inline">Blender</span> Studio</h1>
           </a>
 
           <div class="navbar-main-nav">
@@ -202,10 +202,7 @@
             <a href="{% url 'training-home' %}" class="btn btn-secondary btn-nav">
               <span>Training</span>
             </a>
-            {% comment %} <a href="/services/" class="list-group-item">
-                <span>Services</span>
-              </a>
-            {% endcomment %}
+
             <a href="{% url 'post-list' %}" class="btn btn-secondary btn-nav">
               <span>Blog</span>
             </a>
@@ -214,9 +211,9 @@
               <span>Libraries</span>
             </a>
 
-            <a href="/services" class="btn btn-secondary btn-nav">
+            {% comment %} <a href="/services" class="btn btn-secondary btn-nav">
               <span>Services</span>
-            </a>
+            </a> {% endcomment %}
           </div>
           {% if request.user.is_authenticated %}
 
@@ -422,9 +419,9 @@
                     <a class="h3 drawer-nav-dropdown" href="/libraries">Libraries</a>
                   </div>
 
-                  <div class="col-6 p-0">
+                  {% comment %} <div class="col-6 p-0">
                     <a class="h3 drawer-nav-dropdown" href="/services">Services</a>
-                  </div>
+                  </div> {% endcomment %}
 
                   <div class="col-6 p-0">
                     <a class="h3 drawer-nav-dropdown" href="{% url 'search' %}">Search</a>
