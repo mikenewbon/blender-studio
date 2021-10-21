@@ -52,7 +52,7 @@ class StaticAssetAdmin(AdminUserDefaultMixin, nested_admin.NestedModelAdmin):
                     'source',
                     'original_filename',
                     'size_bytes',
-                    'source_type',
+                    ('source_type', 'content_type'),
                     ('user', 'author', 'contributors'),
                     'license',
                     'thumbnail',

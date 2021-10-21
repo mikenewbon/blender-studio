@@ -213,13 +213,13 @@ Studio doesn't use Docker, only a clone of its own repository and a few systemd 
 To deploy latest `production`, use the following script:
 
 ```
-./deploy.sh studiobeta.blender.org
+./deploy.sh studio.blender.org
 ```
 This will
 
 * pull latest `master` and `production`;
 * fast-forward `production` to `master`;
-* SSH into `studiobeta.blender.org` and there:
+* SSH into `studio.blender.org` and there:
     * pull latest `production`;
     * do `poetry install`;
     * run database migrations;
@@ -238,7 +238,7 @@ The following periodic services exist at the moment:
 In order to set them up in production, the following commands were used:
 
 ```
-ssh root@studiobeta.blender.org
+ssh root@studio.blender.org
 cd /var/www/blender-studio/
 cp systemd/system/*.{service,timer} /lib/systemd/system/
 systemctl enable studio-process-deletion-requests.timer

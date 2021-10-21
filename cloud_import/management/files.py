@@ -1,7 +1,6 @@
 import boto3
 import os
 import requests
-import pathlib
 from google.cloud import storage
 import pathlib
 from typing import Optional
@@ -95,12 +94,16 @@ def file_on_s3(s3_client, bucket, key):
     return True
 
 
-def upload_file_to_s3(source_path: str, dest_path: str):
+def upload_file_to_s3(source_path: str, dest_path: str, **kwargs):
     def human_size(bytes, units=[' bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB']):
-        """Returns a human readable string representation of bytes """
+        """Returns a human readable string representation of bytes"""
         return str(bytes) + units[0] if bytes < 1024 else human_size(bytes >> 10, units[1:])
 
     with open(source_path, "rb") as f:
         human_size_str = human_size(pathlib.Path(source_path).stat().st_size)
         print(f"Uploading {human_size_str} {dest_path} to S3 {settings.AWS_STORAGE_BUCKET_NAME}")
-        s3_client.upload_fileobj(f, settings.AWS_STORAGE_BUCKET_NAME, dest_path)
+        extra_args = settings.AWS_S3_OBJECT_PARAMETERS.copy()
+        extra_args.update(**{k: v for k, v in kwargs.items() if v is not None})
+        s3_client.upload_fileobj(
+            f, settings.AWS_STORAGE_BUCKET_NAME, dest_path, ExtraArgs=extra_args
+        )

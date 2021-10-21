@@ -2,7 +2,7 @@
 set -e
 
 if [ -z "$1" ]; then
-    echo "Use $0 studiobeta.blender.org" >&2
+    echo "Use $0 studio.blender.org" >&2
     exit 1
 fi
 DEPLOYHOST="$1"

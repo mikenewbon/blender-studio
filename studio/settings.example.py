@@ -92,7 +92,7 @@ GOOGLE_RECAPTCHA_SECRET_KEY = 'CHANGE_ME'
 
 MEILISEARCH_PUBLIC_KEY = 'CHANGE_ME'
 MEILISEARCH_PRIVATE_KEY = 'CHANGE_ME'
-# Change the address to 'https://studiobeta.blender.org/s/' in production
+# Change the address to 'https://studio.blender.org/s/' in production
 MEILISEARCH_API_ADDRESS = 'http://127.0.0.1:7700/'
 SEARCH_CLIENT = meilisearch.Client(MEILISEARCH_API_ADDRESS, apiKey=MEILISEARCH_PRIVATE_KEY)
 MAIN_SEARCH_INDEX = SEARCH_CLIENT.get_index(MEILISEARCH_INDEX_UID)

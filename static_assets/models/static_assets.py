@@ -129,8 +129,10 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
         if self.source:
             # The `if` prevents an unhandled exception if one tries to save without a source
             self.size_bytes = self.source.size
+            content_type, _ = mimetypes.guess_type(self.original_filename)
+            if not self.content_type:
+                self.content_type = content_type
             if not self.source_type:
-                content_type, _ = mimetypes.guess_type(self.original_filename)
                 if not content_type:
                     self.source_type = StaticAssetFileTypeChoices.file
                 elif 'image' in content_type:
@@ -162,6 +164,19 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
 
     def __str__(self):
         return f'({self.id}) {self.original_filename}'
+
+    @property
+    def content_disposition(self) -> Optional[str]:
+        """Try to get a human-readable file name for Content-Disposition header."""
+        path = PurePosixPath(self.source.name)
+        ext = path.suffix
+        filename = None
+
+        if self.original_filename:
+            filename = f'{slugify(PurePosixPath(self.original_filename).stem)}{ext}'
+
+        if filename:
+            return f'attachment; filename="{filename}"'
 
 
 class Video(models.Model):
@@ -222,6 +237,21 @@ class Video(models.Model):
     def __str__(self) -> str:
         return f'{self._meta.model_name} {self.static_asset.original_filename}'
 
+    @property
+    def content_disposition(self) -> Optional[str]:
+        """Try to get a human-readable file name for Content-Disposition header."""
+        path = PurePosixPath(self.source.name)
+        ext = path.suffix
+        filename = None
+        resolution_label = f'-{self.resolution_label}' if self.resolution_label else ''
+        original_filename = self.static_asset.original_filename
+
+        if original_filename:
+            filename = f'{slugify(PurePosixPath(original_filename).stem)}{resolution_label}{ext}'
+
+        if filename:
+            return f'attachment; filename="{filename}"'
+
 
 class VideoVariation(models.Model):
     video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='variations')
@@ -239,15 +269,17 @@ class VideoVariation(models.Model):
     def content_disposition(self) -> Optional[str]:
         """Try to get a human-readable file name for Content-Disposition header."""
         path = PurePosixPath(self.source.name)
-        # Falling back to the `original_filename` doesn't make much sense for converted videos
+        ext = path.suffix
         filename = None
+        resolution_label = f'-{self.resolution_label}' if self.resolution_label else ''
+        original_filename = self.video.static_asset.original_filename
 
         section = getattr(self.video.static_asset, 'section', None)
         # This is a training section video, use its name as a file name
         if section:
-            ext = path.suffix
-            resolution_label = f'-{self.resolution_label}' if self.resolution_label else ''
             filename = f'{slugify(section.name)}{resolution_label}{ext}'
+        elif original_filename:
+            filename = f'{slugify(PurePosixPath(original_filename).stem)}{resolution_label}{ext}'
 
         if filename:
             return f'attachment; filename="{filename}"'
