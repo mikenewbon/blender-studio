@@ -10,7 +10,7 @@
 
       &.scroll {
         top: calc(#{$navbar-height + $secondary-navbar-height + $spacer * 1.5});
-        max-height: calc(100vh - #{$navbar-height + $secondary-navbar-height + $spacer * 2.5});
+        max-height: calc(100vh - #{$navbar-height + $secondary-navbar-height + $spacer * 5});
       }
     }
   }
