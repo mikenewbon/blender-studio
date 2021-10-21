@@ -1,13 +1,13 @@
 Dear {% firstof user.customer.full_name user.customer.billing_address.full_name user.full_name user.email %},
 
-Your Blender Cloud subscription #{{subscription.pk}} has expired a while back. We miss you -- and you are missing some exciting content on Blender Cloud as well.{% if latest_posts or latest_trainings %} Just recently, we've published:
+Your Blender Studio subscription #{{subscription.pk}} has expired a while back. We miss you -- and you are missing some exciting content on Blender Studio as well.{% if latest_posts or latest_trainings %} Just recently, we've published:
 {% for post in latest_posts|slice:":2" %}
 * {{ post.title }} {{ site_url }}{{ post.url }}
 {% endfor %}{% for training in latest_trainings|slice:":2" %}
 * {{ training.name }} {{ site_url }}{{ training.url }}
 {% endfor %}
 {% endif %}
-If you'd like to rejoin Blender Cloud, use the link below, we'd love to have you back.
+If you'd like to rejoin Blender Studio, use the link below, we'd love to have you back.
 
 {{ site_url }}{% url "subscriptions:join" %}?source=subscription_expired_email
 
@@ -16,4 +16,4 @@ Hope to see you again soon!
 --
 Until then,
 
-Blender Cloud Team
+Blender Studio Team

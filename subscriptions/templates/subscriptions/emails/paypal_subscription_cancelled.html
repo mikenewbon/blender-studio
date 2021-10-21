@@ -9,8 +9,8 @@
 {% block body %}
   <p>Dear {% firstof user.customer.full_name user.customer.billing_address.full_name user.full_name user.email %},</p>
   <p>
-    As you may have heard, Blender Cloud's subscription system recently got a new shiny update,
-    more on that in <a href="https://cloud.blender.org/blog/subscription-system-update-2021/">the blog post</a>.
+    As you may have heard, Blender Studio's subscription system recently got a new shiny update,
+    more on that in <a href="https://studio.blender.org/blog/subscription-system-update-2021/">the blog post</a>.
   </p>
   <p>Due to this update, the old PayPal Subscriptions payment method is no longer supported.</p>
   <p>
@@ -111,6 +111,6 @@
     --<br />
     Best regards,<br />
 
-    Blender Cloud Team
+    Blender Studio Team
   </p>
 {% endblock body %}

@@ -5,4 +5,4 @@ Manage subscription in your billing settings: {{ billing_url }}.
 --
 Kind regards,
 
-Blender Cloud Team
+Blender Studio Team

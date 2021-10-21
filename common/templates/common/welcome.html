@@ -38,7 +38,7 @@
             {% endcomment %}
             <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center">
               <a href="{% url 'subscriptions:join' %}"
-                class="btn btn-lg btn-primary mr-md-4 mb-2 mb-md-0">Join the Blender Cloud</a>
+                class="btn btn-lg btn-primary mr-md-4 mb-2 mb-md-0">Join the Blender Studio</a>
               <div class="d-inline-block">
                 <p class="mb-0">Access to all training, assets<br>and films for €9.90/month</p>
               </div>
@@ -55,7 +55,7 @@
         <div class="col-md-6 text-center">
           <h2 class="mb-1">From A to UV, we’ve got it covered.</h2>
           <p class="mb-0">With courses covering every major topic in Blender, you get the tools to learn, explore
-            and grow as an artist with the Blender Cloud.</p>
+            and grow as an artist with the Blender Studio.</p>
         </div>
       </div>
       <div class="row">
@@ -65,7 +65,7 @@
       </div>
       <div class="row justify-content-center mb-0">
         <div class="col-md-6 text-center">
-          <p class="mb-0">Want to see more? <a href="/training">Explore all Blender Cloud Training</a>.</p>
+          <p class="mb-0">Want to see more? <a href="/training">Explore all Blender Studio Training</a>.</p>
         </div>
       </div>
     </section>
@@ -146,7 +146,7 @@
       </div>
     </section>
 
-    {% include 'common/components/cards/card_carousel.html' with title="Access all our production assets!" subtitle="You can access all the production files from our films with a Blender Cloud subscription." slides=4 card_set=featured_film_assets media_type="file" id="fromTheArchives" %}
+    {% include 'common/components/cards/card_carousel.html' with title="Access all our production assets!" subtitle="You can access all the production files from our films with a Blender Studio subscription." slides=4 card_set=featured_film_assets media_type="file" id="fromTheArchives" %}
 
     <section class="my-5">
       <div class="row mb-3">
@@ -163,8 +163,8 @@
             <div class="row">
               <div class="col-md-7 col-lg-6 offset-md-5 offset-lg-6">
                 <div class="jumbotron-body py-4">
-                  <h2 class="h1">Subscribe to Blender Cloud today</h2>
-                  <p class="mb-4">Join Blender Cloud and get access to hundreds of hours of training,
+                  <h2 class="h1">Subscribe to Blender Studio today</h2>
+                  <p class="mb-4">Join Blender Studio and get access to hundreds of hours of training,
                     production assets and files from the Open Movies as well as a platform to learn at
                     your own pace, in your own time.</p>
                   <a href="{% url 'subscriptions:join' %}"

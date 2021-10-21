@@ -1,1 +1,1 @@
-Blender Cloud order-{{ order.display_number }}
+Blender Studio order-{{ order.display_number }}

@@ -2,7 +2,7 @@
 {% load subscriptions %}
 {% block content  %}
   <p>
-    Automatic {{ subscription|renewal_period }} payment for your Blender Cloud subscription ({{ order.price.with_currency_symbol }}) was successful. Thank you for subscribing to Blender Cloud!
+    Automatic {{ subscription|renewal_period }} payment for your Blender Studio subscription ({{ order.price.with_currency_symbol }}) was successful. Thank you for subscribing to Blender Studio!
   </p>
   <p>You will find the online invoice at <a href="{{ receipt_url }}">{{ receipt_url }}</a></p>
 {% endblock content %}

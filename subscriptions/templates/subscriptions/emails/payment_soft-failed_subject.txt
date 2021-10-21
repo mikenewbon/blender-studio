@@ -1,1 +1,1 @@
-Blender Cloud Subscription: payment failed (but we'll try again)
+Blender Studio Subscription: payment failed (but we'll try again)

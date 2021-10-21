@@ -7,7 +7,7 @@
 
 {% block body %}
   <p>Dear {% firstof user.customer.full_name user.customer.billing_address.full_name user.full_name user.email %},</p>
-  <p>Your Blender Cloud subscription #{{subscription.pk}} has expired a while back. We miss you -- and you are missing some exciting content on Blender Cloud as well.</p>
+  <p>Your Blender Studio subscription #{{subscription.pk}} has expired a while back. We miss you -- and you are missing some exciting content on Blender Studio as well.</p>
   {% if latest_posts or latest_trainings %}
     <p>Just recently, we've published:</p>
     <ul>
@@ -20,7 +20,7 @@
     </ul>
   {% endif %}
 
-  <p>If you'd like to rejoin Blender Cloud, use the link below, we'd love to have you back.</p>
+  <p>If you'd like to rejoin Blender Studio, use the link below, we'd love to have you back.</p>
   <p style="text-align: center">
     <a style="
       text-decoration: none;
@@ -63,7 +63,7 @@
       text-align: center;
       text-transform: none;
       vertical-align: middle;
-      width: auto;" href="{{ site_url }}{% url 'subscriptions:join' %}?source=subscription_expired_email">Join Blender Cloud</a>
+      width: auto;" href="{{ site_url }}{% url 'subscriptions:join' %}?source=subscription_expired_email">Join Blender Studio</a>
   </p>
 
   <p>Hope to see you again soon!</p>
@@ -72,6 +72,6 @@
     --<br />
     Until then,<br />
 
-    Blender Cloud Team
+    Blender Studio Team
   </p>
 {% endblock body %}

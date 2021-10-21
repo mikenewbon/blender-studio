@@ -6,7 +6,7 @@
       {% url 'user-activity' as my_activity_url %}
       {% url 'user-notification' as my_notifications_url %}
       {% if request.path == my_activity_url %}
-        {% include "common/components/simple_header.html" with title="My activity" subtitle="All your most recent acivity in the cloud is here." %}
+        {% include "common/components/simple_header.html" with title="My activity" subtitle="All your most recent acivity in the Studio is here." %}
       {% elif request.path == my_notifications_url %}
         {% include "common/components/simple_header.html" with title="Notifications" subtitle="All the latest likes and replies to your content are here." %}
       {% else %}

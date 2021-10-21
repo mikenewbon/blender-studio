@@ -19,8 +19,8 @@
       <div class="container-xl">
         <div class="list-group list-group-flush list-group-horizontal small side-scroll">
 
-          <a class="list-group-item logo show-on-scroll" href="/">
-            <img src="{% static 'common/images/cloud-icon.svg' %}" alt="Blender Cloud Icon">
+          <a class="list-group-item logo show-on-scroll icon" href="/">
+            <i class="material-icons">home</i>
           </a>
 
           <a class="list-group-item" href="{% url 'film-detail' film_slug=film.slug %}">
@@ -118,9 +118,9 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
 
-                  <a href="/p/home/" class="dropdown-item">
+                  <a href="{% url 'user-settings' %}" class="dropdown-item">
                     <i class="material-icons">home</i>
-                    <span>My Cloud</span>
+                    <span>My Profile</span>
                   </a>
 
                   <a href="{% url 'user-activity' %}" class="dropdown-item">
@@ -190,7 +190,7 @@
               </a>
               <a href="{% url 'oauth:login' %}" class="list-group-item login-button">Login</a>
               <a href="{% url 'subscriptions:join' %}" class="list-group-item primary">Join
-                <span class="d-none d-lg-inline-block">Blender Cloud</span></a>
+                <span class="d-none d-lg-inline-block">Blender Studio</span></a>
 
             </div>
           {% endif %}

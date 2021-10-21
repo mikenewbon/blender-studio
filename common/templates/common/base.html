@@ -193,8 +193,6 @@
 
           <a href="/" class="navbar-brand">
             <h1 class="mb-n1 h2 text-uppercase">Blender Studio</h1>
-            {% comment %} <img src="{% static 'common/images/blender_cloud_logo_icon.svg' %}" alt="Blender Cloud" class="">
-            <img src="{% static 'common/images/blender_cloud_logo_text.svg' %}" alt="Blender Cloud" style="margin-left: 9px;" class="d-block d-md-none d-lg-block"> {% endcomment %}
           </a>
 
           <div class="navbar-main-nav">
@@ -290,9 +288,9 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
 
-                  <a href="/p/home/" class="dropdown-item">
+                  <a href="{% url 'user-settings' %}" class="dropdown-item">
                     <i class="material-icons">home</i>
-                    <span>My Cloud</span>
+                    <span>My Profile</span>
                   </a>
 
                   <div class="dropdown-menu-nested">
@@ -362,7 +360,7 @@
               </a>
               <a href="{% url 'oauth:login' %}" class="btn btn-transparent btn-nav login-button mr-2">Login</a>
               <a href="{% url 'subscriptions:join' %}" class="btn btn-primary ">Join
-                <span class="d-none d-lg-inline-block">Blender Cloud</span></a>
+                <span class="d-none d-lg-inline-block">Blender Studio</span></a>
             </div>
           {% endif %}
         </div>

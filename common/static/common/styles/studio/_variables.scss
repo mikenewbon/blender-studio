@@ -33,7 +33,7 @@ $grays: map-merge(("100": $gray-100,
 
 //brand colours
 $blender-orange: #e87d0d !default;
-$cloud-blue: #009eff;
+$studio-blue: #009eff;
 $charcoal-gray: #171717 !default;
 $navigation-gray: #1F1F1F !default;
 $input-gray: #2d2d2d !default;
@@ -77,7 +77,7 @@ $colors: map-merge(("blue": $blue,
   ),
   $colors);
 
-$primary: $cloud-blue !default;
+$primary: $studio-blue !default;
 $secondary: $navigation-gray !default;
 $success: $green !default;
 $info: $teal !default;

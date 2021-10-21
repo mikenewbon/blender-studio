@@ -1,8 +1,8 @@
 {% extends "subscriptions/emails/base.html" %}
 {% block content %}
-  <p>Your {{ subscription.plan.name }} subscription has been activated. Thank you for subscribing to Blender Cloud!</p>
+  <p>Your {{ subscription.plan.name }} subscription has been activated. Thank you for subscribing to Blender Studio!</p>
   {% url 'training-home' as training_url %}
-  <p>Explore all Blender Cloud Training:
+  <p>Explore all Blender Studio Training:
     <a href="{{ site_url }}{{ training_url }}">{{ site_url }}{{ training_url }}</a>!
   </p>
 {% endblock %}

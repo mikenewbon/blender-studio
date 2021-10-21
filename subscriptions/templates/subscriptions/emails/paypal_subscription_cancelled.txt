@@ -1,7 +1,7 @@
 {% load subscriptions %}Dear {% firstof user.customer.full_name user.customer.billing_address.full_name user.full_name user.email %},
 
-As you may have heard, Blender Cloud's subscription system recently got a new shiny update,
-more on that in the blog post https://cloud.blender.org/blog/subscription-system-update-2021/ .
+As you may have heard, Blender Studio's subscription system recently got a new shiny update,
+more on that in the blog post https://studio.blender.org/blog/subscription-system-update-2021/ .
 
 Due to this update, the old PayPal Subscriptions payment method is no longer supported.
 This means that PayPal's billing agreement that was used to pay for subscription #{{ subscription.pk }} has been cancelled,
@@ -30,4 +30,4 @@ We hope for your understanding and thank you for your continued support! 🧡
 --
 Best regards,
 
-Blender Cloud Team
+Blender Studio Team

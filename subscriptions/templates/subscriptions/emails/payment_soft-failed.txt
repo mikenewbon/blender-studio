@@ -1,6 +1,6 @@
 {% extends "subscriptions/emails/base.txt" %}
 {% block content %}
-Automatic payment for your Blender Cloud subscription failed. Don't worry, we will automatically try again soon.
+Automatic payment for your Blender Studio subscription failed. Don't worry, we will automatically try again soon.
 
 This was collection attempt {{ order.collection_attempts }} of {{ maximum_collection_attemps }}. If payment still fails after that, we'll send you another email.
 

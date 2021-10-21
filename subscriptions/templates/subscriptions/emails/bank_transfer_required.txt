@@ -1,7 +1,7 @@
 {% extends "subscriptions/emails/base.txt" %}
 {% load subscriptions %}
 {% block content %}
-Thank you for subscribing to Blender Cloud!
+Thank you for subscribing to Blender Studio!
 
 Your {% spaceless %}{% include 'subscriptions/components/info_with_status.txt' %}{% endspaceless %}
 and will be activated as soon as we have received and handled your bank transfer.

@@ -11,11 +11,11 @@ from common.tests.factories.users import UserFactory
 
 shared_meta = {
     'name=.author.': 'Blender Institute',
-    'property=.og:site_name.': 'Blender Cloud',
+    'property=.og:site_name.': 'Blender Studio',
     'property=.og:type.': 'website',
     'property=.og:locale.': 'en_US',
     'name=.twitter:card.': 'summary_large_image',
-    'name=.twitter:site.': '@Blender_Cloud',
+    'name=.twitter:site.': '@Blender_Studio',
 }
 
 
@@ -85,12 +85,12 @@ class TestSiteMetadata(TestCase):
         for meta, value in {
             'property=.og:url.': 'http://testserver/',
             **shared_meta,
-            'property=.og:title.': 'Blender Cloud',
-            'name=.twitter:title.': 'Blender Cloud',
-            'property=.og:description.': 'Blender Cloud is a web based service developed by Blender Institute that allows people to access the training videos and all the data from the open projects.',
-            'name=.twitter:description.': 'Blender Cloud is a web based service developed by Blender Institute that allows people to access the training videos and all the data from the open projects.',
-            'property=.og:image.': 'http://testserver/static/common/images/blender-cloud-og.jpg',
-            'name=.twitter:image.': 'http://testserver/static/common/images/blender-cloud-og.jpg',
+            'property=.og:title.': 'Blender Studio',
+            'name=.twitter:title.': 'Blender Studio',
+            'property=.og:description.': 'Blender Studio is a web based service developed by Blender Institute that allows people to access the training videos and all the data from the open projects.',
+            'name=.twitter:description.': 'Blender Studio is a web based service developed by Blender Institute that allows people to access the training videos and all the data from the open projects.',
+            'property=.og:image.': 'http://testserver/static/common/images/blender-studio-og.jpg',
+            'name=.twitter:image.': 'http://testserver/static/common/images/blender-studio-og.jpg',
         }.items():
             self.assertMetaEquals(html, meta, value)
 
@@ -106,12 +106,12 @@ class TestSiteMetadata(TestCase):
         for meta, value in {
             'property=.og:url.': 'http://testserver/welcome/',
             **shared_meta,
-            'property=.og:title.': 'Blender Cloud',
-            'name=.twitter:title.': 'Blender Cloud',
-            'property=.og:description.': 'Blender Cloud is a web based service developed by Blender Institute that allows people to access the training videos and all the data from the open projects.',
-            'name=.twitter:description.': 'Blender Cloud is a web based service developed by Blender Institute that allows people to access the training videos and all the data from the open projects.',
-            'property=.og:image.': 'http://testserver/static/common/images/blender-cloud-og.jpg',
-            'name=.twitter:image.': 'http://testserver/static/common/images/blender-cloud-og.jpg',
+            'property=.og:title.': 'Blender Studio',
+            'name=.twitter:title.': 'Blender Studio',
+            'property=.og:description.': 'Blender Studio is a web based service developed by Blender Institute that allows people to access the training videos and all the data from the open projects.',
+            'name=.twitter:description.': 'Blender Studio is a web based service developed by Blender Institute that allows people to access the training videos and all the data from the open projects.',
+            'property=.og:image.': 'http://testserver/static/common/images/blender-studio-og.jpg',
+            'name=.twitter:image.': 'http://testserver/static/common/images/blender-studio-og.jpg',
         }.items():
             self.assertMetaEquals(html, meta, value)
 
@@ -129,8 +129,8 @@ class TestSiteMetadata(TestCase):
         for meta, value in {
             'property=.og:url.': f'http://testserver/films/{film_slug}/',
             **shared_meta,
-            'property=.og:title.': f'{film.title} - Blender Cloud',
-            'name=.twitter:title.': f'{film.title} - Blender Cloud',
+            'property=.og:title.': f'{film.title} - Blender Studio',
+            'name=.twitter:title.': f'{film.title} - Blender Studio',
             'property=.og:description.': film.description,
             'name=.twitter:description.': film.description,
             'property=.og:image.': 'https://film/thumbnail_m.jpg',
@@ -156,8 +156,8 @@ class TestSiteMetadata(TestCase):
         for meta, value in {
             'property=.og:url.': f'http://testserver{asset.collection.url}?asset={asset.pk}',
             **shared_meta,
-            'property=.og:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
-            'name=.twitter:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
+            'property=.og:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Studio',
+            'name=.twitter:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Studio',
             'property=.og:description.': asset.description,
             'name=.twitter:description.': asset.description,
             'property=.og:image.': 'https://static/asset/thumbnail_m.jpg',
@@ -182,8 +182,8 @@ class TestSiteMetadata(TestCase):
         for meta, value in {
             'property=.og:url.': f'http://testserver/films/{film_slug}/gallery/?asset={asset.pk}',
             **shared_meta,
-            'property=.og:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
-            'name=.twitter:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
+            'property=.og:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Studio',
+            'name=.twitter:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Studio',
             'property=.og:description.': asset.description,
             'name=.twitter:description.': asset.description,
             'property=.og:image.': 'https://static/asset/thumbnail_m.jpg',
@@ -205,8 +205,8 @@ class TestSiteMetadata(TestCase):
         for meta, value in {
             'property=.og:url.': f'http://testserver/films/{film_slug}/gallery/',
             **shared_meta,
-            'property=.og:title.': f'{film.title} - Featured Artwork - Blender Cloud',
-            'name=.twitter:title.': f'{film.title} - Featured Artwork - Blender Cloud',
+            'property=.og:title.': f'{film.title} - Featured Artwork - Blender Studio',
+            'name=.twitter:title.': f'{film.title} - Featured Artwork - Blender Studio',
             'property=.og:description.': film.description,
             'name=.twitter:description.': film.description,
             'property=.og:image.': 'https://film/thumbnail_m.jpg',
@@ -232,8 +232,8 @@ class TestSiteMetadata(TestCase):
         for meta, value in {
             'property=.og:url.': f'http://testserver/films/{film_slug}/{asset.collection.slug}/?asset={asset.pk}',
             **shared_meta,
-            'property=.og:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
-            'name=.twitter:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
+            'property=.og:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Studio',
+            'name=.twitter:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Studio',
             'property=.og:description.': asset.description,
             'name=.twitter:description.': asset.description,
             'property=.og:image.': 'https://static/asset/thumbnail_m.jpg',
@@ -265,8 +265,8 @@ class TestSiteMetadata(TestCase):
         for meta, value in {
             'property=.og:url.': f'http://testserver/films/{film_slug}/{asset.collection.slug}/',
             **shared_meta,
-            'property=.og:title.': f'{film.title} - {asset.collection.name} - Blender Cloud',
-            'name=.twitter:title.': f'{film.title} - {asset.collection.name} - Blender Cloud',
+            'property=.og:title.': f'{film.title} - {asset.collection.name} - Blender Studio',
+            'name=.twitter:title.': f'{film.title} - {asset.collection.name} - Blender Studio',
             'property=.og:description.': asset.collection.text,
             'name=.twitter:description.': asset.collection.text,
             'property=.og:image.': 'https://film/thumbnail_m.jpg',
@@ -303,8 +303,8 @@ class TestSiteMetadata(TestCase):
         for meta, value in {
             'property=.og:url.': f'http://testserver/films/{film_slug}/{asset.collection.slug}/',
             **shared_meta,
-            'property=.og:title.': f'{film.title} - {asset.collection.name} - Blender Cloud',
-            'name=.twitter:title.': f'{film.title} - {asset.collection.name} - Blender Cloud',
+            'property=.og:title.': f'{film.title} - {asset.collection.name} - Blender Studio',
+            'name=.twitter:title.': f'{film.title} - {asset.collection.name} - Blender Studio',
             'property=.og:description.': film.description,
             'name=.twitter:description.': film.description,
             'property=.og:image.': 'https://film/thumbnail_m.jpg',
@@ -336,8 +336,8 @@ class TestSiteMetadata(TestCase):
         for meta, value in {
             'property=.og:url.': f'http://testserver/films/{film_slug}/{asset.collection.slug}/?asset={asset.pk}',
             **shared_meta,
-            'property=.og:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
-            'name=.twitter:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Cloud',
+            'property=.og:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Studio',
+            'name=.twitter:title.': f'{film.title} - {asset.collection.name}: {asset.name} - Blender Studio',
             'property=.og:description.': asset.description,
             'name=.twitter:description.': asset.description,
             'property=.og:image.': 'https://static/asset/thumbnail_m.jpg',
@@ -361,8 +361,8 @@ class TestSiteMetadata(TestCase):
         for meta, value in {
             'property=.og:url.': f'http://testserver/blog/{post.slug}/',
             **shared_meta,
-            'property=.og:title.': f'{post.title} - Blender Cloud',
-            'name=.twitter:title.': f'{post.title} - Blender Cloud',
+            'property=.og:title.': f'{post.title} - Blender Studio',
+            'name=.twitter:title.': f'{post.title} - Blender Studio',
             'property=.og:description.': post.excerpt,
             'name=.twitter:description.': post.excerpt,
             'property=.og:image.': 'https://post/thumbnail_m.jpg',

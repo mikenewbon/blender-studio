@@ -9,17 +9,17 @@
   <div class="content-locked-text">
     {% if not request.user.is_authenticated %}
       <h3>You need to login to view this content</h3>
-      <p class="mb-3">You can join Blender Cloud for €9.90/month and get access to all of our training & film content
+      <p class="mb-3">You can join Blender Studio for €9.90/month and get access to all of our training & film content
         instantly!</p>
       <a href="{% url 'oauth:login' %}" class="btn btn-transparent btn-nav login-button">Login</a>
       <a href="{% url 'subscriptions:join' %}" class="btn btn-primary">Join Blender
-        Cloud</a>
+        Studio</a>
     {% else %}
       <h3>You need to subscribe to view this content</h3>
-      <p class="mb-3">You can join Blender Cloud for €9.90/month and get access to all of our training & film content
+      <p class="mb-3">You can join Blender Studio for €9.90/month and get access to all of our training & film content
         instantly!</p>
       <a href="{% url 'subscriptions:join' %}" class="btn btn-primary">Join Blender
-        Cloud</a>
+        Studio</a>
     {% endif %}
   </div>
 

@@ -1,6 +1,6 @@
 {% extends "subscriptions/emails/base.txt" %}
 {% block content %}
-Automatic payment for your Blender Cloud subscription has failed.
+Automatic payment for your Blender Studio subscription has failed.
 We have tried {{ order.collection_attempts }} times, but none of those attempts were successful. As a result, we have paused your subscription for now.
 
 The error we received from the payment provider was: {{ failure_message }}.
