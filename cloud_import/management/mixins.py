@@ -1,4 +1,5 @@
 import datetime
+import mimetypes
 import pytz
 import pathlib
 import tempfile
@@ -173,15 +174,22 @@ class ImportCommand(BaseCommand):
             self.console_log(f"\tCreated temporary directory {tmp_dirname}")
             tmp_path = pathlib.Path(tmp_dirname)
             dest_file_path_s3 = files.generate_s3_path(file_path)
+            setattr(instance, attr_name, dest_file_path_s3)
 
             # Check if file is already on S3
             if files.file_on_s3(
-                files.s3_client, settings.AWS_STORAGE_BUCKET_NAME, dest_file_path_s3
+                files.s3_client,
+                settings.AWS_STORAGE_BUCKET_NAME,
+                dest_file_path_s3,
             ):
                 print(f"File {dest_file_path_s3} already exists on S3, skipping upload")
-                setattr(instance, attr_name, dest_file_path_s3)
                 instance.save()
                 return
+
+            # Collect storage metadata
+            guessed_content_type, _ = mimetypes.guess_type(dest_file_path_s3)
+            content_type = getattr(instance, 'content_type', guessed_content_type)
+            content_disposition = getattr(instance, 'content_disposition', None)
 
             # Download file
             downloaded_file_path: Optional[pathlib.Path] = files.download_file_from_storage(
@@ -191,9 +199,14 @@ class ImportCommand(BaseCommand):
             if not downloaded_file_path:
                 self.console_log(f"\tSkipping non existing file {file_uuid}")
                 return
+
             # Upload to S3
-            files.upload_file_to_s3(str(downloaded_file_path), dest_file_path_s3)
-            setattr(instance, attr_name, dest_file_path_s3)
+            files.upload_file_to_s3(
+                str(downloaded_file_path),
+                dest_file_path_s3,
+                ContentType=content_type,
+                ContentDisposition=content_disposition,
+            )
             instance.save()
 
     def reconcile_static_asset_video(
@@ -357,7 +370,7 @@ class ImportCommand(BaseCommand):
                 content_type = 'file'
             static_asset = models_static_assets.StaticAsset.objects.create(
                 source_type=content_type,
-                original_filename=file_doc['name'],
+                original_filename=file_doc.get('filename', file_doc['name']),
                 size_bytes=file_doc['length'],
                 user_id=1,
                 slug=file_slug,
