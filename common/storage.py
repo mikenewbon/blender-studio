@@ -22,7 +22,7 @@ class S3Boto3CustomStorage(S3Boto3Storage):
     def _get_write_parameters(self, name, content):
         """Set ContentDisposition header using original file name.
 
-        While docstring recomments overriding `get_object_parameters` for this purpose,
+        While docstring recommends overriding `get_object_parameters` for this purpose,
         `get_object_parameters` only gets a `name` which is not the original file name,
         but the result of `upload_to`.
         """
