@@ -143,6 +143,12 @@
   }
 }
 
+.scroll {
+  .notification-dropdown {
+    max-height: calc(100vh - #{$navbar-height + $spacer * 4});
+  }
+}
+
 .notification-button {
   @extend .search-button;
   position: relative;
