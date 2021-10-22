@@ -17,8 +17,9 @@ class Command(BaseCommand):
         except Film.DoesNotExist:
             raise CommandError('Film "%s" does not exist' % options['film_slug'])
 
-        # TODO(fsiddi): Ensure that is_public=True
-        credits = FilmProductionCredit.objects.filter(film=film).order_by('user__full_name')
+        credits = FilmProductionCredit.objects.filter(film=film, is_public=True).order_by(
+            'user__full_name'
+        )
 
         lines = []
         line = ''
