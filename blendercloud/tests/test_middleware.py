@@ -1,3 +1,5 @@
+import unittest
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import TestCase, override_settings
@@ -15,6 +17,7 @@ session_cookie_value = '.eJyNj7FOAzEQRP_FNYXtXdu7-YOIDkgkqpO9u9Yhogvc5USB-HesFNS
 
 
 @override_settings(BLENDER_CLOUD_SECRET_KEY='supersecret', BLENDER_CLOUD_AUTH_ENABLED=True)
+@unittest.skip('blendercloud app and middleware are no longer enabled')
 @freeze_time('2020-10-14 11:41:11')  # test cookies contain fixed expiration times
 class TestSessionMiddleware(TestCase):
     maxDiff = None

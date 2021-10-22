@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'waffle',
     'blender_id_oauth_client',
-    'blendercloud',
     'profiles',
     'debug_toolbar',
     'looper',
@@ -65,7 +64,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
-    'blendercloud.middleware.SessionMiddleware',
     'subscriptions.middleware.SetCurrencyMiddleware',
     'waffle.middleware.WaffleMiddleware',
 ]
