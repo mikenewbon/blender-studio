@@ -271,7 +271,7 @@ class BaseSubscriptionTestCase(TestCase):
         self.assertContains(response, 'NL07 INGB 0008 4489 82')
         subscription = response.wsgi_request.user.subscription_set.first()
         self.assertContains(
-            response, f'Blender Cloud order-{subscription.latest_order().display_number}'
+            response, f'Blender Studio order-{subscription.latest_order().display_number}'
         )
 
     def _assert_done_page_displayed(self, response_redirect):
@@ -284,7 +284,7 @@ class BaseSubscriptionTestCase(TestCase):
         self.assertEqual(response_redirect.status_code, 302)
         # Follow the redirect
         response = self.client.get(response_redirect['Location'])
-        self.assertContains(response, 'Welcome to Blender Cloud')
+        self.assertContains(response, 'Welcome to Blender Studio')
         self.assertNotContains(response, 'Bank details')
 
     def _assert_no_emails_sent(self):
@@ -300,11 +300,11 @@ class BaseSubscriptionTestCase(TestCase):
         self.assertEqual(email.reply_to, [])
         # TODO(anna): set the correct from_email DEFAULT_FROM_EMAIL
         self.assertEqual(email.from_email, 'webmaster@localhost')
-        self.assertEqual(email.subject, 'Blender Cloud Subscription Bank Payment')
+        self.assertEqual(email.subject, 'Blender Studio Subscription Bank Payment')
         self.assertEqual(email.alternatives[0][1], 'text/html')
         for email_body in (email.body, email.alternatives[0][0]):
             self.assertIn(
-                f'Blender Cloud order-{subscription.latest_order().number}',
+                f'Blender Studio order-{subscription.latest_order().number}',
                 email_body,
             )
             self.assertIn('NL07 INGB 0008 4489 82', email_body)
@@ -325,14 +325,14 @@ class BaseSubscriptionTestCase(TestCase):
         self.assertEqual(email.reply_to, [])
         # TODO(anna): set the correct from_email DEFAULT_FROM_EMAIL
         self.assertEqual(email.from_email, 'webmaster@localhost')
-        self.assertEqual(email.subject, 'Blender Cloud Subscription Activated')
+        self.assertEqual(email.subject, 'Blender Studio Subscription Activated')
         self.assertEqual(email.alternatives[0][1], 'text/html')
         for email_body in (email.body, email.alternatives[0][0]):
             self.assertIn('activated', email_body)
             self.assertIn(f'Dear {user.customer.full_name},', email_body)
             self.assertIn(reverse('user-settings-billing'), email_body)
             self.assertIn('Automatic renewal subscription', email_body)
-            self.assertIn('Blender Cloud Team', email_body)
+            self.assertIn('Blender Studio Team', email_body)
 
     def _assert_subscription_deactivated_email_is_sent(self, subscription):
         user = subscription.user
@@ -344,13 +344,13 @@ class BaseSubscriptionTestCase(TestCase):
         self.assertEqual(email.reply_to, [])
         # TODO(anna): set the correct from_email DEFAULT_FROM_EMAIL
         self.assertEqual(email.from_email, 'webmaster@localhost')
-        self.assertEqual(email.subject, 'Blender Cloud Subscription Deactivated')
+        self.assertEqual(email.subject, 'Blender Studio Subscription Deactivated')
         self.assertEqual(email.alternatives[0][1], 'text/html')
         for email_body in (email.body, email.alternatives[0][0]):
             self.assertIn('deactivated', email_body)
             self.assertIn('Dear Алексей Н.,', email_body)
             self.assertIn(reverse('user-settings-billing'), email_body)
-            self.assertIn('Blender Cloud Team', email_body)
+            self.assertIn('Blender Studio Team', email_body)
 
     def _assert_payment_soft_failed_email_is_sent(self, subscription):
         user = subscription.user
@@ -363,7 +363,7 @@ class BaseSubscriptionTestCase(TestCase):
         # TODO(anna): set the correct from_email DEFAULT_FROM_EMAIL
         self.assertEqual(email.from_email, 'webmaster@localhost')
         self.assertEqual(
-            email.subject, "Blender Cloud Subscription: payment failed (but we'll try again)"
+            email.subject, "Blender Studio Subscription: payment failed (but we'll try again)"
         )
         self.assertEqual(email.alternatives[0][1], 'text/html')
         for email_body in (email.body, email.alternatives[0][0]):
@@ -380,7 +380,7 @@ class BaseSubscriptionTestCase(TestCase):
                 email_body,
             )
             self.assertIn(reverse('user-settings-billing'), email_body)
-            self.assertIn('Blender Cloud Team', email_body)
+            self.assertIn('Blender Studio Team', email_body)
 
     def _assert_payment_failed_email_is_sent(self, subscription):
         user = subscription.user
@@ -392,7 +392,7 @@ class BaseSubscriptionTestCase(TestCase):
         self.assertEqual(email.reply_to, [])
         # TODO(anna): set the correct from_email DEFAULT_FROM_EMAIL
         self.assertEqual(email.from_email, 'webmaster@localhost')
-        self.assertEqual(email.subject, 'Blender Cloud Subscription: payment failed')
+        self.assertEqual(email.subject, 'Blender Studio Subscription: payment failed')
         self.assertEqual(email.alternatives[0][1], 'text/html')
         for email_body in (email.body, email.alternatives[0][0]):
             self.assertIn(f'Dear {user.customer.full_name},', email_body)
@@ -407,7 +407,7 @@ class BaseSubscriptionTestCase(TestCase):
                 email_body,
             )
             self.assertIn(reverse('user-settings-billing'), email_body)
-            self.assertIn('Blender Cloud Team', email_body)
+            self.assertIn('Blender Studio Team', email_body)
 
     def _assert_payment_paid_email_is_sent(self, subscription):
         user = subscription.user
@@ -419,7 +419,7 @@ class BaseSubscriptionTestCase(TestCase):
         self.assertEqual(email.reply_to, [])
         # TODO(anna): set the correct from_email DEFAULT_FROM_EMAIL
         self.assertEqual(email.from_email, 'webmaster@localhost')
-        self.assertEqual(email.subject, 'Blender Cloud Subscription: payment received')
+        self.assertEqual(email.subject, 'Blender Studio Subscription: payment received')
         self.assertEqual(email.alternatives[0][1], 'text/html')
         for email_body in (email.body, email.alternatives[0][0]):
             self.assertIn(f'Dear {user.customer.full_name},', email_body)
@@ -433,7 +433,7 @@ class BaseSubscriptionTestCase(TestCase):
                 email_body,
             )
             self.assertIn(reverse('user-settings-billing'), email_body)
-            self.assertIn('Blender Cloud Team', email_body)
+            self.assertIn('Blender Studio Team', email_body)
 
     def _assert_managed_subscription_notification_email_is_sent(self, subscription):
         user = subscription.user
@@ -443,7 +443,7 @@ class BaseSubscriptionTestCase(TestCase):
         self.assertEqual(email.to, ['admin@example.com'])
         # TODO(anna): set the correct from_email DEFAULT_FROM_EMAIL
         self.assertEqual(email.from_email, 'webmaster@localhost')
-        self.assertEqual(email.subject, 'Blender Cloud managed subscription needs attention')
+        self.assertEqual(email.subject, 'Blender Studio managed subscription needs attention')
         self.assertEqual(email.alternatives[0][1], 'text/html')
         for email_body in (email.body, email.alternatives[0][0]):
             self.assertIn(f'{user.customer.full_name} has', email_body)
@@ -461,7 +461,7 @@ class BaseSubscriptionTestCase(TestCase):
         email = mail.outbox[0]
         self.assertEqual(email.to, [subscription.user.email])
         self.assertEqual(email.from_email, 'webmaster@localhost')
-        self.assertEqual(email.subject, 'We miss you at Blender Cloud')
+        self.assertEqual(email.subject, 'We miss you at Blender Studio')
         self.assertEqual(email.alternatives[0][1], 'text/html')
         for email_body in (email.body, email.alternatives[0][0]):
             self.assertIn(f'Dear {user.customer.full_name}', email_body)

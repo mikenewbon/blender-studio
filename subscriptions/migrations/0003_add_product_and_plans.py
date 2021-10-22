@@ -36,7 +36,7 @@ def add_product_and_plans(apps, schema_editor):
     Plan = apps.get_model('looper', 'Plan')
     PlanVariation = apps.get_model('looper', 'PlanVariation')
     product, _ = Product.objects.get_or_create(
-        name='Blender Cloud Subscription',
+        name='Blender Studio Subscription',
         type=ProductType.ELECTRONIC_SERVICE.value
     )
     for params in plan_variations:

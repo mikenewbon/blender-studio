@@ -10,7 +10,7 @@ markdown_html_with_audio_tag = '''
     <a href="http://podcast.blender.institute/media/bip_007_movies1.m4a" download class="btn btn-sm btn-dark">Download</a>
 </p>
 
-The first podcast of the year is all about animated movies, including the one we're currently making! We go over the progress on [Caminandes 3](https://cloud.blender.org/p/caminandes-3), the brand new [Character Library](https://cloud.blender.org/p/characters) on Blender Cloud, and finally the topic of the week: Top 3 Animated Movies.
+The first podcast of the year is all about animated movies, including the one we're currently making! We go over the progress on [Caminandes 3](https://studio.blender.org/films/caminandes-3), the brand new [Character Library](https://studio.blender.org/films/characters) on Blender Studio, and finally the topic of the week: Top 3 Animated Movies.
 
 <blockquote><p>hi there, my favorite animated movies are: Bugs, Toy Story and Rango also The Lion King</p> &mdash;  <a href="https://example.com">January 6, 2016</a></blockquote>
 '''
@@ -20,7 +20,7 @@ markdown_html_with_audio_tag_rendered = '''<p class="audio-container">
     </audio>
     <a href="http://podcast.blender.institute/media/bip_007_movies1.m4a" download class="btn btn-sm btn-dark">Download</a>
 </p>
-<p>The first podcast of the year is all about animated movies, including the one we're currently making! We go over the progress on <a href="https://cloud.blender.org/p/caminandes-3">Caminandes 3</a>, the brand new <a href="https://cloud.blender.org/p/characters">Character Library</a> on Blender Cloud, and finally the topic of the week: Top 3 Animated Movies.</p>
+<p>The first podcast of the year is all about animated movies, including the one we're currently making! We go over the progress on <a href="https://studio.blender.org/films/caminandes-3">Caminandes 3</a>, the brand new <a href="https://studio.blender.org/films/characters">Character Library</a> on Blender Studio, and finally the topic of the week: Top 3 Animated Movies.</p>
 <blockquote><p>hi there, my favorite animated movies are: Bugs, Toy Story and Rango also The Lion King</p> &mdash;  <a href="https://example.com">January 6, 2016</a></blockquote>
 '''
 

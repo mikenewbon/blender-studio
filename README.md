@@ -1,8 +1,8 @@
 # Blender Studio
 
-This is the publishing platform of Blender Studio, available on cloud.blender.org.
+This is the publishing platform of Blender Studio, available on studio.blender.org.
 
-By subscribing to Blender Cloud you support the creation of open content,
+By subscribing to Blender Studio you support the creation of open content,
 the development of high-end production tools like Blender and access a
 unique set of learning and creative resources.
 

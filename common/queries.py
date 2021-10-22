@@ -113,7 +113,7 @@ def has_active_subscription(user: User) -> bool:
     if user.has_perm('users.can_view_content'):
         return True
 
-    # The new way, with subscriptions managed by Cloud itself
+    # The new way, with subscriptions managed by Studio itself
     return subscriptions.queries.has_active_subscription(user)
 
 

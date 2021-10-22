@@ -46,8 +46,8 @@ class ContextProcessorsTest(TestCase):
             oauth_info__oauth_user_id='2',
             badges={
                 'cloud_demo': {
-                    'label': 'Blender Cloud',
-                    'description': 'Blender Cloud free account',
+                    'label': 'Blender Studio',
+                    'description': 'Blender Studio free account',
                     'image': 'http://id.local:8000/media/badges/badge_cloud.png',
                     'image_width': 256,
                     'image_height': 256,
@@ -80,8 +80,8 @@ class ContextProcessorsTest(TestCase):
                 'username': 'ⅉanedoe',
                 'badges': {
                     'cloud_demo': {
-                        'label': 'Blender Cloud',
-                        'description': 'Blender Cloud free account',
+                        'label': 'Blender Studio',
+                        'description': 'Blender Studio free account',
                         'image': 'http://id.local:8000/media/badges/badge_cloud.png',
                         'image_width': 256,
                         'image_height': 256,

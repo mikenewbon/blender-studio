@@ -253,11 +253,11 @@ class TestBlenderIDWebhook(TestCase):
             user.badges,
             {
                 'cloud_demo': {
-                    'description': 'Blender Cloud free account',
+                    'description': 'Blender Studio free account',
                     'image': 'http://id.local:8000/media/badges/badge_cloud.png',
                     'image_height': 256,
                     'image_width': 256,
-                    'label': 'Blender Cloud',
+                    'label': 'Blender Studio',
                 }
             },
         )

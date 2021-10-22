@@ -27,8 +27,8 @@ def mock_blender_id_responses() -> None:
             'user_id': 2,
             'badges': {
                 'cloud_demo': {
-                    'label': 'Blender Cloud',
-                    'description': 'Blender Cloud free account',
+                    'label': 'Blender Studio',
+                    'description': 'Blender Studio free account',
                     'image': f'{base_url}media/badges/badge_cloud.png',
                     'image_width': 256,
                     'image_height': 256,
@@ -126,7 +126,7 @@ def mock_mailgun_responses() -> None:
                 'access_level': 'readonly',
                 'address': 'newsletter-test@blender.cloud',
                 'created_at': 'Mon, 14 Dec 2020 15:14:27 -0000',
-                'description': 'For testing newsletters in Blender Cloud',
+                'description': 'For testing newsletters in Blender Studio',
                 'members_count': 5,
                 'name': '',
                 'reply_preference': 'sender',
