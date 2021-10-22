@@ -100,6 +100,7 @@
   color: $white;
 
   @include hover-focus {
+    color: $white;
     background-color: $highlight-white-strong;
   }
 }
