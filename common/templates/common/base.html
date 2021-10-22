@@ -182,7 +182,7 @@
               <span>Blog</span>
             </a>
 
-            <!--
+
             <div class="mx-2 position-relative d-none d-md-block d-lg-none">
               <button class="btn btn-nav btn-icon btn-secondary" data-toggle="dropdown" id="nav-dropdown">
                 <i class="material-icons">arrow_drop_down</i>
@@ -192,9 +192,9 @@
                   <span>Tools</span>
                 </a>
 
-                <a href="https://cloud.blender.org/p/characters/" class="dropdown-item" target="_blank" rel="nofollow">
+                {% comment %} <a href="https://cloud.blender.org/p/characters/" class="dropdown-item" target="_blank" rel="nofollow">
                   <span>Characters</span>
-                </a>
+                </a> {% endcomment %}
               </div>
             </div>
 
@@ -202,10 +202,10 @@
               <span>Tools</span>
             </a>
 
-            <a href="https://cloud.blender.org/p/characters/" class="btn btn-secondary btn-nav d-none d-lg-block" target="_blank" rel="nofollow">
+            {% comment %} <a href="https://cloud.blender.org/p/characters/" class="btn btn-secondary btn-nav d-none d-lg-block" target="_blank" rel="nofollow">
               <span>Characters</span>
-            </a>
-            -->
+            </a> {% endcomment %}
+
           </div>
           {% if request.user.is_authenticated %}
 
@@ -408,12 +408,12 @@
                   </div>
 
                   <div class="col-6 p-0">
-                    <a class="h3 drawer-nav-dropdown" href="/tools">tools</a>
+                    <a class="h3 drawer-nav-dropdown" href="/tools">Tools</a>
                   </div>
 
-                  <div class="col-6 p-0">
+                  {% comment %} <div class="col-6 p-0">
                     <a class="h3 drawer-nav-dropdown" target="_blank" rel="nofollow" href="https://cloud.blender.org/p/characters/">Characters</a>
-                  </div>
+                  </div> {% endcomment %}
 
                   <div class="col-6 p-0">
                     <a class="h3 drawer-nav-dropdown" href="{% url 'search' %}">Search</a>
