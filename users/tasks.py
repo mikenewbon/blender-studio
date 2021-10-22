@@ -144,6 +144,7 @@ def grant_blender_id_role(pk: int, role: str) -> bool:
     """Call Blender ID API to grant a given role to a user with given ID."""
     user = User.objects.get(pk=pk)
     bid.grant_revoke_role(user, action='grant', role=role)
+    bid.copy_badges_from_blender_id(user=user)
     return True
 
 
@@ -152,4 +153,5 @@ def revoke_blender_id_role(pk: int, role: str) -> bool:
     """Call Blender ID API to revoke given roles from a user with given ID."""
     user = User.objects.get(pk=pk)
     bid.grant_revoke_role(user, action='revoke', role=role)
+    bid.copy_badges_from_blender_id(user=user)
     return True
