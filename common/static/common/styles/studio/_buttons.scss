@@ -96,6 +96,14 @@
   margin-left: .25em;
 }
 
+.btn-highlight {
+  color: $white;
+
+  @include hover-focus {
+    background-color: $highlight-white-strong;
+  }
+}
+
 .checkbox-like {
 
   span {
