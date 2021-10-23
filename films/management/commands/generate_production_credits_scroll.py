@@ -17,16 +17,16 @@ class Command(BaseCommand):
         except Film.DoesNotExist:
             raise CommandError('Film "%s" does not exist' % options['film_slug'])
 
-        credits = FilmProductionCredit.objects.filter(film=film, is_public=True).order_by(
-            'user__full_name'
-        )
+        credits = FilmProductionCredit.objects.filter(
+            film=film, is_public=True, user__full_name__isnull=False
+        ).order_by('user__full_name')
+
+        credits_upper = sorted([credit.user.full_name.upper() for credit in credits])
 
         lines = []
         line = ''
-        for credit in credits:
-            formatted_name = f'{credit.user.full_name}'.upper()
-            if not formatted_name:
-                continue
+        for credit in credits_upper:
+            formatted_name = credit
             if formatted_name.startswith('_'):
                 continue
             if line and line[0] != formatted_name[0]:
@@ -41,6 +41,9 @@ class Command(BaseCommand):
                 line += "\n"
                 lines.append(line)
                 line = ''
+
+        if line:
+            lines.append(line)
 
         with open('credits.txt', 'w') as out:
             out.writelines(lines)
