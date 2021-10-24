@@ -41,7 +41,8 @@ class FilmProductionCreditAdmin(admin.ModelAdmin):
 
     def make_read_only(self, request, queryset):
         for credit in queryset:
-            credit.display_name = credit.user.full_name
+            if credit.is_public:
+                credit.display_name = credit.user.full_name
             credit.is_editable = False
             credit.save()
         self.message_user(
