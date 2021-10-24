@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
         credits = FilmProductionCredit.objects.filter(
             film=film, is_public=True, user__full_name__isnull=False
-        ).order_by('user__full_name')
+        )
 
         credits_upper = sorted([credit.user.full_name.upper() for credit in credits])
 
