@@ -22,7 +22,7 @@ BLENDER_ID = {
     "WEBHOOK_USER_MODIFIED_SECRET": b"CHANGE_ME",
     # Credentials linked to a Blender ID system cloud_badger user, for updating subscriber badges
     "BADGER_API_OAUTH_CLIENT": "CHANGE_ME",
-    "BADGER_API_OAUTH_SECRET":  "CHANGE_ME",
+    "BADGER_API_OAUTH_SECRET": "CHANGE_ME",
     "BADGER_API_ACCESS_TOKEN": "CHANGE_ME",
 }
 
@@ -45,10 +45,7 @@ GATEWAYS = {
         'private_key': 'CHANGE_ME',
         # Merchant Account IDs for different currencies.
         # Configured in Braintree: Account → Merchant Account Info.
-        'merchant_account_ids': {
-            'EUR': 'CHANGE_ME',
-            'USD': 'CHANGE_ME',
-        },
+        'merchant_account_ids': {'EUR': 'CHANGE_ME', 'USD': 'CHANGE_ME',},
     },
     # No settings, but a key is required here to activate the gateway.
     'bank': {},
