@@ -15,7 +15,7 @@ shared_meta = {
     'property=.og:type.': 'website',
     'property=.og:locale.': 'en_US',
     'name=.twitter:card.': 'summary_large_image',
-    'name=.twitter:site.': '@Blender_Studio',
+    'name=.twitter:site.': '@Blender_Cloud',
 }
 
 
