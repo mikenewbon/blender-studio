@@ -91,13 +91,3 @@ def from_slug(  # noqa: D103
     training_favorited = cast(bool, getattr(section, 'training_favorited'))
     comments = get_annotated_comments(section, user_pk)
     return training, training_favorited, chapter, section, video, comments
-
-
-def comment(  # noqa: D103
-    *, user_pk: int, section_pk: int, message: str, reply_to_pk: Optional[int]
-) -> models.Comment:
-    comment = models.Comment.objects.create(
-        user_id=user_pk, message=message, reply_to_id=reply_to_pk
-    )
-    sections.SectionComment.objects.create(comment_id=comment.id, section_id=section_pk)
-    return comment

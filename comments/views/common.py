@@ -1,13 +1,14 @@
 # noqa: D100
 from typing import Dict, List, Optional, Sequence
+import json
 
 from django.contrib.auth import get_user_model
+from django.db import transaction
 from django.http import JsonResponse
 
 from comments import typed_templates
 from comments.models import Comment
 from common import markdown
-from common.shortcodes import render as with_shortcodes
 from common.types import assert_cast
 
 User = get_user_model()
@@ -96,20 +97,24 @@ def comments_to_template_type(
     )
 
 
-def comment_to_json_response(comment: Comment):
-    """Serialize given comment to JSON."""
-    return JsonResponse(
-        {
-            'id': comment.pk,
-            'full_name': comment.full_name or comment.username,
-            'profile_image_url': comment.profile_image_url,
-            'date_string': comment.date_created.strftime('%d %B %Y - %H:%M'),
-            'message': comment.message,
-            'message_html': with_shortcodes(comment.message_html),
-            'like_url': comment.like_url,
-            'liked': False,
-            'likes': comment.like_set.count(),
-            'edit_url': comment.edit_url,
-            'delete_url': comment.delete_url,
-        }
+def comment_response(request, comment_model, to_field, field_pk):
+    """Add a comment linked to a specific model and pk."""
+    parsed_body = json.loads(request.body)
+
+    reply_to_pk = int(parsed_body['reply_to']) if parsed_body.get('reply_to') else None
+    message = assert_cast(str, parsed_body['message'])
+
+    @transaction.atomic
+    def create_comment(
+        *, user_pk: int, message: str, reply_to_pk: Optional[int], **kwargs
+    ) -> Comment:
+        comment = Comment.objects.create(user_id=user_pk, message=message, reply_to_id=reply_to_pk)
+        comment_model.objects.create(comment_id=comment.id, **kwargs)
+        return comment
+
+    m2m_params = {to_field: field_pk}
+    comment = create_comment(
+        user_pk=request.user.pk, message=message, reply_to_pk=reply_to_pk, **m2m_params
     )
+
+    return JsonResponse(comment.to_dict())

@@ -161,14 +161,14 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
 
         return {
             'id': self.pk,
-            'full_name': self.full_name,
+            'full_name': self.full_name or self.username,
             'profile_image_url': self.profile_image_url,
             'date_string': self.date_created.strftime('%d %B %Y - %H:%M'),
             'message': self.message,
             'message_html': with_shortcodes(self.message_html),
             'like_url': self.like_url,
             'liked': False,
-            'likes': 0,
+            'likes': self.like_set.count(),
             'edit_url': self.edit_url,
             'delete_url': self.delete_url,
         }

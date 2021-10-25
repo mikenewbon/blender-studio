@@ -1,3 +1,4 @@
+"""Comment edit API."""
 import json
 
 from django.contrib.auth.decorators import login_required
@@ -7,13 +8,13 @@ from django.views.decorators.http import require_POST
 
 from comments.models import Comment
 from comments.queries import edit_comment, moderator_edit_comment
-from comments.views.common import comment_to_json_response
 from common.types import assert_cast
 
 
 @require_POST
 @login_required
 def comment_edit(request: HttpRequest, *, comment_pk: int) -> JsonResponse:
+    """Edit a comment if permissions allow."""
     parsed_body = json.loads(request.body)
 
     message = assert_cast(str, parsed_body['message'])
@@ -26,4 +27,4 @@ def comment_edit(request: HttpRequest, *, comment_pk: int) -> JsonResponse:
         except Comment.DoesNotExist:
             return JsonResponse({}, status=404)
 
-    return comment_to_json_response(comment)
+    return JsonResponse(comment.to_dict())
