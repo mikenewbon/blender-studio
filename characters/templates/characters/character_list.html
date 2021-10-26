@@ -1,0 +1,54 @@
+{% extends 'common/base.html' %}
+
+{% load static %}
+
+{% block title_prepend %}Characters - {% endblock title_prepend %}
+
+{% block bodyclasses %}spacer{% endblock bodyclasses %}
+
+{% block meta %}
+  {% with title="Characters" description="Follow the latest updates from the Blender Cloud." %}
+    {% include 'common/components/meta.html' %}
+  {% endwith %}
+{% endblock %}
+
+{% block jumbotron %}
+  <div class="jumbotron jumbotron-fluid jumbotron-overlay header spacer-n " style="overflow:visible;">
+    <div class="jumbotron-bg-wrapper" style="height: 500px;">
+      <img class="jumbotron-bg" src="{% static "characters/images/characters-header.jpg" %}">
+    </div>
+    <div class="container-xl">
+      <div class="row">
+        <div class="col-lg-5 col-xl-4">
+          <div class="jumbotron-body">
+            <div class="spacer"></div>
+            <h1>Character Library</h1>
+            <p class="mb-0">Characters from Blender Studio Open Movies.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock jumbotron %}
+
+{% block content %}
+
+  <div class="container-xl">
+
+    <div class="row">
+      <div class="col">
+        <h3>All Characters</h3>
+      </div>
+    </div>
+    <div class="row py-2">
+      {% for character in characters %}
+        {% if character.is_published or user.is_superuser or user.is_staff %}
+          {% include "characters/components/card_character.html" %}
+        {% endif %}
+      {% endfor %}
+
+    </div>
+
+  </div>
+
+{% endblock content %}

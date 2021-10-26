@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'users',
     'loginas',
     'nested_admin',
+    'characters',
 ]
 
 AUTH_USER_MODEL = 'users.User'

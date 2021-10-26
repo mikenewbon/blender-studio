@@ -7,9 +7,10 @@ from django.db.models.base import Model
 from django.db.models.expressions import Value
 from django.db.models.fields import CharField
 
+from blog.models import Post
+from characters.models import Character
 from films.models import ProductionLog, Asset, AssetCategory
 from training.models import Training
-from blog.models import Post
 
 User = get_user_model()
 DEFAULT_FEED_PAGE_SIZE = 10
@@ -128,3 +129,8 @@ def get_latest_trainings_and_production_lessons(production_lessons_limit=2, trai
         key=lambda x: getattr(x, 'date_published', getattr(x, 'date_created', None)),
         reverse=True,
     )
+
+
+def get_latest_characters():
+    """Return latest characters."""
+    return Character.objects.filter(is_published=True).order_by('-date_created')

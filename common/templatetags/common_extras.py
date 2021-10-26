@@ -12,6 +12,7 @@ from common.markdown import (
     render_unsafe as render_markdown_unsafe,
     render_as_text as render_markdown_as_text,
 )
+from characters.queries import get_published_characters
 from common.queries import get_latest_trainings_and_production_lessons
 from common.shortcodes import render
 from films.models import Film
@@ -130,4 +131,5 @@ def get_featured() -> Dict[str, Any]:
     return {
         'films': Film.objects.filter(is_featured=True),
         'trainings': get_latest_trainings_and_production_lessons(),
+        'characters': get_published_characters(),
     }

@@ -14,6 +14,7 @@ import subscriptions.urls
 import training.urls
 import static_assets.urls
 import users.urls
+import characters.urls
 
 from common.views.home import home as home_view, welcome as welcome_view
 import common.views.errors as error_views
@@ -33,6 +34,7 @@ urlpatterns = [
     path('films/', include(films.urls)),
     path('training/', include(training.urls)),
     path('blog/', include(blog.urls)),
+    path('', include(characters.urls)),
     path('search/', include(search.urls)),
     path('looper/', include((looper.urls), namespace='looper')),
     path('', include((subscriptions.urls), namespace='subscriptions')),

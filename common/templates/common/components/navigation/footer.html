@@ -1,6 +1,7 @@
 {% load static %}
 {% load common_extras %}
 
+{% get_featured as featured %}
 <footer class="pb-3 container-xl">
   <div class="navdrawer-offset">
     <div class="footer-inner">
@@ -37,9 +38,6 @@
                   <a href="{% url 'film-list' %}" class="h3 text-white">Films</a>
                 </li>
                 <li class="mb-2">
-                  <a href="{% url 'training-home' %}" class="h3 text-white">Training</a>
-                </li>
-                <li class="mb-2">
                   <a href="{% url 'post-list' %}" class="h3 text-white">Blog</a>
                 </li>
               </ul>
@@ -58,21 +56,13 @@
             </div>
 
             <div class="col-md-3 col-6">
-              <a href="https://cloud.blender.org/p/characters/" rel="nofollow" target="_blank" class="h3 text-white">Characters</a>
+              <a href="{% url 'character-list' %}" class="h3 text-white">Characters</a>
               <ul>
-                <li>
-                  <a href="https://cloud.blender.org/p/characters/5f1ed640e9115ed35ea4b3fb" rel="nofollow" target="_blank" class="small subtitle">Rain</a>
-                </li>
-                <li>
-                  <a href="https://cloud.blender.org/p/characters/5d41b19f28b38e1763906a9a" rel="nofollow" target="_blank" class="small subtitle">Victor</a>
-                </li>
-                <li>
-                  <a href="https://cloud.blender.org/p/characters/5d41a32b8307e9cd1023fa78" rel="nofollow" target="_blank" class="small subtitle">Sintel</a>
-                </li>
-                <li>
-                  <a href="https://cloud.blender.org/p/characters/5d40511bfe6b50fb62faea7d" rel="nofollow" target="_blank" class="small subtitle">Franck</a>
-                </li>
-
+                {% for character in featured.characters|slice:":4" %}
+                  <li>
+                    <a href="{% url 'character-detail' slug=character.slug %}" class="small subtitle">{{ character.name }}</a>
+                  </li>
+                {% endfor %}
               </ul>
             </div>
 

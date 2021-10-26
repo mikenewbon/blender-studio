@@ -1,0 +1,62 @@
+{% load common_extras %}
+{% with character_version=character.latest_version %}
+  {% with character_version.get_absolute_url as detail_url %}
+    <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
+      <div class="card">
+        <div class="card-header">
+          <a class="card-header-link" href="{{ detail_url }}" aria-label="{{ character.name }}">
+            {% if character_version.static_asset.thumbnail %}
+              {% block image %}
+                <img alt="{{ character.name }}" class="card-img" src="{{ character_version.static_asset.thumbnail_m_url }}">
+              {% endblock image %}
+            {% endif %}
+          </a>
+        </div>
+        <a href="{{ detail_url }}" class="card-body">
+
+          <h3 class="card-title">
+            {% if character.is_new and character.is_published %}
+              <div class="badge badge-primary">New</div>
+            {% endif %}
+            {{ character.name }}
+          </h3>
+          <p class="card-text">{{ character_version.description|unmarkdown|truncatewords:"10" }}</p>
+
+        </a>
+        <a href="{{ detail_url }}" class="card-footer">
+          <div class="card-subtitle-group">
+            {% if not character.is_published or not character_version.is_published %}
+              <div class="badge badge-danger mr-2">
+                Unpublished
+              </div>
+            {% else %}
+              <p class="card-subtitle">
+                <i class="material-icons icon-inline small">schedule</i>
+                <span class="date">
+                  {{ character.date_published|date:"U" }}
+                </span>
+              </p>
+            {% endif %}
+            {% if character_version.is_free %}
+              <p class="d-inline mr-2 text-success">
+                <i class="material-icons icon-inline small">lock_open</i>
+              </p>
+            {% endif %}
+            {% if character.likes.count > 0 %}
+              <p class="card-subtitle">
+                <i class="material-icons icon-inline small">favorite_border</i>
+                {{ character.likes.count }}
+              </p>
+            {% endif %}
+            {% if character_version.comments.count > 0 %}
+              <p class="card-subtitle">
+                <i class="material-icons icon-inline small">chat_bubble_outline</i>
+                {{ character_version.comments.count }}
+              </p>
+            {% endif %}
+          </div>
+        </a>
+      </div>
+    </div>
+  {% endwith %}
+{% endwith %}

@@ -1,0 +1,160 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% load common_extras %}
+
+{% block title_prepend %}{{ character.name }} - Character Rig - {% endblock title_prepend %}
+
+{% block meta %}
+  {% with title=character.name description=character_version.description|unmarkdown image_url=character_version.static_asset.thumbnail_m_url %}
+    {% include 'common/components/meta.html' %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+  <div class="container-xl py-3">
+
+    {% if character_version.static_asset.thumbnail %}
+      <div class="row justify-content-center mb-3">
+        <div class="col-lg-10">
+          <img class="img-fluid rounded" src="{{ character_version.static_asset.thumbnail.url }}">
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="row align-items-start">
+          <div class="col-12 col-md mb-2 mb-md-3">
+            <div class="">
+              <p class="subtitle ">Character Rig</p>
+              <span class="d-inline">
+                <h1 class="mb-0 d-inline-block">{{ character.name|linebreaksbr }}</h1>
+                <button data-toggle="dropdown" class="btn p-2 subtitle mt-n3 btn-icon btn-dark">
+                  v{{ character_version.number }}
+                  <i class="material-icons">arrow_drop_down</i>
+                </button>
+                {% if character.versions.count %}
+                  <div class="dropdown-menu dropdown-menu-left">
+                    {% for version in character.versions.all %}
+                      {% if version.is_published %}
+                        <a href="{{ version.get_absolute_url }}" class="dropdown-item">
+                          <span>{{ character.name|linebreaksbr }} v{{ version.number }}</span>
+                        </a>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+                <span>
+                </div>
+                <div class="text-muted small">
+                  <div class="col-auto d-flex mb-2">
+                    <div class="row">
+                      <div class="col-auto pr-0">
+                        {% if character_version.static_asset.author_image_url %}
+                          <img src="{{ character_version.static_asset.author_image_url }}" class="profile">
+                        {% else %}
+                          <img src="{% static 'common/images/blank-profile-pic.png' %}" class="profile">
+                        {% endif %}
+                      </div>
+                      <div class="col-auto">
+                        <p class="subtitle text-white-50 x-small">published by</p>
+                        <h4 class="comment-name mb-0">{{ character_version.static_asset.author_name }}</h4>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p class="d-inline mr-2">{{ character_version.date_published|date:"jS F Y" }}</p>
+                  {% if character_version.static_asset.license %}
+                    <a href="{{ character_version.static_asset.license.url }}" target="_blank" class="d-inline mr-2 text-muted"
+                      data-toggle="tooltip" data-placement="bottom" title="{{ character_version.static_asset.license.description }}">
+                      <i class="material-icons icon-inline small">info</i>
+                      {{ character_version.static_asset.license }}
+                    </a>
+                  {% endif %}
+                  {% if character.film %}
+                    <a class="d-inline mr-2 text-muted" href="{{ character.film.url }}">
+                      <i class="material-icons icon-inline small">movie</i>
+                      {{ character.film }}
+                    </a>
+                  {% endif %}
+                  {% if character_version.is_free %}
+                    <p class="d-inline mr-2 text-success">
+                      <i class="material-icons icon-inline small">lock_open</i>
+                      Free
+                    </p>
+                  {% endif %}
+                  <p class="d-inline mr-2 text-muted">
+                    Blender Version: {{ character_version.min_blender_version }}
+                  </p>
+
+                </div>
+              </div>
+
+
+              <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
+                <div class="training-toolbar-container">
+
+                  <div class="training-toolbar">
+
+                    <button data-like-url="{{ character.like_url }}"
+                      class="btn btn-transparent btn-sm btn-icon comment-material-button checkbox-like {% if not user.is_authenticated %}disabled{% endif%}"
+                      {% if not user.is_authenticated %}disabled{% endif%} {% if character.liked %}data-checked="checked" {% endif %}>
+                      <i class="material-icons checkbox-like-icon-checked text-primary">favorite</i>
+                      <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
+                      {% if character.likes.count != 0 %}<span class="likes-count">{{ character.likes.count }}</span>{% endif %}
+                    </button>
+
+                    {% if user.is_anonymous %}
+                      <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to Download</button>
+                    {% elif not character_version.is_free and not request.user|has_active_subscription %}
+                      <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Subscribe to Download</button>
+                    {% elif request.user|has_active_subscription or character_version.is_free %}
+                      <a href="{{ character_version.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ character_version.download_size }})</span></a>
+                    {% endif %}
+
+                    {% if user.is_staff %}
+                      <a href="{{ character.admin_url }}" class="btn btn-sm btn-icon btn-dark">
+                        <i class="material-icons btn-material-icons">create</i>
+                      </a>
+                    {% endif %}
+
+                    <div class="ml-2">
+                      <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
+                        <i class="material-icons">more_horiz</i>
+                      </button>
+                      <div class="dropdown-menu dropdown-menu-right">
+                        <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank"
+                          class="dropdown-item">
+                          <i class="material-icons">flag</i>
+                          <span>Report Problem</span>
+                        </a>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <section class="mb-3 markdown-text">{% with_shortcodes character_version.description|markdown %}</section>
+
+            {% if character.showcases.count %}
+              <h2>Showcases</h2>
+              <div class="files row grid mb-3">
+                <div class="grid-sizer col-12 col-sm-6 col-md-6 col-lg-4"></div>
+                {% for showcase in character.showcases.all %}
+                  {% include "characters/components/card_character_showcase.html" %}
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            <section class="mb-3">{% include 'comments/components/comment_section.html' %}</section>
+
+          </div>
+
+        </div>
+
+      </section>
+    </div>
+{% endblock %}

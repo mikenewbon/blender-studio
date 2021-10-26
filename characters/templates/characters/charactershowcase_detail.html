@@ -1,0 +1,139 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% load common_extras %}
+
+{% block title_prepend %}{{ character_showcase.showcase.title }} - Character Showcase - {% endblock title_prepend %}
+
+{% block meta %}
+  {% with title=character_showcase.title description=character_showcase.description|unmarkdown image_url=character_showcase.static_asset.thumbnail_m_url %}
+    {% include 'common/components/meta.html' %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+  <div class="container-xl py-3">
+
+    {% if character_showcase.static_asset.thumbnail %}
+      <div class="row justify-content-center mb-3">
+        <div class="col-lg-10">
+          <img class="img-fluid rounded" src="{{ character_showcase.static_asset.thumbnail.url }}">
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <p class="subtitle my-2">
+          Character Showcase |
+          <a href="{{ character_showcase.character.get_absolute_url }}">
+            <span class="d-inline-block">{{ character_showcase.character.name }}</span>
+          </a>
+        </p>
+        <h1 class="mb-0 d-inline-block">{{ character_showcase.title|linebreaksbr }}</h1>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="row align-items-start">
+          <div class="col-12 col-md mb-2 mb-md-3">
+            <div class="text-muted small">
+              <div class="col-auto d-flex mb-2">
+                <div class="row">
+                  <div class="col-auto pr-0">
+                    {% if character_showcase.static_asset.author_image_url %}
+                      <img src="{{ character_showcase.static_asset.author_image_url }}" class="profile">
+                    {% else %}
+                      <img src="{% static 'common/images/blank-profile-pic.png' %}" class="profile">
+                    {% endif %}
+                  </div>
+                  <div class="col-auto">
+                    <p class="subtitle text-white-50 x-small">published by</p>
+                    <h4 class="comment-name mb-0">{{ character_showcase.static_asset.author_name }}</h4>
+                  </div>
+                </div>
+              </div>
+
+              <p class="d-inline mr-2">{{ character_showcase.date_published|date:"jS F Y" }}</p>
+              {% if character_showcase.static_asset.license %}
+                <a href="{{ character_showcase.static_asset.license.url }}" target="_blank" class="d-inline mr-2 text-muted"
+                  data-toggle="tooltip" data-placement="bottom" title="{{ character_showcase.static_asset.license.description }}">
+                  <i class="material-icons icon-inline small">info</i>
+                  {{ character_showcase.static_asset.license }}
+                </a>
+              {% endif %}
+              {% if character.film %}
+                <a class="d-inline mr-2 text-muted" href="{{ character.film.url }}">
+                  <i class="material-icons icon-inline small">movie</i>
+                  {{ character.film }}
+                </a>
+              {% endif %}
+              {% if character_showcase.is_free %}
+                <p class="d-inline mr-2 text-success">
+                  <i class="material-icons icon-inline small">lock_open</i>
+                  Free
+                </p>
+              {% endif %}
+              <p class="d-inline mr-2 text-muted">
+                Blender Version: {{ character_showcase.min_blender_version }}
+              </p>
+
+            </div>
+          </div>
+
+
+          <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
+            <div class="training-toolbar-container">
+
+              <div class="training-toolbar">
+
+                <button data-like-url="{{ character.like_url }}"
+                  class="btn btn-transparent btn-sm btn-icon comment-material-button checkbox-like {% if not user.is_authenticated %}disabled{% endif%}"
+                  {% if not user.is_authenticated %}disabled{% endif%} {% if character.liked %}data-checked="checked" {% endif %}>
+                  <i class="material-icons checkbox-like-icon-checked text-primary">favorite</i>
+                  <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
+                  {% if character.likes.count != 0 %}<span class="likes-count">{{ character.likes.count }}</span>{% endif %}
+                </button>
+
+                {% if user.is_anonymous %}
+                  <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to Download</button>
+                {% elif not character_showcase.is_free and not request.user|has_active_subscription %}
+                  <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Subscribe to Download</button>
+                {% elif request.user|has_active_subscription or character_showcase.is_free %}
+                  <a href="{{ character_showcase.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ character_showcase.download_size }})</span></a>
+                {% endif %}
+
+                {% if user_can_edit_character %}
+                  <a href="{{ character_showcase.character.admin_url }}" class="btn btn-sm btn-icon btn-dark">
+                    <i class="material-icons btn-material-icons">create</i>
+                  </a>
+                {% endif %}
+
+                <div class="ml-2">
+                  <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
+                    <i class="material-icons">more_horiz</i>
+                  </button>
+                  <div class="dropdown-menu dropdown-menu-right">
+                    <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank"
+                      class="dropdown-item">
+                      <i class="material-icons">flag</i>
+                      <span>Report Problem</span>
+                    </a>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section class="mb-3 pb-3 markdown-text">{% with_shortcodes character_showcase.description|markdown %}</section>
+
+        <section class="mb-3">{% include 'comments/components/comment_section.html' %}</section>
+
+      </div>
+
+    </div>
+
+  </section>
+  </div>
+{% endblock %}

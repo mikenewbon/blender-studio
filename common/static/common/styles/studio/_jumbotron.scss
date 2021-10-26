@@ -116,7 +116,6 @@ a.jumbotron {
       background: $highlight-black-xstrong !important;
     }
 
-    background: radial-gradient(75.4% 209.68% at 75.4% 51.9%, rgba(0, 0, 0, 0) 30.35%, rgba(0, 0, 0, 0.75) 100%);
     content: close-quote;
     display: block;
     height: 100%;
@@ -130,6 +129,12 @@ a.jumbotron {
   &.overlay-solid {
     .jumbotron-bg-wrapper::before {
       background: $highlight-black-xstrong !important;
+    }
+  }
+
+  &.overlay-default {
+    .jumbotron-bg-wrapper::before {
+      background: radial-gradient(75.4% 209.68% at 75.4% 51.9%, rgba(0, 0, 0, 0) 30.35%, rgba(0, 0, 0, 0.75) 100%);
     }
   }
 

@@ -33,11 +33,12 @@ class ImportCommand(BaseCommand):
             user = oauth.user
             self.console_log(f"Fetched user {user.username}")
             is_created = False
+        except OAuthUserInfo.DoesNotExist:
+            return None, False
+        except TypeError:
+            return None, False
         except User.DoesNotExist:
-            user = User.objects.create(username=user_doc['username'], email=user_doc['email'])
-            self.console_log(f"Created user {user.username}")
-            self.reconcile_user(user, user_doc)
-            is_created = True
+            return None, False
         return user, is_created
 
     def reconcile_user_view_progress(self, user, user_doc):

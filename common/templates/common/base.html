@@ -182,7 +182,6 @@
               <span>Blog</span>
             </a>
 
-
             <div class="mx-2 position-relative d-none d-md-block d-lg-none">
               <button class="btn btn-nav btn-icon btn-secondary" data-toggle="dropdown" id="nav-dropdown">
                 <i class="material-icons">arrow_drop_down</i>
@@ -192,20 +191,18 @@
                   <span>Tools</span>
                 </a>
 
-                {% comment %} <a href="https://cloud.blender.org/p/characters/" class="dropdown-item" target="_blank" rel="nofollow">
+                <a href="{% url 'character-list' %}" class="dropdown-item">
                   <span>Characters</span>
-                </a> {% endcomment %}
+                </a>
               </div>
             </div>
 
             <a href="/tools" class="btn btn-secondary btn-nav d-none d-lg-block ml-2">
               <span>Tools</span>
             </a>
-
-            {% comment %} <a href="https://cloud.blender.org/p/characters/" class="btn btn-secondary btn-nav d-none d-lg-block" target="_blank" rel="nofollow">
+            <a href="{% url 'character-list' %}" class="btn btn-secondary btn-nav d-none d-lg-block ml-2">
               <span>Characters</span>
-            </a> {% endcomment %}
-
+            </a>
           </div>
           {% if request.user.is_authenticated %}
 
@@ -411,9 +408,9 @@
                     <a class="h3 drawer-nav-dropdown" href="/tools">Tools</a>
                   </div>
 
-                  {% comment %} <div class="col-6 p-0">
-                    <a class="h3 drawer-nav-dropdown" target="_blank" rel="nofollow" href="https://cloud.blender.org/p/characters/">Characters</a>
-                  </div> {% endcomment %}
+                  <div class="col-6 p-0">
+                    <a class="h3 drawer-nav-dropdown" href="{% url 'character-list' %}">Characters</a>
+                  </div>
 
                   <div class="col-6 p-0">
                     <a class="h3 drawer-nav-dropdown" href="{% url 'search' %}">Search</a>
