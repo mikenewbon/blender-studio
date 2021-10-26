@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from common.markdown import render_unsafe, render as render_markdown
+from common.markdown import render_unsafe, render as render_markdown, render_as_text
 
 markdown_html_with_audio_tag = '''
 <p class="audio-container">
@@ -38,6 +38,43 @@ markdown_html_with_figure_tag_rendered = '''<p><strong>Something in bold</strong
   <img alt="Alt description" class="figure-img img-fluid rounded" src="https://ddz4ak4pa3d19.cloudfront.net/cache/71/d1/71d11574487cb38fd6ace5967ce22a1b.jpg">
   <figcaption class="figure-caption">A caption for the above image.</figcaption>
 </figure>
+'''
+
+markdown_text = '''
+### Welcome the updated version of the Rain rig!
+
+Some of the features of the rig include:
+
+* IK/FK toggle and snapping for the limbs
+* Stretchy IK toggle for the limbs and spine
+
+Check out a walkthrough of the rig's features in this video: https://youtu.be/ZvG956AFc4Q
+
+**NOTE: When appending or linking the rig, you will have to save and reload the file for the rig scripts to start running.**
+
+Animation by Pablo Fournier, lighting and rendering by Andy Goralczyk. Rain rig by the Blender Animation Studio team.
+
+[Download this character rig](https://studio.blender.org/characters/5f04a68bb5f1a2612f7b29da).
+
+{youtube ZvG956AFc4Q}
+'''
+
+markdown_text_as_text = '''
+Welcome the updated version of the Rain rig!
+Some of the features of the rig include:
+
+- IK/FK toggle and snapping for the limbs
+- Stretchy IK toggle for the limbs and spine
+Check out a walkthrough of the rig's features in this video: https://youtu.be/ZvG956AFc4Q
+
+**NOTE: When appending or linking the rig, you will have to save and reload the file for the rig scripts to start running.**
+
+Animation by Pablo Fournier, lighting and rendering by Andy Goralczyk. Rain rig by the Blender Animation Studio team.
+
+Download this character rig: https://studio.blender.org/characters/5f04a68bb5f1a2612f7b29da.
+
+{youtube ZvG956AFc4Q}
+
 '''
 
 
@@ -91,3 +128,6 @@ class RenderMarkdownTest(TestCase):
             markdown_html_with_figure_tag_rendered,
             str(render_unsafe(markdown_html_with_figure_tag)),
         )
+
+    def test_as_text(self):
+        self.assertEqual(markdown_text_as_text, render_as_text(markdown_text))

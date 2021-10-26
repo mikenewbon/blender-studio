@@ -7,8 +7,11 @@ import bleach
 import bleach.sanitizer
 import mistune
 
+from .markdown_renderers import TextRenderer
+
 _markdown: Optional[mistune.Markdown] = None
 _markdown_with_html: Optional[mistune.Markdown] = None
+_markdown_to_text: Optional[mistune.Markdown] = None
 SHORTCODE_PATTERN = r'{(?:attachment|iframe|youtube|subscribe_banner)\s+[^}]*}'
 ALLOWED_TAGS_EXTRA = {
     # <a> is already allowed by bleach, but we want more allowed attributes for it
@@ -60,6 +63,18 @@ def plugin_shortcode(md):
     md.inline.register_rule('shortcode', SHORTCODE_PATTERN, parse_shortcode)
     md.inline.rules.append('shortcode')
     md.renderer.register('shortcode', keep_shortcode_as_is)
+
+
+def render_as_text(text: str) -> str:
+    """Turn markdown from plain text into even planer text."""
+    global _markdown_to_text
+
+    if _markdown_to_text is None:
+        _markdown_to_text = mistune.Markdown(
+            renderer=TextRenderer(), plugins=[mistune.PLUGINS['table']]
+        )
+
+    return _markdown_to_text(text)
 
 
 def render(text: str) -> Markup:

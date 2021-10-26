@@ -168,3 +168,14 @@ class CommonExtrasTest(TestCase):
         content = template.render({'user': user})
 
         self.assertEqual(content.strip(), 'has active subscription')
+
+    def test_template_with_unmarkdown(self):
+        template_text = """
+        {% load common_extras %}{% spaceless %}{{ text|unmarkdown }}{% endspaceless %}
+        """
+        template = template_engine.from_string(template_text)
+        content = template.render(
+            {'request': self.request, 'text': '### Title\n**Bold!**\nList: \n * one;\n * two;\n\n'}
+        )
+
+        self.assertEqual(content.strip(), 'Title\n**Bold!**\nList:\n\n- one;\n- two;')

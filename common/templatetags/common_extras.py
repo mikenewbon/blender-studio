@@ -10,6 +10,7 @@ from common import queries
 from common.markdown import (
     render as render_markdown,
     render_unsafe as render_markdown_unsafe,
+    render_as_text as render_markdown_as_text,
 )
 from common.queries import get_latest_trainings_and_production_lessons
 from common.shortcodes import render
@@ -58,6 +59,12 @@ def with_shortcodes(context, text: str) -> str:
 def markdown(text: str) -> Markup:
     """Render markdown."""
     return render_markdown(text)
+
+
+@register.filter(name='unmarkdown')
+def unmarkdown(text: str) -> str:
+    """Remove markdown from markdown, leave text."""
+    return render_markdown_as_text(text)
 
 
 @register.filter(name='markdown_unsafe')
