@@ -41,7 +41,11 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
         blank=True,
         max_length=256,
     )
-    source_type = models.CharField(choices=StaticAssetFileTypeChoices.choices, max_length=5)
+    source_type = models.CharField(
+        choices=StaticAssetFileTypeChoices.choices,
+        max_length=5,
+        default=StaticAssetFileTypeChoices.file,
+    )
     # TODO(Natalia): source type validation
     original_filename = models.CharField(max_length=128, editable=False)
     size_bytes = models.BigIntegerField(editable=False)
