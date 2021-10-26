@@ -1,6 +1,7 @@
 """Characters and character version views."""
 from typing import Optional, List
 
+from django.contrib.redirects.models import Redirect
 from django.db import models
 from django.db.models.query import QuerySet
 from django.http import Http404
@@ -37,9 +38,15 @@ class CharacterDetail(RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         """Redirect to latest published character version."""
-        character = get_character(slug=kwargs['slug'])
-        # character.view_count += 1
-        return character.latest_version.get_absolute_url()
+        try:
+            character = get_character(slug=kwargs['slug'])
+            # character.view_count += 1
+            return character.latest_version.get_absolute_url()
+        except Character.DoesNotExist:
+            # Any other old Cloud endpoints are maintained via Redirects
+            existing_redirect = Redirect.objects.filter(old_path=self.request.path).first()
+            if existing_redirect:
+                return existing_redirect.new_path
 
 
 class CharacterVersionDetail(DetailView):
