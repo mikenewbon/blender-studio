@@ -30,7 +30,7 @@ urlpatterns = [
         name='character-version-detail',
     ),
     path(
-        'characters/<slug:slug>/showcase/<int:pk>',
+        'characters/<slug:slug>/showcase/<int:pk>/',
         CharacterShowcaseDetail.as_view(),
         name='character-showcase-detail',
     ),
