@@ -47,6 +47,7 @@ class CharacterDetail(RedirectView):
             existing_redirect = Redirect.objects.filter(old_path=self.request.path).first()
             if existing_redirect:
                 return existing_redirect.new_path
+            raise
 
 
 class CharacterVersionDetail(DetailView):
