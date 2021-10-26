@@ -1,4 +1,5 @@
 """Render film asset gallery and collections."""
+from django.contrib.redirects.models import Redirect
 from django.http import Http404
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404, render, redirect
@@ -123,16 +124,18 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
     if should_show_landing_page(request, film):
         return redirect(reverse('film-detail', kwargs={'film_slug': film_slug}), permanent=False)
 
-    # Redirect Cloudv3 /browse/ endpoint to the gallery
-    if collection_slug == 'browse':
-        return redirect(reverse('film-gallery', kwargs={'film_slug': film_slug}))
     try:
         collection = get_object_or_404(Collection, slug=collection_slug, film_id=film.id)
     except Exception:
-        asset = get_asset_by_slug(slug=collection_slug, film_id=film.id, request=request)
-        if not asset:
-            raise
-        return redirect(asset.url)
+        try:
+            asset = get_asset_by_slug(slug=collection_slug, film_id=film.id, request=request)
+            return redirect(asset.url, permanent=True)
+        except Asset.DoesNotExist:
+            # Any other old Cloud endpoints are maintained via Redirects
+            existing_redirect = Redirect.objects.filter(old_path=request.path).first()
+            if existing_redirect:
+                return redirect(existing_redirect.new_path, permanent=True)
+        raise
     child_collections = collection.child_collections.order_by(*Collection._meta.ordering)
     drawer_menu_context = get_gallery_drawer_context(film, request.user)
 
