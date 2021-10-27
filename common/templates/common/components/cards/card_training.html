@@ -13,9 +13,7 @@
     <a class="card-body" href="{{ training.url }}">
 
       <h3 class="card-title">
-        {% if training.is_free %}
-          <i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top" title="Free">lock_open</i>
-        {% endif %}
+
         {{ training.name }}
       </h3>
       <p class="card-text">{{ training.description }}</p>
@@ -38,6 +36,12 @@
           <i class="material-icons icon-inline small">equalizer</i>
           {{ training.get_difficulty_display }}
         </p>
+        {% if training.is_free %}
+          <p class="d-inline mr-2 text-success small">
+            <i class="material-icons icon-inline small text-success">lock_open</i>
+            Free
+          </p>
+        {% endif %}
       </div>
 
     </div>
