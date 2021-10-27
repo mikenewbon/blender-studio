@@ -79,14 +79,6 @@
 
               <div class="training-toolbar">
 
-                <button data-like-url="{{ character.like_url }}"
-                  class="btn btn-transparent btn-sm btn-icon comment-material-button checkbox-like {% if not user.is_authenticated %}disabled{% endif%}"
-                  {% if not user.is_authenticated %}disabled{% endif%} {% if character.liked %}data-checked="checked" {% endif %}>
-                  <i class="material-icons checkbox-like-icon-checked text-primary">favorite</i>
-                  <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
-                  {% if character.likes.count != 0 %}<span class="likes-count">{{ character.likes.count }}</span>{% endif %}
-                </button>
-
                 {% if user.is_anonymous %}
                   <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to Download</button>
                 {% elif not character_showcase.is_free and not request.user|has_active_subscription %}
