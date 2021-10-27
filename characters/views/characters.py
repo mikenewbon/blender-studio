@@ -38,16 +38,24 @@ class CharacterDetail(RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         """Redirect to latest published character version."""
+        filter_published = (
+            {'is_published': True}
+            if not self.request.user.is_staff and not self.request.user.is_superuser
+            else {}
+        )
         try:
-            character = get_character(slug=kwargs['slug'])
+            character = get_character(slug=kwargs['slug'], **filter_published)
             # character.view_count += 1
-            return character.latest_version.get_absolute_url()
+            latest_version = character.versions.filter(**filter_published).first()
+            if not latest_version:
+                raise Http404()
+            return latest_version.get_absolute_url()
         except Character.DoesNotExist:
             # Any other old Cloud endpoints are maintained via Redirects
             existing_redirect = Redirect.objects.filter(old_path=self.request.path).first()
             if existing_redirect:
                 return existing_redirect.new_path
-            raise
+            raise Http404()
 
 
 class CharacterVersionDetail(DetailView):
@@ -58,9 +66,16 @@ class CharacterVersionDetail(DetailView):
 
     def get_object(self, queryset: Optional[models.query.QuerySet] = ...) -> CharacterVersion:
         """Get character version of the given slug and number."""
+        filter_published = (
+            {'is_published': True, 'character__is_published': True}
+            if not self.request.user.is_staff and not self.request.user.is_superuser
+            else {}
+        )
         try:
             character_version = get_character_version(
-                slug=self.kwargs['slug'], number=self.kwargs['number']
+                character__slug=self.kwargs['slug'],
+                number=self.kwargs['number'],
+                **filter_published,
             )
         except CharacterVersion.DoesNotExist:
             raise Http404()

@@ -70,7 +70,7 @@ class Character(mixins.CreatedUpdatedMixin, models.Model):
 
     @property
     def latest_version(self) -> 'CharacterVersion':
-        return self.versions.filter(is_published=True).first()
+        return self.versions.first()
 
     @property
     def is_new(self) -> bool:

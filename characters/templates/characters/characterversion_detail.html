@@ -36,9 +36,14 @@
                 {% if character.versions.count %}
                   <div class="dropdown-menu dropdown-menu-left">
                     {% for version in character.versions.all %}
-                      {% if version.is_published %}
+                      {% if version.is_published or user.is_staff or user.is_superuser %}
                         <a href="{{ version.get_absolute_url }}" class="dropdown-item">
-                          <span>{{ character.name|linebreaksbr }} v{{ version.number }}</span>
+                          <span>
+                            {{ character.name|linebreaksbr }} v{{ version.number }}
+                            {% if not version.is_published%}
+                              <i class="material-icons icon-inline small text-danger ml-1 mr-0" data-toggle="tooltip" data-placement="top" title="Unpublished">visibility_off</i>
+                            {% endif %}
+                          </span>
                         </a>
                       {% endif %}
                     {% endfor %}

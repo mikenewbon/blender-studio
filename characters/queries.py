@@ -20,12 +20,12 @@ def get_published_characters() -> 'QuerySet[Character]':
     return get_characters().filter(is_published=True)
 
 
-def get_character(slug: str) -> Character:
+def get_character(slug: str, **query_params) -> Character:
     """Get a single character."""
-    return get_characters().get(slug=slug)
+    return get_characters().get(slug=slug, **query_params)
 
 
-def get_character_version(slug: str, number: str) -> CharacterVersion:
+def get_character_version(**query_params) -> CharacterVersion:
     """Get a single character version."""
     return (
         CharacterVersion.objects.select_related('character', 'character__film')
@@ -37,7 +37,7 @@ def get_character_version(slug: str, number: str) -> CharacterVersion:
             'comments',
             'comments__user',
         )
-        .get(character__slug=slug, number=number)
+        .get(**query_params)
     )
 
 
