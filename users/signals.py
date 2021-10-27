@@ -25,7 +25,7 @@ def _get_target_author(target) -> User:
     # training `Section`s
     elif getattr(target, 'user', None):
         return target.user
-    # film `Asset`s
+    # film `Asset`s , `CharacterVersion` or `CharacterShowcase`
     elif getattr(target, 'static_asset', None):
         asset_author = target.static_asset.author or target.static_asset.user
         if asset_author:

@@ -175,7 +175,7 @@ class Comment(mixins.CreatedUpdatedMixin, models.Model):
 
     def get_action_target(self):
         """Return an object this comment is relevant to, e.g. a blog post or a training section."""
-        for field in ('section', 'post', 'asset'):
+        for field in ('section', 'post', 'asset', 'character_version', 'character_showcase'):
             target = getattr(self, field, None)
             if target and target.all():
                 return target.first()
