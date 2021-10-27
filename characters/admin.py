@@ -4,16 +4,34 @@ from common.mixins import ViewOnSiteMixin
 from characters.models import Character, CharacterVersion, CharacterShowcase
 
 
-class CharacterVersionAdmin(admin.TabularInline):
+class CharacterVersionAdmin(admin.StackedInline):
     model = CharacterVersion
     autocomplete_fields = ['static_asset']
     extra = 0
+    fieldsets = (
+        (
+            None,
+            {
+                'fields': (
+                    ('is_published', 'is_free', 'number', 'min_blender_version'),
+                    'date_published',
+                )
+            },
+        ),
+        (None, {'fields': (('static_asset', 'preview_youtube_link'),)}),
+        (None, {'fields': (('description',),)}),
+    )
 
 
-class CharacterShowcaseAdmin(admin.TabularInline):
+class CharacterShowcaseAdmin(admin.StackedInline):
     model = CharacterShowcase
     autocomplete_fields = ['static_asset']
     extra = 0
+    fieldsets = (
+        (None, {'fields': (('is_published', 'is_free', 'min_blender_version'), 'date_published')}),
+        (None, {'fields': (('static_asset', 'preview_youtube_link'),)}),
+        (None, {'fields': (('title', 'description'),)}),
+    )
 
 
 @admin.register(Character)

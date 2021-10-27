@@ -97,6 +97,7 @@ class CharacterVersion(mixins.CreatedUpdatedMixin, _DownloadableMixin, models.Mo
     static_asset = models.ForeignKey(
         'static_assets.StaticAsset', on_delete=models.CASCADE, related_name='char_versions'
     )
+    preview_youtube_link = models.URLField(null=True, blank=True)
     number = models.IntegerField()
     min_blender_version = models.CharField(
         choices=BlenderVersion.choices, max_length=5, db_index=True
@@ -109,6 +110,9 @@ class CharacterVersion(mixins.CreatedUpdatedMixin, _DownloadableMixin, models.Mo
     comments = models.ManyToManyField(
         Comment, through='CharacterVersionComment', related_name='character_version'
     )
+
+    def __str__(self) -> str:
+        return f'{self.character_id and self.character.name or "Character"} v{self.number or "?"}'
 
     @property
     def is_new(self) -> bool:
@@ -141,6 +145,7 @@ class CharacterShowcase(mixins.CreatedUpdatedMixin, _DownloadableMixin, models.M
         on_delete=models.CASCADE,
         related_name='char_showcase',
     )
+    preview_youtube_link = models.URLField(null=True, blank=True)
 
     min_blender_version = models.CharField(
         choices=BlenderVersion.choices, max_length=5, db_index=True
@@ -154,6 +159,9 @@ class CharacterShowcase(mixins.CreatedUpdatedMixin, _DownloadableMixin, models.M
     comments = models.ManyToManyField(
         Comment, through='CharacterShowcaseComment', related_name='character_showcase'
     )
+
+    def __str__(self) -> str:
+        return f'Showcase "{self.title}" for {self.character_id and self.character.name}'
 
     @property
     def is_new(self) -> bool:

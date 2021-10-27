@@ -13,13 +13,20 @@
 {% block content %}
   <div class="container-xl py-2 py-md-3">
 
-    {% if character_showcase.static_asset.thumbnail %}
-      <div class="row justify-content-center mb-3">
-        <div class="col-lg-10">
+    <div class="row justify-content-center mb-3">
+      <div class="col-lg-10">
+        {% if character_showcase.preview_youtube_link %}
+          <a class="video-modal-link video-preview" data-toggle="modal" data-target="#videoModal"
+            data-video="{{ character_showcase.preview_youtube_link }}">
+            {% if character_showcase.static_asset.thumbnail %}
+              <img class="img-fluid rounded" src="{{ character_showcase.static_asset.thumbnail.url }}" alt="Video Preview">
+            {% endif %}
+          </a>
+        {% elif character_showcase.static_asset.thumbnail %}
           <img class="img-fluid rounded" src="{{ character_showcase.static_asset.thumbnail.url }}">
-        </div>
+        {% endif %}
       </div>
-    {% endif %}
+    </div>
 
     <div class="row justify-content-center">
       <div class="col-lg-10">
