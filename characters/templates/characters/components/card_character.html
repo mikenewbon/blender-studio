@@ -3,6 +3,7 @@
   {% with character_version.get_absolute_url as detail_url %}
     <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
       <div class="card">
+
         <div class="card-header">
           <a class="card-header-link" href="{{ detail_url }}" aria-label="{{ character.name }}">
             {% if character_version.static_asset.thumbnail %}
@@ -12,17 +13,17 @@
             {% endif %}
           </a>
         </div>
-        <a href="{{ detail_url }}" class="card-body">
 
+        <a href="{{ detail_url }}" class="card-body">
           <h3 class="card-title">
             {% if character.is_new and character.is_published %}
               <div class="badge badge-primary">New</div>
             {% endif %}
             {{ character.name }}
           </h3>
-          <p class="card-text">{{ character_version.description|unmarkdown|truncatewords:"10" }}</p>
-
+          <p class="card-text">{{ character_version.description|unmarkdown|truncatewords:"50" }}</p>
         </a>
+
         <a href="{{ detail_url }}" class="card-footer">
           <div class="card-subtitle-group">
             {% if not character.is_published or not character_version.is_published %}
