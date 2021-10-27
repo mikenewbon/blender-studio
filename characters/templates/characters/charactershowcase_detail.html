@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container-xl py-3">
+  <div class="container-xl py-2 py-md-3">
 
     {% if character_showcase.static_asset.thumbnail %}
       <div class="row justify-content-center mb-3">
@@ -23,35 +23,20 @@
 
     <div class="row justify-content-center">
       <div class="col-lg-10">
-        <p class="subtitle my-2">
-          Character Showcase |
-          <a href="{{ character_showcase.character.get_absolute_url }}">
-            <span class="d-inline-block">{{ character_showcase.character.name }}</span>
-          </a>
-        </p>
-        <h1 class="mb-0 d-inline-block">{{ character_showcase.title|linebreaksbr }}</h1>
-      </div>
-    </div>
-    <div class="row justify-content-center">
-      <div class="col-lg-10">
         <div class="row align-items-start">
+
           <div class="col-12 col-md mb-2 mb-md-3">
+            <div class="">
+              <p class="subtitle">
+                Character Showcase |
+                <a href="{{ character_showcase.character.get_absolute_url }}">
+                  <span class="d-inline-block">{{ character_showcase.character.name }}</span>
+                </a>
+              </p>
+              <h1 class="mb-0 d-inline-block">{{ character_showcase.title|linebreaksbr }}</h1>
+            </div>
+
             <div class="text-muted small">
-              <div class="col-auto d-flex mb-2">
-                <div class="row">
-                  <div class="col-auto pr-0">
-                    {% if character_showcase.static_asset.author_image_url %}
-                      <img src="{{ character_showcase.static_asset.author_image_url }}" class="profile">
-                    {% else %}
-                      <img src="{% static 'common/images/blank-profile-pic.png' %}" class="profile">
-                    {% endif %}
-                  </div>
-                  <div class="col-auto">
-                    <p class="subtitle text-white-50 x-small">published by</p>
-                    <h4 class="comment-name mb-0">{{ character_showcase.static_asset.author_name }}</h4>
-                  </div>
-                </div>
-              </div>
 
               <p class="d-inline mr-2">{{ character_showcase.date_published|date:"jS F Y" }}</p>
               {% if character_showcase.static_asset.license %}
@@ -79,6 +64,7 @@
 
             </div>
           </div>
+
 
 
           <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
@@ -126,7 +112,25 @@
           </div>
         </div>
 
-        <section class="mb-3 pb-3 markdown-text">{% with_shortcodes character_showcase.description|markdown %}</section>
+        <div class="text-muted small row">
+          <div class="col-auto d-flex mb-2">
+            <div class="row">
+              <div class="col-auto pr-0">
+                {% if character_showcase.static_asset.author_image_url %}
+                  <img src="{{ character_showcase.static_asset.author_image_url }}" class="profile">
+                {% else %}
+                  <img src="{% static 'common/images/blank-profile-pic.png' %}" class="profile">
+                {% endif %}
+              </div>
+              <div class="col-auto">
+                <p class="subtitle text-white-50 x-small">published by</p>
+                <h4 class="comment-name mb-0">{{ character_showcase.static_asset.author_name }}</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section class="mb-3 markdown-text">{% with_shortcodes character_showcase.description|markdown %}</section>
 
         <section class="mb-3">{% include 'comments/components/comment_section.html' %}</section>
 

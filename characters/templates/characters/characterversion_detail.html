@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container-xl py-3">
+  <div class="container-xl py-2 py-md-3">
 
     {% if character_version.static_asset.thumbnail %}
       <div class="row justify-content-center mb-3">
@@ -25,6 +25,7 @@
     <div class="row justify-content-center">
       <div class="col-lg-10">
         <div class="row align-items-start">
+
           <div class="col-12 col-md mb-2 mb-md-3">
             <div class="">
               <p class="subtitle ">Character Rig</p>
@@ -138,7 +139,7 @@
                 {% endif %}
               </div>
               <div class="col-auto">
-                <p class="subtitle text-white-50 x-small">published by</p>
+                <p class="subtitle text-white-50 x-small">Author</p>
                 <h4 class="comment-name mb-0">{{ character_version.static_asset.author_name }}</h4>
               </div>
             </div>
