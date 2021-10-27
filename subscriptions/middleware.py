@@ -44,12 +44,12 @@ EEA_COUNTRY_CODES = (
     'SE',
     'SI',
 )
-COUTRY_CODE_USD = ('US',)
+COUNTRY_CODE_USD = ('US',)
 
 
 def preferred_currency_for_country_code(country_code: Optional[str] = '') -> str:
     """Return currency for the given country code."""
-    if country_code in COUTRY_CODE_USD:
+    if country_code in COUNTRY_CODE_USD:
         return 'USD'
     return 'EUR'
 
