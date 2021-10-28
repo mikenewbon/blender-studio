@@ -133,3 +133,13 @@ def get_featured() -> Dict[str, Any]:
         'trainings': get_latest_trainings_and_production_lessons(),
         'characters': get_published_characters(),
     }
+
+
+@register.simple_tag(takes_context=True)
+def get_video_progress_seconds(context, video) -> bool:
+    """Return video progress for currently logged in user."""
+    request = context.get('request')
+    if request.user.is_anonymous:
+        return None
+    progress_position = video.get_progress_position(request.user.pk)
+    return progress_position.total_seconds() if progress_position else None
