@@ -136,13 +136,12 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
             content_type, _ = mimetypes.guess_type(self.original_filename)
             if not self.content_type:
                 self.content_type = content_type
-            if not self.source_type:
-                if not content_type:
-                    self.source_type = StaticAssetFileTypeChoices.file
-                elif 'image' in content_type:
-                    self.source_type = StaticAssetFileTypeChoices.image
-                elif 'video' in content_type:
-                    self.source_type = StaticAssetFileTypeChoices.video
+            if not content_type:
+                self.source_type = StaticAssetFileTypeChoices.file
+            elif 'image' in content_type:
+                self.source_type = StaticAssetFileTypeChoices.image
+            elif 'video' in content_type:
+                self.source_type = StaticAssetFileTypeChoices.video
 
         if self.source_type == StaticAssetFileTypeChoices.file and not self.thumbnail:
             raise ValidationError(
