@@ -44,7 +44,7 @@
         </a>
 
         {% comment %}
-          {% if admin_change_href is not none %}
+          {% if admin_change_href %}
             <a href="{{ admin_change_href }}">edit</a>
           {% endif %}
         {% endcomment %}
@@ -135,7 +135,7 @@
                     </a>
 
                     {% comment %}
-                      {% if admin_change_href is not none %}
+                      {% if admin_change_href %}
                         <a href="{{ admin_change_href }}">edit</a>
                       {% endif %}
                     {% endcomment %}

@@ -21,7 +21,7 @@
 
 {% block nexted_content %}
   <div class="row mb-3">
-    {% if video is not none %}
+    {% if video %}
       <div class="col training-video">
         {% if section.is_free or request.user|has_active_subscription %}
           {% include 'common/components/video_player.html' with url=video.url progress_url=video.progress_url start_position=video.start_position poster=section.thumbnail_m_url tracks=section.static_asset.video.tracks.all %}
@@ -139,7 +139,7 @@
         <div class="card d-md-none">
           <div class="card-body">
             <!-- TODO(Mike): Get next training -->
-            {% if video is not none %}
+            {% if video %}
               <div class="row mb-2 justify-content-between">
                 <div class="col-auto">
                   <p class="subtitle small">Autoplay Next Section</p>
@@ -171,7 +171,7 @@
       <div class="col-md-4">
         <div class="card d-none d-md-block">
           <div class="card-body">
-            {% if video is not none %}
+            {% if video %}
               <div class="row mb-2 justify-content-between">
                 <div class="col-md-auto">
                   <p class="subtitle small">Autoplay Next Section</p>
