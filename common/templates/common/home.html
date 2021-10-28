@@ -3,33 +3,31 @@
 
 {% block content %}
 
-  <div class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content jumbotron header mb-4 spacer-n">
+  <div class="jumbotron jumbotron-fluid jumbotron-overlay jumbotron header mb-4 spacer-n">
     <div class="jumbotron-bg-wrapper">
-      <img class="jumbotron-bg" src="{% static 'common/images/home/sf-background.jpg' %}" alt="A tiny mushroom-headed imp hides amongst the forrest.">
+      <img class="jumbotron-bg" src="{% static 'common/images/home/sf-dark-background.jpg' %}" alt="A tiny mushroom-headed imp hides amongst the forrest.">
       <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
       {% comment %}
         {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
       {% endcomment %}
     </div>
     <div class="container-xl">
-      <div class="row">
+      <div class="row justify-content-center">
         <div class="col-lg-5 col-md-6">
-          <div class="jumbotron-body">
+          <div class="jumbotron-body text-center">
             <div class="spacer"></div>
-            <p class="mb-2">
-              {% comment %} <span class="badge badge-primary mr-2">New</span> {% endcomment %}
-              <span class="subtitle">Open Movie In Production</span>
-            </p>
             <a href="/films/sprite-fright">
-              <img class="mb-2 film-logo" src="{% static "common/images/home/sf-logo.png" %}" alt="Sprite Fright Logo">
+              <img class="mb-3 mr-n3 film-logo" src="{% static "common/images/home/sf-logo_gradient.png" %}" alt="Sprite Fright Logo">
             </a>
-            <p class="mb-3">Blender Studio’s 13th open movie will be an 80’s-inspired horror comedy, set in Britain: When
+            <h1 class="mb-0">Online Premiere</h1>
+            <h3 class="mb-3">Friday 29th October, 5pm CET</h3>
+            <div class="d-inline-block mb-2">
+              <a href="https://www.youtube.com/watch?v=CSS3fhU-g38" class="btn btn-sprites mr-2 mb-2" rel="nofollow" target="_blank">Watch the Premiere</a>
+              <a href="/films/sprite-fright/" class="btn btn-transparent mb-2">See the project</a>
+            </div>
+            <p class="mb-3">When
               a group of rowdy teenagers trek into an isolated forest, they discover peaceful mushroom creatures that turn
               out to be an unexpected force of nature.</p>
-            <div class="d-inline-block mb-n2">
-              <a href="/films/sprite-fright/" class="btn btn-primary mr-2 mb-2">Check out the project</a>
-              <a href="/films/sprite-fright/production-logs/" class="btn btn-transparent mb-2">See the latest updates</a>
-            </div>
           </div>
         </div>
       </div>
