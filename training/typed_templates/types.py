@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Optional, Set
+from typing import List, Optional, Set, TypedDict
 import dataclasses as dc
 import datetime
 
@@ -97,3 +97,9 @@ class SectionNavigation:
     @property
     def name_with_index(self) -> str:
         return f'{self.index:02.0f}. {self.name}'
+
+
+class SectionProgressReportingData(TypedDict):
+    progress_url: str
+    started_timeout: Optional[float]
+    finished_timeout: Optional[float]
