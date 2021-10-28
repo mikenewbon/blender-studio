@@ -5,7 +5,7 @@ import logging
 import mimetypes
 
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.db import models
 from django.urls.base import reverse
 from django.utils.text import slugify
@@ -136,13 +136,12 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
             content_type, _ = mimetypes.guess_type(self.original_filename)
             if not self.content_type:
                 self.content_type = content_type
-            if not self.source_type:
-                if not content_type:
-                    self.source_type = StaticAssetFileTypeChoices.file
-                elif 'image' in content_type:
-                    self.source_type = StaticAssetFileTypeChoices.image
-                elif 'video' in content_type:
-                    self.source_type = StaticAssetFileTypeChoices.video
+            if not content_type:
+                self.source_type = StaticAssetFileTypeChoices.file
+            elif 'image' in content_type:
+                self.source_type = StaticAssetFileTypeChoices.image
+            elif 'video' in content_type:
+                self.source_type = StaticAssetFileTypeChoices.video
 
         if self.source_type == StaticAssetFileTypeChoices.file and not self.thumbnail:
             raise ValidationError(
@@ -255,6 +254,15 @@ class Video(models.Model):
 
         if filename:
             return f'attachment; filename="{filename}"'
+
+    def get_progress_position(self, user_id) -> Optional[datetime.timedelta]:
+        """Get progress for a user with given ID."""
+        try:
+            progress = self.progress.get(user_id=user_id)
+            return progress.position
+        except ObjectDoesNotExist:
+            pass
+        return None
 
 
 class VideoVariation(models.Model):

@@ -7,7 +7,6 @@ from django.db.models import Exists, OuterRef
 from comments import models
 from comments.queries import get_annotated_comments
 from training.models import chapters, sections, trainings
-from static_assets.models.progress import UserVideoProgress
 import static_assets.models as models_static_assets
 
 
@@ -77,12 +76,9 @@ def from_slug(  # noqa: D103
 
     video: Optional[Tuple[models_static_assets.Video, Optional[datetime.timedelta]]]
     try:
-        try:
-            _video = section.static_asset.video if section.static_asset else None
-            progress = _video.progress.get(user_id=user_pk) if _video else None
-        except UserVideoProgress.DoesNotExist:
-            progress = None
-        video = (_video, None if progress is None else progress.position) if _video else None
+        _video = section.static_asset.video if section.static_asset else None
+        progress_position = _video.get_progress_position(user_pk) if _video else None
+        video = (_video, progress_position) if _video else None
     except models_static_assets.Video.DoesNotExist:
         video = None
 

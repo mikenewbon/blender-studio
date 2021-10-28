@@ -13,13 +13,20 @@
 {% block content %}
   <div class="container-xl py-2 py-md-3">
 
-    {% if character_showcase.static_asset.thumbnail %}
-      <div class="row justify-content-center mb-3">
-        <div class="col-lg-10">
+    <div class="row justify-content-center mb-3">
+      <div class="col-lg-10">
+        {% if character_showcase.preview_youtube_link %}
+          <a class="video-modal-link video-preview" data-toggle="modal" data-target="#videoModal"
+            data-video="{{ character_showcase.preview_youtube_link }}">
+            {% if character_showcase.static_asset.thumbnail %}
+              <img class="img-fluid rounded" src="{{ character_showcase.static_asset.thumbnail.url }}" alt="Video Preview">
+            {% endif %}
+          </a>
+        {% elif character_showcase.static_asset.thumbnail %}
           <img class="img-fluid rounded" src="{{ character_showcase.static_asset.thumbnail.url }}">
-        </div>
+        {% endif %}
       </div>
-    {% endif %}
+    </div>
 
     <div class="row justify-content-center">
       <div class="col-lg-10">
@@ -72,14 +79,6 @@
 
               <div class="training-toolbar">
 
-                <button data-like-url="{{ character.like_url }}"
-                  class="btn btn-transparent btn-sm btn-icon comment-material-button checkbox-like {% if not user.is_authenticated %}disabled{% endif%}"
-                  {% if not user.is_authenticated %}disabled{% endif%} {% if character.liked %}data-checked="checked" {% endif %}>
-                  <i class="material-icons checkbox-like-icon-checked text-primary">favorite</i>
-                  <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
-                  {% if character.likes.count != 0 %}<span class="likes-count">{{ character.likes.count }}</span>{% endif %}
-                </button>
-
                 {% if user.is_anonymous %}
                   <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to Download</button>
                 {% elif not character_showcase.is_free and not request.user|has_active_subscription %}
@@ -123,7 +122,7 @@
                 {% endif %}
               </div>
               <div class="col-auto">
-                <p class="subtitle text-white-50 x-small">published by</p>
+                <p class="subtitle text-white-50 x-small">Published by</p>
                 <h4 class="comment-name mb-0">{{ character_showcase.static_asset.author_name }}</h4>
               </div>
             </div>

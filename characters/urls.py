@@ -17,7 +17,7 @@ urlpatterns = [
         name='api-character-version-comment',
     ),
     path(
-        'api/characters/v/<int:character_showcase_pk>/comment/',
+        'api/characters/showcase/<int:character_showcase_pk>/comment/',
         comment_showcase,
         name='api-character-showcase-comment',
     ),

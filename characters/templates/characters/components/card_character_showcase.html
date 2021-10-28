@@ -42,12 +42,6 @@
               Free
             </p>
           {% endif %}
-          {% if character.likes.count > 0 %}
-            <p class="card-subtitle">
-              <i class="material-icons icon-inline small">favorite_border</i>
-              {{ character.likes.count }}
-            </p>
-          {% endif %}
           {% if showcase.comments.count > 0 %}
             <p class="card-subtitle">
               <i class="material-icons icon-inline small">chat_bubble_outline</i>
