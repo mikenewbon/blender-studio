@@ -16,9 +16,6 @@
 
 {% block scripts %}
   {{ block.super }}
-  {% if request.user.is_authenticated %}
-    {{ section_progress_reporting_data|json_script:"sectionProgressReportingData" }}
-  {% endif %}
   {% javascript 'training' %}
 {% endblock scripts %}
 

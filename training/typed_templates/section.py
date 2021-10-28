@@ -8,7 +8,6 @@ from common.typed_templates.types import TypeSafeTemplateResponse
 from training.typed_templates.types import (
     Chapter,
     Navigation,
-    SectionProgressReportingData,
     Training,
     Video,
 )
@@ -23,7 +22,6 @@ def section(
     section: Section,
     video: Optional[Video],
     comments: Comments,
-    section_progress_reporting_data: SectionProgressReportingData,
     navigation: Navigation,
 ) -> TypeSafeTemplateResponse:
     return TypeSafeTemplateResponse(
@@ -36,7 +34,6 @@ def section(
                 'section': section,
                 'video': video,
                 'comments': comments,
-                'section_progress_reporting_data': section_progress_reporting_data,
                 'navigation': navigation,
             },
         )
