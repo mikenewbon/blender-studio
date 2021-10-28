@@ -8,6 +8,8 @@ from comments.views.common import comments_to_template_type
 from common.typed_templates.types import TypeSafeTemplateResponse
 
 from training import queries, typed_templates
+from training.models.progress import UserSectionProgress
+from training.typed_templates.types import SectionProgressReportingData
 from training.views.common import (
     navigation_to_template_type,
     training_model_to_template_type,
@@ -57,6 +59,15 @@ def section(
         section=section,
         video=video,
         comments=comments_to_template_type(comments, section.comment_url, user=request.user),
+        section_progress_reporting_data=SectionProgressReportingData(
+            progress_url=section.progress_url,
+            started_timeout=UserSectionProgress.started_duration_pageview_duration.total_seconds(),
+            finished_timeout=(
+                UserSectionProgress.finished_duration_pageview_duration.total_seconds()
+                if video is None
+                else None
+            ),
+        ),
         navigation=navigation_to_template_type(*navigation, user=request.user, current=section),
     )
 
