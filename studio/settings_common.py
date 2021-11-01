@@ -266,7 +266,6 @@ LOGGING = {
         'django': {'level': 'WARNING'},
         'urllib3': {'level': 'WARNING'},
         'search': {'level': 'DEBUG'},
-        'blendercloud': {'level': 'DEBUG'},
         'static_assets': {'level': 'DEBUG'},
     },
     'root': {'level': 'WARNING', 'handlers': ['console']},
@@ -372,20 +371,6 @@ THUMBNAIL_CROP_MODE = 'center'
 THUMBNAIL_SIZE_S = '400x225'
 THUMBNAIL_SIZE_M = '1280x720'
 
-BLENDER_CLOUD_SESSION_COOKIE_NAME = 'session'
-BLENDER_CLOUD_REMEMBER_COOKIE_NAME = 'remember_token'
-# Caveat emptor:
-# BLENDER_CLOUD_SESSION_LIFETIME should be **at least as long** as Blender Cloud's session lifetime,
-# otherwise Blender Studio will consider a session invalid **before** Blender Cloud does,
-# meaning that people will appear to be logged out on Blender Studio pages,
-# even if they are logged in in Blender Cloud.
-# Assumes a default Flask's value for the session lifetime.
-# See https://flask.palletsprojects.com/en/1.0.x/config/#PERMANENT_SESSION_LIFETIME
-BLENDER_CLOUD_SESSION_LIFETIME = timedelta(days=31)
-BLENDER_CLOUD_AUTH_ENABLED = False
-BLENDER_CLOUD_SECRET_KEY = 'CHANGE_ME'
-# If set, only use Blender Cloud session cookie for this specific domain
-BLENDER_CLOUD_DOMAIN = None
 CSRF_COOKIE_NAME = 'bstudiocsrftoken'
 
 ACTSTREAM_SETTINGS = {
