@@ -1,0 +1,18 @@
+{% extends "admin/change_form_object_tools.html" %}
+{% load i18n %}
+{% block object-tools-items %}
+  {{ block.super }}
+  <li>
+    {% if original.oauth_info.oauth_user_id %}
+      <a href="{{ BLENDER_ID.BASE_URL }}admin/bid_main/user/{{ original.oauth_info.oauth_user_id }}/change/"
+        target="_blank">
+        {% trans "Show in Blender ID" %}
+      </a>
+    {% else %}
+      <a href="{{ BLENDER_ID.BASE_URL }}admin/bid_main/user/?email__exact={{ original.email|urlencode }}"
+        target="_blank">
+        {% trans "Find in Blender ID" %}
+      </a>
+    {% endif %}
+  </li>
+{% endblock %}
