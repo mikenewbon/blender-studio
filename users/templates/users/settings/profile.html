@@ -33,7 +33,7 @@
     <div class="row">
       <div class="col-md-6 mb-3">
         <label class="mb-0 h3" for="username">Username</label>
-        <p>This is used in comments.</p>
+        <p>This is displayed in comments.</p>
         <input disabled class="form-control" type="text" value="{{ user.username }}" id="username"
           style="background-image:url({% static "common/images/icons/lock.svg" %});">
       </div>
@@ -68,7 +68,7 @@
 
           <div class="comment-name-date-wrapper mb-0">
             <div style="background-image:url('{{ user.image_url }}');" class="profile col-profile"></div>
-            <h4 class="comment-name">{{ user.full_name }}</h4>
+            <h4 class="comment-name">{% firstof user.full_name user.username %}</h4>
             <p class="badge">
               {% with width=16 badges=user.badges %}
                 {% include 'users/components/badges.html' %}
