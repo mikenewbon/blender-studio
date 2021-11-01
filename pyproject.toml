@@ -9,7 +9,7 @@ python = "^3.8"
 django = "3.0 || 3.0.*"
 django-pipeline = "^2.0"
 psycopg2 = "^2.8"
-blender_id_oauth_client = "^0.9.3"
+blender_id_oauth_client = {git = "https://gitlab.com/blender-institute/blender-id-oauth-client.git", branch = "master"}
 libsasscompiler = "^0.1.5"
 jsmin = "3.0.0"
 sorl-thumbnail = "^12.7.0"
