@@ -1,4 +1,5 @@
 from django.urls import path, re_path
+from django.views.generic import RedirectView
 
 from looper.views import settings as looper_settings
 
@@ -57,8 +58,13 @@ urlpatterns = [
         name='receipt',
     ),
     path(
-        'settings/receipts/blender-cloud-<int:order_id>.pdf',
+        'settings/receipts/blender-studio-<int:order_id>.pdf',
         looper_settings.ReceiptPDFView.as_view(),
         name='receipt-pdf',
+    ),
+    # TODO(anna): remove this once blender-cloud-1243.pdf no longer appear in access logs.
+    path(
+        'settings/receipts/blender-cloud-<int:order_id>.pdf',
+        RedirectView.as_view(pattern_name='subscriptions:receipt-pdf', permanent=True),
     ),
 ]
