@@ -204,6 +204,8 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
 
     @property
     def download_url(self) -> str:
+        if not self.source or not self.source.name:
+            return ''
         return reverse('download-source-url', kwargs={'source': self.source.name})
 
 
