@@ -16,7 +16,7 @@
     <div class="row justify-content-center mb-3">
       <div class="col-lg-10">
         {% if character_showcase.preview_youtube_link %}
-            {% include 'common/components/video_player_embed.html' with url=character_showcase.preview_youtube_link rounded=True %}
+          {% include 'common/components/video_player_embed.html' with url=character_showcase.preview_youtube_link rounded=True poster=character_showcase.static_asset.thumbnail_m_url %}
         {% elif character_showcase.static_asset.thumbnail %}
           <img class="img-fluid rounded" src="{{ character_showcase.static_asset.thumbnail.url }}">
         {% endif %}
