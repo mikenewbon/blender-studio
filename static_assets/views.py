@@ -1,3 +1,4 @@
+"""Various static assets views."""
 import datetime
 import json
 import logging
@@ -8,28 +9,33 @@ from django.core.exceptions import ObjectDoesNotExist, SuspiciousOperation
 from django.http import Http404
 from django.http.request import HttpRequest
 from django.http.response import JsonResponse, HttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 import requests
 
+from common.storage import get_s3_url
+from common.queries import has_active_subscription, is_free_static_asset
 from static_assets.models.progress import UserVideoProgress
-from static_assets.models import Video, VideoTrack
+from static_assets.models import Video, VideoTrack, StaticAsset
 from training.queries.progress import (
     set_video_progress,
     set_section_progress_started,
     set_section_progress_finished,
 )
 from static_assets.coconut import events
+from stats.models import StaticAssetDownload
 
 log = logging.getLogger(__name__)
+# CloudFront does not support files larger than 20GB
+CDN_SIZE_LIMIT_BYTES = 20 * 1024 ** 3
 
 
 @require_POST
 @login_required
 def video_progress(request: HttpRequest, *, video_pk: int) -> JsonResponse:
-    # TODO(fsiddi) Relocate to static_assets app
+    """Update video progress."""
     parsed_body = json.loads(request.body)
 
     position = datetime.timedelta(seconds=float(parsed_body['position']))
@@ -93,3 +99,22 @@ def video_track_view(request, pk: int, path: str):
         original_mimetype, _ = mimetypes.guess_type(track.source.name)
         response = HttpResponse(storage_response.content, content_type=original_mimetype)
         return response
+
+
+@require_GET
+@login_required
+def download_view(request, source: str):
+    """Redirect to a storage URL of the given source file, if found in static assets."""
+    static_asset = get_object_or_404(StaticAsset, source=source)
+    can_dowload = has_active_subscription(request.user) or is_free_static_asset(static_asset.pk)
+    if not can_dowload:
+        raise Http404()
+
+    download_source = static_asset.download_source
+    StaticAssetDownload.create_from_request(request, static_asset.pk)
+    redirect_url = (
+        download_source.url
+        if static_asset.size_bytes <= CDN_SIZE_LIMIT_BYTES
+        else get_s3_url(download_source.name)
+    )
+    return redirect(redirect_url, permanent=False)

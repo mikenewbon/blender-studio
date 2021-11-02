@@ -11,6 +11,7 @@ from django.views.decorators.http import require_POST, require_safe
 from common.types import assert_cast
 from films.models import Asset
 from films.queries import get_asset_context, get_asset, set_asset_like
+from stats.models import StaticAssetView
 
 
 @require_safe
@@ -42,6 +43,7 @@ def asset(request: HttpRequest, asset_pk: int) -> HttpResponse:
 
     context = get_asset_context(asset, request)
 
+    StaticAssetView.create_from_request(request, asset.static_asset_id)
     return render(request, 'common/components/modal_asset.html', context)
 
 
@@ -52,6 +54,7 @@ def asset_zoom(request: HttpRequest, asset_pk: int) -> HttpResponse:
     except Asset.DoesNotExist:
         raise Http404('No asset matches the given query.')
 
+    StaticAssetView.create_from_request(request, asset.static_asset_id)
     return render(request, 'common/components/modal_asset_zoom.html', {'asset': asset})
 
 
@@ -65,5 +68,4 @@ def asset_like(request: HttpRequest, *, asset_pk: int) -> JsonResponse:
     number_of_likes = set_asset_like(
         asset_pk=asset_pk, user_pk=request.user.pk, like=requested_like
     )
-
     return JsonResponse({'like': requested_like, 'number_of_likes': number_of_likes})

@@ -9,9 +9,9 @@
           <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
           {% if asset.likes.count != 0 %}<span class="likes-count">{{ asset.likes.count }}</span>{% endif %}
         </button>
-        <a href="{{ asset.download_url }}" download onclick="setTimeout(resetProgress, 100)"
-          class="btn btn-sm btn-dark">Download{% if asset.download_size != "" %} <span
-            class="subtitle">({{ asset.download_size }}){% endif %}</span></a>
+        <a href="{{ asset.static_asset.download_url }}" download onclick="setTimeout(resetProgress, 100)"
+          class="btn btn-sm btn-dark">Download{% if asset.static_asset.download_size != "" %} <span
+            class="subtitle">({{ asset.static_asset.download_size }})</span>{% endif %}</a>
       <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
         <i class="material-icons">more_horiz</i>
       </button>

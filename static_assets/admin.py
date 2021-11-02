@@ -42,7 +42,14 @@ class StaticAssetAdmin(AdminUserDefaultMixin, nested_admin.NestedModelAdmin):
     actions = ['process_videos', 'transcribe_videos']
     inlines = [ImageInline, VideoInline]
     autocomplete_fields = ['user', 'author', 'contributors']
-    list_display = ['__str__', 'date_created', 'date_updated', 'has_tracks']
+    list_display = [
+        '__str__',
+        'date_created',
+        'date_updated',
+        'has_tracks',
+        'view_count',
+        'download_count',
+    ]
     fieldsets = (
         (
             None,
@@ -56,7 +63,7 @@ class StaticAssetAdmin(AdminUserDefaultMixin, nested_admin.NestedModelAdmin):
                     ('user', 'author', 'contributors'),
                     'license',
                     'thumbnail',
-                    'date_created',
+                    ('date_created', 'view_count', 'download_count'),
                 ],
             },
         ),
@@ -89,7 +96,14 @@ class StaticAssetAdmin(AdminUserDefaultMixin, nested_admin.NestedModelAdmin):
         'section__name',
         'assets__name',
     ]
-    readonly_fields = ['original_filename', 'size_bytes', 'date_created', 'id']
+    readonly_fields = [
+        'original_filename',
+        'size_bytes',
+        'date_created',
+        'id',
+        'view_count',
+        'download_count',
+    ]
 
     def process_videos(self, request, queryset):
         """For each asset, process all videos attached if available."""

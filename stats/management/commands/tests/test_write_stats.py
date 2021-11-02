@@ -7,8 +7,9 @@ from django.test import TestCase
 from common.tests.factories.blog import PostFactory
 from common.tests.factories.comments import CommentFactory
 from common.tests.factories.films import AssetFactory
+from common.tests.factories.static_assets import StaticAssetFactory
 from common.tests.factories.users import UserFactory
-from stats.models import Sample
+from stats.models import Sample, StaticAssetView, StaticAssetDownload
 
 
 class WriteStatsCommandTest(TestCase):
@@ -71,3 +72,119 @@ class WriteStatsCommandTest(TestCase):
         self.assertEqual(users_subscribers_count_sample.value, 5)
         # includes users created along with the comments and blog posts
         self.assertEqual(users_total_count_sample.value, 18)
+
+    def test_command_updates_static_assets_view_counters(self):
+        out = StringIO()
+        static_asset = StaticAssetFactory()
+        StaticAssetView.objects.bulk_create(
+            [
+                StaticAssetView(static_asset_id=static_asset.pk, ip_address='192.19.10.10'),
+                StaticAssetView(static_asset_id=static_asset.pk, ip_address='192.19.10.11'),
+            ]
+        )
+        old_date_updated = static_asset.date_updated
+
+        call_command('write_stats', stdout=out)
+
+        static_asset.refresh_from_db()
+        self.assertEqual(static_asset.view_count, 2)
+        self.assertEqual(static_asset.download_count, 0)
+        # auto-update field should not have changed on recount
+        self.assertEqual(old_date_updated, static_asset.date_updated)
+        # tables storing individual views should have been truncated
+        self.assertEqual(StaticAssetView.objects.count(), 0)
+        self.assertEqual(StaticAssetDownload.objects.count(), 0)
+
+    def test_command_updates_static_assets_download_counters(self):
+        out = StringIO()
+        static_asset = StaticAssetFactory()
+        StaticAssetDownload.objects.bulk_create(
+            [
+                StaticAssetDownload(static_asset_id=static_asset.pk, ip_address='192.19.10.10'),
+                StaticAssetDownload(static_asset_id=static_asset.pk, ip_address='192.19.10.11'),
+            ]
+        )
+        old_date_updated = static_asset.date_updated
+
+        call_command('write_stats', stdout=out)
+
+        static_asset.refresh_from_db()
+        self.assertEqual(static_asset.view_count, 0)
+        self.assertEqual(static_asset.download_count, 2)
+        # auto-update field should not have changed on recount
+        self.assertEqual(old_date_updated, static_asset.date_updated)
+        # tables storing individual views should have been truncated
+        self.assertEqual(StaticAssetView.objects.count(), 0)
+        self.assertEqual(StaticAssetDownload.objects.count(), 0)
+
+    def test_command_adds_static_assets_view_counters(self):
+        out = StringIO()
+        static_asset = StaticAssetFactory(view_count=10)
+        StaticAssetView.objects.bulk_create(
+            [
+                StaticAssetView(static_asset_id=static_asset.pk, ip_address='192.19.10.10'),
+                StaticAssetView(static_asset_id=static_asset.pk, ip_address='192.19.10.11'),
+            ]
+        )
+        old_date_updated = static_asset.date_updated
+
+        call_command('write_stats', stdout=out)
+
+        static_asset.refresh_from_db()
+        self.assertEqual(static_asset.view_count, 12)
+        self.assertEqual(static_asset.download_count, 0)
+        # auto-update field should not have changed on recount
+        self.assertEqual(old_date_updated, static_asset.date_updated)
+        # tables storing individual views should have been truncated
+        self.assertEqual(StaticAssetView.objects.count(), 0)
+        self.assertEqual(StaticAssetDownload.objects.count(), 0)
+
+    def test_command_adds_static_assets_download_counters(self):
+        out = StringIO()
+        static_asset = StaticAssetFactory(download_count=10)
+        StaticAssetDownload.objects.bulk_create(
+            [
+                StaticAssetDownload(static_asset_id=static_asset.pk, ip_address='192.19.10.10'),
+                StaticAssetDownload(static_asset_id=static_asset.pk, ip_address='192.19.10.11'),
+            ]
+        )
+        old_date_updated = static_asset.date_updated
+
+        call_command('write_stats', stdout=out)
+
+        static_asset.refresh_from_db()
+        self.assertEqual(static_asset.view_count, 0)
+        self.assertEqual(static_asset.download_count, 12)
+        # auto-update field should not have changed on recount
+        self.assertEqual(old_date_updated, static_asset.date_updated)
+        # tables storing individual views should have been truncated
+        self.assertEqual(StaticAssetView.objects.count(), 0)
+        self.assertEqual(StaticAssetDownload.objects.count(), 0)
+
+    def test_command_updates_static_assets_both_download_and_view_counters(self):
+        out = StringIO()
+        static_asset = StaticAssetFactory(download_count=5, view_count=4)
+        StaticAssetView.objects.bulk_create(
+            [
+                StaticAssetView(static_asset_id=static_asset.pk, ip_address='192.19.10.10'),
+                StaticAssetView(static_asset_id=static_asset.pk, ip_address='192.19.10.11'),
+            ]
+        )
+        StaticAssetDownload.objects.bulk_create(
+            [
+                StaticAssetDownload(static_asset_id=static_asset.pk, ip_address='192.19.10.10'),
+                StaticAssetDownload(static_asset_id=static_asset.pk, ip_address='192.19.10.11'),
+            ]
+        )
+        old_date_updated = static_asset.date_updated
+
+        call_command('write_stats', stdout=out)
+
+        static_asset.refresh_from_db()
+        self.assertEqual(static_asset.view_count, 6)
+        self.assertEqual(static_asset.download_count, 7)
+        # auto-update field should not have changed on recount
+        self.assertEqual(old_date_updated, static_asset.date_updated)
+        # tables storing individual views should have been truncated
+        self.assertEqual(StaticAssetView.objects.count(), 0)
+        self.assertEqual(StaticAssetDownload.objects.count(), 0)

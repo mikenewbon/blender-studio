@@ -2,7 +2,6 @@ import uuid
 
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.template.defaultfilters import filesizeformat
 from django.urls.base import reverse
 from taggit.managers import TaggableManager
 from typing import Optional
@@ -77,27 +76,6 @@ class Section(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models
             'section',
             kwargs={'training_slug': self.chapter.training.slug, 'section_slug': self.slug},
         )
-
-    @property
-    def download_url(self) -> str:
-        if not self.static_asset:
-            return ''
-        if self.static_asset.source_type == 'video':
-            return self.static_asset.video.default_variation_url
-        else:
-            return self.static_asset.source.url
-
-    @property
-    def download_size(self) -> str:
-        if not self.static_asset:
-            return ''
-        if self.static_asset.source_type == 'video':
-            variation = self.static_asset.video.variations.first()
-            if not variation:
-                return ''
-            return filesizeformat(variation.size_bytes)
-        else:
-            return filesizeformat(self.static_asset.size_bytes)
 
     @property
     def comment_url(self) -> str:

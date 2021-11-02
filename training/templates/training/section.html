@@ -83,7 +83,7 @@
               {% elif request.user|has_active_subscription or section.is_free %}
                 {% if section.static_asset.video.tracks.all %}
                   <div class="btn-group">
-                    <a href="{{ section.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ section.download_size }})</span></a>
+                    <a href="{{ section.static_asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ section.static_asset.download_size }})</span></a>
                     <button data-toggle="dropdown" id="subtitleDownload" class="btn btn-sm btn-icon btn-dark rounded-right" ><i class="material-icons">arrow_drop_down</i></button>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="subtitleDownload">
                       {% for track in section.static_asset.video.tracks.all %}
@@ -94,7 +94,7 @@
                     </div>
                   </div>
                 {% else%}
-                  <a href="{{ section.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ section.download_size }})</span></a>
+                  <a href="{{ section.static_asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ section.static_asset.download_size }})</span></a>
                 {% endif %}
               {% endif %}
 

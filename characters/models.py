@@ -2,7 +2,6 @@ import datetime
 
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.template.defaultfilters import filesizeformat
 from django.urls.base import reverse
 from django.utils import timezone
 from django.utils.text import slugify
@@ -13,27 +12,6 @@ from films.models import Film
 import common.help_texts
 
 User = get_user_model()
-
-
-class _DownloadableMixin:
-    @property
-    def download_url(self) -> str:
-        if not self.static_asset.source:
-            return ''
-        return self.static_asset.source.url
-
-    @property
-    def size_bytes(self) -> int:
-        if not self.static_asset.source:
-            return 0
-        return self.static_asset.size_bytes
-
-    @property
-    def download_size(self) -> str:
-        size_bytes = self.size_bytes
-        if size_bytes:
-            return filesizeformat(size_bytes)
-        return ''
 
 
 class BlenderVersion(models.TextChoices):
@@ -56,7 +34,6 @@ class Character(mixins.CreatedUpdatedMixin, models.Model):
     order = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=512)
     slug = models.SlugField(unique=True)
-    view_count = models.PositiveIntegerField(default=0, editable=False)
     is_published = models.BooleanField(default=False)
 
     def clean(self) -> None:
@@ -88,7 +65,7 @@ class Character(mixins.CreatedUpdatedMixin, models.Model):
         return reverse('api-character-like', kwargs={'character_pk': self.pk})
 
 
-class CharacterVersion(mixins.CreatedUpdatedMixin, _DownloadableMixin, models.Model):
+class CharacterVersion(mixins.CreatedUpdatedMixin, models.Model):
     class Meta:
         ordering = ['-number']
 
@@ -132,7 +109,7 @@ class CharacterVersion(mixins.CreatedUpdatedMixin, _DownloadableMixin, models.Mo
         )
 
 
-class CharacterShowcase(mixins.CreatedUpdatedMixin, _DownloadableMixin, models.Model):
+class CharacterShowcase(mixins.CreatedUpdatedMixin, models.Model):
     class Meta:
         ordering = ['order', '-date_published']
 

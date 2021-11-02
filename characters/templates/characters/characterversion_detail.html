@@ -108,7 +108,7 @@
                 {% elif not character_version.is_free and not request.user|has_active_subscription %}
                   <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Subscribe to Download</button>
                 {% elif request.user|has_active_subscription or character_version.is_free %}
-                  <a href="{{ character_version.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ character_version.download_size }})</span></a>
+                  <a href="{{ character_version.static_asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ character_version.static_asset.download_size }})</span></a>
                 {% endif %}
 
                 {% if user.is_staff %}

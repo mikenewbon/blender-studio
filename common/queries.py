@@ -2,7 +2,7 @@ from typing import Optional, Union, Dict, List
 
 from django.contrib.auth import get_user_model
 from django.core import paginator
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Q
 from django.db.models.base import Model
 from django.db.models.expressions import Value
 from django.db.models.fields import CharField
@@ -10,6 +10,7 @@ from django.db.models.fields import CharField
 from blog.models import Post
 from characters.models import Character
 from films.models import ProductionLog, Asset, AssetCategory
+from static_assets.models.static_assets import StaticAsset
 from training.models import Training
 
 User = get_user_model()
@@ -134,3 +135,17 @@ def get_latest_trainings_and_production_lessons(production_lessons_limit=2, trai
 def get_latest_characters():
     """Return latest characters."""
     return Character.objects.filter(is_published=True).order_by('-date_created')
+
+
+def is_free_static_asset(static_asset_id: int) -> bool:
+    """Return True if StaticAsset with given ID is linked to object that is free to download."""
+    return (
+        StaticAsset.objects.filter(static_asset_id=static_asset_id)
+        .filter(
+            Q(assets__is_free=True)
+            | Q(sections__is_free=True)
+            | Q(character_versions__is_free=True)
+            | Q(character_showcases__is_free=True)
+        )
+        .exists()
+    )

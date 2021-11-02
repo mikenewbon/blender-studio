@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from comments.models import Comment
 from films.models import Asset
-from stats.models import Sample
+from stats.models import Sample, StaticAssetView, StaticAssetDownload
 from blog.models import Post
 
 logger = logging.getLogger('write_stats')
@@ -36,7 +36,7 @@ class Command(BaseCommand):
     def _get_users_demo_count(self):
         return User.objects.filter(is_active=True, groups__name='demo').distinct().count()
 
-    def handle(self, *args, **options):
+    def write_samples(self):
         """Run some counting queries and write their results into Sample table."""
         timestamp = timezone.now()
         Sample.objects.bulk_create(
@@ -73,5 +73,13 @@ class Command(BaseCommand):
                 ),
             ]
         )
-        # TODO(anna): need clarification which seconds are those: available or total progress?
-        #    slug='training_seconds',
+
+    def write_static_asset_counts(self):
+        """Calculate view and download counts for StaticAssets."""
+        StaticAssetView.update_counters_and_truncate(to_field='view_count')
+        StaticAssetDownload.update_counters_and_truncate(to_field='download_count')
+
+    def handle(self, *args, **options):
+        """Write various stats."""
+        self.write_samples()
+        self.write_static_asset_counts()

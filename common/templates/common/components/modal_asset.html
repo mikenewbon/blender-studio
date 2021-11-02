@@ -115,7 +115,7 @@
                   {% elif user_has_active_subscription or asset.is_free %}
                     {% if asset.static_asset.video.tracks.all %}
                       <div class="btn-group">
-                        <a href="{{ asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ asset.download_size }})</span></a>
+                        <a href="{{ asset.static_asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ asset.static_asset.download_size }})</span></a>
                         <button data-toggle="dropdown" id="subtitleDownload" class="btn btn-sm btn-icon btn-dark rounded-right" ><i class="material-icons">arrow_drop_down</i></button>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="subtitleDownload">
                           {% for track in asset.static_asset.video.tracks.all %}
@@ -126,7 +126,7 @@
                         </div>
                       </div>
                     {% else%}
-                      <a href="{{ asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ asset.download_size }})</span></a>
+                      <a href="{{ asset.static_asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ asset.static_asset.download_size }})</span></a>
                     {% endif %}
                   {% endif %}
 

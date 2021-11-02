@@ -7,6 +7,7 @@ import mimetypes
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.db import models
+from django.template.defaultfilters import filesizeformat
 from django.urls.base import reverse
 from django.utils.text import slugify
 
@@ -87,6 +88,9 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
     slug = models.SlugField(blank=True)
 
     content_type = models.CharField(max_length=256, blank=True)
+
+    view_count = models.PositiveIntegerField(default=0, editable=False)
+    download_count = models.PositiveIntegerField(default=0, editable=False)
 
     @property
     def author_name(self) -> str:
@@ -181,6 +185,27 @@ class StaticAsset(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, mo
         if filename:
             return f'attachment; filename="{filename}"'
 
+    @property
+    def download_size(self) -> str:
+        size_bytes = self.size_bytes
+        if self.source_type == 'video':
+            variation = self.video.default_variation
+            if variation:
+                size_bytes = variation.size_bytes
+        if size_bytes:
+            return filesizeformat(size_bytes)
+        return ''
+
+    @property
+    def download_source(self):
+        if self.source_type == 'video':
+            return self.video.source if self.video else None
+        return self.source
+
+    @property
+    def download_url(self) -> str:
+        return reverse('download-source-url', kwargs={'source': self.source.name})
+
 
 class Video(models.Model):
     static_asset = models.OneToOneField(StaticAsset, on_delete=models.CASCADE)
@@ -225,12 +250,16 @@ class Video(models.Model):
         return self.source.url
 
     @property
+    def default_variation(self) -> Optional['VideoVariation']:
+        return self.variations.first()
+
+    @property
     def source(self):
-        default_variation: VideoVariation = self.variations.first()
+        default_variation = self.default_variation
         # TODO(fsiddi) ensure that default_variation.source is never None
         if not default_variation or not default_variation.source:
             log.warning('Variation for video %i not found' % self.pk)
-            return self.static_asset.source
+            return None
         return default_variation.source
 
     @property

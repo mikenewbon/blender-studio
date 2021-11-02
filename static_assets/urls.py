@@ -1,6 +1,6 @@
 from django.urls.conf import path, re_path
 
-from static_assets.views import video_progress, coconut_webhook, video_track_view
+from static_assets.views import video_progress, coconut_webhook, video_track_view, download_view
 
 urlpatterns = [
     path('api/videos/<int:video_pk>/progress/', video_progress, name='video-progress'),
@@ -14,5 +14,10 @@ urlpatterns = [
         r'api/videos/track/(?P<pk>\d+)/(?P<path>\w+/\w+/\w+\.vtt)$',
         video_track_view,
         name='video-track',
+    ),
+    re_path(
+        r'download-source/(?P<source>[a-zA-Z0-9-/.]+)$',
+        download_view,
+        name='download-source-url',
     ),
 ]

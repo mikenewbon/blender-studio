@@ -18,6 +18,7 @@ from characters.queries import (
 from comments.models import Comment
 from comments.queries import get_annotated_comments
 from comments.views.common import comments_to_template_type
+from stats.models import StaticAssetView
 
 
 class CharacterList(ListView):
@@ -45,7 +46,6 @@ class CharacterDetail(RedirectView):
         )
         try:
             character = get_character(slug=kwargs['slug'], **filter_published)
-            # character.view_count += 1
             latest_version = character.versions.filter(**filter_published).first()
             if not latest_version:
                 raise Http404()
@@ -58,7 +58,15 @@ class CharacterDetail(RedirectView):
             raise Http404()
 
 
-class CharacterVersionDetail(DetailView):
+class _CharacterViewMixin:
+    def dispatch(self, *args, **kwargs):
+        """Record a StaticAssetView before returning the response."""
+        response = super().dispatch(*args, **kwargs)
+        StaticAssetView.create_from_request(self.request, self.object.static_asset_id)
+        return response
+
+
+class CharacterVersionDetail(_CharacterViewMixin, DetailView):
     """Display a character version."""
 
     model = CharacterVersion
@@ -105,7 +113,7 @@ class CharacterVersionDetail(DetailView):
         return context
 
 
-class CharacterShowcaseDetail(DetailView):
+class CharacterShowcaseDetail(_CharacterViewMixin, DetailView):
     """Display a character showcase."""
 
     model = CharacterShowcase

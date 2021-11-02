@@ -84,7 +84,7 @@
                 {% elif not character_showcase.is_free and not request.user|has_active_subscription %}
                   <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Subscribe to Download</button>
                 {% elif request.user|has_active_subscription or character_showcase.is_free %}
-                  <a href="{{ character_showcase.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ character_showcase.download_size }})</span></a>
+                  <a href="{{ character_showcase.static_asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ character_showcase.static_asset.download_size }})</span></a>
                 {% endif %}
 
                 {% if user_can_edit_character %}

@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.template.defaultfilters import filesizeformat
 from django.urls.base import reverse
 from django.utils import timezone
 from django.utils.text import slugify
@@ -9,14 +8,11 @@ from taggit.managers import TaggableManager
 
 from comments.models import Comment
 from common import mixins
-from common.storage import get_s3_url
 from films.models import Collection
 import common.help_texts
 import static_assets.models as models_static_assets
 
 User = get_user_model()
-# CloudFront does not support files larger than 20GB
-CDN_SIZE_LIMIT_BYTES = 20 * 1024 ** 3
 
 
 class AssetCategory(models.TextChoices):
@@ -82,25 +78,6 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
         )
 
     @property
-    def download_source(self):
-        if not self.static_asset:
-            return
-        if self.static_asset.source_type == 'video':
-            return self.static_asset.video.source
-        else:
-            return self.static_asset.source
-
-    # TODO(fsiddi, anna) Share this code with Sections
-    @property
-    def download_url(self) -> str:
-        download_source = self.download_source
-        if not download_source:
-            return ''
-        if self.size_bytes > CDN_SIZE_LIMIT_BYTES:
-            return get_s3_url(download_source.name)
-        return download_source.url
-
-    @property
     def size_bytes(self) -> int:
         if not self.static_asset:
             return 0
@@ -111,13 +88,6 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
             return variation.size_bytes
         else:
             return self.static_asset.size_bytes
-
-    @property
-    def download_size(self) -> str:
-        size_bytes = self.size_bytes
-        if size_bytes:
-            return filesizeformat(size_bytes)
-        return ''
 
     def get_absolute_url(self) -> str:
         return self.url
