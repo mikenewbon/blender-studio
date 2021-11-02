@@ -246,10 +246,6 @@ class Video(models.Model):
         return f'{hours_str}{minutes_str}{seconds_str}'
 
     @property
-    def default_variation_url(self):
-        return self.source.url
-
-    @property
     def default_variation(self) -> Optional['VideoVariation']:
         return self.variations.first()
 
@@ -259,7 +255,7 @@ class Video(models.Model):
         # TODO(fsiddi) ensure that default_variation.source is never None
         if not default_variation or not default_variation.source:
             log.warning('Variation for video %i not found' % self.pk)
-            return None
+            return self.static_asset.source
         return default_variation.source
 
     @property

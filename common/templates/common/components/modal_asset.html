@@ -48,9 +48,9 @@
               {# **N.B.**: video thumbnail might be missing if video processing hadn't caught up yet #}
               {% get_video_progress_seconds asset.static_asset.video as start_position %}
               {% if asset.static_asset.thumbnail %}
-                {% include 'common/components/video_player.html' with url=asset.static_asset.video.default_variation_url progress_url=asset.static_asset.video.progress_url start_position=start_position poster=asset.static_asset.thumbnail.url tracks=asset.static_asset.video.tracks.all %}
+                {% include 'common/components/video_player.html' with url=asset.static_asset.video.source.url progress_url=asset.static_asset.video.progress_url start_position=start_position poster=asset.static_asset.thumbnail.url tracks=asset.static_asset.video.tracks.all %}
               {% else %}
-                {% include 'common/components/video_player.html' with url=asset.static_asset.video.default_variation_url progress_url=asset.static_asset.video.progress_url start_position=start_position tracks=asset.static_asset.video.tracks.all %}
+                {% include 'common/components/video_player.html' with url=asset.static_asset.video.source.url progress_url=asset.static_asset.video.progress_url start_position=start_position tracks=asset.static_asset.video.tracks.all %}
               {% endif %}
             {% elif asset.static_asset.thumbnail %}
               <a data-toggle="modal" data-target="#file-zoom-modal" class="modal-asset-image-wrapper"

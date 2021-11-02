@@ -51,7 +51,7 @@ def video_model_to_template_type(
     video: models_static_assets.Video, start_position: Optional[datetime.timedelta]
 ) -> typed_templates.types.Video:  # noqa: D103
     return typed_templates.types.Video(
-        url=video.default_variation_url,
+        url=video.source.url,
         progress_url=video.progress_url,
         start_position=None if start_position is None else start_position.total_seconds(),
     )

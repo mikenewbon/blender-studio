@@ -10,7 +10,7 @@
           {% if link == 'self' %}
 
             <figure class="figure blog-video {{ class }}">
-              {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=im.url rounded=True tracks=static_asset.video.tracks.all %}
+              {% include 'common/components/video_player.html' with url=static_asset.video.source.url poster=im.url rounded=True tracks=static_asset.video.tracks.all %}
 
               <figcaption class="figure-caption">{{ caption }} <a href="{{ static_asset.source.url }}" target="_blank">[File]</a>
               </figcaption>
@@ -20,7 +20,7 @@
 
             <figure class="figure blog-video {{ class }}">
 
-              {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=im.url rounded=True tracks=static_asset.video.tracks.all %}
+              {% include 'common/components/video_player.html' with url=static_asset.video.source.url poster=im.url rounded=True tracks=static_asset.video.tracks.all %}
 
               <figcaption class="figure-caption">{{ caption }} <a href="{{ link }}" target="_blank">[ View File ]</a></figcaption>
             </figure>
@@ -33,7 +33,7 @@
           <figure class="figure blog-video {{ class }}">
             {% with width='940' img_source=static_asset.thumbnail %}
               {% thumbnail img_source width as im %}
-                {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=im.url rounded=True tracks=static_asset.video.tracks.all %}
+                {% include 'common/components/video_player.html' with url=static_asset.video.source.url poster=im.url rounded=True tracks=static_asset.video.tracks.all %}
               {% endthumbnail %}
             {% endwith %}
             <figcaption class="figure-caption">{{ caption }}</figcaption>
@@ -48,14 +48,14 @@
           {% if link == 'self' %}
             <figure class="figure blog-video {{ class }}">
 
-              {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=im.url rounded=True tracks=static_asset.video.track.all %}
+              {% include 'common/components/video_player.html' with url=static_asset.video.source.url poster=im.url rounded=True tracks=static_asset.video.track.all %}
 
               <figcaption class="figure-caption"><a href="{{ static_asset.source.url }}" target="_blank">[ View File ]</a></figcaption>
             </figure>
           {% else %}
             <figure class="figure blog-video {{ class }}">
 
-              {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=im.url rounded=True tracks=static_asset.video.tracks.all %}
+              {% include 'common/components/video_player.html' with url=static_asset.video.source.url poster=im.url rounded=True tracks=static_asset.video.tracks.all %}
 
               <figcaption class="figure-caption"><a href="{{ link }}" target="_blank">[ View File ]</a></figcaption>
             </figure>
@@ -63,7 +63,7 @@
 
         {% else %}
 
-          {% include 'common/components/video_player.html' with url=static_asset.video.default_variation_url poster=im.url rounded=True tracks=static_asset.video.tracks.all %}
+          {% include 'common/components/video_player.html' with url=static_asset.video.source.url poster=im.url rounded=True tracks=static_asset.video.tracks.all %}
         {% endif %}
 
       {% endif %}
