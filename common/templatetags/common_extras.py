@@ -136,8 +136,10 @@ def get_featured() -> Dict[str, Any]:
 
 
 @register.simple_tag(takes_context=True)
-def get_video_progress_seconds(context, video) -> bool:
+def get_video_progress_seconds(context, video):
     """Return video progress for currently logged in user."""
+    if not video:
+        return None
     request = context.get('request')
     if request.user.is_anonymous:
         return None
