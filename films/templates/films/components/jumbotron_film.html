@@ -13,7 +13,7 @@
           </p>
           <div class="mb-n2">
             {% if film.youtube_link != "" %}
-              <button class="btn btn-primary mb-2 video-modal-link" data-toggle="modal" data-target="#videoModal"
+              <button class="btn btn-primary mb-2 mr-2 video-modal-link" data-toggle="modal" data-target="#videoModal"
                 data-video="{{ film.youtube_link }}">Watch
                 {{ film.title }}</button>
               <a class="btn btn-transparent mb-2" href="{% url 'film-gallery' film.slug %}">Explore
