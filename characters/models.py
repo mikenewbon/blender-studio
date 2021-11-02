@@ -72,7 +72,7 @@ class CharacterVersion(mixins.CreatedUpdatedMixin, models.Model):
     date_published = models.DateTimeField(default=timezone.now)
     character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name='versions')
     static_asset = models.ForeignKey(
-        'static_assets.StaticAsset', on_delete=models.CASCADE, related_name='char_versions'
+        'static_assets.StaticAsset', on_delete=models.CASCADE, related_name='character_versions'
     )
     preview_youtube_link = models.URLField(null=True, blank=True)
     number = models.IntegerField()
@@ -120,7 +120,7 @@ class CharacterShowcase(mixins.CreatedUpdatedMixin, models.Model):
         blank=True,
         null=True,
         on_delete=models.CASCADE,
-        related_name='char_showcase',
+        related_name='character_showcase',
     )
     preview_youtube_link = models.URLField(null=True, blank=True)
 

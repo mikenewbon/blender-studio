@@ -140,12 +140,12 @@ def get_latest_characters():
 def is_free_static_asset(static_asset_id: int) -> bool:
     """Return True if StaticAsset with given ID is linked to object that is free to download."""
     return (
-        StaticAsset.objects.filter(static_asset_id=static_asset_id)
+        StaticAsset.objects.filter(pk=static_asset_id)
         .filter(
             Q(assets__is_free=True)
-            | Q(sections__is_free=True)
+            | Q(section__is_free=True)
             | Q(character_versions__is_free=True)
-            | Q(character_showcases__is_free=True)
+            | Q(character_showcase__is_free=True)
         )
         .exists()
     )

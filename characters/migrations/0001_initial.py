@@ -80,7 +80,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='characterversion',
             name='static_asset',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='char_versions', to='static_assets.StaticAsset'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='character_versions', to='static_assets.StaticAsset'),
         ),
         migrations.CreateModel(
             name='CharacterShowcase',
@@ -92,7 +92,7 @@ class Migration(migrations.Migration):
                 ('description', models.TextField(blank=True, help_text='\n<p>Format the content in <a href="https://commonmark.org/help/">Markdown</a>.</p>\n<div>\n    <p>\n        To make images float left or right of the text, use the following:\n    </p>\n    <p>\n        <code>\n        {attachment AttachmentID class=\'float-left\'}\n        </code>\n    </p>\n    <p>\n        <code>\n        {attachment AttachmentID class=\'float-right\'}\n        </code>\n    </p>\n</div>\n')),
                 ('order', models.IntegerField(blank=True, null=True)),
                 ('character', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='showcases', to='characters.Character')),
-                ('static_asset', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='char_showcase', to='static_assets.StaticAsset')),
+                ('static_asset', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='character_showcase', to='static_assets.StaticAsset')),
             ],
             options={
                 'abstract': False,
