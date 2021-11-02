@@ -156,7 +156,6 @@ const renderHits = (renderOptions, isFirstRender) => {
     <a href="${item.url}" class="card-body">
 
       <h3 class="card-title">
-        ${item.is_free == true ? `<i class="material-icons icon-inline text-success" data-toggle="tooltip" data-placement="top" title="Free">lock_open</i>` : ''}
         ${instantsearch.highlight({ attribute: 'name', hit: item })}
       </h3>
       <p class="card-text">
@@ -174,6 +173,11 @@ const renderHits = (renderOptions, isFirstRender) => {
           <i class="material-icons icon-inline small">schedule</i>&nbsp;
           ${timeDifference(epochToDate(item.timestamp))}
         </p>
+
+        ${item.is_free == true ? `
+          <p class="d-inline mr-2 text-success small"><i class="material-icons icon-inline small" >lock_open</i>&nbsp;Free</p>
+        ` : ''}
+
 
       </div>
     </a>
