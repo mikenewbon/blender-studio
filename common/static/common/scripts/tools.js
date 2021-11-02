@@ -206,7 +206,7 @@ function makeGrid() {
 
 // eslint-disable-next-line no-unused-vars
 function initVideo(container) {
-  const players = Array.from(container.querySelectorAll('.video-player video')).map(
+  const players = Array.from(container.querySelectorAll('.video-player video, .video-player-embed')).map(
     // eslint-disable-next-line no-undef
     (p) => new Plyr(p)
   );
@@ -233,23 +233,27 @@ function initVideo(container) {
       let _postingProgress = 0;
       let _lastPostProgress = null;
 
-      element.elements.controls
+      if (dataElement.querySelector('video')) {
+        element.elements.controls
         .querySelector('.plyr__menu')
         .insertAdjacentHTML('afterend', loopButton);
+      }
 
-      if (dataElement.querySelector('video').hasAttribute('loop')) {
+      if (dataElement.querySelector('video')?.hasAttribute('loop')) {
         element.elements.controls
           .querySelector('[data-plyr="loop"]')
           .classList.add('plyr__control--pressed');
       }
 
-      element.elements.controls
-        .querySelector('[data-plyr="loop"]')
-        .addEventListener('click', (event) => {
-          event.target.classList.toggle('plyr__control--pressed');
-          // eslint-disable-next-line no-param-reassign
-          element.media.loop = !element.media.loop;
-        });
+      if (dataElement.querySelector('video')) {
+        element.elements.controls
+          .querySelector('[data-plyr="loop"]')
+          .addEventListener('click', (event) => {
+            event.target.classList.toggle('plyr__control--pressed');
+            // eslint-disable-next-line no-param-reassign
+            element.media.loop = !element.media.loop;
+          });
+      }
 
       function postProgress() {
         _lastPostProgress = Date.now();
