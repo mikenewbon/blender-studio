@@ -1,4 +1,4 @@
-from django.db import models, connection, transaction
+from django.db import models, transaction
 from django.http import HttpRequest
 
 from looper.utils import clean_ip_address
@@ -43,11 +43,6 @@ class _StaticAssetVisitMixin(models.Model):
             [cls(ip_address=ip_address, user_id=user_id, static_asset_id=static_asset_id)],
             ignore_conflicts=True,
         )
-
-    @classmethod
-    def truncate(cls):
-        with connection.cursor() as cursor:
-            cursor.execute('TRUNCATE TABLE {} CASCADE'.format(cls._meta.db_table))
 
     @classmethod
     @transaction.atomic
