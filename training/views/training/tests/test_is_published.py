@@ -79,6 +79,7 @@ class TestTrainingAlwaysAvailableToStaffMixin:
         self.assertEqual(response.status_code, 200)
 
 
+@patch('sorl.thumbnail.base.ThumbnailBackend.get_thumbnail', Mock(url=''))
 class TestSectionIsPublishedYes(_AlwaysAvailableToStaffMixin, _BaseTestCase):
     def setUp(self):
         super().setUp()
@@ -102,6 +103,7 @@ class TestSectionIsPublishedYes(_AlwaysAvailableToStaffMixin, _BaseTestCase):
         self.assertEqual(response.status_code, 200)
 
 
+@patch('sorl.thumbnail.base.ThumbnailBackend.get_thumbnail', Mock(url=''))
 class TestSectionIsPublishedNo(_AlwaysAvailableToStaffMixin, _BaseTestCase):
     def setUp(self):
         super().setUp()
@@ -122,6 +124,7 @@ class TestSectionIsPublishedNo(_AlwaysAvailableToStaffMixin, _BaseTestCase):
         self.assertEqual(response.status_code, 302)
 
 
+@patch('sorl.thumbnail.base.ThumbnailBackend.get_thumbnail', Mock(url=''))
 class TestSectionIsPublishedYesChapterNo(_AlwaysAvailableToStaffMixin, _BaseTestCase):
     def setUp(self):
         super().setUp()
@@ -142,6 +145,7 @@ class TestSectionIsPublishedYesChapterNo(_AlwaysAvailableToStaffMixin, _BaseTest
         self.assertEqual(response.status_code, 302)
 
 
+@patch('sorl.thumbnail.base.ThumbnailBackend.get_thumbnail', Mock(url=''))
 class TestSectionIsPublishedYesTrainingNo(_AlwaysAvailableToStaffMixin, _BaseTestCase):
     def setUp(self):
         super().setUp()
@@ -162,6 +166,7 @@ class TestSectionIsPublishedYesTrainingNo(_AlwaysAvailableToStaffMixin, _BaseTes
         self.assertEqual(response.status_code, 302)
 
 
+@patch('sorl.thumbnail.base.ThumbnailBackend.get_thumbnail', Mock(url=''))
 class TestChapterIsPublishedYes(TestChapterAlwaysAvailableToStaffMixin, _BaseTestCase):
     def setUp(self):
         super().setUp()
@@ -180,6 +185,7 @@ class TestChapterIsPublishedYes(TestChapterAlwaysAvailableToStaffMixin, _BaseTes
         self.assertEqual(response.status_code, 200)
 
 
+@patch('sorl.thumbnail.base.ThumbnailBackend.get_thumbnail', Mock(url=''))
 class TestChapterIsPublishedNo(TestChapterAlwaysAvailableToStaffMixin, _BaseTestCase):
     def setUp(self):
         super().setUp()
@@ -198,6 +204,7 @@ class TestChapterIsPublishedNo(TestChapterAlwaysAvailableToStaffMixin, _BaseTest
         self.assertEqual(response.status_code, 302)
 
 
+@patch('sorl.thumbnail.base.ThumbnailBackend.get_thumbnail', Mock(url=''))
 class TestChapterIsPublishedYesTrainingNo(TestChapterAlwaysAvailableToStaffMixin, _BaseTestCase):
     def setUp(self):
         super().setUp()
@@ -216,6 +223,7 @@ class TestChapterIsPublishedYesTrainingNo(TestChapterAlwaysAvailableToStaffMixin
         self.assertEqual(response.status_code, 302)
 
 
+@patch('sorl.thumbnail.base.ThumbnailBackend.get_thumbnail', Mock(url=''))
 class TestTrainingIsPublishedYes(TestTrainingAlwaysAvailableToStaffMixin, _BaseTestCase):
     def setUp(self):
         super().setUp()
@@ -234,6 +242,7 @@ class TestTrainingIsPublishedYes(TestTrainingAlwaysAvailableToStaffMixin, _BaseT
         self.assertEqual(response.status_code, 200)
 
 
+@patch('sorl.thumbnail.base.ThumbnailBackend.get_thumbnail', Mock(url=''))
 class TestTrainingIsPublishedNo(TestTrainingAlwaysAvailableToStaffMixin, _BaseTestCase):
     def setUp(self):
         super().setUp()

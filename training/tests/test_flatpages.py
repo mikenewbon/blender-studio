@@ -1,3 +1,5 @@
+from unittest.mock import patch, Mock
+
 from django.db.utils import IntegrityError
 from django.test.testcases import TestCase
 from django.urls import reverse
@@ -60,6 +62,7 @@ class TestTrainingFlatPageModel(TestCase):
         self.assertHTMLEqual(page.html_content, '<h2>Updated content</h2>')
 
 
+@patch('sorl.thumbnail.base.ThumbnailBackend.get_thumbnail', Mock(url=''))
 class TestTrainingFlatPage(TestCase):
     def setUp(self) -> None:
         self.training_slug = 'scripting-for-artists'

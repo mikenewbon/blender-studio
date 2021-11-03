@@ -1,4 +1,6 @@
-from django.test import TestCase, override_settings
+from unittest.mock import patch, Mock
+
+from django.test import TestCase
 
 from looper.tests.test_preferred_currency import EURO_IPV4, USA_IPV4
 
@@ -7,10 +9,7 @@ from common.tests.factories.users import UserFactory
 from stats.models import StaticAssetView
 
 
-@override_settings(
-    DEFAULT_FILE_STORAGE='django.core.files.storage.FileSystemStorage',
-    PUBLIC_FILE_STORAGE='django.core.files.storage.FileSystemStorage',
-)
+@patch('sorl.thumbnail.base.ThumbnailBackend.get_thumbnail', Mock(url=''))
 class TestCharacterVersion(TestCase):
     def test_get_records_a_static_asset_view(self):
         version = CharacterVersionFactory(is_published=True, character__is_published=True)
@@ -21,7 +20,7 @@ class TestCharacterVersion(TestCase):
         response = self.client.get(url, REMOTE_ADDR=USA_IPV4)
 
         # A record of this view should be created
-        self.assertEqual(200, response.status_code, 200)
+        self.assertEqual(200, response.status_code)
         self.assertEqual(1, StaticAssetView.objects.count())
         view = StaticAssetView.objects.first()
         self.assertEqual(view.static_asset_id, version.static_asset_id)
@@ -32,7 +31,7 @@ class TestCharacterVersion(TestCase):
         response = self.client.get(url, REMOTE_ADDR=USA_IPV4)
 
         # No new records should be created
-        self.assertEqual(200, response.status_code, 200)
+        self.assertEqual(200, response.status_code)
         self.assertEqual(
             1, StaticAssetView.objects.count(), [_ for _ in StaticAssetView.objects.all()]
         )
@@ -41,7 +40,7 @@ class TestCharacterVersion(TestCase):
         response = self.client.get(url, REMOTE_ADDR=EURO_IPV4)
 
         # A record of this view should be created
-        self.assertEqual(200, response.status_code, 200)
+        self.assertEqual(200, response.status_code)
         self.assertEqual(2, StaticAssetView.objects.count())
         self.assertEqual(
             StaticAssetView.objects.get(ip_address=EURO_IPV4).static_asset_id,
@@ -54,7 +53,7 @@ class TestCharacterVersion(TestCase):
         response = self.client.get(url, REMOTE_ADDR=EURO_IPV4)
 
         # A record of this view should be created
-        self.assertEqual(200, response.status_code, 200)
+        self.assertEqual(200, response.status_code)
         self.assertEqual(3, StaticAssetView.objects.count())
         self.assertEqual(
             StaticAssetView.objects.get(user_id=user.pk).static_asset_id, version.static_asset_id
@@ -65,7 +64,7 @@ class TestCharacterVersion(TestCase):
         response = self.client.get(url, REMOTE_ADDR=USA_IPV4)
 
         # No new records should be created
-        self.assertEqual(200, response.status_code, 200)
+        self.assertEqual(200, response.status_code)
         self.assertEqual(3, StaticAssetView.objects.count())
 
         # "View" the character version as logged in user, different user, IP doesn't matter
@@ -74,7 +73,7 @@ class TestCharacterVersion(TestCase):
         response = self.client.get(url, REMOTE_ADDR=EURO_IPV4)
 
         # A record of this view should be created
-        self.assertEqual(200, response.status_code, 200)
+        self.assertEqual(200, response.status_code)
         self.assertEqual(4, StaticAssetView.objects.count())
         self.assertEqual(
             StaticAssetView.objects.get(user_id=another_user.pk).static_asset_id,
@@ -82,10 +81,7 @@ class TestCharacterVersion(TestCase):
         )
 
 
-@override_settings(
-    DEFAULT_FILE_STORAGE='django.core.files.storage.FileSystemStorage',
-    PUBLIC_FILE_STORAGE='django.core.files.storage.FileSystemStorage',
-)
+@patch('sorl.thumbnail.base.ThumbnailBackend.get_thumbnail', Mock(url=''))
 class TestCharacterShowcase(TestCase):
     def test_get_records_a_static_asset_view(self):
         showcase = CharacterShowcaseFactory(is_published=True, character__is_published=True)
@@ -96,7 +92,7 @@ class TestCharacterShowcase(TestCase):
         response = self.client.get(url, REMOTE_ADDR=USA_IPV4)
 
         # A record of this view should be created
-        self.assertEqual(200, response.status_code, 200)
+        self.assertEqual(200, response.status_code)
         self.assertEqual(1, StaticAssetView.objects.count())
         view = StaticAssetView.objects.first()
         self.assertEqual(view.static_asset_id, showcase.static_asset_id)
@@ -107,7 +103,7 @@ class TestCharacterShowcase(TestCase):
         response = self.client.get(url, REMOTE_ADDR=USA_IPV4)
 
         # No new records should be created
-        self.assertEqual(200, response.status_code, 200)
+        self.assertEqual(200, response.status_code)
         self.assertEqual(
             1, StaticAssetView.objects.count(), [_ for _ in StaticAssetView.objects.all()]
         )
@@ -116,7 +112,7 @@ class TestCharacterShowcase(TestCase):
         response = self.client.get(url, REMOTE_ADDR=EURO_IPV4)
 
         # A record of this view should be created
-        self.assertEqual(200, response.status_code, 200)
+        self.assertEqual(200, response.status_code)
         self.assertEqual(2, StaticAssetView.objects.count())
         self.assertEqual(
             StaticAssetView.objects.get(ip_address=EURO_IPV4).static_asset_id,
@@ -129,7 +125,7 @@ class TestCharacterShowcase(TestCase):
         response = self.client.get(url, REMOTE_ADDR=EURO_IPV4)
 
         # A record of this view should be created
-        self.assertEqual(200, response.status_code, 200)
+        self.assertEqual(200, response.status_code)
         self.assertEqual(3, StaticAssetView.objects.count())
         self.assertEqual(
             StaticAssetView.objects.get(user_id=user.pk).static_asset_id, showcase.static_asset_id
@@ -140,7 +136,7 @@ class TestCharacterShowcase(TestCase):
         response = self.client.get(url, REMOTE_ADDR=USA_IPV4)
 
         # No new records should be created
-        self.assertEqual(200, response.status_code, 200)
+        self.assertEqual(200, response.status_code)
         self.assertEqual(3, StaticAssetView.objects.count())
 
         # "View" the character showcase as logged in user, different user, IP doesn't matter
@@ -149,7 +145,7 @@ class TestCharacterShowcase(TestCase):
         response = self.client.get(url, REMOTE_ADDR=EURO_IPV4)
 
         # A record of this view should be created
-        self.assertEqual(200, response.status_code, 200)
+        self.assertEqual(200, response.status_code)
         self.assertEqual(4, StaticAssetView.objects.count())
         self.assertEqual(
             StaticAssetView.objects.get(user_id=another_user.pk).static_asset_id,

@@ -1,3 +1,5 @@
+from unittest.mock import patch, Mock
+
 from django.test.testcases import TestCase
 from django.urls import reverse
 
@@ -8,6 +10,7 @@ from common.tests.factories.comments import CommentUnderPostFactory
 from common.tests.factories.users import UserFactory
 
 
+@patch('sorl.thumbnail.base.ThumbnailBackend.get_thumbnail', Mock(url=''))
 class TestCommentTreeConstruction(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
