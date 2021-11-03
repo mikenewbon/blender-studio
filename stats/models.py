@@ -37,6 +37,8 @@ class _StaticAssetVisitMixin(models.Model):
     @classmethod
     def create_from_request(cls, request: HttpRequest, static_asset_id: int):
         """Create a new record for the given StaticAsset ID based on the given request."""
+        if static_asset_id is None:
+            return
         ip_address = clean_ip_address(request) if request.user.is_anonymous else None
         user_id = request.user.pk if request.user.is_authenticated else None
         cls.objects.bulk_create(
