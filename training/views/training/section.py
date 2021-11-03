@@ -7,6 +7,7 @@ from django.views.decorators.http import require_safe
 from comments.views.common import comments_to_template_type
 from common.typed_templates.types import TypeSafeTemplateResponse
 
+from stats.models import StaticAssetView
 from training import queries, typed_templates
 from training.models.progress import UserSectionProgress
 from training.typed_templates.types import SectionProgressReportingData
@@ -51,6 +52,7 @@ def section(
         video_model, video_start_position = maybe_video
         video = video_model_to_template_type(video=video_model, start_position=video_start_position)
 
+    StaticAssetView.create_from_request(request, section.static_asset_id)
     navigation = queries.trainings.navigation(user_pk=request.user.pk, training_pk=training.pk)
     return typed_templates.section.section(
         request,

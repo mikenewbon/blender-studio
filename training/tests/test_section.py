@@ -1,3 +1,5 @@
+from unittest.mock import patch, Mock
+
 from django.test import TestCase
 from django.urls import reverse
 
@@ -7,8 +9,10 @@ from common.tests.factories.comments import CommentUnderSectionFactory
 from common.tests.factories.static_assets import VideoVariationFactory
 from common.tests.factories.training import SectionFactory
 from common.tests.factories.users import UserFactory
+from stats.models import StaticAssetView
 
 
+@patch('sorl.thumbnail.base.ThumbnailBackend.get_thumbnail', Mock(url=''))
 class TestSection(TestCase):
     def test_section_video_variation_has_content_disposition(self):
         video_variation = VideoVariationFactory(source='ts/testvideo/testvideo.mp4')
@@ -23,6 +27,38 @@ class TestSection(TestCase):
             'attachment; filename="001-test-training-section-720p.mp4"',
             video_variation.content_disposition,
         )
+
+    def test_get_records_a_static_asset_view(self):
+        video_variation = VideoVariationFactory(source='ts/testvideo/testvideo.mp4')
+        # Attach this video to a training section
+        section = SectionFactory(
+            name='001. Test training section',
+            static_asset=video_variation.video.static_asset,
+            is_free=True,
+            is_published=True,
+            chapter__is_published=True,
+            chapter__training__is_published=True,
+        )
+        self.assertEqual(0, StaticAssetView.objects.count())
+        url = section.get_absolute_url()
+
+        # "View" anonymously
+        response = self.client.get(url)
+
+        # A record of this view should be created
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(1, StaticAssetView.objects.count())
+        view = StaticAssetView.objects.first()
+        self.assertEqual(view.static_asset_id, section.static_asset_id)
+        self.assertEqual(view.ip_address, '127.0.0.1')
+        self.assertIsNone(view.user_id)
+
+        # "View" anonymously again
+        response = self.client.get(url)
+
+        # No new records should be created
+        self.assertEqual(200, response.status_code, 200)
+        self.assertEqual(1, StaticAssetView.objects.count())
 
 
 class TestSectionComments(TestCase):
