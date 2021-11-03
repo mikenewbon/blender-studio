@@ -97,7 +97,7 @@ class StaticThumbnailURLMixin:
             return _cacheable_get_thumnbnail(self.thumbnail, size_settings)
         except OSError as e:
             # Handle the classic 'cannot write mode RGBA as JPEG'
-            log.error(e.strerror)
+            log.error(e)
             return None
 
     @property
