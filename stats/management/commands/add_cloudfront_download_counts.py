@@ -36,7 +36,6 @@ class Command(BaseCommand):
                 try:
                     static_asset_q = StaticAsset.objects.filter(
                         Q(source__icontains=source_hash)
-                        | Q(thumbnail__icontains=source_hash)
                         | Q(video__variations__source__icontains=source_hash)
                     )
                     static_asset = static_asset_q.get()
