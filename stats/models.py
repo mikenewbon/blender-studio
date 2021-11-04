@@ -48,14 +48,19 @@ class _StaticAssetVisitMixin(models.Model):
 
     @classmethod
     @transaction.atomic
-    def update_counters_and_truncate(cls, to_field: str):
+    def update_counters(cls, to_field: str):
         from static_assets.models import StaticAsset
 
+        last_seen = StaticAssetCountedVisit.objects.filter(field=to_field).first()
+        last_seen_id = last_seen.last_seen_id if last_seen else 0
         static_asset_id_count = (
-            cls.objects.all()
+            cls.objects.filter(id__gt=last_seen_id)
             .values('static_asset_id')
             .annotate(count=models.Count('static_asset_id'))
         )
+        if not static_asset_id_count:  # nothing to to
+            return
+
         all_static_asset_ids = {_['static_asset_id'] for _ in static_asset_id_count}
         affected_static_assets = {
             _.pk: _ for _ in StaticAsset.objects.filter(id__in=all_static_asset_ids)
@@ -70,7 +75,12 @@ class _StaticAssetVisitMixin(models.Model):
         StaticAsset.objects.bulk_update(
             to_update, batch_size=500, fields={to_field, 'date_updated'}
         )
-        cls.objects.all().delete()
+
+        # Update the last seen ID to make sure next count starts from it
+        max_id = cls.objects.aggregate(max_id=models.Max('pk')).get('max_id')
+        StaticAssetCountedVisit.objects.update_or_create(
+            field=to_field, defaults={'last_seen_id': max_id}
+        )
 
     def __str__(self) -> str:
         ip_address_f = f', IP {self.ip_address}' if self.ip_address else ''
@@ -100,3 +110,16 @@ class StaticAssetView(_StaticAssetVisitMixin, models.Model):
 
 class StaticAssetDownload(_StaticAssetVisitMixin, models.Model):
     pass
+
+
+class StaticAssetCountedVisit(models.Model):
+    """Store last counted ID of unique visits/downloads."""
+
+    class _Field(models.TextChoices):
+        view_count = 'view_count'
+        download_count = 'download_count'
+
+    field = models.CharField(
+        null=False, blank=False, max_length=20, choices=_Field.choices, primary_key=True
+    )
+    last_seen_id = models.PositiveIntegerField(null=False, blank=False)

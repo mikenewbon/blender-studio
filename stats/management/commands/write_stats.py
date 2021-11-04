@@ -76,8 +76,8 @@ class Command(BaseCommand):
 
     def write_static_asset_counts(self):
         """Calculate view and download counts for StaticAssets."""
-        StaticAssetView.update_counters_and_truncate(to_field='view_count')
-        StaticAssetDownload.update_counters_and_truncate(to_field='download_count')
+        StaticAssetView.update_counters(to_field='view_count')
+        StaticAssetDownload.update_counters(to_field='download_count')
 
     def handle(self, *args, **options):
         """Write various stats."""
