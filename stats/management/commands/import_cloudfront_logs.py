@@ -3,42 +3,6 @@ Import CloudFront logs into postgresql.
 
 Use the following command to the info about progress and ETA:
     kill -SIGUSR1 $(ps aux | grep import_cloud | grep -v grep | awk '{print $2}')
-
-
-Asset visits:
-    select asset_endpoint, count(1) as count from (
-        select distinct(
-                c_ip, csuser_agent, cs_protocol, cs_protocol_version, x_forwarded_for, cscookie
-               ) as visitor,
-               split_part(csreferer, '.org/', 2) as asset_endpoint
-        from cflogs
-        where csreferer != 'https://cloud.blender.org/'
-              and csreferer not like '%studio.local%'
-              and csreferer like '%?asset=%'
-              and csreferer not like '%?asset=undefined%'
-              and cs_method = 'GET'
-    ) as tmp
-    group by asset_endpoint
-    order by count desc;
-
-
-Training visits:
-    select asset_endpoint, count(1) as count from (
-        select distinct(
-                c_ip, csuser_agent, cs_protocol, cs_protocol_version, x_forwarded_for, cscookie
-               ) as visitor,
-               split_part(csreferer, '.org/', 2) as asset_endpoint
-        from cflogs
-        where csreferer != 'https://cloud.blender.org/'
-              and csreferer not like '%studio.local%'
-              and csreferer like '%/training/%'
-              and csreferer not like '%?asset=undefined%'
-              and cs_method = 'GET'
-    ) as tmp
-    group by asset_endpoint
-    order by count desc;
-
-Asset downloads:
 """
 # from pprint import pprint
 from datetime import timedelta, datetime
