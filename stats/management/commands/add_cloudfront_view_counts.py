@@ -76,6 +76,9 @@ class Command(BaseCommand):
                 continue
             section = section_q.get()
             static_asset = section.static_asset
+            if not static_asset:
+                logger.warning('%s: no static asset', section_slug)
+                continue
             logger.info(
                 '%s: %s view_count %s -> %s',
                 section_slug,
