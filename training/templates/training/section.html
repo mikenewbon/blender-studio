@@ -26,11 +26,7 @@
   <div class="row mb-3">
     {% if section.preview_youtube_link %}
       <div class="col training-video">
-      {% if section.is_free or request.user|has_active_subscription %}
-        {% include 'common/components/video_player_embed.html' with url=section.preview_youtube_link rounded=True  %}
-      {% else %}
-        {% include 'common/components/content_locked.html' with background=section.thumbnail_m_url %}
-      {% endif %}
+      {% include 'common/components/video_player_embed.html' with url=section.preview_youtube_link rounded=True  %}
       </div>
     {% elif video %}
       <div class="col training-video">
