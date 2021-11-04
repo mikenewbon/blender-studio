@@ -7,9 +7,11 @@
 
 {% block gallery_files %}
 
-  <section class="mb-3 markdown-text">
-    <p>{% with_shortcodes current_collection.text|markdown %}</p>
-  </section>
+  {% if current_collection.text %}
+    <section class="mb-3 mt-n2 markdown-text">
+      <p>{% with_shortcodes current_collection.text|markdown %}</p>
+    </section>
+  {% endif %}
 
   <div class="files row grid">
     <div class="grid-sizer col-6 col-sm-6 col-md-6 col-lg-4"></div>
