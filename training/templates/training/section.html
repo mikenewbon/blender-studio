@@ -24,7 +24,15 @@
 
 {% block nexted_content %}
   <div class="row mb-3">
-    {% if video %}
+    {% if section.preview_youtube_link %}
+      <div class="col training-video">
+      {% if section.is_free or request.user|has_active_subscription %}
+        {% include 'common/components/video_player_embed.html' with url=section.preview_youtube_link rounded=True  %}
+      {% else %}
+        {% include 'common/components/content_locked.html' with background=section.thumbnail_m_url %}
+      {% endif %}
+      </div>
+    {% elif video %}
       <div class="col training-video">
         {% if section.is_free or request.user|has_active_subscription %}
           {% include 'common/components/video_player.html' with url=video.url progress_url=video.progress_url start_position=video.start_position poster=section.thumbnail_m_url tracks=section.static_asset.video.tracks.all %}

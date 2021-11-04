@@ -37,6 +37,9 @@ class Section(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models
         blank=True,
         null=True,
     )
+    # If set, a YouTube embedded player will be displayed instead of the static_asset preview
+    preview_youtube_link = models.URLField(null=True, blank=True)
+
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
 
     comments = models.ManyToManyField(Comment, through='SectionComment', related_name='section')
