@@ -15,7 +15,18 @@
 
     <div class="row justify-content-center mb-3">
       <div class="col-lg-10">
-        {% if character_showcase.preview_youtube_link %}
+        {% if character_showcase.preview_video_static_asset.video %}
+          {% with video=character_showcase.preview_video_static_asset.video %}
+            {% get_video_progress_seconds video as start_position %}
+            <div class="col">
+              {% if character_showcase.is_free or request.user|has_active_subscription %}
+                {% include 'common/components/video_player.html' with url=video.source.url progress_url=video.progress_url start_position=start_position poster=video.thumbnail_m_url tracks=video.tracks.all %}
+              {% else %}
+                {% include 'common/components/content_locked.html' with background=character_showcase.static_asset.thumbnail_m_url %}
+              {% endif %}
+            </div>
+          {% endwith %}
+        {% elif character_showcase.preview_youtube_link %}
           {% include 'common/components/video_player_embed.html' with url=character_showcase.preview_youtube_link rounded=True poster=character_showcase.static_asset.thumbnail_m_url %}
         {% elif character_showcase.static_asset.thumbnail %}
           <img class="img-fluid rounded" src="{{ character_showcase.static_asset.thumbnail.url }}">
@@ -79,6 +90,9 @@
                 {% elif not character_showcase.is_free and not request.user|has_active_subscription %}
                   <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Subscribe to Download</button>
                 {% elif request.user|has_active_subscription or character_showcase.is_free %}
+                  {% if character_showcase.preview_video_static_asset.video %}
+                    <a href="{{ character_showcase.preview_video_static_asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download video <span class="subtitle">({{ character_showcase.preview_video_static_asset.download_size }})</span></a>
+                  {% endif %}
                   <a href="{{ character_showcase.static_asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ character_showcase.static_asset.download_size }})</span></a>
                 {% endif %}
 

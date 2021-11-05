@@ -19,6 +19,7 @@ class CharacterVersionFactory(DjangoModelFactory):
 
     character = factory.SubFactory(CharacterFactory)
     static_asset = factory.SubFactory(StaticAssetFactory)
+    preview_video_static_asset = factory.SubFactory(StaticAssetFactory)
     number = 1
     description = factory.Faker('sentence')
 
@@ -29,5 +30,6 @@ class CharacterShowcaseFactory(DjangoModelFactory):
 
     character = factory.SubFactory(CharacterFactory)
     static_asset = factory.SubFactory(StaticAssetFactory)
+    preview_video_static_asset = factory.SubFactory(StaticAssetFactory)
     description = factory.Faker('sentence')
     title = factory.Faker('text', max_nb_chars=20)

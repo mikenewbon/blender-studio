@@ -6,7 +6,7 @@ from characters.models import Character, CharacterVersion, CharacterShowcase
 
 class CharacterVersionAdmin(admin.StackedInline):
     model = CharacterVersion
-    autocomplete_fields = ['static_asset']
+    autocomplete_fields = ['static_asset', 'preview_video_static_asset']
     extra = 0
     fieldsets = (
         (
@@ -18,24 +18,31 @@ class CharacterVersionAdmin(admin.StackedInline):
                 )
             },
         ),
-        (None, {'fields': (('static_asset', 'preview_youtube_link'),)}),
+        (
+            None,
+            {'fields': (('static_asset', 'preview_video_static_asset', 'preview_youtube_link'),)},
+        ),
         (None, {'fields': (('description',),)}),
     )
 
 
 class CharacterShowcaseAdmin(admin.StackedInline):
     model = CharacterShowcase
-    autocomplete_fields = ['static_asset']
+    autocomplete_fields = ['static_asset', 'preview_video_static_asset']
     extra = 0
     fieldsets = (
         (None, {'fields': (('is_published', 'is_free', 'min_blender_version'), 'date_published')}),
-        (None, {'fields': (('static_asset', 'preview_youtube_link'),)}),
+        (
+            None,
+            {'fields': (('static_asset', 'preview_video_static_asset', 'preview_youtube_link'),)},
+        ),
         (None, {'fields': (('title', 'description'),)}),
     )
 
 
 @admin.register(Character)
-class PostAdmin(ViewOnSiteMixin, admin.ModelAdmin):
+class CharacterAdmin(ViewOnSiteMixin, admin.ModelAdmin):
+    save_on_top = True
     list_display = [
         '__str__',
         'film',

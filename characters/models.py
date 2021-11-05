@@ -74,6 +74,9 @@ class CharacterVersion(mixins.CreatedUpdatedMixin, models.Model):
     static_asset = models.ForeignKey(
         'static_assets.StaticAsset', on_delete=models.CASCADE, related_name='character_versions'
     )
+    preview_video_static_asset = models.ForeignKey(
+        'static_assets.StaticAsset', on_delete=models.SET_NULL, null=True, blank=True
+    )
     preview_youtube_link = models.URLField(null=True, blank=True)
     number = models.IntegerField()
     min_blender_version = models.CharField(
@@ -121,6 +124,9 @@ class CharacterShowcase(mixins.CreatedUpdatedMixin, models.Model):
         null=True,
         on_delete=models.CASCADE,
         related_name='character_showcase',
+    )
+    preview_video_static_asset = models.ForeignKey(
+        'static_assets.StaticAsset', on_delete=models.SET_NULL, null=True, blank=True
     )
     preview_youtube_link = models.URLField(null=True, blank=True)
 
