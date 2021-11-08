@@ -1,0 +1,37 @@
+{% load common_extras %}
+{% if user.is_anonymous %}
+  <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to Download</button>
+{% elif not showcase_or_version.is_free and not request.user|has_active_subscription %}
+  <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Subscribe to Download</button>
+{% elif request.user|has_active_subscription or showcase_or_version.is_free %}
+  {% if showcase_or_version.preview_video_static_asset.video %}
+    <div class="btn-group">
+      <a href="{{ showcase_or_version.static_asset.download_url }}" download class="btn btn-sm btn-dark">Download <span class="subtitle">({{ showcase_or_version.static_asset.download_size }})</span></a>
+      <button data-toggle="dropdown" id="subtitleDownload" class="btn btn-sm btn-icon btn-dark rounded-right" ><i class="material-icons">arrow_drop_down</i></button>
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="subtitleDownload">
+        <a href="{{ showcase_or_version.preview_video_static_asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download video <span class="subtitle">({{ showcase_or_version.preview_video_static_asset.download_size }})</span></a>
+      </div>
+    </div>
+  {% else %}
+    <a href="{{ showcase_or_version.static_asset.download_url }}" download class="btn btn-sm btn-dark">Download <span class="subtitle">({{ showcase_or_version.static_asset.download_size }})</span></a>
+  {% endif %}
+{% endif %}
+
+{% if user_can_edit_character %}
+  <a href="{{ showcase_or_version.character.admin_url }}" class="btn btn-sm btn-icon btn-dark">
+    <i class="material-icons btn-material-icons">create</i>
+  </a>
+{% endif %}
+
+<div class="ml-2">
+  <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
+    <i class="material-icons">more_horiz</i>
+  </button>
+  <div class="dropdown-menu dropdown-menu-right">
+    <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank"
+      class="dropdown-item">
+      <i class="material-icons">flag</i>
+      <span>Report Problem</span>
+    </a>
+  </div>
+</div>
