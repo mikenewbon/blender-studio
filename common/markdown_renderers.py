@@ -41,6 +41,11 @@ class TextRenderer(BaseRenderer):  # noqa: D102
     def block_code(self, code, info=None):  # noqa: D102
         return '\n' + code.strip('\n') + "\n\n"
 
+    def block_html(self, value, **kwargs):  # noqa: D102
+        from common.markdown import sanitize
+
+        return sanitize(value)
+
     def codespan(self, text):  # noqa: D102
         return '`{text}`'.format(text=text)
 
