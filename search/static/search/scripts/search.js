@@ -22,7 +22,7 @@ const search = instantsearch({
         return {
           [indexName]: {
             query: routeState.query,
-            sortby: routeState.sortBy,
+            sortBy: routeState.sortBy,
             menu: {
               model: routeState.type,
               categories: routeState.categories,
