@@ -17,13 +17,23 @@ ALLOWED_TAGS_EXTRA = {
     # <a> is already allowed by bleach, but we want more allowed attributes for it
     'a': ['href', 'title', 'download', 'class', 'target'],
     'audio': ['controls'],
+    'caption': ['class'],
     'cite': ['title'],
+    'col': ['class', 'span'],
+    'colgroup': ['class', 'span'],
     'figcaption': ['class'],
     'figure': ['class'],
     'footer': [],
     'img': ['alt', 'src', 'class'],
     'p': ['class'],
     'source': ['src', 'type'],
+    'table': ['class'],
+    'tbody': ['class'],
+    'td': ['class', 'colspan', 'headers', 'rowspan'],
+    'tfoot': ['class'],
+    'th': ['class', 'abbr', 'colspan', 'headers', 'rowspan', 'scope'],
+    'thead': ['class'],
+    'tr': ['class'],
 }
 ALLOWED_TAGS = bleach.sanitizer.ALLOWED_TAGS + list(ALLOWED_TAGS_EXTRA.keys())
 ALLOWED_ATTRIBUTES = {
