@@ -1,4 +1,8 @@
 # noqa: D100
+from django.templatetags.static import static
+
+import common.markdown
+
 markdown = '''
 <p>Format the content in <a href="https://commonmark.org/help/">Markdown</a>.</p>
 <div>
@@ -17,3 +21,10 @@ markdown = '''
     </p>
 </div>
 '''
+allowed_tags = ', '.join(f'<{tag}>' for tag in common.markdown.ALLOWED_TAGS)
+q_img = static('admin/img/icon-unknown.svg')
+markdown_with_html = markdown + (
+    f'<p title="{allowed_tags}">Some HTML tags are allowed&nbsp;'
+    f'<img alt="Allowed HTML tags" src="{q_img}" class="help help-tooltip">'
+    '</p>'
+)

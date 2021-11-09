@@ -11,6 +11,7 @@ from comments.models import Comment
 from common import mixins, markdown
 from common.upload_paths import get_upload_to_hashed_path
 from films.models import Film
+import common.help_texts
 import static_assets.models as models_static_assets
 
 User = get_user_model()
@@ -34,7 +35,7 @@ class Post(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models.Mo
     excerpt = models.TextField(
         blank=True, help_text='An optional short description displayed on the blog card.'
     )
-    content = models.TextField()
+    content = models.TextField(help_text=common.help_texts.markdown_with_html)
     content_html = models.TextField(blank=True, editable=False)
 
     thumbnail = models.FileField(upload_to=get_upload_to_hashed_path, blank=True)
