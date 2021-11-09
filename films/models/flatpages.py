@@ -11,9 +11,7 @@ from films.models import Film
 
 
 class FilmFlatPage(mixins.CreatedUpdatedMixin, models.Model):
-    """
-    Stores a single film-related flat page.
-    """
+    """Stores a single film-related flat page."""
 
     class Meta:
         constraints = [
@@ -35,7 +33,7 @@ class FilmFlatPage(mixins.CreatedUpdatedMixin, models.Model):
             'If it is not filled, it will be the slugified page title.'
         ),
     )
-    content = models.TextField(blank=True, help_text=common.help_texts.markdown)
+    content = models.TextField(blank=True, help_text=common.help_texts.markdown_with_html)
     html_content = models.TextField(blank=True, editable=False)
     attachments = models.ManyToManyField(models_static_assets.StaticAsset, blank=True)
 
@@ -43,7 +41,9 @@ class FilmFlatPage(mixins.CreatedUpdatedMixin, models.Model):
         """Generates the html version of the content and saves the object."""
         if not self.slug:
             self.slug = slugify(self.title)
-        self.html_content = markdown.render(self.content)
+        # Clean but preserve some of the HTML tags
+        self.content = markdown.clean(self.content)
+        self.html_content = markdown.render_unsafe(self.content)
         super().save(*args, **kwargs)
 
     def __str__(self):

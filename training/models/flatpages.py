@@ -37,7 +37,7 @@ class TrainingFlatPage(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixi
             'If it is not filled, it will be the slugified page title.'
         ),
     )
-    content = models.TextField(blank=True, help_text=common.help_texts.markdown)
+    content = models.TextField(blank=True, help_text=common.help_texts.markdown_with_html)
     html_content = models.TextField(blank=True, editable=False)
     attachments = models.ManyToManyField(models_static_assets.StaticAsset, blank=True)
     header = models.FileField(upload_to=get_upload_to_hashed_path, blank=True)
@@ -46,7 +46,9 @@ class TrainingFlatPage(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixi
         """Generate the html version of the content and saves the object."""
         if not self.slug:
             self.slug = slugify(self.title)
-        self.html_content = markdown.render(self.content)
+        # Clean but preserve some of the HTML tags
+        self.content = markdown.clean(self.content)
+        self.html_content = markdown.render_unsafe(self.content)
         super().save(*args, **kwargs)
 
     def __str__(self):
