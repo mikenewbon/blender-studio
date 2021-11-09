@@ -9,6 +9,7 @@ from typing import Optional
 from comments.models import Comment
 from common import mixins
 from training.models import chapters
+import common.help_texts
 import static_assets.models as models_static_assets
 
 User = get_user_model()
@@ -23,7 +24,7 @@ class Section(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, models
 
     name = models.CharField(max_length=512)
     slug = models.SlugField(unique=True, null=False)
-    text = models.TextField(blank=True)
+    text = models.TextField(blank=True, help_text=common.help_texts.markdown_with_html)
     is_free = models.BooleanField(default=False)
     is_published = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)

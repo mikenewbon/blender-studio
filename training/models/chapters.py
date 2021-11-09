@@ -4,9 +4,10 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls.base import reverse
 
-from common.upload_paths import get_upload_to_hashed_path
 from common import mixins
+from common.upload_paths import get_upload_to_hashed_path
 from training.models import trainings
+import common.help_texts
 
 User = get_user_model()
 
@@ -22,7 +23,7 @@ class Chapter(mixins.CreatedUpdatedMixin, models.Model):
 
     name = models.CharField(max_length=512)
     slug = models.SlugField(unique=True, null=False)
-    description = models.TextField(blank=True)
+    description = models.TextField(blank=True, help_text=common.help_texts.markdown_with_html)
     picture_header = models.FileField(upload_to=get_upload_to_hashed_path, null=True, blank=True)
     thumbnail = models.FileField(upload_to=get_upload_to_hashed_path, blank=True)
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)

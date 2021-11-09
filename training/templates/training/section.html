@@ -26,7 +26,7 @@
   <div class="row mb-3">
     {% if section.preview_youtube_link %}
       <div class="col training-video">
-      {% include 'common/components/video_player_embed.html' with url=section.preview_youtube_link rounded=True  %}
+        {% include 'common/components/video_player_embed.html' with url=section.preview_youtube_link rounded=True  %}
       </div>
     {% elif video %}
       <div class="col training-video">
@@ -140,7 +140,7 @@
         </div>
       </div>
 
-      <section class="mb-3 markdown-text">{% with_shortcodes section.text|markdown %}</section>
+      <section class="mb-3 markdown-text">{% with_shortcodes section.text|markdown_unsafe %}</section>
 
       {% comment %}
         <div class="card d-md-none">

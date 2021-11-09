@@ -46,7 +46,7 @@ class Asset(mixins.CreatedUpdatedMixin, models.Model):
     order = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=512)
     slug = models.SlugField(blank=True)
-    description = models.TextField(blank=True, help_text=common.help_texts.markdown)
+    description = models.TextField(blank=True, help_text=common.help_texts.markdown_with_html)
     category = models.CharField(choices=AssetCategory.choices, max_length=17, db_index=True)
     view_count = models.PositiveIntegerField(default=0, editable=False)
     is_published = models.BooleanField(default=False)

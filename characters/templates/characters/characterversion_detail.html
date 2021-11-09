@@ -135,7 +135,7 @@
         </div>
 
 
-        <section class="mb-3 markdown-text">{% with_shortcodes character_version.description|markdown %}</section>
+        <section class="mb-3 markdown-text">{% with_shortcodes character_version.description|markdown_unsafe %}</section>
 
         {% if character.showcases.count %}
           <h2>Showcases</h2>

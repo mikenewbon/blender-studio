@@ -230,7 +230,7 @@
               {# do not show description to non-subscribers, if this is a subscription-only spoiler #}
               <p class="mb-0">You need to subscribe to view this content.</p>
             {% else %}
-              {% with_shortcodes asset.description|markdown %}
+              {% with_shortcodes asset.description|markdown_unsafe %}
             {% endif %}
           </div>
 

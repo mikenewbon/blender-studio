@@ -29,7 +29,7 @@ def training_model_to_template_type(
         id=training.pk,
         name=training.name,
         description=training.description,
-        summary=markdown.render(training.summary),
+        summary=markdown.render_unsafe(training.summary),
         type=trainings.TrainingType(training.type),
         difficulty=trainings.TrainingDifficulty(training.difficulty),
         tags=set(str(tag) for tag in training.tags.all()),

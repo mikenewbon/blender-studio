@@ -83,7 +83,7 @@ class CharacterVersion(mixins.CreatedUpdatedMixin, models.Model):
         choices=BlenderVersion.choices, max_length=5, db_index=True
     )
 
-    description = models.TextField(blank=True, help_text=common.help_texts.markdown)
+    description = models.TextField(blank=True, help_text=common.help_texts.markdown_with_html)
     is_published = models.BooleanField(default=False)
     is_free = models.BooleanField(default=False)
 
@@ -134,7 +134,7 @@ class CharacterShowcase(mixins.CreatedUpdatedMixin, models.Model):
         choices=BlenderVersion.choices, max_length=5, db_index=True
     )
     title = models.CharField(max_length=512)
-    description = models.TextField(blank=True, help_text=common.help_texts.markdown)
+    description = models.TextField(blank=True, help_text=common.help_texts.markdown_with_html)
     is_published = models.BooleanField(default=False)
     is_free = models.BooleanField(default=False)
     order = models.IntegerField(null=True, blank=True)

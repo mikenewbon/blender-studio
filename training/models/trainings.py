@@ -6,6 +6,7 @@ from taggit.managers import TaggableManager
 
 from common import mixins
 from common.upload_paths import get_upload_to_hashed_path
+import common.help_texts
 
 User = get_user_model()
 
@@ -32,10 +33,8 @@ class Training(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixin, model
 
     name = models.CharField(unique=True, max_length=512)
     slug = models.SlugField(unique=True, blank=True)
-    description = models.TextField()
-    description.description = 'Description consisting of a few sentences.'
-    summary = models.TextField()
-    summary.description = 'Summary consisting of multiple paragraphs.'
+    description = models.TextField(help_text='Description consisting of a few sentences.')
+    summary = models.TextField(help_text=common.help_texts.markdown_with_html)
 
     is_published = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)
