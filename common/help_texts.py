@@ -11,12 +11,12 @@ markdown = '''
     </p>
     <p>
         <code>
-        {attachment AttachmentID class='float-left'}
+        {attachment StaticAssetID class='float-left'}
         </code>
     </p>
     <p>
         <code>
-        {attachment AttachmentID class='float-right'}
+        {attachment StaticAssetID class='float-right'}
         </code>
     </p>
 </div>
