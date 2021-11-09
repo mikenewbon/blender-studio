@@ -209,6 +209,17 @@ const renderHits = (renderOptions, isFirstRender) => {
 
 const customHits = instantsearch.connectors.connectInfiniteHits(renderHits);
 
+function valueNotEmpty(el) {
+  if (el.value !== false || el.value !== null || el.value !== 0 || el.value !== '') {
+    return el.value;
+  }
+  return null;
+}
+
+function filterEmpty(arr) {
+  return arr.filter(valueNotEmpty);
+}
+
 // -------- FILTERS -------- //
 
 // 1. Create a render function
@@ -235,7 +246,7 @@ const renderMenuSelect = (renderOptions, isFirstRender) => {
 
   select.innerHTML = `
     <option value="">All</option>
-    ${items
+    ${filterEmpty(items)
       .map(
         (item) =>
           `<option
