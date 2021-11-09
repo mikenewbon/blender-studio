@@ -1,10 +1,9 @@
-const searchClientConfig = JSON.parse(
-  document.getElementById('search-client-config').textContent
-);
+/* eslint-disable no-undef, no-unused-vars, no-nested-ternary */
+const searchClientConfig = JSON.parse(document.getElementById('search-client-config').textContent);
 
 const indexName = 'studio';
 const search = instantsearch({
-  indexName: indexName,
+  indexName,
   searchClient: instantMeiliSearch(searchClientConfig.hostUrl, searchClientConfig.apiKey),
   routing: {
     stateMapping: {
@@ -40,23 +39,17 @@ const search = instantsearch({
 
 // Create a render function
 const renderSearchBox = (renderOptions, isFirstRender) => {
-  const {
-    query,
-    refine,
-    clear,
-    isSearchStalled,
-    widgetParams
-  } = renderOptions;
+  const { query, refine, clear, isSearchStalled, widgetParams } = renderOptions;
 
   if (isFirstRender) {
     const input = document.createElement('input');
     input.setAttribute('class', 'form-control');
-    input.setAttribute('type', 'text')
-    input.setAttribute('id', 'searchInput')
-    input.setAttribute('placeholder', 'Search tags and keywords')
+    input.setAttribute('type', 'text');
+    input.setAttribute('id', 'searchInput');
+    input.setAttribute('placeholder', 'Search tags and keywords');
 
-    //const loadingIndicator = document.createElement('span');
-    //loadingIndicator.textContent = 'Loading...';
+    // const loadingIndicator = document.createElement('span');
+    // loadingIndicator.textContent = 'Loading...';
 
     const button = document.createElement('button');
     button.setAttribute('class', 'btn btn-icon btn-input');
@@ -65,7 +58,7 @@ const renderSearchBox = (renderOptions, isFirstRender) => {
     buttonIcon.textContent = 'close';
     button.appendChild(buttonIcon);
 
-    input.addEventListener('input', event => {
+    input.addEventListener('input', (event) => {
       refine(event.target.value);
     });
 
@@ -73,41 +66,37 @@ const renderSearchBox = (renderOptions, isFirstRender) => {
       clear();
     });
 
-    widgetParams.container.querySelector('.input-group-append').insertAdjacentElement('beforebegin', input);
-    //widgetParams.container.appendChild(loadingIndicator);
+    widgetParams.container
+      .querySelector('.input-group-append')
+      .insertAdjacentElement('beforebegin', input);
+    // widgetParams.container.appendChild(loadingIndicator);
     widgetParams.container.querySelector('.input-group-append').appendChild(button);
   }
 
   widgetParams.container.querySelector('input').value = query;
-  //widgetParams.container.querySelector('span').hidden = !isSearchStalled;
+  // widgetParams.container.querySelector('span').hidden = !isSearchStalled;
 };
 
 // create custom widget
-const customSearchBox = instantsearch.connectors.connectSearchBox(
-  renderSearchBox
-);
+const customSearchBox = instantsearch.connectors.connectSearchBox(renderSearchBox);
 
 // -------- SORTING -------- //
 
 // Create the render function
 const renderSortBy = (renderOptions, isFirstRender) => {
-  const {
-    options,
-    currentRefinement,
-    hasNoResults,
-    refine,
-    widgetParams,
-  } = renderOptions;
+  const { options, currentRefinement, hasNoResults, refine, widgetParams } = renderOptions;
 
   if (isFirstRender) {
     const select = document.createElement('select');
     select.setAttribute('class', 'custom-select');
 
-    select.addEventListener('change', event => {
+    select.addEventListener('change', (event) => {
       refine(event.target.value);
     });
 
-    widgetParams.container.querySelector('.input-group-prepend').insertAdjacentElement('afterend', select);
+    widgetParams.container
+      .querySelector('.input-group-prepend')
+      .insertAdjacentElement('afterend', select);
   }
 
   const select = widgetParams.container.querySelector('select');
@@ -117,7 +106,7 @@ const renderSortBy = (renderOptions, isFirstRender) => {
   select.innerHTML = `
     ${options
       .map(
-        option => `
+        (option) => `
           <option
             value="${option.value}"
             ${option.value === currentRefinement ? 'selected' : ''}
@@ -143,14 +132,16 @@ const renderHits = (renderOptions, isFirstRender) => {
 
   widgetParams.container.innerHTML = `
       ${hits
-      .map(
-        item =>
-          `
+        .map(
+          (item) =>
+            `
 <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
   <div class="card">
     <div class="card-header">
       <a class="card-header-link" href="${item.url}" aria-label="${item.name}">
-        <img src="${item.thumbnail_url || fileIconURL}" class="${item.thumbnail_url ? 'card-img' : 'file-icon'}" loading=lazy aria-label="${item.name}">
+        <img src="${item.thumbnail_url || fileIconURL}" class="${
+              item.thumbnail_url ? 'card-img' : 'file-icon'
+            }" loading=lazy aria-label="${item.name}">
       </a>
     </div>
     <a href="${item.url}" class="card-body">
@@ -166,7 +157,7 @@ const renderHits = (renderOptions, isFirstRender) => {
       <div class="card-subtitle-group">
         <p class="card-subtitle content-type">
           <i class="material-icons icon-inline small">category</i>&nbsp;
-          ${item.model == "section" ? item.project : item.model}
+          ${item.model === 'section' ? item.project : item.model}
         </p>
 
         <p class="card-subtitle">
@@ -174,9 +165,13 @@ const renderHits = (renderOptions, isFirstRender) => {
           ${timeDifference(epochToDate(item.timestamp))}
         </p>
 
-        ${item.is_free == true ? `
+        ${
+          item.is_free
+            ? `
           <p class="d-inline mr-2 text-success small"><i class="material-icons icon-inline small" >lock_open</i>&nbsp;Free</p>
-        ` : ''}
+        `
+            : ''
+        }
 
 
       </div>
@@ -184,8 +179,8 @@ const renderHits = (renderOptions, isFirstRender) => {
   </div>
 </div>
             `
-      )
-      .join('')}
+        )
+        .join('')}
   `;
 
   lastRenderArgs = renderOptions;
@@ -194,8 +189,8 @@ const renderHits = (renderOptions, isFirstRender) => {
     const sentinel = document.createElement('div');
     widgetParams.container.insertAdjacentElement('afterend', sentinel);
 
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting && !lastRenderArgs.isLastPage) {
           showMore();
         }
@@ -207,15 +202,12 @@ const renderHits = (renderOptions, isFirstRender) => {
     return;
   }
 
-  $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
+  $(() => {
+    $('[data-toggle="tooltip"]').tooltip();
   });
-
 };
 
-
 const customHits = instantsearch.connectors.connectInfiniteHits(renderHits);
-
 
 // -------- FILTERS -------- //
 
@@ -227,11 +219,13 @@ const renderMenuSelect = (renderOptions, isFirstRender) => {
     const select = document.createElement('select');
 
     select.setAttribute('class', 'custom-select');
-    select.addEventListener('change', event => {
+    select.addEventListener('change', (event) => {
       refine(event.target.value);
     });
 
-    widgetParams.container.querySelector('.input-group-prepend').insertAdjacentElement('afterend', select);
+    widgetParams.container
+      .querySelector('.input-group-prepend')
+      .insertAdjacentElement('afterend', select);
     // widgetParams.container.appendChild(select);
   }
 
@@ -243,7 +237,7 @@ const renderMenuSelect = (renderOptions, isFirstRender) => {
     <option value="">All</option>
     ${items
       .map(
-        item =>
+        (item) =>
           `<option
             value="${item.value}"
             ${item.isRefined ? 'selected' : ''}
@@ -258,16 +252,11 @@ const renderMenuSelect = (renderOptions, isFirstRender) => {
 // 2. Create the custom widget
 const customMenuSelect = instantsearch.connectors.connectMenu(renderMenuSelect);
 
-
 // -------- CONFIGURE -------- //
 
-const renderConfigure = (renderOptions, isFirstRender) => { };
+const renderConfigure = (renderOptions, isFirstRender) => {};
 
-const customConfigure = instantsearch.connectors.connectConfigure(
-  renderConfigure,
-  () => { }
-);
-
+const customConfigure = instantsearch.connectors.connectConfigure(renderConfigure, () => {});
 
 // -------- RENDER -------- //
 
@@ -320,7 +309,7 @@ search.addWidgets([
     searchParameters: {
       hitsPerPage: 9,
     },
-  })
+  }),
 ]);
 
 search.start();
