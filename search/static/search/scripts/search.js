@@ -157,19 +157,22 @@ const renderHits = (renderOptions, isFirstRender) => {
     </a>
     <a href="${item.url}" class="card-footer">
       <div class="card-subtitle-group">
+
         <p class="card-subtitle content-type">
           <i class="material-icons icon-inline small">category</i>&nbsp;
           ${item.model === 'section' ? item.training_name : item.model}
         </p>
 
+
+        ${
+          item.film_title
+            ? `<p class="card-subtitle"><i class="material-icons icon-inline small">movie</i>&nbsp;${titleCase(
+                item.film_title
+              )}</p>`
+            : ''
+        }
+
         <p class="card-subtitle">
-          ${
-            item.film_title
-              ? `<i class="material-icons icon-inline small">movie</i>&nbsp;${titleCase(
-                  item.film_title
-                )}`
-              : ''
-          }
           <i class="material-icons icon-inline small">schedule</i>&nbsp;
           ${timeDifference(epochToDate(item.timestamp))}
         </p>
