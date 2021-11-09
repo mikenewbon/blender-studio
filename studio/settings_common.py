@@ -299,7 +299,7 @@ MAIN_SEARCH = {
     'SEARCHABLE_ATTRIBUTES': [
         'model',
         'name',
-        'project',
+        'film_title',
         'tags',
         'secondary_tags',
         'topic',
@@ -310,7 +310,7 @@ MAIN_SEARCH = {
         'content',
         'author_name',
     ],
-    'FACETING_ATTRIBUTES': ['model', 'project', 'license', 'media_type', 'free'],
+    'FACETING_ATTRIBUTES': ['model', 'film_title', 'license', 'media_type', 'free'],
     'RANKING_RULES': {
         MEILISEARCH_INDEX_UID: DEFAULT_RANKING_RULES,
         f'{MEILISEARCH_INDEX_UID}_date_desc': DATE_DESC_RANKING_RULES,
@@ -321,7 +321,7 @@ TRAINING_SEARCH = {
     'SEARCHABLE_ATTRIBUTES': [
         'model',
         'name',
-        'project',
+        'training_name',
         'tags',
         'secondary_tags',
         'chapter_name',

@@ -14,6 +14,7 @@ const search = instantsearch({
           type: indexUiState.menu && indexUiState.menu.model,
           media_type: indexUiState.menu && indexUiState.menu.media_type,
           license: indexUiState.menu && indexUiState.menu.license,
+          film_title: indexUiState.menu && indexUiState.menu.film_title,
           sortBy: indexUiState && indexUiState.sortBy,
         };
       },
@@ -27,6 +28,7 @@ const search = instantsearch({
               categories: routeState.categories,
               media_type: routeState.media_type,
               license: routeState.license,
+              film_title: routeState.film_title,
             },
           },
         };
@@ -157,10 +159,17 @@ const renderHits = (renderOptions, isFirstRender) => {
       <div class="card-subtitle-group">
         <p class="card-subtitle content-type">
           <i class="material-icons icon-inline small">category</i>&nbsp;
-          ${item.model === 'section' ? item.project : item.model}
+          ${item.model === 'section' ? item.training_name : item.model}
         </p>
 
         <p class="card-subtitle">
+          ${
+            item.film_title
+              ? `<i class="material-icons icon-inline small">movie</i>&nbsp;${titleCase(
+                  item.film_title
+                )}`
+              : ''
+          }
           <i class="material-icons icon-inline small">schedule</i>&nbsp;
           ${timeDifference(epochToDate(item.timestamp))}
         </p>
@@ -294,6 +303,10 @@ search.addWidgets([
   customMenuSelect({
     container: document.querySelector('#searchMedia'),
     attribute: 'media_type',
+  }),
+  customMenuSelect({
+    container: document.querySelector('#searchFilm'),
+    attribute: 'film_title',
   }),
   // customMenuSelect({
   //   container: document.querySelector('#searchFree'),

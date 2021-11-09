@@ -28,14 +28,14 @@ class MainSearchSerializer(BaseSearchSerializer):
         Post: {'is_published': True},
     }
     annotations = {
-        Film: {'project': F('title'), 'name': F('title')},
+        Film: {'name': F('title')},
         Asset: {
             'author_name': Case(
                 When(static_asset__author__isnull=False, then=F('static_asset__author__full_name')),
                 default=F('static_asset__user__full_name'),
                 output_field=CharField(),
             ),
-            'project': F('film__title'),
+            'film_title': F('film__title'),
             'collection_name': F('collection__name'),
             'license': F('static_asset__license__name'),
             'media_type': F('static_asset__source_type'),
@@ -46,10 +46,10 @@ class MainSearchSerializer(BaseSearchSerializer):
                 output_field=CharField(),
             ),
         },
-        Training: {'project': F('name')},
+        Training: {},
         Section: {
             'author_name': F('user__full_name'),
-            'project': F('chapter__training__name'),
+            'training_name': F('chapter__training__name'),
             'chapter_name': F('chapter__name'),
             'media_type': Case(
                 When(static_asset__isnull=False, then=F('static_asset__source_type')),
@@ -64,11 +64,7 @@ class MainSearchSerializer(BaseSearchSerializer):
         },
         Post: {
             'author_name': F('author__full_name'),
-            'project': Case(
-                When(film__isnull=False, then=F('film__title')),
-                default=Value(''),
-                output_field=CharField(),
-            ),
+            'film_title': F('film__title'),
             'name': F('title'),
         },
     }

@@ -156,9 +156,9 @@ const renderHits = (renderOptions, isFirstRender) => {
             : ''
         }
         ${
-          item.project
+          item.film_title
             ? `<i class="material-icons icon-inline small">movie</i>&nbsp;${titleCase(
-                item.project
+                item.film_title
               )}`
             : ''
         }

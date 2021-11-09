@@ -29,7 +29,7 @@ class TrainingSearchSerializer(BaseSearchSerializer):
                 default=F('static_asset__user__full_name'),
                 output_field=CharField(),
             ),
-            'project': F('film__title'),
+            'film_title': F('film__title'),
             'type': Value(clean_tag(AssetCategory.production_lesson), output_field=CharField()),
         },
     }
