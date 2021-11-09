@@ -84,7 +84,7 @@ def render_as_text(text: str) -> str:
             renderer=TextRenderer(), plugins=[mistune.PLUGINS['table']]
         )
 
-    return _markdown_to_text(text)
+    return _markdown_to_text(sanitize(text))
 
 
 def render(text: str) -> Markup:
