@@ -1,34 +1,27 @@
-
+/* eslint-disable no-undef, no-unused-vars, no-nested-ternary */
 const searchClientConfig = JSON.parse(
   document.getElementById('training-search-client-config').textContent
 );
-var favoritedTrainingIDs = JSON.parse(
+const favoritedTrainingIDs = JSON.parse(
   document.getElementById('training-favorited-ids').textContent
 );
 const search = instantsearch({
-  indexName: "training_date_desc",
+  indexName: 'training_date_desc',
   searchClient: instantMeiliSearch(searchClientConfig.hostUrl, searchClientConfig.apiKey),
-  routing: true
+  routing: true,
 });
-
 
 // -------- INPUT -------- //
 
 // Create a render function
 const renderSearchBox = (renderOptions, isFirstRender) => {
-  const {
-    query,
-    refine,
-    clear,
-    isSearchStalled,
-    widgetParams
-  } = renderOptions;
+  const { query, refine, clear, isSearchStalled, widgetParams } = renderOptions;
 
   if (isFirstRender) {
     const input = document.createElement('input');
     input.setAttribute('class', 'form-control');
-    input.setAttribute('type', 'text')
-    input.setAttribute('placeholder', 'Search tags and keywords')
+    input.setAttribute('type', 'text');
+    input.setAttribute('placeholder', 'Search tags and keywords');
 
     const append = document.createElement('div');
     append.setAttribute('class', 'input-group-append');
@@ -40,7 +33,7 @@ const renderSearchBox = (renderOptions, isFirstRender) => {
     buttonIcon.textContent = 'close';
     button.appendChild(buttonIcon);
 
-    input.addEventListener('input', event => {
+    input.addEventListener('input', (event) => {
       refine(event.target.value);
     });
 
@@ -48,40 +41,36 @@ const renderSearchBox = (renderOptions, isFirstRender) => {
       clear();
     });
 
-    widgetParams.container.querySelector('.input-group-prepend').insertAdjacentElement('afterend', input);
+    widgetParams.container
+      .querySelector('.input-group-prepend')
+      .insertAdjacentElement('afterend', input);
     input.insertAdjacentElement('afterend', append);
   }
 
   widgetParams.container.querySelector('input').value = query;
-  //widgetParams.container.querySelector('span').hidden = !isSearchStalled;
+  // widgetParams.container.querySelector('span').hidden = !isSearchStalled;
 };
 
 // create custom widget
-const customSearchBox = instantsearch.connectors.connectSearchBox(
-  renderSearchBox
-);
+const customSearchBox = instantsearch.connectors.connectSearchBox(renderSearchBox);
 
 // -------- SORTING -------- //
 
 // Create the render function
 const renderSortBy = (renderOptions, isFirstRender) => {
-  const {
-    options,
-    currentRefinement,
-    hasNoResults,
-    refine,
-    widgetParams,
-  } = renderOptions;
+  const { options, currentRefinement, hasNoResults, refine, widgetParams } = renderOptions;
 
   if (isFirstRender) {
     const select = document.createElement('select');
     select.setAttribute('class', 'custom-select');
 
-    select.addEventListener('change', event => {
+    select.addEventListener('change', (event) => {
       refine(event.target.value);
     });
 
-    widgetParams.container.querySelector('.input-group-prepend').insertAdjacentElement('afterend', select);
+    widgetParams.container
+      .querySelector('.input-group-prepend')
+      .insertAdjacentElement('afterend', select);
   }
 
   const select = widgetParams.container.querySelector('select');
@@ -91,7 +80,7 @@ const renderSortBy = (renderOptions, isFirstRender) => {
   select.innerHTML = `
     ${options
       .map(
-        option => `
+        (option) => `
           <option
             value="${option.value}"
             ${option.value === currentRefinement ? 'selected' : ''}
@@ -121,18 +110,34 @@ const renderHits = (renderOptions, isFirstRender) => {
           (item) =>
             `
 <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
-  <div class="card card-training" data-training-id="${ item.id }" data-favorite-url="${ item.favorite_url }" ${ favoritedTrainingIDs.filter(i => i == item.id).length > 0 == true ? 'data-checked="checked"' : ''}>
+  <div class="card card-training" data-training-id="${item.id}" data-favorite-url="${
+              item.favorite_url
+            }" ${
+              favoritedTrainingIDs.filter((i) => i === item.id).length > 0
+                ? 'data-checked="checked"'
+                : ''
+            }>
     <div class="card-header">
       <a href="${item.url}" class="card-header-link">
         <img src="${item.thumbnail_url}" class="card-img" loading="lazy">
       </a>
-      ${item.type !== 'production lesson' ? authCheck() == true ? `
-        <button class="btn btn-xs btn-icon btn-float checkbox-favorite btn-save-media card-training-favorite ${favoritedTrainingIDs.filter(i => i == item.id).length > 0 == true ? 'checked primary' : ''}" data-toggle="tooltip" data-placement="left" title="Save for later">
-          <i class="material-icons checkbox-favorite-icon-unchecked">${ favoritedTrainingIDs.filter(i => i == item.id).length > 0 == true ? 'check' : 'add'}</i>
+      ${
+        item.type !== 'production lesson'
+          ? authCheck()
+            ? `
+        <button class="btn btn-xs btn-icon btn-float checkbox-favorite btn-save-media card-training-favorite ${
+          favoritedTrainingIDs.filter((i) => i === item.id).length > 0 ? 'checked primary' : ''
+        }" data-toggle="tooltip" data-placement="left" title="Save for later">
+          <i class="material-icons checkbox-favorite-icon-unchecked">${
+            favoritedTrainingIDs.filter((i) => i === item.id).length > 0 ? 'check' : 'add'
+          }</i>
         </button>
-      ` : '' : '' }
+      `
+            : ''
+          : ''
+      }
     </div>
-    <a class="card-body" href="${ item.url }">
+    <a class="card-body" href="${item.url}">
       <h3 class="card-title">
         ${instantsearch.highlight({ attribute: 'name', hit: item })}
       </h3>
@@ -141,11 +146,27 @@ const renderHits = (renderOptions, isFirstRender) => {
     <div class="card-footer">
       <div class="card-subtitle-group">
         <p class="card-subtitle"><i class="material-icons icon-inline small" data-toggle="tooltip" data-placement="top"
-        title="Free">school</i>&nbsp;${ titleCase(item.type) }</p>
+        title="Free">school</i>&nbsp;${titleCase(item.type)}</p>
         <p class="card-subtitle">
-        ${ !!(item.difficulty) ? `<i class="material-icons icon-inline small">equalizer</i>&nbsp;${titleCase(item.difficulty)}` : ''}
-        ${ !!(item.project) ? `<i class="material-icons icon-inline small">movie</i>&nbsp;${titleCase(item.project)}` : ''}
-        ${item.is_free == true ? `<p class="d-inline mr-2 text-success small"><i class="material-icons icon-inline small" >lock_open</i>&nbsp;Free</p>` :''}
+        ${
+          item.difficulty
+            ? `<i class="material-icons icon-inline small">equalizer</i>&nbsp;${titleCase(
+                item.difficulty
+              )}`
+            : ''
+        }
+        ${
+          item.project
+            ? `<i class="material-icons icon-inline small">movie</i>&nbsp;${titleCase(
+                item.project
+              )}`
+            : ''
+        }
+        ${
+          item.is_free
+            ? `<p class="d-inline mr-2 text-success small"><i class="material-icons icon-inline small" >lock_open</i>&nbsp;Free</p>`
+            : ''
+        }
         </p>
       </div>
     </div>
@@ -170,8 +191,8 @@ const renderHits = (renderOptions, isFirstRender) => {
     const sentinel = document.createElement('div');
     widgetParams.container.insertAdjacentElement('afterend', sentinel);
 
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting && !lastRenderArgs.isLastPage) {
           showMore();
         }
@@ -187,9 +208,7 @@ const renderHits = (renderOptions, isFirstRender) => {
   document.dispatchEvent(new Event('trainingResults'));
 };
 
-
 const customHits = instantsearch.connectors.connectInfiniteHits(renderHits);
-
 
 // -------- FILTERS -------- //
 
@@ -201,7 +220,7 @@ const renderMenuSelect = (renderOptions, isFirstRender) => {
     const select = document.createElement('select');
 
     select.setAttribute('class', 'custom-select');
-    select.addEventListener('change', event => {
+    select.addEventListener('change', (event) => {
       refine(event.target.value);
     });
 
@@ -217,7 +236,7 @@ const renderMenuSelect = (renderOptions, isFirstRender) => {
     <option value="">${widgetParams.placeholder}</option>
     ${items
       .map(
-        item =>
+        (item) =>
           `<option
             value="${item.value}"
             ${item.isRefined ? 'selected' : ''}
@@ -232,16 +251,11 @@ const renderMenuSelect = (renderOptions, isFirstRender) => {
 // 2. Create the custom widget
 const customMenuSelect = instantsearch.connectors.connectMenu(renderMenuSelect);
 
-
 // -------- CONFIGURE -------- //
 
 const renderConfigure = (renderOptions, isFirstRender) => {};
 
-const customConfigure = instantsearch.connectors.connectConfigure(
-  renderConfigure,
-  () => {}
-);
-
+const customConfigure = instantsearch.connectors.connectConfigure(renderConfigure, () => {});
 
 // -------- RENDER -------- //
 
@@ -270,7 +284,6 @@ search.addWidgets([
       { label: 'Date (old first)', value: 'training_date_asc' },
     ],
   }),
-
 ]);
 
 search.start();
