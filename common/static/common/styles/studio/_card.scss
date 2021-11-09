@@ -136,16 +136,17 @@
   align-items: center;
   display: flex;
   justify-content: flex-start;
+  flex-wrap: wrap;
 
   .card-subtitle {
     overflow: visible;
     margin-right: $spacer / 2;
 
-    &:last-child {
-      margin-right: 0;
-      overflow: hidden !important;
-      text-overflow: ellipsis;
-    }
+    // &:last-child {
+    //   margin-right: 0;
+    //   overflow: hidden !important;
+    //   text-overflow: ellipsis;
+    // }
   }
 
 
