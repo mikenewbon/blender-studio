@@ -1,5 +1,6 @@
 """Commonly used template tags and filters."""
 from typing import Dict, Any
+import logging
 
 from django import template
 from django.contrib.auth import get_user_model
@@ -20,6 +21,7 @@ from markupsafe import Markup
 
 User = get_user_model()
 register = template.Library()
+logger = logging.getLogger(__name__)
 
 
 class CaptureNode(template.Node):
@@ -65,7 +67,11 @@ def markdown(text: str) -> Markup:
 @register.filter(name='unmarkdown')
 def unmarkdown(text: str) -> str:
     """Remove markdown from markdown, leave text."""
-    return render_markdown_as_text(text)
+    try:
+        return render_markdown_as_text(text)
+    except Exception:
+        logger.exception('Failed to render markdown "as text"')
+        return text
 
 
 @register.filter(name='markdown_unsafe')
