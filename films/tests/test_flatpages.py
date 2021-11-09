@@ -13,12 +13,12 @@ class TestFilmFlatPageModel(TestCase):
         cls.film_2 = FilmFactory()
         cls.flatpage_data = {'film': cls.film_1, 'title': 'About', 'content': '# hello world'}
 
-    def test_slug_and_html_content_created_on_save(self):
+    def test_slug_and_content_html_created_on_save(self):
         flatpage = FilmFlatPage.objects.create(
             film=self.film_1, title='New Page', content='# hello world'
         )
         self.assertEqual(flatpage.slug, 'new-page')
-        self.assertHTMLEqual(flatpage.html_content, '<h1>hello world</h1>')
+        self.assertHTMLEqual(flatpage.content_html, '<h1>hello world</h1>')
 
     def test_slug_created_only_if_not_provided(self):
         custom_slug = 'custom'
@@ -45,15 +45,15 @@ class TestFilmFlatPageModel(TestCase):
 
     def test_cannot_create_pages_with_same_slug_and_film_slug(self):
         with self.assertRaises(IntegrityError):
-            page_1 = FilmFlatPage.objects.create(**self.flatpage_data)
-            page_2 = FilmFlatPage.objects.create(**self.flatpage_data)
+            FilmFlatPage.objects.create(**self.flatpage_data)
+            FilmFlatPage.objects.create(**self.flatpage_data)
 
-    def test_html_content_updated_on_save(self):
+    def test_content_html_updated_on_save(self):
         page = FilmFlatPage.objects.create(**self.flatpage_data)
-        self.assertHTMLEqual(page.html_content, '<h1>hello world</h1>')
+        self.assertHTMLEqual(page.content_html, '<h1>hello world</h1>')
         page.content = '## Updated content'
         page.save()
-        self.assertHTMLEqual(page.html_content, '<h2>Updated content</h2>')
+        self.assertHTMLEqual(page.content_html, '<h2>Updated content</h2>')
 
 
 class TestFilmFlatPage(TestCase):

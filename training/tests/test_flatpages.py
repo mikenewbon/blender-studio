@@ -19,12 +19,12 @@ class TestTrainingFlatPageModel(TestCase):
             'content': '# hello world',
         }
 
-    def test_slug_and_html_content_created_on_save(self):
+    def test_slug_and_content_html_created_on_save(self):
         flatpage = TrainingFlatPage.objects.create(
             training=self.training_1, title='New Page', content='# hello world'
         )
         self.assertEqual(flatpage.slug, 'new-page')
-        self.assertHTMLEqual(flatpage.html_content, '<h1>hello world</h1>')
+        self.assertHTMLEqual(flatpage.content_html, '<h1>hello world</h1>')
 
     def test_slug_created_only_if_not_provided(self):
         custom_slug = 'custom'
@@ -54,12 +54,12 @@ class TestTrainingFlatPageModel(TestCase):
             TrainingFlatPage.objects.create(**self.flatpage_data)
             TrainingFlatPage.objects.create(**self.flatpage_data)
 
-    def test_html_content_updated_on_save(self):
+    def test_content_html_updated_on_save(self):
         page = TrainingFlatPage.objects.create(**self.flatpage_data)
-        self.assertHTMLEqual(page.html_content, '<h1>hello world</h1>')
+        self.assertHTMLEqual(page.content_html, '<h1>hello world</h1>')
         page.content = '## Updated content'
         page.save()
-        self.assertHTMLEqual(page.html_content, '<h2>Updated content</h2>')
+        self.assertHTMLEqual(page.content_html, '<h2>Updated content</h2>')
 
 
 @patch('sorl.thumbnail.base.ThumbnailBackend.get_thumbnail', Mock(url=''))

@@ -34,7 +34,7 @@ class FilmFlatPage(mixins.CreatedUpdatedMixin, models.Model):
         ),
     )
     content = models.TextField(blank=True, help_text=common.help_texts.markdown_with_html)
-    html_content = models.TextField(blank=True, editable=False)
+    content_html = models.TextField(blank=True, editable=False)
     attachments = models.ManyToManyField(models_static_assets.StaticAsset, blank=True)
 
     def save(self, *args: Any, **kwargs: Any) -> None:
@@ -43,7 +43,7 @@ class FilmFlatPage(mixins.CreatedUpdatedMixin, models.Model):
             self.slug = slugify(self.title)
         # Clean but preserve some of the HTML tags
         self.content = markdown.clean(self.content)
-        self.html_content = markdown.render_unsafe(self.content)
+        self.content_html = markdown.render_unsafe(self.content)
         super().save(*args, **kwargs)
 
     def __str__(self):

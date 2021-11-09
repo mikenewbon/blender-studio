@@ -12,9 +12,9 @@ Apps:
 
 To be extracted to a separate app:
  - [progress](#progress) - currently inside [training](#training)
- 
+
 Other:
- - **Project** - this word may refer to a film or a training. We don't have a `Project` model at 
+ - **Project** - this word may refer to a film or a training. We don't have a `Project` model at
    the moment, but there's a chance that it changes in the future.
  - flat pages - at the moment only used for the films' ["About" pages](#film-flat-pages).
 
@@ -180,7 +180,7 @@ will be added in the navigation bar. For example, the "About" section for each f
 is a 'flat page'.
 
 A flat page contents are expected to be formatted in Markdown, which is converted
-to HTML on save, and stored in the `html_content` field.
+to HTML on save, and stored in the `content_html` field.
 We use [mistune](https://mistune.readthedocs.io/) to do the Markdown-to-HTML rendering.
 
 Although this model has been inspired by the django.contrib.flatpages.models.FlatPage

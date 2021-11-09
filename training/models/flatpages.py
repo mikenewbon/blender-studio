@@ -38,7 +38,7 @@ class TrainingFlatPage(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixi
         ),
     )
     content = models.TextField(blank=True, help_text=common.help_texts.markdown_with_html)
-    html_content = models.TextField(blank=True, editable=False)
+    content_html = models.TextField(blank=True, editable=False)
     attachments = models.ManyToManyField(models_static_assets.StaticAsset, blank=True)
     header = models.FileField(upload_to=get_upload_to_hashed_path, blank=True)
 
@@ -48,7 +48,7 @@ class TrainingFlatPage(mixins.CreatedUpdatedMixin, mixins.StaticThumbnailURLMixi
             self.slug = slugify(self.title)
         # Clean but preserve some of the HTML tags
         self.content = markdown.clean(self.content)
-        self.html_content = markdown.render_unsafe(self.content)
+        self.content_html = markdown.render_unsafe(self.content)
         super().save(*args, **kwargs)
 
     def __str__(self):
