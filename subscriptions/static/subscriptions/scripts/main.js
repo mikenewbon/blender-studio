@@ -24,14 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-function teamTabSetup() {
-  console.log('TEAM');
-}
-
-function individualTabSetup() {
-  console.log('INDIV');
-}
-
 function paymentTabSwitch(button) {
   const buttonSelector = document.querySelector('.payment-tab.active');
 
@@ -126,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function showOption(element) {
     const el = element;
-    // console.log('showOption', el);
     el.disabled = false;
     el.hidden = false;
     el.setAttribute('aria-disabled', 'false');
@@ -135,7 +126,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function hideOption(element) {
     const el = element;
-    // console.log('hideOption', el);
     el.disabled = true;
     el.hidden = true;
     el.setAttribute('aria-disabled', 'true');
@@ -145,7 +135,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function showPlanVariationOptions() {
     const selectedPlanOption = getSelectedPlan();
     const selectedPlanId = selectedPlanOption.value;
-    // console.log('selected plan option', selectedPlanOption, selectedPlanId);
     const { options } = selectPlanVariation;
     let firstValidOption = null;
     for (let i = 0; i < options.length; i += 1) {

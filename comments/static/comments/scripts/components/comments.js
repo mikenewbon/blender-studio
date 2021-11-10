@@ -613,8 +613,7 @@ window.comments = (function comments() {
         .jsonRequest('POST', comment.editUrl, {
           message
         })
-        .then(data => {
-          console.log(data)
+        .then((data) => {
           this.comment.message = data.message;
           this.comment.element.dataset.message = this.comment.message;
           this.comment.message_html = data.message_html;
