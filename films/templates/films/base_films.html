@@ -40,11 +40,11 @@
               Production Logs
             </a>
           {% endif %}
-          <a class="list-group-item" href="{% url 'search' %}?film_title={{ film.title }}&sortBy=studio_date_desc&type=asset">
+          {% comment %} <a class="list-group-item" href="{% url 'search' %}?film_title={{ film.title }}&sortBy=studio_date_desc&type=asset">
             {# TODO(anna,mike): replace with the following line when /latest-assets/ page is ready #}
             {# <a class="list-group-item" href="{% url 'film-latest-assets' film_slug=film.slug %}"> #}
             Latest assets
-          </a>
+          </a> {% endcomment %}
           {% if user_has_production_credit or credit %}
 
             <a href="{% url 'production-credit' film_slug=film.slug %}" class="list-group-item small">

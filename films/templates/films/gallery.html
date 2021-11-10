@@ -37,18 +37,19 @@
     <div class="drawer-nav-group">
 
       <div class="drawer-nav-dropdown-wrapper">
-
         <a class="drawer-nav-dropdown h3 " href="{% url 'film-gallery' film_slug=film.slug %}">
           <i class="material-icons mr-2">grade</i>
           Featured Artwork
         </a>
-
-        {% comment %}
-          {% if admin_change_href %}
-            <a href="{{ admin_change_href }}">edit</a>
-          {% endif %}
-        {% endcomment %}
       </div>
+
+      <div class="drawer-nav-dropdown-wrapper">
+        <a class="drawer-nav-dropdown font-weight-bold" href="{% url 'film-latest-assets' film_slug=film.slug %}">
+          <i class="material-icons mr-2">hourglass_bottom</i>
+          Latest Artwork
+        </a>
+      </div>
+
     </div>
 
     {% for collection, child_collections in collections.items %}
@@ -127,23 +128,24 @@
                 <div class="drawer-nav-group">
 
                   <div class="drawer-nav-dropdown-wrapper">
-
                     <a class="drawer-nav-dropdown font-weight-bold" href="{% url 'film-gallery' film_slug=film.slug %}"
                       data-tooltip="tooltip-overflow" data-placement="top" title="Featured Artwork">
                       <i class="material-icons mr-2">grade</i>
                       <span class="overflow-text">Featured Artwork</span>
                     </a>
-
-                    {% comment %}
-                      {% if admin_change_href %}
-                        <a href="{{ admin_change_href }}">edit</a>
-                      {% endif %}
-                    {% endcomment %}
                   </div>
+
+                  <div class="drawer-nav-dropdown-wrapper">
+                    <a class="drawer-nav-dropdown font-weight-bold" href="{% url 'film-latest-assets' film_slug=film.slug %}"
+                      data-tooltip="tooltip-overflow" data-placement="top" title="Latest Artwork">
+                      <i class="material-icons mr-2">hourglass_bottom</i>
+                      <span class="overflow-text">Latest Artwork</span>
+                    </a>
+                  </div>
+
                 </div>
 
                 {% for collection, child_collections in collections.items %}
-
 
                   <div class="drawer-nav-dropdown-wrapper">
                     {% if child_collections %}
