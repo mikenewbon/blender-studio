@@ -1,5 +1,5 @@
 {% load common_extras %}
-{% if user.is_anonymous %}
+{% if user.is_anonymous and not showcase_or_version.is_free %}
   <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to Download</button>
 {% elif not showcase_or_version.is_free and not request.user|has_active_subscription %}
   <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Subscribe to Download</button>

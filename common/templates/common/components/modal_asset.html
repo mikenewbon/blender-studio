@@ -108,7 +108,7 @@
                     {% if asset.likes.count != 0 %}<span class="likes-count">{{ asset.likes.count }}</span>{% endif %}
                   </button>
 
-                  {% if user.is_anonymous %}
+                  {% if user.is_anonymous and not asset.is_free %}
                     <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to Download</button>
                   {% elif not asset.is_free and not user_has_active_subscription %}
                     <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Subscribe to Download</button>

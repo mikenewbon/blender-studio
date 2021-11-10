@@ -80,7 +80,7 @@
 
             <div class="training-toolbar">
 
-              {% if user.is_anonymous %}
+              {% if user.is_anonymous and not section.is_free %}
                 <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to Download</button>
               {% elif not section.is_free and not request.user|has_active_subscription %}
                 <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Subscribe to Download</button>
