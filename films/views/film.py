@@ -186,17 +186,3 @@ class ProductionCreditView(LoginRequiredMixin, TemplateView):
         form.save()
         messages.add_message(request, messages.INFO, 'Your preference has been saved.')
         return self.render_to_response(context=self.get_context_data(**kwargs))
-
-
-class LatestAssets(TemplateView):
-    """View to handle visibility of a user credit for the film."""
-
-    template_name = 'films/latest_assets.html'
-
-    def get_film(self, film_slug):  # noqa: D102
-        return get_object_or_404(Film, slug=film_slug, is_published=True)
-
-    def get_context_data(self, **kwargs):  # noqa: D102
-        context = super().get_context_data(**kwargs)
-        context['film'] = self.get_film(kwargs['film_slug'])
-        return context

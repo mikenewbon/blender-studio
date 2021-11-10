@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls.base import reverse
 from django.views.decorators.http import require_safe
+from django.views.generic import TemplateView
 
 from common.queries import has_active_subscription
 from films.models import Film, Collection, Asset
@@ -157,3 +158,19 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
     }
 
     return render(request, 'films/collection_detail.html', context)
+
+
+class LatestAssets(TemplateView):
+    """View to handle visibility of a user credit for the film."""
+
+    template_name = 'films/latest_assets.html'
+
+    def get_film(self, film_slug):  # noqa: D102
+        return get_object_or_404(Film, slug=film_slug, is_published=True)
+
+    def get_context_data(self, **kwargs):  # noqa: D102
+        context = super().get_context_data(**kwargs)
+        film = self.get_film(kwargs['film_slug'])
+        context['film'] = film
+        context.update(get_gallery_drawer_context(film, self.request.user))
+        return context

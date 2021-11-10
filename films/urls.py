@@ -39,7 +39,9 @@ urlpatterns = [
         production_log.ProductionLogDetailView.as_view(),
         name='film-production-log',
     ),
-    path('<slug:film_slug>/latest-assets/', film.LatestAssets.as_view(), name='film-latest-assets'),
+    path(
+        '<slug:film_slug>/latest-assets/', gallery.LatestAssets.as_view(), name='film-latest-assets'
+    ),
     path('<slug:film_slug>/pages/<slug:page_slug>/', film.flatpage, name='film-flatpage'),
     path(
         '<slug:film_slug>/<slug:collection_slug>/',
