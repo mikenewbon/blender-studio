@@ -1,0 +1,118 @@
+{% extends 'films/base_films.html' %}
+{% load static %}
+{% load common_extras %}
+{% load pipeline %}
+
+{% block title_prepend %}{{ film.title }} - {% endblock title_prepend %}
+
+{% block meta %}
+  {# TODO(anna,mike): update meta #}
+  {% firstof title film.title as title %}
+  {% include 'common/components/meta.html' %}
+{% endblock %}
+
+{% block content %}
+  <div class="container-xl mt-3">
+
+    <section>
+
+      <div class="row">
+        <div class="col search-bar-wrapper">
+          <div class="input-group" id="search-container">
+
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                <i class="material-icons">search</i>
+              </span>
+            </div>
+
+            <div class="input-group-append">
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="row search-filters mb-3 d-md-none">
+
+        <div class="col-auto">
+          <a class="btn btn-sm btn-dark" data-toggle="collapse" href="#filters" role="button" aria-expanded="false"
+            aria-controls="collapseExample">
+            <i class="material-icons">filter_list</i>
+            Filters
+          </a>
+        </div>
+
+        <div class="col-auto ml-auto">
+          <div class="input-group input-group-sm" id="sorting-mobile">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="searchLicence">Sort by:</label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row search-filters collapse" id="filters">
+
+        <div class="col-md-auto mb-3">
+          <div class="input-group input-group-sm" id="searchType">
+            <div class="input-group-prepend">
+              <label class="input-group-text">Type:</label>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col-md-auto mb-3">
+          <div class="input-group input-group-sm" id="searchMedia">
+            <div class="input-group-prepend">
+              <label class="input-group-text">Media:</label>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col-md-auto mb-3">
+          <div class="input-group input-group-sm" id="searchFilm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">Film:</label>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col-md-auto mb-3">
+          <div class="input-group input-group-sm" id="searchLicence">
+            <div class="input-group-prepend">
+              <label class="input-group-text">License:</label>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col-auto mb-3 d-none d-md-block">
+          <div class="input-group input-group-sm" id="sorting">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="searchLicence">Sort by:</label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="row" id="hits"></div>
+
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  {% javascript 'vendor_instantsearch' %}
+  <script>
+    const fileIconURL = '{% static "common/images/icons/file.svg" %}'
+  </script>
+  {{ search_client_config|json_script:"search-client-config" }}
+  {% javascript 'search' %}
+{% endblock scripts %}
