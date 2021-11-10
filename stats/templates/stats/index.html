@@ -35,8 +35,6 @@
           });
         });
 
-        console.log({{ chart.datasets | safe }})
-
         // Render the chart
         const chart = new Chart(ctx, {
           type: '{% firstof chart.type "line" %}',
