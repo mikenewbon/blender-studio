@@ -14,27 +14,56 @@
         line-height: 150%;
       }
 
-      th {
-        width: 200px;
-        text-align: right;
-      }
       th, td {
-        padding: 3px 6px;
         vertical-align: top;
       }
-      h4 {
+      .first td {
+        padding-top: 7px;
+        padding-bottom: 2px;
+      }
+      th {
+        text-align: left;
+        padding-top: 7px;
+        padding-bottom: 3px;
+      }
+      thead tr {
+        text-align: left;
+        background-color: #eeeeee;
+      }
+      tfoot td {
+        padding-top: 7px;
+      }
+
+      .outline-left {
         border-bottom: 1px solid black;
-        padding-top: 3em;
+        border-top: 1px solid black;
+        border-left: 1px solid black;
+        padding-left: 3px;
+      }
+      .outline-right {
+        border-bottom: 1px solid black;
+        border-top: 1px solid black;
+        border-right: 1px solid black;
+      }
+      .outline-y {
+        border-bottom: 1px solid black;
+        border-top: 1px solid black;
+      }
+      .underline {
+        border-bottom: 1px solid black;
+      }
+      .underline-muted {
+        border-bottom: 1px solid grey;
       }
 
       @page {
         size: a4 portrait;
         @frame header_frame {           /* Static Frame */
           -pdf-frame-content: header_content;
-          left: 50pt; width: 512pt; top: 20pt; height: 40pt;
+          left: 50pt; width: 512pt; top: 30pt; height: 150pt;
         }
         @frame content_frame {          /* Content Frame */
-          left: 50pt; width: 512pt; top: 60pt; height: 632pt;
+          left: 50pt; width: 512pt; top: 150pt; height: 522pt;
         }
         @frame footer_frame {           /* Another static Frame */
           -pdf-frame-content: footer_content;
@@ -44,12 +73,22 @@
     </style>
   </head>
   <body>
-    <div id="footer_content">{% block footer_content %}
-      <p><strong>Blender Studio B.V.</strong><br>
-        Buikslotermeerplein 161<br>
-        1025 ET Amsterdam, the Netherlands<br>
-        Tax number NL861711932B01
-      </p>{% endblock %}
-    </div>{% block main_content %}{% endblock %}
+    <div id="header_content">
+      {% block header_content %}
+        <img class="header" src="{% static 'subscriptions/images/pdf_logo.png' %}" height="50">
+        <h1 style="padding-bottom: 50px">Invoice</h1>
+      {% endblock %}
+    </div>
+    <div id="footer_content">
+      {% block footer_content %}
+        <p>
+          <strong>Blender Studio B.V.</strong><br>
+          Buikslotermeerplein 161<br>
+          1025 ET Amsterdam, the Netherlands<br>
+          Tax number NL861711932B01
+        </p>
+      {% endblock %}
+    </div>
+    {% block main_content %}{% endblock %}
   </body>
 </html>
