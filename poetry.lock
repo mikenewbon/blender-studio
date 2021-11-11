@@ -888,7 +888,7 @@ six = ">=1.11.0"
 
 [[package]]
 name = "looper"
-version = "1.9.6rc0"
+version = "1.9.7rc1"
 description = ""
 category = "main"
 optional = false
@@ -914,8 +914,8 @@ zeep = "4.0.0"
 [package.source]
 type = "git"
 url = "git://git.blender.org/looper.git"
-reference = "patched-clock"
-resolved_reference = "d30e050ff772c952c2df3ab272c8fcd57fc8daaa"
+reference = "patched-bt-gateway-collection-methods"
+resolved_reference = "ab2dd6c76d2ab894bbfd98eeb94ceefaef5c7e6e"
 
 [[package]]
 name = "lxml"
@@ -1688,7 +1688,7 @@ xmlsec = ["xmlsec (>=0.6.1)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "7cc6bfc87b1c78558be4de7a21c0f83343cb2fa189cd50312e90a8219ff8bc03"
+content-hash = "1e239622c0441b31e66075f04fa30e71c078bae709268f8e3de65402cb187b9d"
 
 [metadata.files]
 alphabetic-timestamp = [

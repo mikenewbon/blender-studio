@@ -107,3 +107,9 @@ def _on_subscription_expired(sender: looper.models.Subscription, **kwargs):
     # Only send a "subscription expired" email when there are no other active subscriptions
     if not queries.has_active_subscription(sender.user):
         tasks.send_mail_subscription_expired(subscription_id=sender.pk)
+
+
+@receiver(looper.signals.automatic_payment_soft_failed_no_payment_method)
+@receiver(looper.signals.automatic_payment_failed_no_payment_method)
+def _on_automatic_collection_failed_no_payment_method(sender: looper.models.Order, **kwargs):
+    tasks.send_mail_no_payment_method(order_id=sender.pk)

@@ -266,3 +266,56 @@ def send_mail_subscription_expired(subscription_id: int):
         fail_silently=False,
     )
     logger.info('Sent subscription-expired notification to %s', email)
+
+
+@background()
+def send_mail_no_payment_method(order_id: int):
+    """Notify about [soft-]failed automatic collection of a subscription w/o a payment method."""
+    order = looper.models.Order.objects.get(pk=order_id)
+    assert (
+        order.collection_method == 'automatic'
+    ), 'send_mail_no_payment_method expects automatic order'
+    assert (
+        order.subscription.collection_method == 'automatic'
+    ), 'send_mail_no_payment_method expects automatic subscription'
+    assert 'fail' in order.status, f'Unexpected order pk={order_id} status: {order.status}'
+
+    user = order.user
+    customer = user.customer
+    email = customer.billing_email or user.email
+    logger.debug('Sending %r notification to %s', order.status, email)
+
+    # An Unsubscribe record will prevent this message from being delivered by Mailgun.
+    # This records might have been previously created for an existing account.
+    mailgun.delete_unsubscribe_record(email)
+
+    subscription = order.subscription
+
+    pay_url = absolute_url('subscriptions:pay-existing-order', kwargs={'order_id': order.pk})
+    receipt_url = absolute_url('subscriptions:receipt', kwargs={'order_id': order.pk})
+
+    context = {
+        'user': subscription.user,
+        'email': email,
+        'order': order,
+        'subscription': subscription,
+        'pay_url': pay_url,
+        'receipt_url': receipt_url,
+        'failure_message': 'Unsupported payment method, please update subscription',
+        'payment_method': 'Unknown',
+        'maximum_collection_attemps': settings.LOOPER_CLOCK_MAX_AUTO_ATTEMPTS,
+        **get_template_context(),
+    }
+
+    mail_name = f'payment_{order.status}'
+    email_body_html, email_body_txt, subject = _construct_subscription_mail(mail_name, context)
+
+    django.core.mail.send_mail(
+        subject,
+        message=email_body_txt,
+        html_message=email_body_html,
+        from_email=None,  # just use the configured default From-address.
+        recipient_list=[email],
+        fail_silently=False,
+    )
+    logger.info('Sent %r notification to %s', order.status, email)
