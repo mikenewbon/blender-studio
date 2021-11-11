@@ -46,7 +46,11 @@
             {% endif %}
             {% if character.likes.count > 0 %}
               <p class="card-subtitle">
-                <i class="material-icons icon-inline small">favorite_border</i>
+                {% if character.liked %}
+                  <i class="material-icons icon-inline small text-primary">favorite</i>
+                {% else %}
+                  <i class="material-icons icon-inline small">favorite_border</i>
+                {% endif %}
                 {{ character.likes.count }}
               </p>
             {% endif %}

@@ -29,7 +29,13 @@ class CharacterList(ListView):
 
     def get_queryset(self) -> QuerySet:
         """Return all characters, it's up to the template to display them depending on the user."""
-        return get_characters()
+        characters = get_characters().all()
+        # Assign 'liked' attributes
+        if self.request.user.is_authenticated:
+            liked_character_ids = {c.character_id for c in self.request.user.liked_characters.all()}
+            for character in characters:
+                character.liked = character.pk in liked_character_ids
+        return characters
 
 
 class CharacterDetail(RedirectView):
