@@ -1,6 +1,8 @@
 from django.contrib import admin
 import nested_admin
 
+from looper.admin.filters import ChoicesFieldListWithEmptyFilter
+
 from common.mixins import AdminUserDefaultMixin
 from static_assets.models import static_assets, licenses
 
@@ -82,7 +84,7 @@ class StaticAssetAdmin(AdminUserDefaultMixin, nested_admin.NestedModelAdmin):
         'section__chapter__training',
         'assets__film',
         'assets__category',
-        'video__tracks__language',
+        ('video__tracks__language', ChoicesFieldListWithEmptyFilter),
     ]
     search_fields = [
         'source',
