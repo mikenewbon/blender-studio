@@ -2,10 +2,29 @@
 const searchClientConfig = JSON.parse(document.getElementById('search-client-config').textContent);
 const filmTitle = JSON.parse(document.getElementById('film-title').textContent);
 
+const indexName = 'studio_date_desc';
 const search = instantsearch({
-  indexName: 'studio_date_desc',
+  indexName,
   searchClient: instantMeiliSearch(searchClientConfig.hostUrl, searchClientConfig.apiKey),
-  routing: false,
+  routing: {
+    stateMapping: {
+      stateToRoute(uiState) {
+        const indexUiState = uiState[indexName];
+        return {
+          query: indexUiState.query,
+          sortBy: indexUiState && indexUiState.sortBy,
+        };
+      },
+      routeToState(routeState) {
+        return {
+          [indexName]: {
+            query: routeState.query,
+            sortBy: routeState.sortBy,
+          },
+        };
+      },
+    },
+  },
 });
 
 // -------- INPUT -------- //
@@ -116,12 +135,21 @@ const renderHits = (renderOptions, isFirstRender) => {
                     </a>
                   </div>
                   <a href="${item.url}" class="file-body">
-                    ${item.is_free ? `
+                    ${
+                      item.is_free
+                        ? `
                       <i class="material-icons icon-inline small text-success mr-1" data-toggle="tooltip" data-placement="top" title="Free">lock_open</i>
-                    ` : ''}
+                    `
+                        : ''
+                    }
 
-                  <span data-tooltip="tooltip-overflow" data-placement="top" title="${item.name}" class="overflow-text">
-                    <p class="overflow-text h4">${instantsearch.highlight({ attribute: 'name', hit: item })}</p>
+                  <span data-tooltip="tooltip-overflow" data-placement="top" title="${
+                    item.name
+                  }" class="overflow-text">
+                    <p class="overflow-text h4">${instantsearch.highlight({
+                      attribute: 'name',
+                      hit: item,
+                    })}</p>
                   </span>
                   </a>
 
