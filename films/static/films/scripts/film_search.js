@@ -136,13 +136,7 @@ const renderHits = (renderOptions, isFirstRender) => {
                     </a>
                   </div>
                   <a href="${item.url}" class="file-body">
-                    ${
-                      item.is_free
-                        ? `
-                      <i class="material-icons icon-inline small text-success mr-1" data-toggle="tooltip" data-placement="top" title="Free">lock_open</i>
-                    `
-                        : ''
-                    }
+
 
                   <span data-tooltip="tooltip-overflow" data-placement="top" title="${
                     item.name
@@ -153,7 +147,21 @@ const renderHits = (renderOptions, isFirstRender) => {
                     })}</p>
                   </span>
                   </a>
-
+                  <a href="${item.url}" class="file-footer">
+                    <div class="card-subtitle-group">
+                      <p class="card-subtitle x-small">
+                        <i class="material-icons icon-inline x-small">schedule</i>&nbsp;
+                        ${timeDifference(epochToDate(item.timestamp))}
+                      </p>
+                      ${
+                        item.is_free
+                          ? `
+                        <p class="d-inline mr-2 text-success x-small"><i class="material-icons icon-inline x-small" >lock_open</i>&nbsp;Free</p>
+                      `
+                          : ''
+                      }
+                    </div>
+                  </a>
                 </div>
 
             `
