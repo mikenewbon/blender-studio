@@ -37,6 +37,7 @@ const renderSearchBox = (renderOptions, isFirstRender) => {
     const input = document.createElement('input');
     input.setAttribute('class', 'form-control');
     input.setAttribute('type', 'text');
+    input.setAttribute('id', 'searchInput');
     input.setAttribute('placeholder', 'Search tags and keywords');
 
     const append = document.createElement('div');
