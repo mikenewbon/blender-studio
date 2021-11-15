@@ -90,7 +90,11 @@
             1
           </td>
           <td>
-            {{ taxable.price_without_tax.with_currency_symbol_nonocents }}
+            {% if taxable.tax_is_charged %}
+              {{ taxable.price_without_tax.with_currency_symbol_nonocents }}
+            {% else %}
+              {{ order.price.with_currency_symbol_nonocents }}
+            {% endif %}
           </td>
         </tr>
       </tbody>
@@ -107,7 +111,13 @@
             {%  endif %}
           </td>
           <td class="underline-muted"><b>Subtotal</b></td>
-          <td class="underline-muted">{{ taxable.price_without_tax.with_currency_symbol_nonocents }}{% if taxable.tax_type.value %} (ex. VAT){% endif %}</td>
+          <td class="underline-muted">
+            {% if taxable.tax_is_charged %}
+              {{ taxable.price_without_tax.with_currency_symbol_nonocents }}
+            {% else %}
+              {{ order.price.with_currency_symbol_nonocents }}
+            {% endif %}{% if taxable.tax_type.value %} (ex. VAT){% endif %}
+          </td>
         </tr>
         {% if taxable.tax_is_charged %}
           <tr>
@@ -119,48 +129,9 @@
         <tr>
           <td colspan=2></td>
           <td class="underline"><b>Total</b></td>
-          <td class="underline"><b>{{ taxable.price.with_currency_symbol_nonocents }}</b></td>
+          <td class="underline"><b>{{ order.price.with_currency_symbol_nonocents }}</b></td>
         </tr>
       </tfoot>
     </table>
   {% endwith %}
-
-
-  {% comment %}
-    <table style="width: 40em">
-      <tr>
-        <th>Status</th>
-        <td>PAID</td>
-      </tr>
-      <tr>
-        <th>Address</th>
-        <td>{{ order.billing_address|linebreaksbr }}</td>
-      </tr>
-      {% if order.vat_number %}
-        <tr>
-          <th>VATIN</th>
-          <td>{{ order.vat_number }}</td>
-        </tr>
-      {% endif %}
-      <tr>
-        <th>Amount paid</th>
-        <td>
-          {{ order.price.with_currency_symbol_nonocents }}
-          {% with taxable=order.taxable %}
-            {% if taxable.tax_is_charged %}<br />
-              {{ taxable.format_tax_amount }}
-            {% endif %}
-          {% endwith %}
-        </td>
-        {% with refunded=order.total_refunded %}
-          {% if refunded %}
-          </tr>
-          <tr>
-            <th>Amount refunded</th>
-            <td>{{ refunded.with_currency_symbol_nonocents }}</td>
-          {% endif %}
-        {% endwith %}
-      </tr>
-    </table>
-  {% endcomment %}
 {% endblock %}
