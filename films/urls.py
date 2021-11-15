@@ -39,7 +39,7 @@ urlpatterns = [
         production_log.ProductionLogDetailView.as_view(),
         name='film-production-log',
     ),
-    path('<slug:film_slug>/latest-artwork/', gallery.AllAssets.as_view(), name='film-all-assets'),
+    path('<slug:film_slug>/all-artwork/', gallery.AllAssets.as_view(), name='film-all-assets'),
     path('<slug:film_slug>/pages/<slug:page_slug>/', film.flatpage, name='film-flatpage'),
     path(
         '<slug:film_slug>/<slug:collection_slug>/',
