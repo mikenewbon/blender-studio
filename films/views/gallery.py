@@ -160,7 +160,7 @@ def collection_detail(request: HttpRequest, film_slug: str, collection_slug: str
     return render(request, 'films/collection_detail.html', context)
 
 
-class LatestAssets(TemplateView):
+class AllAssets(TemplateView):
     """View to handle visibility of a user credit for the film."""
 
     template_name = 'films/latest_assets.html'

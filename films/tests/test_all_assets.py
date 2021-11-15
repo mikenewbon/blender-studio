@@ -5,12 +5,12 @@ from common.tests.factories.films import FilmFactory
 from common.tests.factories.users import UserFactory
 
 
-class TestLatestAssets(TestCase):
+class TestAllAssets(TestCase):
     maxDiff = None
 
     def setUp(self):
         self.film = FilmFactory()
-        self.url = reverse('film-latest-assets', kwargs={'film_slug': self.film.slug})
+        self.url = reverse('film-all-assets', kwargs={'film_slug': self.film.slug})
 
     def test_view_not_logged_in(self):
         response = self.client.get(self.url)

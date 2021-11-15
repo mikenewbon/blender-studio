@@ -44,7 +44,7 @@
       </div>
 
       <div class="drawer-nav-dropdown-wrapper">
-        <a class="drawer-nav-dropdown font-weight-bold" href="{% url 'film-latest-assets' film_slug=film.slug %}">
+        <a class="drawer-nav-dropdown font-weight-bold" href="{% url 'film-all-assets' film_slug=film.slug %}">
           <i class="material-icons mr-2">search</i>
           All Artwork
         </a>
@@ -136,7 +136,7 @@
                   </div>
 
                   <div class="drawer-nav-dropdown-wrapper">
-                    <a class="drawer-nav-dropdown font-weight-bold" href="{% url 'film-latest-assets' film_slug=film.slug %}"
+                    <a class="drawer-nav-dropdown font-weight-bold" href="{% url 'film-all-assets' film_slug=film.slug %}"
                       data-tooltip="tooltip-overflow" data-placement="top" title="All Artwork">
                       <i class="material-icons mr-2">search</i>
                       <span class="overflow-text">All Artwork</span>
