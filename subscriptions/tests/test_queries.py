@@ -72,20 +72,20 @@ class TestHasNotYetCancelledSubscription(TestCase):
 
         self.assertTrue(has_not_yet_cancelled_subscription(subscription.user))
 
-    def test_true_when_team_subscription_inactive(self):
+    def test_false_when_team_subscription_inactive(self):
         team = TeamFactory(subscription__plan_id=1)
         team.team_users.create(user=UserFactory())
 
-        self.assertTrue(has_not_yet_cancelled_subscription(team.team_users.first().user))
+        self.assertFalse(has_not_yet_cancelled_subscription(team.team_users.first().user))
 
-    def test_true_when_team_subscription_active(self):
+    def test_false_when_team_subscription_active(self):
         team = TeamFactory(
             subscription__plan_id=1,
             subscription__status=list(looper.models.Subscription._ACTIVE_STATUSES)[0],
         )
         team.team_users.create(user=UserFactory())
 
-        self.assertTrue(has_not_yet_cancelled_subscription(team.team_users.first().user))
+        self.assertFalse(has_not_yet_cancelled_subscription(team.team_users.first().user))
 
     def test_false_when_team_subscription_cancelled(self):
         team = TeamFactory(
@@ -110,7 +110,7 @@ class TestHasNotYetCancelledSubscription(TestCase):
 
         self.assertTrue(has_not_yet_cancelled_subscription(team.team_users.first().user))
 
-    def test_true_when_team_subscription_active_personal_cancelled(self):
+    def test_false_when_team_subscription_active_personal_cancelled(self):
         team = TeamFactory(
             subscription__plan_id=1,
             subscription__status=list(looper.models.Subscription._ACTIVE_STATUSES)[0],
@@ -122,7 +122,7 @@ class TestHasNotYetCancelledSubscription(TestCase):
             status='cancelled',
         )
 
-        self.assertTrue(has_not_yet_cancelled_subscription(team.team_users.first().user))
+        self.assertFalse(has_not_yet_cancelled_subscription(team.team_users.first().user))
 
 
 class TestHasSubscription(TestCase):

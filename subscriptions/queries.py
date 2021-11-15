@@ -67,7 +67,7 @@ def should_redirect_to_billing(user: User) -> bool:
 def has_not_yet_cancelled_subscription(user: User) -> bool:
     """Check if a given user has any subscriptions that had not been cancelled yet.
 
-    Checks both for personal and team subscriptions.
+    Checks only "personal", not team, subscriptions.
     """
     if not user.is_authenticated:
         return False
@@ -76,6 +76,4 @@ def has_not_yet_cancelled_subscription(user: User) -> bool:
         status__in=Subscription._CANCELLED_STATUSES
     )
 
-    return not_yet_cancelled_subscriptions.filter(
-        Q(user_id=user.id) | Q(team__team_users__user_id=user.id)
-    ).exists()
+    return not_yet_cancelled_subscriptions.filter(Q(user_id=user.id)).exists()
