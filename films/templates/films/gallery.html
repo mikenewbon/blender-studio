@@ -45,8 +45,8 @@
 
       <div class="drawer-nav-dropdown-wrapper">
         <a class="drawer-nav-dropdown font-weight-bold" href="{% url 'film-latest-assets' film_slug=film.slug %}">
-          <i class="material-icons mr-2">hourglass_bottom</i>
-          Latest Artwork
+          <i class="material-icons mr-2">search</i>
+          All Artwork
         </a>
       </div>
 
@@ -137,9 +137,9 @@
 
                   <div class="drawer-nav-dropdown-wrapper">
                     <a class="drawer-nav-dropdown font-weight-bold" href="{% url 'film-latest-assets' film_slug=film.slug %}"
-                      data-tooltip="tooltip-overflow" data-placement="top" title="Latest Artwork">
-                      <i class="material-icons mr-2">hourglass_bottom</i>
-                      <span class="overflow-text">Latest Artwork</span>
+                      data-tooltip="tooltip-overflow" data-placement="top" title="All Artwork">
+                      <i class="material-icons mr-2">search</i>
+                      <span class="overflow-text">All Artwork</span>
                     </a>
                   </div>
 
@@ -203,7 +203,9 @@
       <div class="col col-md-8 col-lg-9">
         {% block nested_content %}
 
-          {% show_breadcrumbs %}
+          {% block toolbar %}
+            {% show_breadcrumbs %}
+          {% endblock toolbar %}
 
           {% block gallery_files %}
 

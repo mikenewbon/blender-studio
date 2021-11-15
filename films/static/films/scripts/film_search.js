@@ -8,6 +8,91 @@ const search = instantsearch({
   routing: false,
 });
 
+// -------- INPUT -------- //
+
+// Create a render function
+const renderSearchBox = (renderOptions, isFirstRender) => {
+  const { query, refine, clear, isSearchStalled, widgetParams } = renderOptions;
+
+  if (isFirstRender) {
+    const input = document.createElement('input');
+    input.setAttribute('class', 'form-control');
+    input.setAttribute('type', 'text');
+    input.setAttribute('placeholder', 'Search tags and keywords');
+
+    const append = document.createElement('div');
+    append.setAttribute('class', 'input-group-append');
+    const button = document.createElement('button');
+    button.setAttribute('class', 'btn btn-icon btn-input');
+    append.appendChild(button);
+    const buttonIcon = document.createElement('i');
+    buttonIcon.setAttribute('class', 'material-icons');
+    buttonIcon.textContent = 'close';
+    button.appendChild(buttonIcon);
+
+    input.addEventListener('input', (event) => {
+      refine(event.target.value);
+    });
+
+    button.addEventListener('click', () => {
+      clear();
+    });
+
+    widgetParams.container
+      .querySelector('.input-group-prepend')
+      .insertAdjacentElement('afterend', input);
+    input.insertAdjacentElement('afterend', append);
+  }
+
+  widgetParams.container.querySelector('input').value = query;
+  // widgetParams.container.querySelector('span').hidden = !isSearchStalled;
+};
+
+// create custom widget
+const customSearchBox = instantsearch.connectors.connectSearchBox(renderSearchBox);
+
+// -------- SORTING -------- //
+
+// Create the render function
+const renderSortBy = (renderOptions, isFirstRender) => {
+  const { options, currentRefinement, hasNoResults, refine, widgetParams } = renderOptions;
+
+  if (isFirstRender) {
+    const select = document.createElement('select');
+    select.setAttribute('class', 'custom-select');
+
+    select.addEventListener('change', (event) => {
+      refine(event.target.value);
+    });
+
+    widgetParams.container
+      .querySelector('.input-group-prepend')
+      .insertAdjacentElement('afterend', select);
+  }
+
+  const select = widgetParams.container.querySelector('select');
+
+  select.disabled = hasNoResults;
+
+  select.innerHTML = `
+    ${options
+      .map(
+        (option) => `
+          <option
+            value="${option.value}"
+            ${option.value === currentRefinement ? 'selected' : ''}
+          >
+            ${option.label}
+          </option>
+        `
+      )
+      .join('')}
+  `;
+};
+
+// Create the custom widget
+const customSortBy = instantsearch.connectors.connectSortBy(renderSortBy);
+
 // -------- HITS -------- //
 
 let lastRenderArgs;
@@ -82,8 +167,19 @@ const customConfigure = instantsearch.connectors.connectConfigure(renderConfigur
 // -------- RENDER -------- //
 
 search.addWidgets([
+  customSearchBox({
+    container: document.querySelector('#search-container'),
+  }),
   customHits({
     container: document.querySelector('#hits'),
+  }),
+  customSortBy({
+    container: document.querySelector('#sorting'),
+    items: [
+      { label: 'Relevance', value: 'studio' },
+      { label: 'Date (new first)', value: 'studio_date_desc' },
+      { label: 'Date (old first)', value: 'studio_date_asc' },
+    ],
   }),
   customConfigure({
     container: document.querySelector('#hits'),
@@ -99,3 +195,7 @@ search.addWidgets([
 ]);
 
 search.start();
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelector('#searchInput').focus();
+});
