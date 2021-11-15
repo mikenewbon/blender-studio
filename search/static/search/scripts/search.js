@@ -13,7 +13,7 @@ const search = instantsearch({
           query: indexUiState.query,
           type: indexUiState.menu && indexUiState.menu.model,
           media_type: indexUiState.menu && indexUiState.menu.media_type,
-          license: indexUiState.menu && indexUiState.menu.license,
+          // license: indexUiState.menu && indexUiState.menu.license,
           film_title: indexUiState.menu && indexUiState.menu.film_title,
           sortBy: indexUiState && indexUiState.sortBy,
         };
@@ -27,7 +27,7 @@ const search = instantsearch({
               model: routeState.type,
               categories: routeState.categories,
               media_type: routeState.media_type,
-              license: routeState.license,
+              // license: routeState.license,
               film_title: routeState.film_title,
             },
           },
@@ -299,10 +299,10 @@ search.addWidgets([
     container: document.querySelector('#searchType'),
     attribute: 'model',
   }),
-  customMenuSelect({
-    container: document.querySelector('#searchLicence'),
-    attribute: 'license',
-  }),
+  // customMenuSelect({
+  //   container: document.querySelector('#searchLicence'),
+  //   attribute: 'license',
+  // }),
   customMenuSelect({
     container: document.querySelector('#searchMedia'),
     attribute: 'media_type',
