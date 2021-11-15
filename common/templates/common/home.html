@@ -3,73 +3,13 @@
 
 {% block content %}
 
-  <div class="jumbotron jumbotron-fluid jumbotron-overlay jumbotron header spacer-n">
-    <div class="jumbotron-bg-wrapper">
-      <img class="jumbotron-bg" src="{% static 'common/images/home/sf-dark-background.jpg' %}" alt="A tiny mushroom-headed imp hides amongst the forrest.">
-      <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
-      {% comment %}
-        {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
-      {% endcomment %}
-    </div>
-    <div class="container-xl">
-      <div class="row justify-content-center">
-        <div class="col-lg-5 col-md-6">
-          <div class="jumbotron-body text-center">
-            <div class="spacer"></div>
-            <a href="/films/sprite-fright">
-              <img class="mb-3 mr-n3 film-logo" src="{% static "common/images/home/sf-logo_gradient.png" %}" alt="Sprite Fright Logo">
-            </a>
-            <h1 class="mb-3">New Open Movie Out Now!</h1>
-            <div class="d-inline-block mb-2">
-              <button href="https://youtube.com/watch?v=_cMxraX_5RE" class="btn btn-sprites mr-2 mb-2 video-modal-link" data-toggle="modal" data-target="#videoModal" data-video="https://www.youtube.com/watch?v=_cMxraX_5RE" rel="nofollow" target="_blank">Watch Sprite Fright</button>
-              <a href="/films/sprite-fright/" class="btn btn-transparent mb-2">See the project</a>
-            </div>
-            <p class="mb-3">When
-              a group of rowdy teenagers trek into an isolated forest, they discover peaceful mushroom creatures that turn
-              out to be an unexpected force of nature.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
+  <!-- Header -->
+  {% include 'common/components/home_headers/film_general_left.html' %}
 
   <div class="container-xl">
 
-    {% comment %}
     <!-- Live Stream -->
-
-     <section class="mb-4">
-      <div class="row">
-
-        <div class="col-12 col-md-6 mb-3 mb-md-0">
-          <div class="rounded embed-responsive embed-responsive-16by9">
-            <iframe src="https://www.youtube.com/embed/0vGNOtX9iPk" title="YouTube video player" frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen>
-            </iframe>
-          </div>
-        </div>
-
-        <div class="col-12 col-md-6 col-lg-5 offset-lg-1 d-flex flex-column justify-content-center">
-          <p class="mb-1">
-            <span class="badge badge-danger mr-1">Live</span>
-            <span class="subtitle">Artist Livestream</span>
-          </p>
-          <h2 class="mb-1">Snow: Stylized Character Shading #1</h2>
-          <p>In this series, Julien Kaspar will guide you through the creation of "Snow", the next character in the
-            lineup of creative commons rigs on the Blender Studio.
-          </p>
-          <p>Join in the chat on YouTube while Julien answers questions from the community.</p>
-          <div class="button-group">
-            <a href="https://www.youtube.com/watch?v=0vGNOtX9iPk" rel=”nofollow” target="_blank"
-              class="btn btn-danger">Watch on YouTube
-            </a>
-          </div>
-        </div>
-      </div>
-    </section> {% endcomment %}
-
+    {% comment %} {% include 'common/components/home_headers/livestream.html' %} {% endcomment %}
 
     <!-- Latest Blog Posts -->
     {% url 'post-list' as blog_url %}
@@ -82,10 +22,9 @@
     {% endif %}
 
     <!-- Latest Training -->
-
     {% include 'common/components/cards/card_carousel.html' with title="Latest Training" title_link=training_url subtitle="Want to see more? <a href='/training'>Explore all training</a>" slides=3 card_set=featured_trainings media_type="training" id="featuredTrainings" %}
 
-
+    <!-- Featured Movies -->
     <section class="mb-4">
       <div class="row justify-content-center mb-3">
         <div class="col-md-6 text-center">
@@ -101,6 +40,8 @@
         {% endfor %}
       </div>
     </section>
+
+    <!-- From the Archives -->
     {% url 'film-list' as film_url %}
     {% include 'common/components/cards/card_carousel.html' with title="From The Archives" title_link=film_url subtitle="Want to see more? <a href='/films'>Explore all films</a>" slides=4 card_set=featured_film_assets media_type="file" id="fromTheArchives" %}
 
