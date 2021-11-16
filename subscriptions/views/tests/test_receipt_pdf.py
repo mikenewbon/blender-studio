@@ -1,7 +1,9 @@
 from decimal import Decimal
 from io import BytesIO
+from unittest.mock import patch, Mock
 
 from PyPDF2 import PdfFileReader
+from django.test.testcases import TestCase
 from django.urls import reverse
 
 from looper.tests.factories import PaymentMethodFactory, OrderFactory
@@ -11,7 +13,6 @@ from common.tests.factories.subscriptions import (
     create_customer_with_billing_address,
 )
 from common.tests.factories.users import UserFactory
-from subscriptions.tests.base import BaseSubscriptionTestCase
 
 expected_text_tmpl = '''
 Invoice
@@ -42,10 +43,12 @@ Total
 '''
 
 
-class TestReceiptPDFView(BaseSubscriptionTestCase):
+@patch('looper.admin_log.attach_log_entry', Mock(return_value=None))
+class TestReceiptPDFView(TestCase):
     maxDiff = None
 
     @classmethod
+    @patch('looper.admin_log.attach_log_entry', Mock(return_value=None))
     def setUpClass(cls):
         super().setUpClass()
 
@@ -59,10 +62,10 @@ class TestReceiptPDFView(BaseSubscriptionTestCase):
             payment_method=cls.payment_method,
             subscription__payment_method=cls.payment_method,
             subscription__user=user,
-            subscription__plan_id=1,
+            subscription__plan__product__name='Blender Studio Subscription',
         )
 
-    def _read_pdf(self, response):
+    def _extract_text_from_pdf(self, response):
         pdf = PdfFileReader(BytesIO(response.content))
         self.assertEqual(1, pdf.getNumPages())
         pdf_page = pdf.getPage(0)
@@ -70,15 +73,15 @@ class TestReceiptPDFView(BaseSubscriptionTestCase):
 
     def test_get_pdf_unpaid_order_not_found(self):
         unpaid_order = OrderFactory(
-            user=self.user,
+            user=self.payment_method.user,
             price=990,
             tax_country='NL',
             payment_method=self.payment_method,
             subscription__payment_method=self.payment_method,
-            subscription__user=self.user,
+            subscription__user=self.payment_method.user,
             subscription__plan_id=1,
         )
-        self.client.force_login(self.user)
+        self.client.force_login(unpaid_order.user)
         url = reverse('subscriptions:receipt-pdf', kwargs={'order_id': unpaid_order.pk})
         response = self.client.get(url)
 
@@ -113,7 +116,7 @@ class TestReceiptPDFView(BaseSubscriptionTestCase):
         self.assertIn(b'/Height 103', response.content)
         self.assertIn(b'/Width 400', response.content)
 
-        self._read_pdf(response)
+        self._extract_text_from_pdf(response)
 
     def test_get_pdf_total_vat_charged(self):
         taxable = looper.taxes.Taxable(
@@ -137,7 +140,7 @@ class TestReceiptPDFView(BaseSubscriptionTestCase):
 
         self.assertEqual(200, response.status_code)
 
-        pdf_text = self._read_pdf(response)
+        pdf_text = self._extract_text_from_pdf(response)
         self.assertEqual(
             pdf_text,
             expected_text_tmpl.format(
@@ -176,7 +179,7 @@ class TestReceiptPDFView(BaseSubscriptionTestCase):
 
         self.assertEqual(200, response.status_code)
 
-        pdf_text = self._read_pdf(response)
+        pdf_text = self._extract_text_from_pdf(response)
         self.assertEqual(
             pdf_text,
             expected_text_tmpl.format(
@@ -220,7 +223,7 @@ class TestReceiptPDFView(BaseSubscriptionTestCase):
 
         self.assertEqual(200, response.status_code)
 
-        pdf_text = self._read_pdf(response)
+        pdf_text = self._extract_text_from_pdf(response)
         self.assertEqual(
             pdf_text,
             expected_text_tmpl.format(
@@ -252,7 +255,7 @@ class TestReceiptPDFView(BaseSubscriptionTestCase):
 
         self.assertEqual(200, response.status_code)
 
-        pdf_text = self._read_pdf(response)
+        pdf_text = self._extract_text_from_pdf(response)
         self.assertEqual(
             pdf_text,
             expected_text_tmpl.format(
