@@ -99,18 +99,18 @@ class Command(BaseCommand):
             static_asset.content_type, _ = mimetypes.guess_type(dest_file_path_s3)
             static_asset.save()
 
-            film_asset = Asset(
+            film_asset, _ = Asset.objects.get_or_create(
                 static_asset=static_asset,
                 film=film,
                 collection=collection,
-                name=f'{film.title} - {version}',
-                is_spoiler=True,
-                is_published=False,
-                date_created=date,
-                date_updated=date,
-                date_published=date,
-                category='production_file',
             )
+            film_asset.name = f'{film.title} - {version}'
+            film_asset.is_spoiler = True
+            film_asset.is_published = False
+            film_asset.date_created = date
+            film_asset.date_updated = date
+            film_asset.date_published = date
+            film_asset.category = 'production_file'
             film_asset.save()
 
             # Override dates
