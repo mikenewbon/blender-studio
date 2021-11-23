@@ -138,6 +138,7 @@ class BIDSession:
         assert role in (
             'cloud_subscriber',
             'cloud_has_subscription',
+            'sprite_fright',
         ), f'{role} is not a known Blender ID badge'
         return urljoin(self.settings.url_base, f'api/badger/{action}/{role}/{oauth_user_id}')
 
