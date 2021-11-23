@@ -96,6 +96,7 @@ class Command(BaseCommand):
             _upload(file_path, dest_file_path_s3, static_asset)
 
             static_asset.contributors.set([u for u in film.crew.all() if u.pk != user.pk])
+            static_asset.content_type, _ = mimetypes.guess_type(dest_file_path_s3)
             static_asset.save()
 
             film_asset = Asset(
