@@ -225,7 +225,7 @@ class BIDSession:
                 user.save(update_fields=['badges'])
             logger.info(f'Badges updated for {user}')
         except requests.HTTPError:
-            logger.exception(f'Failed to retrieve badges of {user} from Blender ID')
+            logger.warning(f'Failed to retrieve badges of {user} from Blender ID')
         except BIDMissingAccessToken:
             logger.warning(f'Unable to retrieve badges for {user}: no access token')
         except Exception:
