@@ -1,13 +1,13 @@
 {% extends "subscriptions/emails/base.html" %}
 {% load subscriptions %}
 
-{% block content %}
+{% block content %}{% with taxable=subscription.taxable %}
   <p>Thank you for subscribing to Blender Studio!</p>
   <p>
     Your {% spaceless %}{% include 'subscriptions/components/info_with_status.html' %}{% endspaceless %}
     and will be activated as soon as we have received and handled your bank transfer.
   </p>
-  <p>Please send your payment of {{ subscription.price.with_currency_symbol }} to:</p>
+  <p>Please send your payment of {{ taxable.price.with_currency_symbol }} to:</p>
   <p>
     <pre>{% include "subscriptions/components/bank_transfer_details.txt" %}</pre>
   </p>
@@ -28,11 +28,9 @@
   </p>
   <p>
     Payment method: {{ subscription.payment_method }}<br />
-    {% with taxable=subscription.taxable %}
-      Recurring total: {{ taxable.price.with_currency_symbol }}<br />
-      {% if taxable.tax_is_charged %}
-        <span style="margin-left: 8em">{{ taxable.format_tax_amount }}</span>
-      {% endif %}
-    {% endwith %}
+    Recurring total: {{ taxable.price.with_currency_symbol }}<br />
+    {% if taxable.tax_is_charged %}
+      <span style="margin-left: 8em">{{ taxable.format_tax_amount }}</span>
+    {% endif %}
   </p>
-{% endblock content %}
+{% endwith %}{% endblock content %}

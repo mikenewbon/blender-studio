@@ -311,9 +311,27 @@ class BaseSubscriptionTestCase(TestCase):
             self.assertIn('Dear Jane Doe,', email_body)
             self.assertIn(reverse('user-settings-billing'), email_body)
             self.assertIn('Manual renewal subscription', email_body)
+            self.assertIn('is currently on hold', email_body)
+
+    def _assert_bank_transfer_email_is_sent_tax_21(self, subscription):
+        email = mail.outbox[0]
+        for email_body in (email.body, email.alternatives[0][0]):
             self.assertIn('€\xa014.90 per month', email_body)
             self.assertIn('Inc. 21% VAT', email_body)
-            self.assertIn('is currently on hold', email_body)
+            self.assertIn('Please send your payment of €\xa014.90 to', email_body)
+            self.assertIn('Recurring total: €\xa014.90', email_body.replace('    ', ' '))
+
+    def _assert_bank_transfer_email_is_sent_tax_21_eur_reverse_charged(self, subscription):
+        email = mail.outbox[0]
+        for email_body in (email.body, email.alternatives[0][0]):
+            # "Original" subscription price must not be displayed anywhere, only the tax-exc one
+            self.assertNotIn('32.00', email_body)
+            self.assertNotIn('21%', email_body)
+            self.assertNotIn('Inc.', email_body)
+            self.assertNotIn('VAT', email_body)
+            self.assertIn('€\xa026.45 per 3 months', email_body)
+            self.assertIn('Please send your payment of €\xa026.45 to', email_body)
+            self.assertIn('Recurring total: €\xa026.45', email_body.replace('    ', ' '))
 
     def _assert_subscription_activated_email_is_sent(self, subscription):
         user = subscription.user

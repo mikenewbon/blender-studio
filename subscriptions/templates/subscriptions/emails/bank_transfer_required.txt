@@ -1,12 +1,12 @@
 {% extends "subscriptions/emails/base.txt" %}
 {% load subscriptions %}
-{% block content %}
+{% block content %}{% with taxable=subscription.taxable %}
 Thank you for subscribing to Blender Studio!
 
 Your {% spaceless %}{% include 'subscriptions/components/info_with_status.txt' %}{% endspaceless %}
 and will be activated as soon as we have received and handled your bank transfer.
 
-Please send your payment of {{ subscription.price.with_currency_symbol }} to:
+Please send your payment of {{ taxable.price.with_currency_symbol }} to:
 
 {% include "subscriptions/components/bank_transfer_details.txt" %}
 Use the following as a payment reference:
@@ -19,7 +19,7 @@ Subscription information:
 Subscription #:     {{ subscription.id }}
 Renewal type:       {{ subscription.collection_method }}
 Renewal period:     {{ subscription|renewal_period }}
-Payment method:     {{ subscription.payment_method }}{% with taxable=subscription.taxable %}
+Payment method:     {{ subscription.payment_method }}
 Recurring total:    {{ taxable.price.with_currency_symbol }}{% if taxable.tax_is_charged %}
                     {{ taxable.format_tax_amount }}{% endif %}{% endwith %}
 {% endblock content %}

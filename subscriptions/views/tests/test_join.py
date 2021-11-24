@@ -473,6 +473,95 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
         self.assertNotEqual(order.display_number, str(order.pk))
 
         self._assert_bank_transfer_email_is_sent(subscription)
+        self._assert_bank_transfer_email_is_sent_tax_21(subscription)
+
+        # Check that the reverse-charged price is displayed in billing as well
+        response = self.client.get(
+            reverse('subscriptions:manage', kwargs={'subscription_id': subscription.pk})
+        )
+        self.assertContains(response, f'Subscription #{subscription.pk}', html=True)
+        self.assertContains(response, 'Subscription On Hold', html=True)
+        self.assertContains(response, 'Bank Transfer', html=True)
+        self.assertContains(response, '€\xa014.90\u00A0/\u00A0month', html=True)
+
+    @patch(
+        'subscriptions.signals.tasks.send_mail_bank_transfer_required',
+        new=subscriptions.tasks.send_mail_bank_transfer_required.task_function,
+    )
+    @patch(
+        'users.signals.tasks.grant_blender_id_role',
+        new=users.tasks.grant_blender_id_role.task_function,
+    )
+    @responses.activate
+    def test_pay_with_bank_transfer_creates_order_subscription_on_hold_shows_reverse_charged_price(
+        self,
+    ):
+        user = create_customer_with_billing_address(
+            country='ES', full_name='Jane Doe', vat_number='DE260543043'
+        )
+        self.client.force_login(user)
+        util.mock_blender_id_badger_badger_response(
+            'grant', 'cloud_has_subscription', user.oauth_info.oauth_user_id
+        )
+
+        selected_variation = (
+            looper.models.PlanVariation.objects.active()
+            .filter(
+                collection_method='manual',
+                currency='EUR',
+                interval_length=3,
+                interval_unit='month',
+            )
+            .first()
+        )
+        url, _ = self._get_url_for('EUR', selected_variation.price._cents)
+        data = {
+            **required_address_data,
+            'gateway': 'bank',
+            'payment_method_nonce': 'unused',
+            'price': '26.45',
+        }
+        response = self.client.post(url, data, REMOTE_ADDR=EURO_IPV4)
+
+        self._assert_transactionless_done_page_displayed(response)
+
+        subscription = user.subscription_set.first()
+        self.assertEqual(subscription.status, 'on-hold')
+        self.assertEqual(subscription.price, Money('EUR', 3200))
+        self.assertEqual(subscription.tax, Money('EUR', 0))
+        self.assertEqual(subscription.tax_country, 'ES')
+        self.assertEqual(subscription.tax_type, 'VATRC')
+        self.assertEqual(subscription.collection_method, selected_variation.collection_method)
+        self.assertEqual(subscription.collection_method, 'manual')
+        self.assertEqual(subscription.plan, selected_variation.plan)
+
+        order = subscription.latest_order()
+        self.assertEqual(order.status, 'created')
+        self.assertEqual(order.price, Money('EUR', 2645))
+        self.assertEqual(order.tax, Money('EUR', 0))
+        self.assertEqual(order.tax_country, 'ES')
+        self.assertEqual(order.tax_type, 'VATRC')
+        self.assertIsNotNone(order.pk)
+        self.assertIsNotNone(order.number)
+        self.assertIsNotNone(order.display_number)
+        self.assertIsNotNone(order.vat_number)
+        self.assertNotEqual(order.display_number, str(order.pk))
+
+        self._assert_bank_transfer_email_is_sent(subscription)
+        self._assert_bank_transfer_email_is_sent_tax_21_eur_reverse_charged(subscription)
+
+        # Check that the reverse-charged price is displayed in billing as well
+        response = self.client.get(
+            reverse('subscriptions:manage', kwargs={'subscription_id': subscription.pk})
+        )
+        self.assertNotIn('32.00', response)
+        self.assertNotIn('21%', response)
+        self.assertNotIn('Inc.', response)
+        self.assertNotIn('VAT', response)
+        self.assertContains(response, f'Subscription #{subscription.pk}', html=True)
+        self.assertContains(response, 'Subscription On Hold', html=True)
+        self.assertContains(response, 'Bank Transfer', html=True)
+        self.assertContains(response, '€\xa026.45\u00A0/\u00A0quarter', html=True)
 
     @patch(
         # Make sure background task is executed as a normal function

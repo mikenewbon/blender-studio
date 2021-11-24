@@ -1,8 +1,7 @@
 {% extends 'users/settings/base.html' %}
 {% load common_extras %}
 {% load humanize %}
-{% load looper %}
-{% load looper %}
+{% load subscriptions %}
 
 {% block settings %}
   <p class="subtitle">Settings</p>
@@ -54,30 +53,31 @@
             {% if subscription.status %}
               <li class="list-group-item">
                 <div class=row>
-                  <div class="col">
-                    <p class="h4 mb-0">Billing Period</p>
-
-                    {% if subscription.next_payment %}
-                      {% if subscription.status == 'active' or subscription.status == 'on-hold' %}
-                        {% if subscription.next_payment_in_future %}
-                          <p class="x-small subtitle">Your subscription will renew
-                            {{ subscription.collection_method }}{% if subscription.collection_method == 'automatic' %}ally{% else %}ly{% endif %}
-                            on
-                            {{ subscription.next_payment|date }} for {{ subscription | pricing }}.</p>
-                        {% else %}
-                          <p class="x-small subtitle">Your last {{ subscription.collection_method }} payment is due on
-                            {{ subscription.next_payment|date }} for {{ subscription | pricing }}.</p>
+                  {% with taxable=subscription.taxable %}
+                    <div class="col">
+                      <p class="h4 mb-0">Billing Period</p>
+                      {% if subscription.next_payment %}
+                        {% if subscription.status == 'active' or subscription.status == 'on-hold' %}
+                          {% if subscription.next_payment_in_future %}
+                            <p class="x-small subtitle">Your subscription will renew
+                              {{ subscription.collection_method }}{% if subscription.collection_method == 'automatic' %}ally{% else %}ly{% endif %}
+                              on
+                              {{ subscription.next_payment|date }} for {{ subscription|recurring_pricing:taxable.price }}.</p>
+                          {% else %}
+                            <p class="x-small subtitle">Your last {{ subscription.collection_method }} payment is due on
+                              {{ subscription.next_payment|date }} for {{ subscription|recurring_pricing:taxable.price }}.</p>
+                          {% endif %}
+                        {% elif subscription.status == 'pending-cancellation' %}
+                          <p class="x-small subtitle">Your subscription is pending cancellation. It will be deactivated on
+                            {{ subscription.next_payment|date }}.</p>
                         {% endif %}
-                      {% elif subscription.status == 'pending-cancellation' %}
-                        <p class="x-small subtitle">Your subscription is pending cancellation. It will be deactivated on
-                          {{ subscription.next_payment|date }}.</p>
                       {% endif %}
-                    {% endif %}
-                  </div>
-                  <div class="col-auto">
-                    <p class="mb-0 small">{{ subscription | pricing }}</p>
-                  </div>
+                    </div>
+                    <div class="col-auto">
+                      <p class="mb-0 small">{{ subscription|recurring_pricing:taxable.price }}</p>
+                    </div>
 
+                  {% endwith %}
                 </div>
               </li>
             {% endif %}
