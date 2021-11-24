@@ -110,6 +110,28 @@
                     {% endif %}
                   </div>
                 </li>
+                {# Display bank details so that it was possible to make the bank transfer without #}
+                {# having to find the first subscription email from Studio, or to contact support. #}
+                {% if pay_meth.method_type == 'ba' and not subscription.is_cancelled and not subscription.is_active and order %}
+                  <li class="list-group-item">
+                    <div class=row>
+                      <div class="col">
+                        <p class="h4 mb-0 text-muted">Bank details</p>
+                      </div>
+                      <div class="col-auto small">
+                        <pre>{% include "subscriptions/components/bank_transfer_details.txt" %}</pre>
+                      </div>
+                    </div>
+                    <div class=row>
+                      <div class="col small">
+                        <p>Use the following payment reference:</p>
+                      </div>
+                      <div class="col-auto small">
+                        <pre>{% include "subscriptions/components/bank_transfer_reference.txt" %}</pre>
+                      </div>
+                    </div>
+                  </li>
+                {% endif %}
               {% endwith %}
             {% endif %}
 

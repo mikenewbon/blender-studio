@@ -483,6 +483,16 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
         self.assertContains(response, 'Subscription On Hold', html=True)
         self.assertContains(response, 'Bank Transfer', html=True)
         self.assertContains(response, '€\xa014.90\u00A0/\u00A0month', html=True)
+        # Check that bank details are displayed
+        self.assertContains(
+            response,
+            'Blender Studio B.V.\n'
+            'Bank: ING Bank\n'
+            'IBAN: NL07 INGB 0008 4489 82\n'
+            'BIC/Swift: INGB NL2A\n',
+            html=True,
+        )
+        self.assertContains(response, f'Blender Studio order-{order.number}', html=True)
 
     @patch(
         'subscriptions.signals.tasks.send_mail_bank_transfer_required',
@@ -562,6 +572,16 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
         self.assertContains(response, 'Subscription On Hold', html=True)
         self.assertContains(response, 'Bank Transfer', html=True)
         self.assertContains(response, '€\xa026.45\u00A0/\u00A0quarter', html=True)
+        # Check that bank details are displayed
+        self.assertContains(
+            response,
+            'Blender Studio B.V.\n'
+            'Bank: ING Bank\n'
+            'IBAN: NL07 INGB 0008 4489 82\n'
+            'BIC/Swift: INGB NL2A\n',
+            html=True,
+        )
+        self.assertContains(response, f'Blender Studio order-{order.number}', html=True)
 
     @patch(
         # Make sure background task is executed as a normal function
