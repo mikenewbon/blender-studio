@@ -1,11 +1,8 @@
 """Custom file storage classes."""
-from botocore.client import Config
 from django.conf import settings
 from storages.backends.s3boto3 import S3Boto3Storage
 import boto3
-import mimetypes
-
-import common.upload_paths
+from botocore.client import Config
 
 _s3_client = None
 
@@ -37,21 +34,17 @@ class S3Boto3CustomStorage(S3Boto3Storage):
         return params
 
 
-def _get_s3_client():
-    return boto3.client(
-        's3',
-        config=Config(signature_version='s3v4'),
-        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-        region_name=settings.AWS_S3_REGION_NAME,
-    )
-
-
 def get_s3_url(path, expires_in_seconds=3600):
     """Generate a pre-signed S3 URL to a given path."""
     global _s3_client
     if not _s3_client:
-        _s3_client = _get_s3_client()
+        _s3_client = boto3.client(
+            's3',
+            config=Config(signature_version='s3v4'),
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+            region_name=settings.AWS_S3_REGION_NAME,
+        )
 
     return _s3_client.generate_presigned_url(
         'get_object',
@@ -60,25 +53,5 @@ def get_s3_url(path, expires_in_seconds=3600):
             'Key': path,
         },
         HttpMethod='GET',
-        ExpiresIn=expires_in_seconds,
-    )
-
-
-def get_s3_upload_url(filename: str, expires_in_seconds=60 * 60 * 24 * 2):
-    """Generate an S3 URL for upload."""
-    global _s3_client
-    if not _s3_client:
-        _s3_client = _get_s3_client()
-    path = common.upload_paths.get_upload_to_hashed_path(None, filename)
-    content_type, _ = mimetypes.guess_type(filename)
-    content_disposition = f'attachment; filename="{filename}"'
-    return _s3_client.generate_presigned_url(
-        ClientMethod='put_object',
-        Params={
-            'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-            'Key': str(path),
-            'ContentDisposition': content_disposition,
-            'ContentType': content_type,
-        },
         ExpiresIn=expires_in_seconds,
     )
