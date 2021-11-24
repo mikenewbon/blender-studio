@@ -888,7 +888,7 @@ six = ">=1.11.0"
 
 [[package]]
 name = "looper"
-version = "1.9.7rc4"
+version = "1.9.7rc5"
 description = ""
 category = "main"
 optional = false
@@ -915,7 +915,7 @@ zeep = "4.0.0"
 type = "git"
 url = "git://git.blender.org/looper.git"
 reference = "patched-bt-gateway-collection-methods"
-resolved_reference = "321120be4670c34bc8675e3b2e21f3c1a7b90f9b"
+resolved_reference = "03ca37454faef22fb9b3b23c049b9b3d308afb7f"
 
 [[package]]
 name = "lxml"
