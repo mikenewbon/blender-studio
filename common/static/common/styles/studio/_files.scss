@@ -15,7 +15,8 @@
       color: $white;
       text-decoration: none;
 
-      h4, .h4 {
+      h4,
+      .h4 {
         color: white;
       }
     }
@@ -40,7 +41,8 @@
     transition: $transition-base;
   }
 
-  h4, .h4 {
+  h4,
+  .h4 {
     color: $highlight-white-xstrong;
     transition: $transition-base;
   }
@@ -139,6 +141,7 @@
   padding: 0;
   position: relative;
   width: 100%;
+  height: 100%;
 
   .file-modal-link,
   .file-folder-link {
@@ -157,6 +160,24 @@
     position: absolute;
     right: $spacer / 4;
   }
+
+  &.aspect-16by9 {
+    &:before {
+      content: "";
+      width: 1px;
+      margin-left: -1px;
+      float: left;
+      height: 0;
+      padding-top: 591.44px / 1127.34px * 100%;
+    }
+
+    &:after {
+      /* to clear float */
+      content: "";
+      display: table;
+      clear: both;
+    }
+  }
 }
 
 .file-body {
@@ -171,7 +192,8 @@
     line-height: $headings-line-height;
   }
 
-  h4,.h4 {
+  h4,
+  .h4 {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -305,7 +327,7 @@
 // different style for the grid view and carousel views
 .files {
 
-  &.grid{
+  &.grid {
     margin-bottom: $spacer / 2;
   }
 
