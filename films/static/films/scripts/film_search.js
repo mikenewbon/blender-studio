@@ -129,7 +129,7 @@ const renderHits = (renderOptions, isFirstRender) => {
               <div class="col-12 col-sm-6 col-lg-4 file grid-item">
 
                   <div class="file-header">
-                    <a class="file-header-link" href="${item.url}" aria-label="${item.name}">
+                    <a class="file-folder-link" href="${item.url}" aria-label="${item.name}">
                       <img src="${item.thumbnail_url || fileIconURL}" class="${
               item.thumbnail_url ? 'card-img' : 'file-icon'
             }" loading=lazy aria-label="${item.name}">
