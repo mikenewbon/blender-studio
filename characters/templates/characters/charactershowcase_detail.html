@@ -20,7 +20,7 @@
             {% get_video_progress_seconds video as start_position %}
             <div class="col">
               {% if character_showcase.is_free or request.user|has_active_subscription %}
-                {% include 'common/components/video_player.html' with url=video.source.url progress_url=video.progress_url start_position=start_position poster=video.thumbnail_m_url tracks=video.tracks.all %}
+                {% include 'common/components/video_player.html' with url=video.source.url progress_url=video.progress_url start_position=start_position poster=video.thumbnail_m_url tracks=video.tracks.all loop=video.loop %}
               {% else %}
                 {% include 'common/components/content_locked.html' with background=character_showcase.static_asset.thumbnail_m_url %}
               {% endif %}

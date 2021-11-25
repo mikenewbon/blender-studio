@@ -1,5 +1,5 @@
 <div class="video-player {% if rounded %}rounded{% endif %} {% if classes %}{{ classes}}{% endif %}" {% if progress_url %}data-progress-url="{{ progress_url }}"{% endif %} {% if start_position %}data-start-position="{{ start_position }}"{% endif %}>
-  <video {% if asset.static_asset.video.loop %}loop{% endif %} playsinline controls {% if poster %}data-poster="{{ poster }}"{% endif %}>
+  <video {% if loop %}loop{% endif %} playsinline controls {% if poster %}data-poster="{{ poster }}"{% endif %}>
     <source src="{{ url }}">
     {% for track in tracks %}
       <track kind="captions" label="{{ track.get_language_display }}" src="{{ track.url }}" srclang="{{ track.language }}" {% if track.id == 1 %}default{% endif %}/>
