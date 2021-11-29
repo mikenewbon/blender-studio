@@ -50,10 +50,7 @@ class CancelSubscriptionView(SingleSubscriptionMixin, FormView):
     template_name = 'subscriptions/cancel.html'
     form_class = CancelSubscriptionForm
     initial = {'confirm': False}
-
-    def get_success_url(self) -> str:
-        """Get a URL to redirect to upon success."""
-        return reverse('user-settings-billing')
+    success_url = reverse_lazy('user-settings-billing')
 
     def form_valid(self, form):
         """Cancel the subscription."""
