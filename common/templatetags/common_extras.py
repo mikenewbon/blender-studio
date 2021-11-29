@@ -112,12 +112,13 @@ def endswith(value: str, suffix: str) -> bool:
 def add_form_classes(form, size_class=""):
     """Add Bootstrap classes and our custom classes to the form fields."""
     for field_name, field in form.fields.items():
-        if getattr(field.widget, 'input_type', None) in ('radio', 'checkbox'):
+        input_type = getattr(field.widget, 'input_type', None)
+        if input_type in ('radio', 'checkbox'):
             continue
         classes = {'form-control'}
         if size_class:
             classes.add(f'form-control-{size_class}')
-        if field.widget.input_type == 'select':
+        if input_type == 'select':
             classes.add('custom-select')
             if size_class:
                 classes.add(f'custom-select-{size_class}')
