@@ -37,6 +37,8 @@
               {% include 'blog/card_blog.html' with post=card %}
             {% elif media_type == "training" %}
               {% include "training/components/card_training.html" with training=card card_sizes="col-12 col-sm-6 col-lg-4" %}
+            {% elif media_type == "film" %}
+              {% include "films/components/card_film.html" with film=card card_sizes="col-lg-3 col-6 col-md-4" %}
             {% endif %}
           </div>
         {% endfor %}
@@ -50,6 +52,8 @@
               {% include 'blog/card_blog.html' with post=card %}
             {% elif media_type == "training" %}
               {% include "training/components/card_training.html" with training=card card_sizes="col-12 col-sm-6 col-lg-4" %}
+            {% elif media_type == "film" %}
+              {% include "films/components/card_film.html" with film=card card_sizes="col-lg-3 col-6 col-md-4" %}
             {% endif %}
           </div>
         {% endfor %}
