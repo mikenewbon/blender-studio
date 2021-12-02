@@ -41,7 +41,7 @@
       {% endif %}
 
       {% if user.is_staff %}
-        {% firstof item.charachter.admin_url item.admin_url as admin_url %}
+        {% firstof item.character.admin_url item.admin_url as admin_url %}
         <a href="{{ admin_url }}" class="btn btn-sm btn-icon btn-dark">
           <i class="material-icons btn-material-icons">create</i>
         </a>
