@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container-xl py-2 py-md-3">
+  <div class="container-xxl py-2 py-md-3">
 
     <div class="row justify-content-center mb-3">
       <div class="col-lg-10">
@@ -51,49 +51,42 @@
 
             <div class="text-muted small">
 
-              <p class="d-inline mr-2">{{ character_showcase.date_published|date:"jS F Y" }}</p>
+              <p class="d-inline me-2">{{ character_showcase.date_published|date:"jS F Y" }}</p>
               {% if character_showcase.static_asset.license %}
-                <a href="{{ character_showcase.static_asset.license.url }}" target="_blank" class="d-inline mr-2 text-muted"
-                  data-toggle="tooltip" data-placement="bottom" title="{{ character_showcase.static_asset.license.description }}">
+                <a href="{{ character_showcase.static_asset.license.url }}" target="_blank" class="d-inline me-2 text-muted"
+                  data-bs-toggle="tooltip" data-placement="bottom" title="{{ character_showcase.static_asset.license.description }}">
                   <i class="material-icons icon-inline small">info</i>
                   {{ character_showcase.static_asset.license }}
                 </a>
               {% endif %}
               {% if character.film %}
-                <a class="d-inline mr-2 text-muted" href="{{ character.film.url }}">
+                <a class="d-inline me-2 text-muted" href="{{ character.film.url }}">
                   <i class="material-icons icon-inline small">movie</i>
                   {{ character.film }}
                 </a>
               {% endif %}
               {% if character_showcase.is_free %}
-                <p class="d-inline mr-2 text-success">
+                <p class="d-inline me-2 text-success">
                   <i class="material-icons icon-inline small">lock_open</i>
                   Free
                 </p>
               {% endif %}
-              <p class="d-inline mr-2 text-muted">
+              <p class="d-inline me-2 text-muted">
                 Blender Version: {{ character_showcase.min_blender_version }}
               </p>
 
             </div>
           </div>
 
-
-
           <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
-            <div class="training-toolbar-container">
-
-              <div class="training-toolbar">
-                {% include "characters/components/buttons_toolbar.html" with showcase_or_version=character_showcase %}
-              </div>
-            </div>
+            {% include "common/components/navigation/buttons_toolbar.html" with item=character_showcase like_url=character.like_url likes_count=character.likes.count liked=character.liked %}
           </div>
         </div>
 
         <div class="text-muted small row">
           <div class="col-auto d-flex mb-2">
             <div class="row">
-              <div class="col-auto pr-0">
+              <div class="col-auto pe-0">
                 {% if character_showcase.static_asset.author_image_url %}
                   <img src="{{ character_showcase.static_asset.author_image_url }}" class="profile">
                 {% else %}

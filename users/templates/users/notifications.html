@@ -3,15 +3,15 @@
 {% block bodyclasses %}spacer{% endblock bodyclasses %}
 
 {% block content %}
-  <div class="container-xl">
-    <section class="my-4 text-center">
-      {% include "common/components/simple_header.html" with title="Notifications" subtitle="All the latest likes and replies to your content are here." %}
-      <button class="btn btn-dark btn-sm mb-3" data-mark-all-read-url="{% url 'api-notifications-mark-read' %}">
-        <i
-          class="material-icons {% if user.notifications_unread.count >= 1 %}unread{% endif %}">markunread_mailbox</i>
-        <span>Mark all as read</span>
-      </button>
-      <ul class="list-group activity-list">
+  <div class="container-md my-4 text-center">
+    {% include "common/components/simple_header.html" with title="Notifications" subtitle="All the latest likes and replies to your content are here." %}
+    <button class="btn btn-dark btn-sm mb-3" data-mark-all-read-url="{% url 'api-notifications-mark-read' %}">
+      <i
+        class="material-icons {% if user.notifications_unread.count >= 1 %}unread{% endif %}">markunread_mailbox</i>
+      <span>Mark all as read</span>
+    </button>
+    <div class="row justify-content-center">
+      <ul class="list-group activity-list col-xl-8">
 
         {% for notification in notifications %}
           {% with action=notification.action %}
@@ -29,7 +29,7 @@
           {% include "common/components/navigation/pagination.html" %}
         </div>
       </div>
+    </div>
 
-    </section>
   </div>
 {% endblock %}

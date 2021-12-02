@@ -150,7 +150,7 @@
 }
 
 .notification-button {
-  @extend .search-button;
+  @extend .search-button!optional;
   position: relative;
 }
 

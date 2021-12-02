@@ -30,7 +30,7 @@
     {% if comment.is_archived %}
       <p class="badge archived-badge">Archived</p>
       {% if comment.is_top_level %}
-        <a class="comment-expand-archived" data-toggle="collapse" href="#collapse-{{ comment.id }}" role="button"
+        <a class="comment-expand-archived" data-bs-toggle="collapse" href="#collapse-{{ comment.id }}" role="button"
           aria-expanded="false" aria-controls="collapseExample">Show
           comment{% if comment.replies|length >= 1 %}s{% endif %}</a>
       {% endif %}
@@ -63,7 +63,7 @@
 
               {% if comment.edit_url or comment.archive_tree_url %}
                 <button class="btn btn-transparent btn-xs btn-icon comment-material-button comment-dropdown"
-                  data-toggle="dropdown">
+                  data-bs-toggle="dropdown">
                   <i class="material-icons">more_horiz</i>
                 </button>
                 <div class="dropdown-menu">
@@ -143,7 +143,7 @@
           {% include 'comments/components/comment_tree.html' with comment_trees=c.replies|slice:':1' %}
           {% if c.replies|length > 1 %}
 
-            <a class="btn btn-dark btn-sm more-comments-button collapsed" data-toggle="collapse"
+            <a class="btn btn-dark btn-sm more-comments-button collapsed" data-bs-toggle="collapse"
               href="#replies-collapse-{{ comment.id }}" role="button" aria-expanded="false"
               aria-controls="replies-collapse-{{ comment.id }}">
               Show more replies

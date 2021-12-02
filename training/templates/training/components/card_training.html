@@ -1,59 +1,54 @@
-<div class="{{ card_sizes|default:"col-12 col-sm-6 col-lg-4" }} card-grid-item">
-  <div class="card card-training" {% if training.favorited %}data-checked="checked"
-  {% endif %} data-favorite-url="{{ training.favorite_url }}" data-training-id="{{ training.id }}">
+<div class="card card-training {{ card_sizes|default:"col-12 col-sm-6 col-lg-4" }} card-grid-item" {% if training.favorited %}data-checked="checked"
+{% endif %} data-favorite-url="{{ training.favorite_url }}" data-training-id="{{ training.id }}">
 
-    <div class="card-header">
-      <a href="{{ training.url }}" class="card-header-link">
-        <img src="{% firstof training.static_asset.thumbnail_s_url training.thumbnail_s_url %}" class="card-img" alt="{{ training.name }}">
-      </a>
-      {% if request.user.is_authenticated %}
-        {% include 'training/components/card_button_favorite.html' with class='btn-save-media card-training-favorite' checked=training.favorited %}
-      {% endif %}
-    </div>
-
-    <a class="card-body" href="{{ training.url }}">
-
-      <h3 class="card-title">
-        {{ training.name }}
-      </h3>
-      <p class="card-text">{{ training.description }}</p>
+  <div class="card-header">
+    <a href="{{ training.url }}" class="card-header-link">
+      <img src="{% firstof training.static_asset.thumbnail_s_url training.thumbnail_s_url %}" class="card-img" alt="{{ training.name }}">
     </a>
+    {% if request.user.is_authenticated %}
+      {% include 'training/components/card_button_favorite.html' with class='btn-save-media card-training-favorite' checked=training.favorited %}
+    {% endif %}
+  </div>
 
-    <a  href="{{ training.url }}" class="card-footer">
-      {% comment %} {% if training.tags.all %}
+  <a class="card-body" href="{{ training.url }}">
+
+    <h3 class="card-title">
+      {{ training.name }}
+    </h3>
+    <p class="card-text">{{ training.description }}</p>
+  </a>
+
+  <a  href="{{ training.url }}" class="card-footer">
+    {% comment %} {% if training.tags.all %}
         <div class="pills mb-0">
           {% for tag in training.tags.all %}
             {% include 'common/components/cards/pill.html' with label=tag.name %}
           {% endfor %}
         </div>
       {% endif %} {% endcomment %}
-      <div class="card-subtitle-group">
-        <p class="card-subtitle">
+    <div class="card-subtitle-group">
+      <p class="card-subtitle">
+        <i class="material-icons icon-inline small">school</i>
+        {% firstof training.type.label training.get_type_display training.get_category_display %}
+      </p>
+      <p class="card-subtitle">
+        {% if training.get_difficulty_display or training.difficulty.label %}
+          <i class="material-icons icon-inline small">equalizer</i>
+          {% firstof training.get_difficulty_display training.difficulty.label %}
+        {% elif training.project %}
           <i class="material-icons icon-inline small">school</i>
-          {% firstof training.type.label training.get_type_display training.get_category_display %}
-        </p>
-        <p class="card-subtitle">
-          {% if training.get_difficulty_display or training.difficulty.label %}
-            <i class="material-icons icon-inline small">equalizer</i>
-            {% firstof training.get_difficulty_display training.difficulty.label %}
-          {% elif training.project %}
-            <i class="material-icons icon-inline small">school</i>
-            {{ training.project}}
-          {% elif training.film %}
-            <i class="material-icons icon-inline small">movie</i>
-            {{ training.film }}
-          {% endif %}
-        </p>
-        {% if training.is_free %}
-          <p class="d-inline mr-2 text-success small">
-            <i class="material-icons icon-inline small text-success">lock_open</i>
-            Free
-          </p>
+          {{ training.project}}
+        {% elif training.film %}
+          <i class="material-icons icon-inline small">movie</i>
+          {{ training.film }}
         {% endif %}
-      </div>
-
-    </a>
-
-
-  </div>
+      </p>
+      {% if training.is_free %}
+        <p class="d-inline me-2 text-success small">
+          <i class="material-icons icon-inline small text-success">lock_open</i>
+          Free
+        </p>
+      {% endif %}
+    </div>
+  </a>
 </div>

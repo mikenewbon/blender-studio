@@ -1,55 +1,53 @@
 {% load common_extras %}
 {% with showcase.get_absolute_url as detail_url %}
-  <div class="col-12 col-sm-6 col-lg-4 card-grid-item">
-    <div class="card">
-      <div class="card-header">
-        <a class="card-header-link" href="{{ detail_url }}" aria-label="{{ showcase.title }}">
-          {% if showcase.static_asset.thumbnail %}
-            {% block image %}
-              <img alt="{{ showcase.title }}" class="card-img" src="{{ showcase.static_asset.thumbnail_m_url }}">
-            {% endblock image %}
-          {% endif %}
-        </a>
-      </div>
-      <a href="{{ detail_url }}" class="card-body">
-
-        <h3 class="card-title">
-          {% if showcase.is_new and showcase.is_published %}
-            <div class="badge badge-primary">New</div>
-          {% endif %}
-          {{ showcase.title }}
-        </h3>
-        <p class="card-text">{{ showcase.description|unmarkdown|truncatewords:"10" }}</p>
-
-      </a>
-      <a href="{{ detail_url }}" class="card-footer">
-        <div class="card-subtitle-group">
-          {% if not showcase.is_published or not showcase.is_published %}
-            <div class="badge badge-danger mr-2">
-              Unpublished
-            </div>
-          {% else %}
-            <p class="card-subtitle">
-              <i class="material-icons icon-inline small">schedule</i>
-              <span class="date">
-                {{ showcase.date_published|date:"U" }}
-              </span>
-            </p>
-          {% endif %}
-          {% if showcase.is_free %}
-            <p class="d-inline mr-2 text-success small">
-              <i class="material-icons icon-inline small">lock_open</i>
-              Free
-            </p>
-          {% endif %}
-          {% if showcase.comments.count > 0 %}
-            <p class="card-subtitle">
-              <i class="material-icons icon-inline small">chat_bubble_outline</i>
-              {{ showcase.comments.count }}
-            </p>
-          {% endif %}
-        </div>
+  <div class="card col-12 col-sm-6 col-lg-4 card-grid-item">
+    <div class="card-header">
+      <a class="card-header-link" href="{{ detail_url }}" aria-label="{{ showcase.title }}">
+        {% if showcase.static_asset.thumbnail %}
+          {% block image %}
+            <img alt="{{ showcase.title }}" class="card-img" src="{{ showcase.static_asset.thumbnail_m_url }}">
+          {% endblock image %}
+        {% endif %}
       </a>
     </div>
+    <a href="{{ detail_url }}" class="card-body">
+
+      <h3 class="card-title">
+        {% if showcase.is_new and showcase.is_published %}
+          <div class="badge bg-primary">New</div>
+        {% endif %}
+        {{ showcase.title }}
+      </h3>
+      <p class="card-text">{{ showcase.description|unmarkdown|truncatewords:"10" }}</p>
+
+    </a>
+    <a href="{{ detail_url }}" class="card-footer">
+      <div class="card-subtitle-group">
+        {% if not showcase.is_published or not showcase.is_published %}
+          <div class="badge bg-danger me-2">
+            Unpublished
+          </div>
+        {% else %}
+          <p class="card-subtitle">
+            <i class="material-icons icon-inline small">schedule</i>
+            <span class="date">
+              {{ showcase.date_published|date:"U" }}
+            </span>
+          </p>
+        {% endif %}
+        {% if showcase.is_free %}
+          <p class="d-inline me-2 text-success small">
+            <i class="material-icons icon-inline small">lock_open</i>
+            Free
+          </p>
+        {% endif %}
+        {% if showcase.comments.count > 0 %}
+          <p class="card-subtitle">
+            <i class="material-icons icon-inline small">chat_bubble_outline</i>
+            {{ showcase.comments.count }}
+          </p>
+        {% endif %}
+      </div>
+    </a>
   </div>
 {% endwith %}

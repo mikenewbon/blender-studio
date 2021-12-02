@@ -27,7 +27,7 @@
   }
 
   @include media-breakpoint-up(sm) {
-    padding: ($jumbotron-padding * 4) ($jumbotron-padding * 2);
+    padding: ($spacer* 4) ($spacer * 2);
   }
 
   &.jumbotron-fluid {

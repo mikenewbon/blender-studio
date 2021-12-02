@@ -4,7 +4,7 @@
   {% include 'users/components/action_summary.html' %}
 
   {% if not notification.date_read and request.path == my_notifications_url %}
-    <button class="btn btn-sm btn-secondary btn-icon markasread" data-toggle="tooltip" data-placement="top"
+    <button class="btn btn-sm btn-secondary btn-icon markasread" data-bs-toggle="tooltip" data-placement="top"
       title="Mark as read" {% if notification %} data-mark-read-url="{{ notification.mark_read_url }}"
         data-is-read={% if notification.date_read %}"true"{% else %}"false"{% endif %} {% endif %}>
       <i class="material-icons">markunread_mailbox</i>

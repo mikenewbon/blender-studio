@@ -21,11 +21,11 @@
                 </div>
                 <div class="col-auto">
                   {% if subscription.status == "pending-cancellation" %}
-                    <p class="text-warning small mb-0 d-flex align-items-center font-weight-bold"><i class="material-icons ">hourglass_top</i> <span>Pending Cancellation</span></p>
+                    <p class="text-warning small mb-0 d-flex align-items-center fw-bold"><i class="material-icons ">hourglass_top</i> <span>Pending Cancellation</span></p>
                   {% elif subscription.status == "active" %}
-                    <p class="text-success small mb-0 d-flex align-items-center font-weight-bold"><i class="material-icons p ">done</i> <span>Active</span></p>
+                    <p class="text-success small mb-0 d-flex align-items-center fw-bold"><i class="material-icons p ">done</i> <span>Active</span></p>
                   {% else %}
-                    <p class="text-danger small mb-0 d-flex align-items-center font-weight-bold"><i class="material-icons">info</i> <span>Inactive</span></p>
+                    <p class="text-danger small mb-0 d-flex align-items-center fw-bold"><i class="material-icons">info</i> <span>Inactive</span></p>
                   {% endif %}
                 </div>
               </div>
@@ -224,7 +224,7 @@
                   </div>
                   <div class="col-auto">
                     <div class="d-flex justify-content-center">
-                      <a class="ml-auto small text-danger" href="{% url 'subscriptions:cancel' subscription.id %}">
+                      <a class="ms-auto small text-danger" href="{% url 'subscriptions:cancel' subscription.id %}">
                         <span>Cancel subscription</span>
                       </a>
                     </div>

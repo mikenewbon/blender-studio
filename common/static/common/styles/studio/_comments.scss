@@ -30,7 +30,8 @@
 
     .comment-expand-archived {
 
-      @include hover-focus {
+      &:hover,
+      &:focus {
         color: $white;
       }
 
@@ -114,7 +115,8 @@
     color: $highlight-white-xstrong;
 
     &:not(.disabled) {
-      @include hover-focus {
+      &:hover,
+      &:focus {
         color: $white;
       }
     }
@@ -148,7 +150,7 @@
   @include border-radius($input-border-radius-sm);
   @include font-size($input-font-size-sm);
   height: auto;
-  line-height: $input-line-height-sm;
+  line-height: $input-line-height;
   min-height: $input-height-sm;
   padding: $input-padding-y-sm $input-padding-x-sm;
   position: relative;

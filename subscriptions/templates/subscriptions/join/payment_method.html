@@ -37,7 +37,7 @@
 
         </div>
 
-        <div class="payment-tabs-footer border-bottom">
+        <div class="payment-tabs-footer border-bottom border-1">
           <div class="row">
             {% if messages %}
               {% for message in messages %}
@@ -50,20 +50,20 @@
 
           <div class="row">
             <div class="col-auto">
-              <p class="subtitle small font-weight-bold mb-0">Plan:</p>
+              <p class="subtitle small fw-bold mb-0">Plan:</p>
             </div>
 
-            <div class="col text-right">
+            <div class="col text-end">
               <p class="subtitle small mb-0">{{ current_plan_variation.collection_method|capfirst }} (<a href="{{ plan_url }}" class="subtitle underline" >Change</a>)</p>
             </div>
           </div>
 
           <div class="row">
             <div class="col-auto">
-              <p class="subtitle small font-weight-bold mb-0">Billing:</p>
+              <p class="subtitle small fw-bold mb-0">Billing:</p>
             </div>
 
-            <div class="col text-right">
+            <div class="col text-end">
               <fieldset class="checkout-form-billing-address-readonly">
                 {% include "subscriptions/components/billing_address_form_readonly.html"%}
               </fieldset>

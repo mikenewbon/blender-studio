@@ -8,7 +8,7 @@
     <div class="drawer-nav-header">
       <p class="subtitle">
         {% if training.is_free %}
-          <i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top"
+          <i class="material-icons icon-inline small text-success" data-bs-toggle="tooltip" data-placement="top"
             title="Free">lock_open</i>
         {% endif %}
         {% firstof training.type.label training.type|capfirst %}
@@ -19,14 +19,14 @@
     <div class="drawer-nav-group">
       <div class="drawer-nav-dropdown-wrapper">
         <a class="drawer-nav-dropdown h3" href="{{ navigation.overview_url }}">
-          <i class="material-icons mr-2">feed</i>
+          <i class="material-icons me-2">feed</i>
           {% firstof training.type.label training.type|capfirst %} Overview
         </a>
       </div>
       {% for page in training.flatpages.all %}
         <div class="drawer-nav-dropdown-wrapper">
           <a class="drawer-nav-dropdown h3" href="{{ page.url }}">
-            <i class="material-icons mr-2">feed</i>
+            <i class="material-icons me-2">feed</i>
             {{ page.title }}
           </a>
         </div>
@@ -38,7 +38,7 @@
         <div class="drawer-nav-group">
           <div class="drawer-nav-dropdown-wrapper ">
             <a class="drawer-nav-dropdown h3 {% if chapter_navigation.current %} active {% else %}collapsed{% endif %}"
-              data-toggle="collapse" data-target="#nav-{{ chapter_navigation.slug }}">
+              data-bs-toggle="collapse" data-bs-target="#nav-{{ chapter_navigation.slug }}">
               <span class="drawer-nav-dropdown-text">{{ chapter_navigation.name }}</span>
               <i class="material-icons">keyboard_arrow_down</i>
             </a>
@@ -71,7 +71,7 @@
     <div class="drawer-nav-header">
       <p class="subtitle small mb-1">
         {% if training.is_free %}
-          <i class="material-icons icon-inline small text-success" data-toggle="tooltip" data-placement="top"
+          <i class="material-icons icon-inline small text-success" data-bs-toggle="tooltip" data-placement="top"
             title="Free">lock_open</i>
         {% endif %}
         {% firstof training.type.label training.type|capfirst %}
@@ -83,16 +83,16 @@
 
   <div class="drawer-nav-group">
     <div class="drawer-nav-dropdown-wrapper">
-      <a class="drawer-nav-dropdown font-weight-bold" href="{{ navigation.overview_url }}" data-tooltip="tooltip-overflow"
+      <a class="drawer-nav-dropdown fw-bold" href="{{ navigation.overview_url }}" data-bs-tooltip="tooltip-overflow"
         data-placement="top" title="{% firstof training.type.label training.type|capfirst %} Overview">
-        <i class="material-icons mr-2">feed</i>
+        <i class="material-icons me-2">feed</i>
         <span class="overflow-text">{% firstof training.type.label training.type|capfirst %} Overview</span>
       </a>
     </div>
     {% for page in training.flatpages.all %}
       <div class="drawer-nav-dropdown-wrapper">
-        <a class="drawer-nav-dropdown h3" href="{{ page.url }}" data-tooltip="tooltip-overflow" data-placement="top" title="{{ page.title }}">
-          <i class="material-icons mr-2">feed</i>
+        <a class="drawer-nav-dropdown h3" href="{{ page.url }}" data-bs-tooltip="tooltip-overflow" data-placement="top" title="{{ page.title }}">
+          <i class="material-icons me-2">feed</i>
           <span class="drawer-nav-dropdown-text overflow-text">{{ page.title }}</span>
         </a>
       </div>
@@ -104,18 +104,18 @@
 
       <div class="drawer-nav-dropdown-wrapper ">
         <a href="{{ chapter_navigation.url }}"
-          class="drawer-nav-dropdown dropdown font-weight-bold {% if chapter_navigation.current %} active{% endif %}"
-          data-tooltip="tooltip-overflow" data-placement="top" title="{{ chapter_navigation.name }}">
+          class="drawer-nav-dropdown dropdown fw-bold {% if chapter_navigation.current %} active{% endif %}"
+          data-bs-tooltip="tooltip-overflow" data-placement="top" title="{{ chapter_navigation.name }}">
           <span class="drawer-nav-dropdown-text overflow-text">{{ chapter_navigation.name }}</span>
           {% if not chapter_navigation.is_published %}
-            <span class="ml-auto">
-              <i class="material-icons icon-inline small text-danger ml-1 mr-0" data-toggle="tooltip" data-placement="top" title="Unpublished">visibility_off</i>
+            <span class="ms-auto">
+              <i class="material-icons icon-inline small text-danger ms-1 me-0" data-bs-toggle="tooltip" data-placement="top" title="Unpublished">visibility_off</i>
             </span>
           {% endif %}
           {% comment %} <i class="material-icons">keyboard_arrow_down</i> {% endcomment %}
         </a>
         <a class="drawer-nav-dropdown icon {% if chapter_navigation.current %} active {% else %}collapsed{% endif %}"
-          data-toggle="collapse" data-target="#nav-{{ chapter_navigation.slug }}">
+          data-bs-toggle="collapse" data-bs-target="#nav-{{ chapter_navigation.slug }}">
           <i class="material-icons">keyboard_arrow_down</i>
         </a>
       </div>

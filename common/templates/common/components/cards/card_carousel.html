@@ -14,21 +14,21 @@
     </div>
     <div class="col-md-auto d-none d-md-block carousel-card-toolbar">
       <a class="btn btn-lg btn-transparent btn-icon {% if card_set|length <= 1 %}onlyOne{% elif card_set|length <= slides %} lessThanSlides {% endif %}"
-        href="#{{ id }}" role="button" data-slide="prev">
+        data-bs-target="#{{ id }}" role="button" data-bs-slide="prev">
         <i class="material-icons">arrow_back</i>
       </a>
       <a class="btn btn-lg btn-transparent btn-icon {% if card_set|length <= 1 %}onlyOne{% elif card_set|length <= slides %} lessThanSlides {% endif %}"
-        href="#{{ id }}" role="button" data-slide="next">
+        data-bs-target="#{{ id }}" role="button" data-bs-slide="next">
         <i class="material-icons">arrow_forward</i>
       </a>
     </div>
   </div>
   <div class="row">
-    <div id="{{ id }}" class="carousel carousel-card-{{ slides|default:"3" }} slide w-100" data-touch="true"
-      data-ride="carousel" data-interval="0">
-      <div class="carousel-inner w-100" aria-roledescription="carousel">
+    <div id="{{ id }}" class="carousel carousel-card carousel-card-{{ slides|default:"3" }} slide w-100" data-bs-touch="true"
+      data-bs-ride="carousel" data-bs-interval="0">
+      <div class="carousel-inner" aria-roledescription="carousel">
         {% for card in card_set|slice:':1' %}
-          <div class="carousel-item active">
+          <div class="carousel-item row active">
             {% if media_type == "file" %}
               {% include "common/components/file_carousel.html" with film_asset=card card_sizes="col-lg-3 col-6 col-md-4" %}
             {% elif media_type == "section" %}
@@ -41,7 +41,7 @@
           </div>
         {% endfor %}
         {% for card in card_set|slice:'1:6' %}
-          <div class="carousel-item">
+          <div class="carousel-item row">
             {% if media_type == "file" %}
               {% include "common/components/file_carousel.html" with film_asset=card card_sizes="col-lg-3 col-6 col-md-4" %}
             {% elif media_type == "section" %}
@@ -60,11 +60,11 @@
   <div class="row d-block d-md-none">
     <div class="col-md-auto carousel-card-toolbar">
       <a class="btn btn-lg btn-transparent btn-icon {% if card_set|length <= 1 %}onlyOne{% elif card_set|length <= slides %} lessThanSlides {% endif %}"
-        href="#{{ id }}" role="button" data-slide="prev">
+        data-bs-target="#{{ id }}" role="button" data-bs-slide="prev">
         <i class="material-icons">arrow_back</i>
       </a>
       <a class="btn btn-lg btn-transparent btn-icon {% if card_set|length <= 1 %}onlyOne{% elif card_set|length <= slides %} lessThanSlides {% endif %}"
-        href="#{{ id }}" role="button" data-slide="next">
+        data-bs-target="#{{ id }}" role="button" data-bs-slide="next">
         <i class="material-icons">arrow_forward</i>
       </a>
     </div>

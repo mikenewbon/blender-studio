@@ -119,9 +119,9 @@ def add_form_classes(form, size_class=""):
         if size_class:
             classes.add(f'form-control-{size_class}')
         if input_type == 'select':
-            classes.add('custom-select')
+            classes.add('form-select')
             if size_class:
-                classes.add(f'custom-select-{size_class}')
+                classes.add(f'form-select-{size_class}')
         field.widget.attrs.update({'class': ' '.join(classes)})
 
     # Add error class to all the fields with errors

@@ -30,7 +30,7 @@
         <div class="col">
           <label class="h4 mb-1 {% if disabled == True %} subtitle {% endif %}" for="renewal-type">Renewal
             Type</label>
-          <select id="renewal-type" class="select-plan custom-select form-control" autocomplete="off"
+          <select id="renewal-type" class="select-plan form-select form-control" autocomplete="off"
             {% if disabled == True %} readonly {% endif %}>
             {% for plan in plans %}
               <option {% if current_plan_variation.plan_id == plan.pk %}selected{% endif %} value="{{ plan.pk }}"
@@ -48,7 +48,7 @@
             <label class="h4 mb-1 {% if disabled == True %} subtitle {% endif %}" for="renewal-period">Renewal
               Period</label>
             <select id="renewal-period" name="plan_variation_id"
-              class="select-plan-variation custom-select form-control" autocomplete="off" {% if disabled == True %}
+              class="select-plan-variation form-select form-control" autocomplete="off" {% if disabled == True %}
                 readonly {% endif %}>
               {% for plan in plans %}
                 {% for variation in plan.variations.active_ordered_by_renewal %}

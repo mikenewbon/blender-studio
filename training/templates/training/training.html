@@ -22,7 +22,7 @@
           <div class="col-12 col-md mb-2 mb-md-3">
             <p class="subtitle">
               {% if training.is_free %}
-                <i class="material-icons icon-inline text-success" data-toggle="tooltip" data-placement="top"
+                <i class="material-icons icon-inline text-success" data-bs-toggle="tooltip" data-placement="top"
                   title="Free">lock_open</i>
               {% endif %}
               {{ training.type.label }}
@@ -30,19 +30,19 @@
             <h2 class="mb-0">{{ training.name }}</h2>
           </div>
           <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
-            <div class="training-toolbar-container">
+            <div class="button-toolbar-container">
 
-              <div class="pills training-toolbar-pills">
+              <div class="pills button-toolbar-pills">
                 {% for tag in training.tags %}
                   {% include 'common/components/cards/pill.html' with label=tag %}
                 {% endfor %}
               </div>
 
-              <div class="training-toolbar">
+              <div class="button-toolbar">
                 {% if request.user.is_authenticated %}
                   <a class="btn btn-sm save-button {% if not training.favorited %}btn-dark{% else %}btn-primary{% endif %}"
                     data-favorite-url="{{ training.favorite_url }}" {% if training.favorited %}data-checked="checked"
-                    {% endif %} data-toggle="tooltip" {% if training.favorited %}title="Save for later"
+                    {% endif %} data-bs-toggle="tooltip" {% if training.favorited %}title="Save for later"
                     {% else %}title=" Remove from saved for later" {% endif %}>
                     <i class="material-icons">{% if not training.favorited %}add{% else %}check{% endif %}</i>
                     <span>{% if not training.favorited %}Save{% else %}Saved{% endif %}</span>
@@ -55,10 +55,10 @@
                   </a>
                 {% endif %}
 
-                <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
+                <button data-bs-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
                   <i class="material-icons btn-material-icons">more_horiz</i>
                 </button>
-                <div class="dropdown-menu dropdown-menu-right">
+                <div class="dropdown-menu dropdown-menu-end">
                   <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank"
                     class="dropdown-item">
                     <i class="material-icons">flag</i>
@@ -85,7 +85,7 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="row mb-2">
-                    <div class="col-auto pr-0">
+                    <div class="col-auto pe-0">
                       <img src="{% static 'common/images/blank-profile-pic.jpg' %}" class="profile">
                     </div>
                     <div class="col-auto">
@@ -105,8 +105,8 @@
                   <table class="table table-sm mb-0">
                     <tbody>
                       <tr>
-                        <td class="font-weight-bold">Difficulty</td>
-                        <td class="text-right">
+                        <td class="fw-bold">Difficulty</td>
+                        <td class="text-end">
                           <div class="badge badge-difficulty badge-{{ training.difficulty.value }}">
                             <i class="material-icons btn-material-icons">extension</i>
                             {{ training.difficulty.label }}
@@ -114,12 +114,12 @@
                         </td>
                       </tr>
                       <tr>
-                        <td class="font-weight-bold">Last updated</td>
-                        <td class="text-right">{{ training.date_updated|date:"jS F Y" }}</td>
+                        <td class="fw-bold">Last updated</td>
+                        <td class="text-end">{{ training.date_updated|date:"jS F Y" }}</td>
                       </tr>
                       <tr>
-                        <td class="font-weight-bold">Estimated duration</td>
-                        <td class="text-right">4h 32m</td>
+                        <td class="fw-bold">Estimated duration</td>
+                        <td class="text-end">4h 32m</td>
                       </tr>
                     </tbody>
                   </table>

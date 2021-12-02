@@ -6,7 +6,7 @@
     <div class="col">
       <h4 class="mb-0">Renewal</h4>
     </div>
-    <div class="col text-right">
+    <div class="col text-end">
       {{ current_plan_variation.collection_method|capfirst }}, {{ current_plan_variation|recurring_pricing:current_price.price }}
     </div>
   </div>
@@ -15,7 +15,7 @@
     <div class="col text-bold due-today">
       <h2 class="mb-0">Total</h2>
     </div>
-    <div class="col text-right">
+    <div class="col text-end">
       <h2 class="mb-0"><span>{{ current_price.price.with_currency_symbol }}</span></h2>
       <p class="subtitle x-small"><span>{{ current_price.format_tax_amount }}</span></p>
     </div>

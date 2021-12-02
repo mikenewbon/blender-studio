@@ -4,7 +4,7 @@
   <tbody>
     {% for subscription in user.subscription_set.all %}
       <tr>
-        <td class="font-weight-bold">Subscription #{{ subscription.pk }}</td>
+        <td class="fw-bold">Subscription #{{ subscription.pk }}</td>
         <td>{{ subscription.status }}</td>
         <td><a href="{% url 'subscriptions:manage' subscription_id=subscription.pk %}">Manage</a></td>
       </tr>
@@ -15,7 +15,7 @@
 {% if user|can_subscribe %}
   <div class="row">
     <div class="col">
-      <a class="btn btn-primary btn-lg btn-block mt-3" href="{% url 'subscriptions:join' %}">Subscribe</a>
+      <a class="btn btn-primary btn-block" href="{% url 'subscriptions:join' %}">Subscribe</a>
     </div>
   </div>
 {% endif %}

@@ -26,7 +26,7 @@
           </div>
           <form id="settings-form" method="POST" action="{% url 'production-credit' film_slug=film.slug %}">
             {% for field in form %}
-              <div class="form-group form-check pl-0 mb-3">
+              <div class="form-group form-check ps-0 mb-3">
                 {% csrf_token %}
                 {{ field.errors }}
                 <label class="form-check-label">

@@ -186,9 +186,7 @@ PIPELINE = {
         },
         'vendor': {
             'source_filenames': [
-                'common/scripts/vendor/popper.min.js',
-                'common/scripts/vendor/jquery-3.5.1.js',
-                'common/scripts/vendor/bootstrap.js',
+                'common/scripts/vendor/bootstrap.bundle.js',
                 'common/scripts/vendor/plyr.polyfilled.js',
                 'common/scripts/vendor/js.cookie.js',
                 'common/scripts/vendor/imagesloaded.pkgd.js',

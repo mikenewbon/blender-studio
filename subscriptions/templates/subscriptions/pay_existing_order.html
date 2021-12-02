@@ -7,7 +7,7 @@
   <div class="checkout-container">
     <section class="checkout">
       <div class="mx-auto">
-        <a class="text-muted" class="float-right" href="{% url 'user-settings-billing' %}"><i class="fa fa-angle-left pr-3"></i>back to subscription settings</a>
+        <a class="text-muted" class="float-end" href="{% url 'user-settings-billing' %}"><i class="fa fa-angle-left pe-3"></i>back to subscription settings</a>
         <div class="alert alert-sm">
           Your {% include "subscriptions/components/info_with_status.html" %}. It will be activated as soon as the outstanding amount is paid
         </div>
@@ -27,7 +27,7 @@
             <div class="payment-content-inner">
               <section class="checkout-form-fields mb-n2">
                 {% with form|add_form_classes as form %}
-                  <a class="text-muted float-right small" href="{% url 'subscriptions:billing-address' %}"><i class="fa fa-angle-left pr-3"></i>change billing details</a>
+                  <a class="text-muted float-end small" href="{% url 'subscriptions:billing-address' %}"><i class="fa fa-angle-left pe-3"></i>change billing details</a>
                   <fieldset class="checkout-form-billing-address-readonly mb-2">
                     {% include "subscriptions/components/billing_address_form_readonly.html" %}
                   </fieldset>

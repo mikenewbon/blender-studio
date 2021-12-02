@@ -38,14 +38,14 @@
 
       <div class="drawer-nav-dropdown-wrapper">
         <a class="drawer-nav-dropdown h3 " href="{% url 'film-gallery' film_slug=film.slug %}">
-          <i class="material-icons mr-2">grade</i>
+          <i class="material-icons me-2">grade</i>
           Featured Artwork
         </a>
       </div>
 
       <div class="drawer-nav-dropdown-wrapper">
-        <a class="drawer-nav-dropdown font-weight-bold" href="{% url 'film-all-assets' film_slug=film.slug %}">
-          <i class="material-icons mr-2">search</i>
+        <a class="drawer-nav-dropdown fw-bold" href="{% url 'film-all-assets' film_slug=film.slug %}">
+          <i class="material-icons me-2">search</i>
           All Artwork
         </a>
       </div>
@@ -63,13 +63,13 @@
             </span>
           </a>
           <a class="drawer-nav-dropdown icon {% if current_collection.parent.parent != collection and current_collection.parent != collection and current_collection != collection %}collapsed{% endif %}"
-            data-toggle="collapse" data-target="#collection-{{ collection.id }}">
+            data-bs-toggle="collapse" data-bs-target="#collection-{{ collection.id }}">
             <i class="material-icons">keyboard_arrow_down</i>
           </a>
         {% else %}
           <a class="drawer-nav-dropdown h3 {% if current_collection.parent != collection and current_collection != collection %}collapsed{% endif %}"
-            href="{{ collection.url }}" {% if child_collections %}data-toggle="collapse"
-              data-target="#collection-{{ collection.id }}" {% endif %}>
+            href="{{ collection.url }}" {% if child_collections %}data-bs-toggle="collapse"
+              data-bs-target="#collection-{{ collection.id }}" {% endif %}>
             <span class="drawer-nav-dropdown-text">
               {{ collection.name }}
             </span>
@@ -115,7 +115,7 @@
 {% endblock nav_drawer_inner %}
 
 {% block content %}
-  <div class="container-xl pt-2 pt-md-3">
+  <div class="container-xxl pt-2 pt-md-3">
     <div class="row">
 
       <div class="col-md-4 col-lg-3 mb-3 d-none d-md-block">
@@ -128,17 +128,17 @@
                 <div class="drawer-nav-group">
 
                   <div class="drawer-nav-dropdown-wrapper">
-                    <a class="drawer-nav-dropdown font-weight-bold" href="{% url 'film-gallery' film_slug=film.slug %}"
-                      data-tooltip="tooltip-overflow" data-placement="top" title="Featured Artwork">
-                      <i class="material-icons mr-2">grade</i>
+                    <a class="drawer-nav-dropdown fw-bold" href="{% url 'film-gallery' film_slug=film.slug %}"
+                      data-bs-tooltip="tooltip-overflow" data-placement="top" title="Featured Artwork">
+                      <i class="material-icons me-2">grade</i>
                       <span class="overflow-text">Featured Artwork</span>
                     </a>
                   </div>
 
                   <div class="drawer-nav-dropdown-wrapper">
-                    <a class="drawer-nav-dropdown font-weight-bold" href="{% url 'film-all-assets' film_slug=film.slug %}"
-                      data-tooltip="tooltip-overflow" data-placement="top" title="All Artwork">
-                      <i class="material-icons mr-2">search</i>
+                    <a class="drawer-nav-dropdown fw-bold" href="{% url 'film-all-assets' film_slug=film.slug %}"
+                      data-bs-tooltip="tooltip-overflow" data-placement="top" title="All Artwork">
+                      <i class="material-icons me-2">search</i>
                       <span class="overflow-text">All Artwork</span>
                     </a>
                   </div>
@@ -149,18 +149,18 @@
 
                   <div class="drawer-nav-dropdown-wrapper">
                     {% if child_collections %}
-                      <a class="drawer-nav-dropdown font-weight-bold dropdown" href="{{ collection.url }}"
-                        data-tooltip="tooltip-overflow" data-placement="top" title="{{ collection.name }}">
+                      <a class="drawer-nav-dropdown fw-bold dropdown" href="{{ collection.url }}"
+                        data-bs-tooltip="tooltip-overflow" data-placement="top" title="{{ collection.name }}">
                         <span class="drawer-nav-dropdown-text overflow-text">
                           {{ collection.name }}
                         </span>
                       </a>
                       <a class="drawer-nav-dropdown icon {% if current_collection.parent.parent != collection and current_collection.parent != collection and current_collection != collection %}collapsed{% endif %}"
-                        data-toggle="collapse" data-target="#collection-{{ collection.id }}">
+                        data-bs-toggle="collapse" data-bs-target="#collection-{{ collection.id }}">
                         <i class="material-icons">keyboard_arrow_down</i>
                       </a>
                     {% else %}
-                      <a class="drawer-nav-dropdown font-weight-bold" href="{{ collection.url }}" data-tooltip="tooltip-overflow"
+                      <a class="drawer-nav-dropdown fw-bold" href="{{ collection.url }}" data-bs-tooltip="tooltip-overflow"
                         data-placement="top" title="{{ collection.name }}">
                         <span class="drawer-nav-dropdown-text overflow-text">
                           {{ collection.name }}
@@ -176,7 +176,7 @@
 
                         {% for child_collection in child_collections %}
                           <li class="drawer-nav-section">
-                            <a href="{{ child_collection.url }}" class="drawer-nav-section-link" data-tooltip="tooltip-overflow"
+                            <a href="{{ child_collection.url }}" class="drawer-nav-section-link" data-bs-tooltip="tooltip-overflow"
                               data-placement="top" title="{{ child_collection.name }}">
 
                               <i class="material-icons">folder</i>
@@ -235,7 +235,7 @@
           {% endblock gallery_files %}
           <div class="gallery-load-overlay">
             <div class="spinner-border text-primary" role="status">
-              <span class="sr-only">Loading...</span>
+              <span class="visually-hidden">Loading...</span>
             </div>
           </div>
         {% endblock nested_content%}

@@ -1,6 +1,7 @@
 .badge {
   @at-root a#{&} {
-    @include hover-focus() {
+    &:hover,
+    &:focus {
       text-decoration: underline;
     }
   }

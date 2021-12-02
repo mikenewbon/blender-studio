@@ -1,13 +1,11 @@
 {% load static %}
 
-<div class="{{ card_sizes|default:"col-12 col-sm-6 col-lg-4" }} card-grid-item">
-  <div class="card">
-    <a href="{{ section.url }}" class="card-header" {% if section.thumbnail_s_url %} style='background-image: url("{{ section.thumbnail_s_url }}")' {% endif %}>
-      {% include 'training/components/progress_bar.html' with fraction=section.progress_fraction title=second.name %}
-    </a>
-    <a class="card-body" href="{{ section.url }}">
-      <p class="card-subtitle small mb-0">{{ section.training_name }}</p>
-      <h4 class="card-title mb-0">{{ section.name }}</h4>
-    </a>
-  </div>
+<div class="card {{ card_sizes|default:"col-12 col-sm-6 col-lg-4" }} card-grid-item">
+  <a href="{{ section.url }}" class="card-header" {% if section.thumbnail_s_url %} style='background-image: url("{{ section.thumbnail_s_url }}")' {% endif %}>
+    {% include 'training/components/progress_bar.html' with fraction=section.progress_fraction title=second.name %}
+  </a>
+  <a class="card-body" href="{{ section.url }}">
+    <p class="card-subtitle small mb-0">{{ section.training_name }}</p>
+    <h4 class="card-title mb-0">{{ section.name }}</h4>
+  </a>
 </div>

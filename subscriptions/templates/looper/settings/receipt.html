@@ -89,7 +89,7 @@
         <div class="col justify-content-start">
           <p class=" h4 mb-0 subtitle">Address</p>
         </div>
-        <div class="col-auto text-right">
+        <div class="col-auto text-end">
           <div class="mb-0 small mb-0-child">{{ order.billing_address|linebreaks }}</p>
         </div>
       </div>
@@ -132,7 +132,7 @@
         <div class="col justify-content-start">
           <p class=" h4 mb-0 subtitle">Amount Paid</p>
         </div>
-        <div class="col-auto text-right">
+        <div class="col-auto text-end">
           <p class="mb-0 small">{{ order.price.with_currency_symbol_nonocents }}</p>
           {% with taxable=order.taxable %}
             {% if taxable.tax_is_charged %}

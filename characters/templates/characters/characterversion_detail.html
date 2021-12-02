@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container-xl py-2 py-md-3">
+  <div class="container-xxl py-2 py-md-3">
 
     <div class="row justify-content-center mb-3">
       <div class="col-lg-10">
@@ -45,7 +45,7 @@
               <div class="d-inline">
                 <h1 class="mb-0 d-inline-block">{{ character.name|linebreaksbr }}</h1>
                 {% if character.versions.count %}
-                  <button data-toggle="dropdown" class="btn p-2 subtitle mt-n3 btn-icon btn-dark">
+                  <button data-bs-toggle="dropdown" class="btn p-2 subtitle mt-n3 btn-icon btn-dark">
                     v{{ character_version.number }}
                     <i class="material-icons">arrow_drop_down</i>
                   </button>
@@ -56,7 +56,7 @@
                           <span>
                             {{ character.name|linebreaksbr }} v{{ version.number }}
                             {% if not version.is_published%}
-                              <i class="material-icons icon-inline small text-danger ml-1 mr-0" data-toggle="tooltip" data-placement="top" title="Unpublished">visibility_off</i>
+                              <i class="material-icons icon-inline small text-danger ms-1 me-0" data-bs-toggle="tooltip" data-placement="top" title="Unpublished">visibility_off</i>
                             {% endif %}
                           </span>
                         </a>
@@ -68,27 +68,27 @@
             </div>
 
             <div class="text-muted small">
-              <p class="d-inline mr-2">{{ character_version.date_published|date:"jS F Y" }}</p>
+              <p class="d-inline me-2">{{ character_version.date_published|date:"jS F Y" }}</p>
               {% if character_version.static_asset.license %}
-                <a href="{{ character_version.static_asset.license.url }}" target="_blank" class="d-inline mr-2 text-muted"
-                  data-toggle="tooltip" data-placement="bottom" title="{{ character_version.static_asset.license.description }}">
+                <a href="{{ character_version.static_asset.license.url }}" target="_blank" class="d-inline me-2 text-muted"
+                  data-bs-toggle="tooltip" data-placement="bottom" title="{{ character_version.static_asset.license.description }}">
                   <i class="material-icons icon-inline small">info</i>
                   {{ character_version.static_asset.license }}
                 </a>
               {% endif %}
               {% if character.film %}
-                <a class="d-inline mr-2 text-muted" href="{{ character.film.url }}">
+                <a class="d-inline me-2 text-muted" href="{{ character.film.url }}">
                   <i class="material-icons icon-inline small">movie</i>
                   {{ character.film }}
                 </a>
               {% endif %}
               {% if character_version.is_free %}
-                <p class="d-inline mr-2 text-success">
+                <p class="d-inline me-2 text-success">
                   <i class="material-icons icon-inline small">lock_open</i>
                   Free
                 </p>
               {% endif %}
-              <p class="d-inline mr-2 text-muted">
+              <p class="d-inline me-2 text-muted">
                 Blender Version: {{ character_version.min_blender_version }}
               </p>
 
@@ -97,29 +97,14 @@
           </div>
 
           <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
-            <div class="training-toolbar-container">
-
-              <div class="training-toolbar">
-
-                <button data-like-url="{{ character.like_url }}"
-                  class="btn btn-transparent btn-sm btn-icon comment-material-button checkbox-like {% if not user.is_authenticated %}disabled{% endif%}"
-                  {% if not user.is_authenticated %}disabled{% endif%} {% if character.liked %}data-checked="checked" {% endif %}>
-                  <i class="material-icons checkbox-like-icon-checked text-primary">favorite</i>
-                  <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
-                  {% if character.likes.count != 0 %}<span class="likes-count">{{ character.likes.count }}</span>{% endif %}
-                </button>
-
-                {% include "characters/components/buttons_toolbar.html" with showcase_or_version=character_version %}
-
-              </div>
-            </div>
+            {% include "common/components/navigation/buttons_toolbar.html" with item=character_version like_url=character.like_url likes_count=character.likes.count liked=character.liked %}
           </div>
         </div>
 
         <div class="text-muted small row">
           <div class="col-auto d-flex mb-2">
             <div class="row">
-              <div class="col-auto pr-0">
+              <div class="col-auto pe-0">
                 {% if character_version.static_asset.author_image_url %}
                   <img src="{{ character_version.static_asset.author_image_url }}" class="profile">
                 {% else %}

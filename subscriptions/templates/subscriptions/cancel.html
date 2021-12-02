@@ -10,7 +10,7 @@
     <div class="alert alert-warning" role="alert">
 
       <span>Your {{ subscription.plan.name }} subscription is currently <span
-        class="font-weight-bolder">{{ subscription.get_status_display|lower }}</span>.</span>
+        class="fw-bolder">{{ subscription.get_status_display|lower }}</span>.</span>
 
     </div>
   {% endif %}
@@ -35,7 +35,7 @@
         <a class="btn btn-dark btn-sm" href="{% url 'subscriptions:manage' subscription_id=subscription.pk %}"><i class="material-icons">arrow_back</i> Keep Subscription</a>
       </div>
       <div class="col-auto">
-        <button class="btn btn-danger btn-sm ml-auto" id="submit-button" type="submit"><span>Cancel Subscription</span></button>
+        <button class="btn btn-danger btn-sm ms-auto" id="submit-button" type="submit"><span>Cancel Subscription</span></button>
       </div>
     </div>
 

@@ -40,11 +40,8 @@ const renderSearchBox = (renderOptions, isFirstRender) => {
     input.setAttribute('id', 'searchInput');
     input.setAttribute('placeholder', 'Search tags and keywords');
 
-    const append = document.createElement('div');
-    append.setAttribute('class', 'input-group-append');
     const button = document.createElement('button');
-    button.setAttribute('class', 'btn btn-icon btn-input');
-    append.appendChild(button);
+    button.setAttribute('class', 'btn btn-icon btn-sm btn-input');
     const buttonIcon = document.createElement('i');
     buttonIcon.setAttribute('class', 'material-icons');
     buttonIcon.textContent = 'close';
@@ -58,10 +55,8 @@ const renderSearchBox = (renderOptions, isFirstRender) => {
       clear();
     });
 
-    widgetParams.container
-      .querySelector('.input-group-prepend')
-      .insertAdjacentElement('afterend', input);
-    input.insertAdjacentElement('afterend', append);
+    widgetParams.container.insertAdjacentElement('beforeend', input);
+    widgetParams.container.insertAdjacentElement('beforeend', button);
   }
 
   widgetParams.container.querySelector('input').value = query;
@@ -79,15 +74,13 @@ const renderSortBy = (renderOptions, isFirstRender) => {
 
   if (isFirstRender) {
     const select = document.createElement('select');
-    select.setAttribute('class', 'custom-select');
+    select.setAttribute('class', 'form-select');
 
     select.addEventListener('change', (event) => {
       refine(event.target.value);
     });
 
-    widgetParams.container
-      .querySelector('.input-group-prepend')
-      .insertAdjacentElement('afterend', select);
+    widgetParams.container.insertAdjacentElement('beforeend', select);
   }
 
   const select = widgetParams.container.querySelector('select');
@@ -184,13 +177,7 @@ const renderHits = (renderOptions, isFirstRender) => {
     });
 
     observer.observe(sentinel);
-
-    return;
   }
-
-  $(() => {
-    $('[data-toggle="tooltip"]').tooltip();
-  });
 };
 
 const customHits = instantsearch.connectors.connectInfiniteHits(renderHits);

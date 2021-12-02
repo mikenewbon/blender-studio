@@ -19,7 +19,7 @@
         <div class="production-log-header-summary-image">
 
           {% if production_log.youtube_link != "" %}
-            <a class="video-modal-link video-preview" data-toggle="modal" data-target="#videoModal"
+            <a class="video-modal-link video-preview" data-bs-toggle="modal" data-bs-target="#videoModal"
               data-video="{{ production_log.youtube_link }}">
               <img src="{{ production_log.thumbnail_m_url }}" alt="Video Preview">
             </a>
@@ -46,12 +46,12 @@
         {% endif %}
         {% if production_log.summary %}
           <div class="production-log-header-summary-text-inner-wrapper mb-0">
-            <span class="font-weight-bold">This week on {{ film.title }}:</span>
+            <span class="fw-bold">This week on {{ film.title }}:</span>
             {% with_shortcodes production_log.summary|markdown %}
           </div>
           {% if production_log.youtube_link != "" %}
-            <a href="{{ production_log.youtube_link }}" class="video-modal-link mt-2 mb-0" data-toggle="modal"
-              data-target="#videoModal" data-video="{{ production_log.youtube_link }}">Watch the video</a>
+            <a href="{{ production_log.youtube_link }}" class="video-modal-link mt-2 mb-0" data-bs-toggle="modal"
+              data-bs-target="#videoModal" data-video="{{ production_log.youtube_link }}">Watch the video</a>
           {% endif %}
         {% endif %}
       </div>
@@ -67,7 +67,7 @@
         <div class="production-log-individual-summary">
 
           <div class="production-log-individual-summary-profile row">
-            <img src="{{ entry.author_image_url }}" class="profile-image profile ml-2" alt="{{ entry.author_name }}">
+            <img src="{{ entry.author_image_url }}" class="profile-image profile ms-2" alt="{{ entry.author_name }}">
 
             <div class="col-auto flex-shrink-1">
               <p class="profile-name h4">{{ entry.author_name }}</p>
@@ -99,7 +99,7 @@
                   {% endfor %}
                 </div>
 
-                <button class="btn btn-xs btn-icon btn-dark ml-2" data-toggle="dropdown" href="">
+                <button class="btn btn-xs btn-icon btn-dark ms-2" data-bs-toggle="dropdown" href="">
                   <i class="material-icons">arrow_drop_down</i>
                 </button>
 
@@ -107,7 +107,7 @@
                   <h3 class="mb-2">Other Contributors</h3>
                   {% for contributor in contributors %}
                     {% if contributor.pk != entry_author.pk %}
-                      <div class="d-flex mb-2">
+                      <div class="d-flex mb-2 row mx-0">
                         <div style="background-image:url('{{ contributor.image_url }}');" class="profile"></div>
                         <div class="col-auto">
                           <h4 class="comment-name mb-0">{{ contributor.full_name }}</h4>
@@ -231,7 +231,7 @@
               </div>
               <div class="row production-log-individual-files-show-more">
                 <div class="col text-center">
-                  <a data-toggle="collapse" data-objects-type="files" href="#entry-{{ entry.id }}" role="button"
+                  <a data-bs-toggle="collapse" data-objects-type="files" href="#entry-{{ entry.id }}" role="button"
                     aria-expanded="false" aria-controls="entry-{{ entry.id }}"
                     class="btn btn-sm btn-dark collapsed show-more-less">Show </a>
                 </div>

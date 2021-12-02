@@ -23,11 +23,8 @@ const renderSearchBox = (renderOptions, isFirstRender) => {
     input.setAttribute('type', 'text');
     input.setAttribute('placeholder', 'Search tags and keywords');
 
-    const append = document.createElement('div');
-    append.setAttribute('class', 'input-group-append');
     const button = document.createElement('button');
     button.setAttribute('class', 'btn btn-icon btn-input');
-    append.appendChild(button);
     const buttonIcon = document.createElement('i');
     buttonIcon.setAttribute('class', 'material-icons');
     buttonIcon.textContent = 'close';
@@ -41,10 +38,8 @@ const renderSearchBox = (renderOptions, isFirstRender) => {
       clear();
     });
 
-    widgetParams.container
-      .querySelector('.input-group-prepend')
-      .insertAdjacentElement('afterend', input);
-    input.insertAdjacentElement('afterend', append);
+    widgetParams.container.insertAdjacentElement('beforeend', input);
+    input.insertAdjacentElement('afterend', button);
   }
 
   widgetParams.container.querySelector('input').value = query;
@@ -62,15 +57,13 @@ const renderSortBy = (renderOptions, isFirstRender) => {
 
   if (isFirstRender) {
     const select = document.createElement('select');
-    select.setAttribute('class', 'custom-select');
+    select.setAttribute('class', 'form-select');
 
     select.addEventListener('change', (event) => {
       refine(event.target.value);
     });
 
-    widgetParams.container
-      .querySelector('.input-group-prepend')
-      .insertAdjacentElement('afterend', select);
+    widgetParams.container.insertAdjacentElement('beforeend', select);
   }
 
   const select = widgetParams.container.querySelector('select');
@@ -109,14 +102,14 @@ const renderHits = (renderOptions, isFirstRender) => {
         .map(
           (item) =>
             `
-<div class="col-12 col-sm-6 col-lg-4 card-grid-item">
-  <div class="card card-training" data-training-id="${item.id}" data-favorite-url="${
-              item.favorite_url
-            }" ${
+<div class="card card-training col-12 col-sm-6 col-lg-4 card-grid-item" data-training-id="${
+              item.id
+            }" data-favorite-url="${item.favorite_url}" ${
               favoritedTrainingIDs.filter((i) => i === item.id).length > 0
                 ? 'data-checked="checked"'
                 : ''
             }>
+
     <div class="card-header">
       <a href="${item.url}" class="card-header-link">
         <img src="${item.thumbnail_url}" class="card-img" loading="lazy">
@@ -126,13 +119,12 @@ const renderHits = (renderOptions, isFirstRender) => {
           ? authCheck()
             ? `
         <button class="btn btn-xs btn-icon btn-float checkbox-favorite btn-save-media card-training-favorite ${
-          favoritedTrainingIDs.filter((i) => i === item.id).length > 0 ? 'checked primary' : ''
-        }" data-toggle="tooltip" data-placement="left" title="Save for later">
+          favoritedTrainingIDs.filter((i) => i === item.id).length > 0 ? 'checked btn-primary' : ''
+        }" data-bs-toggle="tooltip" data-bs-placement="left" title="Save for later">
           <i class="material-icons checkbox-favorite-icon-unchecked">${
             favoritedTrainingIDs.filter((i) => i === item.id).length > 0 ? 'check' : 'add'
           }</i>
-        </button>
-      `
+        </button>`
             : ''
           : ''
       }
@@ -145,8 +137,9 @@ const renderHits = (renderOptions, isFirstRender) => {
     </a>
     <div class="card-footer">
       <div class="card-subtitle-group">
-        <p class="card-subtitle"><i class="material-icons icon-inline small" data-toggle="tooltip" data-placement="top"
-        title="Free">school</i>&nbsp;${titleCase(item.type)}</p>
+        <p class="card-subtitle"><i class="material-icons icon-inline small">school</i>&nbsp;${titleCase(
+          item.type
+        )}</p>
         <p class="card-subtitle">
         ${
           item.difficulty
@@ -170,20 +163,10 @@ const renderHits = (renderOptions, isFirstRender) => {
         </p>
       </div>
     </div>
-  </div>
 </div>
         `
         )
         .join('')}`;
-
-  // If tags are to be Re-added
-  // ${ item.tags != '' ? `
-  // <div class="pills mb-0">
-  //   ${item.tags.map( tag => `
-  //   <p class="badge badge-pill">${titleCase(tag)}</p>
-  //   `).join('')}
-  // </div>
-  // ` : '' }
 
   lastRenderArgs = renderOptions;
 
@@ -219,7 +202,7 @@ const renderMenuSelect = (renderOptions, isFirstRender) => {
   if (isFirstRender) {
     const select = document.createElement('select');
 
-    select.setAttribute('class', 'custom-select');
+    select.setAttribute('class', 'form-select');
     select.addEventListener('change', (event) => {
       refine(event.target.value);
     });

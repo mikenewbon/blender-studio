@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 /* global ajax:false */
 
 window.comments = (function comments() {
@@ -71,35 +72,41 @@ window.comments = (function comments() {
     }
 
     _setupEventListeners() {
-      this.replyLink && this.replyLink.addEventListener('click', event => {
-        event.preventDefault();
-        this._showReplyInput();
-      });
+      this.replyLink &&
+        this.replyLink.addEventListener('click', (event) => {
+          event.preventDefault();
+          this._showReplyInput();
+        });
 
-      this.editLink && this.editLink.addEventListener('click', event => {
-        event.preventDefault();
-        this._showEditInput();
-      });
+      this.editLink &&
+        this.editLink.addEventListener('click', (event) => {
+          event.preventDefault();
+          this._showEditInput();
+        });
 
-      this.deleteLink && this.deleteLink.addEventListener('click', event => {
-        event.preventDefault();
-        this._postDeleteComment();
-      });
+      this.deleteLink &&
+        this.deleteLink.addEventListener('click', (event) => {
+          event.preventDefault();
+          this._postDeleteComment();
+        });
 
-      this.deleteTreeLink && this.deleteTreeLink.addEventListener('click', event => {
-        event.preventDefault();
-        this._postDeleteTreeComment();
-      });
+      this.deleteTreeLink &&
+        this.deleteTreeLink.addEventListener('click', (event) => {
+          event.preventDefault();
+          this._postDeleteTreeComment();
+        });
 
-      this.hardDeleteTreeLink && this.hardDeleteTreeLink.addEventListener('click', event => {
-        event.preventDefault();
-        this._postHardDeleteTreeComment();
-      });
+      this.hardDeleteTreeLink &&
+        this.hardDeleteTreeLink.addEventListener('click', (event) => {
+          event.preventDefault();
+          this._postHardDeleteTreeComment();
+        });
 
-      this.archiveLink && this.archiveLink.addEventListener('click', event => {
-        event.preventDefault();
-        this._postArchiveComment();
-      });
+      this.archiveLink &&
+        this.archiveLink.addEventListener('click', (event) => {
+          event.preventDefault();
+          this._postArchiveComment();
+        });
 
       this.likeButton && this.likeButton.addEventListener('click', this._postLike.bind(this));
     }
@@ -129,15 +136,17 @@ window.comments = (function comments() {
     }
 
     _getOrCreateReplyInput() {
-      const { commentSection, replyInput, replyInputsElement } = this;
+      const { replyInput, replyInputsElement } = this;
+      let inputText = null;
       if (replyInput == null) {
+        // eslint-disable-next-line no-undef
         const replyInput = ReplyInput.create(currentUser.image_url);
-        let inputText = `@${this.element.querySelector('.comment-name').innerText}&nbsp;`;
+        inputText = `@${this.element.querySelector('.comment-name').innerText}&nbsp;`;
         replyInput.element.querySelector('.comment-input-div').innerHTML = inputText;
         replyInputsElement.append(replyInput.element);
         return replyInput;
       } else {
-        let inputText = `@${this.element.querySelector('.comment-name').innerText}&nbsp;`;
+        inputText = `@${this.element.querySelector('.comment-name').innerText}&nbsp;`;
         replyInput.element.querySelector('.comment-input-div').innerHTML = inputText;
         return replyInput;
       }
@@ -148,17 +157,19 @@ window.comments = (function comments() {
       const replyInputElement = replyInput.element.querySelector('.comment-input-div');
       replyInput.show();
       replyInputElement.focus();
-      //Set caret to the end.
+      // Set caret to the end.
       const range = document.createRange();
       const sel = window.getSelection();
       range.setStart(replyInputElement.firstChild, replyInputElement.innerText.length);
-      range.collapse(true)
-      sel.removeAllRanges()
-      sel.addRange(range)
+      range.collapse(true);
+      sel.removeAllRanges();
+      sel.addRange(range);
     }
 
     appendReply(comment) {
-      const repliesElement = this.element.closest('.top-level-comment').querySelector('.replies .comments');
+      const repliesElement = this.element
+        .closest('.top-level-comment')
+        .querySelector('.replies .comments');
       repliesElement.append(comment.element);
     }
 
@@ -187,8 +198,9 @@ window.comments = (function comments() {
     }
 
     _getOrCreateEditInput() {
-      const { profileImageUrl, editInput, editInputsElement } = this;
+      const { editInput, editInputsElement } = this;
       if (editInput == null) {
+        // eslint-disable-next-line no-undef
         const editInput = EditInput.create(currentUser.image_url);
         editInputsElement.append(editInput.element);
         return editInput;
@@ -206,11 +218,11 @@ window.comments = (function comments() {
     }
 
     _postLike() {
-      const { commentLikesCountElement, likeButton } = this;
+      const { likeButton } = this;
 
       ajax
         .jsonRequest('POST', this.likeUrl, {
-          like: !likeButton.dataset.checked
+          like: !likeButton.dataset.checked,
         })
         .then((data) => {
           if (data.like) {
@@ -233,10 +245,11 @@ window.comments = (function comments() {
       const { deleteUrl, element } = this;
 
       ajax.jsonRequest('POST', deleteUrl).then(() => {
-        element.querySelector('.comment-text').textContent = "[deleted]";
-        element.querySelector('.comment-name').textContent = "[deleted]";
+        element.querySelector('.comment-text').textContent = '[deleted]';
+        element.querySelector('.comment-name').textContent = '[deleted]';
 
         const commentToolbar = element.querySelector('.comment-toolbar');
+        // eslint-disable-next-line no-unused-expressions
         commentToolbar && commentToolbar.remove();
       });
     }
@@ -246,12 +259,24 @@ window.comments = (function comments() {
 
       ajax.jsonRequest('POST', deleteTreeUrl).then(() => {
         if (element.classList.contains('.top-level-comment')) {
-          element.querySelectorAll('.comment-text').forEach(e => e.textContent = "[deleted]");
-          element.querySelectorAll('.comment-name').forEach(e => e.textContent = "[deleted]");
-          element.querySelector('.comment-toolbar') && element.querySelectorAll('.comment-toolbar').forEach(e => e.remove());
+          // eslint-disable-next-line no-return-assign
+          element.querySelectorAll('.comment-text').forEach((e) => (e.textContent = '[deleted]'));
+          // eslint-disable-next-line no-return-assign
+          element.querySelectorAll('.comment-name').forEach((e) => (e.textContent = '[deleted]'));
+          // eslint-disable-next-line no-unused-expressions
+          element.querySelector('.comment-toolbar') &&
+            element.querySelectorAll('.comment-toolbar').forEach((e) => e.remove());
         } else {
-          element.closest('.top-level-comment').querySelectorAll('.comment-text').forEach(e => e.textContent = "[deleted]");
-          element.closest('.top-level-comment').querySelectorAll('.comment-name').forEach(e => e.textContent = "[deleted]");
+          element
+            .closest('.top-level-comment')
+            .querySelectorAll('.comment-text')
+            // eslint-disable-next-line no-return-assign
+            .forEach((e) => (e.textContent = '[deleted]'));
+          element
+            .closest('.top-level-comment')
+            .querySelectorAll('.comment-name')
+            // eslint-disable-next-line no-return-assign
+            .forEach((e) => (e.textContent = '[deleted]'));
         }
       });
     }
@@ -270,46 +295,55 @@ window.comments = (function comments() {
 
     _postArchiveComment() {
       const { archiveUrl, element } = this;
-      const archivedBadge = '<p class="badge badge-secondary archived-badge">Archived</p>';
-      const commentTitleBar = element.querySelectorAll('.comment-name-date-wrapper');
+      const archivedBadge = '<p class="badge bg-secondary archived-badge">Archived</p>';
+      // const commentTitleBar = element.querySelectorAll('.comment-name-date-wrapper');
+
+      function unarchive(element) {
+        element.classList.remove('archived');
+        element.querySelectorAll('.comment').forEach((e) => e.classList.remove('archived'));
+        element
+          .querySelectorAll('.comment-archive .material-icons')
+          // eslint-disable-next-line no-return-assign
+          .forEach((e) => (e.textContent = 'archive'));
+        element
+          .querySelectorAll('.comment-archive-text')
+          // eslint-disable-next-line no-return-assign
+          .forEach((e) => (e.textContent = 'Archive comment'));
+        element.querySelectorAll('.archived-badge').forEach((e) => e.remove());
+        // eslint-disable-next-line no-unused-expressions
+        element.querySelector('.comment-expand-archived') &&
+          element.querySelectorAll('.comment-expand-archived').forEach((e) => e.remove());
+      }
+
+      function archive(element) {
+        element.classList.add('archived');
+        element.querySelectorAll('.comment').forEach((e) => e.classList.add('archived'));
+        element
+          .querySelectorAll('.comment-archive .material-icons')
+          // eslint-disable-next-line no-return-assign
+          .forEach((e) => (e.textContent = 'unarchive'));
+        element
+          .querySelectorAll('.comment-archive-text')
+          // eslint-disable-next-line no-return-assign
+          .forEach((e) => (e.textContent = 'Un-archive comment'));
+        element
+          .querySelectorAll('.comment-name-date-wrapper')
+          // eslint-disable-next-line no-return-assign
+          .forEach((e) => (e.innerHTML += archivedBadge));
+      }
 
       ajax.jsonRequest('POST', archiveUrl).then(() => {
-
         if (element.classList.contains('archived')) {
-
-          function unarchive(element) {
-            element.classList.remove("archived");
-            element.querySelectorAll('.comment').forEach(e => e.classList.remove("archived"));
-            element.querySelectorAll('.comment-archive .material-icons').forEach(e => e.textContent = "archive");
-            element.querySelectorAll('.comment-archive-text').forEach(e => e.textContent = "Archive comment");
-            element.querySelectorAll('.archived-badge').forEach(e => e.remove());
-            element.querySelector('.comment-expand-archived') && element.querySelectorAll('.comment-expand-archived').forEach(e => e.remove());
-          }
-
           if (element.classList.contains('top-level-comment')) {
             unarchive(element);
           } else {
             unarchive(element.closest('.top-level-comment'));
           }
-
+        } else if (element.classList.contains('top-level-comment')) {
+          archive(element);
         } else {
-
-          function archive(element) {
-            element.classList.add("archived");
-            element.querySelectorAll('.comment').forEach(e => e.classList.add("archived"));
-            element.querySelectorAll('.comment-archive .material-icons').forEach(e => e.textContent = "unarchive");
-            element.querySelectorAll('.comment-archive-text').forEach(e => e.textContent = "Un-archive comment");
-            element.querySelectorAll('.comment-name-date-wrapper').forEach(e => e.innerHTML = e.innerHTML + archivedBadge);
-          }
-
-          if (element.classList.contains('top-level-comment')) {
-            archive(element);
-
-          } else {
-            archive(element.closest('.top-level-comment'));
-          }
+          archive(element.closest('.top-level-comment'));
         }
-
       });
     }
 
@@ -335,7 +369,7 @@ window.comments = (function comments() {
     profileImageUrl,
     dateString,
     message,
-    message_html,
+    messageHtml,
     likeUrl,
     liked,
     likes,
@@ -352,12 +386,12 @@ window.comments = (function comments() {
     element.dataset.deleteUrl = deleteUrl;
     element.dataset.archiveUrl = archiveUrl;
     element.dataset.message = message;
-    if (!!profileImageUrl) {
+    if (profileImageUrl) {
       element.querySelector('.profile').style.backgroundImage = `url('${profileImageUrl}')`;
     }
     element.querySelector('.comment-name').innerText = fullName;
     element.querySelector('.comment-date').innerText = dateString;
-    element.querySelector('.comment-text').innerHTML = message_html;
+    element.querySelector('.comment-text').innerHTML = messageHtml;
     element.querySelector('.likes-count').innerText = likes;
     if (liked) {
       element.querySelector('.checkbox-like').dataset.checked = 'checked';
@@ -419,12 +453,12 @@ window.comments = (function comments() {
     }
 
     _setupEventListeners() {
-      this.sendButton.addEventListener('click', event => {
+      this.sendButton.addEventListener('click', (event) => {
         event.preventDefault();
         this._postComment();
       });
 
-      this.inputElement.addEventListener('keydown', event => {
+      this.inputElement.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' && !event.shiftKey) {
           event.preventDefault();
           this.sendButton.click();
@@ -440,16 +474,16 @@ window.comments = (function comments() {
       const message = inputElement.innerText;
 
       if (message === '') {
-        return
+        return;
       }
 
       inputElement.innerText = '';
       ajax
         .jsonRequest('POST', commentSection.commentUrl, {
           reply_to: null,
-          message
+          message,
         })
-        .then(data => {
+        .then((data) => {
           const comment = Comment.create(
             data.id,
             data.full_name,
@@ -493,13 +527,13 @@ window.comments = (function comments() {
     }
 
     _setupEventListeners() {
-      this.sendButton.addEventListener('click', event => {
+      this.sendButton.addEventListener('click', (event) => {
         event.preventDefault();
         this._postReply();
         this.hide();
       });
 
-      this.inputElement.addEventListener('keydown', event => {
+      this.inputElement.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' && !event.shiftKey) {
           event.preventDefault();
           this.sendButton.click();
@@ -520,9 +554,9 @@ window.comments = (function comments() {
       ajax
         .jsonRequest('POST', commentSection.commentUrl, {
           reply_to: replyTo.id,
-          message
+          message,
         })
-        .then(data => {
+        .then((data) => {
           const comment = Comment.create(
             data.id,
             data.full_name,
@@ -537,7 +571,6 @@ window.comments = (function comments() {
             data.delete_url
           );
           replyTo.appendReply(comment);
-
         });
     }
   }
@@ -557,7 +590,7 @@ window.comments = (function comments() {
   ReplyInput.create = function create(profileImageUrl) {
     const template = document.getElementById('comment-reply-input-template');
     const element = template.content.cloneNode(true).querySelector(`.${ReplyInput.className}`);
-    if (!!profileImageUrl) {
+    if (!profileImageUrl) {
       element.querySelector('.profile').style.backgroundImage = `url('${profileImageUrl}')`;
     }
     return ReplyInput.getOrWrap(element);
@@ -579,21 +612,14 @@ window.comments = (function comments() {
     }
 
     _setupEventListeners() {
-      this.sendButton.addEventListener('click', event => {
+      this.sendButton.addEventListener('click', (event) => {
         event.preventDefault();
         this.comment.showContent();
         this._postEdit();
         this.hide();
       });
 
-      // this.element.addEventListener('focusout', event => {
-      //   if (!this.element.contains(event.relatedTarget)) {
-      //     this.comment.showContent();
-      //     this.hide();
-      //   }
-      // });
-
-      this.inputElement.addEventListener('keydown', event => {
+      this.inputElement.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' && !event.shiftKey) {
           event.preventDefault();
           this.sendButton.click();
@@ -611,7 +637,7 @@ window.comments = (function comments() {
       inputElement.innerText = '';
       ajax
         .jsonRequest('POST', comment.editUrl, {
-          message
+          message,
         })
         .then((data) => {
           this.comment.message = data.message;
@@ -637,7 +663,7 @@ window.comments = (function comments() {
   EditInput.create = function create(profileImageUrl) {
     const template = document.getElementById('comment-edit-input-template');
     const element = template.content.cloneNode(true).querySelector(`.${EditInput.className}`);
-    if (!!profileImageUrl) {
+    if (!profileImageUrl) {
       element.querySelector('.profile').style.backgroundImage = `url('${profileImageUrl}')`;
     }
     return EditInput.getOrWrap(element);

@@ -1,58 +1,58 @@
-<div class="{% block classes %}grid-item{% endblock classes %}">
-  <div class="card">
-    <div class="card-header">
-      <a class="card-header-link" href="{% url 'post-detail' slug=post.slug %}" aria-label="{{ post.title }}">
-        {% if post.thumbnail %}
-          {% block image %}
-            <img alt="{{ post.title }}" class="card-img" src="{{ post.thumbnail_s_url }}">
-          {% endblock image %}
-        {% endif %}
-      </a>
-    </div>
-    <a href="{% url 'post-detail' slug=post.slug %}" class="card-body">
-
-      <h3 class="card-title">
-        {% if post.is_new and post.is_published %}
-          <div class="badge badge-primary">New</div>
-        {% endif %}
-        {{ post.title }}
-      </h3>
-      <p class="card-text">{{ post.excerpt }}</p>
-
+<div class="card {% block classes %}grid-item{% endblock classes %}">
+  <div class="card-header">
+    <a class="card-header-link" href="{% url 'post-detail' slug=post.slug %}" aria-label="{{ post.title }}">
+      {% if post.thumbnail %}
+        {% block image %}
+          <img alt="{{ post.title }}" class="card-img" src="{{ post.thumbnail_s_url }}">
+        {% endblock image %}
+      {% endif %}
     </a>
-    <a href="{% url 'post-detail' slug=post.slug %}" class="card-footer">
-      <div class="card-subtitle-group">
+  </div>
+  <a href="{% url 'post-detail' slug=post.slug %}" class="card-body">
 
-        {% comment %} <p class="card-subtitle">
+    <h3 class="card-title">
+      {% if post.is_new and post.is_published %}
+        <div class="badge bg-primary">New</div>
+      {% endif %}
+      {{ post.title }}
+    </h3>
+    <p class="card-text">{{ post.excerpt }}</p>
+
+  </a>
+  <a href="{% url 'post-detail' slug=post.slug %}" class="card-footer">
+    <div class="card-subtitle-group">
+
+      {% comment %} <p class="card-subtitle">
           {{ post.category|title }}
         </p> {% endcomment %}
-        {% if not post.is_published %}
-          <div class="badge badge-danger mr-2">
-            Unpublished
-          </div>
-        {% else %}
-          <p class="card-subtitle">
-            <i class="material-icons icon-inline small">schedule</i>
-            <span class="date">
-              {{ post.date_published|date:"U" }}
-            </span>
-          </p>
-        {% endif %}
-        {% if post.likes.count > 0 %}
-          <p class="card-subtitle">
+      {% if not post.is_published %}
+        <div class="badge bg-danger me-2">
+          Unpublished
+        </div>
+      {% else %}
+        <p class="card-subtitle">
+          <i class="material-icons icon-inline small">schedule</i>
+          <span class="date">
+            {{ post.date_published|date:"U" }}
+          </span>
+        </p>
+      {% endif %}
+      {% if post.likes.count > 0 %}
+        <p class="card-subtitle">
+          {% if post.liked %}
+            <i class="material-icons icon-inline small text-primary">favorite</i>
+          {% else %}
             <i class="material-icons icon-inline small">favorite_border</i>
-            {{ post.likes.count }}
-          </p>
-        {% endif %}
-        {% if post.comments.count > 0 %}
-          <p class="card-subtitle">
-            <i class="material-icons icon-inline small">chat_bubble_outline</i>
-            {{ post.comments.count }}
-          </p>
-        {% endif %}
-      </div>
-    </a>
-
-
-  </div>
+          {% endif %}
+          {{ post.likes.count }}
+        </p>
+      {% endif %}
+      {% if post.comments.count > 0 %}
+        <p class="card-subtitle">
+          <i class="material-icons icon-inline small">chat_bubble_outline</i>
+          {{ post.comments.count }}
+        </p>
+      {% endif %}
+    </div>
+  </a>
 </div>

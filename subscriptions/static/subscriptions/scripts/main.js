@@ -16,33 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // When hiding collapsed inputs, empty them.
   document.querySelectorAll('.collapse').forEach((element) => {
-    $(element).on('hidden.bs.collapse', (e) => {
+    element.addEventListener('hidden.bs.collapse', (e) => {
       e.target.querySelectorAll('input').forEach((input) => {
+        // eslint-disable-next-line no-param-reassign
         input.value = '';
       });
-    });
-  });
-});
-
-function paymentTabSwitch(button) {
-  const buttonSelector = document.querySelector('.payment-tab.active');
-
-  if (button.classList.contains('active')) return;
-
-  button.classList.add('active');
-  buttonSelector.classList.remove('active');
-
-  if (button.dataset.tab === 'team') {
-    teamTabSetup();
-  } else if (button.dataset.tab === 'individual') {
-    individualTabSetup();
-  }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.payment-tab').forEach((item) => {
-    item.addEventListener('click', (e) => {
-      paymentTabSwitch(e.target);
     });
   });
 });
@@ -89,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updatePlanVariationDetails() {
     if (isInvalidOptionSelected()) {
-      console.error('Invalid option selected');
+      // console.error('Invalid option selected');
       return;
     }
     const selectedOption = getSelectedPlanVariation();

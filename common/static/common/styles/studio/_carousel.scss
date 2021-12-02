@@ -1,3 +1,7 @@
+.carousel-card {
+  padding: 0;
+}
+
 .carousel-inner {
   padding: $spacer / 2 0;
 
@@ -8,7 +12,7 @@
     justify-content: flex-start;
   }
 
-  .carousel-item-right.active,
+  .carousel-item-end.active,
   .carousel-item-next {
 
     transform: translateX(100%);
@@ -22,7 +26,7 @@
     }
   }
 
-  .carousel-item-left.active,
+  .carousel-item-start.active,
   .carousel-item-prev {
 
     transform: translateX(-100%);
@@ -36,17 +40,25 @@
     }
   }
 
-  .carousel-item-right,
-  .carousel-item-left {
+  .carousel-item-end,
+  .carousel-item-start {
     transform: translateX(0);
   }
 }
+
+.carousel-item {
+  margin-left: 0;
+  margin-right: -100%;
+  flex-wrap: nowrap;
+  background: $dark;
+}
+
 
 .carousel-card-3 {
   .carousel-inner {
 
     .carousel-item {
-      @include media-breakpoint-down(xs) {
+      @include media-breakpoint-down(sm) {
         &>div {
           display: none;
 
@@ -63,7 +75,7 @@
 .carousel-card-4 {
   .carousel-inner {
 
-    .carousel-item-right.active,
+    .carousel-item-end.active,
     .carousel-item-next {
 
       transform: translateX(50%);
@@ -77,7 +89,7 @@
       }
     }
 
-    .carousel-item-left.active,
+    .carousel-item-start.active,
     .carousel-item-prev {
       transform: translateX(-50%);
 
@@ -90,8 +102,8 @@
       }
     }
 
-    .carousel-item-right,
-    .carousel-item-left {
+    .carousel-item-end,
+    .carousel-item-start {
       transform: translateX(0);
     }
 

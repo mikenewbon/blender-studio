@@ -1,5 +1,3 @@
-/* global $:false */
-
 (function navigation() {
   function navDrawerToggle() {
     document.querySelector('body').classList.toggle('nav-drawer-open');
@@ -11,10 +9,6 @@
         navDrawerToggle();
       });
     });
-  });
-
-  $(() => {
-    $('[data-toggle="tooltip"]').tooltip();
   });
 })();
 
@@ -81,7 +75,7 @@ function animateProgress() {
   let currentProgress = 0;
   let step = 0.5; // the smaller this is the slower the progress bar
 
-  globalProgress.style.opacity = "1";
+  globalProgress.style.opacity = '1';
 
   const interval = setInterval(() => {
     currentProgress += step;
@@ -102,6 +96,7 @@ window.addEventListener('beforeunload', () => {
 });
 
 // Function is also used in modals and download buttons onClick.
+// eslint-disable-next-line no-unused-vars
 function resetProgress() {
   const globalProgress = document.querySelector('.global-progress');
   const progressBar = document.querySelector('.global-progress .progress-bar');

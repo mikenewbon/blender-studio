@@ -1,6 +1,6 @@
-<button class="btn btn-xs btn-icon btn-float checkbox-favorite {{ class }} {% if checked %} checked primary{% endif %}"
+<button class="btn btn-xs btn-icon btn-float checkbox-favorite text-white {{ class }} {% if checked %} checked btn-primary{% endif %}"
   {% if checked %} data-checked="checked" title=" Remove from saved for later" {% else %} title="Save for later"
-  {% endif %} data-toggle="tooltip" data-placement="left">
+  {% endif %} data-bs-toggle="tooltip" data-placement="left">
   {% if checked %}
     <i class="material-icons checkbox-favorite-icon-checked">check</i>
   {% else %}

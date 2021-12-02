@@ -8,26 +8,22 @@
     <p>It looks like you have no film production credits, yet.</p>
   {% else %}
     <div class="row">
-  {% for credit in credits %}
-    <div class="{{ card_sizes|default:"col-12 col-sm-6 col-md-4 col-lg-4" }} card-grid-item">
-      <div class="card card-poster">
-        <div class="card-header">
-          <a href="{% url 'production-credit' film_slug=credit.film.slug %}" class="card-header-link">
+      {% for credit in credits %}
+        <div class="card card-poster {{ card_sizes|default:"col-12 col-sm-6 col-md-4 col-lg-4" }} card-grid-item">
+          <div class="card-header">
+            <a href="{% url 'production-credit' film_slug=credit.film.slug %}" class="card-header-link">
+              {% include "common/components/helpers/image_resize.html" with alt=credit.film.title classes="img-fluid" img_source=credit.film.thumbnail width="500" %}
+            </a>
+          </div>
 
-            {% include "common/components/helpers/image_resize.html" with alt=credit.film.title classes="img-fluid" img_source=credit.film.thumbnail width="500" %}
-
+          <a class="card-body text-center" href="{{ credit.film.url }}">
+            <h3 class="card-title">
+              {{ credit.film.title }}
+            </h3>
           </a>
+
         </div>
-
-        <a class="card-body text-center" href="{{ credit.film.url }}">
-          <h3 class="card-title">
-            {{ credit.film.title }}
-          </h3>
-        </a>
-
-      </div>
-    </div>
-  {% endfor %}
+      {% endfor %}
     </div>
   {% endif %}
 

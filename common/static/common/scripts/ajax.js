@@ -18,17 +18,17 @@ window.ajax = (function ajax() {
   function jsonRequest(method, url, data = null) {
     const csrfToken = getCookie('bstudiocsrftoken');
     return fetch(url, {
-      method: method,
+      method,
       mode: 'same-origin',
       cache: 'no-cache',
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRFToken': csrfToken
+        'X-CSRFToken': csrfToken,
       },
-      body: data == null ? null : JSON.stringify(data)
+      body: data == null ? null : JSON.stringify(data),
     })
-      .then(response => {
+      .then((response) => {
         if (response.status >= 200 && response.status < 300) {
           return Promise.resolve(response);
         }
@@ -37,7 +37,7 @@ window.ajax = (function ajax() {
         }
         return Promise.reject(new Error(response.statusText));
       })
-      .then(response => response.json());
+      .then((response) => response.json());
   }
 
   function post(url, data = null) {
@@ -48,17 +48,17 @@ window.ajax = (function ajax() {
       cache: 'no-cache',
       credentials: 'same-origin',
       headers: {
-        'X-CSRFToken': csrfToken
+        'X-CSRFToken': csrfToken,
       },
-      body: data
+      body: data,
     })
-      .then(response => {
+      .then((response) => {
         if (response.status >= 200 && response.status < 300) {
           return Promise.resolve(response);
         }
         return Promise.reject(new Error(response.statusText));
       })
-      .then(response => response);
+      .then((response) => response);
   }
 
   return { jsonRequest, post };

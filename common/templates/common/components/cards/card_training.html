@@ -1,51 +1,42 @@
-<div class="{{ card_sizes|default:"col-12 col-sm-6 col-lg-4" }} card-grid-item">
-  <div class="card" data-favorite-url="{{ training.favorite_url }}">
-
-    <div class="card-header">
-      <a href="{{ training.url }}" class="card-header-link" aria-label="{{ training.name }}">
-        <img class="card-img" alt="{{ training.title }}" src="{{ training.thumbnail_s_url }}">
-      </a>
-      {% if request.user.is_authenticated %}
-        {% include 'training/components/card_button_favorite.html' with class='btn-save-media card-training-favorite' checked=training.favorited %}
-      {% endif %}
-    </div>
-
-    <a class="card-body" href="{{ training.url }}">
-
-      <h3 class="card-title">
-
-        {{ training.name }}
-      </h3>
-      <p class="card-text">{{ training.description }}</p>
+<div class="card {{ card_sizes|default:"col-12 col-sm-6 col-lg-4" }} card-grid-item" data-favorite-url="{{ training.favorite_url }}">
+  <div class="card-header">
+    <a href="{{ training.url }}" class="card-header-link" aria-label="{{ training.name }}">
+      <img class="card-img" alt="{{ training.title }}" src="{{ training.thumbnail_s_url }}">
     </a>
+    {% if request.user.is_authenticated %}
+      {% include 'training/components/card_button_favorite.html' with class='btn-save-media card-training-favorite' checked=training.favorited %}
+    {% endif %}
+  </div>
 
+  <a class="card-body" href="{{ training.url }}">
+    <h3 class="card-title">
+      {{ training.name }}
+    </h3>
+    <p class="card-text">{{ training.description }}</p>
+  </a>
 
-    <div class="card-footer">
-      {% if training.tags.all %}
-        <div class="pills {% comment %}{{ class|join(' ') }}{% endcomment %}">
-          {% for tag in training.tags.all %}
-            {% include 'common/components/cards/pill.html' with label=tag.name %}
-          {% endfor %}
-        </div>
-      {% endif %}
-      <div class="card-subtitle-group">
-        <p class="card-subtitle">
-          <i class="material-icons icon-inline small">school</i>
-          {{ training.get_type_display }}</p>
-        <p class="card-subtitle">
-          <i class="material-icons icon-inline small">equalizer</i>
-          {{ training.get_difficulty_display }}
-        </p>
-        {% if training.is_free %}
-          <p class="d-inline mr-2 text-success small">
-            <i class="material-icons icon-inline small text-success">lock_open</i>
-            Free
-          </p>
-        {% endif %}
+  <div class="card-footer">
+    {% if training.tags.all %}
+      <div class="pills {% comment %}{{ class|join(' ') }}{% endcomment %}">
+        {% for tag in training.tags.all %}
+          {% include 'common/components/cards/pill.html' with label=tag.name %}
+        {% endfor %}
       </div>
-
+    {% endif %}
+    <div class="card-subtitle-group">
+      <p class="card-subtitle">
+        <i class="material-icons icon-inline small">school</i>
+        {{ training.get_type_display }}</p>
+      <p class="card-subtitle">
+        <i class="material-icons icon-inline small">equalizer</i>
+        {{ training.get_difficulty_display }}
+      </p>
+      {% if training.is_free %}
+        <p class="d-inline me-2 text-success small">
+          <i class="material-icons icon-inline small text-success">lock_open</i>
+          Free
+        </p>
+      {% endif %}
     </div>
-
-
   </div>
 </div>

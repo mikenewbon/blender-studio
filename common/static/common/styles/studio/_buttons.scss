@@ -4,6 +4,7 @@
     line-height: 1;
     margin: calc(-.25em * .667);
     vertical-align: top;
+    pointer-events: none;
   }
 
   &.btn-icon {
@@ -17,9 +18,9 @@
   }
 }
 
-//This button should have underline on hover
 .btn-transparent {
-  @include hover-focus {
+  &:hover,
+  &:focus {
     color: $white;
   }
 }
@@ -29,7 +30,8 @@
   color: $highlight-white-xstrong;
   font-weight: $font-weight-normal;
 
-  @include hover-focus {
+  &:hover,
+  &:focus {
     color: $white;
     background: $highlight-white;
   }
@@ -38,7 +40,8 @@
     background: $transparent !important;
     background-color: $transparent !important;
 
-    @include hover-focus {
+    &:hover,
+    &:focus {
       background: $highlight-white !important;
     }
   }
@@ -46,10 +49,6 @@
   +.btn-nav {
     margin-left: $spacer / 2;
   }
-
-  // @include media-breakpoint-down(md) {
-  //   padding: 0.875rem;
-  // }
 }
 
 .btn-profile {
@@ -61,7 +60,7 @@
 //
 
 .btn-xs {
-  @include button-size($btn-padding-y-xs, $btn-padding-x-xs, $btn-font-size-xs, $btn-line-height-xs, $btn-border-radius-xs);
+  @include button-size($btn-padding-y-xs, $btn-padding-x-xs, $btn-font-size-xs, $btn-border-radius-xs);
 
   &.btn-icon {
     padding: $btn-padding-y-xs;
@@ -69,7 +68,7 @@
 }
 
 .btn-sm {
-  @include button-size($btn-padding-y-sm, $btn-padding-x-sm, $btn-font-size-sm, $btn-line-height-sm, $btn-border-radius-sm);
+  @include button-size($btn-padding-y-sm, $btn-padding-x-sm, $btn-font-size-sm, $btn-border-radius-sm);
 
   &.btn-icon {
     padding: $btn-padding-y-sm;
@@ -77,7 +76,7 @@
 }
 
 .btn-lg {
-  @include button-size($btn-padding-y-lg, $btn-padding-x-lg, $btn-font-size-lg, $btn-line-height-lg, $btn-border-radius-lg);
+  @include button-size($btn-padding-y-lg, $btn-padding-x-lg, $btn-font-size-lg, $btn-border-radius-lg);
 
   &.btn-icon {
     padding: $btn-padding-y-lg;
@@ -88,6 +87,7 @@
   background: linear-gradient(90deg, #F8805C 0%, #F01853 100%);
   position: relative;
   overflow: hidden;
+  color: $white;
 
   &::after {
     content: close-quote;
@@ -101,7 +101,9 @@
     transition: $transition-base;
   }
 
-  @include hover-focus {
+  &:hover,
+  &:focus {
+    color: $white;
     &::after {
       opacity: 1;
     }
@@ -114,6 +116,7 @@
   top: $spacer / 2;
   transition: $transition-base;
   z-index: 1;
+  width: auto;
 }
 
 .likes-count {
@@ -123,8 +126,23 @@
 .btn-highlight {
   color: $white;
 
-  @include hover-focus {
+  &:hover,
+  &:focus {
     color: $white;
+    background-color: $highlight-white-strong;
+  }
+}
+
+.btn-dark {
+  &:hover,
+  &:focus {
+    background-color: $highlight-white;
+  }
+}
+
+.btn-input {
+  &:hover,
+  &:focus {
     background-color: $highlight-white-strong;
   }
 }
@@ -134,7 +152,6 @@
   span {
     color: $highlight-white-xstrong;
     pointer-events: none;
-    // font-weight: $font-weight-normal;
   }
 
   i {

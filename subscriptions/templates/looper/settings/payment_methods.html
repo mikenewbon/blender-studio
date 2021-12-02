@@ -11,9 +11,9 @@
   <table class="table table-sm text-center table-receipts">
     <thead>
       <tr>
-        <th class="text-left">Payment Method</th>
+        <th class="text-start">Payment Method</th>
         <th class="">Expiry</th>
-        <th class="text-right">Remove</th>
+        <th class="text-end">Remove</th>
       </tr>
     </thead>
     <tbody>
@@ -28,22 +28,22 @@
               </td>
             {% else %}
               {% if payment_method.method_type == 'cc' %}
-                <td class="text-left">
-                  <img class="img-responsive mr-2" width="40" src="{{ pm_props.image_url }}"/>
+                <td class="text-start">
+                  <img class="img-responsive me-2" width="40" src="{{ pm_props.image_url }}"/>
                   {{ pm_props.card_type }} Ending with <strong>{{ pm_props.last_4 }}</strong>
                 </td>
                 <td>Expires <strong>{{ pm_props.expiration_date }}</strong></td>
               {% elif payment_method.method_type == 'paypal_account'%}
-                <td class="text-left">
-                  <img class="img-responsive mr-2" width="40" src="{{ pm_props.image_url }}"/>
+                <td class="text-start">
+                  <img class="img-responsive me-2" width="40" src="{{ pm_props.image_url }}"/>
                   With email <strong>{{ pm_props.email }}</strong>
                 </td>
               {% else %}
-                <td class="text-left">{{ pm_props.recognisable_name }}</td>
+                <td class="text-start">{{ pm_props.recognisable_name }}</td>
                 <td></td>
               {% endif %}
             {% endif %}
-            <td class="actions text-right">
+            <td class="actions text-end">
               <a class="text-danger" href="{% url 'looper:payment_method_delete' pk=payment_method.pk %}">Remove</a>
             </td>
           </tr>

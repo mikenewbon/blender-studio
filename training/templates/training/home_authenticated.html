@@ -15,11 +15,12 @@
 {% endblock %}
 
 {% block jumbotron %}
-  <div class="jumbotron jumbotron-fluid jumbotron-overlay header spacer-n mb-n5">
+  <!-- z-index is due to negative bottom margin causing second section not to be clickable -->
+  <div class="jumbotron jumbotron-fluid jumbotron-overlay header spacer-n mb-n5" style="z-index:-1;">
     <div class="jumbotron-bg-wrapper">
       <img class="jumbotron-bg" src="{% static "training/images/training-header-primitive.jpg" %}">
     </div>
-    <div class="container-xl pb-5">
+    <div class="container-xxl pb-5">
       <div class="row">
         <div class="col-lg-5 col-xl-4">
           <div class="jumbotron-body">
@@ -36,7 +37,7 @@
 {% endblock jumbotron %}
 
 {% block content %}
-  <div class="container-xl pt-2 pt-md-3">
+  <div class="container-xxl pt-2 pt-md-3">
 
     <!-- Recently watched -->
     {% if recently_watched_sections %}
@@ -86,9 +87,7 @@
 
         <div class="col-auto mb-3">
           <div class="input-group input-group-sm" id="sorting">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="searchLicence">Sort by:</label>
-            </div>
+            <label class="input-group-text" for="searchLicence">Sort by:</label>
           </div>
         </div>
 
@@ -98,11 +97,9 @@
 
         <div class="col-md-6 mb-3">
           <div id="search_input" class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text">
-                <i class="material-icons">search</i>
-              </span>
-            </div>
+            <span class="input-group-text">
+              <i class="material-icons">search</i>
+            </span>
           </div>
         </div>
 

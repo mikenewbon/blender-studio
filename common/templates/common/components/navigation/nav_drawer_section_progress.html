@@ -1,5 +1,5 @@
 <li class="drawer-nav-section {% if finished %}complete{% endif %}">
-  <a href="{{ href }}" class="drawer-nav-section-link {% if active %}active{% endif %}" data-tooltip="tooltip-overflow"
+  <a href="{{ href }}" class="drawer-nav-section-link {% if active %}active{% endif %}" data-bs-tooltip="tooltip-overflow"
     data-placement="top" title="{{ title }}">
     <div class="nav-drawer-section-progress-wrapper">
       {% comment %} <i class="material-icons">play_arrow</i> {% endcomment %}
@@ -15,13 +15,13 @@
     <p class="overflow-text h4">{{ title }}</p>
     {% if published %}
       {% if free %}
-        <span class="ml-auto">
-          <i class="material-icons icon-inline small text-success ml-1 mr-0" data-toggle="tooltip" data-placement="top" title="Free">lock_open</i>
+        <span class="ms-auto">
+          <i class="material-icons icon-inline small text-success ms-1 me-0" data-bs-toggle="tooltip" data-placement="top" title="Free">lock_open</i>
         </span>
       {% endif %}
     {% else %}
-      <span class="ml-auto">
-        <i class="material-icons icon-inline small text-danger ml-1 mr-0" data-toggle="tooltip" data-placement="top" title="Unpublished">visibility_off</i>
+      <span class="ms-auto">
+        <i class="material-icons icon-inline small text-danger ms-1 me-0" data-bs-toggle="tooltip" data-placement="top" title="Unpublished">visibility_off</i>
       </span>
     {% endif %}
   </a>

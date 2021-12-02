@@ -1,34 +1,31 @@
 {% load static %}
 {% load thumbnail %}
-<div class="{{ card_sizes|default:"col-12 col-sm-6 col-lg-3" }} card-grid-item">
-  <div class="file">
-      <a class="file-header" href="{{ film_asset.url }}" data-asset-id="{{ film_asset.id }}"
-        data-url="{% url 'api-asset' film_asset.id %}?site_context={{ site_context }}" aria-label="{{ film_asset.name }}">
+<div class="file {{ card_sizes|default:"col-12 col-sm-6 col-lg-3" }} card-grid-item">
+  <a class="file-header" href="{{ film_asset.url }}" data-asset-id="{{ film_asset.id }}"
+    data-url="{% url 'api-asset' film_asset.id %}?site_context={{ site_context }}" aria-label="{{ film_asset.name }}">
 
-        {% if film_asset.static_asset.thumbnail_s_url %}
-          <img class="file-image" src="{{ film_asset.static_asset.thumbnail_s_url }}" alt="{{ film_asset.name }}"/>
-        {% endif %}
+    {% if film_asset.static_asset.thumbnail_s_url %}
+      <img class="file-image" src="{{ film_asset.static_asset.thumbnail_s_url }}" alt="{{ film_asset.name }}"/>
+    {% endif %}
 
-        {% if asset.contains_blend_file %}
-          <img class="file-icon" src="{% static "common/images/icons/blend.svg" %}" alt="{{ film_asset.name }}">
-        {% elif asset.static_asset.source_type == "file" %}
-          <img class="file-icon" src="{% static "common/images/icons/file.svg" %}" alt="{{ film_asset.name }}">
-        {% elif asset.static_asset.source_type == "video" %}
-          <div class="badge badge-video-duration badge-darkhighlight-xstrong">
-            {{ asset.static_asset.video.duration_label }}
-          </div>
-        {% endif %}
-      </a>
-      {% if user_can_edit_asset %}
-        <a href="{{ asset.admin_url }}" target="_blank" class="btn btn-secondary btn-xs btn-icon btn-float">
-          <i class="material-icons btn-material-icons">create</i>
-        </a>
-      {% endif %}
-
-    <a class="file-body" href="{{ film_asset.url }}" data-tooltip="tooltip-overflow" data-placement="top"
-      title="{{ asset.name }}" data-url="{% url 'api-asset' film_asset.id %}?site_context={{ site_context }}">
-      <p class="overflow-text h4">{{ film_asset.name }}</p>
+    {% if asset.contains_blend_file %}
+      <img class="file-icon" src="{% static "common/images/icons/blend.svg" %}" alt="{{ film_asset.name }}">
+    {% elif asset.static_asset.source_type == "file" %}
+      <img class="file-icon" src="{% static "common/images/icons/file.svg" %}" alt="{{ film_asset.name }}">
+    {% elif asset.static_asset.source_type == "video" %}
+      <div class="badge badge-video-duration bg-darkhighlight-xstrong">
+        {{ asset.static_asset.video.duration_label }}
+      </div>
+    {% endif %}
+  </a>
+  {% if user_can_edit_asset %}
+    <a href="{{ asset.admin_url }}" target="_blank" class="btn btn-secondary btn-xs btn-icon btn-float">
+      <i class="material-icons btn-material-icons">create</i>
     </a>
+  {% endif %}
 
-  </div>
+  <a class="file-body" href="{{ film_asset.url }}" data-bs-tooltip="tooltip-overflow" data-placement="top"
+    title="{{ asset.name }}" data-url="{% url 'api-asset' film_asset.id %}?site_context={{ site_context }}">
+    <p class="overflow-text h4">{{ film_asset.name }}</p>
+  </a>
 </div>

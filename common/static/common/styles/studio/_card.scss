@@ -7,15 +7,14 @@
     content: close-quote;
     background: $highlight-white;
     border-radius: $border-radius-lg;
-    width: calc(100% + #{$spacer});
+    width: 100%;
     height: calc(100% + #{$spacer});
     position: absolute;
     top: - $spacer / 2;
-    left: - $spacer / 2;
+    left: 0;
     pointer-events: none;
   }
 
-  flex-grow: 1;
   margin-bottom: $spacer;
   transition: $transition-base;
 
@@ -42,10 +41,18 @@
 
     &.checked {
       @extend .btn-primary;
+      color: $white;
+
+      &:hover,
+      &:focus,
+      &:active {
+        color: $white;
+      }
     }
   }
 
-  @include hover-focus {
+  &:hover,
+  &:focus {
 
     &::before {
       opacity: 1;
@@ -70,7 +77,7 @@
 
   // To fix body underline issue
   .card-body {
-    @include hover {
+    &:hover {
       text-decoration: none;
     }
   }
@@ -149,7 +156,6 @@
     // }
   }
 
-
   p {
     margin-bottom: 0;
   }
@@ -199,7 +205,7 @@
 }
 
 .card-link {
-  @include hover {
+  &:hover {
     text-decoration: none;
   }
 
@@ -221,9 +227,9 @@
 
 .card-footer {
   margin-top: -$spacer / 2;
-  padding: 0 $card-spacer-x $card-spacer-x;
+  padding: $card-spacer-x;
 
-  @include hover {
+  &:hover {
     text-decoration: none;
   }
 }
@@ -238,44 +244,9 @@
 }
 
 .card-img-top-left {
-  @include border-top-left-radius($card-inner-border-radius);
+  border-top-left-radius: $card-inner-border-radius;
 }
 
-// Card deck
-
-.card-deck {
-  &.card-deck-lg {
-    @include media-breakpoint-up(lg) {
-      display: flex;
-      flex-flow: row wrap;
-      margin-right: -$card-deck-margin;
-      margin-left: -$card-deck-margin;
-
-      .card {
-        // Flexbugs #4: https://github.com/philipwalton/flexbugs#flexbug-4
-        flex: 1 0 0%;
-        margin-bottom: 0; // Override the default
-        margin-left: $card-deck-margin;
-        margin-right: $card-deck-margin;
-      }
-    }
-  }
-
-  @include media-breakpoint-up(md) {
-    display: flex;
-    flex-flow: row wrap;
-    margin-left: -$card-deck-margin;
-    margin-right: -$card-deck-margin;
-
-    .card {
-      // Flexbugs #4: https://github.com/philipwalton/flexbugs#flexbug-4
-      flex: 1 0 0%;
-      margin-bottom: 0; // Override the default
-      margin-left: $card-deck-margin;
-      margin-right: $card-deck-margin;
-    }
-  }
-}
 
 //
 // Accordion

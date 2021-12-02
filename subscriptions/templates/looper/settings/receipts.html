@@ -9,24 +9,24 @@
     <table class="table table-sm text-center table-receipts">
       <thead>
         <tr>
-          <th class="text-left">Date</th>
-          <th class="text-left">Description</th>
+          <th class="text-start">Date</th>
+          <th class="text-start">Description</th>
           <th>Invoice</th>
-          <th class="text-right">Amount</th>
+          <th class="text-end">Amount</th>
 
         </tr>
       </thead>
       <tbody>
         {% for o in orders %}
           <tr>
-            <td class="text-left">{{ o.paid_at|date|default:'unknown' }}</td>
-            <td class="text-left">{{ o.name }}</td>
+            <td class="text-start">{{ o.paid_at|date|default:'unknown' }}</td>
+            <td class="text-start">{{ o.name }}</td>
             <td class="">
               <a href="{% url 'subscriptions:receipt' order_id=o.pk %}">View</a>
               |
               <a href="{% url 'subscriptions:receipt-pdf' order_id=o.pk %}">Download</a>
             </td>
-            <td class="text-right">{{ o.price.with_currency_symbol_nonocents }}</td>
+            <td class="text-end">{{ o.price.with_currency_symbol_nonocents }}</td>
           </tr>
         {% endfor %}
       </tbody>

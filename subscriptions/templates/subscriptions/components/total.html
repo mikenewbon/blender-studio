@@ -11,7 +11,7 @@
         <h3 class="mb-0">Total</h3>
         <p class="subtitle small"><span class="x-price-tax">{{ current_price.format_tax_amount }}</span></p>
       </div>
-      <div class="col text-right">
+      <div class="col text-end">
         <h2 class="mb-n1"><span class="x-price">{{ current_price.price.with_currency_symbol }}</span></h2>
         <p class="subtitle small">/ <span
           class="x-price-period">{{ current_plan_variation.interval_length }} {{ current_plan_variation.interval_unit }}</span></p>
@@ -21,7 +21,7 @@
   </div>
 
   <div class="row mt-3">
-    <div class="col text-right">
+    <div class="col text-end">
       {% if user.is_authenticated %}
         <button class="btn btn-primary w-100" id="submit-button" type="submit">{{ button_text|default:"Continue" }}</button>
 

@@ -3,14 +3,11 @@
 
   height: auto;
   margin-bottom: 0;
-  width: 100%;
   transition: none;
   background: none;
   border: 0;
 
   &:hover {
-
-
     .file-body {
       color: $white;
       text-decoration: none;
@@ -189,7 +186,7 @@
   display: flex;
 
   i {
-    line-height: $headings-line-height;
+    line-height: 1;
   }
 
   h4,
@@ -268,8 +265,8 @@
 
 //Modal Toolbar
 
-.file-toolbar {
-  @extend .training-toolbar;
+.button-toolbar {
+  @extend .button-toolbar;
 
   .btn+.btn,
   .dropdown-menu+.btn {
@@ -314,28 +311,13 @@
   }
 }
 
-
-// .grid {
-//   margin: ($spacer / 2) (-$spacer / 2);
-// }
-
 .grid-item {
   margin-bottom: $spacer;
-
 }
 
 // different style for the grid view and carousel views
 .files {
-
   &.grid {
     margin-bottom: $spacer / 2;
-  }
-
-  .file {
-    &::before {
-      left: 0;
-      top: - $spacer / 2;
-      width: 100%;
-    }
   }
 }

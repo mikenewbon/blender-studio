@@ -12,7 +12,7 @@ body {
   &.has-secondary-nav {
 
     .navbar {
-      border-radius: $border-radius $border-radius 0 0;
+      border-radius: $border-radius-lg $border-radius-lg 0 0;
       top: #{- $navbar-height};
 
       &.scroll {
@@ -46,6 +46,8 @@ div.spacer-n {
   margin-top: #{ - $navbar-height - $spacer};
 }
 
+
+
 .navbar {
   position: sticky;
   top: #{- $navbar-height };
@@ -54,14 +56,14 @@ div.spacer-n {
   align-items: stretch;
   background: $navigation-gray;
   border: 1px solid $input-gray;
-  border-radius: $border-radius;
+  border-radius: $border-radius-lg;
   flex-wrap: nowrap; // allow us to do the line break for collapsing content
   margin: 0 auto;
-  max-width: calc(100% - #{$spacer * 2});
+  // max-width: calc(100% - #{$spacer * 2});
   min-height: $navbar-height;
   padding: $navbar-padding-y $navbar-padding-x;
   transition: margin-left $nav-drawer-animation-duration, top $nav-drawer-animation-duration;
-  width: 1140px;
+  width: 100%;
   z-index: 1040;
 
   &.hover,
@@ -74,7 +76,7 @@ div.spacer-n {
     overflow-wrap: normal;
   }
 
-  .container-xl {
+  .container-fluid {
     padding: 0 $spacer / 2;
   }
 
@@ -97,7 +99,7 @@ div.spacer-n {
   }
 
   .navbar-main-nav {
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(md) {
       display: none;
     }
 
@@ -107,7 +109,7 @@ div.spacer-n {
     flex-grow: 1;
 
     .list-group-item {
-      @include hover-focus {
+      &:hover, &:focus {
         background: $highlight-white;
         color: $white;
         text-decoration: none;
@@ -142,7 +144,7 @@ div.spacer-n {
   }
 
   .navbar-main-nav-toolbar {
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(md) {
       padding: 0 $spacer / 2;
     }
 
@@ -191,12 +193,10 @@ div.spacer-n {
     }
   }
 
-  .container-xl {
+  .container-fluid {
     @include media-breakpoint-down(sm) {
       padding: 0;
     }
-
-    height: 100%;
   }
 
   .container,
@@ -222,8 +222,8 @@ div.spacer-n {
 
   background: $navigation-gray;
   border: 1px solid $input-gray;
-  max-width: calc(100% - #{$spacer * 2});
-  width: 1140px;
+  // max-width: calc(100% - #{$spacer * 2});
+  width: 100%;
   position: sticky;
   top: -1px;
   z-index: 1030;
@@ -301,7 +301,7 @@ div.spacer-n {
   .list-group-item {
     margin: 0 $spacer / 8;
 
-    @include hover-focus {
+    &:hover, &:focus {
       color: $white;
       text-decoration: none;
 
@@ -342,7 +342,7 @@ div.spacer-n {
 
     &::after {
       background: $highlight-white;
-      border-radius: $border-radius !important;
+      border-radius: $border-radius-sm !important;
       content: close-quote;
       height: calc(100% - #{$spacer / 2});
       left: 0;
@@ -379,7 +379,7 @@ div.spacer-n {
     margin-right: 0;
   }
 
-  @include hover-focus {
+  &:hover, &:focus {
     &::before {
       opacity: 1;
     }
@@ -417,7 +417,7 @@ div.spacer-n {
   padding: $spacer / 2 0;
   line-height: 1;
 
-  @include hover-focus {
+  &:hover, &:focus {
     img {
       opacity: 1;
     }

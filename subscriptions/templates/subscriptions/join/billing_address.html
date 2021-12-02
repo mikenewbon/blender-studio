@@ -33,7 +33,7 @@
           </section>
         </div>
 
-        <div class="payment-tabs-footer border-bottom">
+        <div class="payment-tabs-footer border-bottom border-1">
           <div class="row">
             {% if messages %}
               {% for message in messages %}
@@ -46,10 +46,10 @@
 
           <div class="row">
             <div class="col">
-              <p class="subtitle small font-weight-bold mb-0">Plan:</p>
+              <p class="subtitle small fw-bold mb-0">Plan:</p>
             </div>
 
-            <div class="col text-right">
+            <div class="col text-end">
               <p class="subtitle small mb-0">{{ current_plan_variation.collection_method|capfirst }} (<a href="{{ back_url }}" class="subtitle underline" >Change</a>)</p>
             </div>
           </div>

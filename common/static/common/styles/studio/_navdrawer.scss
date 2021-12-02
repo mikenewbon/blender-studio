@@ -87,7 +87,7 @@
 .nav-drawer-nested {
   background: $navigation-gray;
   display: block;
-  border-radius: $border-radius;
+  border-radius: $border-radius-lg;
   border-right: 0;
   max-height: calc(100vh - #{$spacer * 2});
   height: auto;
@@ -104,7 +104,7 @@
     overflow-y: auto;
   }
 
-  @include media-breakpoint-up(xl) {
+  @include media-breakpoint-up(xxl) {
     margin-left: - $spacer;
   }
 

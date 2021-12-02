@@ -2,33 +2,74 @@
   border-radius: $border-radius-sm;
   font-size: $font-size-sm;
   padding: $alert-padding-sm-y $alert-padding-sm-x;
-  border-left-width: $border-radius-sm!important;
+  border-left-width: $border-radius-sm !important;
 }
 
 .alert {
   border-left-width: $border-radius;
+
+  a {
+    text-decoration: underline;
+    transition: $transition-base;
+  }
 }
 
 .alert-warning {
   background: rgba($warning, .1);
   color: $warning;
   border-color: $warning;
+
+  a {
+    color: $warning;
+
+    &:hover,
+    &:focus {
+      color: shade-color($color: $warning, $weight: $link-shade-percentage);
+    }
+  }
 }
 
 .alert-success {
   background: rgba($success, .1);
   color: $success;
   border-color: $success;
+
+  a {
+    color: $success;
+
+    &:hover,
+    &:focus {
+      color: shade-color($color: $success, $weight: $link-shade-percentage);
+    }
+  }
 }
 
 .alert-danger {
   background: rgba($danger, .1);
   color: $danger;
   border-color: $danger;
+
+  a {
+    color: $danger;
+
+    &:hover,
+    &:focus {
+      color: shade-color($color: $danger, $weight: $link-shade-percentage);
+    }
+  }
 }
 
 .alert-primary {
   background: rgba($primary, .1);
   color: $primary;
   border-color: $primary;
+
+  a {
+    color: $primary;
+
+    &:hover,
+    &:focus {
+      color: shade-color($color: $primary, $weight: $link-shade-percentage);
+    }
+  }
 }

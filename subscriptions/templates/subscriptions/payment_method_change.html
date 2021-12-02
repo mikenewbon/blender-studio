@@ -11,7 +11,7 @@
       <div class="alert alert-{% if subscription.status == 'active' %}primary{% else %}warning{% endif %}" role="alert">
         <span>
           Your {{ subscription.plan.name }} subscription is currently
-          <span class="font-weight-bolder">{{ subscription.get_status_display|lower }}</span>.
+          <span class="fw-bolder">{{ subscription.get_status_display|lower }}</span>.
         </span>
       </div>
 
@@ -34,7 +34,7 @@
       data-braintree-client-token="{{ client_token }}">{% csrf_token %}
       {% with form|add_form_classes as form %}
         <section class="checkout-form-fields">
-          <a class="text-muted float-right" href="{% url 'subscriptions:billing-address' %}"><i class="fa fa-angle-left pr-3"></i>change billing details</a>
+          <a class="text-muted float-end" href="{% url 'subscriptions:billing-address' %}"><i class="fa fa-angle-left pe-3"></i>change billing details</a>
           <fieldset class="checkout-form-billing-address-readonly">
             {% include "subscriptions/components/billing_address_form_readonly.html" %}
           </fieldset>

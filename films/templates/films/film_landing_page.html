@@ -28,7 +28,7 @@
       <img src="{% static "films/images/sprite-fright/sprite-fright-clouds.png" %}" alt="{{ film.title }}" class="jumbotron-bg">
     </div>
 
-    <div class="container-xl">
+    <div class="container-xxl">
       <div class="row">
         <div class="col">
           <div class="jumbotron-body">
@@ -52,7 +52,7 @@
                 <p class="mb-3">Want to know more? Join the studio today and help the team to create & share.</p>
 
                 <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center mb-n2">
-                  <a class="btn btn-primary mr-2 mb-2" href="{% url 'subscriptions:join' %}">Subscribe to get access!</a>
+                  <a class="btn btn-primary me-2 mb-2" href="{% url 'subscriptions:join' %}">Subscribe to get access!</a>
                   <div class="d-inline-block">
                     <p class="mb-2 small">Access to all training, assets<br>and films for €9.90/month</p>
                   </div>
@@ -70,7 +70,7 @@
 
   <!-- Blog Posts -->
   <section class="mb-4">
-    <div class="container-xl">
+    <div class="container-xxl">
 
       <!-- Latest Blog Posts -->
       {% with subtitle="Read the latest news about "|add:film.title|add:"." %}
@@ -88,7 +88,7 @@
       <img src="{% static "films/images/sprite-fright/story.png" %}" alt="{{ film.title }}" class="image-fade image-fade-right">
     </div>
 
-    <div class="container-xl">
+    <div class="container-xxl">
       <div class="row ">
 
         <div class="col-md-6">
@@ -118,11 +118,11 @@
 
   <!-- Production Logs (50-50) -->
   <section class="image-float-section">
-    <div class="container-xl">
+    <div class="container-xxl">
       <div class="row ">
 
         <div class="col-md-5 h-0 align-self-center image-float-container">
-          <img src="{% static "films/images/sprite-fright/production-log.png" %}" alt="{{ film.title }}" class="image-float image-float-left">
+          <img src="{% static "films/images/sprite-fright/production-log.png" %}" alt="{{ film.title }}" class="image-float image-float-start">
         </div>
 
         <div class="col-md-6 offset-md-1">
@@ -152,7 +152,7 @@
   <!-- Pipeline (Card slide) -->
   <section class="my-5">
 
-    <div class="container-xl">
+    <div class="container-xxl">
       <div class="row justify-content-center">
         <div class="col-md-6 text-center">
           <h1>Discover how we built our pipeline for film making!</h1>
@@ -196,7 +196,7 @@
 
   <!-- Production Lessons (50-50) -->
   <div class="image-float-section">
-    <div class="container-xl">
+    <div class="container-xxl">
       <div class="row ">
 
         <div class="col-md-6">
@@ -225,7 +225,7 @@
 
   <!-- Featured Gallery -->
   <section class="mb-4">
-    <div class="container-xl">
+    <div class="container-xxl">
 
       <div class="row mb-3">
         <div class="col text-center">
@@ -266,7 +266,7 @@
       <img src="{% static "films/images/sprite-fright/phil-log.png" %}" alt="{{ film.title }}" class="jumbotron-bg">
     </div>
 
-    <div class="container-xl">
+    <div class="container-xxl">
       <div class="row">
         <div class="col">
           <div class="jumbotron-body">
@@ -290,7 +290,7 @@
 
 
                 <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center mb-n2">
-                  <a class="btn btn-primary mr-2 mb-2" href="{% url 'subscriptions:join' %}">Subscribe to get access!</a>
+                  <a class="btn btn-primary me-2 mb-2" href="{% url 'subscriptions:join' %}">Subscribe to get access!</a>
                   <div class="d-inline-block">
                     <p class="mb-2 small">Access to all training, assets<br>and films for €9.90/month</p>
                   </div>

@@ -15,7 +15,7 @@
     <i class="material-icons btn-material-icons">navigate_before</i>
   </button>
 {% endif %}
-<button class="modal-navigation modal-close btn btn-lg btn-icon d-none d-md-block" data-dismiss="modal">
+<button class="modal-navigation modal-close btn btn-lg btn-icon d-none d-md-block" data-bs-dismiss="modal">
   <i class="material-icons btn-material-icons">close</i>
 </button>
 
@@ -35,11 +35,11 @@
         <div class="modal-header p-0 bg-secondary">
 
           <div class="modal-mobile-header d-md-none bg-dark">
-            <div class="modal-mobile-header-text  d-block d-md-none">
+            <div class="modal-mobile-header-text d-block d-md-none">
               <p class="subtitle x-small">{{ asset.static_asset.get_source_type_display }}</p>
               <h3 class="mb-0">{{ asset.name }}</h3>
             </div>
-            <button class="modal-navigation modal-close btn btn-lg btn-icon" data-dismiss="modal">
+            <button class="modal-navigation modal-close btn btn-lg btn-icon" data-bs-dismiss="modal">
               <i class="material-icons btn-material-icons">close</i>
             </button>
           </div>
@@ -53,7 +53,7 @@
                 {% include 'common/components/video_player.html' with url=asset.static_asset.video.source.url progress_url=asset.static_asset.video.progress_url start_position=start_position poster=asset.static_asset.thumbnail_m_url tracks=asset.static_asset.video.tracks.all loop=asset.static_asset.video.loop %}
               {% endif %}
             {% elif asset.static_asset.thumbnail %}
-              <a data-toggle="modal" data-target="#file-zoom-modal" class="modal-asset-image-wrapper"
+              <a class="modal-asset-image-wrapper zoom-modal-link"
                 data-url="{% url 'api-asset-zoom' asset.id %}">
                 {% include "common/components/helpers/image_resize.html" with alt=asset.name classes="img-fluid" img_source=asset.static_asset.thumbnail width="780" %}
               </a>
@@ -74,22 +74,22 @@
                 <h2 class="">{{ asset.name }}</h2>
               </div>
               <div class="text-muted x-small">
-                <p class="d-inline mr-2">{{ asset.date_published|date:"jS F Y" }}</p>
+                <p class="d-inline me-2">{{ asset.date_published|date:"jS F Y" }}</p>
                 {% if asset.static_asset.license %}
-                  <a href="{{ asset.static_asset.license.url }}" target="_blank" class="d-inline mr-2 text-muted"
-                    data-toggle="tooltip" data-placement="bottom" title="{{ asset.static_asset.license.description }}">
+                  <a href="{{ asset.static_asset.license.url }}" target="_blank" class="d-inline me-2 text-muted"
+                    data-bs-toggle="tooltip" data-placement="bottom" title="{{ asset.static_asset.license.description }}">
                     <i class="material-icons icon-inline x-small">info</i>
                     {{ asset.static_asset.license }}
                   </a>
                 {% endif %}
                 {% if asset.static_asset.copyright %}
-                  <p class="d-inline mr-2">
+                  <p class="d-inline me-2">
                     <i class="material-icons icon-inline x-small">copyright</i>
                     {{ asset.static_asset.copyright }}
                   </p>
                 {% endif %}
                 {% if asset.is_free %}
-                  <p class="d-inline mr-2 text-success">
+                  <p class="d-inline me-2 text-success">
                     <i class="material-icons icon-inline x-small">lock_open</i>
                     Free
                   </p>
@@ -97,68 +97,14 @@
               </div>
             </div>
             <div class="col-12 col-md-auto mb-2 mb-md-0 mt-0 mt-md-3">
-              <div class="training-toolbar-container">
-
-                <div class="file-toolbar">
-                  <button data-like-url="{{ asset.like_url }}"
-                    class="btn btn-transparent btn-sm btn-icon comment-material-button checkbox-like {% if not user.is_authenticated %}disabled{% endif%}"
-                    {% if not user.is_authenticated %}disabled{% endif%} {% if asset.liked %}data-checked="checked" {% endif %}>
-                    <i class="material-icons checkbox-like-icon-checked text-primary">favorite</i>
-                    <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
-                    {% if asset.likes.count != 0 %}<span class="likes-count">{{ asset.likes.count }}</span>{% endif %}
-                  </button>
-
-                  {% if user.is_anonymous and not asset.is_free %}
-                    <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to Download</button>
-                  {% elif not asset.is_free and not user_has_active_subscription %}
-                    <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Subscribe to Download</button>
-                  {% elif user_has_active_subscription or asset.is_free %}
-                    {% if asset.static_asset.video.tracks.all %}
-                      <div class="btn-group">
-                        <a href="{{ asset.static_asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ asset.static_asset.download_size }})</span></a>
-                        <button data-toggle="dropdown" id="subtitleDownload" class="btn btn-sm btn-icon btn-dark rounded-right" ><i class="material-icons">arrow_drop_down</i></button>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="subtitleDownload">
-                          {% for track in asset.static_asset.video.tracks.all %}
-                            <a href="{{ track.url }}" target="_blank" download="{{ asset.name }}_{{ track.language }}.vtt" onclick="setTimeout(resetProgress, 100)" class="dropdown-item">
-                              <span>Download {{ track.get_language_display }} Subtitles</span>
-                            </a>
-                          {% endfor %}
-                        </div>
-                      </div>
-                    {% else%}
-                      <a href="{{ asset.static_asset.download_url }}" download onclick="setTimeout(resetProgress, 100)" class="btn btn-sm btn-dark">Download <span class="subtitle">({{ asset.static_asset.download_size }})</span></a>
-                    {% endif %}
-                  {% endif %}
-
-                  <div class="ml-2">
-                    <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
-                      <i class="material-icons">more_horiz</i>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank"
-                        class="dropdown-item">
-                        <i class="material-icons">flag</i>
-                        <span>Report Problem</span>
-                      </a>
-                      {% if user_can_edit_asset %}
-                        <a href="{{ asset.admin_url }}" target="_blank" class="dropdown-item">
-                          <i class="material-icons">create</i>
-                          <span>Admin Edit</span>
-                        </a>
-                      {% endif %}
-                    </div>
-                  </div>
-
-
-                </div>
-              </div>
+              {% include "common/components/navigation/buttons_toolbar.html" with item=asset %}
             </div>
           </div>
 
           <div class="row align-items-center">
             <div class="col-auto d-flex mb-2">
               <div class="row">
-                <div class="col-auto pr-0">
+                <div class="col-auto pe-0">
                   {% if asset.static_asset.author_image_url %}
                     <img src="{{ asset.static_asset.author_image_url }}" class="profile">
                   {% else %}
@@ -178,7 +124,7 @@
                 <div class="col-auto mb-2">
                   <div class="contributors d-flex align-items-center">
 
-                    <div class="mr-2">
+                    <div class="me-2">
                       <p class="subtitle text-white-50 x-small">Contributors</p>
                       {% comment %} <h4 class="comment-name mb-0">{{ asset.static_asset.contributors.all|length}} Other{% if asset.static_asset.contributors.all|length > 1 %}s{% endif %}:</h4> {% endcomment %}
                       <div class="d-flex">
@@ -187,10 +133,10 @@
                             <img src="{{ contributor.image_url }}" alt="{{ contributor.full_name }}" class="profile rounded-circle">
                           {% endif %}
                         {% endfor %}
-                        <button class="btn btn-xs btn-icon btn-dark ml-2" data-toggle="dropdown" href="">
+                        <button class="btn btn-xs btn-icon btn-dark ms-2" data-bs-toggle="dropdown" href="">
                           <i class="material-icons">arrow_drop_down</i>
                         </button>
-                        <div class="dropdown-menu mt-2 dropdown-menu-right px-2 pt-2 pb-0">
+                        <div class="dropdown-menu mt-2 dropdown-menu-end px-2 pt-2 pb-0">
                           <h3 class="mb-2">Other Contributors</h3>
                           {% for contributor in contributors.all %}
                             {% if contributor.pk != asset_author.pk %}

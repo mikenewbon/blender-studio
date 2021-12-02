@@ -1,5 +1,6 @@
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-undef */
+/* global ajax:false bootstrap:false */
+/* eslint-disable prefer-destructuring */
 // eslint-disable-next-line no-unused-vars
 function epochToDate(epoch) {
   let epochValue = epoch;
@@ -69,29 +70,33 @@ function authCheck() {
 }
 
 function cardCarousel(element) {
-  const totalCards = element.parentElement.childElementCount;
-  let next = $(element).next();
-  if (!next.length) {
-    next = $(element).siblings(':first');
+  function nextElement(item) {
+    if (item.nextElementSibling === null) {
+      return item.parentElement.firstElementChild;
+    } else {
+      return item.nextElementSibling;
+    }
   }
-  next.children(':first-child').clone().appendTo($(element));
+
+  const totalCards = element.parentElement.childElementCount;
+  let next = nextElement(element);
+
+  const append = next.firstElementChild.cloneNode(true);
+
+  element.insertAdjacentElement('beforeend', append);
 
   for (let i = 2; i < totalCards; i += 1) {
-    next = next.next();
-    if (!next.length) {
-      next = $(element).siblings(':first');
-    }
+    next = nextElement(next);
 
-    next.children(':first-child').clone().appendTo($(element));
+    const appendy = next.firstElementChild.cloneNode(true);
+    element.insertAdjacentElement('beforeend', appendy);
   }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  document
-    .querySelectorAll('.carousel-card-3 .carousel-item, .carousel-card-4 .carousel-item')
-    .forEach((item) => {
-      cardCarousel(item);
-    });
+  document.querySelectorAll('.carousel-card .carousel-item').forEach((item) => {
+    cardCarousel(item);
+  });
 });
 
 let currentUser = null;
@@ -101,17 +106,14 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Adds tooltips if text overflows.
-$(() => {
-  $('[data-tooltip="tooltip-overflow"]').each(function () {
-    $(this).tooltip();
-    $(this).tooltip('disable');
-    const text = this.querySelector('.overflow-text');
-    $(this).mouseenter(() => {
-      if (text.scrollWidth > text.clientWidth) {
-        $(this).tooltip('enable');
-        $(this).tooltip('show');
-      }
-    });
+document.querySelectorAll('[data-bs-tooltip="tooltip-overflow"').forEach((i) => {
+  const tooltip = new bootstrap.Tooltip(i);
+  tooltip.disable();
+  const text = i.querySelector('.overflow-text');
+  this.addEventListener('mouseover', () => {
+    if (text.scrollWidth > text.clientWidth) {
+      tooltip.enable();
+    }
   });
 });
 
@@ -133,7 +135,6 @@ function likeButtonSetup(element) {
       const likeUrl = likeButton.dataset.likeUrl;
       const liked = likeButton.dataset.checked;
 
-      // eslint-disable-next-line no-undef
       ajax
         .jsonRequest('POST', likeUrl, {
           like: !liked,
@@ -192,24 +193,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // eslint-disable-next-line no-unused-vars
 function makeGrid() {
-  const $grid = $('.grid').masonry({
+  const elm = document.querySelector('.grid');
+  const masonry = new Masonry(elm, {
     itemSelector: '.grid-item',
     columnWidth: '.grid-sizer',
     percentPosition: true,
     horizontalOrder: true,
   });
 
-  $grid.imagesLoaded().progress(() => {
-    $grid.masonry('layout');
+  imagesLoaded(elm).on('progress', () => {
+    masonry.layout();
   });
 }
 
 // eslint-disable-next-line no-unused-vars
 function initVideo(container) {
-  const players = Array.from(container.querySelectorAll('.video-player video, .video-player-embed')).map(
-    // eslint-disable-next-line no-undef
-    (p) => new Plyr(p)
-  );
+  const players = Array.from(
+    container.querySelectorAll('.video-player video, .video-player-embed')
+  ).map((p) => new Plyr(p));
 
   const loopButton = `
     <button class="plyr__controls__item plyr__control" type="button" data-plyr="loop">
@@ -235,8 +236,8 @@ function initVideo(container) {
 
       if (dataElement.querySelector('video')) {
         element.elements.controls
-        .querySelector('.plyr__menu')
-        .insertAdjacentHTML('afterend', loopButton);
+          .querySelector('.plyr__menu')
+          .insertAdjacentHTML('afterend', loopButton);
       }
 
       if (dataElement.querySelector('video')?.hasAttribute('loop')) {
@@ -304,7 +305,9 @@ document.addEventListener('DOMContentLoaded', () => {
     element.addEventListener('click', () => {
       imageWrapper.innerHTML = imageHTML;
       // eslint-disable-next-line no-undef
-      $(imageZoomModalID).modal('show');
+      const modalEl = document.querySelector(imageZoomModalID);
+      const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+      modal.show(modalEl);
     });
   });
 });
@@ -315,8 +318,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const id = element.hash;
     element.addEventListener('click', (event) => {
       event.preventDefault();
-      document.querySelector(id + ' .read-more-elip').classList.toggle('d-none');
-      document.querySelector(id + ' .read-more-text').classList.toggle('d-none');
+      document.querySelector(`${id} .read-more-elip`).classList.toggle('d-none');
+      document.querySelector(`${id} .read-more-text`).classList.toggle('d-none');
       if (element.querySelector('.read-more-less').innerText === 'more') {
         // eslint-disable-next-line no-param-reassign
         element.querySelector('.read-more-less').innerText = 'less';
@@ -328,9 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// TODO(Mike): Simplify and clean up
 document.addEventListener('DOMContentLoaded', () => {
-
   const nav = document.querySelector('.navbar');
   const secondaryNav = document.querySelector('.navbar-secondary');
   const nestedNav = document.querySelector('.nav-drawer-nested');

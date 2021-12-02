@@ -1,0 +1,16 @@
+.container-nav {
+  max-width: $container-nav-max-width;
+  padding: 0 $spacer / 2;
+
+  &.navbar-secondary {
+    padding: 0;
+  }
+
+  @include media-breakpoint-down(xxl) {
+    max-width: calc(100% - #{$spacer * 2});
+  }
+
+  @include media-breakpoint-down(md) {
+    padding: 0;
+  }
+}

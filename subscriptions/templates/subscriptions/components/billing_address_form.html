@@ -92,7 +92,7 @@
 {% with field=form.vat_number%}
   <div class="row">
     <div class="col text-center mb-2">
-      <a class="small subtitle-light text-decoration-underline" data-toggle="collapse" href="#collapseCompany" role="button"
+      <a class="small subtitle-light text-decoration-underline" data-bs-toggle="collapse" href="#collapseCompany" role="button"
         aria-expanded="false" aria-controls="collapseCompany"><span
           class="add-remove">{% if form.postal_code.value or form.street_address.value or form.city.value or form.extended_address.value or form.region.value or form.locality.value or form.company.value or form.vat_number.value %}Remove{% else %}Add{% endif %}</span>
         billing and VAT details (optional)</a>

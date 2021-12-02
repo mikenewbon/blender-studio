@@ -1,7 +1,7 @@
 <div class="modal-dialog" role="document">
   <div class="modal-content bg-dark">
     <div class="modal-header p-0">
-      <div class="file-toolbar">
+      <div class="button-toolbar">
         <button data-like-url="{{ asset.like_url }}"
           class="btn btn-dark btn-sm btn-icon comment-material-button checkbox-like {% if not user.is_authenticated %}disabled{% endif%}"
           {% if not user.is_authenticated %}disabled{% endif%} {% if asset.liked %}data-checked="checked" {% endif %}>
@@ -12,16 +12,16 @@
         <a href="{{ asset.static_asset.download_url }}" download onclick="setTimeout(resetProgress, 100)"
           class="btn btn-sm btn-dark">Download{% if asset.static_asset.download_size != "" %} <span
             class="subtitle">({{ asset.static_asset.download_size }})</span>{% endif %}</a>
-        <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
+        <button data-bs-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
           <i class="material-icons">more_horiz</i>
         </button>
-        <div class="dropdown-menu dropdown-menu-right">
+        <div class="dropdown-menu dropdown-menu-end">
           <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank" class="dropdown-item">
             <i class="material-icons">flag</i>
             <span>Report Problem</span>
           </a>
         </div>
-        <button data-dismiss="modal" class="btn btn-sm btn-icon btn-dark">
+        <button data-bs-dismiss="modal" class="btn btn-sm btn-icon btn-dark">
           <i class="material-icons">close</i>
         </button>
       </div>

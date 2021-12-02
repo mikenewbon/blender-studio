@@ -1,0 +1,64 @@
+{% load common_extras %}
+{% with static_asset=item.preview_video_static_asset|default:item.static_asset %}
+  <div class="button-toolbar-container">
+    <div class="button-toolbar">
+      {% firstof item.like_url like_url as like_url %}
+      {% firstof item.liked liked as liked %}
+      {% firstof item.likes.count likes_count as likes_count %}
+      {% if like_url %}
+        <button data-like-url="{{ like_url }}"
+          class="btn btn-dark btn-sm btn-icon comment-material-button checkbox-like {% if not user.is_authenticated %}disabled{% endif%}"
+          {% if not user.is_authenticated %}disabled{% endif%} {% if liked %}data-checked="checked" {% endif %}>
+          <i class="material-icons checkbox-like-icon-checked text-primary">favorite</i>
+          <i class="material-icons checkbox-like-icon-unchecked">favorite_border</i>
+          {% if likes_count != 0 %}
+            <span class="likes-count">{{ likes_count }}</span>
+          {% endif %}
+        </button>
+      {% endif %}
+      {% if user.is_anonymous and not item.is_free %}
+        <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Login to Download</button>
+      {% elif not item.is_free and not request.user|has_active_subscription %}
+        <button disabled class="btn disabled btn-sm btn-dark"><i class="material-icons">lock</i> Subscribe to Download</button>
+      {% elif request.user|has_active_subscription or item.is_free %}
+        {% if static_asset.video.tracks.all %}
+          <div class="btn-group">
+            <a href="{{ static_asset.download_url }}" download class="btn btn-sm btn-dark">Download <span class="subtitle">({{ static_asset.download_size }})</span></a>
+            <button data-bs-toggle="dropdown" data-bs-target="#downloadDropdown" class="btn btn-sm btn-icon btn-dark rounded-right dropdown-toggle" >
+              <i class="material-icons">arrow_drop_down</i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" id="downloadDropdown">
+              {% for track in static_asset.video.tracks.all %}
+                <a href="{{ track.url }}" target="_blank" download="{{ item.name }}_{{ track.language }}.vtt" onclick="setTimeout(resetProgress, 100)" class="dropdown-item">
+                  <span>Download {{ track.get_language_display }} Subtitles</span>
+                </a>
+              {% endfor %}
+            </div>
+          </div>
+        {% else %}
+          <a href="{{ static_asset.download_url }}" download class="btn btn-sm btn-dark">Download <span class="subtitle">({{ static_asset.download_size }})</span></a>
+        {% endif %}
+      {% endif %}
+
+      {% if user.is_staff %}
+        {% firstof item.charachter.admin_url item.admin_url as admin_url %}
+        <a href="{{ admin_url }}" class="btn btn-sm btn-icon btn-dark">
+          <i class="material-icons btn-material-icons">create</i>
+        </a>
+      {% endif %}
+
+      <div class="ms-2">
+        <button data-bs-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
+          <i class="material-icons">more_horiz</i>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank"
+            class="dropdown-item">
+            <i class="material-icons">flag</i>
+            <span>Report Problem</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endwith %}

@@ -1,7 +1,7 @@
 {% load pipeline %}
 {% load static %}
 <div class="comment-input row {{ div_class }}" onkeydown="event.stopPropagation()">
-  <div class="col-auto pr-0 d-flex">
+  <div class="col-auto pe-0 d-flex">
     {% if request.user.is_authenticated and request.user.image_url %}
       <div style="background-image:url('{{ request.user.image_url }}');" class="profile"></div>
     {% else %}
@@ -11,7 +11,7 @@
   <div class="col">
     <div class="comment-input-div form-control" contenteditable="true"></div>
   </div>
-  <div class="comment-send col-auto pl-0">
+  <div class="comment-send col-auto ps-0">
     <button class="btn-input btn-sm btn btn-sm btn-icon">
       <i class="material-icons">send</i>
     </button>

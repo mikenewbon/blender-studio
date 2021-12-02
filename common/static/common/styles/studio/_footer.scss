@@ -1,4 +1,4 @@
-footer.container-xl {
+footer.container-xxl {
   @include media-breakpoint-down(sm) {
     text-align: center;
     margin: $spacer / 2!important;
@@ -11,7 +11,7 @@ footer.container-xl {
   }
 
   border: 1px solid $input-gray;
-  border-radius: $border-radius;
+  border-radius: $border-radius-lg;
   background: $navigation-gray;
   padding: $spacer;
   margin-bottom: $spacer;

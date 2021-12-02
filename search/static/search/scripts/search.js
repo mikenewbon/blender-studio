@@ -68,11 +68,10 @@ const renderSearchBox = (renderOptions, isFirstRender) => {
       clear();
     });
 
-    widgetParams.container
-      .querySelector('.input-group-append')
-      .insertAdjacentElement('beforebegin', input);
-    // widgetParams.container.appendChild(loadingIndicator);
-    widgetParams.container.querySelector('.input-group-append').appendChild(button);
+    const searchContainer = document.getElementById('search-container');
+
+    searchContainer.insertAdjacentElement('beforeend', input);
+    searchContainer.insertAdjacentElement('beforeend', button);
   }
 
   widgetParams.container.querySelector('input').value = query;
@@ -90,15 +89,13 @@ const renderSortBy = (renderOptions, isFirstRender) => {
 
   if (isFirstRender) {
     const select = document.createElement('select');
-    select.setAttribute('class', 'custom-select');
+    select.setAttribute('class', 'form-select');
 
     select.addEventListener('change', (event) => {
       refine(event.target.value);
     });
 
-    widgetParams.container
-      .querySelector('.input-group-prepend')
-      .insertAdjacentElement('afterend', select);
+    widgetParams.container.insertAdjacentElement('beforeend', select);
   }
 
   const select = widgetParams.container.querySelector('select');
@@ -137,58 +134,54 @@ const renderHits = (renderOptions, isFirstRender) => {
         .map(
           (item) =>
             `
-<div class="col-12 col-sm-6 col-lg-4 card-grid-item">
-  <div class="card">
-    <div class="card-header">
-      <a class="card-header-link" href="${item.url}" aria-label="${item.name}">
-        <img src="${item.thumbnail_url || fileIconURL}" class="${
+<div class="card col-12 col-sm-6 col-lg-4 card-grid-item">
+  <div class="card-header">
+    <a class="card-header-link" href="${item.url}" aria-label="${item.name}">
+      <img src="${item.thumbnail_url || fileIconURL}" class="${
               item.thumbnail_url ? 'card-img' : 'file-icon'
             }" loading=lazy aria-label="${item.name}">
-      </a>
-    </div>
-    <a href="${item.url}" class="card-body">
-
-      <h3 class="card-title">
-        ${instantsearch.highlight({ attribute: 'name', hit: item })}
-      </h3>
-      <p class="card-text">
-        ${instantsearch.highlight({ attribute: 'description', hit: item })}
-      </p>
-    </a>
-    <a href="${item.url}" class="card-footer">
-      <div class="card-subtitle-group">
-
-        <p class="card-subtitle content-type">
-          <i class="material-icons icon-inline small">category</i>&nbsp;
-          ${item.model === 'section' ? item.training_name : item.model}
-        </p>
-
-
-        ${
-          item.film_title
-            ? `<p class="card-subtitle"><i class="material-icons icon-inline small">movie</i>&nbsp;${titleCase(
-                item.film_title
-              )}</p>`
-            : ''
-        }
-
-        <p class="card-subtitle">
-          <i class="material-icons icon-inline small">schedule</i>&nbsp;
-          ${timeDifference(epochToDate(item.timestamp))}
-        </p>
-
-        ${
-          item.is_free
-            ? `
-          <p class="d-inline mr-2 text-success small"><i class="material-icons icon-inline small" >lock_open</i>&nbsp;Free</p>
-        `
-            : ''
-        }
-
-
-      </div>
     </a>
   </div>
+  <a href="${item.url}" class="card-body">
+
+    <h3 class="card-title">
+      ${instantsearch.highlight({ attribute: 'name', hit: item })}
+    </h3>
+    <p class="card-text">
+      ${instantsearch.highlight({ attribute: 'description', hit: item })}
+    </p>
+  </a>
+  <a href="${item.url}" class="card-footer">
+    <div class="card-subtitle-group">
+
+      <p class="card-subtitle content-type">
+        <i class="material-icons icon-inline small">category</i>&nbsp;
+        ${item.model === 'section' ? item.training_name : item.model}
+      </p>
+
+
+      ${
+        item.film_title
+          ? `<p class="card-subtitle"><i class="material-icons icon-inline small">movie</i>&nbsp;${titleCase(
+              item.film_title
+            )}</p>`
+          : ''
+      }
+
+      <p class="card-subtitle">
+        <i class="material-icons icon-inline small">schedule</i>&nbsp;
+        ${timeDifference(epochToDate(item.timestamp))}
+      </p>
+
+      ${
+        item.is_free
+          ? `
+        <p class="d-inline mr-2 text-success small"><i class="material-icons icon-inline small" >lock_open</i>&nbsp;Free</p>
+      `
+          : ''
+      }
+    </div>
+  </a>
 </div>
             `
         )
@@ -210,13 +203,7 @@ const renderHits = (renderOptions, isFirstRender) => {
     });
 
     observer.observe(sentinel);
-
-    return;
   }
-
-  $(() => {
-    $('[data-toggle="tooltip"]').tooltip();
-  });
 };
 
 const customHits = instantsearch.connectors.connectInfiniteHits(renderHits);
@@ -241,14 +228,12 @@ const renderMenuSelect = (renderOptions, isFirstRender) => {
   if (isFirstRender) {
     const select = document.createElement('select');
 
-    select.setAttribute('class', 'custom-select');
+    select.setAttribute('class', 'form-select');
     select.addEventListener('change', (event) => {
       refine(event.target.value);
     });
 
-    widgetParams.container
-      .querySelector('.input-group-prepend')
-      .insertAdjacentElement('afterend', select);
+    widgetParams.container.insertAdjacentElement('beforeend', select);
     // widgetParams.container.appendChild(select);
   }
 

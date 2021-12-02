@@ -36,6 +36,8 @@
     @extend .col-md-4;
     @extend .col-lg-3;
 
+    position: relative;
+
     // @include media-breakpoint-up(md) {
     //   padding-left: calc(#{$spacer} * 1.5);
     // }
@@ -118,6 +120,7 @@
   @include media-breakpoint-down(sm) {
     margin: #{-$spacer} #{-$spacer} 0 #{-$spacer};
     width: calc(100% + 40px);
+    max-width: calc(100% + 40px);
   }
 
   >*:last-child {
@@ -149,6 +152,7 @@
   .profile-image {
     align-self: flex-start;
     flex-shrink: 0;
+    padding: 0;
   }
 
   .profile-name {
@@ -159,6 +163,7 @@
 .production-log-individual-files-show-more {
   margin-bottom: $spacer / 2;
   margin-top: - $spacer / 4;
+  position: relative;
 }
 
 .add-entry {

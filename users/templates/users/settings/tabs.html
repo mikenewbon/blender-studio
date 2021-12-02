@@ -1,33 +1,33 @@
 {% load common_extras %}
-<div class="drawer-nav-dropdown-wrapper font-weight-bold">
+<div class="drawer-nav-dropdown-wrapper fw-bold">
   <a class="drawer-nav-dropdown" href="{% url 'user-settings'%}">
-    <i class="material-icons mr-2">person</i>
+    <i class="material-icons me-2">person</i>
     <span>Profile</span>
   </a>
 </div>
 
-<div class="drawer-nav-dropdown-wrapper font-weight-bold">
+<div class="drawer-nav-dropdown-wrapper fw-bold">
   <a class="drawer-nav-dropdown" href="{% url 'user-settings-emails' %}">
-    <i class="material-icons mr-2">email</i>
+    <i class="material-icons me-2">email</i>
     <span>Emails</span>
   </a>
 </div>
 
 {% if  request.user.production_credits.all %}
-  <div class="drawer-nav-dropdown-wrapper font-weight-bold">
+  <div class="drawer-nav-dropdown-wrapper fw-bold">
     <a class="drawer-nav-dropdown" href="{% url 'user-settings-production-credits' %}">
-      <i class="material-icons mr-2">recent_actors</i>
+      <i class="material-icons me-2">recent_actors</i>
       <span>Production Credits</span>
     </a>
   </div>
 {% endif %}
 
-<div class="drawer-nav-dropdown-wrapper font-weight-bold">
+<div class="drawer-nav-dropdown-wrapper fw-bold">
   <a class="drawer-nav-dropdown" href="{% url 'user-settings-billing' %}">
-    <i class="material-icons mr-2">credit_card</i>
+    <i class="material-icons me-2">credit_card</i>
     <span>Subscription</span>
   </a>
-  <a class="drawer-nav-dropdown icon" data-toggle="collapse" data-target="#subscription-collapse">
+  <a class="drawer-nav-dropdown icon" data-bs-toggle="collapse" data-bs-target="#subscription-collapse">
     <i class="material-icons">keyboard_arrow_down</i>
   </a>
 </div>
@@ -37,28 +37,28 @@
   <ol class="drawer-nav-list">
 
     <li class="drawer-nav-section">
-      <a href="{% url 'subscriptions:billing-address' %}" class="drawer-nav-section-link " data-tooltip="tooltip-overflow" data-placement="top" title="" data-original-title="">
+      <a href="{% url 'subscriptions:billing-address' %}" class="drawer-nav-section-link " data-bs-tooltip="tooltip-overflow" data-placement="top" title="" data-original-title="">
         <p class="overflow-text h4">Billing addresss</p>
       </a>
     </li>
 
     <li class="drawer-nav-section">
-      <a href="{% url 'subscriptions:receipts' %}" class="drawer-nav-section-link " data-tooltip="tooltip-overflow" data-placement="top" title="" data-original-title="">
+      <a href="{% url 'subscriptions:receipts' %}" class="drawer-nav-section-link " data-bs-tooltip="tooltip-overflow" data-placement="top" title="" data-original-title="">
         <p class="overflow-text h4">Invoices</p>
       </a>
     </li>
 
     <li class="drawer-nav-section">
-      <a href="{% url 'looper:payment_methods' %}" class="drawer-nav-section-link " data-tooltip="tooltip-overflow" data-placement="top" title="" data-original-title="">
+      <a href="{% url 'looper:payment_methods' %}" class="drawer-nav-section-link " data-bs-tooltip="tooltip-overflow" data-placement="top" title="" data-original-title="">
         <p class="overflow-text h4">Payment methods</p>
       </a>
     </li>
   </ol>
 </div>
 
-<div class="drawer-nav-dropdown-wrapper font-weight-bold">
+<div class="drawer-nav-dropdown-wrapper fw-bold">
   <a class="drawer-nav-dropdown" href="{% url 'user-settings-delete' %}">
-    <i class="material-icons mr-2">delete</i>
+    <i class="material-icons me-2">delete</i>
     <span>Delete account</span>
   </a>
 </div>

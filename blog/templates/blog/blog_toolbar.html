@@ -1,7 +1,7 @@
 <div class="row mb-3">
   <div class="col-auto">
     <div class="row">
-      <div style="background-image:url('{{ post.author.image_url }}');" class="profile-image profile ml-2">
+      <div style="background-image:url('{{ post.author.image_url }}');" class="profile-image profile ms-2">
       </div>
       <div class="col-auto">
         <p class="profile-name h4 mb-0">{{ post.author.full_name }}</p>
@@ -12,7 +12,7 @@
     </div>
   </div>
 
-  <div class="file-toolbar col-auto col-sm">
+  <div class="button-toolbar col-auto col-sm">
 
     <button data-like-url="{{ post.like_url }}"
       class="btn btn-transparent btn-sm btn-icon comment-material-button checkbox-like {% if not user.is_authenticated %}disabled{% endif%}"
@@ -30,11 +30,11 @@
     {% endcomment %}
 
     {% comment %}
-      <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
+      <button data-bs-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
         <i class="material-icons">share</i>
       </button>
 
-      <div class="dropdown-menu dropdown-menu-right">
+      <div class="dropdown-menu dropdown-menu-end">
         <button class="dropdown-item copy-url-clipboard">
           <i class="material-icons">link</i>
           <span>Copy link</span>
@@ -53,11 +53,11 @@
       </a>
     {% endif %}
 
-    <button data-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
+    <button data-bs-toggle="dropdown" class="btn btn-sm btn-icon btn-dark">
       <i class="material-icons">more_horiz</i>
     </button>
 
-    <div class="dropdown-menu dropdown-menu-right">
+    <div class="dropdown-menu dropdown-menu-end">
       <a href="https://developer.blender.org/maniphest/task/edit/form/15/" target="_blank" class="dropdown-item">
         <i class="material-icons">flag</i>
         <span>Report Problem</span>

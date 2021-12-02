@@ -1,15 +1,21 @@
 @import '../vendor/bootstrap/functions';
 @import 'functions';
 
+// Settings
 @import 'variables';
 
 @import '../vendor/bootstrap/mixins';
 @import 'mixins';
+
+@import '../vendor/bootstrap/utilities';
+@import 'utilities';
+
+// Vendor Files
 @import '../vendor/bootstrap/root';
 @import '../vendor/bootstrap/reboot';
 @import '../vendor/bootstrap/type';
 @import '../vendor/bootstrap/images';
-@import '../vendor/bootstrap/code';
+@import '../vendor/bootstrap/containers';
 @import '../vendor/bootstrap/grid';
 @import '../vendor/bootstrap/tables';
 @import '../vendor/bootstrap/forms';
@@ -17,18 +23,15 @@
 @import '../vendor/bootstrap/transitions';
 @import '../vendor/bootstrap/dropdown';
 @import '../vendor/bootstrap/button-group';
-@import '../vendor/bootstrap/input-group';
-@import '../vendor/bootstrap/custom-forms';
 @import '../vendor/bootstrap/nav';
 @import '../vendor/bootstrap/navbar';
 @import '../vendor/bootstrap/card';
+@import '../vendor/bootstrap/accordion';
 @import '../vendor/bootstrap/breadcrumb';
 @import '../vendor/bootstrap/pagination';
 @import '../vendor/bootstrap/badge';
-@import '../vendor/bootstrap/jumbotron';
 @import '../vendor/bootstrap/alert';
 @import '../vendor/bootstrap/progress';
-@import '../vendor/bootstrap/media';
 @import '../vendor/bootstrap/list-group';
 @import '../vendor/bootstrap/close';
 // @import '../vendor/bootstrap/toasts';
@@ -37,59 +40,62 @@
 // @import '../vendor/bootstrap/popover';
 @import '../vendor/bootstrap/carousel';
 @import '../vendor/bootstrap/spinners';
-@import '../vendor/bootstrap/utilities';
-// @import '../vendor/bootstrap/print';
+@import '../vendor/bootstrap/offcanvas';
+@import '../vendor/bootstrap/placeholders';
 
-@import '../vendor/plyr/plyr';
-@import '../vendor/masonry/masonry';
+@import '../vendor/bootstrap/helpers';
+@import '../vendor/bootstrap/utilities/api';
 
-@import 'mixins';
+//Bootstrap Files
 @import 'root';
 @import 'reboot';
-@import 'icons';
 @import 'type';
 @import 'images';
-@import 'code';
+@import 'containers';
 @import 'grid';
 @import 'tables';
 @import 'forms';
 @import 'buttons';
-@import 'comments';
 @import 'transitions';
 @import 'dropdown';
 @import 'button-group';
-@import 'input-group';
-@import 'custom-forms';
 @import 'nav';
 @import 'navbar';
-@import 'navdrawer';
-@import 'footer';
 @import 'card';
-@import 'files';
-@import 'blog';
-@import 'production-log';
+@import 'accordion';
 @import 'breadcrumb';
 @import 'pagination';
 @import 'badge';
-@import 'jumbotron';
 @import 'alert';
 @import 'progress';
-@import 'media';
 @import 'list-group';
 @import 'close';
-// @import 'toasts';
+@import 'toasts';
 @import 'modal';
 @import 'tooltip';
-// @import 'popover';
+@import 'popover';
 @import 'carousel';
-// @import 'spinners';
-@import 'utilities';
-// @import 'print';
+@import 'spinners';
+@import 'offcanvas';
+@import 'placeholders';
 
+// Custom
+@import 'icons';
+@import 'comments';
+@import 'navdrawer';
+@import 'footer';
+@import 'files';
+@import 'blog';
+@import 'production-log';
+@import 'jumbotron';
+@import 'media';
 @import 'training';
 @import 'activity';
 @import 'payments';
-
 @import 'flatpages';
 @import 'admin';
 @import 'search';
+
+// Vendor
+@import '../vendor/plyr/plyr';
+@import '../vendor/masonry/masonry';

@@ -8,23 +8,20 @@
 
 {% block content %}
 
-  <div class="container-xl">
+  <div class="container-xxl">
 
     <section>
 
       <div class="row">
         <div class="col search-bar-wrapper">
           <div class="input-group" id="search-container">
+            <span class="input-group-text">
+              <i class="material-icons">search</i>
+            </span>
 
-            <div class="input-group-prepend">
-              <span class="input-group-text">
-                <i class="material-icons">search</i>
-              </span>
-            </div>
+            {% comment %} Search Bar (from JS) {% endcomment %}
 
-            <div class="input-group-append">
-
-            </div>
+            {% comment %} X Button (from JS) {% endcomment %}
 
           </div>
         </div>
@@ -33,20 +30,20 @@
       <div class="row search-filters mb-3 d-md-none">
 
         <div class="col-auto">
-          <a class="btn btn-sm btn-dark" data-toggle="collapse" href="#filters" role="button" aria-expanded="false"
+          <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#filters" role="button" aria-expanded="false"
             aria-controls="collapseExample">
             <i class="material-icons">filter_list</i>
             Filters
           </a>
         </div>
 
-        <div class="col-auto ml-auto">
+        <div class="col-auto ms-auto">
           <div class="input-group input-group-sm" id="sorting-mobile">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="searchLicence">Sort by:</label>
-            </div>
+
+            <label class="input-group-text" for="searchLicence">Sort by:</label>
+
             {% comment %}
-              <select class="custom-select" >
+              <select class="form-select" >
                 <option selected>Relevance</option>
                 <option value="1">Date (New first)</option>
                 <option value="2">Date (Old first)</option>
@@ -61,28 +58,25 @@
 
         <div class="col-md-auto mb-3">
           <div class="input-group input-group-sm" id="searchType">
-            <div class="input-group-prepend">
-              <label class="input-group-text">Type:</label>
-            </div>
+
+            <label class="input-group-text">Type:</label>
+
 
           </div>
         </div>
 
         <div class="col-md-auto mb-3">
           <div class="input-group input-group-sm" id="searchMedia">
-            <div class="input-group-prepend">
-              <label class="input-group-text">Media:</label>
-            </div>
+
+            <label class="input-group-text">Media:</label>
+
 
           </div>
         </div>
 
         <div class="col-md-auto mb-3">
           <div class="input-group input-group-sm" id="searchFilm">
-            <div class="input-group-prepend">
-              <label class="input-group-text">Film:</label>
-            </div>
-
+            <label class="input-group-text">Film:</label>
           </div>
         </div>
 
@@ -106,13 +100,13 @@
           </div>
         </div> {% endcomment %}
 
-        <div class="col-auto ml-auto mb-3 d-none d-md-block">
+        <div class="col-auto ms-auto mb-3 d-none d-md-block">
           <div class="input-group input-group-sm" id="sorting">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="searchLicence">Sort by:</label>
-            </div>
+
+            <label class="input-group-text" for="searchLicence">Sort by:</label>
+
             {% comment %}
-              <select class="custom-select">
+              <select class="form-select">
                 <option selected>Relevance</option>
                 <option value="1">Date (New first)</option>
                 <option value="2">Date (Old first)</option>

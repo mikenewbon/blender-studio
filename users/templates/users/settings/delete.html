@@ -14,8 +14,8 @@
               You can request deletion of your account in <a href="{{ BLENDER_ID.BASE_URL }}">Blender ID</a>.
             </p>
             {% if not can_be_deleted %}
-              <div class="alert alert-dark" role="alert">
-                <i class="material-icons align-middle mr-1">info</i>
+              <div class="alert alert-danger" role="alert">
+                <i class="material-icons align-middle me-1">info</i>
                 <span>Note that your account has publicly visible content, such as blog posts or assets, that cannot be deleted from Blender Studio.</span>
               </div>
             {% endif %}

@@ -153,12 +153,10 @@
 }
 
 .payment-content {
-  // padding-top: $border-radius; TODO(Mike): This is for tabs when re-added
   background: $dark;
   border: 1px solid $input-gray;
   border-top-width: 0;
   border-radius: 0 0 $border-radius $border-radius;
-  // margin-right: 1px; TODO(Mike): This is for tabs when re-added
   overflow: hidden;
 }
 
