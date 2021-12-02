@@ -116,3 +116,11 @@
   border-radius: 50%;
   padding: $spacer / 4;
 }
+
+.float-left {
+  @extend .float-start;
+}
+
+.float-right {
+  @extend .float-end;
+}
