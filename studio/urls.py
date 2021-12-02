@@ -22,6 +22,7 @@ from django.views.generic import TemplateView
 
 admin.site.site_header = settings.ADMIN_SITE_HEADER
 admin.site.site_title = settings.ADMIN_SITE_TITLE
+admin.site.enable_nav_sidebar = False
 
 
 urlpatterns = [
