@@ -146,7 +146,7 @@ class TestReceiptPDFView(TestCase):
             expected_text_tmpl.format(
                 order=order,
                 expected_vatin='',
-                expected_date=order.paid_at.strftime("%b. %d, %Y"),
+                expected_date=order.paid_at.strftime("%b. %-d, %Y"),
                 expected_currency_symbol='•',
                 expected_price='12.52',
                 expected_additional_note='',
@@ -185,7 +185,7 @@ class TestReceiptPDFView(TestCase):
             expected_text_tmpl.format(
                 order=order,
                 expected_vatin='\nVATIN: DE123456789',
-                expected_date=order.paid_at.strftime("%b. %d, %Y"),
+                expected_date=order.paid_at.strftime("%b. %-d, %Y"),
                 # FIXME(anna): PyPDF2's extractText() doesn't extract EUR sign for some reason
                 expected_currency_symbol='•',
                 expected_price='12.52',
@@ -229,7 +229,7 @@ class TestReceiptPDFView(TestCase):
             expected_text_tmpl.format(
                 order=order,
                 expected_vatin='\nVATIN: NL123456789',
-                expected_date=order.paid_at.strftime("%b. %d, %Y"),
+                expected_date=order.paid_at.strftime("%b. %-d, %Y"),
                 # FIXME(anna): PyPDF2's extractText() doesn't extract EUR sign for some reason
                 expected_currency_symbol='•',
                 expected_price='12.31',
@@ -261,7 +261,7 @@ class TestReceiptPDFView(TestCase):
             expected_text_tmpl.format(
                 order=order,
                 expected_vatin='',
-                expected_date=order.paid_at.strftime("%b. %d, %Y"),
+                expected_date=order.paid_at.strftime("%b. %-d, %Y"),
                 expected_currency_symbol='$',
                 expected_price='10',
                 expected_additional_note='',

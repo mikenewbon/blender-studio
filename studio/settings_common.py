@@ -15,7 +15,6 @@ ADMIN_SITE_TITLE = 'Blender Studio'
 INSTALLED_APPS = [
     'django.contrib.redirects',
     'django.contrib.flatpages',
-    'django_jsonfield_backport',
     'emails',
     'blog',
     'comments',
@@ -240,7 +239,7 @@ PIPELINE = {
     'DISABLE_WRAPPER': True,
 }
 
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+STATICFILES_STORAGE = 'pipeline.storage.PipelineManifestStorage'
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -347,6 +346,7 @@ GOOGLE_ANALYTICS_TRACKING_ID = ''
 GOOGLE_RECAPTCHA_SITE_KEY = ''
 GOOGLE_RECAPTCHA_SECRET_KEY = ''
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 PUBLIC_FILE_STORAGE = 'common.storage.S3PublicStorage'
 # Do not set "public-read" ACL on bucket items

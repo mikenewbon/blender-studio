@@ -6,7 +6,7 @@ authors = ["Sem Mulder <sem@blender.studio>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-django = "3.0 || 3.0.*"
+django = "^3.2"
 django-pipeline = "^2.0"
 psycopg2 = "^2.8"
 blender_id_oauth_client = {git = "https://gitlab.com/blender-institute/blender-id-oauth-client.git", branch = "master"}
@@ -32,7 +32,6 @@ requests-oauthlib = "^1.3.0"
 django-activity-stream = "^0.9.0"
 django-background-tasks = "^1.2.5"
 django-anymail = {extras = ["mailgun"], version = "8.2"}
-django-jsonfield-backport = "^1.0.2"
 django-nested-admin = "^3.3.3"
 cryptography = "3.3.2"
 django-waffle = "2.1.0"

@@ -38,14 +38,14 @@ with-fonttools = ["fonttools (>=3.0)", "fonttools (>=4.0)"]
 
 [[package]]
 name = "asgiref"
-version = "3.2.10"
+version = "3.4.1"
 description = "ASGI specs, helper code, and adapters"
 category = "main"
 optional = false
-python-versions = ">=3.5"
+python-versions = ">=3.6"
 
 [package.extras]
-tests = ["pytest", "pytest-asyncio"]
+tests = ["pytest", "pytest-asyncio", "mypy (>=0.800)"]
 
 [[package]]
 name = "attrs"
@@ -115,7 +115,7 @@ webencodings = "*"
 
 [[package]]
 name = "blender-id-oauth-client"
-version = "0.9.4"
+version = "0.9.5"
 description = "Django app for using Blender ID as OAuth2 authentication service."
 category = "main"
 optional = false
@@ -123,14 +123,14 @@ python-versions = "^3.6"
 develop = false
 
 [package.dependencies]
-Django = "^2.1 || 3.0 || 3.0.*"
+Django = "^2.1 || 3.0 || 3.0.* || 3.2.*"
 requests-oauthlib = "^1.0"
 
 [package.source]
 type = "git"
 url = "https://gitlab.com/blender-institute/blender-id-oauth-client.git"
 reference = "master"
-resolved_reference = "1daa5abf3d8971db146fe3a6e054ba2730beb577"
+resolved_reference = "bf6b38d1af3754f9ba72229cc719deadf1a1027f"
 
 [[package]]
 name = "boto3"
@@ -295,19 +295,19 @@ python-versions = "*"
 
 [[package]]
 name = "django"
-version = "3.0.14"
+version = "3.2.9"
 description = "A high-level Python Web framework that encourages rapid development and clean, pragmatic design."
 category = "main"
 optional = false
 python-versions = ">=3.6"
 
 [package.dependencies]
-asgiref = ">=3.2,<4.0"
+asgiref = ">=3.3.2,<4"
 pytz = "*"
 sqlparse = ">=0.2.2"
 
 [package.extras]
-argon2 = ["argon2-cffi (>=16.1.0)"]
+argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
@@ -361,7 +361,7 @@ six = ">=1.10.0"
 
 [[package]]
 name = "django-countries"
-version = "6.1.3"
+version = "7.2.1"
 description = "Provides a country field for Django models."
 category = "main"
 optional = false
@@ -370,6 +370,7 @@ python-versions = "*"
 [package.extras]
 dev = ["tox", "black", "django", "pytest", "pytest-django", "djangorestframework", "graphene-django"]
 maintainer = ["transifex-client", "zest.releaser", "django"]
+pyuca = ["pyuca"]
 test = ["pytest", "pytest-django", "pytest-cov", "graphene-django"]
 
 [[package]]
@@ -383,17 +384,6 @@ python-versions = ">=3.5"
 [package.dependencies]
 Django = ">=1.11"
 sqlparse = ">=0.2.0"
-
-[[package]]
-name = "django-jsonfield-backport"
-version = "1.0.2"
-description = "Backport of the cross-DB JSONField model and form fields from Django 3.1."
-category = "main"
-optional = false
-python-versions = ">=3.5"
-
-[package.dependencies]
-Django = ">=2.2"
 
 [[package]]
 name = "django-loginas"
@@ -888,7 +878,7 @@ six = ">=1.11.0"
 
 [[package]]
 name = "looper"
-version = "1.9.7rc5"
+version = "1.10.0rc2"
 description = ""
 category = "main"
 optional = false
@@ -901,8 +891,8 @@ babel = "^2.6"
 bleach = "^3.3.0"
 braintree = "4.12.0"
 colorhash = "^1.0.3"
-django = "^2.2.0 || 3.0 || 3.0.*"
-django-countries = "^6.0"
+django = "^2.2.0 || 3.0 || 3.0.* || 3.2.*"
+django-countries = "^7.2.1"
 django-pipeline = "^2.0.6"
 geoip2 = "^3.0"
 python-dateutil = "^2.7"
@@ -915,7 +905,7 @@ zeep = "4.0.0"
 type = "git"
 url = "git://git.blender.org/looper.git"
 reference = "patched-bt-gateway-collection-methods"
-resolved_reference = "03ca37454faef22fb9b3b23c049b9b3d308afb7f"
+resolved_reference = "1b6d762c7205c41a23583e2b3c2be26f3c5bd73c"
 
 [[package]]
 name = "lxml"
@@ -1688,7 +1678,7 @@ xmlsec = ["xmlsec (>=0.6.1)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "efd54221b7845c260c6bf4caa23206aea1ef06778f4e0b73fd43351d6a8d188c"
+content-hash = "ca9d05bd42e4756e70f79a4cfc16f725c4efaa6fc67382e432a927ec35fb6e7c"
 
 [metadata.files]
 alphabetic-timestamp = [
@@ -1708,8 +1698,8 @@ arabic-reshaper = [
     {file = "arabic_reshaper-2.1.3.tar.gz", hash = "sha256:a236fc6e9dde2a61cc6a5ca962b522e42694e1bb2a2d86894ed7a4eba4ce1890"},
 ]
 asgiref = [
-    {file = "asgiref-3.2.10-py3-none-any.whl", hash = "sha256:9fc6fb5d39b8af147ba40765234fa822b39818b12cc80b35ad9b0cef3a476aed"},
-    {file = "asgiref-3.2.10.tar.gz", hash = "sha256:7e51911ee147dd685c3c8b805c0ad0cb58d360987b56953878f8c06d2d1c6f1a"},
+    {file = "asgiref-3.4.1-py3-none-any.whl", hash = "sha256:ffc141aa908e6f175673e7b1b3b7af4fdb0ecb738fc5c8b88f69f055c2415214"},
+    {file = "asgiref-3.4.1.tar.gz", hash = "sha256:4ef1ab46b484e3c706329cedeff284a5d40824200638503f5768edb6de7d58e9"},
 ]
 attrs = [
     {file = "attrs-19.3.0-py2.py3-none-any.whl", hash = "sha256:08a96c641c3a74e44eb59afb61a24f2cb9f4d7188748e76ba4bb5edfa3cb7d1c"},
@@ -1835,8 +1825,8 @@ distlib = [
     {file = "distlib-0.3.1.zip", hash = "sha256:edf6116872c863e1aa9d5bb7cb5e05a022c519a4594dc703843343a9ddd9bff1"},
 ]
 django = [
-    {file = "Django-3.0.14-py3-none-any.whl", hash = "sha256:9bc7aa619ed878fedba62ce139abe663a147dccfd20e907725ec11e02a1ca225"},
-    {file = "Django-3.0.14.tar.gz", hash = "sha256:d58d8394036db75a81896037d757357e79406e8f68816c3e8a28721c1d9d4c11"},
+    {file = "Django-3.2.9-py3-none-any.whl", hash = "sha256:e22c9266da3eec7827737cde57694d7db801fedac938d252bf27377cec06ed1b"},
+    {file = "Django-3.2.9.tar.gz", hash = "sha256:51284300f1522ffcdb07ccbdf676a307c6678659e1284f0618e5a774127a6a08"},
 ]
 django-activity-stream = [
     {file = "django-activity-stream-0.9.0.tar.gz", hash = "sha256:9d63c83147867d9a3da7cf02389fda16b2694236b90b43489b42e6e6f2aaacc5"},
@@ -1853,16 +1843,12 @@ django-compat = [
     {file = "django-compat-1.0.15.tar.gz", hash = "sha256:3ac9a3bedc56b9365d9eb241bc5157d0c193769bf995f9a78dc1bc24e7c2331b"},
 ]
 django-countries = [
-    {file = "django-countries-6.1.3.tar.gz", hash = "sha256:64015977a5989bcb0e645007299b19fe8ac117466af375161b26bcfa32ae2808"},
-    {file = "django_countries-6.1.3-py3-none-any.whl", hash = "sha256:a0f77154ae08cb38a0d65530a399ead5f5837ebf6c74f7576e71bb7acdacca94"},
+    {file = "django-countries-7.2.1.tar.gz", hash = "sha256:26878b54d36bedff30b4535ceefcb8af6784741a8b30b1b8a662fb14a936a4ab"},
+    {file = "django_countries-7.2.1-py3-none-any.whl", hash = "sha256:adc965f1d348124274b7d918fc1aad5e29609758af999e1822baa9f2cc06d1b8"},
 ]
 django-debug-toolbar = [
     {file = "django-debug-toolbar-2.2.tar.gz", hash = "sha256:eabbefe89881bbe4ca7c980ff102e3c35c8e8ad6eb725041f538988f2f39a943"},
     {file = "django_debug_toolbar-2.2-py3-none-any.whl", hash = "sha256:ff94725e7aae74b133d0599b9bf89bd4eb8f5d2c964106e61d11750228c8774c"},
-]
-django-jsonfield-backport = [
-    {file = "django-jsonfield-backport-1.0.2.tar.gz", hash = "sha256:0286dcc1c112389d52096f269eed83a77364ea2b349fe1777f5e4464c3c36fa9"},
-    {file = "django_jsonfield_backport-1.0.2-py3-none-any.whl", hash = "sha256:5574505967f6d7ada8c9269a5f873cfdca9812dc9502eee2b7a86be5c3798c76"},
 ]
 django-loginas = [
     {file = "django-loginas-0.3.9.tar.gz", hash = "sha256:9c10b2cdcf3b6605471f260e226bddf25726d6f5eb5fce88c91ef563bcd208bf"},

@@ -32,7 +32,7 @@
               Invoice Date:
             </td>
             <td>
-              {{ order.paid_at|default:order.created_at|date }}
+              {{ order.paid_at|default:order.created_at|date:"N j, Y" }}
             </td>
           </tr>
           <tr>
