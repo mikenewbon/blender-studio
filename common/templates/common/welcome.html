@@ -2,14 +2,11 @@
 {% load static %}
 
 {% block content %}
+  <!-- Header Jumbotron-->
   <div class="jumbotron jumbotron-fluid jumbotron-overlay overlay-wide-content jumbotron header spacer-n">
     <div class="jumbotron-bg-wrapper">
       <img class="jumbotron-bg" src="{% static "common/images/welcome/welcome-header-sprite.jpg" %}"
         alt="3D Render of the latest Blender Open Movie">
-      <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
-      {% comment %}
-        {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
-      {% endcomment %}
     </div>
     <div class="container-xxl">
       <div class="row">
@@ -19,23 +16,6 @@
             <h1 class="mb-2">The Creators Who Share</h1>
             <p>Blender Studio is the creative part of the Blender HQ. A dedicated team of artists and developers who challenge themselves with creative-technical targets to help Blender users and to drive Blender development forward. This happens in an open source production environment and by sharing everything they make in an open and free license.</p>
             <p class="mb-4">Want to know more? Join the studio today and help the team to create & share.</p>
-            {% comment %}
-              <div class="row mb-4 justify-content-stretch">
-                <div class="col-md-4 d-flex flex-column justify-content-between">
-                  <h3>Learn from our expert team</h3>
-                  <p class="small">Courses, workshops and production lessons with .blend files included.
-                  </p>
-                </div>
-                <div class="col-md-4 d-flex flex-column justify-content-between">
-                  <h3>Download 1000s of files and assets</h3>
-                  <p class="small">Production quality HDRI’s, textures and fully rigged characters.</p>
-                </div>
-                <div class="col-md-4 d-flex flex-column justify-content-between">
-                  <h3>Use our production software</h3>
-                  <p class="small">Featuring task tracking, render management and asset libraries.</p>
-                </div>
-              </div>
-            {% endcomment %}
             <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center">
               <a href="{% url 'subscriptions:join' %}"
                 class="btn btn-lg btn-primary me-md-4 mb-2 mb-md-0">Join the Blender Studio</a>
@@ -50,6 +30,7 @@
   </div>
 
   <div class="container-xxl mt-4 mt-md-5">
+    <!-- Training -->
     <section class="mb-4 mb-md-5">
       <div class="row justify-content-center mb-3">
         <div class="col-md-6 text-center">
@@ -70,6 +51,7 @@
       </div>
     </section>
 
+    <!-- Learn (video) -->
     <section class="mb-4 mb-md-5">
       <div class="row">
         {% for section in featured_sections|slice:':1' %}
@@ -92,6 +74,7 @@
       </div>
     </section>
 
+    <!-- Sprite Fright -->
     <section class="mb-5">
       <div class="row mb-3">
         <div class="col">
@@ -99,10 +82,6 @@
             <div class="jumbotron-bg-wrapper">
               <img class="jumbotron-bg" src="{% static "common/images/home/sf-background.jpg" %}"
                 alt="3D Render of the latest Blender Open Movie">
-              <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
-              {% comment %}
-                {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
-              {% endcomment %}
             </div>
             <div class="row">
               <div class="col-md-7 col-lg-6">
@@ -124,6 +103,7 @@
       </div>
     </section>
 
+    <!-- Films -->
     <section class="mb-4 mb-md-5">
       <div class="row justify-content-center mb-3">
         <div class="col-md-6 text-center">
@@ -146,8 +126,10 @@
       </div>
     </section>
 
+    <!-- Assets -->
     {% include 'common/components/cards/card_carousel.html' with title="Access all our production assets!" subtitle="You can access all the production files from our films with a Blender Studio subscription." slides=4 card_set=featured_film_assets media_type="file" id="fromTheArchives" %}
 
+    <!-- Subscribe -->
     <section class="my-5">
       <div class="row mb-3">
         <div class="col">
@@ -155,10 +137,6 @@
             <div class="jumbotron-bg-wrapper">
               <img class="jumbotron-bg" src="{% static "common/images/welcome/dweebs-bg.png" %}"
                 alt="A 3D cartoon dog enjoying tasty treats">
-              <!-- TODO(Mike): Impliment image sets when flat-pages are done. -->
-              {% comment %}
-                {% include "common/components/helpers/image_set.html" with classes="jumbotron-bg" img_source=XXX xsmall_width="576" small_width="758" medium_width="992" large_width="1200" xlarge_width="1920" %}
-              {% endcomment %}
             </div>
             <div class="row">
               <div class="col-md-7 col-lg-6 offset-md-5 offset-lg-6">
@@ -177,6 +155,7 @@
       </div>
     </section>
 
+    <!-- FAQ -->
     {% include 'common/components/faq.html' with classes="mb-5" %}
 
   </div>
