@@ -50,7 +50,7 @@ window.asset = (function asset() {
     const spinner =
       '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
     const close =
-      '<button class="modal-navigation modal-close btn btn-lg btn-icon d-none d-md-block" data-dismiss="modal"><i class="material-icons btn-material-icons">close</i></button>';
+      '<button class="modal-navigation modal-close btn btn-lg btn-icon d-none d-md-block" data-bs-dismiss="modal"><i class="material-icons btn-material-icons">close</i></button>';
     // eslint-disable-next-line no-param-reassign
     element.innerHTML = spinner + close;
   }
