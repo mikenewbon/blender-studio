@@ -1,8 +1,8 @@
-footer.container-xxl {
+footer.container-nav {
   @include media-breakpoint-down(sm) {
     text-align: center;
-    margin: $spacer / 2!important;
-    width: calc(100% - #{$spacer})!important;
+    margin: $spacer / 2 !important;
+    width: calc(100% - #{$spacer}) !important;
   }
 
   @include media-breakpoint-down(lg) {
@@ -20,14 +20,6 @@ footer.container-xxl {
 
   ul {
     @include list-unstyled;
-  }
-}
-
-footer {
-
-
-  @include media-breakpoint-down(sm) {
-
   }
 }
 
@@ -54,6 +46,5 @@ body {
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - #{$spacer});
-
   @include scroll-bar($dark, $input-gray);
 }
