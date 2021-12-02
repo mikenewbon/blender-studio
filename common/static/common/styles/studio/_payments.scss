@@ -82,7 +82,7 @@
 .payment-header {
   border: 1px solid $input-gray;
   border-bottom-width: 0;
-  border-radius: $border-radius $border-radius 0 0;
+  border-radius: $border-radius-lg $border-radius-lg 0 0;
   padding: $spacer;
   background: $navigation-gray;
 }
@@ -99,7 +99,7 @@
   border-bottom-width: 0;
   width: 50%;
   text-align: center;
-  border-radius: $border-radius $border-radius 0 0;
+  border-radius: $border-radius-lg $border-radius-lg 0 0;
   position: relative;
 
   &.active {
@@ -156,7 +156,7 @@
   background: $dark;
   border: 1px solid $input-gray;
   border-top-width: 0;
-  border-radius: 0 0 $border-radius $border-radius;
+  border-radius: 0 0 $border-radius-lg $border-radius-lg;
   overflow: hidden;
 }
 
