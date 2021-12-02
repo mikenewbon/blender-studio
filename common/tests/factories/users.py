@@ -37,5 +37,5 @@ class UserFactory(DjangoModelFactory):
     )
     password = 'pass'
 
-    oauth_tokens = factory.RelatedFactory(OAuthUserTokenFactory, factory_related_name='user')
+    oauth_tokens = factory.RelatedFactoryList(OAuthUserTokenFactory, factory_related_name='user')
     oauth_info = factory.RelatedFactory(OAuthUserInfoFactory, factory_related_name='user')

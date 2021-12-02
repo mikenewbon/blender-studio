@@ -18,6 +18,7 @@ import looper.models
 
 from subscriptions.form_fields import VATNumberField
 from subscriptions.form_widgets import RegionSelect
+import subscriptions.models
 
 logger = logging.getLogger(__name__)
 
@@ -278,3 +279,14 @@ class CancelSubscriptionForm(forms.Form):
     """Confirm cancellation of a subscription."""
 
     confirm = forms.BooleanField(label='Confirm Subscription Cancellation')
+
+
+class TeamForm(forms.ModelForm):
+    """Configure team subscription at the manage subscription page."""
+
+    class Meta:
+        model = subscriptions.models.Team
+        fields = ('emails', 'email_domain', 'invoice_reference')
+        widgets = {
+            'emails': forms.Textarea(attrs={'rows': 2}),
+        }

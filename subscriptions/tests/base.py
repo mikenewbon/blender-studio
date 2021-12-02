@@ -98,6 +98,7 @@ class BaseSubscriptionTestCase(TestCase):
         self._assert_billing_details_form_displayed(response)
 
     def _assert_plan_selector_displayed(self, response):
+        self.assertContains(response, 'Step 1: Choose your plan.', html=True)
         self.assertContains(
             response,
             '<option selected value="1" title="This subscription is renewed automatically. You can stop or cancel a subscription any time.">Automatic renewal</option>',
@@ -109,6 +110,30 @@ class BaseSubscriptionTestCase(TestCase):
             html=True,
         )
 
+    def _assert_team_plan_selector_displayed(self, response):
+        self.assertContains(response, 'Step 1: Choose your team plan.', html=True)
+        self.assertContains(
+            response,
+            '<option selected value="3" title="This subscription is renewed automatically. You can stop or cancel a subscription any time.">Automatic renewal, 15 seats</option>',
+            html=True,
+        )
+        self.assertContains(
+            response,
+            '<option value="4" title="This subscription is renewed manually. You can leave it on-hold, or renew it when convenient.">Manual renewal, 15 seats</option>',
+            html=True,
+        )
+        self.assertContains(
+            response,
+            '<option value="5" title="This subscription is renewed automatically. You can stop or cancel a subscription any time.">Automatic renewal, unlimited seats</option>',
+            html=True,
+        )
+        self.assertContains(
+            response,
+            '<option value="6" title="This subscription is renewed manually. You can leave it on-hold, or renew it when convenient.">Manual renewal, unlimited seats</option>',
+            html=True,
+        )
+        self.assertContains(response, '<span class="x-team-seats font-bold">15</span>', html=True)
+
     def _assert_continue_to_billing_displayed(self, response):
         self.assertContains(response, 'Continue to Billing')
 
@@ -117,6 +142,14 @@ class BaseSubscriptionTestCase(TestCase):
 
     def _assert_plan_selector_with_sign_in_cta_displayed(self, response):
         self._assert_plan_selector_displayed(response)
+
+        self.assertContains(response, 'Sign in with Blender ID')
+        self.assertNotContains(response, 'Continue to Payment')
+        self.assertNotContains(response, 'id_street_address')
+        self.assertNotContains(response, 'id_full_name')
+
+    def _assert_team_plan_selector_with_sign_in_cta_displayed(self, response):
+        self._assert_team_plan_selector_displayed(response)
 
         self.assertContains(response, 'Sign in with Blender ID')
         self.assertNotContains(response, 'Continue to Payment')
@@ -150,6 +183,23 @@ class BaseSubscriptionTestCase(TestCase):
         self.assertContains(
             response,
             '<span class="x-price-tax">Inc. 21% VAT (€&nbsp;1.72)</span>',
+            html=True,
+        )
+
+    def _assert_default_team_variation_selected_tax_21_eur(self, response):
+        self.assertContains(
+            response,
+            '<option selected data-team-seats="15" data-renewal-period="1 month" data-currency-symbol="€" data-plan-id="3" data-price="90.00" data-price-tax="15.62" data-tax-rate="21" data-tax-display-name="VAT" data-next-url="/join/team/plan-variation/16/" value="16">Every 1 month</option>',
+            html=True,
+        )
+        self.assertContains(
+            response,
+            '<span class="x-price">€&nbsp;90.00</span>',
+            html=True,
+        )
+        self.assertContains(
+            response,
+            '<span class="x-price-tax">Inc. 21% VAT (€&nbsp;15.62)</span>',
             html=True,
         )
 
@@ -350,6 +400,25 @@ class BaseSubscriptionTestCase(TestCase):
             self.assertIn(f'Dear {user.customer.full_name},', email_body)
             self.assertIn(reverse('user-settings-billing'), email_body)
             self.assertIn('Automatic renewal subscription', email_body)
+            self.assertIn('Blender Studio Team', email_body)
+
+    def _assert_team_subscription_activated_email_is_sent(self, subscription):
+        user = subscription.user
+        self.assertEqual(len(mail.outbox), 1)
+        _write_mail(mail)
+        email = mail.outbox[0]
+        self.assertEqual(email.to, [user.customer.billing_email])
+        # TODO(anna): set the correct reply_to
+        self.assertEqual(email.reply_to, [])
+        # TODO(anna): set the correct from_email DEFAULT_FROM_EMAIL
+        self.assertEqual(email.from_email, 'webmaster@localhost')
+        self.assertEqual(email.subject, 'Blender Studio Subscription Activated')
+        self.assertEqual(email.alternatives[0][1], 'text/html')
+        for email_body in (email.body, email.alternatives[0][0]):
+            self.assertIn('activated', email_body)
+            self.assertIn(f'Dear {user.customer.full_name},', email_body)
+            self.assertIn(reverse('user-settings-billing'), email_body)
+            self.assertIn('Automatic renewal, 15 seats subscription', email_body)
             self.assertIn('Blender Studio Team', email_body)
 
     def _assert_subscription_deactivated_email_is_sent(self, subscription):

@@ -1,13 +1,18 @@
+from datetime import timedelta
+from typing import Set
 import logging
 
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 from django.dispatch import receiver
 import alphabetic_timestamp as ats
 import django.db.models.signals as django_signals
 
 from looper.models import Customer, Order
+import looper.admin_log
 import looper.signals
 
+import subscriptions.models
 import subscriptions.queries as queries
 import subscriptions.tasks as tasks
 import users.tasks
@@ -48,9 +53,6 @@ def _set_order_number(sender, instance: Order, **kwargs):
 @receiver(subscription_created_needs_payment)
 def _on_subscription_created_needs_payment(sender: looper.models.Subscription, **kwargs):
     tasks.send_mail_bank_transfer_required(subscription_id=sender.pk)
-
-    # TODO(anna): if this Subscription is a team subscription,
-    # the task has to be called for user IDs of the team members
     users.tasks.grant_blender_id_role(pk=sender.user_id, role='cloud_has_subscription')
 
 
@@ -62,21 +64,31 @@ def _on_subscription_status_changed(sender: looper.models.Subscription, **kwargs
 
 @receiver(looper.signals.subscription_activated)
 def _on_subscription_status_activated(sender: looper.models.Subscription, **kwargs):
-    # TODO(anna): if this Subscription is a team subscription,
-    # the task has to be called for user IDs of the team members
     users.tasks.grant_blender_id_role(pk=sender.user_id, role='cloud_has_subscription')
     users.tasks.grant_blender_id_role(pk=sender.user_id, role='cloud_subscriber')
+
+    if not hasattr(sender, 'team'):
+        return
+    # Also grant badges to team members
+    for team_user in sender.team.users.all():
+        users.tasks.grant_blender_id_role(pk=team_user.pk, role='cloud_subscriber')
 
 
 @receiver(looper.signals.subscription_deactivated)
 @receiver(looper.signals.subscription_expired)
 def _on_subscription_status_deactivated(sender: looper.models.Subscription, **kwargs):
-    # TODO(anna): if this Subscription is a team subscription,
-    # the task has to be called for user IDs of the team members
-
     # No other active subscription exists, subscriber badge can be revoked
     if not queries.has_active_subscription(sender.user):
         users.tasks.revoke_blender_id_role(pk=sender.user_id, role='cloud_subscriber')
+
+    if not hasattr(sender, 'team'):
+        return
+    # Also remove team members' badges
+    for team_user in sender.team.users.all():
+        # Revoke the badge, unless they have another active subscription
+        if queries.has_active_subscription(team_user):
+            continue
+        users.tasks.revoke_blender_id_role(pk=team_user.pk, role='cloud_subscriber')
 
 
 @receiver(looper.signals.automatic_payment_succesful)
@@ -113,3 +125,81 @@ def _on_subscription_expired(sender: looper.models.Subscription, **kwargs):
 @receiver(looper.signals.automatic_payment_failed_no_payment_method)
 def _on_automatic_collection_failed_no_payment_method(sender: looper.models.Order, **kwargs):
     tasks.send_mail_no_payment_method(order_id=sender.pk)
+
+
+@receiver(django_signals.post_save, sender=User)
+def add_to_teams(sender, instance: User, created, **kwargs):
+    """Add newly created user to teams containing their email."""
+    if not created:
+        return
+    email_domain = instance.email.lower().split('@')[-1]
+    for team in subscriptions.models.Team.objects.filter(
+        Q(emails__contains=[instance.email]) | Q(email_domain=email_domain)
+    ):
+        team.add(instance)
+
+
+@receiver(django_signals.post_save, sender=subscriptions.models.Team)
+def set_team_users(sender, instance: subscriptions.models.Team, **kwargs):
+    """Set team users to users with emails matching team emails."""
+    emails = instance.emails
+    current_team_users = instance.users.all()
+    current_team_users_ids = {_.pk for _ in current_team_users}
+    # Remove all users that are neither on the emails list, nor have emails that match email domain
+    for user in current_team_users:
+        if (
+            user.email.lower() in emails
+            or instance.email_domain
+            and instance.email_domain.lower() in user.email.lower()
+        ):
+            continue
+        instance.remove(user)
+
+    # Add all users that are either on the emails list, or have emails that match the email domain
+    email_q = Q(email__in=emails)
+    if instance.email_domain:
+        email_q = email_q | Q(email__contains=f'@{instance.email_domain}')
+    matching_users = User.objects.filter(email_q)
+    for user in matching_users:
+        if user.pk in current_team_users_ids:
+            continue
+        instance.add(user)
+
+
+@receiver(django_signals.m2m_changed, sender=subscriptions.models.Team.users.through)
+def _on_team_change_grant_revoke_subscriber_badges(
+    sender, instance: subscriptions.models.Team, action: str, pk_set: Set[int], **kwargs
+):
+    if action not in ('post_add', 'post_remove'):
+        return
+
+    # If team subscription is active, add the subscriber badge to the newly added team member
+    is_team_subscription_active = instance.subscription.is_active
+    for user_id in pk_set:
+        user = User.objects.get(pk=user_id)
+        if action == 'post_add' and is_team_subscription_active:
+            # The task must be delayed because OAuthUserInfo might not exist at the moment
+            # when a newly registered User is added to the team because its email matches.
+            users.tasks.grant_blender_id_role(
+                pk=user.pk, role='cloud_subscriber', schedule=timedelta(minutes=2)
+            )
+        elif action == 'post_remove' and not queries.has_active_subscription(user):
+            users.tasks.revoke_blender_id_role(pk=user.pk, role='cloud_subscriber')
+
+
+@receiver(django_signals.post_save, sender=Order)
+def _add_invoice_reference(sender, instance: Order, created, **kwargs):
+    # Only set external reference if this is a new order
+    if not created:
+        return
+    # Only set external reference if order doesn't have one
+    if instance.external_reference:
+        return
+    subscription = instance.subscription
+    if not hasattr(subscription, 'team'):
+        return
+    if not subscription.team.invoice_reference:
+        return
+
+    instance.external_reference = subscription.team.invoice_reference
+    instance.save(update_fields={'external_reference'})

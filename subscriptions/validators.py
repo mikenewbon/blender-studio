@@ -1,6 +1,8 @@
 """Custom validators for subscription-related forms."""
 import logging
+import re
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
@@ -9,6 +11,11 @@ import stdnum.exceptions
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+with open(settings.BASE_DIR / 'subscriptions' / 'common_email_domains.txt') as f:
+    domains = set(_.strip() for _ in f.readlines())
+    common_email_domains = '|'.join(domains)
+re_common_email_domain = re.compile(f'^({common_email_domains})$', re.I)
+re_valid_invoice_reference = re.compile('^[-_ #0-9a-z]*$', re.I)
 
 
 class VATINValidator:
@@ -54,3 +61,37 @@ class VATINValidator:
 
         if not is_valid:
             raise ValidationError(self.messages['vies'], code='vat_number', params={'vatin': value})
+
+
+def _is_valid_domain(domain: str) -> bool:
+    if len(domain) > 255:
+        return False
+    parts = domain.split('.')
+    allowed = re.compile(r"(?!-)[A-Z\d-]{1,63}(?<!-)$", re.IGNORECASE)
+    return len(parts) > 1 and all(allowed.match(x) for x in parts)
+
+
+def _is_common_email_domain(value: str) -> str:
+    return re_common_email_domain.match(value)
+
+
+def validate_email_domain(value: str) -> str:
+    """Ensure the given value is not an invalid host name or a common email domain name."""
+    value = value.lower().strip()
+    if value[-1] == ".":
+        value = value[:-1]  # strip exactly one dot from the right, if present
+    if not _is_valid_domain(value):
+        raise ValidationError('Must be a valid domain name')
+    if _is_common_email_domain(value):
+        raise ValidationError('Domains of common email providers are not allowed')
+    return value
+
+
+def validate_invoice_reference(value: str) -> str:
+    """Ensure the given value is an acceptible invoice reference (Order.external_reference)."""
+    if not re_valid_invoice_reference.match(value):
+        raise ValidationError(
+            'Only the following are allowed: '
+            'letters (A-Z, a-z), digits (0-9), -, _, # and blank space.'
+        )
+    return value

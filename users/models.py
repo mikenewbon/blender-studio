@@ -104,6 +104,7 @@ class User(AbstractUser):
         import looper.admin_log as admin_log
         import looper.models
         import subscriptions.queries
+        import subscriptions.models
 
         if not self.can_be_deleted:
             looper.error(
@@ -177,6 +178,8 @@ class User(AbstractUser):
         logger.warning('Deleting customer records of user pk=%s', self.pk)
         looper.models.Customer.objects.filter(user_id=self.pk).delete()
         looper.models.GatewayCustomerId.objects.filter(user_id=self.pk).delete()
+
+        subscriptions.models.TeamUsers.objects.filter(user_id=self.pk).delete()
 
         logger.warning('Anonymizing comments of user pk=%s', self.pk)
         self.comments.update(user_id=None)

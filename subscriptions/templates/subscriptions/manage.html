@@ -1,11 +1,13 @@
 {% extends 'users/settings/base.html' %}
 {% load common_extras %}
 {% load humanize %}
+{% load looper %}
+{% load pipeline %}
 {% load subscriptions %}
 
 {% block settings %}
   <p class="subtitle">Settings</p>
-  <h1 class="mb-0">Subscription #{{ subscription.pk }}</h1>
+  <h1 class="mb-0">{% if subscription.team %}Team {% endif %}Subscription #{{ subscription.pk }}</h1>
 
   <div class="settings-billing">
     <div class="row">
@@ -20,13 +22,7 @@
                   <p class="h4 mb-0">Subscription Status</p>
                 </div>
                 <div class="col-auto">
-                  {% if subscription.status == "pending-cancellation" %}
-                    <p class="text-warning small mb-0 d-flex align-items-center fw-bold"><i class="material-icons ">hourglass_top</i> <span>Pending Cancellation</span></p>
-                  {% elif subscription.status == "active" %}
-                    <p class="text-success small mb-0 d-flex align-items-center fw-bold"><i class="material-icons p ">done</i> <span>Active</span></p>
-                  {% else %}
-                    <p class="text-danger small mb-0 d-flex align-items-center fw-bold"><i class="material-icons">info</i> <span>Inactive</span></p>
-                  {% endif %}
+                  {% include "subscriptions/components/pretty_status.html" %}
                 </div>
               </div>
             </li>
@@ -134,6 +130,8 @@
                 {% endif %}
               {% endwith %}
             {% endif %}
+
+            {% include "subscriptions/components/manage_team.html" %}
 
             {% comment %}
               {% if subscription and subscription.collection_method == 'automatic' and 'cancel' not in subscription.status %}

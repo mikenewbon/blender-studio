@@ -10,6 +10,7 @@ from looper.tests.factories import PaymentMethodFactory, OrderFactory
 import looper.taxes
 
 from common.tests.factories.subscriptions import (
+    TeamFactory,
     create_customer_with_billing_address,
 )
 from common.tests.factories.users import UserFactory
@@ -22,7 +23,7 @@ Buikslotermeerplein 161
 Tax number NL861711932B01
 Billing Address
 E-mail: {order.email}{expected_vatin}
-Invoice Number:
+{expected_external_reference}Invoice Number:
 {order.number}
 Invoice Date:
 {expected_date}
@@ -31,9 +32,9 @@ Product
 Quantity
 Price
 Blender Studio Subscription
-Subscription #: {order.subscription_id}
+{expected_team_prefix}Subscription #: {order.subscription_id}
 Renewal type: Automatic
-Renewal period: Monthly
+Renewal period: Monthly{expected_team_seats}
 1
 {expected_currency_symbol} {expected_price}{expected_additional_note}
 Subtotal
@@ -146,8 +147,11 @@ class TestReceiptPDFView(TestCase):
             expected_text_tmpl.format(
                 order=order,
                 expected_vatin='',
+                expected_external_reference='',
                 expected_date=order.paid_at.strftime("%b. %-d, %Y"),
                 expected_currency_symbol='•',
+                expected_team_prefix='',
+                expected_team_seats='',
                 expected_price='12.52',
                 expected_additional_note='',
                 expected_subtotal='12.52 (ex. VAT)',
@@ -185,9 +189,12 @@ class TestReceiptPDFView(TestCase):
             expected_text_tmpl.format(
                 order=order,
                 expected_vatin='\nVATIN: DE123456789',
+                expected_external_reference='',
                 expected_date=order.paid_at.strftime("%b. %-d, %Y"),
                 # FIXME(anna): PyPDF2's extractText() doesn't extract EUR sign for some reason
                 expected_currency_symbol='•',
+                expected_team_prefix='',
+                expected_team_seats='',
                 expected_price='12.52',
                 expected_subtotal='12.52 (ex. VAT)',
                 expected_additional_note=(
@@ -229,9 +236,12 @@ class TestReceiptPDFView(TestCase):
             expected_text_tmpl.format(
                 order=order,
                 expected_vatin='\nVATIN: NL123456789',
+                expected_external_reference='',
                 expected_date=order.paid_at.strftime("%b. %-d, %Y"),
                 # FIXME(anna): PyPDF2's extractText() doesn't extract EUR sign for some reason
                 expected_currency_symbol='•',
+                expected_team_prefix='',
+                expected_team_seats='',
                 expected_price='12.31',
                 expected_subtotal='12.31 (ex. VAT)',
                 expected_additional_note='',
@@ -261,12 +271,96 @@ class TestReceiptPDFView(TestCase):
             expected_text_tmpl.format(
                 order=order,
                 expected_vatin='',
+                expected_external_reference='',
                 expected_date=order.paid_at.strftime("%b. %-d, %Y"),
                 expected_currency_symbol='$',
+                expected_team_prefix='',
+                expected_team_seats='',
                 expected_price='10',
                 expected_additional_note='',
                 expected_subtotal='10',
                 expected_vat='',
                 expected_total='10',
+            ),
+        )
+
+    def test_get_pdf_total_team_no_vat(self):
+        team = TeamFactory(
+            seats=4,
+            emails=['test1@example.com', 'test2@example.com'],
+            name='Team Awesome',
+            subscription__plan_id=1,
+        )
+        order = OrderFactory(
+            price=20000,
+            currency='USD',
+            status='paid',
+            tax_country='US',
+            email='billing@example.com',
+            subscription=team.subscription,
+        )
+        self.client.force_login(order.user)
+        url = reverse('subscriptions:receipt-pdf', kwargs={'order_id': order.pk})
+        response = self.client.get(url)
+
+        self.assertEqual(200, response.status_code)
+
+        pdf_text = self._extract_text_from_pdf(response)
+        self.assertEqual(
+            pdf_text,
+            expected_text_tmpl.format(
+                order=order,
+                expected_vatin='',
+                expected_external_reference='',
+                expected_date=order.paid_at.strftime("%b. %-d, %Y"),
+                expected_currency_symbol='$',
+                expected_team_prefix='Team ',
+                expected_team_seats='\nSeats: 4',
+                expected_price='200',
+                expected_additional_note='',
+                expected_subtotal='200',
+                expected_vat='',
+                expected_total='200',
+            ),
+        )
+
+    def test_get_pdf_total_team_invoice_reference_becomes_order_external_reference(self):
+        team = TeamFactory(
+            seats=4,
+            emails=['test1@example.com', 'test2@example.com'],
+            name='Team Awesome',
+            subscription__plan_id=1,
+            invoice_reference='PO #9876',
+        )
+        order = OrderFactory(
+            price=20000,
+            currency='USD',
+            status='paid',
+            tax_country='US',
+            email='billing@example.com',
+            subscription=team.subscription,
+        )
+        self.client.force_login(order.user)
+        url = reverse('subscriptions:receipt-pdf', kwargs={'order_id': order.pk})
+        response = self.client.get(url)
+
+        self.assertEqual(200, response.status_code)
+
+        pdf_text = self._extract_text_from_pdf(response)
+        self.assertEqual(
+            pdf_text,
+            expected_text_tmpl.format(
+                order=order,
+                expected_vatin='',
+                expected_external_reference='Invoice ref.: PO #9876\n',
+                expected_date=order.paid_at.strftime("%b. %-d, %Y"),
+                expected_currency_symbol='$',
+                expected_team_prefix='Team ',
+                expected_team_seats='\nSeats: 4',
+                expected_price='200',
+                expected_additional_note='',
+                expected_subtotal='200',
+                expected_vat='',
+                expected_total='200',
             ),
         )

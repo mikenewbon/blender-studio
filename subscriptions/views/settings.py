@@ -3,10 +3,11 @@ from typing import Optional
 import logging
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
-from django.views.generic import UpdateView, FormView, TemplateView
+from django.views.generic import UpdateView, FormView
 
 import looper.models
 import looper.views.settings
@@ -16,8 +17,10 @@ from subscriptions.forms import (
     CancelSubscriptionForm,
     ChangePaymentMethodForm,
     PayExistingOrderForm,
+    TeamForm,
 )
-from subscriptions.views.mixins import SingleSubscriptionMixin
+from subscriptions.views.mixins import SingleSubscriptionMixin, BootstrapErrorListMixin
+import subscriptions.models
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -139,7 +142,24 @@ class PayExistingOrderView(looper.views.checkout.CheckoutExistingOrderView):
         )
 
 
-class ManageSubscriptionView(SingleSubscriptionMixin, TemplateView):
+class ManageSubscriptionView(
+    SuccessMessageMixin, SingleSubscriptionMixin, BootstrapErrorListMixin, UpdateView
+):
     """View and manage a subscription."""
 
     template_name = 'subscriptions/manage.html'
+    form_class = TeamForm
+    model = subscriptions.models.Team
+    pk_url_kwarg = 'subscription_id'
+    success_message = 'Team subscription updated successfully'
+
+    def get_object(self, queryset=None):
+        """Get team if this is a team subscription."""
+        subscription = self.get_subscription()
+        return subscription.team if hasattr(subscription, 'team') else None
+
+    def get_success_url(self):
+        """Display the same manage subscription page when done editing the team."""
+        return reverse(
+            'subscriptions:manage', kwargs={'subscription_id': self.object.subscription_id}
+        )

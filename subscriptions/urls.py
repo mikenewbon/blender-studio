@@ -4,7 +4,10 @@ from django.views.generic import RedirectView
 from looper.views import settings as looper_settings
 
 from subscriptions.views.join import BillingDetailsView, ConfirmAndPayView
-from subscriptions.views.select_plan_variation import SelectPlanVariationView
+from subscriptions.views.select_plan_variation import (
+    SelectPlanVariationView,
+    SelectTeamPlanVariationView,
+)
 import subscriptions.views.settings as settings
 
 # Required for URL namespace to work
@@ -15,6 +18,11 @@ urlpatterns = [
         r'^join/(?:plan-variation/(?P<plan_variation_id>\d+)/)?$',
         SelectPlanVariationView.as_view(),
         name='join',
+    ),
+    re_path(
+        r'^join/team/(?:plan-variation/(?P<plan_variation_id>\d+)/)?$',
+        SelectTeamPlanVariationView.as_view(),
+        name='join-team',
     ),
     path(
         'join/plan-variation/<int:plan_variation_id>/billing/',

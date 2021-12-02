@@ -5,6 +5,25 @@
   {% get_taxable current_plan_variation.price current_plan_variation.plan.product.type as current_price %}
 
   <div class="selected-plan-variation-details">
+    {% with team_properties=current_plan_variation.plan.team_properties %}
+      {% if team_properties %}
+        <div class="row mb-3">
+          <div class="col">
+            <h3 class="mb-0">Seats</h3>
+          </div>
+          <div class="col text-right">
+            <h3>
+              <span class="x-team-seats font-bold">
+                {% if team_properties.seats %}
+                  {{ team_properties.seats }}
+                {% else %}unlimited
+                {% endif %}
+              </span>
+            </h3>
+          </div>
+        </div>
+      {% endif %}
+    {% endwith %}
 
     <div class="row mb-3">
       <div class="col">
@@ -13,8 +32,12 @@
       </div>
       <div class="col text-end">
         <h2 class="mb-n1"><span class="x-price">{{ current_price.price.with_currency_symbol }}</span></h2>
-        <p class="subtitle small">/ <span
-          class="x-price-period">{{ current_plan_variation.interval_length }} {{ current_plan_variation.interval_unit }}</span></p>
+        <p class="subtitle small">
+          /
+          <span class="x-price-period">
+            {{ current_plan_variation.interval_length }} {{ current_plan_variation.interval_unit }}
+          </span>
+        </p>
       </div>
     </div>
 

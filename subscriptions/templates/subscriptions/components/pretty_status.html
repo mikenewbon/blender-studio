@@ -1,0 +1,7 @@
+{% if subscription.status == "pending-cancellation" %}
+  <p class="text-warning small mb-0 d-flex align-items-center fw-bold"><i class="material-icons ">hourglass_top</i> <span>Pending Cancellation</span></p>
+{% elif subscription.status == "active" %}
+  <p class="text-success small mb-0 d-flex align-items-center fw-bold"><i class="material-icons p ">done</i> <span>Active</span></p>
+{% else %}
+  <p class="text-danger small mb-0 d-flex align-items-center fw-bold"><i class="material-icons">info</i> <span>Inactive</span></p>
+{% endif %}

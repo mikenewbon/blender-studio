@@ -5,6 +5,7 @@ import logging
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import transaction
 from django.shortcuts import redirect, get_object_or_404
 from django.views.generic import FormView
 
@@ -20,6 +21,7 @@ from subscriptions.forms import BillingAddressForm, PaymentForm, AutomaticPaymen
 from subscriptions.middleware import preferred_currency_for_country_code
 from subscriptions.queries import should_redirect_to_billing
 from subscriptions.signals import subscription_created_needs_payment
+import subscriptions.models
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -220,8 +222,10 @@ class ConfirmAndPayView(_JoinMixin, LoginRequiredMixin, FormView):
         self, gateway: looper.models.Gateway, payment_method: looper.models.PaymentMethod
     ) -> looper.models.Subscription:
         subscription = self._get_existing_subscription()
+        is_new = False
         if not subscription:
             subscription = looper.models.Subscription()
+            is_new = True
             self.log.debug('Creating an new subscription for %s, %s', gateway, payment_method)
         collection_method = self.plan_variation.collection_method
         supported = set(gateway.provider.supported_collection_methods)
@@ -230,18 +234,33 @@ class ConfirmAndPayView(_JoinMixin, LoginRequiredMixin, FormView):
             # might not match the one selected by the customer.
             collection_method = supported.pop()
 
-        subscription.plan = self.plan_variation.plan
-        subscription.user = self.user
-        subscription.payment_method = payment_method
-        # Currency must be set before the price, in case it was changed
-        subscription.currency = self.plan_variation.currency
-        subscription.price = self.plan_variation.price
-        subscription.interval_unit = self.plan_variation.interval_unit
-        subscription.interval_length = self.plan_variation.interval_length
-        subscription.collection_method = collection_method
-        subscription.save()
+        with transaction.atomic():
+            subscription.plan = self.plan_variation.plan
+            subscription.user = self.user
+            subscription.payment_method = payment_method
+            # Currency must be set before the price, in case it was changed
+            subscription.currency = self.plan_variation.currency
+            subscription.price = self.plan_variation.price
+            subscription.interval_unit = self.plan_variation.interval_unit
+            subscription.interval_length = self.plan_variation.interval_length
+            subscription.collection_method = collection_method
+            subscription.save()
 
-        self.log.debug('Updated subscription pk=%r', subscription.pk)
+            # Configure the team if this is a team plan
+            if hasattr(subscription.plan, 'team_properties'):
+                team_properties = subscription.plan.team_properties
+                team, team_is_new = subscriptions.models.Team.objects.get_or_create(
+                    subscription=subscription,
+                    seats=team_properties.seats,
+                )
+                self.log.info(
+                    '%s a team for subscription pk=%r, seats: %s',
+                    team_is_new and 'Created' or 'Updated',
+                    subscription.pk,
+                    team.seats and team.seats or 'unlimited',
+                )
+
+        self.log.debug('%s subscription pk=%r', is_new and 'Created' or 'Updated', subscription.pk)
         return subscription
 
     def form_invalid(self, form):

@@ -1,0 +1,71 @@
+{% load common_extras %}
+{% if subscription.team %}
+  <style>
+    .helptext {
+      font-size: smaller;
+    }
+  </style>
+  {% with subscription=object.subscription %}
+    <li class="list-group-item mt-2">
+      <div class=row>
+        <div class="col">
+          <p class="h3 mb-0">Team</p>
+          <p class="x-small subtitle">
+            Manage your team by listing their individual team members' emails, or by setting a team email domain.
+          </p>
+        </div>
+      </div>
+      {% if subscription.team.seats %}
+        <div class=row>
+          <div class="col">
+            <p class="h4 mt-2 mb-0">Seats</p>
+            <p class="x-small subtitle">Maximum number of team members allowed for this subscription</p>
+          </div>
+          <div class="col-auto small">
+            {{ subscription.team.seats }}
+          </div>
+        </div>
+      {% endif %}
+      <div class="row">
+        {% with form|add_form_classes:"sm" as form %}
+          <div class="col mt-2">
+            <form class="form-group" method="post">{% csrf_token %}
+              {{ form.as_p }}
+              <div class="row">
+                <div class="col">
+                  <div class="notice-wrapper">
+                    {% if messages %}
+                      {% for message in messages %}
+                        <div class="alert alert-sm alert-success">{{ message }}</div>
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <button class="btn btn-primary btn-sm form-submit mb-2 px-5" type="submit">Save</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        {% endwith %}
+      </div>
+    </li>
+    {% if subscription.team.users.count %}
+      <li class="list-group-item">
+        <div class=row>
+          <div class="col">
+            <p class="h4 mb-0">Active team members</p>
+            <p class="x-small subtitle"></p>
+          </div>
+          <div class="col-auto small">
+            {% for user in subscription.team.users.all %}
+              {% if user.is_active %}
+                <div class="col">{% firstof user.full_name user.username %} ({{ user.email }})</div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </li>
+    {% endif %}
+  {% endwith %}
+{% endif %}

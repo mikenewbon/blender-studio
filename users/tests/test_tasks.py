@@ -8,6 +8,7 @@ from django.utils import timezone
 from comments.queries import set_comment_like
 from common.tests.factories.comments import CommentFactory
 from common.tests.factories.subscriptions import (
+    TeamFactory,
     PaymentMethodFactory,
     TransactionFactory,
     create_customer_with_billing_address,
@@ -203,3 +204,77 @@ class TestTasks(TestCase):
         transaction.order.subscription.refresh_from_db()
         self.assertEqual(transaction.order.price._cents, 990)
         self.assertEqual(transaction.order.tax_country, 'NL')
+
+    def test_handle_deletion_request_user_has_orders_and_is_on_a_team(self):
+        now = timezone.now()
+        team = TeamFactory(
+            subscription__user=create_customer_with_billing_address(
+                full_name='Joe Manager Dane',
+                email='mail1@example.com',
+            )
+        )
+        team.users.add(UserFactory())
+        team.users.add(UserFactory())
+        user_to_be_deleted = UserFactory(date_deletion_requested=now - timedelta(days=30))
+        team.users.add(user_to_be_deleted)
+        self.assertEqual(3, team.users.count())
+        # this user also has a subscription with an order and a transaction
+        payment_method = PaymentMethodFactory(user=user_to_be_deleted)
+        TransactionFactory(
+            user=user_to_be_deleted,
+            order__price=990,
+            order__tax_country='NL',
+            order__payment_method=payment_method,
+            order__subscription__payment_method=payment_method,
+            order__subscription__user=user_to_be_deleted,
+            order__subscription__status='cancelled',
+            order__user=user_to_be_deleted,
+            payment_method=payment_method,
+        )
+
+        tasks.handle_deletion_request.task_function(pk=user_to_be_deleted.pk)
+
+        # sanity check: nothing happened to the user owning the team subscription
+        team.subscription.user.refresh_from_db()
+        self.assertEqual('Joe Manager Dane', team.subscription.user.full_name)
+        self.assertTrue(team.subscription.user.is_active)
+
+        # user wasn't deleted but anonymised
+        user_to_be_deleted.refresh_from_db()
+        self.assertFalse(user_to_be_deleted.is_active)
+        self.assertEqual(user_to_be_deleted.full_name, '')
+        self.assertTrue(user_to_be_deleted.email.startswith('del'))
+        self.assertTrue(user_to_be_deleted.email.endswith('@example.com'))
+
+        # user is no longer on the team
+        team.refresh_from_db()
+        self.assertEqual(2, team.users.count())
+
+    def test_handle_deletion_request_user_and_is_on_a_team(self):
+        now = timezone.now()
+        team = TeamFactory(
+            subscription__user=create_customer_with_billing_address(
+                full_name='Joe Manager Dane',
+                email='mail1@example.com',
+            )
+        )
+        team.users.add(UserFactory())
+        team.users.add(UserFactory())
+        user_to_be_deleted = UserFactory(date_deletion_requested=now - timedelta(days=30))
+        team.users.add(user_to_be_deleted)
+        self.assertEqual(3, team.users.count())
+
+        tasks.handle_deletion_request.task_function(pk=user_to_be_deleted.pk)
+
+        # sanity check: nothing happened to the user owning the team subscription
+        team.subscription.user.refresh_from_db()
+        self.assertEqual('Joe Manager Dane', team.subscription.user.full_name)
+        self.assertTrue(team.subscription.user.is_active)
+
+        # user was deleted
+        with self.assertRaises(User.DoesNotExist):
+            user_to_be_deleted.refresh_from_db()
+
+        # user is no longer on the team
+        team.refresh_from_db()
+        self.assertEqual(2, team.users.count())

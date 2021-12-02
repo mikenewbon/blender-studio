@@ -15,6 +15,11 @@
             <b>VATIN</b>: {{ order.vat_number }}
           </p>
         {% endif %}
+        {% if order.external_reference %}
+          <p>
+            <b>Invoice ref.</b>: {{ order.external_reference }}
+          </p>
+        {% endif %}
       </td>
 
       <td>
@@ -60,7 +65,7 @@
     </tr>
   </table>
 
-  {% with taxable=order.taxable %}
+  {% with taxable=order.taxable subscription=order.subscription team=order.subscription.team %}
     <table>
       <thead>
         <tr>
@@ -73,17 +78,22 @@
       <tbody>
         <tr class="first underline">
           <td colspan=2 style="padding-left: 3px">
-            {{ order.subscription.plan.product.name }}
+            {{ subscription.plan.product.name }}
             <div style="font-size: small; padding-left: 7px;">
               <div>
-                <b>Subscription #:</b> {{ order.subscription_id }}
+                <b>{% if team %}Team {% endif %}Subscription #:</b> {{ order.subscription_id }}
               </div>
               <div>
-                <b>Renewal type:</b> {{ order.subscription.collection_method|capfirst }}
+                <b>Renewal type:</b> {{ subscription.collection_method|capfirst }}
               </div>
               <div>
                 <b>Renewal period:</b> {{ order.subscription|renewal_period|capfirst }}
               </div>
+              {% if team %}
+                <div>
+                  <b>Seats:</b> {% if team.seats %}{{ team.seats }}{% else %}unlimited{% endif %}
+                </div>
+              {% endif %}
             </div>
           </td>
           <td>

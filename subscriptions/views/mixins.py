@@ -3,6 +3,7 @@ from typing import Optional
 import logging
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.forms.utils import ErrorList
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
@@ -10,6 +11,18 @@ from looper.models import Subscription
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+
+
+class BootstrapErrorList(ErrorList):
+    """Render errors with Bootstrap classes."""
+
+    def as_ul(self) -> str:
+        """Render as ul."""
+        if not self:
+            return ''
+        return '<ul class="errorlist alert alert-danger">{}</ul>'.format(
+            ''.join([f'<li class="error">{e}</li>' for e in self])
+        )
 
 
 class SingleSubscriptionMixin(LoginRequiredMixin):
@@ -54,3 +67,13 @@ class SingleSubscriptionMixin(LoginRequiredMixin):
         :return: None to continue handling this request, or a
             HttpResponse to stop processing early.
         """
+
+
+class BootstrapErrorListMixin:
+    """Override get_form method changing error_class of the form."""
+
+    def get_form(self, *args, **kwargs):
+        """Override form error list class with a Bootstrap-compatible one."""
+        form = super().get_form(*args, **kwargs)
+        form.error_class = BootstrapErrorList
+        return form

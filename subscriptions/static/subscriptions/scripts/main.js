@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const priceEl = document.querySelector('.x-price');
   const priceTaxEl = document.querySelector('.x-price-tax');
   const renewalPeriodEl = document.querySelector('.x-price-period');
+  const teamSeatsEl = document.querySelector('.x-team-seats');
   const priceInput = document.getElementById('id_price');
   const signInLink = document.querySelector('.x-sign-in');
 
@@ -71,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     const selectedOption = getSelectedPlanVariation();
-    const { currencySymbol, renewalPeriod, nextUrl } = selectedOption.dataset;
+    const { currencySymbol, renewalPeriod, nextUrl, teamSeats } = selectedOption.dataset;
     const { price, priceTax } = selectedOption.dataset;
 
     // Display the amounts with the tax details:
@@ -79,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     priceTaxEl.innerText = formatTaxAmount(selectedOption, priceTax);
     renewalPeriodEl.innerText = renewalPeriod;
+    teamSeatsEl.innerText = teamSeats;
 
     // Update SignIn button's "next" so that selection remains the same after sign in
     if (signInLink && nextUrl) {

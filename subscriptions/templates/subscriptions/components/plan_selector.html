@@ -6,7 +6,7 @@
   <div class="payment-header">
     <h2 class="payment-header-title">Join the Studio</h2>
     <div class="d-flex justify-content-between">
-      <p class="mb-0  small">Step 1: Choose your plan.</p>
+      <p class="mb-0  small">Step 1: Choose your {% if select_team_plans %}team {% endif %}plan.</p>
       <p class="small  mb-0">1 of 3</p>
     </div>
 
@@ -55,6 +55,9 @@
                   {% if variation.currency == preferred_currency %}
                     {% get_taxable variation.price plan.product.type as taxable %}
                     <option {% if current_plan_variation.id == variation.pk %}selected{% endif %}
+                      {% if plan.team_properties %}
+                        data-team-seats="{% if plan.team_properties.seats %}{{ plan.team_properties.seats }}{% else %}unlimited{% endif %}"
+                      {% endif %}
                       data-renewal-period="{{ variation.interval_length }} {{ variation.interval_unit }}"
                       data-currency-symbol="{{ variation.price.currency_symbol }}"
                       data-plan-id="{{ variation.plan_id }}"
@@ -67,7 +70,7 @@
                       {% if current_plan_variation.plan_id != plan.id %}
                         aria-disabled="true" disabled="true" hidden="true"
                       {% endif %}
-                      data-next-url="{% url "subscriptions:join" plan_variation_id=variation.pk %}"
+                      data-next-url="{% if select_team_plans %}{% url "subscriptions:join-team" plan_variation_id=variation.pk %}{% else %}{% url "subscriptions:join" plan_variation_id=variation.pk %}{% endif %}"
                       value="{{ variation.pk }}">
                       Every {{ variation.interval_length }} {{ variation.interval_unit }}
                     </option>

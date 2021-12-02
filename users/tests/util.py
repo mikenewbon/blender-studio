@@ -61,11 +61,14 @@ def mock_blender_id_responses() -> None:
         )
 
 
-def mock_blender_id_badger_badger_response(action: str, role: str, oauth_user_id: str) -> None:
+def mock_blender_id_badger_badger_response(action: str, role: str, oauth_user_id: str, rsps=None):
     """Set up mock responses of Blender ID badger API."""
     base_url = settings.BLENDER_ID['BASE_URL']
-    responses.add(
-        responses.POST,
+    # Use default responses mock unless provided an alternative.
+    # This allows controlling assert_all_requests_are_fired flag when necessary.
+    rsps = rsps or responses
+    rsps.add(
+        rsps.POST,
         f'{base_url}api/badger/{action}/{role}/{oauth_user_id}',
         status=200,
     )

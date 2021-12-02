@@ -140,7 +140,7 @@ def handle_deletion_request(pk: int) -> bool:
 
 
 @background()
-def grant_blender_id_role(pk: int, role: str) -> bool:
+def grant_blender_id_role(pk: int, role: str, **kwargs) -> bool:
     """Call Blender ID API to grant a given role to a user with given ID."""
     user = User.objects.get(pk=pk)
     bid.grant_revoke_role(user, action='grant', role=role)
@@ -149,7 +149,7 @@ def grant_blender_id_role(pk: int, role: str) -> bool:
 
 
 @background()
-def revoke_blender_id_role(pk: int, role: str) -> bool:
+def revoke_blender_id_role(pk: int, role: str, **kwargs) -> bool:
     """Call Blender ID API to revoke given roles from a user with given ID."""
     user = User.objects.get(pk=pk)
     bid.grant_revoke_role(user, action='revoke', role=role)

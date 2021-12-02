@@ -21,9 +21,13 @@ logger.setLevel(logging.DEBUG)
 
 class _PlanSelectorMixin:
     get_currency = AbstractPaymentView.get_currency
+    select_team_plans = False
 
     def _get_plans(self):
-        return looper.models.Plan.objects.filter(is_active=True)
+        return looper.models.Plan.objects.filter(
+            is_active=True,
+            team_properties__isnull=not self.select_team_plans,
+        )
 
     def _get_default_plan_variation(self):
         return self._get_plans().first().variation_for_currency(self.get_currency())
@@ -33,7 +37,9 @@ class _PlanSelectorMixin:
             return None
         try:
             return looper.models.PlanVariation.objects.active().get(
-                pk=plan_variation_id, currency=self.get_currency()
+                pk=plan_variation_id,
+                currency=self.get_currency(),
+                plan__team_properties__isnull=not self.select_team_plans,
             )
         except looper.models.PlanVariation.DoesNotExist:
             return None
@@ -44,6 +50,7 @@ class SelectPlanVariationView(_PlanSelectorMixin, FormView):
 
     template_name = 'subscriptions/join/select_plan_variation.html'
     form_class = SelectPlanVariationForm
+    select_team_plans = False
 
     def get(self, request, *args, **kwargs):
         """Get optional plan_variation_id from the URL and set it on the view.
@@ -67,6 +74,7 @@ class SelectPlanVariationView(_PlanSelectorMixin, FormView):
             **super().get_context_data(**kwargs),
             'plans': self._get_plans(),
             'current_plan_variation': self.plan_variation,
+            'select_team_plans': self.select_team_plans,
         }
         return ctx
 
@@ -81,3 +89,9 @@ class SelectPlanVariationView(_PlanSelectorMixin, FormView):
         """Save the billing details and pass the data to the payment form."""
         plan_variation_id = form.cleaned_data['plan_variation_id']
         return redirect('subscriptions:join-billing-details', plan_variation_id=plan_variation_id)
+
+
+class SelectTeamPlanVariationView(SelectPlanVariationView):
+    """Display available team subscription plans."""
+
+    select_team_plans = True

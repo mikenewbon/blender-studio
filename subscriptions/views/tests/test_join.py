@@ -169,7 +169,8 @@ class TestPOSTBillingDetailsView(BaseSubscriptionTestCase):
         selected_variation = (
             looper.models.PlanVariation.objects.active()
             .filter(
-                collection_method='manual',
+                currency='EUR',
+                plan__name='Manual renewal',
             )
             .first()
         )
@@ -306,10 +307,8 @@ class TestPOSTBillingDetailsView(BaseSubscriptionTestCase):
 
 @freeze_time('2021-05-19 11:41:11')
 class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
-    def _get_url_for(self, currency: str, cents: int) -> Tuple[str, looper.models.PlanVariation]:
-        plan_variation = looper.models.PlanVariation.objects.get(
-            price=Money(currency, cents), currency=currency
-        )
+    def _get_url_for(self, **filter_params) -> Tuple[str, looper.models.PlanVariation]:
+        plan_variation = looper.models.PlanVariation.objects.active().get(**filter_params)
         return (
             reverse(
                 'subscriptions:join-confirm-and-pay',
@@ -319,7 +318,7 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
         )
 
     def test_plan_variation_does_not_match_detected_currency_usd_euro_ip(self):
-        url, _ = self._get_url_for('USD', 11900)
+        url, _ = self._get_url_for(currency='USD', price=11900)
         user = create_customer_with_billing_address(country='NL')
         self.client.force_login(user)
 
@@ -329,7 +328,7 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_plan_variation_matches_detected_currency_eur_non_eea_ip(self):
-        url, _ = self._get_url_for('EUR', 990)
+        url, _ = self._get_url_for(currency='EUR', price=990)
         user = create_customer_with_billing_address()
         self.client.force_login(user)
 
@@ -341,7 +340,7 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
         self._assert_total_default_variation_selected_no_tax_eur(response)
 
     def test_billing_address_country_takes_precedence_over_geo_ip(self):
-        url, _ = self._get_url_for('EUR', 990)
+        url, _ = self._get_url_for(currency='EUR', price=990)
         user = create_customer_with_billing_address(country='NL')
         self.client.force_login(user)
 
@@ -352,7 +351,7 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
         self._assert_total_default_variation_selected_tax_21_eur(response)
 
     def test_invalid_missing_required_fields(self):
-        url, _ = self._get_url_for('EUR', 990)
+        url, _ = self._get_url_for(currency='EUR', price=990)
         user = create_customer_with_billing_address(country='NL')
         self.client.force_login(user)
 
@@ -371,7 +370,7 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
         )
 
     def test_invalid_price_does_not_match_selected_plan_variation(self):
-        url, selected_variation = self._get_url_for('EUR', 990)
+        url, selected_variation = self._get_url_for(currency='EUR', price=990)
         user = create_customer_with_billing_address(country='NL')
         self.client.force_login(user)
 
@@ -391,7 +390,7 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
         )
 
     def test_invalid_bank_transfer_cannot_be_selected_for_automatic_payments(self):
-        url, selected_variation = self._get_url_for('EUR', 990)
+        url, selected_variation = self._get_url_for(currency='EUR', price=990)
         user = create_customer_with_billing_address(country='NL')
         self.client.force_login(user)
 
@@ -430,17 +429,12 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
             'grant', 'cloud_has_subscription', user.oauth_info.oauth_user_id
         )
 
-        selected_variation = (
-            looper.models.PlanVariation.objects.active()
-            .filter(
-                collection_method='manual',
-                currency='EUR',
-                interval_length=1,
-                interval_unit='month',
-            )
-            .first()
+        url, selected_variation = self._get_url_for(
+            currency='EUR',
+            interval_length=1,
+            interval_unit='month',
+            plan__name='Manual renewal',
         )
-        url, _ = self._get_url_for('EUR', selected_variation.price._cents)
         data = {
             **required_address_data,
             'gateway': 'bank',
@@ -514,17 +508,12 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
             'grant', 'cloud_has_subscription', user.oauth_info.oauth_user_id
         )
 
-        selected_variation = (
-            looper.models.PlanVariation.objects.active()
-            .filter(
-                collection_method='manual',
-                currency='EUR',
-                interval_length=3,
-                interval_unit='month',
-            )
-            .first()
+        url, selected_variation = self._get_url_for(
+            currency='EUR',
+            plan__name='Manual renewal',
+            interval_length=3,
+            interval_unit='month',
         )
-        url, _ = self._get_url_for('EUR', selected_variation.price._cents)
         data = {
             **required_address_data,
             'gateway': 'bank',
@@ -594,7 +583,7 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
     )
     @responses.activate
     def test_pay_with_credit_card_creates_order_subscription_active(self):
-        url, selected_variation = self._get_url_for('EUR', 990)
+        url, selected_variation = self._get_url_for(currency='EUR', price=990)
         user = create_customer_with_billing_address(country='NL', full_name='Jane Doe')
         self.client.force_login(user)
         util.mock_blender_id_badger_badger_response(
@@ -631,21 +620,65 @@ class TestPOSTConfirmAndPayView(BaseSubscriptionTestCase):
 
         self._assert_subscription_activated_email_is_sent(subscription)
 
+    @patch(
+        # Make sure background task is executed as a normal function
+        'subscriptions.signals.tasks.send_mail_subscription_status_changed',
+        new=subscriptions.tasks.send_mail_subscription_status_changed.task_function,
+    )
+    @patch(
+        'users.signals.tasks.grant_blender_id_role',
+        new=users.tasks.grant_blender_id_role.task_function,
+    )
+    @responses.activate
+    def test_pay_with_credit_card_creates_order_subscription_active_team(self):
+        url, selected_variation = self._get_url_for(
+            currency='EUR',
+            price=9000,
+            plan__name='Automatic renewal, 15 seats',
+        )
+        user = create_customer_with_billing_address(country='NL', full_name='Jane Doe')
+        self.client.force_login(user)
+        util.mock_blender_id_badger_badger_response(
+            'grant', 'cloud_has_subscription', user.oauth_info.oauth_user_id
+        )
+        util.mock_blender_id_badger_badger_response(
+            'grant', 'cloud_subscriber', user.oauth_info.oauth_user_id
+        )
+
+        data = {
+            **required_address_data,
+            'gateway': 'braintree',
+            'payment_method_nonce': 'fake-valid-nonce',
+            'price': '90.00',
+        }
+        response = self.client.post(url, data, REMOTE_ADDR=EURO_IPV4)
+
+        self._assert_done_page_displayed(response)
+
+        subscription = user.subscription_set.first()
+        order = subscription.latest_order()
+        self.assertEqual(subscription.status, 'active')
+        self.assertEqual(subscription.price, Money('EUR', 9000))
+        self.assertEqual(subscription.collection_method, selected_variation.collection_method)
+        self.assertEqual(subscription.collection_method, 'automatic')
+        self.assertEqual(subscription.plan, selected_variation.plan)
+        self.assertEqual(order.status, 'paid')
+        self.assertIsNotNone(order.number)
+        self.assertEqual(order.price, Money('EUR', 9000))
+        self.assertEqual(order.subscription.team.seats, 15)
+
+        self._assert_team_subscription_activated_email_is_sent(subscription)
+
     def test_pay_with_credit_card_creates_order_subscription_active_business_de(self):
         user = create_customer_with_billing_address(country='DE', vat_number='DE260543043')
         self.client.force_login(user)
 
-        selected_variation = (
-            looper.models.PlanVariation.objects.active()
-            .filter(
-                collection_method='manual',
-                currency='EUR',
-                interval_length=1,
-                interval_unit='month',
-            )
-            .first()
+        url, selected_variation = self._get_url_for(
+            currency='EUR',
+            interval_length=1,
+            interval_unit='month',
+            plan__name='Manual renewal',
         )
-        url, _ = self._get_url_for('EUR', selected_variation.price._cents)
         data = {
             **required_address_data,
             'vat_number': 'DE 260543043',

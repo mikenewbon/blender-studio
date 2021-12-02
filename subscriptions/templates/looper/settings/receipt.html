@@ -108,6 +108,19 @@
       </li>
     {% endif %}
 
+    {% if order.external_reference %}
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col">
+            <p class=" h4 mb-0 subtitle">Invoice ref.</p>
+          </div>
+          <div class="col-auto">
+            <p class="mb-0 small">{{ order.external_reference }}</p>
+          </div>
+        </div>
+      </li>
+    {% endif %}
+
     <li class="list-group-item">
       <div class="row">
         <div class="col">
